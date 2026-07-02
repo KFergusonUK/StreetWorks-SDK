@@ -6,7 +6,11 @@ Initial release.
 
 - `streetworks.streetmanager`: sync + async clients for all nine Street
   Manager APIs (V6/V7, sandbox/production) with automatic auth, token
-  refresh, retries and rate-limit handling.
+  refresh, retries and rate-limit handling. Explicit `authenticate()` method
+  for fail-fast credential/connectivity checks.
+- Connectivity smoke test (`scripts/smoke_test.py`) and skip-guarded
+  integration test suite (`pytest -m integration`) for verifying against the
+  real test/sandbox systems.
 - `streetworks.opendata`: SNS receiver toolkit — parsing, signature
   verification, subscription auto-confirmation, event extraction.
 - `streetworks.datavia`: OGC WFS client for Geoplace DataVIA - Basic and

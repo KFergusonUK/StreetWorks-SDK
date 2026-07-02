@@ -54,6 +54,12 @@ packages = ["src/streetworks"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+# Integration tests hit live systems and need credentials; exclude them from
+# the default run. Run them explicitly with: pytest -m integration
+addopts = "-m 'not integration'"
+markers = [
+    "integration: makes real calls to live test/sandbox systems (needs credentials)",
+]
 
 [tool.ruff]
 line-length = 100

@@ -75,6 +75,8 @@ def test_expired_token_refreshes_via_party_api():
         sm.work.get_work("X")  # stale -> refresh
 
     assert refresh_route.call_count == 1
+    refresh_body = json.loads(refresh_route.calls[0].request.content)
+    assert refresh_body == {"refreshToken": "refresh"}
 
 
 @respx.mock
@@ -123,6 +125,17 @@ async def test_async_client_roundtrip():
     async with AsyncStreetManagerClient("u@e.com", "pw") as sm:
         permits = await sm.reporting.permits(status="submitted")
     assert permits["rows"][0]["permit_status"] == "submitted"
+
+
+@respx.mock
+def test_authenticate_returns_org_reference():
+    auth_route = respx.post(f"{SANDBOX}/v6/work/authenticate").mock(
+        return_value=httpx.Response(200, json=auth_response())
+    )
+    with StreetManagerClient("user@example.com", "pw") as sm:
+        org = sm.authenticate()
+    assert org == "1234"
+    assert auth_route.call_count == 1
 
 
 @respx.mock

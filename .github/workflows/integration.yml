@@ -1,0 +1,32 @@
+name: Integration tests (live systems)
+
+# Manual only. Hits real test/sandbox systems using credentials stored as
+# repository secrets. Never runs on push/PR, so it can't break normal CI.
+on:
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    environment: integration   # optional: gate behind a reviewer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: pytest -m integration -v
+        env:
+          SM_EMAIL: ${{ secrets.SM_EMAIL }}
+          SM_PASSWORD: ${{ secrets.SM_PASSWORD }}
+          SM_ENV: sandbox
+          SM_VERSION: v6
+          DATAVIA_USER: ${{ secrets.DATAVIA_USER }}
+          DATAVIA_PASSWORD: ${{ secrets.DATAVIA_PASSWORD }}
+          DATAVIA_CLIENT_ID: ${{ secrets.DATAVIA_CLIENT_ID }}
+          DATAVIA_CLIENT_SECRET: ${{ secrets.DATAVIA_CLIENT_SECRET }}
+          DATAVIA_USRN: ${{ secrets.DATAVIA_USRN }}
+          DTRO_CLIENT_ID: ${{ secrets.DTRO_CLIENT_ID }}
+          DTRO_CLIENT_SECRET: ${{ secrets.DTRO_CLIENT_SECRET }}
+          DTRO_APP_ID: ${{ secrets.DTRO_APP_ID }}
+          DTRO_ENV: integration

@@ -287,6 +287,18 @@ class StreetManagerClient:
         """SWA code / organisation reference of the authenticated user."""
         return self._auth.organisation_reference
 
+    def authenticate(self) -> str | None:
+        """Eagerly acquire an ID token, verifying credentials and connectivity.
+
+        Returns the organisation reference on success. Raises
+        :class:`~streetworks.exceptions.AuthenticationError` for bad
+        credentials, ``AccountLockedError`` (423), ``OrganisationSuspendedError``
+        (412), or a transport error if the service is unreachable. Useful as a
+        fail-fast check at start-up or in a connectivity smoke test.
+        """
+        self._auth.get_id_token()
+        return self.organisation_reference
+
     def logout(self) -> None:
         self._auth.logout()
 
@@ -435,6 +447,12 @@ class AsyncStreetManagerClient:
     @property
     def organisation_reference(self) -> str | None:
         return self._auth.organisation_reference
+
+    async def authenticate(self) -> str | None:
+        """Eagerly acquire an ID token, verifying credentials and connectivity.
+        Returns the organisation reference on success."""
+        await self._auth.get_id_token()
+        return self.organisation_reference
 
     async def logout(self) -> None:
         await self._auth.logout()

@@ -5,12 +5,18 @@
 [![Python](https://img.shields.io/pypi/pyversions/streetworks)](https://pypi.org/project/streetworks/)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
-An open Python SDK for UK street works APIs.
+An open Python SDK for UK street works APIs — one consistent, typed,
+well-tested client for the services the sector actually uses.
 
 > We do this not because it is easy, but because it is hard.
 
-One consistent, typed, well-tested client library covering the APIs the UK
-street works sector actually uses — starting with:
+```python
+from streetworks.streetmanager import StreetManagerClient, Environment
+
+with StreetManagerClient("api-user@example.com", password, environment=Environment.SANDBOX) as sm:
+    sm.authenticate()                                  # verify credentials
+    submitted = sm.reporting.permits(status="submitted")
+```
 
 | Module | Service | Direction |
 |---|---|---|
@@ -23,26 +29,29 @@ Shared across all modules: automatic retries with exponential backoff and
 jitter, `Retry-After`-aware 429 handling, a single exception hierarchy, and
 both **sync and async** clients built on [httpx](https://www.python-httpx.org/).
 
-## How do I use this?
+## What this is (and isn't)
 
-1. **Get credentials** for the service(s) you need — they are issued by the
-   service operators, not by this SDK:
-   - *Street Manager*: API accounts come from your organisation's Street
-     Manager admin (start in [sandbox](https://department-for-transport-streetmanager.github.io/street-manager-docs/articles/testing-with-street-manager-sandbox-environment.html); credentials are per-environment).
-   - *Street Manager Open Data*: register an HTTPS endpoint with DfT to
-     receive the SNS subscription.
-   - *DataVIA*: a [Geoplace DataVIA](https://datavia.geoplace.co.uk/) account
-     (username/password) or issued OAuth2 client credentials.
-   - *D-TRO*: register an application via the
-     [D-TRO service](https://d-tro.dft.gov.uk/) to get an app id and OAuth2
-     client credentials (integration first, then production).
-2. **Install** the package (below) and keep secrets in environment variables
-   or a secret manager — never in code.
-3. **Pick your module** from the table above and follow its section — every
-   client works as a context manager, retries sensibly, and raises typed
-   exceptions from `streetworks.exceptions`.
-4. **Start in the test environment** (Street Manager SANDBOX, D-TRO
-   integration) and verify your workflows before pointing at production.
+**It is** a typed client library: it handles authentication, token lifecycles,
+retries, rate limiting, pagination, and request/response plumbing for each of
+these APIs, so you call Python methods instead of hand-rolling HTTP. Auth and
+connectivity are verified against the real systems (see **Status** below).
+
+**It isn't** a replacement for the APIs' own documentation. You still bring
+your own credentials (issued by the service operators, not by this SDK) and
+you still need each API's domain concepts — what a permit payload contains,
+what makes a valid USRN filter, which DataVIA layer holds which data. The SDK
+gets you connected and typed; the linked docs tell you what to send.
+
+## Status
+
+Early alpha (`0.1.0`). Street Manager authentication and connectivity are
+**verified working against SANDBOX** with a real account. The DataVIA and
+D-TRO clients are built to the published documentation and pass a full mocked
+test suite, but some endpoint details are awaiting first confirmation against a
+live account — see the "Values to confirm" list in
+[docs/INTEGRATION.md](docs/INTEGRATION.md). The `streetworks.exceptions` API
+and the client method surface may change before `1.0`. Feedback and
+first-contact reports very welcome.
 
 ## Install
 
@@ -52,6 +61,47 @@ pip install "streetworks[sns]"     # + SNS signature verification (cryptography)
 ```
 
 Requires Python 3.10+.
+
+## Prerequisites: credentials
+
+Credentials are issued by the service operators. You only need the ones for the
+service(s) you'll use. Keep them in environment variables or a secret manager —
+never in code.
+
+| Service | How to get access | Environment variables |
+|---|---|---|
+| Street Manager | Your organisation's Street Manager admin issues API accounts; [start in sandbox](https://department-for-transport-streetmanager.github.io/street-manager-docs/articles/testing-with-street-manager-sandbox-environment.html) | `SM_EMAIL`, `SM_PASSWORD` |
+| Street Manager Open Data | Register an HTTPS endpoint with DfT to receive the SNS subscription | *(none — you host the receiver)* |
+| DataVIA | A [Geoplace DataVIA](https://datavia.geoplace.co.uk/) account (username/password) or issued OAuth2 client credentials | `DATAVIA_USER` + `DATAVIA_PASSWORD`, or `DATAVIA_CLIENT_ID` + `DATAVIA_CLIENT_SECRET` |
+| D-TRO | Register an application via the [D-TRO service](https://d-tro.dft.gov.uk/) for an app id and OAuth2 client credentials (integration first, then production) | `DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID` |
+
+Credentials are **per-environment** — sandbox/integration credentials do not
+work against production, and vice versa.
+
+## Verify your setup
+
+Before writing any code, confirm your credentials and connectivity with the
+included smoke test. It targets the **test** environments by default, is
+read-only, and skips any service you haven't configured:
+
+```bash
+SM_EMAIL='api-user@example.com' SM_PASSWORD='...' python scripts/smoke_test.py
+```
+
+```
+================================================================
+streetworks connectivity smoke test
+TARGET  Street Manager: sandbox
+All checks are READ-ONLY.
+================================================================
+
+  [PASS] Street Manager - authenticated (sandbox/v6), organisation 1355
+  ...
+```
+
+A `FAIL` prints the exact exception, so a wrong credential or environment is
+obvious immediately. See [docs/INTEGRATION.md](docs/INTEGRATION.md) for the
+full variable list and how to (deliberately) target production.
 
 ## Street Manager
 
@@ -87,6 +137,12 @@ from streetworks.streetmanager import AsyncStreetManagerClient
 async with AsyncStreetManagerClient("api-user@example.com", "password") as sm:
     permits = await sm.reporting.permits(status="submitted")
 ```
+
+> **Environments.** `Environment.SANDBOX` and `Environment.PRODUCTION` are
+> isolated systems with separate credentials. Develop and test against
+> SANDBOX; only point at PRODUCTION once your workflows are proven. The smoke
+> test and integration suite refuse to touch production without an explicit
+> opt-in, so a stray setting can't send you at live data by accident.
 
 ### Typed models
 
@@ -183,8 +239,10 @@ with DTROClient(client_id, client_secret, app_id=app_id,
    generic `get/post/put/delete` on every API group for everything else.
 2. **Be a good API citizen.** Token reuse, refresh-then-reauth, exponential
    backoff, honoured `Retry-After` — per the DfT integration guidance.
-3. **Test without credentials.** The whole suite runs against mocked
-   transports (`respx`); CI needs no secrets.
+3. **Test without credentials, verify with them.** The whole unit suite runs
+   against mocked transports (`respx`) so CI needs no secrets; a separate
+   smoke test and skip-guarded integration suite verify against the real
+   systems when you supply credentials.
 4. **Room to grow.** Each provider is a self-contained module over a shared
    transport/exception core — adding a new API is additive.
 
@@ -203,8 +261,18 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest                    # 35 mocked unit tests - no credentials needed
 ruff check .
+```
+
+The unit tests mock the network so they run offline and without credentials.
+To verify the SDK against the **real** test/sandbox systems with your own
+credentials, use the smoke test or the integration suite — see
+[docs/INTEGRATION.md](docs/INTEGRATION.md):
+
+```bash
+python scripts/smoke_test.py     # one read-only call per configured service
+pytest -m integration -v         # same checks, in the test suite
 ```
 
 ## Licence

@@ -55,13 +55,24 @@ class TokenSet:
 
     @classmethod
     def from_response(cls, data: dict[str, Any]) -> TokenSet:
-        id_token = data["idToken"]
+        def pick(*keys: str) -> str | None:
+            for key in keys:
+                if data.get(key) is not None:
+                    return data[key]
+            return None
+
+        id_token = pick("id_token", "idToken")
+        if id_token is None:
+            raise KeyError(
+                "Authentication response contained no id token "
+                f"(keys: {sorted(data)})"
+            )
         expires_at = _jwt_expiry(id_token) or (time.time() + FALLBACK_LIFETIME)
         return cls(
             id_token=id_token,
-            access_token=data.get("accessToken"),
-            refresh_token=data.get("refreshToken"),
-            organisation_reference=data.get("organisationReference"),
+            access_token=pick("access_token", "accessToken"),
+            refresh_token=pick("refresh_token", "refreshToken"),
+            organisation_reference=pick("organisation_reference", "organisationReference"),
             expires_at=expires_at,
         )
 
@@ -90,12 +101,15 @@ class _TokenManagerBase:
     def organisation_reference(self) -> str | None:
         return self.tokens.organisation_reference if self.tokens else None
 
+    # Note: the wire format is camelCase (confirmed against SANDBOX). Swagger
+    # generators expose snake_case Python attributes, but they map back to
+    # these camelCase JSON keys - don't be misled into sending snake_case.
     def _auth_body(self) -> dict[str, str]:
         return {"emailAddress": self._email, "password": self._password}
 
     def _refresh_body(self) -> dict[str, str]:
         assert self.tokens and self.tokens.refresh_token
-        return {"emailAddress": self._email, "refreshToken": self.tokens.refresh_token}
+        return {"refreshToken": self.tokens.refresh_token}
 
 
 class SyncTokenManager(_TokenManagerBase):
