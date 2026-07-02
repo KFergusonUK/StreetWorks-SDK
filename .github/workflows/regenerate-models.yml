@@ -1,0 +1,43 @@
+name: Regenerate Street Manager models
+
+# Run manually from the Actions tab. Downloads the official swagger specs
+# and opens a PR if the generated Pydantic models changed.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Street Manager API version"
+        default: "v6"
+        required: true
+      url_template:
+        description: "Swagger spec URL ({api}/{version} placeholders)"
+        default: "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/docs/swagger.json"
+        required: true
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[gen]" httpx
+      - run: |
+          python scripts/generate_models.py \
+            --version "${{ inputs.version }}" \
+            --url-template "${{ inputs.url_template }}"
+      - run: pip install -e ".[dev]" && pytest -q
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: regenerate-models-${{ inputs.version }}
+          title: "Regenerate ${{ inputs.version }} Street Manager models"
+          commit-message: "Regenerate ${{ inputs.version }} models from official swagger specs"
+          body: |
+            Automated regeneration of `streetworks.streetmanager.models.${{ inputs.version }}`
+            from the official DfT swagger specifications.
+
+            Spec source: `${{ inputs.url_template }}`

@@ -1,0 +1,45 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "Street Manager Mini API (test fixture)", "version": "6.0"},
+  "paths": {
+    "/authenticate": {
+      "post": {
+        "parameters": [{"in": "body", "name": "body", "schema": {"$ref": "#/definitions/AuthenticationRequest"}}],
+        "responses": {"200": {"schema": {"$ref": "#/definitions/AuthenticationResponse"}}}
+      }
+    }
+  },
+  "definitions": {
+    "AuthenticationRequest": {
+      "type": "object",
+      "required": ["emailAddress", "password"],
+      "properties": {
+        "emailAddress": {"type": "string", "description": "Case sensitive email address"},
+        "password": {"type": "string"}
+      }
+    },
+    "AuthenticationResponse": {
+      "type": "object",
+      "properties": {
+        "idToken": {"type": "string"},
+        "accessToken": {"type": "string"},
+        "refreshToken": {"type": "string"},
+        "organisationReference": {"type": "string"}
+      }
+    },
+    "PermitStatus": {
+      "type": "string",
+      "enum": ["submitted", "granted", "permit_modification_request", "refused", "closed", "revoked", "progressed", "cancelled"]
+    },
+    "PermitSummaryResponse": {
+      "type": "object",
+      "properties": {
+        "permit_reference_number": {"type": "string"},
+        "work_reference_number": {"type": "string"},
+        "status": {"$ref": "#/definitions/PermitStatus"},
+        "usrn": {"type": "integer"},
+        "proposed_start_date": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
