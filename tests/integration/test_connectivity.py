@@ -133,5 +133,8 @@ def test_dtro_events_search() -> None:
         app_id=os.environ.get("DTRO_APP_ID"),
         environment=env,
     ) as dtro:
-        events = dtro.search_events(pageSize=1)
+        # /events requires page, pageSize, since and to.
+        events = dtro.search_events(
+            page=1, pageSize=1, since="2020-01-01T00:00:00", to="2099-01-01T00:00:00"
+        )
         assert isinstance(events, dict)

@@ -47,6 +47,7 @@ class _ClientCredentialsBase:
         self._scope = scope
         self._access_token: str | None = None
         self._expires_at: float = 0.0
+        self.last_token_response: dict[str, Any] | None = None
 
     @property
     def _fresh(self) -> bool:
@@ -65,6 +66,7 @@ class _ClientCredentialsBase:
         return kwargs
 
     def _store(self, payload: dict[str, Any]) -> str:
+        self.last_token_response = payload
         self._access_token = payload["access_token"]
         lifetime = float(payload.get("expires_in") or FALLBACK_LIFETIME)
         self._expires_at = time.time() + lifetime

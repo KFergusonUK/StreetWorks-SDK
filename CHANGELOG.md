@@ -21,4 +21,7 @@ Initial release.
 - `streetworks.dtro`: DfT Digital Traffic Regulation Orders client -
   OAuth2 client credentials with token caching, integration/production
   environments, publish (body/file/gzip), retrieve, delete, events search,
-  and signed-URL full CSV export.
+  signed-URL full CSV export, provisions (create/update/delete, with the
+  distinct `App-Id` header), schemas, and search. Token metadata exposed via
+  `token_info`. Verified against the official OpenAPI spec and Postman
+  collection.

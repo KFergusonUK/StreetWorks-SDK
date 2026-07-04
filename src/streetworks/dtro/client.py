@@ -96,10 +96,18 @@ class DTROClient:
     def search_events(self, **criteria: Any) -> JSON:
         """``POST /events`` - search D-TRO create/update/delete events.
 
-        Supported criteria include ``page``, ``pageSize``, ``since``, ``to``,
-        ``traCreator``, ``currentTraOwner``, ``troName``, ``regulationType``,
-        ``vehicleType``, ``orderReportingPoint``, and ``regulationStart`` /
-        ``regulationEnd`` as ``{"operator": ..., "value": ...}`` dicts.
+        Four fields are **required** by the API: ``page``, ``pageSize``,
+        ``since`` and ``to`` (the last two are ISO 8601 date-times). Optional
+        criteria include ``traCreator``, ``currentTraOwner``, ``troName``,
+        ``regulationType``, ``vehicleType``, ``orderReportingPoint``,
+        ``modifiedFrom`` / ``modifiedTo``, ``deletedFrom`` / ``deletedTo``, and
+        ``regulationStart`` / ``regulationEnd``.
+
+        Example::
+
+            dtro.search_events(page=1, pageSize=50,
+                               since="2025-01-01T00:00:00",
+                               to="2025-03-01T00:00:00")
         """
         return self.request("POST", "events", json=criteria).json()
 
@@ -142,6 +150,64 @@ class DTROClient:
     def delete_dtro(self, dtro_id: str) -> None:
         """``DELETE /dtros/{dtroId}``."""
         self.request("DELETE", f"dtros/{dtro_id}")
+
+    @property
+    def token_info(self) -> JSON | None:
+        """Metadata from the most recent token response, if any - includes
+        ``scope``, ``api_product_list`` and ``organization_name``, which reveal
+        which environment and access level you authenticated into. ``None``
+        until the first authenticated call."""
+        return self._oauth.last_token_response
+
+    # --- provisions (publisher scope; require the App-Id header) ------------ #
+
+    def _app_id_header(self) -> dict[str, str]:
+        if not self.app_id:
+            raise ValueError(
+                "app_id is required for provisions endpoints "
+                "(they send it as the 'App-Id' header, distinct from x-app-id)"
+            )
+        return {"App-Id": self.app_id}
+
+    def create_provisions(self, provisions: list[JSON], *, dtro_id: str | None = None) -> Any:
+        """``POST /provisions/createFromBody`` - body is a JSON array of
+        provision objects. Requires ``app_id`` (sent as the ``App-Id`` header)."""
+        params = {"dtroId": dtro_id} if dtro_id else None
+        return self.request(
+            "POST",
+            "provisions/createFromBody",
+            json=provisions,
+            params=params,
+            headers=self._app_id_header(),
+        ).json()
+
+    def update_provision(self, provision_id: str, provision: JSON) -> Any:
+        """``PUT /provisions/{provisionId}``. Requires ``app_id``."""
+        return self.request(
+            "PUT", f"provisions/{provision_id}", json=provision, headers=self._app_id_header()
+        ).json()
+
+    def delete_provision(self, provision_id: str) -> None:
+        """``DELETE /provisions/{provisionId}``. Requires ``app_id``."""
+        self.request("DELETE", f"provisions/{provision_id}", headers=self._app_id_header())
+
+    # --- schemas & search (consume) ---------------------------------------- #
+
+    def schema_versions(self) -> Any:
+        """``GET /schemas/versions`` - list available D-TRO schema versions."""
+        return self.request("GET", "schemas/versions").json()
+
+    def schemas(self) -> Any:
+        """``GET /schemas`` - list schemas."""
+        return self.request("GET", "schemas").json()
+
+    def get_schema(self, version: str) -> Any:
+        """``GET /schemas/{version}`` - fetch a specific schema version."""
+        return self.request("GET", f"schemas/{version}").json()
+
+    def search(self, query: JSON) -> Any:
+        """``POST /search`` - search published D-TROs (a ``DtroSearch`` body)."""
+        return self.request("POST", "search", json=query).json()
 
     def close(self) -> None:
         self._transport.close()
@@ -211,6 +277,52 @@ class AsyncDTROClient:
 
     async def delete_dtro(self, dtro_id: str) -> None:
         await self.request("DELETE", f"dtros/{dtro_id}")
+
+    def _app_id_header(self) -> dict[str, str]:
+        if not self.app_id:
+            raise ValueError(
+                "app_id is required for provisions endpoints "
+                "(they send it as the 'App-Id' header, distinct from x-app-id)"
+            )
+        return {"App-Id": self.app_id}
+
+    async def create_provisions(
+        self, provisions: list[JSON], *, dtro_id: str | None = None
+    ) -> Any:
+        params = {"dtroId": dtro_id} if dtro_id else None
+        return (
+            await self.request(
+                "POST",
+                "provisions/createFromBody",
+                json=provisions,
+                params=params,
+                headers=self._app_id_header(),
+            )
+        ).json()
+
+    async def update_provision(self, provision_id: str, provision: JSON) -> Any:
+        return (
+            await self.request(
+                "PUT",
+                f"provisions/{provision_id}",
+                json=provision,
+                headers=self._app_id_header(),
+            )
+        ).json()
+
+    async def delete_provision(self, provision_id: str) -> None:
+        await self.request(
+            "DELETE", f"provisions/{provision_id}", headers=self._app_id_header()
+        )
+
+    async def schema_versions(self) -> Any:
+        return (await self.request("GET", "schemas/versions")).json()
+
+    async def get_schema(self, version: str) -> Any:
+        return (await self.request("GET", f"schemas/{version}")).json()
+
+    async def search(self, query: JSON) -> Any:
+        return (await self.request("POST", "search", json=query)).json()
 
     async def aclose(self) -> None:
         await self._transport.aclose()

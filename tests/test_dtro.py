@@ -1,6 +1,7 @@
 import json
 
 import httpx
+import pytest
 import respx
 
 from streetworks.dtro import DTROClient, Environment
@@ -69,12 +70,19 @@ def test_create_update_delete_and_events():
     with DTROClient("cid", "secret", app_id="app-uuid") as dtro:
         created = dtro.create_dtro(payload)
         dtro.update_dtro(created["id"], payload)
-        dtro.search_events(since="2026-01-01T00:00:00", pageSize=50)
+        dtro.search_events(
+            page=1, pageSize=50, since="2026-01-01T00:00:00", to="2026-03-01T00:00:00"
+        )
         dtro.delete_dtro(created["id"])
 
     assert json.loads(create.calls[0].request.content) == payload
     sent = json.loads(events.calls[0].request.content)
-    assert sent == {"since": "2026-01-01T00:00:00", "pageSize": 50}
+    assert sent == {
+        "page": 1,
+        "pageSize": 50,
+        "since": "2026-01-01T00:00:00",
+        "to": "2026-03-01T00:00:00",
+    }
 
 
 @respx.mock
@@ -105,3 +113,43 @@ def test_production_environment_url():
         result = dtro.get_all_dtros_url()
     assert "signed.example" in result["url"]
     assert route.call_count == 1
+
+
+@respx.mock
+def test_provisions_send_App_Id_header_not_x_app_id():
+    mock_token()
+    create = respx.post(f"{INTEGRATION}/provisions/createFromBody").mock(
+        return_value=httpx.Response(201, json=[{"id": "prov-1"}])
+    )
+    with DTROClient("cid", "secret", app_id="app-uuid") as dtro:
+        dtro.create_provisions([{"actionType": "new"}], dtro_id="dtro-9")
+
+    req = create.calls[0].request
+    # provisions require the capitalised App-Id header specifically
+    assert req.headers.get("App-Id") == "app-uuid"
+    assert "dtroId=dtro-9" in str(req.url)
+
+
+@respx.mock
+def test_provisions_require_app_id():
+    mock_token()
+    with DTROClient("cid", "secret") as dtro:  # no app_id
+        with pytest.raises(ValueError, match="app_id is required"):
+            dtro.update_provision("prov-1", {"foo": "bar"})
+
+
+@respx.mock
+def test_schemas_and_search():
+    mock_token()
+    respx.get(f"{INTEGRATION}/schemas/versions").mock(
+        return_value=httpx.Response(200, json=["3.4.1", "3.5.1"])
+    )
+    search = respx.post(f"{INTEGRATION}/search").mock(
+        return_value=httpx.Response(200, json={"results": []})
+    )
+    with DTROClient("cid", "secret", app_id="app-uuid") as dtro:
+        versions = dtro.schema_versions()
+        dtro.search({"queries": []})
+
+    assert "3.5.1" in versions
+    assert search.call_count == 1

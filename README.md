@@ -44,14 +44,21 @@ gets you connected and typed; the linked docs tell you what to send.
 
 ## Status
 
-Early alpha (`0.1.0`). Street Manager authentication and connectivity are
-**verified working against SANDBOX** with a real account. The DataVIA and
-D-TRO clients are built to the published documentation and pass a full mocked
-test suite, but some endpoint details are awaiting first confirmation against a
-live account — see the "Values to confirm" list in
-[docs/INTEGRATION.md](docs/INTEGRATION.md). The `streetworks.exceptions` API
-and the client method surface may change before `1.0`. Feedback and
-first-contact reports very welcome.
+Early alpha (`0.1.0`). **Authentication and read/consume access are verified
+against the real systems for all four providers:** Street Manager (SANDBOX),
+Geoplace DataVIA (live — including a real feature query), D-TRO (production
+token + events search), and the Open Data SNS parsing/verification pipeline.
+
+Not yet exercised against live systems — implemented to the published specs
+and covered by mocked tests: the **write/publish** paths (Street Manager work
+submission and assessment; D-TRO create/update and provisions). These are
+publisher-scoped and deliberately excluded from the read-only smoke test.
+
+Known reconciliation items: D-TRO payload models track spec `3.4.x` while
+production is on `3.5.1` (with `4.0.0` due mid-2026); the
+`streetworks.exceptions` API and client method surface may change before
+`1.0`. See [docs/INTEGRATION.md](docs/INTEGRATION.md) for how to verify
+against the real systems yourself. First-contact reports welcome.
 
 ## Install
 
@@ -167,9 +174,11 @@ python scripts/generate_models.py --version v6 --from-dir specs/streetmanager/v6
 ## Street Manager Open Data (SNS push)
 
 Open Data is a *push* model: Street Manager POSTs event notifications to an
-HTTPS endpoint you host. `streetworks.opendata` handles envelope parsing,
-signature verification, subscription auto-confirmation, and payload
-extraction — framework-agnostic:
+HTTPS endpoint you host. **The receiver needs no credentials** — messages are
+authenticated with AWS's public signing certificate (fetched over HTTPS), not
+a shared secret, so there's nothing to configure on the SDK side for parsing,
+verifying, or confirming. `streetworks.opendata` handles all of that,
+framework-agnostic:
 
 ```python
 from streetworks.opendata import handle
@@ -182,6 +191,14 @@ if event is not None:               # None => subscription handshake, auto-confi
 
 See [`examples/opendata_fastapi.py`](examples/opendata_fastapi.py) for a
 complete FastAPI receiver.
+
+> **Credentials nuance.** *Receiving* Open Data needs no credentials. But note
+> there are two distinct feeds: the fully public **Open Data** feed (this
+> module), and a separate per-organisation **API Notifications** feed whose
+> *subscription* is set up by calling an authenticated Street Manager endpoint
+> (`POST api-notifications/subscribe`) — that setup step needs Street Manager
+> credentials, though the messages, once flowing, are received the same
+> credential-free way. This module handles the receiving side of both.
 
 ## Geoplace DataVIA
 
@@ -231,6 +248,10 @@ with DTROClient(client_id, client_secret, app_id=app_id,
     dtro.create_dtro(payload)                          # publisher scope
     dtro.create_dtro_from_file(big_json, gzip=True)    # large D-TROs
     signed = dtro.get_all_dtros_url()                  # full CSV extract
+
+    dtro.schema_versions()                             # available schema versions
+    dtro.search({...})                                 # search published D-TROs
+    dtro.create_provisions([...], dtro_id="...")       # provisions (App-Id header handled)
 ```
 
 ## Design principles
@@ -251,7 +272,8 @@ with DTROClient(client_id, client_secret, app_id=app_id,
 - [x] Pydantic model generation pipeline for the Street Manager swagger specs
 - [ ] Auto-pagination helpers for the Reporting API
 - [ ] DataVIA WMS support
-- [ ] D-TRO data-model helpers (schema validation against DfT releases)
+- [ ] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
+      (`v3.5.1` to match production, `v4.0.0` to follow) — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md)
 - [ ] Scottish Road Works Register (SRWR)?
 - [ ] Ordnance Survey NGD / Linked Identifiers?
 

@@ -50,6 +50,7 @@ import os
 import sys
 import traceback
 from collections.abc import Callable
+from datetime import datetime, timezone
 
 from streetworks.exceptions import StreetworksError
 
@@ -173,9 +174,17 @@ def check_dtro() -> str:
         app_id=os.environ.get("DTRO_APP_ID"),
         environment=env,
     ) as dtro:
-        events = dtro.search_events(pageSize=1)
+        # /events requires page, pageSize, since and to (all mandatory).
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+        events = dtro.search_events(
+            page=1, pageSize=1, since="2020-01-01T00:00:00", to=now
+        )
         total = events.get("totalCount", "?") if isinstance(events, dict) else "?"
-        return f"token acquired ({env.name.lower()}), events search -> totalCount {total}"
+        info = dtro.token_info or {}
+        scope = info.get("scope")
+        products = info.get("api_product_list")
+        extra = f", scope={scope}, products={products}" if scope or products else ""
+        return f"token acquired ({env.name.lower()}{extra}), events -> totalCount {total}"
 
 
 def check_opendata_parsing() -> str:
