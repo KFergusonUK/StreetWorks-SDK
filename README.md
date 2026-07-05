@@ -71,6 +71,21 @@ pip install "streetworks[sns]"     # + SNS signature verification (cryptography)
 
 Requires Python 3.10+.
 
+## Quickstart
+
+The fastest way to see everything working: copy the credential template, fill
+in what you have, and run the one-file tour — it logs in to each configured
+provider and retrieves a little real data (read-only). Providers you leave
+blank are skipped, and SRWR / OS Open USRN need no credentials at all.
+
+```bash
+cp .env.example .env      # then edit .env
+python examples/quickstart.py
+```
+
+For connectivity checks without data retrieval, use the smoke test instead:
+`python scripts/smoke_test.py`.
+
 ## Prerequisites: credentials
 
 Credentials are issued by the service operators. You only need the ones for the

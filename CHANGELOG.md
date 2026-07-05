@@ -4,6 +4,9 @@
 
 ### Added
 
+- `examples/quickstart.py` + `.env.example`: a one-file tour that loads
+  credentials from `.env` and retrieves a little real data from every
+  configured provider.
 - **New provider: OS Open USRN** (`streetworks.openusrn`) - GB-wide USRN
   lookup with street geometry via the OS Downloads API (OpenData, no key).
   Streamed ~300 MB GeoPackage download and a stdlib-only reader (sqlite3 +
