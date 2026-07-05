@@ -64,6 +64,13 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+# Generated model files are machine-authored (datamodel-code-generator) and are
+# not hand-maintained, so linting them is noise.
+# E.g. sometimes the lines are too long in auto generated files
+extend-exclude = [
+    "src/streetworks/streetmanager/models",
+    "src/streetworks/dtro/models",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

@@ -11,7 +11,7 @@ on:
         required: true
       url_template:
         description: "Swagger spec URL ({api}/{version} placeholders)"
-        default: "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/docs/swagger.json"
+        default: "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/swagger.json"
         required: true
 
 jobs:

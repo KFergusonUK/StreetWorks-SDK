@@ -18,7 +18,7 @@ Two ways to supply the specs:
    DfT hosts::
 
        python scripts/generate_models.py --version v6 \\
-           --url-template "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/docs/swagger.json"
+           --url-template "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/swagger.json"
 
 Requires the ``gen`` extra: ``pip install -e ".[gen]"``.
 
