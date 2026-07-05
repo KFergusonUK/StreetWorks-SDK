@@ -19,6 +19,12 @@ async def main() -> None:
         print(len(inspections.get("rows", [])), "inspections")
         print(len(fpns.get("rows", [])), "disputed FPNs")
 
+        # For complete result sets, let the SDK walk every page:
+        total = 0
+        async for _permit in sm.reporting.iter_permits(status="submitted"):
+            total += 1
+        print(total, "submitted permits across all pages")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

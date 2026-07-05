@@ -210,6 +210,62 @@ def check_opendata_parsing() -> str:
     return f"parsed sample notification ({event.event_type}) - deploy an endpoint for live push"
 
 
+def check_srwr() -> str:
+    """SRWR Open Data needs no credentials. If SRWR_ARCHIVE points at a local
+    .zip/.csv it is parsed; otherwise the latest daily extract is downloaded
+    (a few MB) and parsed. Both paths are read-only."""
+    import tempfile
+    from pathlib import Path
+
+    from streetworks.srwr import SRWRClient, iter_activities
+
+    local = os.environ.get("SRWR_ARCHIVE")
+    if local:
+        path = Path(local)
+        source_desc = f"local archive {path.name}"
+    else:
+        tmp = Path(tempfile.mkdtemp()) / "srwr-daily.zip"
+        with SRWRClient() as srwr:
+            path = srwr.download_daily(tmp)
+        source_desc = f"downloaded daily extract ({path.stat().st_size:,} bytes)"
+
+    count = with_phase = 0
+    for activity in iter_activities(path):
+        count += 1
+        if activity.phases:
+            with_phase += 1
+    return f"{source_desc} -> {count} activities ({with_phase} with phases)"
+
+
+def check_openusrn() -> str:
+    """OS Open USRN needs no credentials. By default this only queries the
+    Downloads API metadata (the GeoPackage itself is ~300 MB - too big for a
+    smoke test). Set OPENUSRN_GPKG to a local extracted .gpkg to also verify
+    a real lookup (set OPENUSRN_TEST_USRN to choose the USRN)."""
+    from streetworks.openusrn import OpenUSRNClient, UsrnDatabase
+
+    with OpenUSRNClient() as client:
+        entries = client.downloads()
+        if not entries:
+            raise RuntimeError("Downloads API returned no GeoPackage entry")
+        entry = entries[0]
+        summary = f"API OK: {entry['fileName']} ({entry['size']:,} bytes)"
+
+    local = os.environ.get("OPENUSRN_GPKG")
+    if local:
+        with UsrnDatabase(local) as db:
+            total = db.count()
+            usrn = os.environ.get("OPENUSRN_TEST_USRN")
+            if usrn:
+                street = db.get(usrn)
+                found = "found" if street else "NOT FOUND"
+                geom = " with geometry" if street and street.geometry else ""
+                summary += f"; local db {total:,} USRNs, {usrn} {found}{geom}"
+            else:
+                summary += f"; local db {total:,} USRNs"
+    return summary
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -252,6 +308,11 @@ def main() -> int:
     reporter.check("D-TRO", ["DTRO_CLIENT_ID", "DTRO_CLIENT_SECRET"], check_dtro)
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)
+    # SRWR Open Data needs no credentials either (set SRWR_ARCHIVE to use a
+    # local file instead of downloading)
+    reporter.check("SRWR Open Data", [], check_srwr)
+    # OS Open USRN needs no credentials (metadata check only by default)
+    reporter.check("OS Open USRN", [], check_openusrn)
 
     print()
     if reporter.ran == 0:

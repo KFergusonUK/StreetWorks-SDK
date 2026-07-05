@@ -24,6 +24,7 @@ Example
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator, Iterator
 from typing import Any
 
 import httpx
@@ -177,6 +178,42 @@ class ReportingAPI(_SyncGroup):
 
     def alterations(self, **params: Any) -> JSON:
         return self.get("alterations", params=params)
+
+    # --- auto-pagination ------------------------------------------------ #
+    # Reporting endpoints page with an ``offset`` query parameter and return
+    # ``{"pagination": {"hasNextPage": bool, ...}, "rows": [...]}``. These
+    # iterators follow ``hasNextPage``, advancing ``offset`` by the rows
+    # received, so callers never handle paging by hand:
+    #
+    #     for permit in sm.reporting.iter_permits(status="submitted"):
+    #         ...
+
+    def _iter_rows(self, path: str, params: dict[str, Any]) -> Iterator[JSON]:
+        offset = int(params.pop("offset", 0) or 0)
+        while True:
+            page = self.get(path, params={**params, "offset": offset})
+            rows = page.get("rows") or []
+            yield from rows
+            pagination = page.get("pagination") or {}
+            if not pagination.get("hasNextPage") or not rows:
+                return
+            offset += len(rows)
+
+    def iter_permits(self, **params: Any) -> Iterator[JSON]:
+        """Iterate every permit matching the filters, across all pages."""
+        return self._iter_rows("permits", params)
+
+    def iter_inspections(self, **params: Any) -> Iterator[JSON]:
+        return self._iter_rows("inspections", params)
+
+    def iter_fixed_penalty_notices(self, **params: Any) -> Iterator[JSON]:
+        return self._iter_rows("fixed-penalty-notices", params)
+
+    def iter_reinstatements(self, **params: Any) -> Iterator[JSON]:
+        return self._iter_rows("reinstatements", params)
+
+    def iter_alterations(self, **params: Any) -> Iterator[JSON]:
+        return self._iter_rows("alterations", params)
 
 
 class LookupAPI(_SyncGroup):
@@ -381,6 +418,36 @@ class AsyncReportingAPI(_AsyncGroup):
 
     async def alterations(self, **params: Any) -> JSON:
         return await self.get("alterations", params=params)
+
+    # --- auto-pagination (see ReportingAPI for the contract) -------------- #
+
+    async def _iter_rows(self, path: str, params: dict[str, Any]) -> AsyncIterator[JSON]:
+        offset = int(params.pop("offset", 0) or 0)
+        while True:
+            page = await self.get(path, params={**params, "offset": offset})
+            rows = page.get("rows") or []
+            for row in rows:
+                yield row
+            pagination = page.get("pagination") or {}
+            if not pagination.get("hasNextPage") or not rows:
+                return
+            offset += len(rows)
+
+    def iter_permits(self, **params: Any) -> AsyncIterator[JSON]:
+        """Async-iterate every permit matching the filters, across all pages."""
+        return self._iter_rows("permits", params)
+
+    def iter_inspections(self, **params: Any) -> AsyncIterator[JSON]:
+        return self._iter_rows("inspections", params)
+
+    def iter_fixed_penalty_notices(self, **params: Any) -> AsyncIterator[JSON]:
+        return self._iter_rows("fixed-penalty-notices", params)
+
+    def iter_reinstatements(self, **params: Any) -> AsyncIterator[JSON]:
+        return self._iter_rows("reinstatements", params)
+
+    def iter_alterations(self, **params: Any) -> AsyncIterator[JSON]:
+        return self._iter_rows("alterations", params)
 
 
 class AsyncLookupAPI(_AsyncGroup):

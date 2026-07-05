@@ -1,0 +1,47 @@
+name: Regenerate D-TRO models
+
+# Run manually from the Actions tab after updating (or adding) a schema under
+# specs/dtro/<version>/. Regenerates the Pydantic models and opens a PR if
+# they changed. Unlike the Street Manager workflow this doesn't download
+# anything: the DfT publishes D-TRO schemas via their GitHub repo
+# (department-for-transport-public/D-TRO), so the schema is committed to
+# specs/ first and the generator runs against that file.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Schema version namespace (e.g. v3_5_1, v4_0_0)"
+        default: "v3_5_1"
+        required: true
+      schema:
+        description: "Path to the committed JSON schema"
+        default: "specs/dtro/v3_5_1/dtro-schema.json"
+        required: true
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[gen]"
+      - run: |
+          python scripts/generate_dtro_models.py \
+            --version "${{ inputs.version }}" \
+            --schema "${{ inputs.schema }}"
+      - run: pip install -e ".[dev]" && pytest -q
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: regenerate-dtro-models-${{ inputs.version }}
+          title: "Regenerate ${{ inputs.version }} D-TRO models"
+          commit-message: "Regenerate ${{ inputs.version }} D-TRO models from the committed schema"
+          body: |
+            Automated regeneration of `streetworks.dtro.models.${{ inputs.version }}`
+            from `${{ inputs.schema }}`.
+
+            Schema source: https://github.com/department-for-transport-public/D-TRO

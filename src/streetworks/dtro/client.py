@@ -159,6 +159,36 @@ class DTROClient:
         until the first authenticated call."""
         return self._oauth.last_token_response
 
+    @staticmethod
+    def validate_payload(payload: JSON, *, version: str = "v3_5_1") -> JSON:
+        """Validate a publish payload against the generated D-TRO data-model
+        models before sending it, raising ``pydantic.ValidationError`` on a bad
+        payload and returning it unchanged on success.
+
+        This catches structural, type, enum, and required-field errors locally.
+        Cross-field conditional rules (the schema's ``if/then/else``) are still
+        enforced by the service on submission, so a payload that passes here can
+        still be rejected on ``create_dtro`` - but the common mistakes are
+        caught first. ``version`` selects the schema namespace (only
+        ``v3_5_1`` ships today).
+
+        Requires the models to be importable; they are generated into the
+        package, so this works out of the box for the shipped version(s).
+        """
+        import importlib
+
+        try:
+            module = importlib.import_module(
+                f"streetworks.dtro.models.{version}"
+            )
+        except ModuleNotFoundError as exc:
+            raise ValueError(
+                f"No generated D-TRO models for {version!r}. "
+                "Available today: 'v3_5_1'."
+            ) from exc
+        module.Model.model_validate(payload)
+        return payload
+
     # --- provisions (publisher scope; require the App-Id header) ------------ #
 
     def _app_id_header(self) -> dict[str, str]:
@@ -323,6 +353,9 @@ class AsyncDTROClient:
 
     async def search(self, query: JSON) -> Any:
         return (await self.request("POST", "search", json=query)).json()
+
+    # Pure local validation - identical for sync and async use.
+    validate_payload = DTROClient.validate_payload
 
     async def aclose(self) -> None:
         await self._transport.aclose()

@@ -19,3 +19,11 @@ with DTROClient(
 
     # Or grab everything as CSV via a signed URL (valid 60 minutes)
     print(dtro.get_all_dtros_url())
+
+# Publishers: validate a payload against the v3.5.1 schema models locally
+# before submitting (catches structural/enum/required-field errors early;
+# the service still applies its cross-field rules on submission):
+#
+#     from streetworks.dtro import DTROClient
+#     DTROClient.validate_payload(payload)      # raises ValidationError if bad
+#     dtro.create_dtro(payload)

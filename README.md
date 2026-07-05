@@ -44,18 +44,20 @@ gets you connected and typed; the linked docs tell you what to send.
 
 ## Status
 
-Early alpha (`0.1.0`). **Authentication and read/consume access are verified
-against the real systems for all four providers:** Street Manager (SANDBOX),
-Geoplace DataVIA (live — including a real feature query), D-TRO (production
-token + events search), and the Open Data SNS parsing/verification pipeline.
+Early alpha. **Authentication and read/consume access are verified against
+the real systems for all providers:** Street Manager (SANDBOX), Geoplace
+DataVIA (live — including a real feature query), D-TRO (production token +
+events search), the Open Data SNS parsing/verification pipeline, SRWR
+Open Data (parsed against real published daily and monthly extracts), and
+OS Open USRN (Downloads API + GeoPackage reader).
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
 submission and assessment; D-TRO create/update and provisions). These are
 publisher-scoped and deliberately excluded from the read-only smoke test.
 
-Known reconciliation items: D-TRO payload models track spec `3.4.x` while
-production is on `3.5.1` (with `4.0.0` due mid-2026); the
+Known reconciliation items: D-TRO `v4.0.0` schema models to follow when it
+lands (production cut-over expected mid-2026; `v3.5.1` models ship now); the
 `streetworks.exceptions` API and client method surface may change before
 `1.0`. See [docs/INTEGRATION.md](docs/INTEGRATION.md) for how to verify
 against the real systems yourself. First-contact reports welcome.
@@ -128,6 +130,10 @@ with StreetManagerClient(
     # Typed convenience methods for common workflows...
     work = sm.work.get_work("TSR1591199404915")
     submitted = sm.reporting.permits(status="submitted")
+
+    # Or let the SDK walk every page for you:
+    for permit in sm.reporting.iter_permits(status="submitted"):
+        ...
     sm.work.assess_permit("TSR1591199404915", "TSR1591199404915-01",
                           {"assessment_status": "granted", ...})
 
@@ -254,6 +260,58 @@ with DTROClient(client_id, client_secret, app_id=app_id,
     dtro.create_provisions([...], dtro_id="...")       # provisions (App-Id header handled)
 ```
 
+## Scottish Road Works Register (SRWR) Open Data
+
+Scotland's national road works register publishes its full noticing data as
+daily Open Data extracts under the Open Government Licence v3 — **no
+credentials required**. `streetworks.srwr` downloads the archives and parses
+the multi-record-type CSV format (spec v2.02) into typed records, grouped
+into complete Activities:
+
+```python
+from streetworks.srwr import SRWRClient, describe
+
+with SRWRClient() as srwr:
+    archive = srwr.download_daily("srwr-daily.zip")
+    for activity in srwr.iter_activities(archive):
+        phase = activity.phases[-1]
+        print(activity.activity_id,
+              describe("works_type", phase.works_type),
+              describe("activity_status", phase.activity_status),
+              phase.location)
+```
+
+Parsing streams (a 4-million-record monthly archive parses in well under a
+minute at ~30 MB memory). Monthly/yearly archives concatenate the daily
+extracts; `latest_activities()` applies the spec's most-recent-occurrence
+rule. Notices, phases, sites, inspections, FPNs, restrictions and reference
+data are all exposed; `describe()` translates the register's coded values.
+
+> The authenticated SRWR (Aurora) web-services API is available only to
+> Scottish roads authorities and utilities and is not publicly documented, so
+> it isn't covered. The Open Data feed carries the register's noticing data
+> and needs no account.
+
+## OS Open USRN
+
+Every Unique Street Reference Number in Great Britain, with street geometry,
+as Ordnance Survey OpenData — **no credentials required**. USRNs are the
+common key across this SDK: Street Manager works, DataVIA streets, D-TRO
+regulated places and SRWR activities all reference them.
+`streetworks.openusrn` downloads the GeoPackage via the OS Downloads API and
+queries it with the standard library only (no GDAL or geospatial stack):
+
+```python
+from streetworks.openusrn import OpenUSRNClient, UsrnDatabase, extract_gpkg
+
+with OpenUSRNClient() as client:
+    archive = client.download("osopenusrn.zip")   # ~300 MB, streamed
+
+with UsrnDatabase(extract_gpkg(archive)) as db:
+    street = db.get(33909869)
+    print(street.geometry)        # WKT, British National Grid (EPSG:27700)
+```
+
 ## Design principles
 
 1. **Never block the user.** Typed methods for confirmed, common endpoints;
@@ -270,11 +328,19 @@ with DTROClient(client_id, client_secret, app_id=app_id,
 ## Roadmap
 
 - [x] Pydantic model generation pipeline for the Street Manager swagger specs
-- [ ] Auto-pagination helpers for the Reporting API
+- [x] Auto-pagination helpers for the Reporting API (`iter_permits()` etc.)
 - [ ] DataVIA WMS support
-- [ ] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
+- [x] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
       (`v3.5.1` to match production, `v4.0.0` to follow) — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md)
-- [ ] Scottish Road Works Register (SRWR)?
+- [x] Scottish Road Works Register - Open Data provider (`streetworks.srwr`).
+      The authenticated SRWR/Aurora web-services API is restricted to Scottish
+      authorities and utilities; contributions from SRWR users welcome.
+- [ ] **Common models**: canonical cross-provider types (`Street`, `WorksNotice`,
+      `Coordinate`, ...) with explicit `.to_common()` converters, so the same code
+      handles English and Scottish data - native full-fidelity interfaces retained
+- [x] OS Open USRN: credential-free GB-wide USRN lookup with geometry (`streetworks.openusrn`)
+- [ ] Scottish street gazetteer (OSG portal open data); Northern Ireland gazetteer
+      (Wales is already covered by the Geoplace NSG via DataVIA)
 - [ ] Ordnance Survey NGD / Linked Identifiers?
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).

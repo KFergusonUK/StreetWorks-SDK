@@ -30,27 +30,36 @@ schema version is only the **publish payload** you send to `create_dtro` /
 ## What the SDK does today
 
 The client accepts publish payloads as plain dicts and forwards them as-is, so
-you can already publish against **any** schema version by constructing the
-payload yourself (the DfT examples in the repo above are the reference). There
-is not yet a set of generated, version-namespaced Pydantic models to validate
-those payloads before sending — that's the planned enhancement below.
+you can publish against **any** schema version by constructing the payload
+yourself (the DfT examples in the repo above are the reference). For the
+shipped schema version(s), generated Pydantic models let you validate a
+payload locally before sending — see below.
 
-## Planned: generated publish models
+## Generated publish models (v3.5.1 shipped)
 
-Mirroring the Street Manager model pipeline, the intent is to generate
-version-namespaced Pydantic models from the DfT JSON schemas, e.g.
-`streetworks.dtro.models.v3_5_1` and `streetworks.dtro.models.v4_0_0`, so a
-publisher can validate a payload against the exact version their authority
-targets.
+Version-namespaced Pydantic models are generated from the DfT JSON schema
+into `streetworks.dtro.models.<version>` — `v3_5_1` ships today, matching
+production. Validate a payload before publishing:
 
-To do this when picking the work up:
+```python
+from streetworks.dtro import DTROClient
 
-1. Download the JSON schema for the desired version from the repo's version
-   folder into `specs/dtro/<version>/`.
-2. Extend `scripts/generate_models.py` (or add a sibling script) to emit
-   `src/streetworks/dtro/models/<version>/` from that schema.
-3. Commit the generated models so they ship on PyPI, and add a manual
-   regeneration workflow like the Street Manager one.
+DTROClient.validate_payload(payload)                    # v3_5_1 default
+DTROClient.validate_payload(payload, version="v3_5_1")  # explicit
+```
 
-Until then, publishing works with hand-constructed dicts validated by the
-service on submission.
+This raises `pydantic.ValidationError` on structural, type, enum, or
+required-field errors, and returns the payload unchanged on success. Two
+honest limits: the schema's cross-field `if/then/else` rules (e.g. "if
+regulation X then condition Y required") are enforced by the D-TRO service
+on submission, not locally; and formatted strings (email/uri/date) validate
+leniently as plain strings. A payload that passes here can still be rejected
+by the service — but the common mistakes are caught first.
+
+To add a new version (e.g. `v4_0_0` when it lands):
+
+1. Download its JSON schema from the repo's version folder into
+   `specs/dtro/<version>/`.
+2. Run `python scripts/generate_dtro_models.py --version v4_0_0
+   --schema specs/dtro/v4_0_0/<schema>.json`.
+3. Commit the generated models so they ship on PyPI.
