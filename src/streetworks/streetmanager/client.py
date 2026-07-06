@@ -10,6 +10,12 @@ Design notes
   typed convenience methods. Everything else is reachable via the generic
   ``get/post/put/delete`` methods on each group, so the SDK never blocks you
   from calling an endpoint we haven't wrapped yet.
+* Some methods are **derived views**, not raw endpoints: they call an endpoint
+  and reduce the result client-side into a smaller answer (e.g.
+  ``reporting.active_section_58``). By convention their docstrings open with
+  "Derived view", they live under a ``# --- derived views`` heading, and they
+  return plain dicts like the raw methods. Treat them as conveniences, not 1:1
+  API calls.
 * Authentication, token caching/refresh, retries and 429 handling are
   automatic. Tokens are shared across all resource groups of a client.
 
@@ -32,6 +38,7 @@ import httpx
 from .._transport import AsyncTransport, RetryConfig, SyncTransport
 from .auth import AsyncTokenManager, SyncTokenManager
 from .environments import Api, ApiVersion, Environment, base_url
+from .utils.section_58_utils import summarise_active
 
 JSON = dict[str, Any]
 
@@ -152,9 +159,7 @@ class WorkAPI(_SyncGroup):
     def upload_file(self, filename: str, content: bytes, swa_code: str | None = None) -> JSON:
         """``POST /files`` (multipart). Returns ``{"file_id": ...}``."""
         params = {"swaCode": swa_code} if swa_code else None
-        response = self.request(
-            "POST", "files", files={"file": (filename, content)}, params=params
-        )
+        response = self.request("POST", "files", files={"file": (filename, content)}, params=params)
         return response.json()
 
 
@@ -178,6 +183,25 @@ class ReportingAPI(_SyncGroup):
 
     def alterations(self, **params: Any) -> JSON:
         return self.get("alterations", params=params)
+
+    def section_58s(self, usrn: str | int, **params: Any) -> JSON:
+        """GET /section-58s  for a USRN e.g. section_58s(12345).
+
+        usrn is always required; extra filters pass through as query params.
+        """
+        return self.get("section-58s", params={"usrn": usrn, **params})
+
+    # --- derived views: not raw 1:1 endpoints ------ #
+
+    def active_section_58(self, usrn: str | int) -> JSON:
+        """Derived view: reduce GET /section-58s for a USRN to the in-force
+        restriction, else the next upcoming one, else nothing. Rows are
+        validated against Section58SummaryResponse before reducing.
+
+        Computed client-side (not a 1:1 API call). Returns
+        {"active": bool, "upcoming": bool, "section_58": row | None}.
+        """
+        return summarise_active(self._iter_rows("section-58s", {"usrn": usrn}))
 
     # --- auto-pagination ------------------------------------------------ #
     # Reporting endpoints page with an ``offset`` query parameter and return
@@ -418,6 +442,23 @@ class AsyncReportingAPI(_AsyncGroup):
 
     async def alterations(self, **params: Any) -> JSON:
         return await self.get("alterations", params=params)
+
+    async def section_58s(self, usrn: str | int, **params: Any) -> JSON:
+        """``GET /section-58s`` for a USRN; ``usrn`` is always required."""
+        return await self.get("section-58s", params={"usrn": usrn, **params})
+
+    # --- derived views: computed client-side, not raw 1:1 endpoints ------ #
+
+    async def active_section_58(self, usrn: str | int) -> JSON:
+        """Derived view: reduce GET /section-58s for a USRN to the in-force
+        restriction, else the next upcoming one, else nothing. Rows are
+        validated against Section58SummaryResponse before reducing.
+
+        Computed client-side (not a 1:1 API call). Returns
+        {"active": bool, "upcoming": bool, "section_58": row | None}.
+        """
+        rows = [r async for r in self._iter_rows("section-58s", {"usrn": usrn})]
+        return summarise_active(rows)
 
     # --- auto-pagination (see ReportingAPI for the contract) -------------- #
 
