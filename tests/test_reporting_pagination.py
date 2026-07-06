@@ -19,8 +19,10 @@ def mock_auth() -> None:
 
 
 def _page(rows: list[dict], has_next: bool) -> httpx.Response:
+    # The live API uses snake_case here (live-verified), unlike e.g. the
+    # camelCase auth endpoint - Street Manager mixes conventions.
     return httpx.Response(
-        200, json={"pagination": {"totalRows": 5, "hasNextPage": has_next}, "rows": rows}
+        200, json={"pagination": {"total_rows": 5, "has_next_page": has_next}, "rows": rows}
     )
 
 
@@ -82,3 +84,23 @@ async def test_async_iter_permits_walks_all_pages():
     ) as sm:
         ids = [row["id"] async for row in sm.reporting.iter_permits()]
     assert ids == [1, 2]
+
+
+@respx.mock
+def test_iter_tolerates_camelcase_pagination_key():
+    """Defensive: the swagger reference implies camelCase; accept it too."""
+    mock_auth()
+    respx.get(f"{SANDBOX_REPORTING}/permits").mock(
+        side_effect=[
+            httpx.Response(
+                200,
+                json={"pagination": {"hasNextPage": True}, "rows": [{"id": 1}]},
+            ),
+            httpx.Response(
+                200,
+                json={"pagination": {"hasNextPage": False}, "rows": [{"id": 2}]},
+            ),
+        ]
+    )
+    with StreetManagerClient("e@x.com", "pw", environment=Environment.SANDBOX) as sm:
+        assert [r["id"] for r in sm.reporting.iter_permits()] == [1, 2]

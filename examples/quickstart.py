@@ -25,7 +25,10 @@ def load_dotenv(path: str = ".env") -> None:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, _, value = line.partition("=")
-        os.environ.setdefault(key.strip(), value.strip())
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]  # strip surrounding quotes, dotenv-style
+        os.environ.setdefault(key.strip(), value)
 
 
 load_dotenv()
@@ -169,5 +172,33 @@ if gpkg and Path(gpkg).exists():
 else:
     print("  (set OPENUSRN_GPKG to a downloaded GeoPackage for local lookups -")
     print("   see examples/openusrn_lookup.py for the one-off ~300 MB download)")
+
+# --- Northern Ireland: TrafficWatchNI roadworks RSS (no credentials) -------------
+
+section("TrafficWatchNI (Northern Ireland)")
+from streetworks.trafficwatchni import ATTRIBUTION as NI_ATTRIBUTION  # noqa: E402
+from streetworks.trafficwatchni import Feed as NIFeed  # noqa: E402
+from streetworks.trafficwatchni import TrafficWatchNIClient  # noqa: E402
+
+with TrafficWatchNIClient() as twni:
+    ni_items = twni.fetch(NIFeed.ROADWORKS)
+for item in ni_items[:3]:
+    print(f"  {item.closure_type or 'Roadworks'}: {item.road or '?'}, "
+          f"{item.town or '?'} - {item.promoter or 'promoter n/a'}")
+print(f"  ({len(ni_items)} items; {NI_ATTRIBUTION})")
+
+# --- Wales: Traffic Wales roadworks RSS (no credentials) -------------------------
+
+section("Traffic Wales")
+from streetworks.trafficwales import ATTRIBUTION as TW_ATTRIBUTION  # noqa: E402
+from streetworks.trafficwales import Feed as TWFeed  # noqa: E402
+from streetworks.trafficwales import TrafficWalesClient  # noqa: E402
+
+with TrafficWalesClient() as tw:
+    tw_items = tw.fetch(TWFeed.ROADWORKS)
+for item in tw_items[:3]:
+    roads = "/".join(item.roads) or "?"
+    print(f"  {roads}: {item.title[:60]}")
+print(f"  ({len(tw_items)} items; {TW_ATTRIBUTION})")
 
 print("\ndone.")

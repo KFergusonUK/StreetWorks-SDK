@@ -205,9 +205,11 @@ class ReportingAPI(_SyncGroup):
 
     # --- auto-pagination ------------------------------------------------ #
     # Reporting endpoints page with an ``offset`` query parameter and return
-    # ``{"pagination": {"hasNextPage": bool, ...}, "rows": [...]}``. These
-    # iterators follow ``hasNextPage``, advancing ``offset`` by the rows
-    # received, so callers never handle paging by hand:
+    # ``{"pagination": {...}, "rows": [...]}``. The live API's next-page flag
+    # is ``has_next_page`` (snake_case - live-verified by Chris Carlon; the
+    # swagger-derived reference implied camelCase, and Street Manager mixes
+    # conventions between APIs), so both spellings are accepted. Iterators
+    # advance ``offset`` by the rows received, so callers never page by hand:
     #
     #     for permit in sm.reporting.iter_permits(status="submitted"):
     #         ...
@@ -219,7 +221,8 @@ class ReportingAPI(_SyncGroup):
             rows = page.get("rows") or []
             yield from rows
             pagination = page.get("pagination") or {}
-            if not pagination.get("hasNextPage") or not rows:
+            has_next = pagination.get("has_next_page", pagination.get("hasNextPage"))
+            if not has_next or not rows:
                 return
             offset += len(rows)
 
@@ -470,7 +473,8 @@ class AsyncReportingAPI(_AsyncGroup):
             for row in rows:
                 yield row
             pagination = page.get("pagination") or {}
-            if not pagination.get("hasNextPage") or not rows:
+            has_next = pagination.get("has_next_page", pagination.get("hasNextPage"))
+            if not has_next or not rows:
                 return
             offset += len(rows)
 

@@ -2,11 +2,50 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Reporting auto-pagination now recognises the live API's `has_next_page`
+  key (snake_case); previously only the camelCase `hasNextPage` implied by
+  the swagger reference was checked, so iteration stopped after one page
+  against the real service. Both spellings are now accepted.
+  Live-verified and reported by Chris Carlon.
+
 ### Added
 
+- **Northern Ireland provider: TrafficWatchNI** (`streetworks.trafficwatchni`)
+  and **Wales provider: Traffic Wales** (`streetworks.trafficwales`): open,
+  credential-free roadworks/incidents RSS feeds (5-minute refresh) with
+  best-effort typed extraction and raw text always preserved. Honest
+  caveat: traveller-information feeds, not works registers. With these,
+  all four UK nations have coverage. Attribution requirements (DfI TICC /
+  Traffic Wales) are documented and baked into module docstrings.
+- **DATEX II support** (`streetworks.datex2`): streaming, namespace-tolerant
+  parser for SituationPublication roadworks (DATEX II v3 and v2) with typed
+  situations, records, validity and normalised locations, plus an `NDWClient`
+  adapter for the Netherlands' credential-free national open data. Verified
+  against the real 172 MB Dutch planned-works feed (14,577 situations parsed
+  in ~7 s at ~35 MB memory).
+- **Street Manager Section 58 support** (`reporting.section_58s()` and the
+  `active_section_58()` derived view, sync + async), the documented
+  "derived view" convention, committed v6 generated models, and a swagger
+  URL fix in the model generator. Contributed by Chris Carlon (#1).
+- **DataVIA WMS support**: `wms_capabilities()`, `get_map()` (rendered NSG
+  map images) and `get_feature_info()` ("what's at this pixel?") on both
+  sync and async clients. Handles the WMS 1.3.0/1.1.1 dialect differences
+  (CRS vs SRS, I/J vs X/Y) and surfaces the classic
+  exception-XML-with-HTTP-200 failure as a proper error. WMS layer names
+  are unprefixed (unlike the WFS's `ms:` feature types - live-verified);
+  the `Layer` enum works for both, and WMS-only aggregate layers such as
+  `"Streets"` can be passed as strings.
 - `examples/quickstart.py` + `.env.example`: a one-file tour that loads
   credentials from `.env` and retrieves a little real data from every
   configured provider.
+
+## [0.2.0] - 2026-07-05
+
+
+### Added
+
 - **New provider: OS Open USRN** (`streetworks.openusrn`) - GB-wide USRN
   lookup with street geometry via the OS Downloads API (OpenData, no key).
   Streamed ~300 MB GeoPackage download and a stdlib-only reader (sqlite3 +

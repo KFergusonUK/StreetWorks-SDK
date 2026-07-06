@@ -21,7 +21,7 @@ from .exceptions import (
     TransportError,
 )
 
-__version__ = "0.2.0"  # keep in sync with pyproject.toml
+__version__ = "0.3.0"  # keep in sync with pyproject.toml
 
 __all__ = [
     "APIError",

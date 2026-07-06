@@ -26,6 +26,7 @@ import httpx
 
 from .._oauth import AsyncClientCredentials, SyncClientCredentials
 from .._transport import AsyncTransport, RetryConfig, SyncTransport
+from ..exceptions import APIError
 from . import filters
 
 HOST = "https://www.datavia.geoplace.co.uk"
@@ -90,6 +91,82 @@ class _DataViaBase:
         return params
 
 
+# --------------------------------------------------------------------------- #
+# WMS (Web Map Service) helpers. The NSG service endpoints serve both WFS and
+# WMS; these build standard OGC WMS KVP requests. Version differences handled:
+# 1.3.0 uses CRS and I/J and (for geographic CRSs like EPSG:4326) lat/lon axis
+# order in BBOX; 1.1.1 uses SRS and X/Y with lon/lat. The default here is
+# EPSG:27700 (easting,northing), which is unambiguous in both versions.
+# --------------------------------------------------------------------------- #
+
+
+def _wms_layer_names(layers: Layer | str | Sequence[Layer | str]) -> str:
+    """WMS layer names on the NSG services are *unprefixed* (``StreetLines``),
+    unlike the WFS feature types (``ms:StreetLines``) - verified against the
+    live WMS capabilities. Strip the namespace so the ``Layer`` enum works for
+    both services; plain strings (e.g. the WMS-only aggregate ``"Streets"``)
+    pass through unchanged."""
+    if isinstance(layers, (Layer, str)):
+        layers = [layers]
+    names = (
+        layer.value if isinstance(layer, Layer) else str(layer) for layer in layers
+    )
+    return ",".join(n.removeprefix("ms:") for n in names)
+
+
+def _wms_bbox(bbox: Sequence[float]) -> str:
+    if len(bbox) != 4:
+        raise ValueError("bbox must be (minx, miny, maxx, maxy)")
+    return ",".join(str(v) for v in bbox)
+
+
+def _wms_map_params(
+    layers: Layer | str | Sequence[Layer | str],
+    bbox: Sequence[float],
+    *,
+    width: int,
+    height: int,
+    crs: str,
+    image_format: str,
+    styles: str,
+    transparent: bool,
+    version: str,
+    extra: dict[str, Any],
+) -> dict[str, Any]:
+    crs_key = "crs" if version.startswith("1.3") else "srs"
+    params: dict[str, Any] = {
+        "service": "WMS",
+        "version": version,
+        "request": "GetMap",
+        "layers": _wms_layer_names(layers),
+        "styles": styles,
+        crs_key: crs,
+        "bbox": _wms_bbox(bbox),
+        "width": width,
+        "height": height,
+        "format": image_format,
+        "transparent": str(transparent).upper(),
+    }
+    params.update(extra)
+    return params
+
+
+def _check_wms_image(response: httpx.Response) -> bytes:
+    """A WMS server reports errors as XML with HTTP 200; detect that when an
+    image was requested and raise with the ServiceException text."""
+    content = response.content
+    content_type = response.headers.get("content-type", "")
+    if "xml" in content_type or content[:5].lstrip()[:1] == b"<":
+        text = content.decode("utf-8", "replace")
+        raise APIError(
+            f"WMS returned a service exception instead of an image: {text[:500]}",
+            status_code=response.status_code,
+            body=text,
+            request_url=str(response.request.url),
+        )
+    return content
+
+
 class DataViaClient(_DataViaBase):
     """Synchronous DataVIA client.
 
@@ -149,6 +226,104 @@ class DataViaClient(_DataViaBase):
             params={"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"},
             header_provider=self._headers,
         )
+        return response.text
+
+    # --- WMS (rendered map images) ----------------------------------------- #
+
+    def wms_capabilities(self, *, version: str = "1.3.0") -> str:
+        """WMS ``GetCapabilities`` - the map layers, styles, and formats."""
+        response = self._transport.request(
+            "GET",
+            self.service_url,
+            params={"service": "WMS", "version": version, "request": "GetCapabilities"},
+            header_provider=self._headers,
+        )
+        return response.text
+
+    def get_map(
+        self,
+        layers: Layer | str | Sequence[Layer | str],
+        bbox: Sequence[float],
+        *,
+        width: int = 768,
+        height: int = 768,
+        crs: str = "EPSG:27700",
+        image_format: str = "image/png",
+        styles: str = "",
+        transparent: bool = True,
+        version: str = "1.3.0",
+        **extra: Any,
+    ) -> bytes:
+        """WMS ``GetMap`` - a rendered map image of NSG layers as bytes.
+
+        ``bbox`` is ``(minx, miny, maxx, maxy)`` in ``crs`` units - with the
+        default British National Grid that's eastings/northings. (If you use
+        ``EPSG:4326`` with WMS 1.3.0, the axis order is latitude,longitude -
+        a classic WMS trap; sticking to 27700 avoids it.) Multiple layers
+        render bottom-to-top in the order given. The WMS also offers
+        aggregate layers not in the ``Layer`` enum - ``"Streets"`` renders the
+        full composite street map::
+
+            png = dv.get_map(
+                [Layer.STREET_LINES],
+                (424000, 533800, 426000, 535200),   # Spennymoor, County Durham
+            )
+            Path("durham.png").write_bytes(png)
+        """
+        response = self._transport.request(
+            "GET",
+            self.service_url,
+            params=_wms_map_params(
+                layers, bbox, width=width, height=height, crs=crs,
+                image_format=image_format, styles=styles,
+                transparent=transparent, version=version, extra=extra,
+            ),
+            header_provider=self._headers,
+        )
+        return _check_wms_image(response)
+
+    def get_feature_info(
+        self,
+        layers: Layer | str | Sequence[Layer | str],
+        bbox: Sequence[float],
+        i: int,
+        j: int,
+        *,
+        width: int = 768,
+        height: int = 768,
+        crs: str = "EPSG:27700",
+        info_format: str = "application/json",
+        feature_count: int = 10,
+        version: str = "1.3.0",
+        **extra: Any,
+    ) -> Any:
+        """WMS ``GetFeatureInfo`` - "what's at this pixel?" for a GetMap.
+
+        ``i``/``j`` are pixel coordinates within the ``width`` x ``height``
+        image (WMS 1.1.1 calls them ``x``/``y``; both handled). Returns parsed
+        JSON when ``info_format`` is JSON, else the response text.
+        """
+        params = _wms_map_params(
+            layers, bbox, width=width, height=height, crs=crs,
+            image_format="image/png", styles="", transparent=True,
+            version=version, extra={},
+        )
+        params["request"] = "GetFeatureInfo"
+        params["query_layers"] = params["layers"]
+        params["info_format"] = info_format
+        params["feature_count"] = feature_count
+        if version.startswith("1.3"):
+            params["i"], params["j"] = i, j
+        else:
+            params["x"], params["y"] = i, j
+        params.pop("format")
+        params.pop("transparent")
+        params.update(extra)
+        response = self._transport.request(
+            "GET", self.service_url, params=params, header_provider=self._headers
+        )
+        if "json" in info_format:
+            return response.json()
         return response.text
 
     def get_features(
@@ -335,6 +510,80 @@ class AsyncDataViaClient(_DataViaBase):
             params={"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"},
             header_provider=self._headers,
         )
+        return response.text
+
+    async def wms_capabilities(self, *, version: str = "1.3.0") -> str:
+        response = await self._transport.request(
+            "GET",
+            self.service_url,
+            params={"service": "WMS", "version": version, "request": "GetCapabilities"},
+            header_provider=self._headers,
+        )
+        return response.text
+
+    async def get_map(
+        self,
+        layers: Layer | str | Sequence[Layer | str],
+        bbox: Sequence[float],
+        *,
+        width: int = 768,
+        height: int = 768,
+        crs: str = "EPSG:27700",
+        image_format: str = "image/png",
+        styles: str = "",
+        transparent: bool = True,
+        version: str = "1.3.0",
+        **extra: Any,
+    ) -> bytes:
+        """WMS ``GetMap`` (see the sync client for full docs)."""
+        response = await self._transport.request(
+            "GET",
+            self.service_url,
+            params=_wms_map_params(
+                layers, bbox, width=width, height=height, crs=crs,
+                image_format=image_format, styles=styles,
+                transparent=transparent, version=version, extra=extra,
+            ),
+            header_provider=self._headers,
+        )
+        return _check_wms_image(response)
+
+    async def get_feature_info(
+        self,
+        layers: Layer | str | Sequence[Layer | str],
+        bbox: Sequence[float],
+        i: int,
+        j: int,
+        *,
+        width: int = 768,
+        height: int = 768,
+        crs: str = "EPSG:27700",
+        info_format: str = "application/json",
+        feature_count: int = 10,
+        version: str = "1.3.0",
+        **extra: Any,
+    ) -> Any:
+        params = _wms_map_params(
+            layers, bbox, width=width, height=height, crs=crs,
+            image_format="image/png", styles="", transparent=True,
+            version=version, extra={},
+        )
+        params["request"] = "GetFeatureInfo"
+        params["query_layers"] = params["layers"]
+        params["info_format"] = info_format
+        params["feature_count"] = feature_count
+        if version.startswith("1.3"):
+            params["i"], params["j"] = i, j
+        else:
+            params["x"], params["y"] = i, j
+        params.pop("format")
+        params.pop("transparent")
+        params.update(extra)
+        response = await self._transport.request(
+            "GET", self.service_url, params=params, header_provider=self._headers
+        )
+        if "json" in info_format:
+            return response.json()
         return response.text
 
     async def get_features(

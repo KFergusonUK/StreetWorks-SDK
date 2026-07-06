@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "streetworks"
-version = "0.2.0"
+version = "0.3.0"
 description = "An open SDK for UK street works APIs: DfT Street Manager, Street Manager Open Data (SNS), and Geoplace DataVIA."
 readme = "README.md"
 license = { file = "LICENSE" }

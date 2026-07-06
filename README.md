@@ -22,8 +22,13 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 |---|---|---|
 | `streetworks.streetmanager` | [DfT Street Manager](https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/) — all nine APIs (Work, Reporting, Street Lookup, GeoJSON, Party, Data Export, Event, Sampling, Worklist), V6 & V7, sandbox & production | read + write |
 | `streetworks.opendata` | [Street Manager Open Data](https://department-for-transport-streetmanager.github.io/street-manager-docs/open-data/) — AWS SNS push notifications | receive |
-| `streetworks.datavia` | [Geoplace DataVIA](https://datavia.geoplace.co.uk/documentation) — full NSG layer catalogue over OGC WFS (Basic + OAuth2) | read |
+| `streetworks.datavia` | [Geoplace DataVIA](https://datavia.geoplace.co.uk/documentation) — full NSG layer catalogue over OGC WFS and WMS (rendered maps + feature info), Basic + OAuth2 | read |
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — integration & production | read + write |
+| `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
+| `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with the NDW (Netherlands) open-data adapter | read |
+| `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
+| `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
 
 Shared across all modules: automatic retries with exponential backoff and
 jitter, `Retry-After`-aware 429 handling, a single exception hierarchy, and
@@ -252,6 +257,24 @@ POST `GetFeature` bodies match the shapes in the DataVIA documentation
 available via `get_features_kvp()`. Output formats: GeoJSON (default),
 OGRGML, SHAPEZIP, CSV, SPATIALITEZIP.
 
+### WMS (rendered map images)
+
+The same endpoints also serve OGC WMS, so you can pull rendered map images of
+NSG layers or ask "what street is at this pixel?":
+
+```python
+from pathlib import Path
+
+png = dv.get_map([Layer.STREET_LINES], (424000, 533800, 426000, 535200))
+Path("durham-streets.png").write_bytes(png)
+
+info = dv.get_feature_info(Layer.STREET_LINES, (424000, 533800, 426000, 535200),
+                           i=384, j=384)      # pixel coords in the image
+```
+
+Coordinates default to British National Grid (EPSG:27700), which sidesteps
+the WMS 1.3.0 lat/lon axis-order trap that bites with EPSG:4326.
+
 ## DfT D-TRO
 
 OAuth2 client credentials (30-minute tokens, cached and renewed
@@ -327,6 +350,65 @@ with UsrnDatabase(extract_gpkg(archive)) as db:
     print(street.geometry)        # WKT, British National Grid (EPSG:27700)
 ```
 
+## DATEX II (European roadworks)
+
+DATEX II is the European standard for traffic and roadworks data exchange,
+used by the National Access Points across Europe. `streetworks.datex2` is a
+streaming, namespace-tolerant parser for SituationPublication roadworks —
+DATEX II **v3 and v2** — plus source adapters, starting with the Netherlands'
+credential-free NDW open data:
+
+```python
+from streetworks.datex2 import NDWClient, iter_roadworks
+
+with NDWClient() as ndw:
+    feed = ndw.download_planned_works("ndw-planned.xml.gz")
+
+for situation in iter_roadworks(feed):
+    works = situation.roadworks[0]
+    print(works.source_name, works.road_maintenance_type,
+          works.validity.overall_start, works.location.point)
+```
+
+The parser streams (the ~170 MB Dutch national feed parses in seconds at
+~35 MB memory) and normalises locations across referencing methods.
+**Coordinates are WGS84 latitude/longitude** — not the British National Grid
+used by the UK providers here. National Highways (England's SRN, DATEX II
+v3.4 via its developer portal) is the planned second adapter.
+
+## Northern Ireland & Wales (traveller-information RSS)
+
+The remaining UK nations are covered by open RSS feeds — credential-free, but
+**shallower data**: these are traveller-information services (current and
+forthcoming closures as human-readable text), not works registers. Typed
+fields are best-effort extractions and the raw text is always preserved.
+
+**Northern Ireland — TrafficWatchNI** (`streetworks.trafficwatchni`): DfI's
+Traffic Information & Control Centre feeds for roadworks, incidents and
+events; trunk roads and motorways NI-wide plus all roads in Greater Belfast,
+refreshed every 5 minutes. *Attribution required: credit DfI TICC and
+preserve item URLs.*
+
+**Wales — Traffic Wales** (`streetworks.trafficwales`): Welsh Government
+feeds for roadworks, incidents/events and headlines on the motorway and
+trunk road network, in English and Welsh, refreshed every 5 minutes.
+*Attribution required: credit Traffic Wales.* (Traffic Wales also offers
+richer DATEX II feeds — access on application via traffic.wales/developers;
+once granted, `streetworks.datex2` can parse them.)
+
+```python
+from streetworks.trafficwatchni import TrafficWatchNIClient
+from streetworks.trafficwales import TrafficWalesClient, Feed
+
+with TrafficWatchNIClient() as twni:
+    for item in twni.fetch():
+        print(item.closure_type, item.road, item.town, "-", item.promoter)
+
+with TrafficWalesClient() as tw:
+    for item in tw.fetch(Feed.ROADWORKS):
+        print(item.roads, item.title)
+```
+
 ## Design principles
 
 1. **Never block the user.** Typed methods for confirmed, common endpoints;
@@ -344,7 +426,7 @@ with UsrnDatabase(extract_gpkg(archive)) as db:
 
 - [x] Pydantic model generation pipeline for the Street Manager swagger specs
 - [x] Auto-pagination helpers for the Reporting API (`iter_permits()` etc.)
-- [ ] DataVIA WMS support
+- [x] DataVIA WMS support (`get_map`, `get_feature_info`, `wms_capabilities`)
 - [x] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
       (`v3.5.1` to match production, `v4.0.0` to follow) — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md)
 - [x] Scottish Road Works Register - Open Data provider (`streetworks.srwr`).
@@ -354,9 +436,57 @@ with UsrnDatabase(extract_gpkg(archive)) as db:
       `Coordinate`, ...) with explicit `.to_common()` converters, so the same code
       handles English and Scottish data - native full-fidelity interfaces retained
 - [x] OS Open USRN: credential-free GB-wide USRN lookup with geometry (`streetworks.openusrn`)
+- [x] Northern Ireland roadworks (TrafficWatchNI RSS) and Wales motorway/trunk
+      roadworks (Traffic Wales RSS) — all four UK nations now have coverage
+- [ ] Traffic Wales DATEX II feeds (richer than the RSS; access on application)
 - [ ] Scottish street gazetteer (OSG portal open data); Northern Ireland gazetteer
-      (Wales is already covered by the Geoplace NSG via DataVIA)
+      (Wales street gazetteer is already covered by the Geoplace NSG via DataVIA)
+- [x] **DATEX II parser** (v3 + v2 SituationPublication roadworks) with the
+      NDW (Netherlands) open-data adapter — verified against the real national feed
+- [ ] Further DATEX II adapters: National Highways (England SRN, developer-portal
+      key), Mobilithek (DE), transport.data.gouv.fr (FR) — per-NAP verification needed
 - [ ] Ordnance Survey NGD / Linked Identifiers?
+
+### 0.4.0 — European & Crown Dependency roadworks
+
+Candidate feeds, researched but **not yet verified**. As always, each needs a
+real sample feed and a licence/access check *before* building — the first task
+per source is "can we get the feed and what do the terms permit," not coding.
+
+Grouped by the client shape they need:
+
+- **DATEX II adapters** (thin fetchers over the existing `streetworks.datex2`
+  parser, NDW-style). Candidates: Finland (Digitraffic — open, well-documented,
+  the natural next one to prove the pattern), Norway (Statens vegvesen),
+  Denmark (Vejdirektoratet), Sweden (Trafikverket — verify its SOAP/XML model
+  is DATEX-compatible), Spain (DGT NAP), France (Bison Futé). Access models
+  vary from fully open to registration/agreement-gated — confirm per country.
+- **ArcGIS REST** (a new client shape — Esri `/query?f=json`). Jersey publishes
+  roadworks as an ArcGIS MapServer layer; likely a quick, self-contained win
+  and the SDK's first Channel Islands coverage.
+- **Dedicated pieces** (each its own project, not a quick adapter): Germany's
+  Mobilithek (broker/subscription access, mixed schemas — D-TRO-scale effort);
+  Guernsey (appears to be an HTML site — confirm whether any structured feed
+  exists before committing, and check licensing for scraping).
+- Verify-the-source-first: prefer official government feeds over third-party
+  API-marketplace wrappers; a couple of the researched links need their real
+  upstream endpoint confirmed.
+
+### US work zones (WZDx) — separate strand, own research session
+
+The US standard for roadworks is **WZDx (Work Zone Data Exchange)**, GeoJSON-
+based and distinct from DATEX II — so it needs its own parser, not a `datex2`
+adapter. The USDOT [WZDx feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
+is the canonical directory of live publishers and feed URLs — the right
+starting point for surveying what exists.
+
+### International gazetteers — separate strand
+
+The European equivalents of OS Open USRN (address/street reference layers, not
+roadworks — keep distinct from the feeds above): France BAN, Spain Catastro,
+Norway Kartverket, Netherlands PDOK, Germany Geoportal, Portugal SNIG, plus the
+UK GeoPlace gazetteer SOAP API. These eventually connect to the **common
+models** work; formats differ widely, so each needs its own mapping design.
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 

@@ -151,7 +151,10 @@ def check_datavia() -> str:
 
     with client as dv:
         caps = dv.get_capabilities()
-        detail = f"{method} auth, GetCapabilities returned {len(caps)} bytes"
+        wms = dv.wms_capabilities()
+        detail = (
+            f"{method} auth, WFS caps {len(caps)} bytes, WMS caps {len(wms)} bytes"
+        )
         usrn = os.environ.get("DATAVIA_USRN")
         if usrn:
             result = dv.street_by_usrn(usrn)
@@ -266,6 +269,52 @@ def check_openusrn() -> str:
     return summary
 
 
+def check_datex2_ndw() -> str:
+    """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
+    local planned-works file to parse it locally; otherwise the live feed is
+    downloaded (~15 MB gzipped)."""
+    import tempfile
+    from pathlib import Path
+
+    from streetworks.datex2 import NDWClient, iter_roadworks
+
+    local = os.environ.get("NDW_FEED")
+    if local:
+        path = Path(local)
+        source_desc = f"local feed {path.name}"
+    else:
+        tmp = Path(tempfile.mkdtemp()) / "ndw-planned.xml.gz"
+        with NDWClient() as ndw:
+            path = ndw.download_planned_works(tmp)
+        source_desc = f"downloaded planned-works feed ({path.stat().st_size:,} bytes)"
+
+    situations = works = 0
+    for situation in iter_roadworks(path):
+        situations += 1
+        works += len(situation.roadworks)
+    return f"{source_desc} -> {situations:,} roadworks situations ({works:,} works records)"
+
+
+def check_trafficwatchni() -> str:
+    """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
+    from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
+
+    with TrafficWatchNIClient() as twni:
+        items = twni.fetch(Feed.ROADWORKS)
+    extracted = sum(1 for i in items if i.closure_type or i.promoter)
+    return f"{len(items)} roadworks items ({extracted} with extracted fields)"
+
+
+def check_trafficwales() -> str:
+    """Traffic Wales RSS needs no credentials."""
+    from streetworks.trafficwales import Feed, TrafficWalesClient
+
+    with TrafficWalesClient() as tw:
+        items = tw.fetch(Feed.ROADWORKS)
+    with_roads = sum(1 for i in items if i.roads)
+    return f"{len(items)} roadworks items ({with_roads} with road numbers)"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -313,6 +362,11 @@ def main() -> int:
     reporter.check("SRWR Open Data", [], check_srwr)
     # OS Open USRN needs no credentials (metadata check only by default)
     reporter.check("OS Open USRN", [], check_openusrn)
+    # NDW DATEX II (Netherlands) needs no credentials
+    reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
+    # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
+    reporter.check("TrafficWatchNI", [], check_trafficwatchni)
+    reporter.check("Traffic Wales", [], check_trafficwales)
 
     print()
     if reporter.ran == 0:
