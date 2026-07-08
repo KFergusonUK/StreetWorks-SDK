@@ -1,0 +1,1497 @@
+{
+  "D2Payload": {
+    "version": "3.4",
+    "modelBaseVersion": "3",
+    "lang": "en",
+    "feedDescription": "Road and Lane Closures",
+    "feedType": "SituationPublication",
+    "publicationTime": "2026-07-07T19:34:36.36Z",
+    "publicationCreator": {
+      "country": "gb",
+      "nationalIdentifier": "NationalHighways"
+    },
+    "situation": [
+      {
+        "idG": "467118",
+        "situationVersionTime": "2026-07-07T19:27:58.58Z",
+        "headerInformation": {
+          "confidentiality": "noRestriction",
+          "informationStatus": "real"
+        },
+        "situationRecord": [
+          {
+            "sitRoadOrCarriagewayOrLaneManagement": {
+              "idG": "1-1779093921-86d6b09a-efeb-42f6-9e56-6dd8f68f5fa6",
+              "versionG": "1",
+              "situationRecordCreationTime": "2026-05-18T08:22:29.29Z",
+              "situationRecordVersionTime": "2026-07-07T19:27:58.58Z",
+              "probabilityOfOccurrence": "probable",
+              "complianceOption": "mandatory",
+              "roadOrCarriagewayOrLaneManagementType": {
+                "value": "carriagewayClosures"
+              },
+              "source": {
+                "sourceIdentification": "roadworks"
+              },
+              "validity": {
+                "validityStatus": "planned",
+                "validityTimeSpecification": {
+                  "overallStartTime": "2026-06-17T05:00:00.00Z",
+                  "overallEndTime": "2026-07-26T19:00:00.00Z"
+                }
+              },
+              "cause": {
+                "causeType": "roadMaintenance",
+                "detailedCauseType": {
+                  "roadMaintenanceType": [
+                    "maintenanceWork"
+                  ]
+                }
+              },
+              "generalPublicComment": [
+                {
+                  "comment": "A27 westbound Falmer exit slip road closure"
+                }
+              ],
+              "locationReference": {
+                "locLinearLocation": {
+                  "gmlLineString": {
+                    "locGmlLineString": {
+                      "srsDimension": 2,
+                      "srsName": "EPSG::4326",
+                      "posList": "50.863689 -0.07643 50.863439 -0.078122 50.863413 -0.078274 50.863388 -0.078389 50.863355 -0.078509 50.863304 -0.078639 50.863226 -0.078828 50.863139 -0.078987 50.863015 -0.079162 50.862927 -0.079265 50.862839 -0.079354 50.862623 -0.079543 50.862617 -0.079548 50.862564 -0.079607 50.862485 -0.07971 50.86246 -0.079813"
+                    }
+                  },
+                  "supplementaryPositionalDescription": {
+                    "locationDescription": "A27 westbound exit for B2123",
+                    "carriageway": [
+                      {
+                        "carriageway": {
+                          "value": "slipRoads",
+                          "extendedValueG": ""
+                        },
+                        "carriagewayExtensionG": {
+                          "impactOnCarriageway": {
+                            "numberOfLanesRestricted": 2,
+                            "numberOfOperationalLanes": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "locSingleRoadLinearLocation": {
+                  "linearWithinLinearElement": [
+                    {
+                      "directionOnLinearSection": "westBound",
+                      "directionRelativeOnLinearSection": "aligned",
+                      "heightGradeOfLinearSection": {
+                        "value": "extendedG",
+                        "extendedValueG": "start1End1"
+                      },
+                      "linearElement": {
+                        "locLinearElementByCode": {
+                          "roadName": "A27",
+                          "linearElementReferenceModel": "The Network Model",
+                          "linearElementIdentifier": "{5A516928-F838-428F-93FF-EBDCD1AAD224}",
+                          "linearElementByCodeExtensionG": {
+                            "linearElementType": "bCarriagewayExitSlip"
+                          }
+                        }
+                      },
+                      "fromPoint": {
+                        "locDistanceFromLinearElementStart": {
+                          "distanceAlong": 0.0
+                        }
+                      },
+                      "toPoint": {
+                        "locDistanceFromLinearElementStart": {
+                          "distanceAlong": 289.0
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "roadOrCarriagewayOrLaneManagementExtensionG": {
+                "hasWidthRestrictionFlag": false,
+                "hasHeightRestrictionFlag": false,
+                "hasWeightRestrictionFlag": false,
+                "hasContraFlow": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "idG": "473996",
+        "situationVersionTime": "2026-04-01T00:02:36.36Z",
+        "headerInformation": {
+          "confidentiality": "noRestriction",
+          "informationStatus": "real"
+        },
+        "situationRecord": [
+          {
+            "sitRoadOrCarriagewayOrLaneManagement": {
+              "idG": "1-1774361395-43d66771-79b5-43c1-b1a6-30c50e23bc96",
+              "versionG": "1",
+              "situationRecordCreationTime": "2026-03-09T08:37:12.12Z",
+              "situationRecordVersionTime": "2026-04-01T00:02:36.36Z",
+              "probabilityOfOccurrence": "certain",
+              "complianceOption": "mandatory",
+              "roadOrCarriagewayOrLaneManagementType": {
+                "value": "carriagewayClosures"
+              },
+              "source": {
+                "sourceIdentification": "roadworks"
+              },
+              "validity": {
+                "validityStatus": "suspended",
+                "validityTimeSpecification": {
+                  "overallStartTime": "2026-04-07T19:00:00.00Z",
+                  "overallEndTime": "2026-07-11T05:00:00.00Z"
+                }
+              },
+              "cause": {
+                "causeType": "roadMaintenance",
+                "detailedCauseType": {
+                  "roadMaintenanceType": [
+                    "roadworks"
+                  ]
+                }
+              },
+              "generalPublicComment": [
+                {
+                  "comment": "A47 eastbound Sutton Roundabout to Jct 16 carriageway closure"
+                }
+              ],
+              "locationReference": {
+                "locLocationGroupByList": {
+                  "locationContainedInGroup": [
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.572002 -0.320257 52.572105 -0.319294 52.572202 -0.318493 52.572291 -0.317781 52.572521 -0.316253 52.572752 -0.314783 52.572833 -0.314189 52.572882 -0.313804 52.572912 -0.313434 52.572968 -0.3129 52.573004 -0.312309 52.573023 -0.311733 52.573042 -0.311171 52.57303 -0.310345 52.573003 -0.309712 52.57299 -0.309417 52.572957 -0.309035 52.572893 -0.308329 52.572783 -0.307536 52.572615 -0.30648 52.572264 -0.304531 52.572183 -0.303929 52.572113 -0.303445 52.572041 -0.302813 52.57203 -0.302666"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{A630B03E-5570-4D81-9112-2E88ECC72D00}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 1217.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.580685 -0.361698 52.580888 -0.36089 52.581155 -0.359832 52.581536 -0.358327 52.581638 -0.357895 52.581763 -0.357227 52.581805 -0.357018 52.581879 -0.356514 52.581968 -0.355802 52.582032 -0.35518 52.582092 -0.354366 52.582119 -0.353671 52.582124 -0.35277 52.582119 -0.352372 52.582106 -0.352122 52.582093 -0.351856 52.582078 -0.351571 52.582006 -0.350618 52.581935 -0.34993 52.581862 -0.349439 52.581754 -0.348784"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{FC2AD7E8-1F36-8865-0496-1BF2017A2361}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 905.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.580128 -0.363898 52.580291 -0.363259 52.580685 -0.361698"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{D31D2650-3A97-16DE-B915-DCAFB3B9EB02}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 161.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.579841 -0.376087 52.579787 -0.375903 52.57953 -0.374593 52.579351 -0.373345 52.579299 -0.372771 52.579256 -0.372315 52.579243 -0.372021 52.579204 -0.371122 52.579197 -0.37062 52.579214 -0.369867 52.579234 -0.369364 52.579309 -0.368314 52.579357 -0.36784 52.579487 -0.366861 52.579587 -0.366267 52.579789 -0.365285 52.580112 -0.36396 52.580128 -0.363898"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{70772EE1-E933-454D-AADE-07D55F18B674}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 2.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 852.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.572114 -0.3256 52.57206 -0.325198 52.572008 -0.324719 52.571934 -0.323689 52.571916 -0.323079 52.571911 -0.322695 52.571903 -0.322164 52.571903 -0.32212 52.571908 -0.321869 52.571919 -0.321367 52.571963 -0.320672 52.572002 -0.320257"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{041AF1FC-F258-4FC1-87B7-41765323D21D}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 364.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.57203 -0.302666 52.572009 -0.30246 52.571984 -0.301989 52.571948 -0.301356 52.571947 -0.301259"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{391B9CDE-8BFF-48DE-BCF6-1F0AFC32FD7F}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 95.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.576546 -0.336743 52.575996 -0.335703 52.575072 -0.333938 52.574596 -0.333055 52.574391 -0.332667 52.574214 -0.33232 52.573925 -0.331732 52.573773 -0.331401 52.573587 -0.330989 52.573446 -0.330649 52.573345 -0.330408 52.573218 -0.33005 52.573005 -0.329447 52.572849 -0.32896 52.572737 -0.328578 52.572654 -0.328271 52.572549 -0.327853 52.572444 -0.327403 52.572328 -0.326861 52.572231 -0.326334 52.572164 -0.325923 52.572114 -0.3256"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1260 and A1",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{54C572EB-71DF-BD51-B786-368548422180}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "bCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 913.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.57238 -0.324728 52.572389 -0.324684 52.572391 -0.3244 52.57238 -0.324091 52.57238 -0.32408 52.572347 -0.323811 52.572259 -0.323384 52.572156 -0.322981 52.572062 -0.322554 52.572005 -0.322163 52.571992 -0.321705 52.572001 -0.320895 52.572 -0.320714 52.572002 -0.320257"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound access at a minor junction between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "slipRoads",
+                                "extendedValueG": ""
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{F2E96AE3-D6F5-44F9-8918-7972F0EB09D7}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriagewayEntrySlip"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 310.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.572002 -0.320257 52.572105 -0.319294 52.572202 -0.318493 52.572291 -0.317781 52.572399 -0.317063"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1 and A1260",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{A630B03E-5570-4D81-9112-2E88ECC72D00}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 221.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.5779 -0.339367 52.577845 -0.339264 52.57716 -0.337917 52.5768 -0.337223 52.576546 -0.336743"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1260 and A1",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{F14093E7-4838-C105-C1E7-143647DB521E}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "bCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 233.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.581754 -0.348784 52.581695 -0.348447 52.581609 -0.348037 52.581427 -0.347262 52.581322 -0.346837 52.581209 -0.346443 52.58103 -0.34586 52.580861 -0.345364 52.580674 -0.344869 52.580562 -0.344578 52.580469 -0.344346 52.580367 -0.344113 52.580135 -0.343605 52.579258 -0.341941 52.578962 -0.341377 52.578288 -0.340089 52.5779 -0.339367"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A47 eastbound between A1260 and A1",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 2,
+                                  "numberOfOperationalLanes": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "eastBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A47",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{59A5C866-403B-47D4-B8B6-D63D83739E06}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "bCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 776.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              "roadOrCarriagewayOrLaneManagementExtensionG": {
+                "hasWidthRestrictionFlag": false,
+                "hasHeightRestrictionFlag": false,
+                "hasWeightRestrictionFlag": false,
+                "hasContraFlow": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "idG": "458159",
+        "situationVersionTime": "2026-07-07T19:27:58.58Z",
+        "headerInformation": {
+          "confidentiality": "noRestriction",
+          "informationStatus": "real"
+        },
+        "situationRecord": [
+          {
+            "sitRoadOrCarriagewayOrLaneManagement": {
+              "idG": "1-1764093443-06a5555d-1fe5-4974-b359-218a2bcfb5d8",
+              "versionG": "1",
+              "situationRecordCreationTime": "2025-11-25T15:52:01.01Z",
+              "situationRecordVersionTime": "2026-07-07T19:27:58.58Z",
+              "probabilityOfOccurrence": "certain",
+              "complianceOption": "mandatory",
+              "roadOrCarriagewayOrLaneManagementType": {
+                "value": "other"
+              },
+              "source": {
+                "sourceIdentification": "roadworks"
+              },
+              "validity": {
+                "validityStatus": "active",
+                "validityTimeSpecification": {
+                  "overallStartTime": "2025-09-23T03:04:00.00Z",
+                  "overallEndTime": "2027-04-01T05:00:00.00Z"
+                }
+              },
+              "cause": {
+                "causeType": "constructionWork",
+                "detailedCauseType": {
+                  "constructionWorkType": "roadImprovementOrUpgrading"
+                }
+              },
+              "generalPublicComment": [
+                {
+                  "comment": "A11 northbound Tuttles Lane Interchange to Thickthorn Roundabout static lane 2 closure"
+                }
+              ],
+              "locationReference": {
+                "locLocationGroupByList": {
+                  "locationContainedInGroup": [
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.585622 1.182647 52.586512 1.185694 52.586949 1.187158 52.587378 1.188578 52.587611 1.189274 52.587852 1.190015 52.588047 1.190634 52.588366 1.191647 52.588673 1.192575 52.588707 1.192676 52.589168 1.193905 52.589354 1.194362 52.589599 1.194941 52.5903 1.196601 52.590496 1.197029 52.590615 1.197288 52.591031 1.198175 52.59119 1.198541 52.591421 1.199075 52.591825 1.200094 52.592351 1.201546 52.592608 1.202329 52.59261 1.202337 52.592708 1.202634"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A11 northbound between B1135 near Wymondham (north) and A47",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl2"
+                                  },
+                                  "laneNumber": 2,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A11",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{A17356ED-9D6B-4F75-87BA-AE82E6C1364C}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 1571.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.597788 1.21626 52.598073 1.216781 52.598511 1.217537 52.599035 1.218371 52.599553 1.219209 52.60035 1.220345 52.60061 1.220704 52.600862 1.221033 52.601114 1.221361 52.601164 1.221424 52.60134 1.221644 52.601566 1.221926 52.602212 1.222638 52.602396 1.222814 52.602493 1.222881 52.602712 1.222959"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A11 northbound between B1135 near Wymondham (north) and A47",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl2"
+                                  },
+                                  "laneNumber": 2,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start2End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A11",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{B5C49FBC-B5B4-44B8-8F54-C2AB703FCCFD}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 717.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.592836 1.203026 52.593123 1.203984 52.593311 1.204662 52.59372 1.206169 52.593842 1.206635 52.594008 1.207164 52.594173 1.207693 52.594572 1.208919 52.594855 1.209737 52.594956 1.209995 52.595427 1.211211 52.595705 1.211911 52.596103 1.212826 52.596518 1.213758 52.59685 1.214447 52.597473 1.215688 52.597627 1.215966 52.597788 1.21626"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A11 northbound between B1135 near Wymondham (north) and A47",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl2"
+                                  },
+                                  "laneNumber": 2,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End2"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A11",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{10AD6656-59E0-4A92-BF84-A76BCE396833}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 1058.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.592708 1.202634 52.592836 1.203026"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A11 northbound between B1135 near Wymondham (north) and A47",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl2"
+                                  },
+                                  "laneNumber": 2,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A11",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{7A774BBD-4626-42B4-A88E-E30A84C3D9C6}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 30.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "52.580199 1.15236 52.580224 1.152833 52.580268 1.153751 52.580351 1.155484 52.580415 1.156449 52.580477 1.157162 52.580558 1.158157 52.580723 1.159748 52.58082 1.160479 52.580933 1.161314 52.581101 1.162433 52.581186 1.162941 52.58148 1.164749 52.58224 1.169277 52.582358 1.169891 52.582507 1.170699 52.582674 1.171523 52.582803 1.172093 52.582916 1.172584 52.582996 1.172934 52.58328 1.174077 52.583663 1.175566 52.584382 1.178257 52.584456 1.178532 52.585236 1.181305 52.5854 1.181893 52.585622 1.182647"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "A11 northbound between B1135 near Wymondham (north) and A47",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl2"
+                                  },
+                                  "laneNumber": 2,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "A11",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{80474333-5517-4918-8B4E-070CABD7D85A}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "aCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 170.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 2325.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              "roadOrCarriagewayOrLaneManagementExtensionG": {
+                "hasWidthRestrictionFlag": false,
+                "hasHeightRestrictionFlag": false,
+                "hasWeightRestrictionFlag": false,
+                "hasContraFlow": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "idG": "409447",
+        "situationVersionTime": "2026-07-07T19:27:59.59Z",
+        "headerInformation": {
+          "confidentiality": "noRestriction",
+          "informationStatus": "real"
+        },
+        "situationRecord": [
+          {
+            "sitRoadOrCarriagewayOrLaneManagement": {
+              "idG": "1-1764675254-ddc7ff99-737d-4d33-83e7-39f63fcd6130",
+              "versionG": "2",
+              "situationRecordCreationTime": "2025-12-02T11:20:46.46Z",
+              "situationRecordVersionTime": "2026-07-07T19:27:59.59Z",
+              "probabilityOfOccurrence": "probable",
+              "complianceOption": "mandatory",
+              "roadOrCarriagewayOrLaneManagementType": {
+                "value": "other"
+              },
+              "source": {
+                "sourceIdentification": "roadworks"
+              },
+              "validity": {
+                "validityStatus": "planned",
+                "validityTimeSpecification": {
+                  "overallStartTime": "2026-02-27T21:00:00.00Z",
+                  "overallEndTime": "2027-03-01T06:00:00.00Z"
+                }
+              },
+              "cause": {
+                "causeType": "authorityOperation",
+                "detailedCauseType": {
+                  "authorityOperationType": "other"
+                }
+              },
+              "generalPublicComment": [
+                {
+                  "comment": "M23 northbound Jct 10 24 hour lane 1 closure on exit slip road"
+                }
+              ],
+              "locationReference": {
+                "locLocationGroupByList": {
+                  "locationContainedInGroup": [
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "51.128101 -0.142019 51.128873 -0.142049 51.129535 -0.142119 51.130107 -0.142155 51.131007 -0.142217 51.131583 -0.142237 51.131682 -0.142247 51.131827 -0.142313 51.131957 -0.142398"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "M23 J10 northbound exit",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "slipRoads",
+                                "extendedValueG": ""
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl1"
+                                  },
+                                  "laneNumber": 1,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 1
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "M23",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{EC91896E-0460-4C45-BD20-A5E28E4B0510}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "bCarriagewayExitSlip"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 0.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 431.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "locLinearLocation": {
+                        "gmlLineString": {
+                          "locGmlLineString": {
+                            "srsDimension": 2,
+                            "srsName": "EPSG::4326",
+                            "posList": "51.127952 -0.142025 51.128101 -0.142019"
+                          }
+                        },
+                        "supplementaryPositionalDescription": {
+                          "locationDescription": "M23 northbound between J10A and J10",
+                          "carriageway": [
+                            {
+                              "carriageway": {
+                                "value": "extendedG",
+                                "extendedValueG": "dualCarriageway"
+                              },
+                              "lane": [
+                                {
+                                  "laneUsage": {
+                                    "value": "extendedG",
+                                    "extendedValueG": "cl1"
+                                  },
+                                  "laneNumber": 1,
+                                  "laneExtensionG": {
+                                    "impactOnLanes": {
+                                      "impactExtensionG": {
+                                        "lanesStatus": "closed",
+                                        "laneImpactDirection": "aligned"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "carriagewayExtensionG": {
+                                "impactOnCarriageway": {
+                                  "numberOfLanesRestricted": 1,
+                                  "numberOfOperationalLanes": 3
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "locSingleRoadLinearLocation": {
+                        "linearWithinLinearElement": [
+                          {
+                            "directionOnLinearSection": "northBound",
+                            "directionRelativeOnLinearSection": "aligned",
+                            "heightGradeOfLinearSection": {
+                              "value": "extendedG",
+                              "extendedValueG": "start1End1"
+                            },
+                            "linearElement": {
+                              "locLinearElementByCode": {
+                                "roadName": "M23",
+                                "linearElementReferenceModel": "The Network Model",
+                                "linearElementIdentifier": "{DEDA7046-F98B-4AF2-9869-BFD54CAF75DF}",
+                                "linearElementByCodeExtensionG": {
+                                  "linearElementType": "bCarriageway"
+                                }
+                              }
+                            },
+                            "fromPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 309.0
+                              }
+                            },
+                            "toPoint": {
+                              "locDistanceFromLinearElementStart": {
+                                "distanceAlong": 326.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              "roadOrCarriagewayOrLaneManagementExtensionG": {
+                "hasWidthRestrictionFlag": false,
+                "hasHeightRestrictionFlag": false,
+                "hasWeightRestrictionFlag": false,
+                "hasContraFlow": false
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

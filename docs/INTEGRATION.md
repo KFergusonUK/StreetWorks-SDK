@@ -52,7 +52,7 @@ Settings → Secrets and variables → Actions:
 
 `SM_EMAIL`, `SM_PASSWORD`, `DATAVIA_USER`, `DATAVIA_PASSWORD`,
 `DATAVIA_CLIENT_ID`, `DATAVIA_CLIENT_SECRET`, `DATAVIA_USRN`,
-`DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID`.
+`DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID`, `NH_SUBSCRIPTION_KEY`.
 
 ## Environment variables
 
@@ -67,6 +67,7 @@ Settings → Secrets and variables → Actions:
 | `DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET` | D-TRO | OAuth2 client credentials |
 | `DTRO_APP_ID` | D-TRO | your application UUID |
 | `DTRO_ENV` | D-TRO | `integration` (default) or `production` |
+| `NH_SUBSCRIPTION_KEY` | National Highways (DATEX II) | `Ocp-Apim-Subscription-Key` from the [developer portal](https://developer.data.nationalhighways.co.uk/) - a single live environment, no sandbox |
 
 ## Open Data is different
 
@@ -97,6 +98,11 @@ overridable without touching library internals):
 - **D-TRO token and endpoint paths.** Token is obtained from
   `{base}/oauth-generator`; the newest *provisions* endpoints aren't wrapped
   yet — reach them via `dtro.request(...)` until they're added.
+- **National Highways response format.** Already confirmed against the live
+  API (not just the docs): the `/closures` endpoint returns **XML** regardless
+  of an `Accept: application/json` header - you must also send
+  `X-Response-MediaType: application/json`, which `NationalHighwaysClient`
+  does automatically.
 
 When you've confirmed the real shapes, please open a PR or an issue noting
 what you verified and against which environment — that turns these inferences

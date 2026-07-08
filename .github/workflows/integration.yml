@@ -30,3 +30,4 @@ jobs:
           DTRO_CLIENT_SECRET: ${{ secrets.DTRO_CLIENT_SECRET }}
           DTRO_APP_ID: ${{ secrets.DTRO_APP_ID }}
           DTRO_ENV: integration
+          NH_SUBSCRIPTION_KEY: ${{ secrets.NH_SUBSCRIPTION_KEY }}

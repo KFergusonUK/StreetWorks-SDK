@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-08
+
 ### Fixed
 
 - Reporting auto-pagination now recognises the live API's `has_next_page`
@@ -12,6 +14,25 @@
 
 ### Added
 
+- **National Highways provider** (`streetworks.datex2.nationalhighways`):
+  a DATEX II v3.4 adapter for England's Strategic Road Network Road and
+  Lane Closures service. Unlike NDW, National Highways returns its closures
+  as JSON, not XML, so it gets its own parsing path onto the shared
+  `Situation`/`SituationRecord` models; handles both single- and
+  multi-location records and cursor pagination via the `x-next` header.
+  Live-verified, including the undocumented-as-mandatory
+  `X-Response-MediaType: application/json` header the real API requires.
+- **UK Police provider** (`streetworks.police`): a thin adapter over
+  `data.police.uk`'s street-level crime endpoints (no credentials), plus a
+  `safety_signal()` helper that aggregates crime near a point into a
+  worker-safety signal for lone working / unfamiliar sites, filtered to the
+  categories that actually bear on personal risk. Not a street-works
+  dataset in its own right - documented caveats for historical-not-live and
+  area-level-not-site-level data. Live-verified.
+- `examples/quickstart.py` is now resilient: every provider demo runs
+  inside a try/except so one unreachable or misconfigured feed no longer
+  aborts the rest of the tour, and it now includes National Highways and
+  UK Police alongside the existing providers.
 - **Northern Ireland provider: TrafficWatchNI** (`streetworks.trafficwatchni`)
   and **Wales provider: Traffic Wales** (`streetworks.trafficwales`): open,
   credential-free roadworks/incidents RSS feeds (5-minute refresh) with
@@ -39,7 +60,7 @@
   `"Streets"` can be passed as strings.
 - `examples/quickstart.py` + `.env.example`: a one-file tour that loads
   credentials from `.env` and retrieves a little real data from every
-  configured provider.
+  configured provider (see above for the 0.4.0 resilience update).
 
 ## [0.2.0] - 2026-07-05
 

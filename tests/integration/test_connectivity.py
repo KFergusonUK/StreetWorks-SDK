@@ -117,6 +117,16 @@ def test_datavia_street_by_usrn() -> None:
         assert result.get("type") == "FeatureCollection"
 
 
+def test_nationalhighways_get_closures() -> None:
+    _require("NH_SUBSCRIPTION_KEY")
+    from streetworks.datex2 import ClosureType, NationalHighwaysClient
+
+    with NationalHighwaysClient(os.environ["NH_SUBSCRIPTION_KEY"]) as nh:
+        payload, _next_url = nh.get_closures(ClosureType.PLANNED)
+        situations = payload.get("D2Payload", payload).get("situation", [])
+        assert isinstance(situations, list)
+
+
 def test_dtro_events_search() -> None:
     _require("DTRO_CLIENT_ID", "DTRO_CLIENT_SECRET")
     _guard_production("DTRO_ENV", "integration")

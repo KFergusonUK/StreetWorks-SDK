@@ -13,3 +13,7 @@ venv/
 htmlcov/
 uv.lock
 .env
+
+# Raw (untrimmed) API responses saved while developing against live services -
+# large and may contain more real-world detail than we want committed.
+tests/fixtures/*_raw.json
