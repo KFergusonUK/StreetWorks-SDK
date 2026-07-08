@@ -39,6 +39,12 @@
   inside a try/except so one unreachable or misconfigured feed no longer
   aborts the rest of the tour, and it now includes National Highways and
   UK Police alongside the existing providers.
+
+## [0.3.0] - 2026-07-06
+
+
+### Added
+
 - **Northern Ireland provider: TrafficWatchNI** (`streetworks.trafficwatchni`)
   and **Wales provider: Traffic Wales** (`streetworks.trafficwales`): open,
   credential-free roadworks/incidents RSS feeds (5-minute refresh) with
