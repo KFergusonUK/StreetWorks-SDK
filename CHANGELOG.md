@@ -11,6 +11,12 @@
   the swagger reference was checked, so iteration stopped after one page
   against the real service. Both spellings are now accepted.
   Live-verified and reported by Chris Carlon.
+- DATEX II timestamp parsing (`streetworks.datex2.parser._dt`) now tolerates
+  non-standard fractional-second precision - National Highways' live API
+  emits 2-digit fractions (e.g. `"2026-05-18T08:22:29.29Z"`), which
+  `datetime.fromisoformat` silently fails to parse on Python < 3.11 (only
+  0/3/6-digit fractions are accepted there). Caught by CI running the matrix
+  down to 3.10, not by local testing on a newer interpreter.
 
 ### Added
 
@@ -89,7 +95,7 @@
   in `scripts/generate_dtro_models.py` with the schema stored under
   `specs/dtro/v3_5_1/`.
 
-## 0.1.0 (unreleased)
+## 0.1.0 2026-07-04
 
 Initial release.
 

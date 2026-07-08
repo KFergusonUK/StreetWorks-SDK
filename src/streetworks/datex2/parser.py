@@ -17,6 +17,7 @@ opened transparently.
 from __future__ import annotations
 
 import gzip
+import re
 from collections.abc import Iterator
 from datetime import datetime
 from pathlib import Path
@@ -28,6 +29,7 @@ from .models import Location, Period, Situation, SituationRecord, Validity
 __all__ = ["iter_situations", "iter_roadworks"]
 
 _XSI_TYPE = "{http://www.w3.org/2001/XMLSchema-instance}type"
+_FRACTIONAL_SECONDS = re.compile(r"\.(\d+)")
 
 
 def _local(tag: str) -> str:
@@ -65,10 +67,20 @@ def _deep_text(element: Element, *path: str) -> str | None:
 
 
 def _dt(value: str | None) -> datetime | None:
+    """Parse an ISO-8601 timestamp, tolerating non-standard fractional-second
+    precision (National Highways' live API emits 2-digit fractions, e.g.
+    ``"2026-05-18T08:22:29.29Z"``) by padding/truncating to 6 digits -
+    ``datetime.fromisoformat`` only accepts 0/3/6-digit fractions on
+    Python < 3.11."""
     if not value:
         return None
+    value = value.replace("Z", "+00:00")
+    match = _FRACTIONAL_SECONDS.search(value)
+    if match:
+        micros = match.group(1)[:6].ljust(6, "0")
+        value = f"{value[: match.start()]}.{micros}{value[match.end() :]}"
     try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return datetime.fromisoformat(value)
     except ValueError:
         return None
 
