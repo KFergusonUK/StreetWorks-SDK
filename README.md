@@ -30,6 +30,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
+| `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 
 Shared across all modules: automatic retries with exponential backoff and
 jitter, `Retry-After`-aware 429 handling, a single exception hierarchy, and
@@ -478,6 +479,51 @@ would otherwise mislead:
    `safety_signal()` filters to the categories that actually bear on it
    rather than reporting the raw total.
 
+## Common models
+
+Every provider above has its own native, full-fidelity shape — that's
+deliberate, and it never goes away. `streetworks.common` adds canonical
+types *alongside* those native interfaces, for code that wants to handle
+works data from several providers the same way without caring which one it
+came from:
+
+```python
+from streetworks.common import from_srwr
+from streetworks.srwr import SRWRClient, iter_activities
+
+with SRWRClient() as srwr:
+    archive = srwr.download_daily("srwr-daily.zip")
+    for activity in iter_activities(archive):
+        works = from_srwr(activity)
+        for site in works.sites:
+            print(site.reference, site.works_type, site.date_confidence, site.raw)
+```
+
+Two levels, deliberately not three: `Works` is the umbrella (reference,
+location, promoter — no committed dates of its own); `WorksSite` is the
+dated, actionable unit under it (Street Manager's `-01`/`-02` permits,
+SRWR's phases joined to their Undertaker-Phase, DATEX roadworks records all
+map here). `WorksPlanning` is a separate type for planning *artifacts* —
+PAAs and Street Manager Forward Plans — with indicative rather than
+committed dates: a record that is *born* as a planning artifact maps here;
+a record that only *transitions* through a planning-ish status (SRWR's
+"Advance Planning", DATEX's `validityStatus = planned`) stays a `WorksSite`
+with that status exposed, so the same source record never migrates between
+canonical types as its lifecycle progresses.
+
+Every canonical object carries a `source_grade` (`register` / `operator` /
+`traveller_info`) and `WorksSite` carries a computed `date_confidence`
+(`verified` / `estimated` / `unknown`), so consumers can filter by
+trustworthiness without provider-specific knowledge — and every one keeps
+`.raw` pointing back at its exact source record(s), so converting never
+loses anything.
+
+Converters currently cover SRWR, Street Manager, DATEX II (NDW and National
+Highways via the one shared converter), TrafficWatchNI and Traffic Wales.
+UK Police stays outside the works hierarchy entirely — it's a *context*
+provider (area-level crime as a safety signal), not a works provider, and
+forcing it into a `WorksSite` would misrepresent what it actually is.
+
 ## Design principles
 
 1. **Never block the user.** Typed methods for confirmed, common endpoints;
@@ -501,9 +547,12 @@ would otherwise mislead:
 - [x] Scottish Road Works Register - Open Data provider (`streetworks.srwr`).
       The authenticated SRWR/Aurora web-services API is restricted to Scottish
       authorities and utilities; contributions from SRWR users welcome.
-- [ ] **Common models**: canonical cross-provider types (`Street`, `WorksNotice`,
-      `Coordinate`, ...) with explicit `.to_common()` converters, so the same code
-      handles English and Scottish data - native full-fidelity interfaces retained
+- [x] **Common models** (`streetworks.common`): canonical cross-provider types
+      (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with explicit
+      per-provider converters (`from_srwr`, `from_streetmanager`, `from_datex2`,
+      `from_trafficwatchni`, `from_trafficwales`), so the same code handles works
+      data from any provider — native full-fidelity interfaces retained,
+      `.raw` always keeps the source record(s)
 - [x] OS Open USRN: credential-free GB-wide USRN lookup with geometry (`streetworks.openusrn`)
 - [x] Northern Ireland roadworks (TrafficWatchNI RSS) and Wales motorway/trunk
       roadworks (Traffic Wales RSS) — all four UK nations now have coverage

@@ -2,6 +2,49 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-09
+
+### Added
+
+- **Common models** (`streetworks.common`): canonical cross-provider types -
+  `Works` (the umbrella: reference, location, promoter/source), `WorksSite`
+  (the dated, actionable unit - Street Manager permits, SRWR phases, DATEX
+  roadworks records), `WorksPlanning` (planning artifacts - PAAs, Forward
+  Plans - kept a distinct type so a record never migrates canonical type as
+  its lifecycle status changes), `Coordinate` (value plus an explicit CRS
+  label, never silently reprojected) and `Notice`. `SourceGrade` and
+  `DateConfidence` let consumers filter by trustworthiness without
+  provider-specific knowledge. Converters (`from_srwr`, `from_streetmanager`,
+  `from_datex2`, `from_trafficwatchni`, `from_trafficwales`) sit alongside
+  each provider's native, full-fidelity interface - every canonical object
+  keeps `.raw` pointing back at its source record(s).
+  - SRWR: joins Phase (007) to Undertaker-Phase (008) by `phase_number` -
+    no such join existed before.
+  - Street Manager: groups permits by `work_reference_number`; a PAA and the
+    permit that later supersedes it share one reference, confirmed live -
+    the PAA becomes `WorksPlanning`, not a site. New
+    `reporting.forward_plans()`/`iter_forward_plans()` (sync + async) feed
+    Forward Plans in; real sandbox data showed these already carry their
+    eventual work reference (the design spec assumed they're free-floating
+    until converted), so `Works` gained a `plannings` field.
+  - DATEX (NDW + National Highways): one converter serves both adapters,
+    since they already share the same `Situation` model. `date_confidence`
+    is computed from real `validityStatus` values observed in the National
+    Highways fixture (`active`/`suspended` -> verified, `planned` ->
+    estimated).
+  - TrafficWatchNI / Traffic Wales: thin converters (RSS items have no
+    umbrella reference); `date_confidence` is always `unknown`.
+- **Traffic Wales parser upgrade** (`streetworks.trafficwales`): rebuilt
+  against a live fetch of the real feed rather than a synthetic sample.
+  `FeedItem` now carries `coordinate` (WGS84, from `georss:point`),
+  `road`/`direction`/`location_from_to`/`work_type`/`restriction` (parsed
+  positionally from both ends of the colon-delimited title - segment count
+  and order both vary across real items), `severity` (free text - the feed
+  mixes closure-type and genuine severity wording), `start`/`end`/
+  `last_updated` (from labelled description fields, 4-digit years,
+  preferred over the title's 2-digit dates), `operating_window` and
+  `source`. Prerequisite for the Traffic Wales common-model converter.
+
 ## [0.4.0] - 2026-07-08
 
 ### Fixed
