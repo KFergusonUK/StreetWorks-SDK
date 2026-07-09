@@ -573,7 +573,7 @@ forcing it into a `WorksSite` would misrepresent what it actually is.
       — per-NAP verification needed
 - [ ] Ordnance Survey NGD / Linked Identifiers?
 
-### 0.4.0 — European & Crown Dependency roadworks
+### European & Crown Dependency roadworks — separate strand
 
 Candidate feeds, researched but **not yet verified**. As always, each needs a
 real sample feed and a licence/access check *before* building — the first task
@@ -620,7 +620,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest                    # 35 mocked unit tests - no credentials needed
+pytest                    # 138 mocked unit tests - no credentials needed
 ruff check .
 ```
 
