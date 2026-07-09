@@ -1,0 +1,291 @@
+{
+  "road_event_feed_info": {
+    "update_date": "2026-07-09T19:48:00Z",
+    "publisher": "Ville de Québec",
+    "version": "3.1",
+    "data_sources": [
+      {
+        "organization_name": "Quebec",
+        "location_method": "unknown"
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "ACL-20260708-DK-02-P1_1",
+      "type": "Feature",
+      "properties": {
+        "data_source_id": "TIC-Quebec/1",
+        "event_type": "work-zone",
+        "road_names": [
+          "Rue Gérard-Morisset"
+        ],
+        "direction": "westbound",
+        "beginning_accuracy": "estimated",
+        "ending_accuracy": "estimated",
+        "start_date": "2026-07-16T12:00:00Z",
+        "end_date": "2026-07-17T22:00:00Z",
+        "start_date_accuracy": "estimated",
+        "end_date_accuracy": "estimated",
+        "event_status": "planned",
+        "vehicle_impact": "all-lanes-closed",
+        "restrictions": [],
+        "description": "Québec, Rue Gérard-Morisset à Boulevard René-Lévesque O travaux de réaménagement des routes, du 2026-07-16 08:00 jusqu'au 2026-07-17 18:00",
+        "update_date": "2026-07-08T16:58:31.467Z",
+        "lanes": [
+          {
+            "order": 1,
+            "status": "closed",
+            "type": "lane"
+          },
+          {
+            "order": 2,
+            "status": "closed",
+            "type": "unknown"
+          }
+        ],
+        "relationship": {
+          "parents": [
+            "ACL-20260708-DK-02-WZP"
+          ]
+        },
+        "types_of_work": [
+          {
+            "type_name": "roadway-relocation"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.256683,
+            46.7888819
+          ],
+          [
+            -71.25662,
+            46.78909
+          ],
+          [
+            -71.25654,
+            46.7892
+          ],
+          [
+            -71.25642,
+            46.78928
+          ],
+          [
+            -71.2559,
+            46.78956
+          ],
+          [
+            -71.25634,
+            46.78995
+          ],
+          [
+            -71.2565,
+            46.79004
+          ],
+          [
+            -71.25663,
+            46.79004
+          ],
+          [
+            -71.25675,
+            46.79
+          ],
+          [
+            -71.257,
+            46.78986
+          ],
+          [
+            -71.25716,
+            46.7898
+          ],
+          [
+            -71.2573,
+            46.78975
+          ],
+          [
+            -71.25749,
+            46.78969
+          ],
+          [
+            -71.25759,
+            46.78965
+          ],
+          [
+            -71.25853,
+            46.7891
+          ],
+          [
+            -71.2586,
+            46.789
+          ],
+          [
+            -71.25858,
+            46.7889
+          ],
+          [
+            -71.25848,
+            46.7888
+          ],
+          [
+            -71.2582,
+            46.78856
+          ],
+          [
+            -71.25809,
+            46.78849
+          ],
+          [
+            -71.25796,
+            46.78846
+          ],
+          [
+            -71.25784,
+            46.78848
+          ],
+          [
+            -71.25722,
+            46.78884
+          ],
+          [
+            -71.2571564,
+            46.78884
+          ]
+        ]
+      }
+    },
+    {
+      "id": "Phase 3 - Section B-D0",
+      "type": "Feature",
+      "properties": {
+        "data_source_id": "TIC-Quebec/1",
+        "event_type": "detour",
+        "road_names": [
+          "Rue de Montmartre"
+        ],
+        "direction": "eastbound",
+        "beginning_accuracy": "estimated",
+        "ending_accuracy": "estimated",
+        "start_date": "2026-04-07T11:00:00Z",
+        "end_date": "2026-10-27T21:00:00Z",
+        "start_date_accuracy": "estimated",
+        "end_date_accuracy": "estimated",
+        "event_status": "active",
+        "vehicle_impact": "unknown",
+        "description": "via Rue de Montmartre",
+        "update_date": "2026-06-19T16:35:28.477Z",
+        "relationship": {
+          "parents": [
+            "Phase 3 - Section B"
+          ]
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.2471223,
+            46.8097951
+          ],
+          [
+            -71.24692,
+            46.8099
+          ],
+          [
+            -71.24638,
+            46.81019
+          ],
+          [
+            -71.24605,
+            46.81039
+          ],
+          [
+            -71.24594,
+            46.81046
+          ],
+          [
+            -71.24578,
+            46.81057
+          ],
+          [
+            -71.24543,
+            46.81085
+          ],
+          [
+            -71.24534,
+            46.8109
+          ],
+          [
+            -71.24518,
+            46.81096
+          ],
+          [
+            -71.24432,
+            46.81115
+          ],
+          [
+            -71.24282,
+            46.81151
+          ]
+        ]
+      }
+    },
+    {
+      "id": "20260423003-1",
+      "type": "Feature",
+      "properties": {
+        "data_source_id": "TIC-Quebec/1",
+        "event_type": "work-zone",
+        "road_names": [
+          "Rue St-Jean"
+        ],
+        "direction": "northbound",
+        "beginning_accuracy": "estimated",
+        "ending_accuracy": "estimated",
+        "start_date": "2026-05-16T14:00:00Z",
+        "end_date": "2026-10-12T15:00:00Z",
+        "start_date_accuracy": "estimated",
+        "end_date_accuracy": "estimated",
+        "event_status": "active",
+        "vehicle_impact": "some-lanes-closed",
+        "restrictions": [],
+        "description": "Québec, Rue St-Jean vers le nord entre Rue St-Stanislas et Côte du Palais permis-terrasse, du 2026-05-16 jusqu'au 2026-10-12, chaque jour entre 11:00 et 23:59",
+        "update_date": "2026-04-23T13:52:18.507Z",
+        "lanes": [
+          {
+            "order": 1,
+            "status": "open",
+            "type": "lane"
+          },
+          {
+            "order": 2,
+            "status": "closed",
+            "type": "unknown"
+          },
+          {
+            "order": 3,
+            "status": "open",
+            "type": "sidewalk"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.2111013,
+            46.8136326
+          ],
+          [
+            -71.2109871,
+            46.8136921
+          ]
+        ]
+      }
+    }
+  ]
+}

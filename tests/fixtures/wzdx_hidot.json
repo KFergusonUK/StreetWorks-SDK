@@ -1,0 +1,156 @@
+{
+  "feed_info": {
+    "update_date": "2024-02-22T19:32:06Z",
+    "publisher": "Blyncsy",
+    "contact_name": "Patrick Brown",
+    "contact_email": "support@blyncsy.com",
+    "update_frequency": 604800,
+    "version": "4.1",
+    "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "data_sources": [
+      {
+        "data_source_id": "1",
+        "organization_name": "HDOT"
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "0",
+      "type": "Feature",
+      "properties": {
+        "id": "69009d13-2651-405f-ae04-d7b0ec33d73a",
+        "core_details": {
+          "data_source_id": "1",
+          "event_type": "work-zone",
+          "road_names": [
+            "Dillingham Blvd"
+          ],
+          "direction": "eastbound",
+          "name": "Dillingham Blvd Work Zone 1",
+          "description": "Dillingham Blvd Work Zone 1",
+          "creation_date": "2026-07-02T23:13:50Z",
+          "update_date": "2026-07-02T23:13:50Z"
+        },
+        "is_start_position_verified": true,
+        "is_end_position_verified": true,
+        "start_date": "2025-11-03T23:37:22.671000+00:00",
+        "end_date": "2025-11-12T04:52:58.560000+00:00",
+        "location_method": "channel-device-method",
+        "is_start_date_verified": false,
+        "is_end_date_verified": false,
+        "vehicle_impact": "unknown"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -157.88804,
+            21.33274
+          ],
+          [
+            -157.88767,
+            21.33261
+          ],
+          [
+            -157.88716,
+            21.33241
+          ],
+          [
+            -157.88664,
+            21.33221
+          ],
+          [
+            -157.8863,
+            21.33206
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "type": "Feature",
+      "properties": {
+        "id": "4ff2792a-8b56-47a8-b15f-b2c4c3c78255",
+        "core_details": {
+          "data_source_id": "1",
+          "event_type": "work-zone",
+          "road_names": [
+            "Dillingham Blvd"
+          ],
+          "direction": "eastbound",
+          "name": "Dillingham Blvd Work Zone 2",
+          "description": "Dillingham Blvd Work Zone 2",
+          "creation_date": "2026-07-02T23:13:50Z",
+          "update_date": "2026-07-02T23:13:50Z"
+        },
+        "is_start_position_verified": true,
+        "is_end_position_verified": true,
+        "start_date": "2025-11-03T23:37:22.671000+00:00",
+        "end_date": "2025-11-12T04:52:58.560000+00:00",
+        "location_method": "channel-device-method",
+        "is_start_date_verified": false,
+        "is_end_date_verified": false,
+        "vehicle_impact": "unknown"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -157.88252,
+            21.32943
+          ],
+          [
+            -157.88236,
+            21.3293
+          ],
+          [
+            -157.88182,
+            21.32883
+          ],
+          [
+            -157.88112,
+            21.32824
+          ],
+          [
+            -157.88042,
+            21.32764
+          ],
+          [
+            -157.87973,
+            21.32705
+          ],
+          [
+            -157.87903,
+            21.32645
+          ],
+          [
+            -157.87833,
+            21.32586
+          ],
+          [
+            -157.87764,
+            21.32526
+          ],
+          [
+            -157.87694,
+            21.32467
+          ],
+          [
+            -157.87624,
+            21.32408
+          ],
+          [
+            -157.87567,
+            21.32358
+          ],
+          [
+            -157.87554,
+            21.32348
+          ]
+        ]
+      }
+    }
+  ]
+}

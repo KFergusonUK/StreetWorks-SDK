@@ -1,0 +1,102 @@
+[
+  {
+    "state": "hawaii",
+    "issuingorganization": "Hawaii DOT",
+    "feedname": "hidot",
+    "url": {
+      "url": "https://ai.blyncsy.io/wzdx/hidot/feed"
+    },
+    "format": "geojson",
+    "active": true,
+    "datafeed_frequency_update": "168h",
+    "version": "4.1",
+    "sdate": "2023-05-17T00:00:00.000",
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -157.85788,
+        21.30493
+      ]
+    },
+    ":@computed_region_m2nu_4dib": "606",
+    ":@computed_region_28hd_vqqn": "4",
+    ":@computed_region_8fe2_rd7y": "28"
+  },
+  {
+    "state": "new york",
+    "issuingorganization": "New York DOT",
+    "feedname": "nysdot",
+    "url": {
+      "url": "https://511ny.org/api/wzdx"
+    },
+    "format": "geojson",
+    "active": true,
+    "datafeed_frequency_update": "15m",
+    "version": "4.1",
+    "sdate": "2023-08-03T00:00:00.000",
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -73.75522,
+        42.65155
+      ]
+    },
+    ":@computed_region_m2nu_4dib": "1643",
+    ":@computed_region_28hd_vqqn": "47",
+    ":@computed_region_8fe2_rd7y": "19"
+  },
+  {
+    "state": "washington",
+    "issuingorganization": "Washington State DOT",
+    "feedname": "wsdot",
+    "url": {
+      "url": "https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed"
+    },
+    "format": "geojson",
+    "active": true,
+    "datafeed_frequency_update": "1m",
+    "version": "4.2",
+    "sdate": "2024-02-05T00:00:00.000",
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -122.89165,
+        47.03954
+      ]
+    },
+    ":@computed_region_m2nu_4dib": "1253",
+    ":@computed_region_28hd_vqqn": "6",
+    ":@computed_region_8fe2_rd7y": "2"
+  },
+  {
+    "state": "n/a",
+    "issuingorganization": "Quebec City",
+    "feedname": "quebec",
+    "url": {
+      "url": "https://quebec.gewi.com/wzdx/pull"
+    },
+    "format": "geojson",
+    "active": true,
+    "version": "3.1",
+    "sdate": "2025-04-28T00:00:00.000"
+  },
+  {
+    "state": "michigan",
+    "issuingorganization": "Michigan Department of Transportation",
+    "feedname": "michigandot",
+    "format": "geojson",
+    "active": false,
+    "sdate": "2023-04-21T00:00:00.000",
+    "edate": "2025-06-30T00:30:00.000",
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -84.55226,
+        42.73194
+      ]
+    },
+    ":@computed_region_m2nu_4dib": "2959",
+    ":@computed_region_28hd_vqqn": "50",
+    ":@computed_region_8fe2_rd7y": "37"
+  }
+]
