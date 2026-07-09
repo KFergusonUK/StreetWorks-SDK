@@ -1,11 +1,16 @@
 """Tests for the TrafficWatchNI and Traffic Wales RSS providers.
 
-The NI fixture item text is taken from real observed TrafficWatchNI feed
-content; the Wales fixture is synthetic RSS 2.0 (the live feed's exact item
-phrasing is verified via the smoke test).
+Both fixtures' item text is taken from real observed feed content: NI from
+prior smoke-testing, Wales from a live fetch of
+https://traffic.wales/feeds/roadworks/rss.xml (2026-07-08) - chosen to cover
+the parser's real edge cases: a normal work-type-then-restriction title, one
+missing the work-type segment entirely, one where restriction and work type
+appear in the *reverse* of the usual order ("Lanes closed : Environmental
+work"), and one with an empty leading (road) segment.
 """
 
-from datetime import date
+from datetime import date, datetime
+from pathlib import Path
 
 import httpx
 import respx
@@ -89,28 +94,63 @@ def test_ni_client_fetches_and_parses():
     assert len(items) == 2 and items[0].promoter == "BT Openreach"
 
 
-WALES_RSS = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel>
-  <title>Traffic Wales Roadworks</title>
-  <item>
-    <title>M4 eastbound J24 to J23A - carriageway resurfacing</title>
-    <description>Overnight closures on the M4 eastbound between junction 24
-      and junction 23A for resurfacing. Diversion via A48.</description>
-    <link>https://traffic.wales/current-projects/example</link>
-    <pubDate>Sun, 05 Jul 2026 18:00:00 GMT</pubDate>
-    <category>Roadworks</category>
-    <category>South Wales</category>
-  </item>
-</channel></rss>"""
+WALES_RSS = (Path(__file__).parent / "fixtures" / "trafficwales_roadworks.xml").read_text(
+    encoding="utf-8"
+)
 
 
-def test_wales_parses_roads_and_categories():
+def test_wales_parses_full_item_with_work_type_and_restriction():
     items = parse_wales(WALES_RSS)
-    assert len(items) == 1
+    assert len(items) == 4
     item = items[0]
-    assert item.roads == ("M4", "A48")  # deduped, order of appearance
-    assert item.categories == ("Roadworks", "South Wales")
+    assert item.roads == ("A40",)
     assert item.link and "traffic.wales" in item.link
+    assert item.guid == "RNMDA_2026130475"
+    assert item.coordinate == (51.78344, -2.939548)
+    assert item.road == "A40"
+    assert item.direction == "Eastbound"
+    assert item.location_from_to == "Raglan to Abergavenny Hardwick R/bout"
+    assert item.work_type == "Resurfacing work"
+    assert item.restriction == "Road closed : Diversions in place"
+    assert item.severity == "Road closure"
+    assert item.source == "Welsh Government"
+    assert item.start == datetime(2026, 7, 15, 20, 0)
+    assert item.end == datetime(2026, 7, 16, 6, 0)
+    assert item.operating_window == "15/07/26-16/07/26 2000-0600"
+    assert item.last_updated == datetime(2026, 7, 6, 8, 28)
+
+
+def test_wales_item_missing_work_type_segment():
+    items = parse_wales(WALES_RSS)
+    item = items[1]
+    assert item.road == "A40"
+    assert item.location_from_to == "Nantgaredig to Abergwili"
+    assert item.work_type is None
+    assert item.restriction == "Lanes closed"
+    assert item.severity == "Moderate"
+    assert item.start == datetime(2026, 7, 13, 9, 30)
+    assert item.end == datetime(2026, 7, 13, 15, 30)
+
+
+def test_wales_item_restriction_before_work_type():
+    # Real items aren't consistent about segment order - this one puts the
+    # restriction ("Lanes closed") before the work type ("Environmental
+    # work"), the reverse of the usual order.
+    items = parse_wales(WALES_RSS)
+    item = items[2]
+    assert item.work_type == "Environmental work"
+    assert item.restriction == "Lanes closed"
+
+
+def test_wales_item_with_empty_road_segment():
+    items = parse_wales(WALES_RSS)
+    item = items[3]
+    assert item.road is None
+    assert item.direction == "Both directions"
+    assert item.location_from_to == "Abergavenny Hardwick R/bout to Raglan"
+    assert item.restriction == "Bridge closed Local lanes closed"
+    # A single time value, not a "HHMM-HHMM" range - still captured whole.
+    assert item.operating_window == "06/07/26-14/09/26 0600"
 
 
 def test_wales_feed_urls_english_and_welsh():
@@ -132,4 +172,4 @@ def test_wales_client_fetches_and_parses():
     )
     with TrafficWalesClient() as tw:
         items = tw.fetch(WalesFeed.ROADWORKS)
-    assert items[0].roads[0] == "M4"
+    assert items[0].roads[0] == "A40"

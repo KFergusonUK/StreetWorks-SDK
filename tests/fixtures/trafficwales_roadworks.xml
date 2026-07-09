@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:georss="http://www.georss.org/georss" version="2.0">
+<channel>
+<title>Traffic Wales RSS for Roadworks</title>
+<item>
+  <title>A40 : Eastbound : Raglan to Abergavenny Hardwick R/bout : Resurfacing work : Road closed : Diversions in place : 15/07/26-16/07/26 2000-0600 :</title>
+  <link>https://traffic.wales/road-traffic-alerts/593003</link>
+  <description>Description: A40 : Eastbound : Raglan to Abergavenny Hardwick R/bout : Resurfacing work : Road closed : Diversions in place : 15/07/26-16/07/26 2000-0600 :, Start time: 15/07/2026 20:00 , End Date:  16/07/2026 6:00, Severity: Road closure, Source: Welsh Government,  Last updated: 06/07/2026 8:28</description>
+  <pubDate>Mon, 06 Jul 2026 08:28:13 +0000</pubDate>
+  <guid isPermaLink="false">RNMDA_2026130475</guid>
+  <georss:point>51.78344 -2.939548</georss:point>
+</item>
+<item>
+  <title>A40 : Both directions : Nantgaredig to Abergwili : 13/07/26 0930-1530 : Lanes closed :</title>
+  <link>https://traffic.wales/road-traffic-alerts/592979</link>
+  <description>Description: A40 : Both directions : Nantgaredig to Abergwili : 13/07/26 0930-1530 : Lanes closed :, Start time: 13/07/2026 9:30 , End Date:  13/07/2026 15:30, Severity: Moderate, Source: Welsh Government,  Last updated: 07/07/2026 18:27</description>
+  <pubDate>Tue, 07 Jul 2026 18:27:20 +0000</pubDate>
+  <guid isPermaLink="false">RNMDA_2026130508</guid>
+  <georss:point>51.871273 -4.227312</georss:point>
+</item>
+<item>
+  <title>A477 : Both directions : Kilgetty : Lanes closed : Environmental work : 06/07/26-13/07/26 0930-1530 :</title>
+  <link>https://traffic.wales/road-traffic-alerts/592891</link>
+  <description>Description: A477 : Both directions : Kilgetty : Lanes closed : Environmental work : 06/07/26-13/07/26 0930-1530 :, Start time: 06/07/2026 9:30 , End Date:  13/07/2026 15:30, Severity: Moderate, Source: Welsh Government,  Last updated: 06/07/2026 9:30</description>
+  <pubDate>Mon, 06 Jul 2026 09:30:00 +0000</pubDate>
+  <guid isPermaLink="false">RNMDA_2026130415</guid>
+  <georss:point>51.728565 -4.724212</georss:point>
+</item>
+<item>
+  <title>: Both directions : Abergavenny Hardwick R/bout to Raglan : Bridge closed Local lanes closed : 06/07/26-14/09/26 0600 :</title>
+  <link>https://traffic.wales/road-traffic-alerts/592823</link>
+  <description>Description: : Both directions : Abergavenny Hardwick R/bout to Raglan : Bridge closed Local lanes closed : 06/07/26-14/09/26 0600 :, Start time: 06/07/2026 6:00 , End Date:  14/09/2026 6:00, Severity: Road closure, Source: Welsh Government,  Last updated: 07/07/2026 13:20</description>
+  <pubDate>Tue, 07 Jul 2026 13:20:32 +0000</pubDate>
+  <guid isPermaLink="false">RNMDA_2026130353</guid>
+  <georss:point>51.78344 -2.939548</georss:point>
+</item>
+</channel></rss>
