@@ -5,6 +5,7 @@ full-fidelity interface - they never replace it. See :mod:`.models` for the
 type design and the record-identity rules that decide what maps where.
 """
 
+from .from_srwr import from_srwr
 from .models import (
     Coordinate,
     DateConfidence,
@@ -23,4 +24,5 @@ __all__ = [
     "WorksSite",
     "WorksPlanning",
     "Works",
+    "from_srwr",
 ]
