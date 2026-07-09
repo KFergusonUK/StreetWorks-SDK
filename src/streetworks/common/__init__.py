@@ -7,6 +7,7 @@ type design and the record-identity rules that decide what maps where.
 
 from .from_datex2 import from_datex2
 from .from_srwr import from_srwr
+from .from_streetmanager import from_streetmanager
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
 from .models import (
@@ -31,4 +32,5 @@ __all__ = [
     "from_trafficwatchni",
     "from_trafficwales",
     "from_datex2",
+    "from_streetmanager",
 ]

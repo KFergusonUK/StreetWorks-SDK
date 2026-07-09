@@ -120,7 +120,15 @@ class WorksPlanning:
 @dataclass
 class Works:
     """The umbrella works record - reference, location, promoter/source.
-    Carries no committed dates of its own; those live on its `sites`."""
+    Carries no committed dates of its own; those live on its `sites`.
+
+    ``plannings`` holds any planning artifacts (PAAs, Forward Plans) sharing
+    this Works' reference - in practice a provider's planning record often
+    already carries the eventual work reference (observed on live Street
+    Manager Forward Plan data, ahead of any permit existing under it), so
+    it's a sibling of `sites` here rather than always floating free of any
+    Works. A planning artifact with no linkable reference at all still gets
+    its own free-standing :class:`WorksPlanning` outside any Works."""
 
     reference: str | None = None
     location_usrn: str | None = None
@@ -128,4 +136,5 @@ class Works:
     promoter: str | None = None
     source_grade: SourceGrade = SourceGrade.TRAVELLER_INFO
     sites: tuple[WorksSite, ...] = ()
+    plannings: tuple[WorksPlanning, ...] = ()
     raw: Any = None

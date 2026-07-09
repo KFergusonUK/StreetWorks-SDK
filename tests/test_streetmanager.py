@@ -35,6 +35,22 @@ def auth_response(expires_in: float = 3600, id_token: str | None = None) -> dict
 
 
 @respx.mock
+def test_forward_plans_hits_reporting_endpoint_with_filters():
+    respx.post(f"{SANDBOX}/v6/work/authenticate").mock(
+        return_value=httpx.Response(200, json=auth_response())
+    )
+    route = respx.get(f"{SANDBOX}/v6/reporting/forward-plans").mock(
+        return_value=httpx.Response(200, json={"pagination": {"has_next_page": False}, "rows": []})
+    )
+
+    with StreetManagerClient("user@example.com", "pw") as sm:
+        sm.reporting.forward_plans(usrn=12345)
+
+    sent = route.calls[0].request
+    assert sent.url.params["usrn"] == "12345"
+
+
+@respx.mock
 def test_authenticates_once_and_sends_token_header():
     auth_route = respx.post(f"{SANDBOX}/v6/work/authenticate").mock(
         return_value=httpx.Response(200, json=auth_response())

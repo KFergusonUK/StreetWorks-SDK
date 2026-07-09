@@ -50,6 +50,7 @@ def test_works_wraps_sites_and_keeps_raw():
     assert works.sites[0].reference == "UG1071000002-01"
     assert works.sites[0].notices[0].notice_type == "works_start"
     assert works.raw == {"work_reference_number": "UG1071000002"}
+    assert works.plannings == ()
 
 
 def test_works_planning_is_a_distinct_type_with_optional_link():
