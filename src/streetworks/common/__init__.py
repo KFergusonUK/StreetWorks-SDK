@@ -6,6 +6,8 @@ type design and the record-identity rules that decide what maps where.
 """
 
 from .from_srwr import from_srwr
+from .from_trafficwales import from_trafficwales
+from .from_trafficwatchni import from_trafficwatchni
 from .models import (
     Coordinate,
     DateConfidence,
@@ -25,4 +27,6 @@ __all__ = [
     "WorksPlanning",
     "Works",
     "from_srwr",
+    "from_trafficwatchni",
+    "from_trafficwales",
 ]
