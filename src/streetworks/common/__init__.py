@@ -5,6 +5,7 @@ full-fidelity interface - they never replace it. See :mod:`.models` for the
 type design and the record-identity rules that decide what maps where.
 """
 
+from .from_datex2 import from_datex2
 from .from_srwr import from_srwr
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
@@ -29,4 +30,5 @@ __all__ = [
     "from_srwr",
     "from_trafficwatchni",
     "from_trafficwales",
+    "from_datex2",
 ]
