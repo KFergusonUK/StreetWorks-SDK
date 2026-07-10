@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-10
+
+### Added
+
+- **US work zones: WZDx** (`streetworks.wzdx`): a parser-first provider for
+  the US Work Zone Data Exchange standard - one schema-level GeoJSON parser
+  plus a generic client that fetches any agency's feed URL (WZDx is
+  published independently by ~40+ agencies, not one central API), and a
+  registry helper against the USDOT feed registry. Built and verified
+  against 12 live feeds spanning WZDx v3.1-v4.2 (Hawaii, Maryland, Indiana,
+  NY/TRANSCOM, Missouri, Louisiana, Kentucky, Washington, Minnesota,
+  Delaware, Idaho, Québec), not a single sample - caught real cross-agency
+  variation a narrower check would have missed: `core_details` nesting is
+  v4-only (v3.1 feeds are flat), the feed-info key isn't cleanly
+  version-gated (`feed_info` vs the older `road_event_feed_info`, one v4.2
+  feed emits both), geometry varies (LineString/MultiPoint, sometimes both
+  in one feed), and two genuinely different cross-reference mechanisms
+  exist in the wild (`relationship.parents`/`.children` vs
+  `core_details.related_road_events`). Confirmed real placeholder/garbage
+  dates at scale (one live feed's "current" records span years 2019-2040).
+  Every field read is defensive - nothing raises on a malformed record.
+- **Common models**: `streetworks.common.from_wzdx` converter, mapping
+  `event_type == "work-zone"` records to `WorksSite` (detour/device/
+  restriction events are WZDx's analogue of DATEX measures and stay
+  native-only). `source_grade` is `operator`; `date_confidence` prefers
+  WZDx's accuracy-enum fields over its boolean verified flags, per the two
+  different encodings observed live. Coordinate axis order is verified
+  against `from_datex2`'s actual behaviour (not assumed) and explicitly
+  flipped from WZDx's native GeoJSON `(lon, lat)` to this SDK's
+  `(lat, lon)` convention for `EPSG:4326`, with a dedicated cross-converter
+  test asserting the two can't silently drift apart.
+- `streetworks._dt`: the fractional-second-tolerant ISO-8601 parser
+  (previously local to `streetworks.datex2`) is now shared - WZDx feeds hit
+  the exact same problem (`datetime.fromisoformat` only accepts 0/3/6-digit
+  fractional seconds on Python < 3.11) with even worse precision (7 digits
+  on a Washington State feed) than the case that broke `datex2` on 3.10.
+
 ## [0.5.0] - 2026-07-09
 
 ### Added
