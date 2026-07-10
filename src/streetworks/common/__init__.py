@@ -10,6 +10,7 @@ from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
+from .from_wzdx import from_wzdx
 from .models import (
     Coordinate,
     DateConfidence,
@@ -33,4 +34,5 @@ __all__ = [
     "from_trafficwales",
     "from_datex2",
     "from_streetmanager",
+    "from_wzdx",
 ]
