@@ -311,6 +311,23 @@ def check_datex2_ndw() -> str:
     return f"{source_desc} -> {situations:,} roadworks situations ({works:,} works records)"
 
 
+def check_wzdx() -> str:
+    """WZDx (US Work Zone Data Exchange) needs no credentials. Points at
+    Washington State DOT's feed by default; set WZDX_FEED_URL to point at a
+    different agency's feed instead (see streetworks.wzdx.list_feeds() for
+    the full USDOT registry)."""
+    from streetworks.wzdx import WZDxClient
+
+    feed_url = os.environ.get("WZDX_FEED_URL", "https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed")
+    with WZDxClient() as wzdx:
+        feed = wzdx.fetch(feed_url)
+    work_zones = sum(1 for e in feed.road_events if e.is_work_zone)
+    return (
+        f"{feed.publisher} (WZDx v{feed.version}): {len(feed.road_events)} road "
+        f"events ({work_zones} work zones)"
+    )
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -399,6 +416,8 @@ def main() -> int:
     reporter.check("OS Open USRN", [], check_openusrn)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
+    # WZDx (US Work Zone Data Exchange) needs no credentials
+    reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

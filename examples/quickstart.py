@@ -4,7 +4,7 @@ Copy `.env.example` to `.env`, fill in the credentials you have, then:
 
     python examples/quickstart.py
 
-Providers without credentials are skipped; SRWR, OS Open USRN,
+Providers without credentials are skipped; SRWR, OS Open USRN, WZDx,
 TrafficWatchNI, Traffic Wales and UK Police need none.
 Everything here is read-only.
 """
@@ -172,6 +172,35 @@ if os.environ.get("NH_SUBSCRIPTION_KEY"):
     attempt("National Highways", _nationalhighways_demo)
 else:
     print("skipped - set NH_SUBSCRIPTION_KEY in .env")
+
+# --- WZDx: US work zones, any agency's feed (no credentials) --------------------
+
+section("WZDx (US Work Zone Data Exchange)")
+
+
+def _wzdx_demo() -> None:
+    from streetworks.wzdx import WZDxClient, list_feeds
+
+    feeds = list_feeds()
+    print(f"  {len(feeds)} active feeds in the USDOT registry")
+
+    # Washington State DOT by default; set WZDX_FEED_URL to point at any
+    # other agency's feed instead (see the feeds listed above).
+    feed_url = os.environ.get("WZDX_FEED_URL", "https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed")
+    with WZDxClient() as wzdx:
+        feed = wzdx.fetch(feed_url)
+    print(f"  {feed.publisher} (WZDx v{feed.version}): {len(feed.road_events)} road events")
+    shown = 0
+    for event in feed.road_events:
+        if not event.is_work_zone:
+            continue
+        print("  ", ", ".join(event.road_names) or "?", "-", event.vehicle_impact)
+        shown += 1
+        if shown == 3:
+            break
+
+
+attempt("WZDx", _wzdx_demo)
 
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
