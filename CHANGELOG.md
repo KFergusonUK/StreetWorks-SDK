@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-07-11
+
+### Added
+
+- **Finland: Digitraffic** (`streetworks.datex2.digitraffic`) - the first
+  provider of the European DATEX expansion, and the first adapter to prove
+  the National-Highways pattern (a source that isn't DATEX-shaped itself
+  can still produce the same shared `Situation`/`SituationRecord` models)
+  a second time. Verified against the live feed (574-575 real features,
+  not assumed): Digitraffic's Simple-JSON is its own schema, not a JSON
+  serialisation of DATEX II. Every field mapping decision is documented in
+  the module rather than glossed over - `record_type` is a hardcoded
+  compromise (Digitraffic has no maintenance/construction discriminator),
+  `road_maintenance_type` takes the single most specific work-type entry
+  rather than a joined composite, `validity.status` stays `None` always
+  (no lifecycle field exists in the feed, checked exhaustively - so
+  `date_confidence` honestly comes out `UNKNOWN` throughout), and location
+  geometry is documented as area-level (the situation's, shared across
+  every phase-derived record - confirmed on a live 3-phase situation with
+  three different road numbers under one geometry), not phase-precise -
+  `road_number`/`alert_c_location` are the precise per-phase locators.
+  `administrative_area` comes from a new `provinces()` helper (province,
+  confirmed *not* an ELY-centre - that field doesn't exist in this feed),
+  verified safe to reuse one value per situation across all 610 phases in
+  the live feed, zero exceptions. Credential-free; no Alert-C location-code
+  decoding (only the human-readable name is preserved, same as elsewhere).
+- **`SituationRecord`/`Situation` gained a `.raw` field**, for all three
+  DATEX sources, matching the `.raw` pattern already used elsewhere in this
+  SDK (WZDx's `RoadEvent`, SRWR's `Record`) - a real, pre-existing gap
+  surfaced while reviewing Finland's field mapping, not new to Finland.
+  Populated for National Highways and Digitraffic (free - their payloads
+  are already fully in memory). Left `None` for the streaming XML parser
+  (NDW and raw DATEX v2/v3) deliberately, not by oversight: each XML
+  element is cleared after yielding to keep the verified ~170 MB feed /
+  ~35 MB memory characteristic, and a stored reference would go stale
+  under the caller.
+
 ## [0.6.1] - 2026-07-11
 
 ### Added

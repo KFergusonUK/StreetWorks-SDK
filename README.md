@@ -26,7 +26,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML) and National Highways (England SRN, JSON) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), and Digitraffic (Finland, its own JSON schema; no credentials) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -58,8 +58,9 @@ DataVIA (live — including a real feature query), D-TRO (production token +
 events search), the Open Data SNS parsing/verification pipeline, SRWR
 Open Data (parsed against real published daily and monthly extracts),
 OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
-`safety_signal()` and category queries against `data.police.uk`), and WZDx
-(parsed against 12 live agency feeds spanning v3.1–v4.2).
+`safety_signal()` and category queries against `data.police.uk`), WZDx
+(parsed against 12 live agency feeds spanning v3.1–v4.2), and Digitraffic/
+Finland (parsed against the real live feed).
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -402,6 +403,38 @@ with NationalHighwaysClient(subscription_key) as nh:
 headers unless you also send `X-Response-MediaType: application/json` — the
 client sends this for you.)
 
+**Finland's Digitraffic** (Fintraffic's open data platform) publishes
+national roadworks credential-free as its own JSON schema — **not** a DATEX
+II serialisation, unlike National Highways — so
+`streetworks.datex2.digitraffic` has its own parsing path too, onto the
+same shared models:
+
+```python
+from streetworks.common import from_datex2
+from streetworks.datex2.digitraffic import DigitrafficClient, provinces
+
+with DigitrafficClient() as digitraffic:
+    payload = digitraffic.get_roadworks()
+    situations = digitraffic.parse(payload)
+
+situation_provinces = provinces(payload)  # province isn't on Situation itself
+for situation in situations:
+    works = from_datex2(
+        situation, territory="Finland",
+        administrative_area=situation_provinces.get(situation.id),
+    )
+```
+
+Verified against the live feed (2026-07): `record_type` is a documented
+compromise (Digitraffic has no maintenance/construction split, so it's
+hardcoded, not read off a field), `validity.status` stays unset always (no
+active/planned/suspended-equivalent exists in the feed, so
+`date_confidence` honestly comes out `unknown`), and the coordinate given
+per record is the *situation's* affected-area geometry, not that record's
+exact spot — `road_number`/Alert-C name are the precise per-record
+locators. See `streetworks/datex2/digitraffic.py`'s module docstring for
+the full field-by-field mapping and why each choice was made.
+
 ## WZDx (US Work Zone Data Exchange)
 
 WZDx is the US standard for work zone data — GeoJSON-based, distinct from
@@ -575,10 +608,11 @@ converters (`from_datex2`, `from_wzdx`) can't derive these from the source
 record alone — see their docstrings for why — and take them as keyword
 arguments instead of guessing.
 
-Converters currently cover SRWR, Street Manager, DATEX II (NDW and National
-Highways via the one shared converter), WZDx, TrafficWatchNI and Traffic
-Wales. UK Police stays outside the works hierarchy entirely — it's a
-*context* provider (area-level crime as a safety signal), not a works
+Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
+Highways, and Digitraffic/Finland via the one shared converter), WZDx,
+TrafficWatchNI and Traffic Wales. UK Police stays outside the works
+hierarchy entirely — it's a *context* provider (area-level crime as a
+safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
 actually is.
 
@@ -628,6 +662,9 @@ actually is.
 - [x] National Highways (England SRN) DATEX II v3.4 **JSON** adapter
       (`streetworks.datex2.nationalhighways`), cursor pagination via `x-next` —
       verified against the real API
+- [x] Finland (Digitraffic) DATEX adapter (`streetworks.datex2.digitraffic`)
+      — its own JSON schema, not a DATEX-II serialisation, mapped onto the
+      same shared models; verified against the real feed, no credentials
 - [ ] Further DATEX II adapters: Mobilithek (DE), transport.data.gouv.fr (FR)
       — per-NAP verification needed
 - [x] **WZDx (US Work Zone Data Exchange)** parser (`streetworks.wzdx`,
@@ -644,11 +681,13 @@ per source is "can we get the feed and what do the terms permit," not coding.
 Grouped by the client shape they need:
 
 - **DATEX II adapters** (thin fetchers over the existing `streetworks.datex2`
-  parser, NDW-style). Candidates: Finland (Digitraffic — open, well-documented,
-  the natural next one to prove the pattern), Norway (Statens vegvesen),
-  Denmark (Vejdirektoratet), Sweden (Trafikverket — verify its SOAP/XML model
-  is DATEX-compatible), Spain (DGT NAP), France (Bison Futé). Access models
-  vary from fully open to registration/agreement-gated — confirm per country.
+  models, Finland/National-Highways-style where the source isn't DATEX-shaped
+  itself). Candidates: Norway (Statens vegvesen), Denmark (Vejdirektoratet),
+  Sweden (Trafikverket — verify its SOAP/XML model is DATEX-compatible),
+  Spain (DGT NAP), France (Bison Futé). Access models vary from fully open
+  to registration/agreement-gated — confirm per country. Note Alert-C
+  location-code decoding (numeric codes → geometry, not yet supported) is
+  likely needed for some of these, unlike Finland's coordinate-carrying JSON.
 - **ArcGIS REST** (a new client shape — Esri `/query?f=json`). Jersey publishes
   roadworks as an ArcGIS MapServer layer; likely a quick, self-contained win
   and the SDK's first Channel Islands coverage.
@@ -674,7 +713,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest                    # 156 mocked unit tests - no credentials needed
+pytest                    # 164 mocked unit tests - no credentials needed
 ruff check .
 ```
 
