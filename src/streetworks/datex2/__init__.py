@@ -2,12 +2,18 @@
 
 A streaming, namespace-tolerant parser for SituationPublication roadworks
 (DATEX II v3 and v2), plus source adapters for National Access Point feeds:
-the Netherlands' credential-free NDW open data (XML), and National Highways'
+the Netherlands' credential-free NDW open data (XML), National Highways'
 Road and Lane Closures service for England (JSON - see
 :mod:`streetworks.datex2.nationalhighways` for why it needs its own parsing
-path).
+path), and Fintraffic's Digitraffic open data for Finland (its own
+Simple-JSON schema, not a DATEX-II serialisation - see
+:mod:`streetworks.datex2.digitraffic` for the field-by-field mapping).
 """
 
+from .digitraffic import BASE_URL as DIGITRAFFIC_BASE_URL
+from .digitraffic import DigitrafficClient
+from .digitraffic import parse_situations as parse_digitraffic_situations
+from .digitraffic import provinces as digitraffic_provinces
 from .models import Location, Period, Situation, SituationRecord, Validity
 from .nationalhighways import BASE_URL as NH_BASE_URL
 from .nationalhighways import ClosureType, NationalHighwaysClient
@@ -30,4 +36,8 @@ __all__ = [
     "ClosureType",
     "parse_nationalhighways_situations",
     "NH_BASE_URL",
+    "DigitrafficClient",
+    "parse_digitraffic_situations",
+    "digitraffic_provinces",
+    "DIGITRAFFIC_BASE_URL",
 ]

@@ -40,7 +40,7 @@ class SourceGrade(str, Enum):
     filter without tribal knowledge of which providers are which."""
 
     REGISTER = "register"  #: statutory works registers (Street Manager, SRWR)
-    OPERATOR = "operator"  #: road-operator published data (DATEX: NDW, National Highways)
+    OPERATOR = "operator"  #: road-operator published data (DATEX, WZDx)
     TRAVELLER_INFO = "traveller_info"  #: best-effort RSS extraction (TrafficWatchNI, Traffic Wales)
 
 

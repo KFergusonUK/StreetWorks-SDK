@@ -202,6 +202,40 @@ def _wzdx_demo() -> None:
 
 attempt("WZDx", _wzdx_demo)
 
+# --- Digitraffic: Finnish national roadworks (no credentials) -------------------
+
+section("Digitraffic (Finland)")
+
+
+def _digitraffic_demo() -> None:
+    from streetworks.common import from_datex2
+    from streetworks.datex2.digitraffic import DigitrafficClient, provinces
+
+    with DigitrafficClient() as digitraffic:
+        payload = digitraffic.get_roadworks()
+        situations = digitraffic.parse(payload)
+    situation_provinces = provinces(payload)
+    print(f"  {len(situations)} situations")
+    shown = 0
+    for situation in situations:
+        if not situation.roadworks:
+            continue
+        works = from_datex2(
+            situation, territory="Finland",
+            administrative_area=situation_provinces.get(situation.id),
+        )
+        site = works.sites[0]
+        print(
+            "  ", works.administrative_area or "?", "-", site.works_type,
+            "-", site.location_description,
+        )
+        shown += 1
+        if shown == 3:
+            break
+
+
+attempt("Digitraffic", _digitraffic_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")

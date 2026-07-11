@@ -311,6 +311,23 @@ def check_datex2_ndw() -> str:
     return f"{source_desc} -> {situations:,} roadworks situations ({works:,} works records)"
 
 
+def check_digitraffic() -> str:
+    """Digitraffic (Finland) needs no credentials. Its Simple-JSON schema
+    isn't DATEX-shaped itself (see streetworks.datex2.digitraffic), but
+    still produces the same Situation/SituationRecord models."""
+    from streetworks.datex2.digitraffic import DigitrafficClient, provinces
+
+    with DigitrafficClient() as digitraffic:
+        payload = digitraffic.get_roadworks()
+        situations = digitraffic.parse(payload)
+    works = sum(len(s.roadworks) for s in situations)
+    distinct_provinces = len(set(provinces(payload).values()))
+    return (
+        f"{len(situations):,} situations ({works:,} works records) across "
+        f"{distinct_provinces} provinces"
+    )
+
+
 def check_wzdx() -> str:
     """WZDx (US Work Zone Data Exchange) needs no credentials. Points at
     Washington State DOT's feed by default; set WZDX_FEED_URL to point at a
@@ -416,6 +433,8 @@ def main() -> int:
     reporter.check("OS Open USRN", [], check_openusrn)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
+    # Digitraffic (Finland) needs no credentials
+    reporter.check("DATEX II (Digitraffic/Finland)", [], check_digitraffic)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

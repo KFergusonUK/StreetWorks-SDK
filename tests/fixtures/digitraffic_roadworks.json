@@ -1,0 +1,2974 @@
+{
+  "type": "FeatureCollection",
+  "dataUpdatedTime": "2026-07-10T13:21:51.021Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.871069,
+          61.47797
+        ]
+      },
+      "properties": {
+        "situationId": "GUID50467185",
+        "situationType": "road work",
+        "trafficAnnouncementType": null,
+        "version": 4,
+        "releaseTime": "2026-07-10T13:20:56.176Z",
+        "versionTime": "2026-07-10T13:21:44.477Z",
+        "announcements": [
+          {
+            "language": "fi",
+            "title": "Tie 9, Tampere. Tietyö. ",
+            "location": {
+              "countryCode": 6,
+              "locationTableNumber": 17,
+              "locationTableVersion": "1.11.45",
+              "description": "Tie 9 välillä Tampere - Jyväskylä, Tampere.\nTarkempi paikka: Kaukajärven liittymä. Rampilla."
+            },
+            "locationDetails": {
+              "roadAddressLocation": {
+                "primaryPoint": {
+                  "municipality": "Tampere",
+                  "province": "Pirkanmaa",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 9,
+                    "roadSection": 205,
+                    "distance": 2102
+                  },
+                  "alertCLocation": {
+                    "locationCode": 1788,
+                    "name": "Kaukajärven liittymä",
+                    "distance": 0
+                  }
+                },
+                "direction": "unknown"
+              }
+            },
+            "features": [
+              {
+                "name": "Ajokaista suljettu liikenteeltä"
+              }
+            ],
+            "roadWorkPhases": [
+              {
+                "id": "GUID50469963",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 9 välillä Tampere - Jyväskylä, Tampere.\nTarkempi paikka: Kaukajärven liittymä. Rampilla."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Tampere",
+                      "province": "Pirkanmaa",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 9,
+                        "roadSection": 205,
+                        "distance": 2102
+                      },
+                      "alertCLocation": {
+                        "locationCode": 1788,
+                        "name": "Kaukajärven liittymä",
+                        "distance": 0
+                      }
+                    },
+                    "direction": "unknown"
+                  }
+                },
+                "workingHours": [
+                  {
+                    "weekday": "Saturday",
+                    "startTime": "10:00",
+                    "endTime": "16:00"
+                  }
+                ],
+                "timeAndDuration": {
+                  "startTime": "2026-07-10T21:00:00.000Z",
+                  "endTime": "2026-07-11T20:59:59.999Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "measurement equipment",
+                    "description": "Silmukka-anturin asentaminen"
+                  },
+                  {
+                    "type": "other",
+                    "description": ""
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "single lane closed",
+                    "restriction": {
+                      "name": "Yksi ajokaista suljettu"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": false,
+                "severity": "high",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              }
+            ],
+            "timeAndDuration": {
+              "startTime": "2026-07-10T21:00:00.000Z",
+              "endTime": "2026-07-11T20:59:59.999Z"
+            },
+            "additionalInformation": "Liikenne- ja kelitiedot verkossa: https://liikennetilanne.fintraffic.fi/",
+            "sender": "Fintraffic Tieliikennekeskus Tampere"
+          }
+        ],
+        "contact": {
+          "phone": "02002100",
+          "email": "tampere.liikennekeskus@fintraffic.fi"
+        },
+        "dataUpdatedTime": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              27.781628,
+              63.348264
+            ],
+            [
+              27.781543,
+              63.348338
+            ],
+            [
+              27.781534,
+              63.348345
+            ],
+            [
+              27.781239,
+              63.34858
+            ],
+            [
+              27.781225,
+              63.34859
+            ],
+            [
+              27.781141,
+              63.348651
+            ],
+            [
+              27.780871,
+              63.348829
+            ],
+            [
+              27.780553,
+              63.349014
+            ],
+            [
+              27.780549,
+              63.349016
+            ],
+            [
+              27.780497,
+              63.349044
+            ],
+            [
+              27.779589,
+              63.349497
+            ],
+            [
+              27.779576,
+              63.349504
+            ],
+            [
+              27.779359,
+              63.349609
+            ],
+            [
+              27.779355,
+              63.349611
+            ],
+            [
+              27.779338,
+              63.349617
+            ],
+            [
+              27.779032,
+              63.349732
+            ],
+            [
+              27.779019,
+              63.349737
+            ],
+            [
+              27.778635,
+              63.349866
+            ],
+            [
+              27.777809,
+              63.35012
+            ],
+            [
+              27.777779,
+              63.350128
+            ],
+            [
+              27.777576,
+              63.350185
+            ],
+            [
+              27.777159,
+              63.350292
+            ],
+            [
+              27.776907,
+              63.350346
+            ],
+            [
+              27.77688,
+              63.350351
+            ],
+            [
+              27.776696,
+              63.350386
+            ],
+            [
+              27.776133,
+              63.350478
+            ],
+            [
+              27.775266,
+              63.350619
+            ],
+            [
+              27.774693,
+              63.350698
+            ],
+            [
+              27.774689,
+              63.350699
+            ],
+            [
+              27.774667,
+              63.350701
+            ],
+            [
+              27.774085,
+              63.350765
+            ],
+            [
+              27.774053,
+              63.350769
+            ],
+            [
+              27.773095,
+              63.350895
+            ],
+            [
+              27.773064,
+              63.3509
+            ],
+            [
+              27.772838,
+              63.350935
+            ],
+            [
+              27.772466,
+              63.351
+            ],
+            [
+              27.772249,
+              63.351046
+            ],
+            [
+              27.772241,
+              63.351048
+            ],
+            [
+              27.772066,
+              63.351091
+            ],
+            [
+              27.771724,
+              63.351184
+            ],
+            [
+              27.771698,
+              63.351192
+            ],
+            [
+              27.771342,
+              63.351298
+            ],
+            [
+              27.771298,
+              63.351311
+            ],
+            [
+              27.771279,
+              63.351317
+            ],
+            [
+              27.771213,
+              63.351337
+            ],
+            [
+              27.770703,
+              63.35151
+            ],
+            [
+              27.770087,
+              63.35171
+            ],
+            [
+              27.770056,
+              63.35172
+            ],
+            [
+              27.769638,
+              63.351859
+            ],
+            [
+              27.769569,
+              63.351881
+            ],
+            [
+              27.769282,
+              63.351977
+            ],
+            [
+              27.768849,
+              63.352122
+            ]
+          ],
+          [
+            [
+              27.768849,
+              63.352122
+            ],
+            [
+              27.768707,
+              63.352185
+            ],
+            [
+              27.768681,
+              63.352198
+            ],
+            [
+              27.768628,
+              63.352224
+            ],
+            [
+              27.768573,
+              63.35225
+            ],
+            [
+              27.768558,
+              63.352258
+            ],
+            [
+              27.768449,
+              63.352311
+            ],
+            [
+              27.768444,
+              63.352313
+            ],
+            [
+              27.768275,
+              63.35239
+            ],
+            [
+              27.768262,
+              63.352396
+            ],
+            [
+              27.768042,
+              63.3525
+            ],
+            [
+              27.768035,
+              63.352504
+            ],
+            [
+              27.767787,
+              63.35262
+            ],
+            [
+              27.767782,
+              63.352623
+            ],
+            [
+              27.766343,
+              63.35332
+            ],
+            [
+              27.766333,
+              63.353324
+            ],
+            [
+              27.765326,
+              63.35376
+            ],
+            [
+              27.765319,
+              63.353763
+            ],
+            [
+              27.764477,
+              63.354093
+            ],
+            [
+              27.76447,
+              63.354096
+            ],
+            [
+              27.764407,
+              63.354118
+            ],
+            [
+              27.764147,
+              63.354202
+            ],
+            [
+              27.763979,
+              63.35425
+            ],
+            [
+              27.763874,
+              63.354276
+            ],
+            [
+              27.763766,
+              63.3543
+            ],
+            [
+              27.763656,
+              63.354321
+            ],
+            [
+              27.763649,
+              63.354322
+            ],
+            [
+              27.762999,
+              63.354408
+            ],
+            [
+              27.762965,
+              63.35441
+            ],
+            [
+              27.762651,
+              63.354436
+            ],
+            [
+              27.762329,
+              63.354458
+            ],
+            [
+              27.762309,
+              63.35446
+            ],
+            [
+              27.762033,
+              63.354481
+            ],
+            [
+              27.762015,
+              63.354483
+            ],
+            [
+              27.761699,
+              63.354504
+            ],
+            [
+              27.761683,
+              63.354505
+            ],
+            [
+              27.761447,
+              63.354522
+            ],
+            [
+              27.76133,
+              63.354534
+            ],
+            [
+              27.761303,
+              63.354537
+            ],
+            [
+              27.761149,
+              63.354556
+            ],
+            [
+              27.760891,
+              63.35461
+            ],
+            [
+              27.760851,
+              63.354619
+            ],
+            [
+              27.760606,
+              63.35468
+            ],
+            [
+              27.760505,
+              63.354709
+            ],
+            [
+              27.760439,
+              63.35473
+            ],
+            [
+              27.760376,
+              63.354752
+            ],
+            [
+              27.760346,
+              63.354763
+            ],
+            [
+              27.760325,
+              63.354771
+            ],
+            [
+              27.760267,
+              63.354796
+            ],
+            [
+              27.760212,
+              63.354822
+            ],
+            [
+              27.76016,
+              63.35485
+            ],
+            [
+              27.760064,
+              63.354907
+            ],
+            [
+              27.759996,
+              63.354951
+            ],
+            [
+              27.759992,
+              63.354953
+            ],
+            [
+              27.759886,
+              63.355029
+            ],
+            [
+              27.759809,
+              63.355092
+            ],
+            [
+              27.759739,
+              63.355157
+            ],
+            [
+              27.759723,
+              63.355173
+            ],
+            [
+              27.759718,
+              63.355179
+            ],
+            [
+              27.75966,
+              63.355246
+            ],
+            [
+              27.759573,
+              63.355366
+            ],
+            [
+              27.759569,
+              63.355371
+            ],
+            [
+              27.75941,
+              63.355593
+            ],
+            [
+              27.759401,
+              63.355606
+            ],
+            [
+              27.75923,
+              63.355845
+            ],
+            [
+              27.759218,
+              63.35586
+            ],
+            [
+              27.759032,
+              63.356097
+            ],
+            [
+              27.75902,
+              63.356112
+            ],
+            [
+              27.75882,
+              63.356346
+            ],
+            [
+              27.758816,
+              63.356351
+            ],
+            [
+              27.758553,
+              63.356613
+            ],
+            [
+              27.758537,
+              63.356628
+            ],
+            [
+              27.758262,
+              63.356887
+            ],
+            [
+              27.758248,
+              63.356899
+            ],
+            [
+              27.758026,
+              63.35709
+            ],
+            [
+              27.75801,
+              63.357103
+            ],
+            [
+              27.757987,
+              63.357118
+            ],
+            [
+              27.757972,
+              63.357128
+            ],
+            [
+              27.757869,
+              63.357205
+            ],
+            [
+              27.757855,
+              63.357216
+            ],
+            [
+              27.757828,
+              63.357236
+            ],
+            [
+              27.75781,
+              63.35725
+            ],
+            [
+              27.757684,
+              63.357362
+            ],
+            [
+              27.757667,
+              63.357377
+            ],
+            [
+              27.757593,
+              63.357441
+            ],
+            [
+              27.757579,
+              63.357452
+            ],
+            [
+              27.757357,
+              63.357637
+            ],
+            [
+              27.75717,
+              63.357805
+            ],
+            [
+              27.756889,
+              63.358088
+            ],
+            [
+              27.756777,
+              63.358223
+            ],
+            [
+              27.756766,
+              63.358238
+            ],
+            [
+              27.756649,
+              63.358429
+            ],
+            [
+              27.756566,
+              63.358581
+            ],
+            [
+              27.756525,
+              63.358668
+            ],
+            [
+              27.756517,
+              63.358685
+            ],
+            [
+              27.756347,
+              63.359071
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "situationId": "GUID50465119",
+        "situationType": "road work",
+        "trafficAnnouncementType": null,
+        "version": 8,
+        "releaseTime": "2026-05-29T15:57:57.692Z",
+        "versionTime": "2026-05-29T16:13:52.440Z",
+        "announcements": [
+          {
+            "language": "fi",
+            "title": "Tie 577, Lapinlahti. Tietyö. ",
+            "location": {
+              "countryCode": 6,
+              "locationTableNumber": 17,
+              "locationTableVersion": "1.11.45",
+              "description": "Tie 577 välillä Nilsiä - Varpaisjärvi, Lapinlahti.\nTarkempi paikka: Paikasta Ruukuntie 900 m, vaikutusalue 1,9 km, suuntaan Varpaisjärvi."
+            },
+            "locationDetails": {
+              "roadAddressLocation": {
+                "primaryPoint": {
+                  "municipality": "Lapinlahti",
+                  "province": "Pohjois-Savo",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 577,
+                    "roadSection": 6,
+                    "distance": 4841
+                  },
+                  "alertCLocation": {
+                    "locationCode": 11021,
+                    "name": "Ruukuntie",
+                    "distance": 900
+                  }
+                },
+                "secondaryPoint": {
+                  "municipality": "Lapinlahti",
+                  "province": "Pohjois-Savo",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 577,
+                    "roadSection": 7,
+                    "distance": 1063
+                  },
+                  "alertCLocation": {
+                    "locationCode": 11023,
+                    "name": "Varpaisjärvi",
+                    "distance": 9
+                  }
+                },
+                "direction": "both"
+              }
+            },
+            "features": [
+              {
+                "name": "Liikenne ohjataan kaksisuuntaisena toiselle ajoradalle"
+              },
+              {
+                "name": "Ajokaistoja on kavennettu"
+              },
+              {
+                "name": "Ajoneuvon suurin sallittu leveys",
+                "quantity": 3.0,
+                "unit": "m"
+              },
+              {
+                "name": "Ajokaistoja on kavennettu"
+              },
+              {
+                "name": "Ajoneuvon suurin sallittu leveys",
+                "quantity": 3.0,
+                "unit": "m"
+              },
+              {
+                "name": "Ajokaistoja on kavennettu"
+              }
+            ],
+            "roadWorkPhases": [
+              {
+                "id": "GUID50467866",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 577 välillä Nilsiä - Varpaisjärvi, Lapinlahti.\nTarkempi paikka: Paikasta Ruukuntie 900 m, vaikutusalue 1,9 km, suuntaan Varpaisjärvi."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 577,
+                        "roadSection": 6,
+                        "distance": 4841
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11021,
+                        "name": "Ruukuntie",
+                        "distance": 900
+                      }
+                    },
+                    "secondaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 577,
+                        "roadSection": 7,
+                        "distance": 1063
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11023,
+                        "name": "Varpaisjärvi",
+                        "distance": 9
+                      }
+                    },
+                    "direction": "both"
+                  }
+                },
+                "workingHours": [
+                  {
+                    "weekday": "Monday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Thursday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Tuesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Friday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Wednesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  }
+                ],
+                "timeAndDuration": {
+                  "startTime": "2026-05-31T21:00:00.000Z",
+                  "endTime": "2026-07-31T20:59:59.999Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "buried cables",
+                    "description": "Kaapelityö"
+                  },
+                  {
+                    "type": "lighting",
+                    "description": "Valaistustyö"
+                  },
+                  {
+                    "type": "other",
+                    "description": ""
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "contra flow traffic",
+                    "restriction": {
+                      "name": "Liikenne ohjataan kaksisuuntaisena toiselle ajoradalle"
+                    }
+                  },
+                  {
+                    "type": "narrow lanes",
+                    "restriction": {
+                      "name": "Ajokaista kavennettu työmaan kohdalla"
+                    }
+                  },
+                  {
+                    "type": "narrow or closed pedestrian and bicyle path",
+                    "restriction": {
+                      "name": "Kevyen liikenteen väylä suljettu/kavennettu"
+                    }
+                  },
+                  {
+                    "type": "slow moving maintenance vehicle",
+                    "restriction": {
+                      "name": "Työkoneita liikenteen seassa"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": true,
+                "severity": "high",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              },
+              {
+                "id": "GUID50467867",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 582 välillä Lapinlahti - Rautavaara, Lapinlahti.\nTarkempi paikka: Paikasta Vartiala 3,9 km, vaikutusalue 2,1 km, suuntaan Honkamäki."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 582,
+                        "roadSection": 2,
+                        "distance": 12639
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11035,
+                        "name": "Vartiala",
+                        "distance": 3851
+                      }
+                    },
+                    "secondaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 582,
+                        "roadSection": 5,
+                        "distance": 907
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11039,
+                        "name": "Honkamäki",
+                        "distance": 1621
+                      }
+                    },
+                    "direction": "both"
+                  }
+                },
+                "workingHours": [
+                  {
+                    "weekday": "Thursday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Friday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Wednesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Tuesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Monday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  }
+                ],
+                "timeAndDuration": {
+                  "startTime": "2026-05-31T21:00:00.000Z",
+                  "endTime": "2026-07-31T20:59:59.999Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "buried cables",
+                    "description": "Kaapelityö"
+                  },
+                  {
+                    "type": "lighting",
+                    "description": "Valaistustyö"
+                  },
+                  {
+                    "type": "other",
+                    "description": ""
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "vehicle width limit",
+                    "restriction": {
+                      "name": "Ajoneuvon maksimileveys",
+                      "quantity": 3.0,
+                      "unit": "m"
+                    }
+                  },
+                  {
+                    "type": "narrow lanes",
+                    "restriction": {
+                      "name": "Ajokaista kavennettu työmaan kohdalla"
+                    }
+                  },
+                  {
+                    "type": "narrow or closed pedestrian and bicyle path",
+                    "restriction": {
+                      "name": "Kevyen liikenteen väylä suljettu/kavennettu"
+                    }
+                  },
+                  {
+                    "type": "slow moving maintenance vehicle",
+                    "restriction": {
+                      "name": "Työkoneita liikenteen seassa"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": true,
+                "severity": "high",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              },
+              {
+                "id": "GUID50467868",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 576 välillä Siilinjärvi - Varpaisjärvi, Lapinlahti.\nTarkempi paikka: Paikasta Varpaisjärvi, vaikutusalue 600 m, suuntaan Suurimäki."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 576,
+                        "roadSection": 6,
+                        "distance": 6662
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11009,
+                        "name": "Varpaisjärvi",
+                        "distance": 8
+                      }
+                    },
+                    "secondaryPoint": {
+                      "municipality": "Lapinlahti",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 576,
+                        "roadSection": 6,
+                        "distance": 6021
+                      },
+                      "alertCLocation": {
+                        "locationCode": 11008,
+                        "name": "Suurimäki",
+                        "distance": 6021
+                      }
+                    },
+                    "direction": "both"
+                  }
+                },
+                "workingHours": [
+                  {
+                    "weekday": "Monday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Friday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Wednesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Tuesday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  },
+                  {
+                    "weekday": "Thursday",
+                    "startTime": "07:00",
+                    "endTime": "19:00"
+                  }
+                ],
+                "timeAndDuration": {
+                  "startTime": "2026-05-31T21:00:00.000Z",
+                  "endTime": "2026-07-31T20:59:59.999Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "buried cables",
+                    "description": "Kaapelityö"
+                  },
+                  {
+                    "type": "lighting",
+                    "description": "Valaistustyö"
+                  },
+                  {
+                    "type": "other",
+                    "description": ""
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "vehicle width limit",
+                    "restriction": {
+                      "name": "Ajoneuvon maksimileveys",
+                      "quantity": 3.0,
+                      "unit": "m"
+                    }
+                  },
+                  {
+                    "type": "narrow lanes",
+                    "restriction": {
+                      "name": "Ajokaista kavennettu työmaan kohdalla"
+                    }
+                  },
+                  {
+                    "type": "narrow or closed pedestrian and bicyle path",
+                    "restriction": {
+                      "name": "Kevyen liikenteen väylä suljettu/kavennettu"
+                    }
+                  },
+                  {
+                    "type": "slow moving maintenance vehicle",
+                    "restriction": {
+                      "name": "Työkoneita liikenteen seassa"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": true,
+                "severity": "high",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              }
+            ],
+            "timeAndDuration": {
+              "startTime": "2026-05-31T21:00:00.000Z",
+              "endTime": "2026-07-31T20:59:59.999Z"
+            },
+            "additionalInformation": "Liikenne- ja kelitiedot verkossa: https://liikennetilanne.fintraffic.fi/",
+            "sender": "Fintraffic Tieliikennekeskus Tampere"
+          }
+        ],
+        "contact": {
+          "phone": "02002100",
+          "email": "tampere.liikennekeskus@fintraffic.fi"
+        },
+        "dataUpdatedTime": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              27.63574,
+              62.884133
+            ],
+            [
+              27.635909,
+              62.884386
+            ],
+            [
+              27.636001,
+              62.884556
+            ],
+            [
+              27.63615,
+              62.884833
+            ],
+            [
+              27.636343,
+              62.885401
+            ],
+            [
+              27.636569,
+              62.886148
+            ],
+            [
+              27.636572,
+              62.886157
+            ],
+            [
+              27.636699,
+              62.886675
+            ],
+            [
+              27.636904,
+              62.887495
+            ],
+            [
+              27.636921,
+              62.887548
+            ],
+            [
+              27.637071,
+              62.887955
+            ],
+            [
+              27.637077,
+              62.887971
+            ],
+            [
+              27.63712,
+              62.888095
+            ],
+            [
+              27.637127,
+              62.888112
+            ],
+            [
+              27.637135,
+              62.888129
+            ],
+            [
+              27.637179,
+              62.888216
+            ],
+            [
+              27.637181,
+              62.888221
+            ],
+            [
+              27.637354,
+              62.888571
+            ],
+            [
+              27.637363,
+              62.888587
+            ],
+            [
+              27.63758,
+              62.888913
+            ],
+            [
+              27.637657,
+              62.889015
+            ],
+            [
+              27.637666,
+              62.889026
+            ],
+            [
+              27.638031,
+              62.889462
+            ],
+            [
+              27.638093,
+              62.889528
+            ],
+            [
+              27.638103,
+              62.889538
+            ],
+            [
+              27.638415,
+              62.889848
+            ],
+            [
+              27.638419,
+              62.889852
+            ],
+            [
+              27.638669,
+              62.890076
+            ],
+            [
+              27.638688,
+              62.890092
+            ],
+            [
+              27.638706,
+              62.890107
+            ],
+            [
+              27.638928,
+              62.890276
+            ],
+            [
+              27.638948,
+              62.890291
+            ],
+            [
+              27.63899,
+              62.890326
+            ],
+            [
+              27.63932,
+              62.89057
+            ],
+            [
+              27.639328,
+              62.890575
+            ],
+            [
+              27.640393,
+              62.891242
+            ],
+            [
+              27.640403,
+              62.891247
+            ],
+            [
+              27.640581,
+              62.891343
+            ],
+            [
+              27.640595,
+              62.89135
+            ],
+            [
+              27.640601,
+              62.891354
+            ],
+            [
+              27.64071,
+              62.891409
+            ],
+            [
+              27.641138,
+              62.891619
+            ],
+            [
+              27.641162,
+              62.891631
+            ],
+            [
+              27.641832,
+              62.891934
+            ],
+            [
+              27.641947,
+              62.891983
+            ],
+            [
+              27.64196,
+              62.891988
+            ],
+            [
+              27.642436,
+              62.89218
+            ],
+            [
+              27.644296,
+              62.892901
+            ],
+            [
+              27.646457,
+              62.893764
+            ],
+            [
+              27.646472,
+              62.89377
+            ],
+            [
+              27.646963,
+              62.893977
+            ],
+            [
+              27.646975,
+              62.893982
+            ],
+            [
+              27.647107,
+              62.894036
+            ],
+            [
+              27.647877,
+              62.89437
+            ],
+            [
+              27.647883,
+              62.894372
+            ],
+            [
+              27.648139,
+              62.894483
+            ],
+            [
+              27.648155,
+              62.894491
+            ],
+            [
+              27.648529,
+              62.894676
+            ],
+            [
+              27.64879,
+              62.894791
+            ],
+            [
+              27.649251,
+              62.895004
+            ],
+            [
+              27.64958,
+              62.895144
+            ],
+            [
+              27.64992,
+              62.895294
+            ],
+            [
+              27.649934,
+              62.895301
+            ],
+            [
+              27.65023,
+              62.895445
+            ],
+            [
+              27.650248,
+              62.895453
+            ],
+            [
+              27.650545,
+              62.895597
+            ],
+            [
+              27.650565,
+              62.895606
+            ],
+            [
+              27.651013,
+              62.895833
+            ],
+            [
+              27.651036,
+              62.895845
+            ],
+            [
+              27.651411,
+              62.896053
+            ],
+            [
+              27.65142,
+              62.896058
+            ],
+            [
+              27.651752,
+              62.896236
+            ],
+            [
+              27.652413,
+              62.896568
+            ],
+            [
+              27.652432,
+              62.896578
+            ],
+            [
+              27.652924,
+              62.896835
+            ],
+            [
+              27.652943,
+              62.896845
+            ],
+            [
+              27.653075,
+              62.896913
+            ],
+            [
+              27.65336,
+              62.897061
+            ],
+            [
+              27.653383,
+              62.897073
+            ],
+            [
+              27.653694,
+              62.897237
+            ],
+            [
+              27.654133,
+              62.897467
+            ],
+            [
+              27.654149,
+              62.897475
+            ],
+            [
+              27.654443,
+              62.89762
+            ],
+            [
+              27.654469,
+              62.897632
+            ],
+            [
+              27.654849,
+              62.897814
+            ],
+            [
+              27.65486,
+              62.897819
+            ],
+            [
+              27.65527,
+              62.898012
+            ],
+            [
+              27.655282,
+              62.898017
+            ],
+            [
+              27.655647,
+              62.898181
+            ],
+            [
+              27.65567,
+              62.898191
+            ],
+            [
+              27.65606,
+              62.898368
+            ],
+            [
+              27.656072,
+              62.898374
+            ],
+            [
+              27.656447,
+              62.898532
+            ],
+            [
+              27.656466,
+              62.89854
+            ],
+            [
+              27.656644,
+              62.898611
+            ],
+            [
+              27.656662,
+              62.898618
+            ],
+            [
+              27.656674,
+              62.898623
+            ],
+            [
+              27.656906,
+              62.89872
+            ],
+            [
+              27.657482,
+              62.898938
+            ],
+            [
+              27.657498,
+              62.898944
+            ],
+            [
+              27.657928,
+              62.899101
+            ],
+            [
+              27.658055,
+              62.899146
+            ],
+            [
+              27.658419,
+              62.899264
+            ],
+            [
+              27.658449,
+              62.899275
+            ],
+            [
+              27.658697,
+              62.899363
+            ],
+            [
+              27.658724,
+              62.899372
+            ],
+            [
+              27.659273,
+              62.899546
+            ],
+            [
+              27.660066,
+              62.899785
+            ],
+            [
+              27.660076,
+              62.899788
+            ],
+            [
+              27.66068,
+              62.899956
+            ],
+            [
+              27.660709,
+              62.899965
+            ],
+            [
+              27.661279,
+              62.900124
+            ],
+            [
+              27.661312,
+              62.900133
+            ],
+            [
+              27.661898,
+              62.900279
+            ],
+            [
+              27.661924,
+              62.900286
+            ],
+            [
+              27.662028,
+              62.90031
+            ],
+            [
+              27.66204,
+              62.900313
+            ],
+            [
+              27.662147,
+              62.900336
+            ],
+            [
+              27.662173,
+              62.900342
+            ],
+            [
+              27.662461,
+              62.900407
+            ]
+          ],
+          [
+            [
+              27.635402,
+              62.884126
+            ],
+            [
+              27.635523,
+              62.884317
+            ],
+            [
+              27.63566,
+              62.884546
+            ],
+            [
+              27.635793,
+              62.884839
+            ],
+            [
+              27.635796,
+              62.884845
+            ],
+            [
+              27.635928,
+              62.885144
+            ],
+            [
+              27.635933,
+              62.885155
+            ],
+            [
+              27.636062,
+              62.885527
+            ],
+            [
+              27.636067,
+              62.885544
+            ],
+            [
+              27.636251,
+              62.886203
+            ],
+            [
+              27.636255,
+              62.886219
+            ],
+            [
+              27.636714,
+              62.887892
+            ],
+            [
+              27.636771,
+              62.88803
+            ],
+            [
+              27.636776,
+              62.88804
+            ],
+            [
+              27.636976,
+              62.888479
+            ],
+            [
+              27.636982,
+              62.888491
+            ],
+            [
+              27.637135,
+              62.88875
+            ],
+            [
+              27.637146,
+              62.888767
+            ],
+            [
+              27.637257,
+              62.888939
+            ],
+            [
+              27.63726,
+              62.888944
+            ],
+            [
+              27.637272,
+              62.888961
+            ],
+            [
+              27.637504,
+              62.889266
+            ],
+            [
+              27.637514,
+              62.889277
+            ],
+            [
+              27.637755,
+              62.889542
+            ],
+            [
+              27.63776,
+              62.889546
+            ],
+            [
+              27.638044,
+              62.889842
+            ],
+            [
+              27.638465,
+              62.890213
+            ],
+            [
+              27.638474,
+              62.89022
+            ],
+            [
+              27.638823,
+              62.890501
+            ],
+            [
+              27.638832,
+              62.890508
+            ],
+            [
+              27.639172,
+              62.890749
+            ],
+            [
+              27.639183,
+              62.890757
+            ],
+            [
+              27.63925,
+              62.890801
+            ],
+            [
+              27.640158,
+              62.891365
+            ],
+            [
+              27.640165,
+              62.89137
+            ],
+            [
+              27.640318,
+              62.891456
+            ],
+            [
+              27.640411,
+              62.891508
+            ],
+            [
+              27.640819,
+              62.891704
+            ],
+            [
+              27.640839,
+              62.891713
+            ],
+            [
+              27.641309,
+              62.89193
+            ],
+            [
+              27.641335,
+              62.891942
+            ],
+            [
+              27.641696,
+              62.892107
+            ],
+            [
+              27.64172,
+              62.892117
+            ],
+            [
+              27.641807,
+              62.892153
+            ],
+            [
+              27.642202,
+              62.892301
+            ],
+            [
+              27.642231,
+              62.892313
+            ],
+            [
+              27.643096,
+              62.892652
+            ],
+            [
+              27.64311,
+              62.892657
+            ],
+            [
+              27.6454,
+              62.893542
+            ],
+            [
+              27.645781,
+              62.893689
+            ],
+            [
+              27.645789,
+              62.893692
+            ],
+            [
+              27.646772,
+              62.894105
+            ],
+            [
+              27.646872,
+              62.894147
+            ],
+            [
+              27.647386,
+              62.894363
+            ],
+            [
+              27.647402,
+              62.89437
+            ],
+            [
+              27.647826,
+              62.894556
+            ],
+            [
+              27.647845,
+              62.894565
+            ],
+            [
+              27.648245,
+              62.894763
+            ],
+            [
+              27.648264,
+              62.894772
+            ],
+            [
+              27.648505,
+              62.89489
+            ],
+            [
+              27.648517,
+              62.894896
+            ],
+            [
+              27.648936,
+              62.895086
+            ],
+            [
+              27.649238,
+              62.895229
+            ],
+            [
+              27.649247,
+              62.895234
+            ],
+            [
+              27.649851,
+              62.895517
+            ],
+            [
+              27.649873,
+              62.895527
+            ],
+            [
+              27.650536,
+              62.895833
+            ],
+            [
+              27.650541,
+              62.895836
+            ],
+            [
+              27.651077,
+              62.896098
+            ],
+            [
+              27.651095,
+              62.896109
+            ],
+            [
+              27.651243,
+              62.896193
+            ],
+            [
+              27.651257,
+              62.8962
+            ],
+            [
+              27.651444,
+              62.896293
+            ],
+            [
+              27.65205,
+              62.896609
+            ],
+            [
+              27.652652,
+              62.896922
+            ],
+            [
+              27.652805,
+              62.897001
+            ],
+            [
+              27.653328,
+              62.897273
+            ],
+            [
+              27.653345,
+              62.897282
+            ],
+            [
+              27.654011,
+              62.897624
+            ],
+            [
+              27.654051,
+              62.897644
+            ],
+            [
+              27.654076,
+              62.897657
+            ],
+            [
+              27.654444,
+              62.897844
+            ],
+            [
+              27.65445,
+              62.897847
+            ],
+            [
+              27.654863,
+              62.898039
+            ],
+            [
+              27.655345,
+              62.898256
+            ],
+            [
+              27.655362,
+              62.898264
+            ],
+            [
+              27.655782,
+              62.898454
+            ],
+            [
+              27.655795,
+              62.89846
+            ],
+            [
+              27.656195,
+              62.898632
+            ],
+            [
+              27.656207,
+              62.898637
+            ],
+            [
+              27.656654,
+              62.898813
+            ],
+            [
+              27.656669,
+              62.898818
+            ],
+            [
+              27.657244,
+              62.899036
+            ],
+            [
+              27.657253,
+              62.899039
+            ],
+            [
+              27.657281,
+              62.899049
+            ],
+            [
+              27.657832,
+              62.899252
+            ],
+            [
+              27.658136,
+              62.899348
+            ],
+            [
+              27.658159,
+              62.899357
+            ],
+            [
+              27.658563,
+              62.8995
+            ],
+            [
+              27.658582,
+              62.899506
+            ],
+            [
+              27.659129,
+              62.899682
+            ],
+            [
+              27.659141,
+              62.899685
+            ],
+            [
+              27.659704,
+              62.89985
+            ],
+            [
+              27.659722,
+              62.899855
+            ],
+            [
+              27.660086,
+              62.899962
+            ],
+            [
+              27.660099,
+              62.899966
+            ],
+            [
+              27.6605,
+              62.900079
+            ],
+            [
+              27.661047,
+              62.900224
+            ],
+            [
+              27.66108,
+              62.900233
+            ],
+            [
+              27.661489,
+              62.90034
+            ],
+            [
+              27.661519,
+              62.900348
+            ],
+            [
+              27.6619,
+              62.900441
+            ],
+            [
+              27.661924,
+              62.900447
+            ],
+            [
+              27.662029,
+              62.900472
+            ],
+            [
+              27.662064,
+              62.900478
+            ],
+            [
+              27.66233,
+              62.900531
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "situationId": "GUID50467132",
+        "situationType": "road work",
+        "trafficAnnouncementType": null,
+        "version": 1,
+        "releaseTime": "2026-07-09T15:34:16.221Z",
+        "versionTime": "2026-07-09T15:34:16.220Z",
+        "announcements": [
+          {
+            "language": "fi",
+            "title": "Tie 5, Kuopio. Tietyö. ",
+            "location": {
+              "countryCode": 6,
+              "locationTableNumber": 17,
+              "locationTableVersion": "1.11.45",
+              "description": "Tie 5 välillä Mikkeli - Kuopio, Kuopio.\nTarkempi paikka: Välillä Siikalahden liittymä - Kuopion liittymä."
+            },
+            "locationDetails": {
+              "roadAddressLocation": {
+                "primaryPoint": {
+                  "municipality": "Kuopio",
+                  "province": "Pohjois-Savo",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 5,
+                    "roadSection": 160,
+                    "distance": 0
+                  },
+                  "alertCLocation": {
+                    "locationCode": 1325,
+                    "name": "Siikalahden liittymä",
+                    "distance": 0
+                  }
+                },
+                "secondaryPoint": {
+                  "municipality": "Kuopio",
+                  "province": "Pohjois-Savo",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 5,
+                    "roadSection": 160,
+                    "distance": 2374
+                  },
+                  "alertCLocation": {
+                    "locationCode": 5666,
+                    "name": "Kuopion liittymä",
+                    "distance": 0
+                  }
+                },
+                "direction": "unknown"
+              }
+            },
+            "features": [
+              {
+                "name": "Nopeusrajoitus",
+                "quantity": 60.0,
+                "unit": "km/h"
+              },
+              {
+                "name": "Ajokaistoja on kavennettu"
+              }
+            ],
+            "roadWorkPhases": [
+              {
+                "id": "GUID50469909",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 5 välillä Mikkeli - Kuopio, Kuopio.\nTarkempi paikka: Välillä Siikalahden liittymä - Kuopion liittymä."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Kuopio",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 5,
+                        "roadSection": 160,
+                        "distance": 0
+                      },
+                      "alertCLocation": {
+                        "locationCode": 1325,
+                        "name": "Siikalahden liittymä",
+                        "distance": 0
+                      }
+                    },
+                    "secondaryPoint": {
+                      "municipality": "Kuopio",
+                      "province": "Pohjois-Savo",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 5,
+                        "roadSection": 160,
+                        "distance": 2374
+                      },
+                      "alertCLocation": {
+                        "locationCode": 5666,
+                        "name": "Kuopion liittymä",
+                        "distance": 0
+                      }
+                    },
+                    "direction": "unknown"
+                  }
+                },
+                "workingHours": [
+                  {
+                    "weekday": "Thursday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Wednesday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Friday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Saturday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Sunday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Monday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  },
+                  {
+                    "weekday": "Tuesday",
+                    "startTime": "08:00",
+                    "endTime": "23:55"
+                  }
+                ],
+                "comment": "Jaksoittain etenevä työ",
+                "timeAndDuration": {
+                  "startTime": "2026-07-13T21:00:00.000Z",
+                  "endTime": "2026-09-18T20:59:59.999Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "other",
+                    "description": "Runkojätevesiviemärin sukitus"
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "narrow lanes",
+                    "restriction": {
+                      "name": "Ajokaista kavennettu työmaan kohdalla"
+                    }
+                  },
+                  {
+                    "type": "speed limit",
+                    "restriction": {
+                      "name": "Nopeusrajoitus",
+                      "quantity": 60.0,
+                      "unit": "km/h"
+                    }
+                  },
+                  {
+                    "type": "speed limit length",
+                    "restriction": {
+                      "name": "Matka, jolla nopeusrajoitus voimassa",
+                      "quantity": 500.0,
+                      "unit": "m"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": false,
+                "severity": "low",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              }
+            ],
+            "timeAndDuration": {
+              "startTime": "2026-07-13T21:00:00.000Z",
+              "endTime": "2026-09-18T20:59:59.999Z"
+            },
+            "additionalInformation": "Liikenne- ja kelitiedot verkossa: https://liikennetilanne.fintraffic.fi/",
+            "sender": "Fintraffic Tieliikennekeskus Tampere"
+          }
+        ],
+        "contact": {
+          "phone": "02002100",
+          "email": "tampere.liikennekeskus@fintraffic.fi"
+        },
+        "dataUpdatedTime": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              24.752891,
+              60.165064
+            ],
+            [
+              24.752817,
+              60.165122
+            ],
+            [
+              24.752782,
+              60.165154
+            ],
+            [
+              24.752768,
+              60.165167
+            ],
+            [
+              24.752753,
+              60.165183
+            ],
+            [
+              24.752725,
+              60.165216
+            ],
+            [
+              24.752702,
+              60.16525
+            ],
+            [
+              24.752694,
+              60.165262
+            ],
+            [
+              24.752685,
+              60.16528
+            ],
+            [
+              24.752668,
+              60.165315
+            ],
+            [
+              24.752661,
+              60.165332
+            ],
+            [
+              24.752656,
+              60.16535
+            ],
+            [
+              24.752652,
+              60.165368
+            ],
+            [
+              24.75265,
+              60.16538
+            ],
+            [
+              24.752648,
+              60.165398
+            ],
+            [
+              24.752647,
+              60.165416
+            ],
+            [
+              24.752647,
+              60.165416
+            ],
+            [
+              24.752648,
+              60.16547
+            ],
+            [
+              24.752649,
+              60.16548
+            ],
+            [
+              24.752651,
+              60.165498
+            ],
+            [
+              24.752676,
+              60.165641
+            ],
+            [
+              24.752684,
+              60.165704
+            ],
+            [
+              24.752695,
+              60.165766
+            ],
+            [
+              24.752719,
+              60.165903
+            ],
+            [
+              24.752773,
+              60.166218
+            ],
+            [
+              24.752795,
+              60.166379
+            ],
+            [
+              24.752797,
+              60.16645
+            ],
+            [
+              24.752797,
+              60.166464
+            ],
+            [
+              24.752788,
+              60.166536
+            ],
+            [
+              24.752781,
+              60.166568
+            ],
+            [
+              24.752763,
+              60.166643
+            ],
+            [
+              24.752762,
+              60.166647
+            ],
+            [
+              24.752711,
+              60.166788
+            ],
+            [
+              24.752696,
+              60.166823
+            ],
+            [
+              24.752693,
+              60.166828
+            ],
+            [
+              24.752618,
+              60.166969
+            ],
+            [
+              24.75251,
+              60.167132
+            ],
+            [
+              24.752505,
+              60.167139
+            ],
+            [
+              24.752497,
+              60.167152
+            ],
+            [
+              24.752393,
+              60.167305
+            ],
+            [
+              24.752362,
+              60.167357
+            ],
+            [
+              24.752319,
+              60.167444
+            ],
+            [
+              24.752278,
+              60.16755
+            ],
+            [
+              24.752275,
+              60.16756
+            ],
+            [
+              24.752242,
+              60.167685
+            ],
+            [
+              24.752231,
+              60.167756
+            ],
+            [
+              24.75223,
+              60.167766
+            ],
+            [
+              24.752225,
+              60.167838
+            ],
+            [
+              24.752227,
+              60.167892
+            ],
+            [
+              24.752234,
+              60.167946
+            ],
+            [
+              24.752236,
+              60.167953
+            ],
+            [
+              24.752251,
+              60.168006
+            ],
+            [
+              24.752302,
+              60.168129
+            ],
+            [
+              24.752307,
+              60.168138
+            ],
+            [
+              24.752437,
+              60.168381
+            ],
+            [
+              24.752441,
+              60.168389
+            ],
+            [
+              24.752646,
+              60.168752
+            ],
+            [
+              24.752841,
+              60.169097
+            ],
+            [
+              24.752844,
+              60.169103
+            ],
+            [
+              24.753071,
+              60.169522
+            ],
+            [
+              24.753237,
+              60.169815
+            ],
+            [
+              24.75324,
+              60.169821
+            ],
+            [
+              24.753616,
+              60.170515
+            ],
+            [
+              24.7539,
+              60.171071
+            ],
+            [
+              24.753902,
+              60.171075
+            ],
+            [
+              24.754147,
+              60.171564
+            ],
+            [
+              24.754413,
+              60.172067
+            ],
+            [
+              24.754421,
+              60.172084
+            ],
+            [
+              24.754655,
+              60.172554
+            ],
+            [
+              24.754662,
+              60.172568
+            ],
+            [
+              24.754681,
+              60.172607
+            ],
+            [
+              24.755028,
+              60.173266
+            ],
+            [
+              24.755032,
+              60.173275
+            ],
+            [
+              24.755209,
+              60.173642
+            ],
+            [
+              24.755211,
+              60.173645
+            ],
+            [
+              24.755396,
+              60.174065
+            ],
+            [
+              24.755399,
+              60.174072
+            ],
+            [
+              24.755453,
+              60.174174
+            ],
+            [
+              24.75559,
+              60.174601
+            ],
+            [
+              24.755683,
+              60.175083
+            ],
+            [
+              24.755684,
+              60.175089
+            ],
+            [
+              24.755717,
+              60.175501
+            ],
+            [
+              24.755716,
+              60.175609
+            ],
+            [
+              24.755716,
+              60.175626
+            ],
+            [
+              24.755671,
+              60.176074
+            ],
+            [
+              24.755669,
+              60.176085
+            ],
+            [
+              24.755567,
+              60.176585
+            ],
+            [
+              24.755558,
+              60.17662
+            ],
+            [
+              24.755556,
+              60.176626
+            ],
+            [
+              24.755442,
+              60.176962
+            ],
+            [
+              24.755397,
+              60.177068
+            ],
+            [
+              24.755396,
+              60.177071
+            ],
+            [
+              24.75516,
+              60.177522
+            ],
+            [
+              24.755151,
+              60.177537
+            ],
+            [
+              24.754936,
+              60.177898
+            ],
+            [
+              24.754927,
+              60.177912
+            ],
+            [
+              24.754714,
+              60.178198
+            ],
+            [
+              24.754374,
+              60.178596
+            ],
+            [
+              24.753866,
+              60.179051
+            ],
+            [
+              24.75386,
+              60.179056
+            ],
+            [
+              24.753352,
+              60.179491
+            ],
+            [
+              24.753349,
+              60.179493
+            ],
+            [
+              24.752867,
+              60.179875
+            ],
+            [
+              24.752369,
+              60.18027
+            ],
+            [
+              24.752357,
+              60.180279
+            ],
+            [
+              24.751776,
+              60.180775
+            ],
+            [
+              24.751763,
+              60.180787
+            ],
+            [
+              24.751459,
+              60.181073
+            ],
+            [
+              24.751038,
+              60.181499
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "situationId": "GUID50467130",
+        "situationType": "road work",
+        "trafficAnnouncementType": null,
+        "version": 1,
+        "releaseTime": "2026-07-09T14:15:09.206Z",
+        "versionTime": "2026-07-09T14:15:09.205Z",
+        "announcements": [
+          {
+            "language": "fi",
+            "title": "Tie 102, eli Kehä II, Espoo. Tietyö. ",
+            "location": {
+              "countryCode": 6,
+              "locationTableNumber": 17,
+              "locationTableVersion": "1.11.45",
+              "description": "Tie 102, eli Kehä II, Espoo.\nTarkempi paikka: Välillä Gräsanlaakso - Kokinkylän liittymä."
+            },
+            "locationDetails": {
+              "roadAddressLocation": {
+                "primaryPoint": {
+                  "municipality": "Espoo",
+                  "province": "Uusimaa",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 102,
+                    "roadSection": 1,
+                    "distance": 33
+                  },
+                  "roadName": "Kehä II",
+                  "alertCLocation": {
+                    "locationCode": 37215,
+                    "name": "Gräsanlaakso",
+                    "distance": 0
+                  }
+                },
+                "secondaryPoint": {
+                  "municipality": "Espoo",
+                  "province": "Uusimaa",
+                  "country": "Suomi",
+                  "roadAddress": {
+                    "road": 102,
+                    "roadSection": 2,
+                    "distance": 0
+                  },
+                  "roadName": "Kehä II",
+                  "alertCLocation": {
+                    "locationCode": 5052,
+                    "name": "Kokinkylän liittymä",
+                    "distance": 0
+                  }
+                },
+                "direction": "pos",
+                "directionDescription": "pohjoiseen"
+              }
+            },
+            "features": [
+              {
+                "name": "Nopeusrajoitus",
+                "quantity": 50.0,
+                "unit": "km/h"
+              },
+              {
+                "name": "Ajokaista suljettu liikenteeltä"
+              }
+            ],
+            "roadWorkPhases": [
+              {
+                "id": "GUID50469907",
+                "location": {
+                  "countryCode": 6,
+                  "locationTableNumber": 17,
+                  "locationTableVersion": "1.11.45",
+                  "description": "Tie 102, eli Kehä II, Espoo.\nTarkempi paikka: Välillä Gräsanlaakso - Kokinkylän liittymä."
+                },
+                "locationDetails": {
+                  "roadAddressLocation": {
+                    "primaryPoint": {
+                      "municipality": "Espoo",
+                      "province": "Uusimaa",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 102,
+                        "roadSection": 1,
+                        "distance": 33
+                      },
+                      "roadName": "Kehä II",
+                      "alertCLocation": {
+                        "locationCode": 37215,
+                        "name": "Gräsanlaakso",
+                        "distance": 0
+                      }
+                    },
+                    "secondaryPoint": {
+                      "municipality": "Espoo",
+                      "province": "Uusimaa",
+                      "country": "Suomi",
+                      "roadAddress": {
+                        "road": 102,
+                        "roadSection": 2,
+                        "distance": 0
+                      },
+                      "roadName": "Kehä II",
+                      "alertCLocation": {
+                        "locationCode": 5052,
+                        "name": "Kokinkylän liittymä",
+                        "distance": 0
+                      }
+                    },
+                    "direction": "pos",
+                    "directionDescription": "pohjoiseen"
+                  }
+                },
+                "workingHours": [],
+                "timeAndDuration": {
+                  "startTime": "2026-07-16T18:00:00.000Z",
+                  "endTime": "2026-07-17T03:00:00.000Z"
+                },
+                "workTypes": [
+                  {
+                    "type": "resurfacing",
+                    "description": "Päällystys- tai paikkaustyö"
+                  },
+                  {
+                    "type": "stabilization",
+                    "description": "Jyrsintä-/stabilointityö"
+                  },
+                  {
+                    "type": "other",
+                    "description": ""
+                  }
+                ],
+                "restrictions": [
+                  {
+                    "type": "single lane closed",
+                    "restriction": {
+                      "name": "Yksi ajokaista suljettu"
+                    }
+                  },
+                  {
+                    "type": "slow moving maintenance vehicle",
+                    "restriction": {
+                      "name": "Työkoneita liikenteen seassa"
+                    }
+                  },
+                  {
+                    "type": "speed limit",
+                    "restriction": {
+                      "name": "Nopeusrajoitus",
+                      "quantity": 50.0,
+                      "unit": "km/h"
+                    }
+                  },
+                  {
+                    "type": "speed limit length",
+                    "restriction": {
+                      "name": "Matka, jolla nopeusrajoitus voimassa",
+                      "quantity": 3000.0,
+                      "unit": "m"
+                    }
+                  }
+                ],
+                "restrictionsLiftable": true,
+                "severity": "highest",
+                "slowTrafficTimes": [],
+                "queuingTrafficTimes": []
+              }
+            ],
+            "timeAndDuration": {
+              "startTime": "2026-07-16T18:00:00.000Z",
+              "endTime": "2026-07-17T03:00:00.000Z"
+            },
+            "additionalInformation": "Liikenne- ja kelitiedot verkossa: https://liikennetilanne.fintraffic.fi/",
+            "sender": "Fintraffic Tieliikennekeskus Helsinki"
+          }
+        ],
+        "contact": {
+          "phone": "02002100",
+          "email": "helsinki.liikennekeskus@fintraffic.fi"
+        },
+        "dataUpdatedTime": null
+      }
+    }
+  ]
+}

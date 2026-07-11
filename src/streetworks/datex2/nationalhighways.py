@@ -189,6 +189,7 @@ def _parse_record(management: JSON) -> SituationRecord:
         comments=comments,
         road_maintenance_type=road_maintenance_types[0] if road_maintenance_types else None,
         construction_work_type=detailed.get("constructionWorkType"),
+        raw=management,
     )
 
 
@@ -196,6 +197,7 @@ def _parse_situation(situation: JSON) -> Situation:
     result = Situation(
         id=situation.get("idG", ""),
         version_time=_dt(situation.get("situationVersionTime")),
+        raw=situation,
     )
     for wrapper in situation.get("situationRecord") or []:
         management = wrapper.get("sitRoadOrCarriagewayOrLaneManagement")

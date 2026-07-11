@@ -1,9 +1,12 @@
 """DATEX II -> streetworks.common converter.
 
-Serves both DATEX adapters unchanged - NDW (Netherlands, XML) and National
-Highways (England SRN, JSON) both already normalise onto the same
+Serves all three DATEX adapters unchanged - NDW (Netherlands, XML),
+National Highways (England SRN, JSON), and Digitraffic (Finland, its own
+Simple-JSON - see :mod:`streetworks.datex2.digitraffic` for why it still
+produces this same model despite not being DATEX-shaped itself) all
+normalise onto the same
 :class:`~streetworks.datex2.Situation`/:class:`~streetworks.datex2.SituationRecord`
-models, so one converter covers both; ``source_grade`` is always
+models, so one converter covers all of them; ``source_grade`` is always
 :attr:`~streetworks.common.SourceGrade.OPERATOR` for DATEX per the spec's
 provider table.
 
@@ -15,11 +18,10 @@ management consequences, not works sites, and stay reachable natively via
 ``situation.measures``.
 
 ``territory``/``administrative_area`` can't be derived from a ``Situation``
-alone - NDW (Netherlands) and National Highways (England) both feed the
-same shared model, and National Highways' ``source_name`` is a generic
-``"roadworks"`` label (live-verified), not an authority name - so the
-caller states them explicitly rather than the converter guessing which
-adapter produced the Situation:
+alone - none of the three adapters' Situations state their own country, and
+National Highways'/Digitraffic's ``source_name`` values aren't authority
+names - so the caller states them explicitly rather than the converter
+guessing which adapter produced the Situation:
 
 - NDW: ``from_datex2(situation, territory="Netherlands")`` -
   ``administrative_area`` defaults to ``source_name`` (e.g.
@@ -27,7 +29,14 @@ adapter produced the Situation:
 - National Highways: ``from_datex2(situation, territory="England",
   administrative_area="National Highways")`` - the operator IS the
   data-owning authority, so it's passed explicitly rather than trusting
-  ``source_name``.
+  ``source_name`` (which is just the generic label ``"roadworks"``).
+- Digitraffic (Finland): ``from_datex2(situation, territory="Finland",
+  administrative_area=streetworks.datex2.digitraffic.provinces(payload).get(situation.id))`` -
+  ``source_name`` there is a Fintraffic traffic-centre name, not a
+  province, so relying on the default would be wrong; ``date_confidence``
+  will come out ``UNKNOWN`` for every Finland site, honestly - Digitraffic
+  has no active/planned/suspended-equivalent field for ``validity.status``
+  to carry.
 """
 
 from __future__ import annotations

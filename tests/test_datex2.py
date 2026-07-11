@@ -145,6 +145,14 @@ def test_parses_v3_situation_from_real_shape():
     assert works.location.point == (50.857113, 5.8124113)
     assert works.location.carriageway == "mainCarriageway"
 
+    # .raw stays unset for the streaming XML parser - a deliberate trade-off
+    # (each Element is cleared after yielding to bound memory on huge feeds),
+    # not an oversight - unlike the JSON-sourced adapters (National
+    # Highways, Digitraffic), which populate it since the payload is
+    # already fully in memory regardless.
+    assert works.raw is None
+    assert s.raw is None
+
 
 def test_parses_linear_geometry_poslist():
     situations = list(iter_situations(_v3_stream()))

@@ -8,12 +8,25 @@ simply ``None``/empty - national profiles vary.
 Coordinates in DATEX II feeds are WGS84 latitude/longitude (per the standard's
 ETRS89/WGS84 convention) - **not** the British National Grid eastings/northings
 used by the UK providers in this SDK.
+
+``raw`` on both ``Situation`` and ``SituationRecord`` points back at the
+source object - a dict for the JSON-sourced adapters (National Highways,
+Digitraffic), matching the ``.raw`` pattern used elsewhere in this SDK
+(WZDx's ``RoadEvent``, SRWR's ``Record``). It's ``None`` for the streaming
+XML parser (:mod:`streetworks.datex2.parser`, serving NDW and any raw
+DATEX v2/v3 XML) - a deliberate trade-off, not an oversight: that parser
+clears each XML element after yielding it to keep memory bounded on huge
+feeds (~170 MB uncompressed, ~35 MB memory, verified against the real NDW
+feed), so a stored ``Element`` reference would go stale under the caller.
+Keeping ``raw`` unset there preserves that verified characteristic instead
+of silently regressing it for a field most callers use rarely.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any
 
 __all__ = ["Situation", "SituationRecord", "Validity", "Period", "Location"]
 
@@ -79,6 +92,7 @@ class SituationRecord:
     road_maintenance_type: str | None = None
     construction_work_type: str | None = None
     subject_type_of_works: str | None = None
+    raw: Any = None
 
     @property
     def is_roadworks(self) -> bool:
@@ -93,6 +107,7 @@ class Situation:
     version_time: datetime | None = None
     overall_severity: str | None = None
     records: list[SituationRecord] = field(default_factory=list)
+    raw: Any = None
 
     @property
     def roadworks(self) -> list[SituationRecord]:

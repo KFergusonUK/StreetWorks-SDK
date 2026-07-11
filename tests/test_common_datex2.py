@@ -1,10 +1,12 @@
 """Tests for streetworks.common.from_datex2.
 
-Covers both DATEX adapters through the one shared converter: a trimmed NDW
-v3 fixture (same shape as test_datex2.py's) for the XML path, and the real
-National Highways closures fixture for the JSON path - the latter is the
-one that actually carries all three real validityStatus values (active,
-planned, suspended), so it's what exercises date_confidence properly.
+Covers all three DATEX adapters through the one shared converter: a trimmed
+NDW v3 fixture (same shape as test_datex2.py's) for the XML path, the real
+National Highways closures fixture for the JSON path - the one that
+actually carries all three real validityStatus values (active, planned,
+suspended), so it's what exercises date_confidence properly - and the real
+Digitraffic (Finland) fixture, which has no lifecycle-status field at all
+and needs the province() lookup for administrative_area.
 """
 
 import io
@@ -14,6 +16,8 @@ from pathlib import Path
 
 from streetworks.common import DateConfidence, SourceGrade, from_datex2
 from streetworks.datex2 import iter_situations
+from streetworks.datex2.digitraffic import parse_situations as parse_digitraffic_situations
+from streetworks.datex2.digitraffic import provinces
 from streetworks.datex2.nationalhighways import parse_situations
 
 V3_FEED = """<?xml version="1.0" encoding="UTF-8"?>
@@ -149,3 +153,40 @@ def test_from_datex2_nh_suspended_status_is_also_verified():
     assert site.status == "suspended"
     assert site.date_confidence is DateConfidence.VERIFIED
     assert site.actual_start == site.proposed_start
+
+
+DIGITRAFFIC_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "digitraffic_roadworks.json").read_text(
+        encoding="utf-8"
+    )
+)
+
+
+def test_from_datex2_digitraffic_uses_province_lookup_for_administrative_area():
+    situations = parse_digitraffic_situations(DIGITRAFFIC_FIXTURE)
+    situation_provinces = provinces(DIGITRAFFIC_FIXTURE)
+    situation = next(s for s in situations if s.id == "GUID50465119")
+
+    works = from_datex2(
+        situation,
+        territory="Finland",
+        administrative_area=situation_provinces.get(situation.id),
+    )
+    assert works.territory == "Finland"
+    assert works.administrative_area == "Pohjois-Savo"  # genuinely stated, not inferred
+    # source_name (a Fintraffic traffic centre) is promoter, not administrative_area.
+    assert works.promoter == "Fintraffic Tieliikennekeskus Tampere"
+    assert len(works.sites) == 3  # one per roadWorkPhase
+
+
+def test_from_datex2_digitraffic_date_confidence_is_always_unknown():
+    # Digitraffic has no active/planned/suspended-equivalent field, so
+    # validity.status is always None and date_confidence honestly reflects
+    # that - never guessed at from severity or anything else.
+    situations = parse_digitraffic_situations(DIGITRAFFIC_FIXTURE)
+    situation = next(s for s in situations if s.id == "GUID50467185")
+    works = from_datex2(situation, territory="Finland")
+    site = works.sites[0]
+    assert site.date_confidence is DateConfidence.UNKNOWN
+    assert site.actual_start is None
+    assert site.proposed_start is not None  # the date itself is still known, just unverified

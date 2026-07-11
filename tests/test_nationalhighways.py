@@ -51,6 +51,11 @@ def test_parses_single_location_roadmaintenance_record():
     assert works.location.carriageway == "slipRoads"
     assert works.location.road_number == "A27"
 
+    # .raw preserves the exact source dicts - the management record itself
+    # for SituationRecord, the whole situation dict for Situation.
+    assert works.raw["idG"] == "1-1779093921-86d6b09a-efeb-42f6-9e56-6dd8f68f5fa6"
+    assert s.raw["idG"] == "467118"
+
 
 def test_parses_multi_location_roadmaintenance_record():
     situations = parse_situations(FIXTURE)
