@@ -560,6 +560,21 @@ trustworthiness without provider-specific knowledge — and every one keeps
 `.raw` pointing back at its exact source record(s), so converting never
 loses anything.
 
+`Works` also carries location *provenance*, not location *geography*:
+`territory` (country-level — UK nations count as countries: `"Scotland"`,
+`"England"`, ..., plus `"USA"`, `"Netherlands"`) and `administrative_area`
+(the sub-national body that *owns* the data one level down — a UK highway
+authority, a US state DOT, a Dutch province, or a national operator's own
+name where the operator IS the authority). `administrative_area` is
+populated only where a provider genuinely states it, never inferred from a
+coordinate, and is consistent *within* one territory but not
+size-comparable *across* them — filter by `territory` before aggregating.
+`WorksSite.territory`/`.administrative_area` delegate to the parent `Works`,
+so a site in hand doesn't need the umbrella held separately. Some
+converters (`from_datex2`, `from_wzdx`) can't derive these from the source
+record alone — see their docstrings for why — and take them as keyword
+arguments instead of guessing.
+
 Converters currently cover SRWR, Street Manager, DATEX II (NDW and National
 Highways via the one shared converter), WZDx, TrafficWatchNI and Traffic
 Wales. UK Police stays outside the works hierarchy entirely — it's a
@@ -595,7 +610,9 @@ actually is.
       per-provider converters (`from_srwr`, `from_streetmanager`, `from_datex2`,
       `from_wzdx`, `from_trafficwatchni`, `from_trafficwales`), so the same code
       handles works data from any provider — native full-fidelity interfaces
-      retained, `.raw` always keeps the source record(s)
+      retained, `.raw` always keeps the source record(s); `Works` also carries
+      `territory`/`administrative_area` location provenance so a mixed
+      cross-provider list can be filtered by where the data comes from
 - [x] OS Open USRN: credential-free GB-wide USRN lookup with geometry (`streetworks.openusrn`)
 - [x] Northern Ireland roadworks (TrafficWatchNI RSS) and Wales motorway/trunk
       roadworks (Traffic Wales RSS) — all four UK nations now have coverage
@@ -657,7 +674,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest                    # 151 mocked unit tests - no credentials needed
+pytest                    # 156 mocked unit tests - no credentials needed
 ruff check .
 ```
 

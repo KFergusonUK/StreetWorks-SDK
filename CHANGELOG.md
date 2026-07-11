@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-11
+
+### Added
+
+- **Location provenance on `Works`**: `territory` (country-level - UK
+  nations count as countries, plus `"USA"`, `"Netherlands"`, etc.) and
+  `administrative_area` (the sub-national body that *owns* the data one
+  level down - a UK highway authority, a US state DOT, a Dutch province,
+  or a national operator's own name where the operator IS the authority),
+  so a consumer can filter a mixed cross-provider `list[Works]` by where
+  the data comes from. `administrative_area` is populated only where a
+  provider genuinely states it, never inferred from a coordinate, and is
+  consistent *within* a territory but not size-comparable *across* them.
+  `WorksSite` gained read-only `territory`/`administrative_area`
+  properties that delegate to the parent `Works` (single source of truth,
+  convenient access from a site alone).
+  - `from_srwr` gained an optional `districts` parameter: District (099)
+    records are excluded from `Activity` bundles by the reader (they're
+    file-section reference data, not activity data), so decoding
+    `notifiable_district_id` to a name needs it passed in explicitly;
+    without one, the bare district ID is used.
+  - `from_datex2` gained explicit `territory`/`administrative_area`
+    keyword parameters - it's one shared converter for NDW and National
+    Highways precisely because they produce the same model, but
+    Netherlands vs England can't be told apart from a `Situation` alone,
+    and National Highways' `source_name` is a generic `"roadworks"`
+    label, not an authority name.
+  - `from_wzdx` gained the same two parameters, `territory` defaulting to
+    `"USA"` - WZDx's publishing state lives on the registry entry, not
+    the road event, so it can't be derived from events alone either.
+  - `from_streetmanager`, `from_trafficwatchni` and `from_trafficwales`
+    populate them directly from existing provider data (or a hardcoded
+    territory where the feed is nation-wide with nothing sub-national to
+    report).
+
 ## [0.6.0] - 2026-07-10
 
 ### Added
