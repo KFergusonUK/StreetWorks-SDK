@@ -19,7 +19,7 @@ at its source record(s), so nothing is lost by converting.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -100,6 +100,19 @@ class WorksSite:
     notices: tuple[Notice, ...] = ()
     source_grade: SourceGrade = SourceGrade.TRAVELLER_INFO
     raw: Any = None
+    _works: Works | None = field(default=None, repr=False, compare=False)
+
+    @property
+    def territory(self) -> str | None:
+        """Delegates to the parent :class:`Works` - wired automatically when
+        this site is passed into ``Works(sites=...)``. ``None`` for a
+        WorksSite constructed standalone, outside any Works."""
+        return self._works.territory if self._works is not None else None
+
+    @property
+    def administrative_area(self) -> str | None:
+        """Delegates to the parent :class:`Works` - see :attr:`territory`."""
+        return self._works.administrative_area if self._works is not None else None
 
 
 @dataclass
@@ -128,13 +141,34 @@ class Works:
     Manager Forward Plan data, ahead of any permit existing under it), so
     it's a sibling of `sites` here rather than always floating free of any
     Works. A planning artifact with no linkable reference at all still gets
-    its own free-standing :class:`WorksPlanning` outside any Works."""
+    its own free-standing :class:`WorksPlanning` outside any Works.
+
+    ``territory``/``administrative_area`` are location-provenance, not
+    location-geography: ``territory`` is the country/nation this data
+    covers (UK nations count as countries - "Scotland", "England", ...,
+    plus "USA", "Netherlands", etc; almost always set, mostly hardcoded per
+    converter since each provider knows its own territory) and
+    ``administrative_area`` is the sub-national body that *owns* the data
+    one level down (a UK highway authority, a US state DOT, a Dutch
+    province, or a national operator's own name where the operator IS the
+    authority) - populated only where the provider genuinely states it,
+    never inferred from a coordinate. ``administrative_area`` is consistent
+    *within* a territory but not size-comparable *across* territories (a US
+    state dwarfs a UK county) - filter by ``territory`` first before
+    aggregating by area.
+    """
 
     reference: str | None = None
     location_usrn: str | None = None
     coordinate: Coordinate | None = None
     promoter: str | None = None
+    territory: str | None = None
+    administrative_area: str | None = None
     source_grade: SourceGrade = SourceGrade.TRAVELLER_INFO
     sites: tuple[WorksSite, ...] = ()
     plannings: tuple[WorksPlanning, ...] = ()
     raw: Any = None
+
+    def __post_init__(self) -> None:
+        for site in self.sites:
+            site._works = self

@@ -43,6 +43,9 @@ def from_trafficwatchni(item: RoadworksItem) -> Works:
     return Works(
         # TrafficWatchNI's feed carries no geometry, so `coordinate` stays unset.
         promoter=item.promoter,
+        territory="Northern Ireland",
+        # administrative_area stays unset - DfI TICC is territory-wide, the
+        # feed carries no sub-national authority to report.
         source_grade=SourceGrade.TRAVELLER_INFO,
         sites=(site,),
         raw=item,

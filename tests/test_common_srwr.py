@@ -68,11 +68,16 @@ def test_from_srwr_joins_phase_to_undertaker_phase_and_attaches_notices():
 
     assert works.reference == "TL002-S1711"
     assert works.location_usrn == "84202034"
+    assert works.territory == "Scotland"
+    assert works.administrative_area == "9066001"  # bare notifiable_district_id, no districts map
     assert works.source_grade is SourceGrade.REGISTER
     assert len(works.sites) == 1
 
     site = works.sites[0]
     assert site.reference == "3268777-2"
+    # WorksSite delegates territory/administrative_area to its parent Works.
+    assert site.territory == "Scotland"
+    assert site.administrative_area == "9066001"
     assert site.works_type  # decoded via describe(), not the bare "05" code
     assert site.status  # decoded activity_status
     assert site.location_description == "Outside Crossgates Cottages"
@@ -101,3 +106,9 @@ def test_from_srwr_without_undertaker_phase_falls_back_to_unknown_confidence():
     assert site.date_confidence is DateConfidence.UNKNOWN
     assert site.notices == ()
     assert site.raw == (site.raw[0],)  # just the phase, no undertaker-phase to join
+
+
+def test_from_srwr_decodes_administrative_area_when_districts_map_given():
+    activity = next(iter_activities(io.StringIO(SECTION)))
+    works = from_srwr(activity, districts={9066001: "Fife Council"})
+    assert works.administrative_area == "Fife Council"

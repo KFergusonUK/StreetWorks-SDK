@@ -47,6 +47,9 @@ def from_trafficwales(item: FeedItem) -> Works:
     return Works(
         coordinate=coordinate,
         promoter=item.source,
+        territory="Wales",
+        # administrative_area stays unset - the feed carries no sub-national
+        # authority to report.
         source_grade=SourceGrade.TRAVELLER_INFO,
         sites=(site,),
         raw=item,

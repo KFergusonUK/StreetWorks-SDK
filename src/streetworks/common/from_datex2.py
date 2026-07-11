@@ -13,6 +13,21 @@ non-works measure records (lane closures, reroutings, speed limits...) are
 deliberately left out of the common model, per spec - they're traffic-
 management consequences, not works sites, and stay reachable natively via
 ``situation.measures``.
+
+``territory``/``administrative_area`` can't be derived from a ``Situation``
+alone - NDW (Netherlands) and National Highways (England) both feed the
+same shared model, and National Highways' ``source_name`` is a generic
+``"roadworks"`` label (live-verified), not an authority name - so the
+caller states them explicitly rather than the converter guessing which
+adapter produced the Situation:
+
+- NDW: ``from_datex2(situation, territory="Netherlands")`` -
+  ``administrative_area`` defaults to ``source_name`` (e.g.
+  ``"Provincie Limburg"``), which is genuinely a province name there.
+- National Highways: ``from_datex2(situation, territory="England",
+  administrative_area="National Highways")`` - the operator IS the
+  data-owning authority, so it's passed explicitly rather than trusting
+  ``source_name``.
 """
 
 from __future__ import annotations
@@ -79,10 +94,17 @@ def _to_site(record: SituationRecord) -> WorksSite:
     )
 
 
-def from_datex2(situation: Situation) -> Works:
+def from_datex2(
+    situation: Situation,
+    *,
+    territory: str | None = None,
+    administrative_area: str | None = None,
+) -> Works:
     """Convert one DATEX II :class:`~streetworks.datex2.Situation` (from
     either the NDW or National Highways adapter) into a
-    :class:`~streetworks.common.Works`."""
+    :class:`~streetworks.common.Works`. See module docstring for
+    ``territory``/``administrative_area`` - they can't be derived from the
+    Situation alone, so pass them explicitly."""
     roadworks = situation.roadworks
     first = roadworks[0] if roadworks else None
     return Works(
@@ -91,6 +113,12 @@ def from_datex2(situation: Situation) -> Works:
         coordinate=Coordinate(value=first.location.point, crs="EPSG:4326")
         if first is not None and first.location.point is not None
         else None,
+        territory=territory,
+        administrative_area=(
+            administrative_area
+            if administrative_area is not None
+            else (first.source_name if first else None)
+        ),
         source_grade=SourceGrade.OPERATOR,
         sites=tuple(_to_site(record) for record in roadworks),
         raw=situation,

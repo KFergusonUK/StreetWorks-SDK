@@ -40,9 +40,12 @@ def test_from_trafficwatchni_wraps_one_site_with_unknown_confidence():
     assert works.source_grade is SourceGrade.TRAVELLER_INFO
     assert works.promoter == "BT Openreach"
     assert works.coordinate is None  # NI's feed carries no geometry
+    assert works.territory == "Northern Ireland"
+    assert works.administrative_area is None  # DfI TICC is territory-wide
     assert len(works.sites) == 1
 
     site = works.sites[0]
+    assert site.territory == "Northern Ireland"  # delegates from the parent Works
     assert site.works_type == "Lane Closure"
     assert site.location_description == "Malone Road, Belfast"
     assert site.proposed_start.date() == date(2026, 3, 19)
@@ -62,6 +65,8 @@ def test_from_trafficwales_wraps_one_site_with_coordinate():
     assert works.coordinate is not None
     assert works.coordinate.crs == "EPSG:4326"
     assert works.coordinate.value == (51.78344, -2.939548)
+    assert works.territory == "Wales"
+    assert works.administrative_area is None
 
     site = works.sites[0]
     assert site.works_type == "Resurfacing work"

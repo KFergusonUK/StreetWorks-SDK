@@ -38,10 +38,15 @@ def test_minor_permit_becomes_a_site_with_point_coordinate():
     assert works.location_usrn == "33909869"
     assert works.coordinate.crs == "EPSG:27700"
     assert works.coordinate.value == (425334.09, 533885.19)
+    assert works.territory == "England"
+    assert works.administrative_area == "DURHAM COUNTY COUNCIL"
     assert len(works.sites) == 1
     assert works.plannings == ()
 
     site = works.sites[0]
+    # WorksSite delegates territory/administrative_area to its parent Works.
+    assert site.territory == "England"
+    assert site.administrative_area == "DURHAM COUNTY COUNCIL"
     assert site.reference == "UG00065061596-01"
     assert site.proposed_start == datetime(2026, 6, 3, tzinfo=timezone.utc)
     assert site.actual_start is None
@@ -79,6 +84,8 @@ def test_forward_plan_attaches_to_matching_works_not_free_standing():
 
     free_standing = [w for w in works_list if w.reference is None]
     assert len(free_standing) == 1
+    assert free_standing[0].territory == "England"
+    assert free_standing[0].administrative_area == "DURHAM COUNTY COUNCIL"
     assert len(free_standing[0].plannings) == 1
     planning = free_standing[0].plannings[0]
     assert planning.kind == "forward_plan"

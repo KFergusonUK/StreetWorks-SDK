@@ -7,6 +7,16 @@ module adds that join, on ``phase_number``, to build one
 :class:`~streetworks.common.WorksSite` per phase; matching Notice (006)
 records (also keyed by ``phase_number``) are attached to
 ``WorksSite.notices``.
+
+``administrative_area`` (the notified roads authority - SRWR's district
+system) needs district *names*, not just the ``notifiable_district_id`` int
+on the 001 Activity record - and District (099) records are explicitly
+excluded from :func:`~streetworks.srwr.iter_activities`'s bundles (they're
+file-section reference data, not activity data), so they can't be read off
+``activity`` alone. Pass a ``district_id -> name`` mapping (built with
+``iter_records(source, record_types=["099"])``) via ``districts``; without
+one, the bare district ID is used - still genuinely provider-stated, just
+undecoded, rather than left empty.
 """
 
 from __future__ import annotations
@@ -40,10 +50,20 @@ def _notice(record: Record) -> Notice:
     )
 
 
-def from_srwr(activity: Activity) -> Works:
+def from_srwr(activity: Activity, *, districts: dict[int, str] | None = None) -> Works:
     """Convert one SRWR :class:`~streetworks.srwr.reader.Activity` bundle
-    into a :class:`~streetworks.common.Works`."""
+    into a :class:`~streetworks.common.Works`. ``districts`` optionally maps
+    ``notifiable_district_id -> district_description`` (see module
+    docstring) to decode ``administrative_area`` to a name; omit it to get
+    the bare district ID instead."""
     header = activity.activity
+    notifiable_district_id = getattr(header, "notifiable_district_id", None)
+    if notifiable_district_id is None:
+        administrative_area = None
+    elif districts and notifiable_district_id in districts:
+        administrative_area = districts[notifiable_district_id]
+    else:
+        administrative_area = str(notifiable_district_id)
     undertaker_phases = {
         up.phase_number: up
         for up in activity.undertaker_phases
@@ -93,6 +113,8 @@ def from_srwr(activity: Activity) -> Works:
         location_usrn=(
             str(header.usrn) if header is not None and header.usrn is not None else None
         ),
+        territory="Scotland",
+        administrative_area=administrative_area,
         source_grade=SourceGrade.REGISTER,
         sites=tuple(sites),
         raw=activity,

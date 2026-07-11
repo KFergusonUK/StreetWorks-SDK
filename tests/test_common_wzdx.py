@@ -74,6 +74,23 @@ def test_from_wzdx_thin_works_since_no_works_ref_observed():
     assert all(s.source_grade is SourceGrade.OPERATOR for w in works_list for s in w.sites)
 
 
+def test_from_wzdx_territory_defaults_to_usa_administrative_area_needs_caller():
+    events = parse_road_events(_fixture("hidot"))
+    works_list = from_wzdx(events)
+    assert all(w.territory == "USA" for w in works_list)
+    # administrative_area (the publishing state) isn't on the road event -
+    # it lives on the registry entry, so it stays empty unless passed in.
+    assert all(w.administrative_area is None for w in works_list)
+    assert all(s.territory == "USA" for w in works_list for s in w.sites)
+
+
+def test_from_wzdx_administrative_area_passed_from_registry_entry():
+    events = parse_road_events(_fixture("hidot"))
+    works_list = from_wzdx(events, territory="USA", administrative_area="Hawaii")
+    assert all(w.administrative_area == "Hawaii" for w in works_list)
+    assert all(s.administrative_area == "Hawaii" for w in works_list for s in w.sites)
+
+
 def test_from_wzdx_date_confidence_prefers_accuracy_enum_over_boolean():
     events = parse_road_events(_fixture("wsdot"))
     works_list = from_wzdx(events)

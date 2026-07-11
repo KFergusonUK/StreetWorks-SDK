@@ -77,9 +77,13 @@ def test_from_datex2_ndw_maps_one_site_per_roadworks_record_only():
     situation = next(iter_situations(io.BytesIO(V3_FEED.encode())))
     assert len(situation.roadworks) == 1 and len(situation.measures) == 1
 
-    works = from_datex2(situation)
+    works = from_datex2(situation, territory="Netherlands")
     assert works.reference == "NDW03_554987"
     assert works.promoter == "Provincie Limburg"
+    # territory can't be inferred (see module docstring) - caller states it;
+    # administrative_area defaults to source_name, a real province name here.
+    assert works.territory == "Netherlands"
+    assert works.administrative_area == "Provincie Limburg"
     assert works.coordinate.value == (50.857113, 5.8124113)
     assert works.coordinate.crs == "EPSG:4326"
     assert works.source_grade is SourceGrade.OPERATOR
@@ -99,9 +103,27 @@ def test_from_datex2_ndw_maps_one_site_per_roadworks_record_only():
     assert site.traffic_management == "Verminderd aantal rijstroken beschikbaar"
 
 
+def test_from_datex2_without_territory_leaves_it_unset():
+    situation = next(iter_situations(io.BytesIO(V3_FEED.encode())))
+    works = from_datex2(situation)  # no territory passed
+    assert works.territory is None
+    assert works.administrative_area == "Provincie Limburg"  # still defaults from source_name
+
+
 def _site_for(situation_id: str):
     situation = next(s for s in parse_situations(NH_FIXTURE) if s.id == situation_id)
     return from_datex2(situation).sites[0]
+
+
+def test_from_datex2_national_highways_overrides_administrative_area():
+    # National Highways' source_name is a generic "roadworks" label, not an
+    # authority name - the operator is the authority, passed explicitly.
+    situation = next(s for s in parse_situations(NH_FIXTURE) if s.id == "467118")
+    works = from_datex2(situation, territory="England", administrative_area="National Highways")
+    assert works.territory == "England"
+    assert works.administrative_area == "National Highways"
+    assert works.sites[0].territory == "England"  # delegates from the parent Works
+    assert works.sites[0].administrative_area == "National Highways"
 
 
 def test_from_datex2_nh_planned_status_is_estimated():

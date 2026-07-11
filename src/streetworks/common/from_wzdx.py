@@ -25,6 +25,14 @@ objects - ``detour``/``device``/``restriction`` events are WZDx's analogue
 of DATEX measure records (traffic-management consequences, not works
 sites) and stay native/raw only, per the same design principle DATEX
 measures follow.
+
+``territory`` defaults to ``"USA"`` (true for every feed observed).
+``administrative_area`` (the publishing state/agency) is NOT on the road
+event - it lives one level up, on the registry entry
+(:attr:`~streetworks.wzdx.RegistryEntry.state`) - so it can't be derived
+from ``road_events`` alone. Pass it explicitly (the caller already knows it
+from whichever :class:`~streetworks.wzdx.RegistryEntry` gave them the feed
+URL); omitting it leaves it honestly empty rather than guessed at.
 """
 
 from __future__ import annotations
@@ -96,10 +104,22 @@ def _to_site(event: RoadEvent) -> WorksSite:
     )
 
 
-def from_wzdx(road_events: list[RoadEvent]) -> list[Works]:
+def from_wzdx(
+    road_events: list[RoadEvent],
+    *,
+    territory: str = "USA",
+    administrative_area: str | None = None,
+) -> list[Works]:
     """Convert WZDx :class:`~streetworks.wzdx.RoadEvent` objects into
     :class:`~streetworks.common.Works`. Non-work-zone events (detours,
-    devices, restrictions) are silently skipped, not converted."""
+    devices, restrictions) are silently skipped, not converted.
+
+    ``territory``/``administrative_area`` apply to every ``Works`` this call
+    produces - all ``road_events`` are expected to come from one
+    ``WZDxClient.fetch()`` call, i.e. one agency/state. See module
+    docstring for why ``administrative_area`` needs to be passed in rather
+    than derived.
+    """
     work_zones = [e for e in road_events if e.is_work_zone]
 
     grouped: dict[str, list[RoadEvent]] = defaultdict(list)
@@ -114,6 +134,8 @@ def from_wzdx(road_events: list[RoadEvent]) -> list[Works]:
         Works(
             reference=works_ref,
             coordinate=_coordinate(events[0].geometry),
+            territory=territory,
+            administrative_area=administrative_area,
             source_grade=SourceGrade.OPERATOR,
             sites=tuple(_to_site(e) for e in events),
             raw=events,
@@ -123,6 +145,8 @@ def from_wzdx(road_events: list[RoadEvent]) -> list[Works]:
     works_list.extend(
         Works(
             coordinate=_coordinate(event.geometry),
+            territory=territory,
+            administrative_area=administrative_area,
             source_grade=SourceGrade.OPERATOR,
             sites=(_to_site(event),),
             raw=event,

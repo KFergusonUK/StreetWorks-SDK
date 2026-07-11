@@ -18,6 +18,12 @@ is already populated well before any permit exists under it - so a forward
 plan lands in the matching Works' ``plannings`` where one exists, and only
 falls back to a free-standing :class:`~streetworks.common.WorksPlanning`
 (no ``Works`` at all) if it doesn't.
+
+``territory`` is hardcoded ``"England"`` - Street Manager is DfT's service
+and no field in the reporting response states which UK nation a permit is
+in, so there's nothing to key off if Welsh authorities also report through
+it. ``administrative_area`` comes straight off ``highway_authority``, which
+every observed row carries.
 """
 
 from __future__ import annotations
@@ -136,6 +142,8 @@ def from_streetmanager(
                 location_usrn=str(header["usrn"]) if header.get("usrn") is not None else None,
                 coordinate=_coordinate(header.get("works_coordinates")),
                 promoter=header.get("promoter_organisation"),
+                territory="England",
+                administrative_area=header.get("highway_authority"),
                 source_grade=SourceGrade.REGISTER,
                 sites=tuple(sites),
                 plannings=tuple(plannings),
@@ -145,6 +153,7 @@ def from_streetmanager(
 
     by_reference_works = {w.reference: w for w in works_list}
     free_standing_plannings: list[WorksPlanning] = []
+    free_standing_rows: list[JSON] = []
     for row in forward_plans or []:
         planning = _to_planning(row, kind="forward_plan")
         works = by_reference_works.get(planning.works_reference)
@@ -152,10 +161,13 @@ def from_streetmanager(
             works.plannings = (*works.plannings, planning)
         else:
             free_standing_plannings.append(planning)
+            free_standing_rows.append(row)
 
     if free_standing_plannings:
         works_list.append(
             Works(
+                territory="England",
+                administrative_area=free_standing_rows[0].get("highway_authority"),
                 source_grade=SourceGrade.REGISTER,
                 plannings=tuple(free_standing_plannings),
                 raw=free_standing_plannings,
