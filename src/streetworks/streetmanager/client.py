@@ -192,6 +192,15 @@ class ReportingAPI(_SyncGroup):
         """
         return self.get("section-58s", params={"usrn": usrn, **params})
 
+    def forward_plans(self, **params: Any) -> JSON:
+        """``GET /forward-plans`` e.g. ``forward_plans(usrn=12345)``.
+
+        Unlike ``section_58s``, no filter is required - forward plans are
+        free-floating (not yet linked to a work reference), so there's no
+        natural required key the way a USRN is for section 58s.
+        """
+        return self.get("forward-plans", params=params)
+
     # --- derived views: not raw 1:1 endpoints ------ #
 
     def active_section_58(self, usrn: str | int) -> JSON:
@@ -242,6 +251,9 @@ class ReportingAPI(_SyncGroup):
 
     def iter_alterations(self, **params: Any) -> Iterator[JSON]:
         return self._iter_rows("alterations", params)
+
+    def iter_forward_plans(self, **params: Any) -> Iterator[JSON]:
+        return self._iter_rows("forward-plans", params)
 
 
 class LookupAPI(_SyncGroup):
@@ -463,7 +475,11 @@ class AsyncReportingAPI(_AsyncGroup):
         """``GET /section-58s`` for a USRN; ``usrn`` is always required."""
         return await self.get("section-58s", params={"usrn": usrn, **params})
 
-    # --- derived views: not raw 1:1 endpoints ------ #
+    async def forward_plans(self, **params: Any) -> JSON:
+        """``GET /forward-plans`` - no filter required, unlike ``section_58s``."""
+        return await self.get("forward-plans", params=params)
+
+    # --- derived views: computed client-side, not raw 1:1 endpoints ------ #
 
     async def active_section_58(self, usrn: str | int) -> JSON:
         """Derived view: reduce GET /section-58s for a USRN to the in-force
@@ -506,6 +522,9 @@ class AsyncReportingAPI(_AsyncGroup):
 
     def iter_alterations(self, **params: Any) -> AsyncIterator[JSON]:
         return self._iter_rows("alterations", params)
+
+    def iter_forward_plans(self, **params: Any) -> AsyncIterator[JSON]:
+        return self._iter_rows("forward-plans", params)
 
 
 class AsyncLookupAPI(_AsyncGroup):

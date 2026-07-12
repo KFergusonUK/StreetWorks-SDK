@@ -23,12 +23,15 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.streetmanager` | [DfT Street Manager](https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/) — all nine APIs (Work, Reporting, Street Lookup, GeoJSON, Party, Data Export, Event, Sampling, Worklist), V6 & V7, sandbox & production | read + write |
 | `streetworks.opendata` | [Street Manager Open Data](https://department-for-transport-streetmanager.github.io/street-manager-docs/open-data/) — AWS SNS push notifications | receive |
 | `streetworks.datavia` | [Geoplace DataVIA](https://datavia.geoplace.co.uk/documentation) — full NSG layer catalogue over OGC WFS and WMS (rendered maps + feature info), Basic + OAuth2 | read |
-| `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — integration & production | read + write |
+| `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with the NDW (Netherlands) open-data adapter | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML) and National Highways (England SRN, JSON) | read |
+| `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
+| `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
+| `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 
 Shared across all modules: automatic retries with exponential backoff and
 jitter, `Retry-After`-aware 429 handling, a single exception hierarchy, and
@@ -53,8 +56,10 @@ Early alpha. **Authentication and read/consume access are verified against
 the real systems for all providers:** Street Manager (SANDBOX), Geoplace
 DataVIA (live — including a real feature query), D-TRO (production token +
 events search), the Open Data SNS parsing/verification pipeline, SRWR
-Open Data (parsed against real published daily and monthly extracts), and
-OS Open USRN (Downloads API + GeoPackage reader).
+Open Data (parsed against real published daily and monthly extracts),
+OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
+`safety_signal()` and category queries against `data.police.uk`), and WZDx
+(parsed against 12 live agency feeds spanning v3.1–v4.2).
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -103,6 +108,7 @@ never in code.
 | Street Manager Open Data | Register an HTTPS endpoint with DfT to receive the SNS subscription | *(none — you host the receiver)* |
 | DataVIA | A [Geoplace DataVIA](https://datavia.geoplace.co.uk/) account (username/password) or issued OAuth2 client credentials | `DATAVIA_USER` + `DATAVIA_PASSWORD`, or `DATAVIA_CLIENT_ID` + `DATAVIA_CLIENT_SECRET` |
 | D-TRO | Register an application via the [D-TRO service](https://d-tro.dft.gov.uk/) for an app id and OAuth2 client credentials (integration first, then production) | `DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID` |
+| National Highways | Free account at the [developer portal](https://developer.data.nationalhighways.co.uk/) — create a "Subscription" for an API key | `NH_SUBSCRIPTION_KEY` |
 
 Credentials are **per-environment** — sandbox/integration credentials do not
 work against production, and vice versa.
@@ -355,8 +361,8 @@ with UsrnDatabase(extract_gpkg(archive)) as db:
 DATEX II is the European standard for traffic and roadworks data exchange,
 used by the National Access Points across Europe. `streetworks.datex2` is a
 streaming, namespace-tolerant parser for SituationPublication roadworks —
-DATEX II **v3 and v2** — plus source adapters, starting with the Netherlands'
-credential-free NDW open data:
+DATEX II **v3 and v2** — plus source adapters. The first is the Netherlands'
+credential-free NDW open data (XML):
 
 ```python
 from streetworks.datex2 import NDWClient, iter_roadworks
@@ -373,8 +379,67 @@ for situation in iter_roadworks(feed):
 The parser streams (the ~170 MB Dutch national feed parses in seconds at
 ~35 MB memory) and normalises locations across referencing methods.
 **Coordinates are WGS84 latitude/longitude** — not the British National Grid
-used by the UK providers here. National Highways (England's SRN, DATEX II
-v3.4 via its developer portal) is the planned second adapter.
+used by the UK providers here.
+
+**National Highways** (England's Strategic Road Network) publishes its
+DATEX II v3.4 extended profile as **JSON, not XML**, so it needs its own
+parsing path rather than the streaming XML parser above —
+`streetworks.datex2.nationalhighways` maps that JSON onto the same
+`Situation`/`SituationRecord` models. Needs a free subscription key from the
+[developer portal](https://developer.data.nationalhighways.co.uk/); it pages
+through results automatically via the `x-next` cursor:
+
+```python
+from streetworks.datex2 import ClosureType, NationalHighwaysClient
+
+with NationalHighwaysClient(subscription_key) as nh:
+    for situation in nh.iter_roadworks(ClosureType.PLANNED):
+        works = situation.roadworks[0]
+        print(works.cause_type, works.road_maintenance_type, works.location.point)
+```
+
+(Verified against the live API: it returns XML regardless of `Accept`
+headers unless you also send `X-Response-MediaType: application/json` — the
+client sends this for you.)
+
+## WZDx (US Work Zone Data Exchange)
+
+WZDx is the US standard for work zone data — GeoJSON-based, distinct from
+DATEX II, so `streetworks.wzdx` is its own parser rather than a `datex2`
+adapter. It's a schema published independently by ~40+ agencies (state
+DOTs, MPOs, tolling authorities...), not one central API, so
+`WZDxClient.fetch()` takes any feed URL directly — credential-free:
+
+```python
+from streetworks.wzdx import WZDxClient
+
+with WZDxClient() as wzdx:
+    feed = wzdx.fetch("https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed")
+    print(feed.version, feed.publisher, len(feed.road_events))
+    for event in feed.road_events:
+        if event.is_work_zone:
+            print(event.road_names, event.vehicle_impact, event.geometry.point)
+```
+
+Use `streetworks.wzdx.list_feeds()` to discover feed URLs from the [USDOT
+feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
+rather than hardcoding one.
+
+Verified against **12 live agency feeds spanning WZDx v3.1–v4.2** (not one
+sample — cross-agency variation a single feed hides is exactly what broke
+assumptions during development): `core_details` nesting is a v4-only
+convention (v3.1 feeds are flat on `properties`); the feed-info key isn't
+cleanly version-gated (`feed_info` vs the older `road_event_feed_info` -
+one v4.2 feed emits both); geometry varies (`LineString`/`MultiPoint`,
+sometimes both within one feed, always **`(longitude, latitude)`** GeoJSON
+order — the reverse of DATEX's `(latitude, longitude)`); and date-firmness
+has two independent encodings in the wild (boolean
+`is_start_date_verified`/`is_end_date_verified` flags, and accuracy enums
+`start_date_accuracy`/`end_date_accuracy`) that don't always agree with
+each other and don't always exist together. Real placeholder/garbage dates
+are confirmed at scale, not assumed — one live feed's "current" records
+spanned years 2019–2040. Every field is read defensively; nothing raises
+on a malformed record.
 
 ## Northern Ireland & Wales (traveller-information RSS)
 
@@ -409,6 +474,114 @@ with TrafficWalesClient() as tw:
         print(item.roads, item.title)
 ```
 
+## UK Police (crime data — a worker-safety signal)
+
+There's no API for reporting abuse or aggression towards road workers
+directly — it doesn't exist. What does exist is the [UK Police
+API](https://data.police.uk/docs/) (`data.police.uk`), which publishes
+street-level crime for England, Wales, and Northern Ireland — **no
+credentials required**. `streetworks.police` wraps it as a contextual
+safety signal for planning lone working or an unfamiliar site, not as a
+street-works dataset in its own right.
+
+```python
+from streetworks.police import PoliceClient
+
+with PoliceClient() as police:
+    signal = police.safety_signal(51.500617, -0.124629)  # lat, lng of the worksite
+    print(signal)
+    # {'date': None, 'total_crimes': 3420, 'safety_relevant_count': 1623,
+    #  'by_category': {'anti-social-behaviour': 1152, 'violent-crime': 344,
+    #                  'public-order': 98, 'robbery': 21, 'possession-of-weapons': 8}}
+```
+
+`safety_signal()` fetches crime in roughly a one-mile radius of a point and
+counts only the categories in `SAFETY_RELEVANT_CATEGORIES` — violence and
+sexual offences, public order, anti-social behaviour, robbery, and
+possession of weapons. Property crime (vehicle crime, burglary, shoplifting,
+bicycle theft, criminal damage) is fetched but excluded from the count,
+because it says little about the risk of confrontation to a person on site.
+The raw per-point and per-polygon methods (`street_level_crimes`,
+`street_level_crimes_in_area`, `crimes_at_location`, `crimes_no_location`,
+`forces`, `locate_neighbourhood`, ...) are also available unfiltered.
+
+**Read this as contextual awareness, not prediction** — three things that
+would otherwise mislead:
+
+1. **Historical, not live.** The API publishes street-level crime roughly a
+   month or two in arrears, aggregated per calendar month — recent past, not
+   what's happening at the site today.
+2. **Area-level, not site-level.** Police deliberately anonymise each
+   crime's location to a snapped map point (often the middle of the street,
+   sometimes 100m+ off the true spot) to protect victim privacy. This is a
+   signal about the surrounding area, never the exact worksite.
+3. **Category matters more than the total.** "High crime" as a lump figure
+   is close to meaningless for personal safety — an area heavy in vehicle
+   crime or shoplifting says little about risk to a road crew. That's why
+   `safety_signal()` filters to the categories that actually bear on it
+   rather than reporting the raw total.
+
+## Common models
+
+Every provider above has its own native, full-fidelity shape — that's
+deliberate, and it never goes away. `streetworks.common` adds canonical
+types *alongside* those native interfaces, for code that wants to handle
+works data from several providers the same way without caring which one it
+came from:
+
+```python
+from streetworks.common import from_srwr
+from streetworks.srwr import SRWRClient, iter_activities
+
+with SRWRClient() as srwr:
+    archive = srwr.download_daily("srwr-daily.zip")
+    for activity in iter_activities(archive):
+        works = from_srwr(activity)
+        for site in works.sites:
+            print(site.reference, site.works_type, site.date_confidence, site.raw)
+```
+
+Two levels, deliberately not three: `Works` is the umbrella (reference,
+location, promoter — no committed dates of its own); `WorksSite` is the
+dated, actionable unit under it (Street Manager's `-01`/`-02` permits,
+SRWR's phases joined to their Undertaker-Phase, DATEX roadworks records all
+map here). `WorksPlanning` is a separate type for planning *artifacts* —
+PAAs and Street Manager Forward Plans — with indicative rather than
+committed dates: a record that is *born* as a planning artifact maps here;
+a record that only *transitions* through a planning-ish status (SRWR's
+"Advance Planning", DATEX's `validityStatus = planned`) stays a `WorksSite`
+with that status exposed, so the same source record never migrates between
+canonical types as its lifecycle progresses.
+
+Every canonical object carries a `source_grade` (`register` / `operator` /
+`traveller_info`) and `WorksSite` carries a computed `date_confidence`
+(`verified` / `estimated` / `unknown`), so consumers can filter by
+trustworthiness without provider-specific knowledge — and every one keeps
+`.raw` pointing back at its exact source record(s), so converting never
+loses anything.
+
+`Works` also carries location *provenance*, not location *geography*:
+`territory` (country-level — UK nations count as countries: `"Scotland"`,
+`"England"`, ..., plus `"USA"`, `"Netherlands"`) and `administrative_area`
+(the sub-national body that *owns* the data one level down — a UK highway
+authority, a US state DOT, a Dutch province, or a national operator's own
+name where the operator IS the authority). `administrative_area` is
+populated only where a provider genuinely states it, never inferred from a
+coordinate, and is consistent *within* one territory but not
+size-comparable *across* them — filter by `territory` before aggregating.
+`WorksSite.territory`/`.administrative_area` delegate to the parent `Works`,
+so a site in hand doesn't need the umbrella held separately. Some
+converters (`from_datex2`, `from_wzdx`) can't derive these from the source
+record alone — see their docstrings for why — and take them as keyword
+arguments instead of guessing.
+
+Converters currently cover SRWR, Street Manager, DATEX II (NDW and National
+Highways via the one shared converter), WZDx, TrafficWatchNI and Traffic
+Wales. UK Police stays outside the works hierarchy entirely — it's a
+*context* provider (area-level crime as a safety signal), not a works
+provider, and forcing it into a `WorksSite` would misrepresent what it
+actually is.
+
 ## Design principles
 
 1. **Never block the user.** Typed methods for confirmed, common endpoints;
@@ -432,22 +605,37 @@ with TrafficWalesClient() as tw:
 - [x] Scottish Road Works Register - Open Data provider (`streetworks.srwr`).
       The authenticated SRWR/Aurora web-services API is restricted to Scottish
       authorities and utilities; contributions from SRWR users welcome.
-- [ ] **Common models**: canonical cross-provider types (`Street`, `WorksNotice`,
-      `Coordinate`, ...) with explicit `.to_common()` converters, so the same code
-      handles English and Scottish data - native full-fidelity interfaces retained
+- [x] **Common models** (`streetworks.common`): canonical cross-provider types
+      (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with explicit
+      per-provider converters (`from_srwr`, `from_streetmanager`, `from_datex2`,
+      `from_wzdx`, `from_trafficwatchni`, `from_trafficwales`), so the same code
+      handles works data from any provider — native full-fidelity interfaces
+      retained, `.raw` always keeps the source record(s); `Works` also carries
+      `territory`/`administrative_area` location provenance so a mixed
+      cross-provider list can be filtered by where the data comes from
 - [x] OS Open USRN: credential-free GB-wide USRN lookup with geometry (`streetworks.openusrn`)
 - [x] Northern Ireland roadworks (TrafficWatchNI RSS) and Wales motorway/trunk
       roadworks (Traffic Wales RSS) — all four UK nations now have coverage
+- [x] UK Police crime data (`streetworks.police`) as a worker-safety signal —
+      no API exists for roadworker abuse directly, so this is the closest
+      honest proxy; `safety_signal()` filters to the categories that bear on
+      personal safety — verified against the real API
 - [ ] Traffic Wales DATEX II feeds (richer than the RSS; access on application)
 - [ ] Scottish street gazetteer (OSG portal open data); Northern Ireland gazetteer
       (Wales street gazetteer is already covered by the Geoplace NSG via DataVIA)
 - [x] **DATEX II parser** (v3 + v2 SituationPublication roadworks) with the
-      NDW (Netherlands) open-data adapter — verified against the real national feed
-- [ ] Further DATEX II adapters: National Highways (England SRN, developer-portal
-      key), Mobilithek (DE), transport.data.gouv.fr (FR) — per-NAP verification needed
+      NDW (Netherlands, XML) open-data adapter — verified against the real national feed
+- [x] National Highways (England SRN) DATEX II v3.4 **JSON** adapter
+      (`streetworks.datex2.nationalhighways`), cursor pagination via `x-next` —
+      verified against the real API
+- [ ] Further DATEX II adapters: Mobilithek (DE), transport.data.gouv.fr (FR)
+      — per-NAP verification needed
+- [x] **WZDx (US Work Zone Data Exchange)** parser (`streetworks.wzdx`,
+      v3.1–v4.2), a generic feed client, and a USDOT registry helper —
+      verified against 12 live agency feeds, not one sample
 - [ ] Ordnance Survey NGD / Linked Identifiers?
 
-### 0.4.0 — European & Crown Dependency roadworks
+### European & Crown Dependency roadworks — separate strand
 
 Candidate feeds, researched but **not yet verified**. As always, each needs a
 real sample feed and a licence/access check *before* building — the first task
@@ -472,14 +660,6 @@ Grouped by the client shape they need:
   API-marketplace wrappers; a couple of the researched links need their real
   upstream endpoint confirmed.
 
-### US work zones (WZDx) — separate strand, own research session
-
-The US standard for roadworks is **WZDx (Work Zone Data Exchange)**, GeoJSON-
-based and distinct from DATEX II — so it needs its own parser, not a `datex2`
-adapter. The USDOT [WZDx feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
-is the canonical directory of live publishers and feed URLs — the right
-starting point for surveying what exists.
-
 ### International gazetteers — separate strand
 
 The European equivalents of OS Open USRN (address/street reference layers, not
@@ -494,7 +674,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest                    # 35 mocked unit tests - no credentials needed
+pytest                    # 156 mocked unit tests - no credentials needed
 ruff check .
 ```
 

@@ -1,0 +1,180 @@
+{
+  "road_event_feed_info": {
+    "$id": "1",
+    "publisher": "Washington State DOT IT",
+    "update_frequency": 60,
+    "update_date": "2026-07-09T11:58:06.487+00:00",
+    "version": "4.2",
+    "data_sources": [
+      {
+        "data_source_id": "WSDOT-CIA",
+        "organization_name": "Unknown",
+        "update_frequency": 86400,
+        "update_date": "2022-06-14T23:09:35.4369671+00:00",
+        "lrs_type": "Use of milemarkers posted by the roadways. These are registered to a dynamic segmentation of statewide LRS basemap.",
+        "lrs_url": "https://www.wsdot.wa.gov/data/tools/geoportal/",
+        "location_verify_method": ""
+      },
+      {
+        "data_source_id": "WSDOT-WZDB",
+        "organization_name": "Unknown",
+        "update_frequency": 3600,
+        "update_date": "2025-02-28T19:00:03.5890462+00:00",
+        "lrs_type": "Use of milemarkers posted by the roadways. These are registered to a dynamic segmentation of statewide LRS basemap.",
+        "lrs_url": "https://www.wsdot.wa.gov/data/tools/geoportal/",
+        "location_verify_method": ""
+      }
+    ]
+  },
+  "feed_info": {
+    "publisher": "Washington State DOT IT",
+    "update_frequency": 60,
+    "update_date": "2026-07-09T11:58:06.487+00:00",
+    "version": "4.2",
+    "data_sources": [
+      {
+        "data_source_id": "WSDOT-CIA",
+        "organization_name": "Unknown",
+        "update_frequency": 86400,
+        "update_date": "2022-06-14T23:09:35.4369671+00:00",
+        "lrs_type": "Use of milemarkers posted by the roadways. These are registered to a dynamic segmentation of statewide LRS basemap.",
+        "lrs_url": "https://www.wsdot.wa.gov/data/tools/geoportal/",
+        "location_verify_method": ""
+      },
+      {
+        "data_source_id": "WSDOT-WZDB",
+        "organization_name": "Unknown",
+        "update_frequency": 3600,
+        "update_date": "2025-02-28T19:00:03.5890462+00:00",
+        "lrs_type": "Use of milemarkers posted by the roadways. These are registered to a dynamic segmentation of statewide LRS basemap.",
+        "lrs_url": "https://www.wsdot.wa.gov/data/tools/geoportal/",
+        "location_verify_method": ""
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "properties": {
+        "beginning_accuracy": "estimated",
+        "is_start_position_verified": false,
+        "ending_accuracy": "estimated",
+        "is_end_position_verified": false,
+        "start_date": "2025-04-25T00:00:00+00:00",
+        "end_date": "2028-12-30T00:00:00+00:00",
+        "start_date_accuracy": "verified",
+        "is_start_date_verified": true,
+        "end_date_accuracy": "verified",
+        "is_end_date_verified": true,
+        "event_status": "pending",
+        "vehicle_impact": "unknown",
+        "location_method": "unknown",
+        "worker_presence": {
+          "are_workers_present": false
+        },
+        "reduced_speed_limit_kph": 0.0,
+        "core_details": {
+          "data_source_id": "WSDOT-CIA",
+          "event_type": "work-zone",
+          "road_names": [
+            "524"
+          ],
+          "direction": "westbound",
+          "description": "I-5, SR 524, and SR 525 - Fish Passages",
+          "creation_date": "2024-05-31T21:29:32.3308699+00:00",
+          "update_date": "2024-05-31T21:29:32.3309161+00:00"
+        }
+      },
+      "id": "40615-W",
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -122.250866,
+            47.826012
+          ],
+          [
+            -122.247385,
+            47.825946
+          ],
+          [
+            -122.246756,
+            47.825939
+          ],
+          [
+            -122.246167,
+            47.825924
+          ],
+          [
+            -122.245898,
+            47.825917
+          ]
+        ]
+      },
+      "bbox": [
+        -122.250866,
+        47.826012,
+        -122.245898,
+        47.825917
+      ]
+    },
+    {
+      "properties": {
+        "beginning_accuracy": "estimated",
+        "is_start_position_verified": false,
+        "ending_accuracy": "estimated",
+        "is_end_position_verified": false,
+        "start_date": "2026-04-01T00:00:00+00:00",
+        "end_date": "2027-04-15T00:00:00+00:00",
+        "start_date_accuracy": "verified",
+        "is_start_date_verified": true,
+        "end_date_accuracy": "verified",
+        "is_end_date_verified": true,
+        "event_status": "pending",
+        "vehicle_impact": "unknown",
+        "location_method": "unknown",
+        "worker_presence": {
+          "are_workers_present": false
+        },
+        "reduced_speed_limit_kph": 0.0,
+        "core_details": {
+          "data_source_id": "WSDOT-CIA",
+          "event_type": "work-zone",
+          "road_names": [
+            "005"
+          ],
+          "direction": "northbound",
+          "description": "I-5/Steamboat Slough Bridge - Special Bridge Repair",
+          "creation_date": "2024-05-31T21:29:16.7552058+00:00",
+          "update_date": "2024-05-31T21:29:16.7552449+00:00"
+        }
+      },
+      "id": "14636-N",
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -122.18054,
+            48.043271
+          ],
+          [
+            -122.181007,
+            48.044123
+          ],
+          [
+            -122.183544,
+            48.048546
+          ]
+        ]
+      },
+      "bbox": [
+        -122.18054,
+        48.043271,
+        -122.183544,
+        48.048546
+      ]
+    }
+  ]
+}

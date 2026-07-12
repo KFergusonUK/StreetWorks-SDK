@@ -33,6 +33,9 @@ skipped if its variables are absent.
     export DTRO_APP_ID="..."         # your application UUID
     export DTRO_ENV="integration"    # or "production"
 
+    # National Highways (DATEX II closures) - a single live environment
+    export NH_SUBSCRIPTION_KEY="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -107,6 +110,8 @@ def target_environments() -> dict[str, str]:
         envs["DataVIA"] = "live"  # DataVIA has a single environment
     if os.environ.get("DTRO_CLIENT_ID"):
         envs["D-TRO"] = "PRODUCTION" if _is_prod("DTRO_ENV", "integration") else "integration"
+    if os.environ.get("NH_SUBSCRIPTION_KEY"):
+        envs["National Highways"] = "live"  # single environment, no sandbox
     return envs
 
 
@@ -180,6 +185,17 @@ def check_dtro() -> str:
         products = info.get("api_product_list")
         extra = f", scope={scope}, products={products}" if scope or products else ""
         return f"token acquired ({env.name.lower()}{extra}), events -> totalCount {total}"
+
+
+def check_nationalhighways() -> str:
+    """National Highways closures (DATEX II v3.4 JSON) - a single live
+    environment, read-only. Fetches one page of planned closures."""
+    from streetworks.datex2 import ClosureType, NationalHighwaysClient
+
+    with NationalHighwaysClient(os.environ["NH_SUBSCRIPTION_KEY"]) as nh:
+        payload, next_url = nh.get_closures(ClosureType.PLANNED)
+        situations = payload.get("D2Payload", payload).get("situation", [])
+    return f"{len(situations)} situations on page 1 (more pages: {bool(next_url)})"
 
 
 def check_opendata_parsing() -> str:
@@ -287,6 +303,23 @@ def check_datex2_ndw() -> str:
     return f"{source_desc} -> {situations:,} roadworks situations ({works:,} works records)"
 
 
+def check_wzdx() -> str:
+    """WZDx (US Work Zone Data Exchange) needs no credentials. Points at
+    Washington State DOT's feed by default; set WZDX_FEED_URL to point at a
+    different agency's feed instead (see streetworks.wzdx.list_feeds() for
+    the full USDOT registry)."""
+    from streetworks.wzdx import WZDxClient
+
+    feed_url = os.environ.get("WZDX_FEED_URL", "https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed")
+    with WZDxClient() as wzdx:
+        feed = wzdx.fetch(feed_url)
+    work_zones = sum(1 for e in feed.road_events if e.is_work_zone)
+    return (
+        f"{feed.publisher} (WZDx v{feed.version}): {len(feed.road_events)} road "
+        f"events ({work_zones} work zones)"
+    )
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -305,6 +338,24 @@ def check_trafficwales() -> str:
         items = tw.fetch(Feed.ROADWORKS)
     with_roads = sum(1 for i in items if i.roads)
     return f"{len(items)} roadworks items ({with_roads} with road numbers)"
+
+
+def check_police() -> str:
+    """UK Police API (data.police.uk) needs no credentials. Not a street-works
+    feed - a worker-safety signal (see README for the historical/area-level
+    caveats). POLICE_LAT/POLICE_LNG override the default probe point
+    (Westminster, London)."""
+    from streetworks.police import PoliceClient
+
+    lat = float(os.environ.get("POLICE_LAT", "51.500617"))
+    lng = float(os.environ.get("POLICE_LNG", "-0.124629"))
+    with PoliceClient() as police:
+        updated = police.last_updated()
+        signal = police.safety_signal(lat, lng)
+    return (
+        f"data current to {updated}; {signal['total_crimes']} crimes near "
+        f"({lat}, {lng}), {signal['safety_relevant_count']} safety-relevant"
+    )
 
 
 def main() -> int:
@@ -347,6 +398,7 @@ def main() -> int:
     else:
         reporter.check("DataVIA (Basic)", ["DATAVIA_USER", "DATAVIA_PASSWORD"], check_datavia)
     reporter.check("D-TRO", ["DTRO_CLIENT_ID", "DTRO_CLIENT_SECRET"], check_dtro)
+    reporter.check("National Highways", ["NH_SUBSCRIPTION_KEY"], check_nationalhighways)
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)
     # SRWR Open Data needs no credentials either (set SRWR_ARCHIVE to use a
@@ -356,9 +408,13 @@ def main() -> int:
     reporter.check("OS Open USRN", [], check_openusrn)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
+    # WZDx (US Work Zone Data Exchange) needs no credentials
+    reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)
+    # UK Police (data.police.uk) needs no credentials
+    reporter.check("UK Police (crime safety signal)", [], check_police)
 
     print()
     if reporter.ran == 0:

@@ -18,11 +18,11 @@ from __future__ import annotations
 
 import gzip
 from collections.abc import Iterator
-from datetime import datetime
 from pathlib import Path
 from typing import IO
 from xml.etree.ElementTree import Element, iterparse
 
+from .._dt import parse_iso8601 as _dt
 from .models import Location, Period, Situation, SituationRecord, Validity
 
 __all__ = ["iter_situations", "iter_roadworks"]
@@ -62,15 +62,6 @@ def _text(element: Element | None) -> str | None:
 
 def _deep_text(element: Element, *path: str) -> str | None:
     return _text(_find(element, *path))
-
-
-def _dt(value: str | None) -> datetime | None:
-    if not value:
-        return None
-    try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError:
-        return None
 
 
 def _multilingual(element: Element | None) -> str | None:

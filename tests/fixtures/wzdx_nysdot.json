@@ -1,0 +1,104 @@
+{
+  "feed_info": {
+    "update_date": "2026-07-09T19:48:32.0824011+00:00",
+    "publisher": "Arcadis",
+    "version": "4.1",
+    "data_sources": [
+      {
+        "data_source_id": "TRANSCOM",
+        "organization_name": "TRANSCOM",
+        "update_date": "2026-07-09T19:48:32Z"
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "vcF0/Np3Ba0ad+14hQ0fLSaGXnw=",
+      "type": "Feature",
+      "properties": {
+        "core_details": {
+          "event_type": "work-zone",
+          "data_source_id": "TRANSCOM",
+          "road_names": [
+            "I-84"
+          ],
+          "direction": "unknown",
+          "related_road_events": [
+            {
+              "type": "next-occurrence",
+              "id": "8zRP1Tj5ZTchlsL+ihOhwHzBmbY="
+            }
+          ],
+          "description": "Bridge rehabilitation on I-84 eastbound ramp to Exit 37 - NY 52 - Walden (Gardnertown) D265160/B1026780/NIGHT/32786609 - This work is weather permitting. Plan travel accordingly; delays may exist, Sunday July 5th, 2026 thru Sunday July 19th, 2026 Monday/ Tuesday/ Wednesday/ Thursday/ Friday/ Saturday, 08:00 AM thru 11:00 AM, left lane closures",
+          "update_date": "2026-07-03T10:00:30Z"
+        },
+        "road_event_id": "vcF0/Np3Ba0ad+14hQ0fLSaGXnw=",
+        "beginning_cross_street": "Exit 37 - NY 52 - Walden",
+        "ending_cross_street": "",
+        "is_start_position_verified": false,
+        "is_end_position_verified": false,
+        "start_date": "2026-07-09T12:00:00Z",
+        "end_date": "2026-07-09T15:00:00Z",
+        "is_start_date_verified": false,
+        "is_end_date_verified": false,
+        "location_method": "unknown",
+        "vehicle_impact": "unknown",
+        "restrictions": [],
+        "types_of_work": [],
+        "lanes": [],
+        "impacted_cds_curb_zones": []
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [
+          [
+            -74.048744,
+            41.513557
+          ]
+        ]
+      }
+    },
+    {
+      "id": "XfaixG2k4cHiTXaGK+cj9Y2U2PU=",
+      "type": "Feature",
+      "properties": {
+        "core_details": {
+          "event_type": "work-zone",
+          "data_source_id": "TRANSCOM",
+          "road_names": [
+            "NY 3"
+          ],
+          "direction": "unknown",
+          "related_road_events": [],
+          "description": "Bridge replacement on NY 3 both directions CR 75 South (Hounsfield) to Town of Hounsfield; Town of Henderson Line (Henderson) Rte. 3 closed from CR 75 (Smithville Rd.) to Ridge Rd. due to bridge replacement. Motorists are directed to follow the signed detour route that uses CR 75 and Ridge Rd., Continuous Tuesday July 7th, 2026 12:00 AM thru Sunday November 1st, 2026 11:59 PM All lanes closed and detoured westbound; All lanes of 2 lanes closed and detoured eastbound",
+          "update_date": "2026-07-02T13:24:06Z"
+        },
+        "road_event_id": "XfaixG2k4cHiTXaGK+cj9Y2U2PU=",
+        "beginning_cross_street": "CR 75 South",
+        "ending_cross_street": "Town of Hounsfield; Town of Henderson Line",
+        "is_start_position_verified": false,
+        "is_end_position_verified": false,
+        "start_date": "2026-07-09T04:00:00Z",
+        "end_date": "2026-07-24T03:59:59Z",
+        "is_start_date_verified": false,
+        "is_end_date_verified": false,
+        "location_method": "unknown",
+        "vehicle_impact": "unknown",
+        "restrictions": [],
+        "types_of_work": [],
+        "lanes": [],
+        "impacted_cds_curb_zones": []
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [
+          [
+            -76.107962,
+            43.926949
+          ]
+        ]
+      }
+    }
+  ]
+}
