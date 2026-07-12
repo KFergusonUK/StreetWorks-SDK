@@ -7,9 +7,7 @@ from streetworks.streetmanager import AsyncStreetManagerClient
 
 
 async def main() -> None:
-    async with AsyncStreetManagerClient(
-        os.environ["SM_EMAIL"], os.environ["SM_PASSWORD"]
-    ) as sm:
+    async with AsyncStreetManagerClient(os.environ["SM_EMAIL"], os.environ["SM_PASSWORD"]) as sm:
         permits, inspections, fpns = await asyncio.gather(
             sm.reporting.permits(status="submitted"),
             sm.reporting.inspections(),

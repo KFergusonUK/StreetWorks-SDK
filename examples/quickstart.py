@@ -117,9 +117,7 @@ if os.environ.get("DTRO_CLIENT_ID"):
             environment=env,
         ) as dtro:
             now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-            events = dtro.search_events(
-                page=1, pageSize=3, since="2024-01-01T00:00:00", to=now
-            )
+            events = dtro.search_events(page=1, pageSize=3, since="2024-01-01T00:00:00", to=now)
             info = dtro.token_info or {}
             print(f"authenticated ({env.name.lower()}, scope={info.get('scope')})")
             for event in (events.get("events") or [])[:3]:
@@ -183,8 +181,10 @@ from streetworks.trafficwatchni import TrafficWatchNIClient  # noqa: E402
 with TrafficWatchNIClient() as twni:
     ni_items = twni.fetch(NIFeed.ROADWORKS)
 for item in ni_items[:3]:
-    print(f"  {item.closure_type or 'Roadworks'}: {item.road or '?'}, "
-          f"{item.town or '?'} - {item.promoter or 'promoter n/a'}")
+    print(
+        f"  {item.closure_type or 'Roadworks'}: {item.road or '?'}, "
+        f"{item.town or '?'} - {item.promoter or 'promoter n/a'}"
+    )
 print(f"  ({len(ni_items)} items; {NI_ATTRIBUTION})")
 
 # --- Wales: Traffic Wales roadworks RSS (no credentials) -------------------------

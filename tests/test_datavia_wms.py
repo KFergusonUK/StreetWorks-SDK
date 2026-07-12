@@ -94,18 +94,14 @@ def test_get_feature_info_111_uses_x_y():
         return_value=httpx.Response(200, json={"features": []})
     )
     with _client() as dv:
-        dv.get_feature_info(
-            Layer.STREET_LINES, (1, 2, 3, 4), i=10, j=20, version="1.1.1"
-        )
+        dv.get_feature_info(Layer.STREET_LINES, (1, 2, 3, 4), i=10, j=20, version="1.1.1")
     q = route.calls[0].request.url.params
     assert q["x"] == "10" and q["y"] == "20" and "i" not in q
 
 
 @respx.mock
 def test_wms_capabilities():
-    respx.get(BASIC_SERVICE_URL).mock(
-        return_value=httpx.Response(200, text="<WMS_Capabilities/>")
-    )
+    respx.get(BASIC_SERVICE_URL).mock(return_value=httpx.Response(200, text="<WMS_Capabilities/>"))
     with _client() as dv:
         assert "WMS_Capabilities" in dv.wms_capabilities()
 

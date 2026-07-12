@@ -68,9 +68,7 @@ def intersects_polygon(ring: Sequence[Coordinate], *, geometry_property: str = "
     )
 
 
-def dwithin_point(
-    x: float, y: float, distance_m: float, *, geometry_property: str = "geom"
-) -> str:
+def dwithin_point(x: float, y: float, distance_m: float, *, geometry_property: str = "geom") -> str:
     """``ogc:DWithin`` - features within ``distance_m`` metres of a point."""
     return (
         "<ogc:DWithin>"
@@ -81,9 +79,7 @@ def dwithin_point(
     )
 
 
-def bbox(
-    lower: Coordinate, upper: Coordinate, *, geometry_property: str = "geom"
-) -> str:
+def bbox(lower: Coordinate, upper: Coordinate, *, geometry_property: str = "geom") -> str:
     """``ogc:BBOX`` with a ``gml:Envelope``."""
     return (
         "<ogc:BBOX>"

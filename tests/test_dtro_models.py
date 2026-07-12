@@ -70,9 +70,9 @@ def test_validates_real_source_payload():
 
 def test_rejects_unknown_regulation_type():
     bad = copy.deepcopy(VALID_SOURCE)
-    bad["source"]["provision"][0]["regulation"][0]["generalRegulation"][
-        "regulationType"
-    ] = "notARealRegulationType"
+    bad["source"]["provision"][0]["regulation"][0]["generalRegulation"]["regulationType"] = (
+        "notARealRegulationType"
+    )
     with pytest.raises(ValidationError):
         Model.model_validate(bad)
 

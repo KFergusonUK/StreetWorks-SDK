@@ -38,7 +38,8 @@ import httpx
 from .._transport import AsyncTransport, RetryConfig, SyncTransport
 from .auth import AsyncTokenManager, SyncTokenManager
 from .environments import Api, ApiVersion, Environment, base_url
-from .utils.section_58_utils import summarise_active
+from .utils.lookup_utils import summarise_traffic_sensitive
+from .utils.reporting_utils import summarise_active_section_58
 
 JSON = dict[str, Any]
 
@@ -201,7 +202,7 @@ class ReportingAPI(_SyncGroup):
         Computed client-side (not a 1:1 API call). Returns
         {"active": bool, "upcoming": bool, "section_58": row | None}.
         """
-        return summarise_active(self._iter_rows("section-58s", {"usrn": usrn}))
+        return summarise_active_section_58(self._iter_rows("section-58s", {"usrn": usrn}))
 
     # --- auto-pagination ------------------------------------------------ #
     # Reporting endpoints page with an ``offset`` query parameter and return
@@ -255,6 +256,18 @@ class LookupAPI(_SyncGroup):
     def street_by_usrn(self, usrn: int | str) -> Any:
         """``GET /nsg/streets/{usrn}``."""
         return self.get(f"nsg/streets/{usrn}")
+
+    # --- derived views: not raw 1:1 endpoints ------ #
+
+    def is_traffic_sensitive(self, usrn: int | str) -> JSON:
+        """Derived view: reduce GET /nsg/streets/{usrn} to whether the street
+        is traffic sensitive, plus the supporting special-designation rows.
+        Validated against StreetResponse before reducing.
+
+        Computed client-side (not a 1:1 API call). Returns
+        {"is_traffic_sensitive": bool, "designations": [row, ...]}.
+        """
+        return summarise_traffic_sensitive(self.street_by_usrn(usrn))
 
 
 class GeoJsonAPI(_SyncGroup):
@@ -450,7 +463,7 @@ class AsyncReportingAPI(_AsyncGroup):
         """``GET /section-58s`` for a USRN; ``usrn`` is always required."""
         return await self.get("section-58s", params={"usrn": usrn, **params})
 
-    # --- derived views: computed client-side, not raw 1:1 endpoints ------ #
+    # --- derived views: not raw 1:1 endpoints ------ #
 
     async def active_section_58(self, usrn: str | int) -> JSON:
         """Derived view: reduce GET /section-58s for a USRN to the in-force
@@ -461,7 +474,7 @@ class AsyncReportingAPI(_AsyncGroup):
         {"active": bool, "upcoming": bool, "section_58": row | None}.
         """
         rows = [r async for r in self._iter_rows("section-58s", {"usrn": usrn})]
-        return summarise_active(rows)
+        return summarise_active_section_58(rows)
 
     # --- auto-pagination (see ReportingAPI for the contract) -------------- #
 
@@ -497,6 +510,26 @@ class AsyncReportingAPI(_AsyncGroup):
 
 class AsyncLookupAPI(_AsyncGroup):
     api = Api.LOOKUP
+
+    async def streets(self, **params: Any) -> Any:
+        """``GET /nsg/streets`` - query NSG street data (e.g. by coordinates)."""
+        return await self.get("nsg/streets", params=params)
+
+    async def street_by_usrn(self, usrn: int | str) -> Any:
+        """``GET /nsg/streets/{usrn}``."""
+        return await self.get(f"nsg/streets/{usrn}")
+
+    # --- derived views: not raw 1:1 endpoints ------ #
+
+    async def is_traffic_sensitive(self, usrn: int | str) -> JSON:
+        """Derived view: reduce GET /nsg/streets/{usrn} to whether the street
+        is traffic sensitive, plus the supporting special-designation rows.
+        Validated against StreetResponse before reducing.
+
+        Computed client-side (not a 1:1 API call). Returns
+        {"is_traffic_sensitive": bool, "designations": [row, ...]}.
+        """
+        return summarise_traffic_sensitive(await self.street_by_usrn(usrn))
 
 
 class AsyncGeoJsonAPI(_AsyncGroup):
