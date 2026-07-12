@@ -137,9 +137,7 @@ if os.environ.get("DTRO_CLIENT_ID"):
             environment=env,
         ) as dtro:
             now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-            events = dtro.search_events(
-                page=1, pageSize=3, since="2024-01-01T00:00:00", to=now
-            )
+            events = dtro.search_events(page=1, pageSize=3, since="2024-01-01T00:00:00", to=now)
             info = dtro.token_info or {}
             print(f"  authenticated ({env.name.lower()}, scope={info.get('scope')})")
             for event in (events.get("events") or [])[:3]:

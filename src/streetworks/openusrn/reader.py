@@ -33,9 +33,15 @@ class UsrnStreet:
 # Minimal WKB -> WKT
 # ---------------------------------------------------------------------------
 
-_GEOM_NAMES = {1: "POINT", 2: "LINESTRING", 3: "POLYGON",
-               4: "MULTIPOINT", 5: "MULTILINESTRING", 6: "MULTIPOLYGON",
-               7: "GEOMETRYCOLLECTION"}
+_GEOM_NAMES = {
+    1: "POINT",
+    2: "LINESTRING",
+    3: "POLYGON",
+    4: "MULTIPOINT",
+    5: "MULTILINESTRING",
+    6: "MULTIPOLYGON",
+    7: "GEOMETRYCOLLECTION",
+}
 
 
 class _WkbReader:
@@ -195,10 +201,7 @@ class UsrnDatabase:
 
     def iter_streets(self, *, limit: int | None = None) -> Iterator[UsrnStreet]:
         """Iterate USRN features (optionally limited)."""
-        sql = (
-            f'SELECT "{self.usrn_column}", "{self.geometry_column}" '
-            f'FROM "{self.table}"'
-        )
+        sql = f'SELECT "{self.usrn_column}", "{self.geometry_column}" FROM "{self.table}"'
         if limit is not None:
             sql += f" LIMIT {int(limit)}"
         for row in self._conn.execute(sql):

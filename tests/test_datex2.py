@@ -176,9 +176,9 @@ def test_gzip_detected_by_magic_bytes(tmp_path):
 
 @respx.mock
 def test_ndw_client_downloads_planned_works(tmp_path):
-    respx.get(
-        "https://opendata.ndw.nu/planningsfeed_wegwerkzaamheden_en_evenementen.xml.gz"
-    ).mock(return_value=httpx.Response(200, content=gzip.compress(V3_FEED.encode())))
+    respx.get("https://opendata.ndw.nu/planningsfeed_wegwerkzaamheden_en_evenementen.xml.gz").mock(
+        return_value=httpx.Response(200, content=gzip.compress(V3_FEED.encode()))
+    )
     with NDWClient() as ndw:
         path = ndw.download_planned_works(tmp_path / "feed.xml.gz")
     assert len(list(iter_roadworks(path))) == 1

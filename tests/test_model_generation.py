@@ -26,10 +26,14 @@ def test_generate_models_from_swagger2_fixture(tmp_path, monkeypatch):
     env_root = tmp_path / "out"
     result = subprocess.run(
         [
-            sys.executable, str(script),
-            "--version", "vtest",
-            "--apis", "work",
-            "--from-dir", str(spec_dir),
+            sys.executable,
+            str(script),
+            "--version",
+            "vtest",
+            "--apis",
+            "work",
+            "--from-dir",
+            str(spec_dir),
         ],
         capture_output=True,
         text=True,

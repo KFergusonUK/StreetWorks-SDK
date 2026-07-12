@@ -10,7 +10,7 @@ Run: python examples/datex2_ndw_roadworks.py
 from streetworks.datex2 import NDWClient, iter_roadworks
 
 with NDWClient() as ndw:
-    feed = ndw.download_planned_works("ndw-planned.xml.gz")   # ~15 MB
+    feed = ndw.download_planned_works("ndw-planned.xml.gz")  # ~15 MB
 
 urgent = 0
 for situation in iter_roadworks(feed):

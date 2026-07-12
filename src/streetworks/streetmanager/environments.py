@@ -24,8 +24,8 @@ class Environment(str, Enum):
 
 
 class ApiVersion(str, Enum):
-    V6 = "v6"       # stable baseline - additive changes only
-    V7 = "v7"       # under active development
+    V6 = "v6"  # stable baseline - additive changes only
+    V7 = "v7"  # under active development
     LATEST = "latest"
 
 

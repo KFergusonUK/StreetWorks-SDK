@@ -130,10 +130,7 @@ def _parse_location(record: Element) -> Location:
     pos_list = _first_descendant(location, "posList")
     if pos_list is not None and pos_list.text:
         values = pos_list.text.split()
-        pairs = [
-            (float(values[i]), float(values[i + 1]))
-            for i in range(0, len(values) - 1, 2)
-        ]
+        pairs = [(float(values[i]), float(values[i + 1])) for i in range(0, len(values) - 1, 2)]
         points.extend(pairs)
 
     # carriageway nests (carriageway/carriageway); take the deepest one
@@ -174,9 +171,7 @@ def _parse_record(element: Element) -> SituationRecord:
         creation_time=_dt(_deep_text(element, "situationRecordCreationTime")),
         version_time=_dt(_deep_text(element, "situationRecordVersionTime")),
         probability_of_occurrence=_deep_text(element, "probabilityOfOccurrence"),
-        source_name=_multilingual(
-            _find(element, "source", "sourceName")
-        ),
+        source_name=_multilingual(_find(element, "source", "sourceName")),
         validity=_parse_validity(element),
         location=_parse_location(element),
         cause_type=_deep_text(cause, "causeType") if cause is not None else None,

@@ -13,7 +13,9 @@ from streetworks.streetmanager import (  # noqa: E402
     StreetManagerClient,
 )
 from streetworks.streetmanager.environments import Environment  # noqa: E402
-from streetworks.streetmanager.utils.section_58_utils import summarise_active  # noqa: E402
+from streetworks.streetmanager.utils.reporting_utils import (  # noqa: E402
+    summarise_active_section_58,
+)
 
 SANDBOX = "https://api.sandbox.manage-roadworks.service.gov.uk"
 SECTION_58S = f"{SANDBOX}/v6/reporting/section-58s"
@@ -49,21 +51,21 @@ def _row(status: str, ref: str = "S58-TEST-001") -> dict:
 
 
 def test_in_force_is_active():
-    result = summarise_active([_row("in_force", ref="live"), _row("closed")])
+    result = summarise_active_section_58([_row("in_force", ref="live"), _row("closed")])
     assert result["active"] is True
     assert result["upcoming"] is False
     assert result["section_58"]["section_58_reference_number"] == "live"
 
 
 def test_proposed_is_upcoming():
-    result = summarise_active([_row("proposed", ref="next")])
+    result = summarise_active_section_58([_row("proposed", ref="next")])
     assert result["active"] is False
     assert result["upcoming"] is True
     assert result["section_58"]["section_58_reference_number"] == "next"
 
 
 def test_nothing_active_or_upcoming():
-    assert summarise_active([_row("closed")]) == {
+    assert summarise_active_section_58([_row("closed")]) == {
         "active": False,
         "upcoming": False,
         "section_58": None,
@@ -75,7 +77,7 @@ def test_malformed_row_is_rejected():
     bad = _row("in_force")
     del bad["street"]  # required field
     with pytest.raises(ValidationError):
-        summarise_active([bad])
+        summarise_active_section_58([bad])
 
 
 @respx.mock

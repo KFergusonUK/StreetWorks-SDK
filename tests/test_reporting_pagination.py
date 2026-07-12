@@ -51,9 +51,7 @@ def test_iter_permits_walks_all_pages():
 def test_iter_stops_on_empty_rows_even_if_has_next_claims_more():
     """Defensive: a malformed response must not cause an infinite loop."""
     mock_auth()
-    respx.get(f"{SANDBOX_REPORTING}/inspections").mock(
-        side_effect=[_page([], has_next=True)]
-    )
+    respx.get(f"{SANDBOX_REPORTING}/inspections").mock(side_effect=[_page([], has_next=True)])
     with StreetManagerClient("e@x.com", "pw", environment=Environment.SANDBOX) as sm:
         assert list(sm.reporting.iter_inspections()) == []
 
@@ -79,9 +77,7 @@ async def test_async_iter_permits_walks_all_pages():
             _page([{"id": 2}], has_next=False),
         ]
     )
-    async with AsyncStreetManagerClient(
-        "e@x.com", "pw", environment=Environment.SANDBOX
-    ) as sm:
+    async with AsyncStreetManagerClient("e@x.com", "pw", environment=Environment.SANDBOX) as sm:
         ids = [row["id"] async for row in sm.reporting.iter_permits()]
     assert ids == [1, 2]
 

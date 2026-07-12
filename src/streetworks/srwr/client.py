@@ -27,6 +27,7 @@ __all__ = ["SRWRClient", "AsyncSRWRClient", "BASE_URL"]
 
 BASE_URL = "https://downloads.srwr.scot/export"
 
+
 def _check_is_archive(response: httpx.Response, path: str) -> None:
     """The export host serves an HTML file-list page at some URLs; catch the
     case where we fetched a page instead of an archive."""
@@ -37,7 +38,6 @@ def _check_is_archive(response: httpx.Response, path: str) -> None:
             "file listing. Use download_archive() with an archive name such "
             "as '04.zip', or pass the direct file URL as base_url."
         )
-
 
 
 class SRWRClient:

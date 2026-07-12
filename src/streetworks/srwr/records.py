@@ -25,6 +25,7 @@ __all__ = ["Record", "RECORD_TYPE_NAMES", "parse_row"]
 # converter maps that to None rather than guessing a default.
 # --------------------------------------------------------------------------- #
 
+
 def _int(value: str) -> int | None:
     return int(value) if value.strip() else None
 
@@ -540,9 +541,7 @@ class Record:
         try:
             return self._named[name]
         except KeyError:
-            raise AttributeError(
-                f"{self.type_name!r} record has no field {name!r}"
-            ) from None
+            raise AttributeError(f"{self.type_name!r} record has no field {name!r}") from None
 
     def to_dict(self) -> dict[str, Any]:
         """Named fields as a plain dict (converted values)."""
