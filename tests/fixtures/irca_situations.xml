@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <s:Body>
+    <pullSnapshotDataOutput modelBaseVersion="3" xmlns="http://datex2.eu/wsdl/snapshotPull/2020">
+      <payload xmlns:q1="http://datex2.eu/schema/3/situation" xsi:type="q1:SituationPublication" lang="is" modelBaseVersion="3" xmlns="http://datex2.eu/schema/3/messageContainer">
+        <publicationTime xmlns="http://datex2.eu/schema/3/common">2026-07-12T18:14:59.8014543Z</publicationTime>
+        <publicationCreator xmlns="http://datex2.eu/schema/3/common">
+          <country>IS</country>
+          <nationalIdentifier>IRCA</nationalIdentifier>
+        </publicationCreator>
+        <q1:situation id="IRCA_67862.0">
+          <q1:headerInformation>
+            <informationStatus xmlns="http://datex2.eu/schema/3/common">real</informationStatus>
+          </q1:headerInformation>
+          <q1:situationRecord xsi:type="q1:MaintenanceWorks" id="IRCA_67862.0_1" version="0">
+            <q1:situationRecordCreationTime>2026-03-09T12:27:47Z</q1:situationRecordCreationTime>
+            <q1:situationRecordVersionTime>2026-03-09T12:27:47Z</q1:situationRecordVersionTime>
+            <q1:probabilityOfOccurrence>certain</q1:probabilityOfOccurrence>
+            <q1:validity>
+              <validityStatus xmlns="http://datex2.eu/schema/3/common">definedByValidityTimeSpec</validityStatus>
+              <validityTimeSpecification xmlns="http://datex2.eu/schema/3/common">
+                <overallStartTime>2026-03-09T12:27:47Z</overallStartTime>
+                <overallEndTime>2029-03-09T13:27:00Z</overallEndTime>
+              </validityTimeSpecification>
+            </q1:validity>
+            <q1:generalPublicComment>
+              <q1:comment>
+                <values xmlns="http://datex2.eu/schema/3/common">
+                  <value lang="en" />
+                  <value lang="is">Vegna framkvæmda við „Hringvegur (1) um Ölfusá“ verða settar þrengingar á veginn og umferðarhraði lækkaður við hringtorgið Hringvegur 1 / Biskupstungnabraut og á Hringveg 1 á móts við Uppsali. Vegfarendur eru beðnir að aka með gát um vinnusvæðið og virða merkingar. Áætlað er að framkvæmdum ljúki haustið 2028.</value>
+                </values>
+              </q1:comment>
+            </q1:generalPublicComment>
+            <q1:locationReference xmlns:q4="http://datex2.eu/schema/3/locationReferencing" xsi:type="q4:PointLocation">
+              <q4:coordinatesForDisplay>
+                <q4:latitude>63.939644</q4:latitude>
+                <q4:longitude>-20.964005</q4:longitude>
+              </q4:coordinatesForDisplay>
+              <q4:pointByCoordinates>
+                <q4:pointCoordinates>
+                  <q4:latitude>63.939644</q4:latitude>
+                  <q4:longitude>-20.964005</q4:longitude>
+                </q4:pointCoordinates>
+              </q4:pointByCoordinates>
+            </q1:locationReference>
+            <q1:roadMaintenanceType>roadworks</q1:roadMaintenanceType>
+          </q1:situationRecord>
+        </q1:situation>
+        <q1:situation id="IRCA_70818.0">
+          <q1:headerInformation>
+            <informationStatus xmlns="http://datex2.eu/schema/3/common">real</informationStatus>
+          </q1:headerInformation>
+          <q1:situationRecord xsi:type="q1:MaintenanceWorks" id="IRCA_70818.0_1" version="0">
+            <q1:situationRecordCreationTime>2026-06-24T13:12:40Z</q1:situationRecordCreationTime>
+            <q1:situationRecordVersionTime>2026-06-24T13:12:40Z</q1:situationRecordVersionTime>
+            <q1:probabilityOfOccurrence>certain</q1:probabilityOfOccurrence>
+            <q1:validity>
+              <validityStatus xmlns="http://datex2.eu/schema/3/common">definedByValidityTimeSpec</validityStatus>
+              <validityTimeSpecification xmlns="http://datex2.eu/schema/3/common">
+                <overallStartTime>2026-06-24T13:12:40Z</overallStartTime>
+                <overallEndTime>2026-07-31T14:12:00Z</overallEndTime>
+              </validityTimeSpecification>
+            </q1:validity>
+            <q1:generalPublicComment>
+              <q1:comment>
+                <values xmlns="http://datex2.eu/schema/3/common">
+                  <value lang="en" />
+                  <value lang="is">Stikur hafa verið teknar upp og kantar lagaðir, slitlagið er holótt og mjög ílla farið. Akið varlega.</value>
+                </values>
+              </q1:comment>
+            </q1:generalPublicComment>
+            <q1:locationReference xmlns:q6="http://datex2.eu/schema/3/locationReferencing" xsi:type="q6:PointLocation">
+              <q6:coordinatesForDisplay>
+                <q6:latitude>65.04372</q6:latitude>
+                <q6:longitude>-21.69768</q6:longitude>
+              </q6:coordinatesForDisplay>
+              <q6:pointByCoordinates>
+                <q6:pointCoordinates>
+                  <q6:latitude>65.04372</q6:latitude>
+                  <q6:longitude>-21.69768</q6:longitude>
+                </q6:pointCoordinates>
+              </q6:pointByCoordinates>
+            </q1:locationReference>
+            <q1:roadMaintenanceType>roadworks</q1:roadMaintenanceType>
+          </q1:situationRecord>
+        </q1:situation>
+        <q1:situation id="IRCA_71223.0">
+          <q1:headerInformation>
+            <informationStatus xmlns="http://datex2.eu/schema/3/common">real</informationStatus>
+          </q1:headerInformation>
+          <q1:situationRecord xsi:type="q1:NonWeatherRelatedRoadConditions" id="IRCA_71223.0_1" version="0">
+            <q1:situationRecordCreationTime>2026-07-10T13:37:24Z</q1:situationRecordCreationTime>
+            <q1:situationRecordVersionTime>2026-07-10T13:37:24Z</q1:situationRecordVersionTime>
+            <q1:probabilityOfOccurrence>certain</q1:probabilityOfOccurrence>
+            <q1:safetyRelatedMessage>true</q1:safetyRelatedMessage>
+            <q1:validity>
+              <validityStatus xmlns="http://datex2.eu/schema/3/common">definedByValidityTimeSpec</validityStatus>
+              <validityTimeSpecification xmlns="http://datex2.eu/schema/3/common">
+                <overallStartTime>2026-07-10T13:37:24Z</overallStartTime>
+                <overallEndTime>2026-07-13T14:32:00Z</overallEndTime>
+              </validityTimeSpecification>
+            </q1:validity>
+            <q1:generalPublicComment>
+              <q1:comment>
+                <values xmlns="http://datex2.eu/schema/3/common">
+                  <value lang="en">Road work: Loose gravel, drive with care, speed reduced to 50 km</value>
+                  <value lang="is">Unnið er að blettunum  á þessum kafla og hraðinn er tekinn niður í 50 km. Ökumenn vinsalegast sýnið aðgát og tillitssemi.</value>
+                </values>
+              </q1:comment>
+            </q1:generalPublicComment>
+            <q1:locationReference xmlns:q2="http://datex2.eu/schema/3/locationReferencing" xsi:type="q2:PointLocation">
+              <q2:coordinatesForDisplay>
+                <q2:latitude>63.943253</q2:latitude>
+                <q2:longitude>-21.979279</q2:longitude>
+              </q2:coordinatesForDisplay>
+              <q2:pointByCoordinates>
+                <q2:pointCoordinates>
+                  <q2:latitude>63.943253</q2:latitude>
+                  <q2:longitude>-21.979279</q2:longitude>
+                </q2:pointCoordinates>
+              </q2:pointByCoordinates>
+            </q1:locationReference>
+            <q1:nonWeatherRelatedRoadConditionType>looseChippings</q1:nonWeatherRelatedRoadConditionType>
+          </q1:situationRecord>
+        </q1:situation>
+      </payload>
+    </pullSnapshotDataOutput>
+  </s:Body>
+</s:Envelope>

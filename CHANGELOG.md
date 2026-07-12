@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [0.7.0] - 2026-07-11
+## [0.7.0] - 2026-07-12
 
 ### Added
 
@@ -38,6 +38,59 @@
   element is cleared after yielding to keep the verified ~170 MB feed /
   ~35 MB memory characteristic, and a stored reference would go stale
   under the caller.
+- **Iceland: IRCA/Vegagerðin** (`streetworks.datex2.irca`) - genuine DATEX
+  II v3 XML (not a bespoke JSON schema like Finland/National Highways),
+  reused through the existing shared parser's field-extraction logic.
+  Credential-free, confirmed reliably reachable across multiple independent
+  live fetches (no API key, no IP allow-listing) - unlike Norway (see
+  below), this one ships complete. Verified field-by-field against real
+  data: `record_type` is a genuine `xsi:type` discriminator
+  (`MaintenanceWorks`, not a hardcoded compromise), location is always
+  `PointLocation`/`pointByCoordinates` (checked across every situation on
+  two independent fetches - zero `LinearLocation`, zero Alert-C),
+  `road_maintenance_type` is a real, low-cardinality (`"roadworks"`) field,
+  and `administrative_area` has no genuinely-stated source field anywhere in
+  the feed (checked exhaustively - every unique element name across a full
+  live fetch), so it's left unset rather than inferred. Licence confirmed to
+  permit free reuse, redistribution, and commercial exploitation, with
+  mandatory attribution ("Based on information provided by the Icelandic
+  Road and Coastal Administration (IRCA)"), baked into the module
+  docstring. Shares SOAP request-construction plumbing
+  (`streetworks.datex2._snapshotpull`) with the (pending) Norway adapter,
+  since both expose the identical `snapshotPull/2020` WSDL interface.
+- **`streetworks.datex2.parser` gained `iter_situations_full`/
+  `iter_roadworks_full`** - the same field extraction as
+  `iter_situations`/`iter_roadworks`, but parsing the whole document into
+  memory at once instead of streaming, so `Situation.raw`/
+  `SituationRecord.raw` get populated with their source XML `Element`.
+  `iter_situations` (streaming, clears elements) exists specifically for
+  huge feeds like NDW's ~170 MB dump, where that memory bound is worth
+  losing `.raw` for; Iceland's response is ~250 KB, nowhere near that scale,
+  so `streetworks.datex2.irca` uses the `_full` variant and gets `.raw`
+  fidelity for free. Norway's `VegvesenClient` still uses the streaming
+  form pending Phase 2 confirming its real response size.
+- **Norway: Statens vegvesen** (`streetworks.datex2.vegvesen`) - **Phase 1
+  scaffold, pending live verification.** Built against Statens vegvesen's
+  own WSDL/service catalogue (probed live) and a real snapshotPull document
+  from Iceland's sibling implementation (used to validate that the shared
+  parser handles a real SOAP-wrapped response unchanged, not as a claim
+  about Norway's own feed shape). Blocked on credentials for Phase 2 live
+  verification - not usable against real Norwegian data yet; see the module
+  docstring for the three explicitly open questions.
+
+### Fixed
+
+- **Multilingual DATEX fields could silently return an empty string.** The
+  shared XML parser's `_multilingual()` helper took the *first* `<value>`
+  in a `values/value[lang]` structure regardless of whether it was empty -
+  some real feeds (confirmed on Iceland's IRCA feed) list an empty
+  placeholder value (e.g. `lang="en"`) before the real text in another
+  language. This silently dropped real comment text (and any other field
+  routed through `_multilingual`) on every DATEX provider with this value
+  ordering. Now skips empty entries and returns the first non-empty value.
+  Verified against NDW, National Highways, and Digitraffic fixtures
+  (unaffected - they don't have this ordering) and confirmed it now
+  correctly surfaces real text on the Iceland/Norway fixtures.
 
 ## [0.6.1] - 2026-07-11
 

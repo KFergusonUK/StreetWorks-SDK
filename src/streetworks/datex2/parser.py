@@ -9,9 +9,16 @@ deliberate cost of ignoring namespace semantics the roadworks profile doesn't
 depend on.
 
 Feeds can be huge (the Dutch national planned-works feed is ~170 MB
-uncompressed), so parsing streams via ``iterparse`` and yields one
-:class:`~streetworks.datex2.models.Situation` at a time; gzipped files are
-opened transparently.
+uncompressed), so :func:`iter_situations` streams via ``iterparse`` and
+yields one :class:`~streetworks.datex2.models.Situation` at a time,
+clearing each XML element after yielding it to bound memory - the trade-off
+documented on :attr:`~streetworks.datex2.models.Situation.raw` (it stays
+``None`` there, since a stored ``Element`` reference would go stale).
+:func:`iter_situations_full` is the same field extraction over a fully
+in-memory parse instead, for documents small enough that fidelity
+(``.raw``) matters more than memory bounding (e.g. Iceland's ~250 KB
+snapshotPull response - see :mod:`streetworks.datex2.irca`). Gzipped files
+are opened transparently either way.
 """
 
 from __future__ import annotations
@@ -21,11 +28,12 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import IO
 from xml.etree.ElementTree import Element, iterparse
+from xml.etree.ElementTree import parse as _parse_tree
 
 from .._dt import parse_iso8601 as _dt
 from .models import Location, Period, Situation, SituationRecord, Validity
 
-__all__ = ["iter_situations", "iter_roadworks"]
+__all__ = ["iter_situations", "iter_roadworks", "iter_situations_full", "iter_roadworks_full"]
 
 _XSI_TYPE = "{http://www.w3.org/2001/XMLSchema-instance}type"
 
@@ -65,11 +73,24 @@ def _deep_text(element: Element, *path: str) -> str | None:
 
 
 def _multilingual(element: Element | None) -> str | None:
-    """values/value[lang] - return the first value's text."""
+    """values/value[lang] - return the first NON-EMPTY value's text.
+
+    Real feeds list an empty placeholder value before the real text (e.g.
+    Iceland's IRCA feed lists an empty ``lang="en"`` entry before the real
+    ``lang="is"`` one) - taking literally the first ``<value>`` regardless
+    of content silently dropped real text. Falls back to the element's own
+    direct text if there's no ``values``/``value`` structure at all.
+    """
     if element is None:
         return None
-    value = _find(element, "values", "value")
-    return _text(value) or _text(element)
+    values = _find(element, "values")
+    if values is not None:
+        for value in _findall(values, "value"):
+            text = _text(value)
+            if text:
+                return text
+        return None
+    return _text(element)
 
 
 def _first_descendant(element: Element, name: str) -> Element | None:
@@ -245,5 +266,39 @@ def iter_roadworks(source: str | Path | IO[bytes]) -> Iterator[Situation]:
     """Like :func:`iter_situations`, but only situations that contain at least
     one roadworks record (MaintenanceWorks/ConstructionWorks)."""
     for situation in iter_situations(source):
+        if situation.roadworks:
+            yield situation
+
+
+def iter_situations_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+    """Like :func:`iter_situations`, but parses the whole document into
+    memory at once (no streaming/element-clearing) instead, so
+    :attr:`~streetworks.datex2.models.Situation.raw` /
+    :attr:`~streetworks.datex2.models.SituationRecord.raw` are populated
+    with their source ``Element`` - safe here because nothing is cleared
+    out from under the caller. Only use this for documents you know are
+    small (megabytes, not the ~170 MB scale :func:`iter_situations` is
+    built for) - see module docstring.
+    """
+    stream, owned = _open_stream(source)
+    try:
+        root = _parse_tree(stream).getroot()
+    finally:
+        if owned:
+            stream.close()
+    for element in root.iter():
+        if _local(element.tag) == "situation":
+            situation = _parse_situation(element)
+            situation.raw = element
+            record_elements = _findall(element, "situationRecord")
+            for record_element, record in zip(record_elements, situation.records, strict=True):
+                record.raw = record_element
+            yield situation
+
+
+def iter_roadworks_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+    """Like :func:`iter_situations_full`, but only situations that contain
+    at least one roadworks record (MaintenanceWorks/ConstructionWorks)."""
+    for situation in iter_situations_full(source):
         if situation.roadworks:
             yield situation

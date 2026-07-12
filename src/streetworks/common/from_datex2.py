@@ -1,10 +1,12 @@
 """DATEX II -> streetworks.common converter.
 
-Serves all three DATEX adapters unchanged - NDW (Netherlands, XML),
-National Highways (England SRN, JSON), and Digitraffic (Finland, its own
-Simple-JSON - see :mod:`streetworks.datex2.digitraffic` for why it still
-produces this same model despite not being DATEX-shaped itself) all
-normalise onto the same
+Serves all DATEX adapters unchanged - NDW (Netherlands, XML), National
+Highways (England SRN, JSON), Digitraffic (Finland, its own Simple-JSON -
+see :mod:`streetworks.datex2.digitraffic` for why it still produces this
+same model despite not being DATEX-shaped itself), IRCA (Iceland, XML -
+:mod:`streetworks.datex2.irca`), and Vegvesen (Norway, **pending live
+verification** - see :mod:`streetworks.datex2.vegvesen`) all normalise onto
+the same
 :class:`~streetworks.datex2.Situation`/:class:`~streetworks.datex2.SituationRecord`
 models, so one converter covers all of them; ``source_grade`` is always
 :attr:`~streetworks.common.SourceGrade.OPERATOR` for DATEX per the spec's
@@ -37,6 +39,18 @@ guessing which adapter produced the Situation:
   will come out ``UNKNOWN`` for every Finland site, honestly - Digitraffic
   has no active/planned/suspended-equivalent field for ``validity.status``
   to carry.
+- IRCA (Iceland): ``from_datex2(situation, territory="Iceland")`` - no
+  ``administrative_area`` is passed: checked exhaustively against the live
+  feed, no region/authority-equivalent field exists there at all (see
+  :mod:`streetworks.datex2.irca`). ``source_name`` also defaults to
+  ``None`` here since no record carries a ``<source>`` element.
+- Vegvesen (Norway, **pending live verification** - see
+  :mod:`streetworks.datex2.vegvesen`): ``from_datex2(situation,
+  territory="Norway")`` - no ``administrative_area`` is passed because no
+  real Norwegian record has been inspected to confirm a genuinely-stated
+  region field exists; it falls back to this converter's own default
+  (``source_name``), which is itself unconfirmed to be an authority name for
+  Norway. Revisit once Phase 2 shows real data.
 """
 
 from __future__ import annotations

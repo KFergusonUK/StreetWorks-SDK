@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "streetworks"
 version = "0.7.0"
-description = "An open SDK for UK street works APIs, spanning all four UK nations plus European DATEX II and US WZDx roadworks: Street Manager, DataVIA, D-TRO, SRWR, OS Open USRN, DATEX II (NDW, National Highways, Digitraffic/Finland), TrafficWatchNI, Traffic Wales, UK Police, WZDx, and canonical cross-provider common models."
+description = "An open SDK for UK street works APIs, spanning all four UK nations plus European DATEX II and US WZDx roadworks: Street Manager, DataVIA, D-TRO, SRWR, OS Open USRN, DATEX II (NDW, National Highways, Digitraffic/Finland, IRCA/Iceland), TrafficWatchNI, Traffic Wales, UK Police, WZDx, and canonical cross-provider common models."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

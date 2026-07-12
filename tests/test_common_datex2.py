@@ -1,12 +1,15 @@
 """Tests for streetworks.common.from_datex2.
 
-Covers all three DATEX adapters through the one shared converter: a trimmed
-NDW v3 fixture (same shape as test_datex2.py's) for the XML path, the real
+Covers all DATEX adapters through the one shared converter: a trimmed NDW
+v3 fixture (same shape as test_datex2.py's) for the XML path, the real
 National Highways closures fixture for the JSON path - the one that
 actually carries all three real validityStatus values (active, planned,
-suspended), so it's what exercises date_confidence properly - and the real
+suspended), so it's what exercises date_confidence properly - the real
 Digitraffic (Finland) fixture, which has no lifecycle-status field at all
-and needs the province() lookup for administrative_area.
+and needs the province() lookup for administrative_area, the real IRCA
+(Iceland) fixture, and the Vegvesen (Norway) fixture - **pending live
+verification**, real DATEX data but from Iceland's sibling implementation,
+not Norway itself (see streetworks.datex2.vegvesen).
 """
 
 import io
@@ -15,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from streetworks.common import DateConfidence, SourceGrade, from_datex2
-from streetworks.datex2 import iter_situations
+from streetworks.datex2 import iter_situations, iter_situations_full
 from streetworks.datex2.digitraffic import parse_situations as parse_digitraffic_situations
 from streetworks.datex2.digitraffic import provinces
 from streetworks.datex2.nationalhighways import parse_situations
@@ -190,3 +193,51 @@ def test_from_datex2_digitraffic_date_confidence_is_always_unknown():
     assert site.date_confidence is DateConfidence.UNKNOWN
     assert site.actual_start is None
     assert site.proposed_start is not None  # the date itself is still known, just unverified
+
+
+def test_from_datex2_vegvesen_norway_pending_live_verification():
+    """Norway (Vegvesen) - pending live verification, see
+    streetworks.datex2.vegvesen. The fixture is real DATEX snapshotPull data
+    from Iceland (IRCA), used only to confirm from_datex2 works unchanged
+    against whatever the shared XML parser produces from a real
+    SOAP-wrapped snapshotPull document - not a claim about Norway's own
+    feed shape."""
+    fixture = Path(__file__).parent / "fixtures" / "vegvesen_getsituation_sample.xml"
+    situation = next(iter_situations(fixture))
+
+    works = from_datex2(situation, territory="Norway")
+    assert works.territory == "Norway"
+    # No administrative_area passed - no confirmed source field yet (see
+    # module docstring), so it falls back to source_name, which is None
+    # here (the fixture's records carry no <source> element).
+    assert works.administrative_area is None
+    assert works.source_grade is SourceGrade.OPERATOR
+    assert works.coordinate.crs == "EPSG:4326"
+    assert len(works.sites) == 1
+    # Regression check for the multilingual-comments bug fix (see
+    # streetworks.datex2.parser._multilingual) - this real comment lists an
+    # empty lang="en" placeholder before the real lang="is" text.
+    assert works.sites[0].traffic_management == (
+        "Unnið við endurbyggingu vegarins, hann er grófur, ósléttur og "
+        "seinfarinn, akið mjög varlega. Þetta er vinnusvæði!!"
+    )
+
+
+def test_from_datex2_irca_iceland():
+    fixture = Path(__file__).parent / "fixtures" / "irca_situations.xml"
+    situation = next(s for s in iter_situations_full(fixture) if s.roadworks)
+
+    works = from_datex2(situation, territory="Iceland")
+    assert works.territory == "Iceland"
+    # No administrative_area - checked exhaustively against the live feed,
+    # no region/authority field exists there at all (see module docstring
+    # in streetworks.datex2.irca).
+    assert works.administrative_area is None
+    assert works.promoter is None  # no <source> element on any record seen
+    assert works.source_grade is SourceGrade.OPERATOR
+    assert works.coordinate.crs == "EPSG:4326"
+    # .raw is the Situation itself here (from_datex2 always sets this), which
+    # in turn carries the source XML Element - iter_situations_full populates
+    # it since Iceland's small response doesn't need streaming/clearing.
+    assert works.sites[0].raw.raw is not None
+    assert len(works.sites) == 1

@@ -36,6 +36,13 @@ skipped if its variables are absent.
     # National Highways (DATEX II closures) - a single live environment
     export NH_SUBSCRIPTION_KEY="..."
 
+    # Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
+    # streetworks.datex2.vegvesen. Provide either Basic or Bearer, not both.
+    export VEGVESEN_USERNAME="..."
+    export VEGVESEN_PASSWORD="..."
+    # ... or:
+    export VEGVESEN_TOKEN="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -112,6 +119,8 @@ def target_environments() -> dict[str, str]:
         envs["D-TRO"] = "PRODUCTION" if _is_prod("DTRO_ENV", "integration") else "integration"
     if os.environ.get("NH_SUBSCRIPTION_KEY"):
         envs["National Highways"] = "live"  # single environment, no sandbox
+    if os.environ.get("VEGVESEN_TOKEN") or os.environ.get("VEGVESEN_USERNAME"):
+        envs["Statens vegvesen (Norway)"] = "live"  # single environment, no sandbox
     return envs
 
 
@@ -204,6 +213,48 @@ def check_nationalhighways() -> str:
         payload, next_url = nh.get_closures(ClosureType.PLANNED)
         situations = payload.get("D2Payload", payload).get("situation", [])
     return f"{len(situations)} situations on page 1 (more pages: {bool(next_url)})"
+
+
+def check_irca() -> str:
+    """IRCA/Vegagerðin (Iceland, DATEX II) needs no credentials - confirmed
+    live and reliably reachable (see streetworks.datex2.irca)."""
+    from streetworks.datex2 import IcelandClient
+
+    with IcelandClient() as irca:
+        situations = list(irca.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return f"{len(situations):,} roadworks situations ({works:,} works records)"
+
+
+def check_vegvesen() -> str:
+    """Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
+    streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
+    VEGVESEN_USERNAME/VEGVESEN_PASSWORD, or Bearer via VEGVESEN_TOKEN) and
+    an IP allow-listed by Statens vegvesen - it's expected to fail/skip
+    everywhere else, which is why this check is gated behind those env
+    vars rather than run unconditionally like the credential-free DATEX
+    adapters (NDW, Digitraffic)."""
+    from streetworks.datex2 import VegvesenClient
+
+    token = os.environ.get("VEGVESEN_TOKEN")
+    if token:
+        client = VegvesenClient(token=token)
+        method = "Bearer"
+    else:
+        client = VegvesenClient(
+            username=os.environ["VEGVESEN_USERNAME"],
+            password=os.environ["VEGVESEN_PASSWORD"],
+        )
+        method = "Basic"
+
+    with client as vegvesen:
+        situations = list(vegvesen.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return (
+        f"{method} auth, {len(situations):,} roadworks situations "
+        f"({works:,} works records) - first real Norwegian data seen, "
+        "compare against module docstring's open questions"
+    )
 
 
 def check_opendata_parsing() -> str:
@@ -424,6 +475,14 @@ def main() -> int:
         reporter.check("DataVIA (Basic)", ["DATAVIA_USER", "DATAVIA_PASSWORD"], check_datavia)
     reporter.check("D-TRO", ["DTRO_CLIENT_ID", "DTRO_CLIENT_SECRET"], check_dtro)
     reporter.check("National Highways", ["NH_SUBSCRIPTION_KEY"], check_nationalhighways)
+    if os.environ.get("VEGVESEN_TOKEN"):
+        reporter.check("DATEX II (Vegvesen/Norway, Bearer)", ["VEGVESEN_TOKEN"], check_vegvesen)
+    else:
+        reporter.check(
+            "DATEX II (Vegvesen/Norway, Basic)",
+            ["VEGVESEN_USERNAME", "VEGVESEN_PASSWORD"],
+            check_vegvesen,
+        )
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)
     # SRWR Open Data needs no credentials either (set SRWR_ARCHIVE to use a
@@ -435,6 +494,8 @@ def main() -> int:
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials
     reporter.check("DATEX II (Digitraffic/Finland)", [], check_digitraffic)
+    # IRCA (Iceland) needs no credentials
+    reporter.check("DATEX II (IRCA/Iceland)", [], check_irca)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

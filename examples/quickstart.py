@@ -236,6 +236,26 @@ def _digitraffic_demo() -> None:
 
 attempt("Digitraffic", _digitraffic_demo)
 
+# --- IRCA: Icelandic national roadworks (no credentials) -------------------------
+
+section("IRCA/Vegagerðin (Iceland)")
+
+
+def _irca_demo() -> None:
+    from streetworks.common import from_datex2
+    from streetworks.datex2.irca import IcelandClient
+
+    with IcelandClient() as irca:
+        situations = list(irca.iter_roadworks())
+    print(f"  {len(situations)} roadworks situations")
+    for situation in situations[:3]:
+        works = from_datex2(situation, territory="Iceland")
+        site = works.sites[0]
+        print("  ", site.works_type, "-", site.coordinate.value if site.coordinate else "?")
+
+
+attempt("IRCA (Iceland)", _irca_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")

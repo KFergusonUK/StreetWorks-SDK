@@ -117,6 +117,29 @@ V2_FEED = """<?xml version="1.0" encoding="UTF-8"?>
 """
 
 
+# Real feeds (confirmed on Iceland's IRCA feed - see streetworks.datex2.irca)
+# list an empty placeholder value before the real text. The parser must
+# skip it, not silently return the empty entry.
+EMPTY_PLACEHOLDER_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<mc:messageContainer xmlns:sit="http://datex2.eu/schema/3/situation"
+    xmlns:mc="http://datex2.eu/schema/3/messageContainer"
+    xmlns:loc="http://datex2.eu/schema/3/locationReferencing"
+    xmlns:com="http://datex2.eu/schema/3/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" modelBaseVersion="3">
+  <mc:payload xsi:type="sit:SituationPublication" lang="is">
+    <sit:situation id="EMPTY_PLACEHOLDER">
+      <sit:situationRecord xsi:type="sit:MaintenanceWorks" id="EMPTY_PLACEHOLDER_1" version="0">
+        <sit:generalPublicComment><sit:comment><com:values>
+          <com:value lang="en"></com:value>
+          <com:value lang="is">Raunverulegur texti</com:value>
+        </com:values></sit:comment></sit:generalPublicComment>
+      </sit:situationRecord>
+    </sit:situation>
+  </mc:payload>
+</mc:messageContainer>
+"""
+
+
 def _v3_stream() -> io.BytesIO:
     return io.BytesIO(V3_FEED.encode())
 
@@ -159,6 +182,12 @@ def test_parses_linear_geometry_poslist():
     measure = situations[0].measures[0]
     assert measure.location.kind == "LinearLocation"
     assert measure.location.points == ((50.85, 5.81), (50.86, 5.82), (50.87, 5.83))
+
+
+def test_multilingual_skips_empty_placeholder_value():
+    situations = list(iter_situations(io.BytesIO(EMPTY_PLACEHOLDER_FEED.encode())))
+    comments = situations[0].roadworks[0].comments
+    assert comments == ("Raunverulegur texti",)
 
 
 def test_iter_roadworks_filters_out_event_only_situations():
