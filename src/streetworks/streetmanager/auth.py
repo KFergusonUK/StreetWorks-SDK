@@ -63,10 +63,7 @@ class TokenSet:
 
         id_token = pick("id_token", "idToken")
         if id_token is None:
-            raise KeyError(
-                "Authentication response contained no id token "
-                f"(keys: {sorted(data)})"
-            )
+            raise KeyError(f"Authentication response contained no id token (keys: {sorted(data)})")
         expires_at = _jwt_expiry(id_token) or (time.time() + FALLBACK_LIFETIME)
         return cls(
             id_token=id_token,

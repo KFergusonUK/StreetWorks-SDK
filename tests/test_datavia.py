@@ -1,4 +1,3 @@
-
 import httpx
 import pytest
 import respx
@@ -30,9 +29,7 @@ def test_requires_exactly_one_auth_method():
 
 @respx.mock
 def test_street_by_usrn_posts_doc_shaped_getfeature():
-    route = respx.post(BASIC_SERVICE_URL).mock(
-        return_value=httpx.Response(200, json=GEOJSON_EMPTY)
-    )
+    route = respx.post(BASIC_SERVICE_URL).mock(return_value=httpx.Response(200, json=GEOJSON_EMPTY))
     with make_client() as dv:
         result = dv.street_by_usrn(4401245)
 
@@ -52,9 +49,7 @@ def test_street_by_usrn_posts_doc_shaped_getfeature():
 @respx.mock
 def test_oauth_client_credentials_flow():
     token_route = respx.post(TOKEN_URL).mock(
-        return_value=httpx.Response(
-            200, json={"access_token": "tok123", "expires_in": 3600}
-        )
+        return_value=httpx.Response(200, json={"access_token": "tok123", "expires_in": 3600})
     )
     service_route = respx.post(OIDC_SERVICE_URL).mock(
         return_value=httpx.Response(200, json=GEOJSON_EMPTY)
@@ -72,9 +67,7 @@ def test_oauth_client_credentials_flow():
 
 @respx.mock
 def test_dwithin_and_combined_filters():
-    route = respx.post(BASIC_SERVICE_URL).mock(
-        return_value=httpx.Response(200, json=GEOJSON_EMPTY)
-    )
+    route = respx.post(BASIC_SERVICE_URL).mock(return_value=httpx.Response(200, json=GEOJSON_EMPTY))
     fragment = filters.and_(
         filters.dwithin_point(-0.138405, 50.825181, 100),
         filters.property_equals("special_designation_code", 2),
@@ -91,9 +84,7 @@ def test_dwithin_and_combined_filters():
 
 @respx.mock
 def test_kvp_get_with_paging_params():
-    route = respx.get(BASIC_SERVICE_URL).mock(
-        return_value=httpx.Response(200, json=GEOJSON_EMPTY)
-    )
+    route = respx.get(BASIC_SERVICE_URL).mock(return_value=httpx.Response(200, json=GEOJSON_EMPTY))
     with make_client() as dv:
         dv.get_features_kvp(Layer.ESU_STREETS, start_index=0, count=50)
 
@@ -111,9 +102,7 @@ def test_iter_features_pages_until_short_page():
         start = int(body.split("<wfs:StartIndex>")[1].split("<")[0])
         n = 2 if start == 0 else 1  # second page is short -> stop
         features = [{"type": "Feature", "properties": {"i": start + j}} for j in range(n)]
-        return httpx.Response(
-            200, json={"type": "FeatureCollection", "features": features}
-        )
+        return httpx.Response(200, json={"type": "FeatureCollection", "features": features})
 
     respx.post(BASIC_SERVICE_URL).mock(side_effect=page)
     with make_client() as dv:

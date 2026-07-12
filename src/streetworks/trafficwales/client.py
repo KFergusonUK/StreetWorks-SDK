@@ -237,9 +237,7 @@ def parse_feed(xml: str | bytes) -> list[FeedItem]:
                 published=_parse_pubdate(_child_text(element, "pubDate")),
                 guid=_child_text(element, "guid"),
                 categories=tuple(
-                    c.text.strip()
-                    for c in element.findall("category")
-                    if c.text and c.text.strip()
+                    c.text.strip() for c in element.findall("category") if c.text and c.text.strip()
                 ),
                 roads=roads,
                 coordinate=_georss_point(element),

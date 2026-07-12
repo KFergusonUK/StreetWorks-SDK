@@ -166,9 +166,7 @@ def check_datavia() -> str:
     with client as dv:
         caps = dv.get_capabilities()
         wms = dv.wms_capabilities()
-        detail = (
-            f"{method} auth, WFS caps {len(caps)} bytes, WMS caps {len(wms)} bytes"
-        )
+        detail = f"{method} auth, WFS caps {len(caps)} bytes, WMS caps {len(wms)} bytes"
         usrn = os.environ.get("DATAVIA_USRN")
         if usrn:
             result = dv.street_by_usrn(usrn)
@@ -180,11 +178,7 @@ def check_datavia() -> str:
 def check_dtro() -> str:
     from streetworks.dtro import DTROClient, Environment
 
-    env = (
-        Environment.PRODUCTION
-        if _is_prod("DTRO_ENV", "integration")
-        else Environment.INTEGRATION
-    )
+    env = Environment.PRODUCTION if _is_prod("DTRO_ENV", "integration") else Environment.INTEGRATION
     with DTROClient(
         os.environ["DTRO_CLIENT_ID"],
         os.environ["DTRO_CLIENT_SECRET"],
@@ -193,9 +187,7 @@ def check_dtro() -> str:
     ) as dtro:
         # /events requires page, pageSize, since and to (all mandatory).
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-        events = dtro.search_events(
-            page=1, pageSize=1, since="2020-01-01T00:00:00", to=now
-        )
+        events = dtro.search_events(page=1, pageSize=1, since="2020-01-01T00:00:00", to=now)
         total = events.get("totalCount", "?") if isinstance(events, dict) else "?"
         info = dtro.token_info or {}
         scope = info.get("scope")

@@ -41,8 +41,8 @@ class Feed(str, Enum):
 
 
 class Region(str, Enum):
-    NORTHERN_IRELAND = ""          #: trunk roads and motorways, NI-wide
-    BELFAST = "belfast"            #: all roads in the Greater Belfast area
+    NORTHERN_IRELAND = ""  #: trunk roads and motorways, NI-wide
+    BELFAST = "belfast"  #: all roads in the Greater Belfast area
 
 
 @dataclass
@@ -56,11 +56,11 @@ class RoadworksItem:
     published: datetime | None = None
     guid: str | None = None
     # --- best-effort extractions ----------------------------------------- #
-    closure_type: str | None = None      # "Road closure", "Lane Closure", ...
-    promoter: str | None = None          # "BT Openreach", "NI Water", ...
+    closure_type: str | None = None  # "Road closure", "Lane Closure", ...
+    promoter: str | None = None  # "BT Openreach", "NI Water", ...
     start_date: date | None = None
     end_date: date | None = None
-    operating_times: str | None = None   # "Daily 09:30 to 16:30", "Overnight"
+    operating_times: str | None = None  # "Daily 09:30 to 16:30", "Overnight"
     diversion: bool = False
     traffic_control: bool = False
     road: str | None = None

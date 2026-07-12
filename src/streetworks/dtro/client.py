@@ -55,9 +55,11 @@ class DTROClient:
         timeout: float = 60.0,
         retry: RetryConfig | None = None,
     ) -> None:
-        self.base = environment.base if isinstance(environment, Environment) else str(
-            environment
-        ).rstrip("/")
+        self.base = (
+            environment.base
+            if isinstance(environment, Environment)
+            else str(environment).rstrip("/")
+        )
         self.app_id = app_id
         self._transport = SyncTransport(timeout=timeout, retry=retry)
         self._oauth = SyncClientCredentials(
@@ -130,9 +132,7 @@ class DTROClient:
         if gzip:
             content = gzip_module.compress(content)
             filename = filename if filename.endswith(".gz") else f"{filename}.gz"
-        response = self.request(
-            "POST", "dtros/createFromFile", files={"file": (filename, content)}
-        )
+        response = self.request("POST", "dtros/createFromFile", files={"file": (filename, content)})
         return response.json()
 
     def update_dtro_from_file(
@@ -178,13 +178,10 @@ class DTROClient:
         import importlib
 
         try:
-            module = importlib.import_module(
-                f"streetworks.dtro.models.{version}"
-            )
+            module = importlib.import_module(f"streetworks.dtro.models.{version}")
         except ModuleNotFoundError as exc:
             raise ValueError(
-                f"No generated D-TRO models for {version!r}. "
-                "Available today: 'v3_5_1'."
+                f"No generated D-TRO models for {version!r}. Available today: 'v3_5_1'."
             ) from exc
         module.Model.model_validate(payload)
         return payload
@@ -262,9 +259,11 @@ class AsyncDTROClient:
         timeout: float = 60.0,
         retry: RetryConfig | None = None,
     ) -> None:
-        self.base = environment.base if isinstance(environment, Environment) else str(
-            environment
-        ).rstrip("/")
+        self.base = (
+            environment.base
+            if isinstance(environment, Environment)
+            else str(environment).rstrip("/")
+        )
         self.app_id = app_id
         self._transport = AsyncTransport(timeout=timeout, retry=retry)
         self._oauth = AsyncClientCredentials(
@@ -284,9 +283,7 @@ class AsyncDTROClient:
 
     async def request(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
         url = f"{self.base}/{path.lstrip('/')}"
-        return await self._transport.request(
-            method, url, header_provider=self._headers, **kwargs
-        )
+        return await self._transport.request(method, url, header_provider=self._headers, **kwargs)
 
     async def get_dtro(self, dtro_id: str) -> JSON:
         return (await self.request("GET", f"dtros/{dtro_id}")).json()
@@ -301,9 +298,7 @@ class AsyncDTROClient:
         return (await self.request("POST", "dtros/createFromBody", json=payload)).json()
 
     async def update_dtro(self, dtro_id: str, payload: JSON) -> JSON:
-        return (
-            await self.request("PUT", f"dtros/updateFromBody/{dtro_id}", json=payload)
-        ).json()
+        return (await self.request("PUT", f"dtros/updateFromBody/{dtro_id}", json=payload)).json()
 
     async def delete_dtro(self, dtro_id: str) -> None:
         await self.request("DELETE", f"dtros/{dtro_id}")
@@ -316,9 +311,7 @@ class AsyncDTROClient:
             )
         return {"App-Id": self.app_id}
 
-    async def create_provisions(
-        self, provisions: list[JSON], *, dtro_id: str | None = None
-    ) -> Any:
+    async def create_provisions(self, provisions: list[JSON], *, dtro_id: str | None = None) -> Any:
         params = {"dtroId": dtro_id} if dtro_id else None
         return (
             await self.request(
@@ -341,9 +334,7 @@ class AsyncDTROClient:
         ).json()
 
     async def delete_provision(self, provision_id: str) -> None:
-        await self.request(
-            "DELETE", f"provisions/{provision_id}", headers=self._app_id_header()
-        )
+        await self.request("DELETE", f"provisions/{provision_id}", headers=self._app_id_header())
 
     async def schema_versions(self) -> Any:
         return (await self.request("GET", "schemas/versions")).json()

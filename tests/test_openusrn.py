@@ -72,9 +72,7 @@ def test_discovers_layer_and_looks_up_usrn(gpkg_path):
         assert db.count() == 2
         street = db.get(33909869)
         assert street.usrn == 33909869
-        assert street.geometry == (
-            "LINESTRING (424000.5 542000.25, 424100 542050)"
-        )
+        assert street.geometry == ("LINESTRING (424000.5 542000.25, 424100 542050)")
         assert db.get("33909869").usrn == 33909869  # string USRNs accepted
         assert db.get(999) is None
 
@@ -93,9 +91,7 @@ def test_iter_streets(gpkg_path):
 def test_wkb_decoder_handles_multilinestring_and_point():
     inner = wkb_linestring([(1.0, 2.0), (3.0, 4.0)])
     multi = struct.pack("<BII", 1, 5, 1) + inner
-    assert gpkg_geometry_to_wkt(gpkg_blob(multi)) == (
-        "MULTILINESTRING ((1 2, 3 4))"
-    )
+    assert gpkg_geometry_to_wkt(gpkg_blob(multi)) == ("MULTILINESTRING ((1 2, 3 4))")
     point = struct.pack("<BI2d", 1, 1, 5.5, 6.5)
     assert gpkg_geometry_to_wkt(gpkg_blob(point)) == "POINT (5.5 6.5)"
     assert gpkg_geometry_to_wkt(None) is None
@@ -157,8 +153,7 @@ def test_wkb_decoder_handles_iso_z_multilinestring():
     wkt = gpkg_geometry_to_wkt(gpkg_blob(multi_z))
     # Z is read correctly (keeping the stream aligned) and WKT emitted 2D
     assert wkt == (
-        "MULTILINESTRING ((424000.5 542000.25, 424100 542050), "
-        "(424100 542050, 424200 542100))"
+        "MULTILINESTRING ((424000.5 542000.25, 424100 542050), (424100 542050, 424200 542100))"
     )
 
 

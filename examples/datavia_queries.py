@@ -18,8 +18,12 @@ with DataViaClient(
     print(len(nearby.get("features", [])), "streets within 100m")
 
     # Special Engineering Difficulty lines intersecting a polygon
-    ring = [(-0.140162, 50.823943), (-0.140162, 50.826413),
-            (-0.136653, 50.826413), (-0.136653, 50.823943)]
+    ring = [
+        (-0.140162, 50.823943),
+        (-0.140162, 50.826413),
+        (-0.136653, 50.826413),
+        (-0.136653, 50.823943),
+    ]
     sed = dv.get_features(
         Layer.SPECIAL_DESIGNATION_LINES,
         filter_fragment=filters.and_(

@@ -18,12 +18,16 @@ with SRWRClient() as srwr:
         for phase in activity.phases:
             status = describe("activity_status", phase.activity_status)
             works = describe("works_type", phase.works_type)
-            print(f"{activity.activity_id} {record.activity_reference}: "
-                  f"{works} - {status} @ {phase.location}")
+            print(
+                f"{activity.activity_id} {record.activity_reference}: "
+                f"{works} - {status} @ {phase.location}"
+            )
         for up in activity.undertaker_phases:
-            if up.traffic_management_type and describe(
-                "traffic_management_type", up.traffic_management_type
-            ) == "Road Closure":
+            if (
+                up.traffic_management_type
+                and describe("traffic_management_type", up.traffic_management_type)
+                == "Road Closure"
+            ):
                 road_closures += 1
 
     print(f"\n{road_closures} phases involve a full road closure")

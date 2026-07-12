@@ -75,14 +75,10 @@ class OpenUSRNClient:
         format. Each entry carries ``url``, ``fileName``, ``format`` and
         ``size`` (bytes)."""
         params = {"format": file_format} if file_format else None
-        response = self._transport.request(
-            "GET", f"{self.product_url}/downloads", params=params
-        )
+        response = self._transport.request("GET", f"{self.product_url}/downloads", params=params)
         return response.json()
 
-    def download(
-        self, dest: str | Path, *, file_format: str = "GeoPackage"
-    ) -> Path:
+    def download(self, dest: str | Path, *, file_format: str = "GeoPackage") -> Path:
         """Stream the product file to ``dest`` and return its path.
 
         The GeoPackage is ~300 MB; it is streamed in chunks, never held in
@@ -124,9 +120,7 @@ class AsyncOpenUSRNClient:
         client: httpx.AsyncClient | None = None,
     ):
         self.product_url = product_url.rstrip("/")
-        self._client = client or httpx.AsyncClient(
-            timeout=timeout, follow_redirects=True
-        )
+        self._client = client or httpx.AsyncClient(timeout=timeout, follow_redirects=True)
 
     async def product_info(self) -> Any:
         response = await self._client.get(self.product_url)
@@ -141,9 +135,7 @@ class AsyncOpenUSRNClient:
             _raise_for_response(response)
         return response.json()
 
-    async def download(
-        self, dest: str | Path, *, file_format: str = "GeoPackage"
-    ) -> Path:
+    async def download(self, dest: str | Path, *, file_format: str = "GeoPackage") -> Path:
         entries = await self.downloads(file_format=file_format)
         if not entries:
             raise ValueError(f"no {file_format!r} download available for Open USRN")

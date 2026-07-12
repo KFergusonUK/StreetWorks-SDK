@@ -86,9 +86,9 @@ def test_ni_feed_urls():
 
 @respx.mock
 def test_ni_client_fetches_and_parses():
-    respx.get(
-        "https://rss.trafficwatchni.com/trafficwatchni_roadworks_rss.xml"
-    ).mock(return_value=httpx.Response(200, content=NI_RSS.encode()))
+    respx.get("https://rss.trafficwatchni.com/trafficwatchni_roadworks_rss.xml").mock(
+        return_value=httpx.Response(200, content=NI_RSS.encode())
+    )
     with TrafficWatchNIClient() as twni:
         items = twni.fetch()
     assert len(items) == 2 and items[0].promoter == "BT Openreach"

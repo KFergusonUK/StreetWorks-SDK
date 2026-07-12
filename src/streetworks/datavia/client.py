@@ -108,9 +108,7 @@ def _wms_layer_names(layers: Layer | str | Sequence[Layer | str]) -> str:
     pass through unchanged."""
     if isinstance(layers, (Layer, str)):
         layers = [layers]
-    names = (
-        layer.value if isinstance(layer, Layer) else str(layer) for layer in layers
-    )
+    names = (layer.value if isinstance(layer, Layer) else str(layer) for layer in layers)
     return ",".join(n.removeprefix("ms:") for n in names)
 
 
@@ -274,9 +272,16 @@ class DataViaClient(_DataViaBase):
             "GET",
             self.service_url,
             params=_wms_map_params(
-                layers, bbox, width=width, height=height, crs=crs,
-                image_format=image_format, styles=styles,
-                transparent=transparent, version=version, extra=extra,
+                layers,
+                bbox,
+                width=width,
+                height=height,
+                crs=crs,
+                image_format=image_format,
+                styles=styles,
+                transparent=transparent,
+                version=version,
+                extra=extra,
             ),
             header_provider=self._headers,
         )
@@ -304,9 +309,16 @@ class DataViaClient(_DataViaBase):
         JSON when ``info_format`` is JSON, else the response text.
         """
         params = _wms_map_params(
-            layers, bbox, width=width, height=height, crs=crs,
-            image_format="image/png", styles="", transparent=True,
-            version=version, extra={},
+            layers,
+            bbox,
+            width=width,
+            height=height,
+            crs=crs,
+            image_format="image/png",
+            styles="",
+            transparent=True,
+            version=version,
+            extra={},
         )
         params["request"] = "GetFeatureInfo"
         params["query_layers"] = params["layers"]
@@ -380,9 +392,7 @@ class DataViaClient(_DataViaBase):
         response = self._transport.request(
             "GET",
             self.service_url,
-            params=self._build_get_params(
-                layer, srs=srs, start_index=start_index, count=count
-            ),
+            params=self._build_get_params(layer, srs=srs, start_index=start_index, count=count),
             header_provider=self._headers,
         )
         return _decode(response, "geojson")
@@ -540,9 +550,16 @@ class AsyncDataViaClient(_DataViaBase):
             "GET",
             self.service_url,
             params=_wms_map_params(
-                layers, bbox, width=width, height=height, crs=crs,
-                image_format=image_format, styles=styles,
-                transparent=transparent, version=version, extra=extra,
+                layers,
+                bbox,
+                width=width,
+                height=height,
+                crs=crs,
+                image_format=image_format,
+                styles=styles,
+                transparent=transparent,
+                version=version,
+                extra=extra,
             ),
             header_provider=self._headers,
         )
@@ -564,9 +581,16 @@ class AsyncDataViaClient(_DataViaBase):
         **extra: Any,
     ) -> Any:
         params = _wms_map_params(
-            layers, bbox, width=width, height=height, crs=crs,
-            image_format="image/png", styles="", transparent=True,
-            version=version, extra={},
+            layers,
+            bbox,
+            width=width,
+            height=height,
+            crs=crs,
+            image_format="image/png",
+            styles="",
+            transparent=True,
+            version=version,
+            extra={},
         )
         params["request"] = "GetFeatureInfo"
         params["query_layers"] = params["layers"]

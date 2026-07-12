@@ -120,7 +120,4 @@ class Situation:
         return [r for r in self.records if not r.is_roadworks]
 
     def __repr__(self) -> str:
-        return (
-            f"<Situation {self.id}: {len(self.roadworks)} works, "
-            f"{len(self.measures)} measures>"
-        )
+        return f"<Situation {self.id}: {len(self.roadworks)} works, {len(self.measures)} measures>"
