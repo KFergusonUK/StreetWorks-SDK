@@ -218,6 +218,22 @@ def check_irca() -> str:
     return f"{len(situations):,} roadworks situations ({works:,} works records)"
 
 
+def check_bisonfute() -> str:
+    """Bison Futé/the DIRs (France, DATEX II v2) needs no credentials -
+    confirmed live and reliably reachable (see streetworks.datex2.bisonfute)."""
+    from streetworks.datex2 import BisonFuteClient
+    from streetworks.datex2.bisonfute import dir_regions
+
+    with BisonFuteClient() as bf:
+        situations = list(bf.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    distinct_regions = len(set(dir_regions(situations).values()))
+    return (
+        f"{len(situations):,} roadworks situations ({works:,} works records) "
+        f"across {distinct_regions} DIR regions"
+    )
+
+
 def check_vegvesen() -> str:
     """Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
     streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
@@ -488,6 +504,8 @@ def main() -> int:
     reporter.check("DATEX II (Digitraffic/Finland)", [], check_digitraffic)
     # IRCA (Iceland) needs no credentials
     reporter.check("DATEX II (IRCA/Iceland)", [], check_irca)
+    # Bison Fute (France) needs no credentials
+    reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

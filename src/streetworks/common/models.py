@@ -59,10 +59,20 @@ class Coordinate:
     never silently converted. UK register/gazetteer providers use British
     National Grid (``EPSG:27700`` easting/northing); DATEX providers use
     WGS84 (``EPSG:4326`` latitude/longitude). Mixed-CRS comparisons are the
-    caller's informed choice, not something this SDK guesses at."""
+    caller's informed choice, not something this SDK guesses at.
+
+    ``value`` is always one representative point - the first vertex, for a
+    line - so every existing point-only consumer keeps working unchanged.
+    ``points`` is ``None`` for a genuine point location; when the source
+    geometry is a real line (WZDx/Street Manager LineString, a DATEX
+    ``LinearLocation``/TPEG segment), it holds every vertex in the same
+    order/axis convention as ``value``, with ``points[0] == value`` always.
+    Populated only where a converter has real multi-vertex geometry to give
+    - never synthesised from a single point."""
 
     value: tuple[float, float]
     crs: str
+    points: tuple[tuple[float, float], ...] | None = None
 
 
 @dataclass

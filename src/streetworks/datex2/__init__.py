@@ -9,11 +9,16 @@ path), Fintraffic's Digitraffic open data for Finland (its own Simple-JSON
 schema, not a DATEX-II serialisation - see
 :mod:`streetworks.datex2.digitraffic` for the field-by-field mapping),
 IRCA/Vegagerðin's DATEX II snapshotPull service for Iceland (credential-free
-- see :mod:`streetworks.datex2.irca`), and Statens vegvesen's DATEX II
-snapshotPull service for Norway (**pending live verification** - see
-:mod:`streetworks.datex2.vegvesen`).
+- see :mod:`streetworks.datex2.irca`), Bison Futé/the DIRs' DATEX II v2 feed
+for France (credential-free - see :mod:`streetworks.datex2.bisonfute`), and
+Statens vegvesen's DATEX II snapshotPull service for Norway (**pending live
+verification** - see :mod:`streetworks.datex2.vegvesen`).
 """
 
+from .bisonfute import BASE_URL as BISONFUTE_BASE_URL
+from .bisonfute import CONTENT_PATH as BISONFUTE_CONTENT_PATH
+from .bisonfute import BisonFuteClient
+from .bisonfute import dir_regions as bisonfute_dir_regions
 from .digitraffic import BASE_URL as DIGITRAFFIC_BASE_URL
 from .digitraffic import DigitrafficClient
 from .digitraffic import parse_situations as parse_digitraffic_situations
@@ -54,6 +59,10 @@ __all__ = [
     "IcelandClient",
     "IRCA_BASE_URL",
     "IRCA_SITUATION_ENDPOINT",
+    "BisonFuteClient",
+    "BISONFUTE_BASE_URL",
+    "BISONFUTE_CONTENT_PATH",
+    "bisonfute_dir_regions",
     "VegvesenClient",
     "VEGVESEN_BASE_URL",
     "NVDB_BASE_URL",

@@ -56,6 +56,34 @@ def test_coordinate_axis_order_matches_from_datex2_for_the_same_point():
     assert wzdx_coordinate.value == datex_coordinate.value == (lat, lon)
 
 
+def test_from_wzdx_linestring_geometry_survives_as_coordinate_points():
+    # A real LineString used to collapse to a single point (geometry.point)
+    # - Coordinate.points now carries every vertex, flipped the same way as
+    # the single-point case, with value staying the first for backward
+    # compatibility.
+    native_lon_lat = ((-71.5, 42.5), (-71.4, 42.6), (-71.3, 42.7))
+    event = RoadEvent(
+        id="wz-line",
+        event_type="work-zone",
+        geometry=Geometry(kind="LineString", points=native_lon_lat),
+    )
+    coordinate = from_wzdx([event])[0].coordinate
+
+    assert coordinate is not None
+    assert coordinate.value == (42.5, -71.5)
+    assert coordinate.points == ((42.5, -71.5), (42.6, -71.4), (42.7, -71.3))
+
+
+def test_from_wzdx_single_point_geometry_leaves_points_none():
+    event = RoadEvent(
+        id="wz-point",
+        event_type="work-zone",
+        geometry=Geometry(kind="Point", points=((-71.5, 42.5),)),
+    )
+    coordinate = from_wzdx([event])[0].coordinate
+    assert coordinate.points is None
+
+
 def test_from_wzdx_skips_non_work_zone_events():
     events = parse_road_events(_fixture("quebec"))
     assert any(e.event_type == "detour" for e in events)  # fixture has one

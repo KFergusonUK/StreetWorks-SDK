@@ -4,7 +4,8 @@ Serves all DATEX adapters unchanged - NDW (Netherlands, XML), National
 Highways (England SRN, JSON), Digitraffic (Finland, its own Simple-JSON -
 see :mod:`streetworks.datex2.digitraffic` for why it still produces this
 same model despite not being DATEX-shaped itself), IRCA (Iceland, XML -
-:mod:`streetworks.datex2.irca`), and Vegvesen (Norway, **pending live
+:mod:`streetworks.datex2.irca`), Bison Futé (France, XML v2 -
+:mod:`streetworks.datex2.bisonfute`), and Vegvesen (Norway, **pending live
 verification** - see :mod:`streetworks.datex2.vegvesen`) all normalise onto
 the same
 :class:`~streetworks.datex2.Situation`/:class:`~streetworks.datex2.SituationRecord`
@@ -44,6 +45,13 @@ guessing which adapter produced the Situation:
   feed, no region/authority-equivalent field exists there at all (see
   :mod:`streetworks.datex2.irca`). ``source_name`` also defaults to
   ``None`` here since no record carries a ``<source>`` element.
+- Bison Futé (France): ``from_datex2(situation, territory="France",
+  administrative_area=streetworks.datex2.bisonfute.dir_regions(situations).get(situation.id))``
+  - ``source_name`` there is a fine-grained sub-office (e.g. ``"CEI de
+  Rostrenen"``), not the DIR region; the DIR name (e.g. ``"Direction
+  interdépartementale des routes/DIR Sud-Ouest"``) is genuinely stated but
+  not on the shared model, so ``dir_regions()`` reads it from ``.raw``
+  instead (see :mod:`streetworks.datex2.bisonfute`).
 - Vegvesen (Norway, **pending live verification** - see
   :mod:`streetworks.datex2.vegvesen`): ``from_datex2(situation,
   territory="Norway")`` - no ``administrative_area`` is passed because no
@@ -85,12 +93,25 @@ def _location_description(record: SituationRecord) -> str | None:
     return text or None
 
 
+def _coordinate(location_points: tuple[tuple[float, float], ...]) -> Coordinate | None:
+    """DATEX ``Location.points`` is already (latitude, longitude), no flip
+    needed. 2+ points is real line geometry (a ``LinearLocation``/posList,
+    or a TPEG segment's from/to pair) - kept whole on ``points``, not just
+    the first vertex; see ``Coordinate`` for why that used to be a loss."""
+    if not location_points:
+        return None
+    return Coordinate(
+        value=location_points[0],
+        crs="EPSG:4326",
+        points=location_points if len(location_points) > 1 else None,
+    )
+
+
 def _to_site(record: SituationRecord) -> WorksSite:
     status = record.validity.status
     confidence = _date_confidence(status)
     overall_start = record.validity.overall_start
     overall_end = record.validity.overall_end
-    point = record.location.point
     # A "verified" status confirms the site has genuinely started; the end
     # is still just the validity window's expectation either way, so only
     # actual_start (never actual_end) is inferred from it.
@@ -106,7 +127,7 @@ def _to_site(record: SituationRecord) -> WorksSite:
         works_type=works_type,
         status=status,
         location_description=_location_description(record),
-        coordinate=Coordinate(value=point, crs="EPSG:4326") if point is not None else None,
+        coordinate=_coordinate(record.location.points),
         proposed_start=overall_start,
         proposed_end=overall_end,
         actual_start=actual_start,
@@ -133,9 +154,7 @@ def from_datex2(
     return Works(
         reference=situation.id,
         promoter=first.source_name if first else None,
-        coordinate=Coordinate(value=first.location.point, crs="EPSG:4326")
-        if first is not None and first.location.point is not None
-        else None,
+        coordinate=_coordinate(first.location.points) if first is not None else None,
         territory=territory,
         administrative_area=(
             administrative_area

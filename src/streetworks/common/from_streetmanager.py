@@ -57,10 +57,10 @@ def _dt(value: str | datetime | None) -> datetime | None:
 
 def _coordinate(works_coordinates: JSON | None) -> Coordinate | None:
     """``works_coordinates`` is BNG GeoJSON - a ``Point`` or a ``LineString``
-    observed live. A LineString collapses to its first vertex (the same
-    "first point stands for the location" convention DATEX's own
-    ``Location.point`` uses for linear locations) - full geometry stays
-    reachable via ``.raw``."""
+    observed live. A LineString's full vertex list is kept on
+    ``Coordinate.points`` (``value`` is still just the first, for point-only
+    consumers) - it used to collapse to a single point; see ``Coordinate``
+    for why that was a genuine loss, not a convention."""
     if not works_coordinates:
         return None
     coordinates = works_coordinates.get("coordinates")
@@ -68,8 +68,10 @@ def _coordinate(works_coordinates: JSON | None) -> Coordinate | None:
     if geometry_type == "Point" and coordinates:
         return Coordinate(value=(coordinates[0], coordinates[1]), crs="EPSG:27700")
     if geometry_type == "LineString" and coordinates:
-        first = coordinates[0]
-        return Coordinate(value=(first[0], first[1]), crs="EPSG:27700")
+        points = tuple((c[0], c[1]) for c in coordinates)
+        return Coordinate(
+            value=points[0], crs="EPSG:27700", points=points if len(points) > 1 else None
+        )
     return None
 
 

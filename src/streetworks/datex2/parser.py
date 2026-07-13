@@ -100,6 +100,10 @@ def _first_descendant(element: Element, name: str) -> Element | None:
     return None
 
 
+def _descendants(element: Element, name: str) -> list[Element]:
+    return [d for d in element.iter() if _local(d.tag) == name]
+
+
 # --------------------------------------------------------------------------- #
 # Section parsers
 # --------------------------------------------------------------------------- #
@@ -138,13 +142,34 @@ def _parse_location(record: Element) -> Location:
     kind = _xsi_local(location) or None
     points: list[tuple[float, float]] = []
 
-    # Point locations: pointByCoordinates/pointCoordinates/latitude+longitude
-    coordinates = _first_descendant(location, "pointCoordinates")
-    if coordinates is not None:
-        lat = _deep_text(coordinates, "latitude")
-        lon = _deep_text(coordinates, "longitude")
-        if lat and lon:
-            points.append((float(lat), float(lon)))
+    # TPEG linear locations: a segment's `from`/`to` endpoints, each with its
+    # own pointCoordinates - captured as a real 2-point line (from, then to),
+    # not just whichever endpoint happens to come first in document order.
+    # Confirmed live (France/Bison Fute): `to` is listed before `from`, so a
+    # plain "first pointCoordinates anywhere" search silently dropped `from`
+    # - a real loss, not a documented convention, since both are genuinely
+    # present.
+    tpeg_linear = _first_descendant(location, "tpegLinearLocation")
+    if tpeg_linear is not None:
+        for tag in ("from", "to"):
+            endpoint = _find(tpeg_linear, tag)
+            coordinates = (
+                _first_descendant(endpoint, "pointCoordinates") if endpoint is not None else None
+            )
+            if coordinates is None:
+                continue
+            lat = _deep_text(coordinates, "latitude")
+            lon = _deep_text(coordinates, "longitude")
+            if lat and lon:
+                points.append((float(lat), float(lon)))
+    else:
+        # Point locations: pointByCoordinates/pointCoordinates/latitude+longitude
+        coordinates = _first_descendant(location, "pointCoordinates")
+        if coordinates is not None:
+            lat = _deep_text(coordinates, "latitude")
+            lon = _deep_text(coordinates, "longitude")
+            if lat and lon:
+                points.append((float(lat), float(lon)))
 
     # Linear locations: gmlLineString/posList ("lon lat lon lat ..." or
     # "lat lon ..." depending on srsName; DATEX II uses lat/lon pairs).
@@ -166,7 +191,18 @@ def _parse_location(record: Element) -> Location:
     )
 
     road_number = _text(_first_descendant(location, "roadNumber"))
-    alert_c = _text(_first_descendant(location, "specificLocation"))
+    # Prefer the human-readable name (alertCLocationName, multilingual) over
+    # the raw numeric location-table code (specificLocation) - confirmed
+    # live (France/Bison Fute, 787/787 real Alert-C blocks) that a name is
+    # always present. A linear location can carry two (primary/secondary
+    # point) - if the first is an empty placeholder, the second's real name
+    # is tried before giving up (same "empty listed first" pattern already
+    # handled in _multilingual, one level up). Falls back to the raw code
+    # only if every name found is empty/absent.
+    alert_c = next(
+        (name for e in _descendants(location, "alertCLocationName") if (name := _multilingual(e))),
+        None,
+    ) or _text(_first_descendant(location, "specificLocation"))
 
     return Location(
         kind=kind,

@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [0.7.0] - 2026-07-12
+## [0.7.0] - 2026-07-13
 
 ### Added
 
@@ -77,8 +77,55 @@
   about Norway's own feed shape). Blocked on credentials for Phase 2 live
   verification - not usable against real Norwegian data yet; see the module
   docstring for the three explicitly open questions.
+- **France: Bison Futé/the DIRs** (`streetworks.datex2.bisonfute`) - genuine
+  DATEX II **v2** XML for the non-concessionary national road network,
+  reused through the existing shared parser (the `_full` variant, like
+  Iceland - `.raw` populated). Credential-free, verified against the live
+  feed (256 situations, 170 roadworks: 150 `MaintenanceWorks`, 20
+  `ConstructionWorks`). Every single roadworks record (170/170) carries
+  WGS84 coordinates alongside an Alert-C reference - coordinates taken,
+  Alert-C preserved not decoded. `administrative_area` (the DIR region,
+  e.g. `"Direction interdépartementale des routes/DIR Sud-Ouest"`) is
+  genuinely stated on 170/170 roadworks records but on a different, coarser
+  field than the shared model's `source_name` (a fine sub-office); a new
+  `dir_regions()` helper reads it from each record's `.raw` XML directly,
+  the same shape of solution as Digitraffic's `provinces()`. Published
+  under the Licence Ouverte / Open Licence 2.0 (Etalab), confirmed via the
+  official data.gouv.fr dataset page. France's real data (TPEG linear
+  locations, Alert-C names) is what surfaced two genuine, pre-existing gaps
+  in the *shared* DATEX parser - see Fixed, below.
+- **`Coordinate` gained a `points` field.** Every converter with real
+  multi-vertex line geometry available (WZDx's `LineString`, Street
+  Manager's `LineString`, DATEX's `LinearLocation`/TPEG segments) used to
+  collapse it to a single point when building the common model - a real,
+  confirmed loss (not a documented convention, despite one docstring
+  framing it that way), not just a France-specific gap. `value` stays one
+  representative point (the first vertex) for every existing point-only
+  consumer; `points` now carries the whole line when one genuinely exists
+  (`None` for a real point location), with `points[0] == value` always.
+  Fixed in `from_wzdx`, `from_streetmanager`, and `from_datex2` together,
+  once, rather than per-provider.
 
 ### Fixed
+
+- **DATEX `alert_c_location` returned a raw numeric location-table code
+  instead of the human-readable name.** The shared XML parser read
+  `specificLocation` (e.g. `"17855"`), ignoring the sibling
+  `alertCLocationName` (e.g. `"Fos"`) that actually states the name -
+  confirmed on France's live feed, 787/787 real Alert-C blocks carry both.
+  A linear location can state two points (primary/secondary); if the first
+  name found is an empty placeholder, later ones are tried before falling
+  back to the raw code - the same "skip empty, take the first real one"
+  discipline as the multilingual-comments fix, one level up. Not a
+  France-specific bug: it had simply never been exercised by real Alert-C
+  data before (Digitraffic has its own, different, already-correct code
+  path).
+- **DATEX TPEG linear locations only kept one endpoint's coordinates.** A
+  segment's `from`/`to` endpoints (each with their own `pointCoordinates`)
+  used to collapse to whichever one the parser's generic "first
+  `pointCoordinates` found anywhere" search happened to hit first (`to`,
+  on France's real feed) - silently dropping the other, genuinely-present
+  endpoint. Now captured as a real 2-point line (`from` then `to`).
 
 - **Multilingual DATEX fields could silently return an empty string.** The
   shared XML parser's `_multilingual()` helper took the *first* `<value>`

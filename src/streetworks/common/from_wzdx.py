@@ -72,12 +72,18 @@ def _coordinate(geometry: Geometry) -> Coordinate | None:
     EPSG:4326 Coordinate in this SDK (see from_datex2) is (latitude,
     longitude), traced directly from how DATEX's own XML lat/lon elements
     populate Location.points with no flip. Swap the pair here - not just
-    relabel it - so Coordinate.value means the same thing everywhere."""
-    point = geometry.point
-    if point is None:
+    relabel it - so Coordinate.value means the same thing everywhere.
+
+    A real ``LineString`` (2+ points) keeps every vertex on ``points``,
+    flipped the same way - it used to collapse to just the first point;
+    see ``Coordinate`` for why that was a genuine loss, not a convention."""
+    points = geometry.points
+    if not points:
         return None
-    lon, lat = point
-    return Coordinate(value=(lat, lon), crs="EPSG:4326")
+    flipped = tuple((lat, lon) for lon, lat in points)
+    return Coordinate(
+        value=flipped[0], crs="EPSG:4326", points=flipped if len(flipped) > 1 else None
+    )
 
 
 def _location_description(event: RoadEvent) -> str | None:

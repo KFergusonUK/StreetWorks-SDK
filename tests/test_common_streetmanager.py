@@ -67,8 +67,13 @@ def test_paa_and_major_permit_share_one_works_and_paa_is_planning_not_a_site():
     assert works.plannings[0].works_reference == "UG27724003165"
 
     site = works.sites[0]
-    # LineString geometry collapses to its first vertex.
+    # value is still the first vertex (back-compat); points now keeps the
+    # whole LineString - it used to collapse to just the first vertex.
     assert site.coordinate.value == (428390.419828733, 525491.263508591)
+    assert site.coordinate.points == (
+        (428390.419828733, 525491.263508591),
+        (428482.606090606, 525501.531152278),
+    )
     assert site.actual_start == datetime(2025, 11, 19, 9, tzinfo=timezone.utc)
     assert site.actual_end == datetime(2025, 11, 19, 10, tzinfo=timezone.utc)
     assert site.date_confidence is DateConfidence.VERIFIED

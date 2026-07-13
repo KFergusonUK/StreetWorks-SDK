@@ -26,7 +26,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), and IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), and Bison Futé (France, XML v2; no credentials) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -60,7 +60,8 @@ Open Data (parsed against real published daily and monthly extracts),
 OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
-Finland, and IRCA/Iceland (both parsed against real live feeds).
+Finland, IRCA/Iceland, and Bison Futé/France (all parsed against real live
+feeds).
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -463,6 +464,43 @@ with mandatory attribution — see `streetworks/datex2/irca.py`'s module
 docstring for the exact required wording and the full field-by-field
 mapping.
 
+**France's Bison Futé/the DIRs** publish roadworks for the non-concessionary
+national road network (the state-run RRN) credential-free, as genuine
+DATEX II **v2** XML — again reused through the same shared parser, no
+bespoke path needed:
+
+```python
+from streetworks.common import from_datex2
+from streetworks.datex2.bisonfute import BisonFuteClient, dir_regions
+
+with BisonFuteClient() as bf:
+    situations = list(bf.iter_roadworks())
+regions = dir_regions(situations)  # DIR region isn't on the shared model
+for situation in situations:
+    works = from_datex2(
+        situation, territory="France",
+        administrative_area=regions.get(situation.id),
+    )
+```
+
+Verified against the live feed (2026-07, 256 situations, 170 roadworks):
+every single roadworks record carries WGS84 coordinates *and* an Alert-C
+reference side by side — coordinates are taken, Alert-C is preserved (not
+decoded). France's real data is what surfaced two genuine gaps in the
+*shared* DATEX parser, now fixed: `alert_c_location` used to return a raw
+numeric location-table code instead of the human-readable name sitting
+right next to it, and TPEG linear locations (a segment's `from`/`to`
+endpoints) used to keep only whichever endpoint came first in document
+order, silently dropping the other — both fixed in
+`streetworks/datex2/parser.py`, and the 2-point line now survives all the
+way to `Coordinate.points` (see below). `administrative_area` (the DIR
+region, e.g. `"DIR Sud-Ouest"`) is genuinely stated but on a different,
+coarser field than the shared model's `source_name` — `dir_regions()`
+reads it from each record's `.raw` XML directly. Published under the
+**Licence Ouverte / Open Licence 2.0 (Etalab)** — see
+`streetworks/datex2/bisonfute.py`'s module docstring for the attribution
+wording and full field-by-field mapping.
+
 ## WZDx (US Work Zone Data Exchange)
 
 WZDx is the US standard for work zone data — GeoJSON-based, distinct from
@@ -621,6 +659,13 @@ trustworthiness without provider-specific knowledge — and every one keeps
 `.raw` pointing back at its exact source record(s), so converting never
 loses anything.
 
+`Coordinate.value` is always one representative point, so every point-only
+consumer keeps working unchanged; `Coordinate.points` holds every vertex
+when the source geometry is a real line (a WZDx/Street Manager `LineString`,
+a DATEX `LinearLocation`/TPEG segment) — `points[0] == value` always. This
+used to just collapse to `value` across every converter that had line
+geometry available; now it survives.
+
 `Works` also carries location *provenance*, not location *geography*:
 `territory` (country-level — UK nations count as countries: `"Scotland"`,
 `"England"`, ..., plus `"USA"`, `"Netherlands"`) and `administrative_area`
@@ -637,8 +682,8 @@ record alone — see their docstrings for why — and take them as keyword
 arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
-Highways, Digitraffic/Finland, and IRCA/Iceland via the one shared
-converter), WZDx, TrafficWatchNI and Traffic Wales. UK Police stays outside
+Highways, Digitraffic/Finland, IRCA/Iceland, and Bison Futé/France via the
+one shared converter), WZDx, TrafficWatchNI and Traffic Wales. UK Police stays outside
 the works hierarchy entirely — it's a *context* provider (area-level crime as a
 safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
@@ -697,6 +742,13 @@ actually is.
       genuine DATEX II v3 XML over a SOAP `snapshotPull` interface, reused
       through the existing shared parser unchanged; verified against
       multiple independent live fetches, no credentials
+- [x] France (Bison Futé/the DIRs) DATEX adapter (`streetworks.datex2.bisonfute`)
+      — genuine DATEX II v2 XML for the non-concessionary national network,
+      reused through the existing shared parser; verified against the real
+      feed (256 situations, 170 roadworks, 100% coordinate coverage), no
+      credentials. Surfaced and fixed two real gaps in the shared parser
+      itself (`alert_c_location` name preference, TPEG linear from/to
+      geometry) - not France-specific bugs, just never exercised before
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -719,10 +771,10 @@ Grouped by the client shape they need:
 
 - **DATEX II adapters** (thin fetchers over the existing `streetworks.datex2`
   models, Finland/National-Highways-style where the source isn't DATEX-shaped
-  itself). Norway and Iceland are covered above (Iceland shipped, Norway
-  Phase 1). Further candidates: Denmark (Vejdirektoratet), Sweden
-  (Trafikverket — verify its SOAP/XML model is DATEX-compatible), Spain (DGT
-  NAP), France (Bison Futé). Access models vary from fully open to
+  itself). Norway, Iceland, and France are covered above (Iceland and France
+  shipped, Norway Phase 1). Further candidates: Denmark (Vejdirektoratet),
+  Sweden (Trafikverket — verify its SOAP/XML model is DATEX-compatible),
+  Spain (DGT NAP). Access models vary from fully open to
   registration/agreement-gated — confirm per country. Note Alert-C
   location-code decoding (numeric codes → geometry, not yet supported) is
   likely needed for some of these, unlike Finland's coordinate-carrying JSON.

@@ -254,6 +254,29 @@ def _irca_demo() -> None:
 
 attempt("IRCA (Iceland)", _irca_demo)
 
+# --- Bison Fute: French national roadworks, non-concessionary network (no credentials) ---
+
+section("Bison Fute / DIRs (France)")
+
+
+def _bisonfute_demo() -> None:
+    from streetworks.common import from_datex2
+    from streetworks.datex2.bisonfute import BisonFuteClient, dir_regions
+
+    with BisonFuteClient() as bf:
+        situations = list(bf.iter_roadworks())
+    regions = dir_regions(situations)
+    print(f"  {len(situations)} roadworks situations")
+    for situation in situations[:3]:
+        works = from_datex2(
+            situation, territory="France", administrative_area=regions.get(situation.id)
+        )
+        site = works.sites[0]
+        print("  ", works.administrative_area or "?", "-", site.works_type)
+
+
+attempt("Bison Fute (France)", _bisonfute_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")

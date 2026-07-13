@@ -7,9 +7,11 @@ actually carries all three real validityStatus values (active, planned,
 suspended), so it's what exercises date_confidence properly - the real
 Digitraffic (Finland) fixture, which has no lifecycle-status field at all
 and needs the province() lookup for administrative_area, the real IRCA
-(Iceland) fixture, and the Vegvesen (Norway) fixture - **pending live
-verification**, real DATEX data but from Iceland's sibling implementation,
-not Norway itself (see streetworks.datex2.vegvesen).
+(Iceland) fixture, the real Bison Futé (France) fixture - which needs the
+dir_regions() lookup the same shape of way, and exercises real TPEG linear
+geometry surviving as Coordinate.points - and the Vegvesen (Norway) fixture
+- **pending live verification**, real DATEX data but from Iceland's
+sibling implementation, not Norway itself (see streetworks.datex2.vegvesen).
 """
 
 import io
@@ -19,8 +21,10 @@ from pathlib import Path
 
 from streetworks.common import DateConfidence, SourceGrade, from_datex2
 from streetworks.datex2 import iter_situations, iter_situations_full
+from streetworks.datex2.bisonfute import dir_regions as bisonfute_dir_regions
 from streetworks.datex2.digitraffic import parse_situations as parse_digitraffic_situations
 from streetworks.datex2.digitraffic import provinces
+from streetworks.datex2.models import Location, Situation, SituationRecord, Validity
 from streetworks.datex2.nationalhighways import parse_situations
 
 V3_FEED = """<?xml version="1.0" encoding="UTF-8"?>
@@ -93,6 +97,7 @@ def test_from_datex2_ndw_maps_one_site_per_roadworks_record_only():
     assert works.administrative_area == "Provincie Limburg"
     assert works.coordinate.value == (50.857113, 5.8124113)
     assert works.coordinate.crs == "EPSG:4326"
+    assert works.coordinate.points is None  # a genuine point location, not a line
     assert works.source_grade is SourceGrade.OPERATOR
     # Only the MaintenanceWorks record becomes a site - the SpeedManagement
     # measure record is deliberately left out of the common model.
@@ -108,6 +113,30 @@ def test_from_datex2_ndw_maps_one_site_per_roadworks_record_only():
     assert site.actual_start is None
     assert site.location_description == "mainCarriageway"
     assert site.traffic_management == "Verminderd aantal rijstroken beschikbaar"
+
+
+def test_from_datex2_linear_location_survives_as_coordinate_points():
+    # A LinearLocation/posList with several vertices used to collapse to
+    # just the first one (Location.point) - Coordinate.points now carries
+    # the whole line, value staying the first vertex for compatibility.
+    situation = Situation(
+        id="linear-1",
+        records=[
+            SituationRecord(
+                id="linear-1-rec",
+                record_type="MaintenanceWorks",
+                validity=Validity(),
+                location=Location(
+                    kind="LinearLocation",
+                    points=((50.85, 5.81), (50.86, 5.82), (50.87, 5.83)),
+                ),
+            )
+        ],
+    )
+    works = from_datex2(situation, territory="Netherlands")
+    assert works.coordinate.value == (50.85, 5.81)
+    assert works.coordinate.points == ((50.85, 5.81), (50.86, 5.82), (50.87, 5.83))
+    assert works.sites[0].coordinate.points == ((50.85, 5.81), (50.86, 5.82), (50.87, 5.83))
 
 
 def test_from_datex2_without_territory_leaves_it_unset():
@@ -221,6 +250,24 @@ def test_from_datex2_vegvesen_norway_pending_live_verification():
         "Unnið við endurbyggingu vegarins, hann er grófur, ósléttur og "
         "seinfarinn, akið mjög varlega. Þetta er vinnusvæði!!"
     )
+
+
+def test_from_datex2_bisonfute_france():
+    fixture = Path(__file__).parent / "fixtures" / "bisonfute_content.xml"
+    situations = list(iter_situations_full(fixture))
+    regions = bisonfute_dir_regions([s for s in situations if s.roadworks])
+    situation = next(s for s in situations if s.id == "260122-001686")
+
+    works = from_datex2(
+        situation, territory="France", administrative_area=regions.get(situation.id)
+    )
+    assert works.territory == "France"
+    assert works.administrative_area == "Direction interdépartementale des routes/DIR Sud-Ouest"
+    assert works.source_grade is SourceGrade.OPERATOR
+    # Real TPEG linear geometry (both endpoints) survives all the way
+    # through to the common model, not just the first vertex.
+    assert works.coordinate.points == ((42.92285, 0.68384415), (42.908493, 0.6984161))
+    assert works.sites[0].coordinate.points == ((42.92285, 0.68384415), (42.908493, 0.6984161))
 
 
 def test_from_datex2_irca_iceland():

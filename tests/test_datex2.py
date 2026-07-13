@@ -184,6 +184,94 @@ def test_parses_linear_geometry_poslist():
     assert measure.location.points == ((50.85, 5.81), (50.86, 5.82), (50.87, 5.83))
 
 
+# Real shape confirmed on France/Bison Fute (DATEX II v2): a TPEG linear
+# location's from/to endpoints, each with their own pointCoordinates, plus
+# an alertCLinear carrying both a raw numeric code (specificLocation) and a
+# human-readable name (alertCLocationName) side by side.
+TPEG_LINEAR_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<d2LogicalModel xmlns:ns2="http://datex2.eu/schema/2/2_0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" modelBaseVersion="2">
+  <ns2:payloadPublication xsi:type="ns2:SituationPublication" lang="fr">
+    <ns2:situation id="FR_1">
+      <ns2:situationRecord xsi:type="ns2:MaintenanceWorks" id="FR_1_1" version="1">
+        <ns2:groupOfLocations xsi:type="ns2:Linear">
+          <ns2:tpegLinearLocation>
+            <ns2:to xsi:type="ns2:TpegNonJunctionPoint">
+              <ns2:pointCoordinates><ns2:latitude>42.908493</ns2:latitude><ns2:longitude>0.6984161</ns2:longitude></ns2:pointCoordinates>
+            </ns2:to>
+            <ns2:from xsi:type="ns2:TpegNonJunctionPoint">
+              <ns2:pointCoordinates><ns2:latitude>42.92285</ns2:latitude><ns2:longitude>0.68384415</ns2:longitude></ns2:pointCoordinates>
+            </ns2:from>
+          </ns2:tpegLinearLocation>
+          <ns2:alertCLinear xsi:type="ns2:AlertCMethod4Linear">
+            <ns2:alertCMethod4PrimaryPointLocation>
+              <ns2:alertCLocation>
+                <ns2:alertCLocationName><ns2:values>
+                  <ns2:value lang="fr">Fos</ns2:value>
+                </ns2:values></ns2:alertCLocationName>
+                <ns2:specificLocation>17855</ns2:specificLocation>
+              </ns2:alertCLocation>
+            </ns2:alertCMethod4PrimaryPointLocation>
+          </ns2:alertCLinear>
+          <ns2:linearWithinLinearElement>
+            <ns2:linearElement><ns2:roadNumber>N0125</ns2:roadNumber></ns2:linearElement>
+          </ns2:linearWithinLinearElement>
+        </ns2:groupOfLocations>
+        <ns2:roadMaintenanceType>roadworks</ns2:roadMaintenanceType>
+      </ns2:situationRecord>
+      <ns2:situationRecord xsi:type="ns2:ConstructionWorks" id="FR_1_2" version="1">
+        <ns2:groupOfLocations xsi:type="ns2:Linear">
+          <ns2:alertCLinear xsi:type="ns2:AlertCMethod4Linear">
+            <ns2:alertCMethod4PrimaryPointLocation>
+              <ns2:alertCLocation>
+                <ns2:alertCLocationName><ns2:values>
+                  <ns2:value lang="fr"/>
+                </ns2:values></ns2:alertCLocationName>
+                <ns2:specificLocation>19091</ns2:specificLocation>
+              </ns2:alertCLocation>
+            </ns2:alertCMethod4PrimaryPointLocation>
+            <ns2:alertCMethod4SecondaryPointLocation>
+              <ns2:alertCLocation>
+                <ns2:alertCLocationName><ns2:values>
+                  <ns2:value lang="fr">Pont-Cerda Tunnel du Puymorens</ns2:value>
+                </ns2:values></ns2:alertCLocationName>
+                <ns2:specificLocation>18533</ns2:specificLocation>
+              </ns2:alertCLocation>
+            </ns2:alertCMethod4SecondaryPointLocation>
+          </ns2:alertCLinear>
+        </ns2:groupOfLocations>
+      </ns2:situationRecord>
+    </ns2:situation>
+  </ns2:payloadPublication>
+</d2LogicalModel>
+"""
+
+
+def test_tpeg_linear_location_captures_both_endpoints():
+    # Both from/to endpoints must survive as a 2-point line - a plain
+    # "first pointCoordinates found anywhere" search used to silently drop
+    # whichever endpoint wasn't listed first (confirmed live: France lists
+    # `to` before `from`).
+    situations = list(iter_situations(io.BytesIO(TPEG_LINEAR_FEED.encode())))
+    works = situations[0].roadworks[0]
+    assert works.location.kind == "Linear"
+    assert works.location.points == ((42.92285, 0.68384415), (42.908493, 0.6984161))
+    assert works.location.road_number == "N0125"
+
+
+def test_alert_c_location_prefers_human_readable_name_over_raw_code():
+    situations = list(iter_situations(io.BytesIO(TPEG_LINEAR_FEED.encode())))
+    works = situations[0].roadworks[0]
+    assert works.location.alert_c_location == "Fos"  # not the raw "17855"
+
+
+def test_alert_c_location_tries_secondary_point_when_primary_name_is_empty():
+    situations = list(iter_situations(io.BytesIO(TPEG_LINEAR_FEED.encode())))
+    construction = situations[0].roadworks[1]
+    assert construction.record_type == "ConstructionWorks"
+    assert construction.location.alert_c_location == "Pont-Cerda Tunnel du Puymorens"
+
+
 def test_multilingual_skips_empty_placeholder_value():
     situations = list(iter_situations(io.BytesIO(EMPTY_PLACEHOLDER_FEED.encode())))
     comments = situations[0].roadworks[0].comments
