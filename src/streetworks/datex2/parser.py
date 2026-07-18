@@ -24,6 +24,7 @@ are opened transparently either way.
 from __future__ import annotations
 
 import gzip
+import logging
 from collections.abc import Iterator
 from pathlib import Path
 from typing import IO
@@ -36,6 +37,8 @@ from .models import Location, Period, Situation, SituationRecord, Validity
 __all__ = ["iter_situations", "iter_roadworks", "iter_situations_full", "iter_roadworks_full"]
 
 _XSI_TYPE = "{http://www.w3.org/2001/XMLSchema-instance}type"
+
+_logger = logging.getLogger(__name__)
 
 
 def _local(tag: str) -> str:
@@ -131,7 +134,7 @@ def _parse_validity(record: Element) -> Validity:
     )
 
 
-def _parse_location(record: Element) -> Location:
+def _parse_location(record: Element, *, provider: str | None = None) -> Location:
     location = _find(record, "locationReference")
     if location is None:
         # v2 nests it as groupOfLocations/locationContainedInGroup etc.
@@ -190,7 +193,27 @@ def _parse_location(record: Element) -> Location:
         None,
     )
 
+    # Spain/DGT states the road identifier as `roadName` (e.g. "N-400",
+    # "A-1507") under roadInformation, not `roadNumber` - confirmed live
+    # (391/391 real roadworks records) it never has `roadNumber` at all, so
+    # this falls back rather than replacing the primary lookup (NDW/France
+    # already populate `roadNumber` where present). The fallback is only
+    # ever consulted when `roadNumber` is absent (the `or` short-circuits
+    # otherwise) - confirmed against ~52,500 real live records across
+    # France/NDW/Spain that the two are never simultaneously present with
+    # disagreeing values.
     road_number = _text(_first_descendant(location, "roadNumber"))
+    if road_number is None:
+        road_name = _text(_first_descendant(location, "roadName"))
+        if road_name is not None:
+            _logger.debug(
+                "%s: road_number fallback fired for record %s - using roadName %r "
+                "(no roadNumber present)",
+                provider or "unknown provider",
+                record.get("id", ""),
+                road_name,
+            )
+        road_number = road_name
     # Prefer the human-readable name (alertCLocationName, multilingual) over
     # the raw numeric location-table code (specificLocation) - confirmed
     # live (France/Bison Fute, 787/787 real Alert-C blocks) that a name is
@@ -213,7 +236,7 @@ def _parse_location(record: Element) -> Location:
     )
 
 
-def _parse_record(element: Element) -> SituationRecord:
+def _parse_record(element: Element, *, provider: str | None = None) -> SituationRecord:
     cause = _find(element, "cause")
     comments = tuple(
         text
@@ -221,6 +244,26 @@ def _parse_record(element: Element) -> SituationRecord:
         if (text := _multilingual(_find(comment, "comment")))
     )
     urgent_text = _deep_text(element, "urgentRoadworks")
+    # NDW/France/Iceland/Norway state `roadMaintenanceType` as a direct child
+    # of the record (a MaintenanceWorks-subtype attribute). Spain/DGT has no
+    # MaintenanceWorks xsi:type at all - it discriminates roadworks generically
+    # via `cause/detailedCauseType/roadMaintenanceType` instead (confirmed live,
+    # 391/391 real roadworks records) - so the deep path is a fallback, tried
+    # only when the direct child is absent. Confirmed against ~52,500 real
+    # live records across France/NDW/Spain that the two are never
+    # simultaneously present with disagreeing values.
+    road_maintenance_type = _deep_text(element, "roadMaintenanceType")
+    if road_maintenance_type is None and cause is not None:
+        deep_road_maintenance_type = _deep_text(cause, "detailedCauseType", "roadMaintenanceType")
+        if deep_road_maintenance_type is not None:
+            _logger.debug(
+                "%s: road_maintenance_type fallback fired for record %s - using "
+                "cause/detailedCauseType/roadMaintenanceType %r (no direct child present)",
+                provider or "unknown provider",
+                element.get("id", ""),
+                deep_road_maintenance_type,
+            )
+        road_maintenance_type = deep_road_maintenance_type
     return SituationRecord(
         id=element.get("id", ""),
         record_type=_xsi_local(element) or "SituationRecord",
@@ -230,7 +273,7 @@ def _parse_record(element: Element) -> SituationRecord:
         probability_of_occurrence=_deep_text(element, "probabilityOfOccurrence"),
         source_name=_multilingual(_find(element, "source", "sourceName")),
         validity=_parse_validity(element),
-        location=_parse_location(element),
+        location=_parse_location(element, provider=provider),
         cause_type=_deep_text(cause, "causeType") if cause is not None else None,
         cause_description=_multilingual(_find(cause, "causeDescription"))
         if cause is not None
@@ -239,13 +282,13 @@ def _parse_record(element: Element) -> SituationRecord:
         impact_delay_band=_text(_first_descendant(element, "delayBand")),
         operator_action_status=_deep_text(element, "operatorActionStatus"),
         urgent=None if urgent_text is None else urgent_text.lower() == "true",
-        road_maintenance_type=_deep_text(element, "roadMaintenanceType"),
+        road_maintenance_type=road_maintenance_type,
         construction_work_type=_deep_text(element, "constructionWorkType"),
         subject_type_of_works=_deep_text(element, "subjects", "subjectTypeOfWorks"),
     )
 
 
-def _parse_situation(element: Element) -> Situation:
+def _parse_situation(element: Element, *, provider: str | None = None) -> Situation:
     situation = Situation(
         id=element.get("id", ""),
         version_time=_dt(_deep_text(element, "situationVersionTime")),
@@ -253,7 +296,7 @@ def _parse_situation(element: Element) -> Situation:
     )
     for child in element:
         if _local(child.tag) == "situationRecord":
-            situation.records.append(_parse_record(child))
+            situation.records.append(_parse_record(child, provider=provider))
     return situation
 
 
@@ -274,34 +317,47 @@ def _open_stream(source: str | Path | IO[bytes]) -> tuple[IO[bytes], bool]:
     return raw, True
 
 
-def iter_situations(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+def iter_situations(
+    source: str | Path | IO[bytes], *, provider: str | None = None
+) -> Iterator[Situation]:
     """Stream :class:`Situation` objects from a DATEX II document.
 
     ``source`` may be a path to an XML file, a path to a gzipped XML file
     (detected by magic bytes, so any filename works), or an open binary
     stream. Works with DATEX II v3 (``messageContainer``) and v2
     (``d2LogicalModel``) documents that carry a SituationPublication.
+
+    ``provider`` is an optional label (e.g. ``"Bison Fute/France"``) used
+    only to identify the source in the debug-level logs emitted when a
+    field-mapping fallback fires (see module docstring) - it has no effect
+    on parsing. Adapters that own their fetch (Bison Futé, IRCA, Vegvesen,
+    DGT) pass their own name automatically; callers using this function
+    directly (e.g. NDW's documented usage) may pass one explicitly.
     """
     stream, owned = _open_stream(source)
     try:
         for _event, element in iterparse(stream, events=("end",)):
             if _local(element.tag) == "situation":
-                yield _parse_situation(element)
+                yield _parse_situation(element, provider=provider)
                 element.clear()
     finally:
         if owned:
             stream.close()
 
 
-def iter_roadworks(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+def iter_roadworks(
+    source: str | Path | IO[bytes], *, provider: str | None = None
+) -> Iterator[Situation]:
     """Like :func:`iter_situations`, but only situations that contain at least
     one roadworks record (MaintenanceWorks/ConstructionWorks)."""
-    for situation in iter_situations(source):
+    for situation in iter_situations(source, provider=provider):
         if situation.roadworks:
             yield situation
 
 
-def iter_situations_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+def iter_situations_full(
+    source: str | Path | IO[bytes], *, provider: str | None = None
+) -> Iterator[Situation]:
     """Like :func:`iter_situations`, but parses the whole document into
     memory at once (no streaming/element-clearing) instead, so
     :attr:`~streetworks.datex2.models.Situation.raw` /
@@ -309,7 +365,8 @@ def iter_situations_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
     with their source ``Element`` - safe here because nothing is cleared
     out from under the caller. Only use this for documents you know are
     small (megabytes, not the ~170 MB scale :func:`iter_situations` is
-    built for) - see module docstring.
+    built for) - see module docstring. See :func:`iter_situations` for
+    ``provider``.
     """
     stream, owned = _open_stream(source)
     try:
@@ -319,7 +376,7 @@ def iter_situations_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
             stream.close()
     for element in root.iter():
         if _local(element.tag) == "situation":
-            situation = _parse_situation(element)
+            situation = _parse_situation(element, provider=provider)
             situation.raw = element
             record_elements = _findall(element, "situationRecord")
             for record_element, record in zip(record_elements, situation.records, strict=True):
@@ -327,9 +384,11 @@ def iter_situations_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
             yield situation
 
 
-def iter_roadworks_full(source: str | Path | IO[bytes]) -> Iterator[Situation]:
+def iter_roadworks_full(
+    source: str | Path | IO[bytes], *, provider: str | None = None
+) -> Iterator[Situation]:
     """Like :func:`iter_situations_full`, but only situations that contain
     at least one roadworks record (MaintenanceWorks/ConstructionWorks)."""
-    for situation in iter_situations_full(source):
+    for situation in iter_situations_full(source, provider=provider):
         if situation.roadworks:
             yield situation

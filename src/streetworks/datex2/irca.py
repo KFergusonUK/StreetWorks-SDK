@@ -154,12 +154,12 @@ class IcelandClient:
         """Parses the whole (small, ~250 KB) response into memory at once,
         not streaming - so ``.raw`` is populated on every ``Situation``/
         ``SituationRecord`` (unlike NDW/Norway's streaming parser)."""
-        yield from _iter_situations_full(io.BytesIO(self.get_situations()))
+        yield from _iter_situations_full(io.BytesIO(self.get_situations()), provider="IRCA/Iceland")
 
     def iter_roadworks(self) -> Iterator[Situation]:
         """Like :meth:`iter_situations`, but only situations with at least
         one roadworks record (``MaintenanceWorks``/``ConstructionWorks``)."""
-        yield from _iter_roadworks_full(io.BytesIO(self.get_situations()))
+        yield from _iter_roadworks_full(io.BytesIO(self.get_situations()), provider="IRCA/Iceland")
 
     def close(self) -> None:
         self._transport.close()

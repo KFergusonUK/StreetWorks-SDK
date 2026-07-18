@@ -154,12 +154,16 @@ class BisonFuteClient:
         return response.content
 
     def iter_situations(self) -> Iterator[Situation]:
-        yield from _iter_situations_full(io.BytesIO(self.get_events()))
+        yield from _iter_situations_full(
+            io.BytesIO(self.get_events()), provider="Bison Fute/France"
+        )
 
     def iter_roadworks(self) -> Iterator[Situation]:
         """Like :meth:`iter_situations`, but only situations with at least
         one roadworks record (``MaintenanceWorks``/``ConstructionWorks``)."""
-        yield from _iter_roadworks_full(io.BytesIO(self.get_events()))
+        yield from _iter_roadworks_full(
+            io.BytesIO(self.get_events()), provider="Bison Fute/France"
+        )
 
     def close(self) -> None:
         self._transport.close()

@@ -218,12 +218,12 @@ class VegvesenClient:
         return response.content
 
     def iter_situations(self) -> Iterator[Situation]:
-        yield from _iter_situations(io.BytesIO(self.get_situations()))
+        yield from _iter_situations(io.BytesIO(self.get_situations()), provider="Vegvesen/Norway")
 
     def iter_roadworks(self) -> Iterator[Situation]:
         """Like :meth:`iter_situations`, but only situations with at least
         one roadworks record (``MaintenanceWorks``/``ConstructionWorks``)."""
-        yield from _iter_roadworks(io.BytesIO(self.get_situations()))
+        yield from _iter_roadworks(io.BytesIO(self.get_situations()), provider="Vegvesen/Norway")
 
     def close(self) -> None:
         self._transport.close()

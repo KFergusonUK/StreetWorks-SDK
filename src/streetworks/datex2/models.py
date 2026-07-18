@@ -96,7 +96,20 @@ class SituationRecord:
 
     @property
     def is_roadworks(self) -> bool:
-        return self.record_type in ROADWORKS_TYPES
+        # Most profiles use a dedicated MaintenanceWorks/ConstructionWorks
+        # xsi:type. Spain/DGT has neither - it publishes roadworks as a
+        # generic record (RoadOrCarriagewayOrLaneManagement, mostly, but also
+        # SpeedManagement/AbnormalTraffic) discriminated only by
+        # `cause/causeType=roadMaintenance` +
+        # `detailedCauseType/roadMaintenanceType=roadworks` - confirmed live,
+        # 391/391 real roadworks records across all three record types, zero
+        # MaintenanceWorks/ConstructionWorks records in the whole feed. This
+        # check is additive (never true for a feed that never sets
+        # `cause_type`/`road_maintenance_type` this way - confirmed against
+        # every other adapter's fixtures, none use a `cause` element at all).
+        return self.record_type in ROADWORKS_TYPES or (
+            self.cause_type == "roadMaintenance" and self.road_maintenance_type == "roadworks"
+        )
 
 
 @dataclass
