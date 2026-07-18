@@ -323,6 +323,27 @@ def _autobahn_demo() -> None:
 
 attempt("Autobahn GmbH (Germany)", _autobahn_demo)
 
+# --- German state roadworks: Hamburg + Brandenburg, OGC WFS (no credentials) ---
+
+section("German state roadworks (Hamburg, Brandenburg)")
+
+
+def _germany_ogc_demo() -> None:
+    from streetworks.common import from_ogc_features
+    from streetworks.ogc.germany import FIELD_MAPS, GermanRoadworksClient
+
+    with GermanRoadworksClient() as germany:
+        for state, field_map in FIELD_MAPS.items():
+            features = germany.fetch(state)
+            works = from_ogc_features(features, field_map)
+            print(f"  {state}: {len(works)} works")
+            if works:
+                site = works[0].sites[0]
+                print("   ", site.works_type, "-", site.location_description or "(no road field)")
+
+
+attempt("German state roadworks", _germany_ogc_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")

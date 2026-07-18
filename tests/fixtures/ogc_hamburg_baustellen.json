@@ -1,0 +1,100 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "DE.HH.UP_BAUSTELLE_916925",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.037271111591924,
+     53.62984929345569
+    ]
+   },
+   "properties": {
+    "titel": "Wellingsbütteler Landstraße / Leitungs- und Straßenarbeiten",
+    "organisation": "Landesbetrieb Straßen, Brücken und Gewässer",
+    "anlass": "Sanierungsbedürftige technische Infrastruktur der Ver- und Entsorgung sowie der Erschließung",
+    "umfang": "Aufgrund der umfassenden Tätigkeiten und Einschränkungen informieren Sie sich bitte auf der u.g. Webseite.",
+    "baubeginn": "05.08.2024",
+    "bauende": "31.07.2026",
+    "letzteaktualisierung": "2026-07-13T16:53:30",
+    "istzugangeingeschraenkt": true,
+    "einschraenkungsbegruendung": "Temporäre Einschränkung bei Baufeldern vor den Gebäuden, Einbahnstraßenregelung stadteinwärts, fußläufige Erreichbarkeit jederzeit gewährleistet",
+    "iststoerung": true,
+    "isthotspot": false,
+    "istfreigegeben": true,
+    "mehrwert": "bedarfsangepasste Verkehrsanlagen, sichere Radverkehrsführung, Schulwegsicherung, instandgesetzte Ver- und Entsorgungsleitungen",
+    "istoepnveingeschraenkt": false,
+    "hatinternetlink": true,
+    "internetlink": "https://lsbg.hamburg.de/baumassnahmen-und-planungen/strassenzug-wellingsbuettel",
+    "hatumleitungsbeschreibung": true,
+    "umleitungsbeschreibung": "Alte Landstraße",
+    "istparkraumeingeschraenkt": true,
+    "parkraumeinschraenkung": "Einschränkung durch Baufelder"
+   },
+   "srsName": "EPSG:4326"
+  },
+  {
+   "type": "Feature",
+   "id": "DE.HH.UP_BAUSTELLE_3628374",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.022964136571078,
+     53.47565809160702
+    ]
+   },
+   "properties": {
+    "titel": "A1 Süderelbbrücke / Asphaltsanierungsarbeiten",
+    "organisation": "Behörde für Verkehr und Mobilitätswende",
+    "anlass": "Asphaltsanierungsarbeiten auf dem Hauptfahrstreifen",
+    "umfang": "GST-Verkehre können nicht durch die Baustelle geleitet werden!",
+    "baubeginn": "22.07.2026",
+    "bauende": "23.07.2026",
+    "letzteaktualisierung": "2026-07-17T15:20:24",
+    "istzugangeingeschraenkt": false,
+    "iststoerung": true,
+    "isthotspot": false,
+    "istfreigegeben": true,
+    "mehrwert": "Verkehrssicherheit",
+    "istoepnveingeschraenkt": false,
+    "hatinternetlink": false,
+    "hatumleitungsbeschreibung": true,
+    "umleitungsbeschreibung": "Die Bedarfsumleitung U83 ab der AS HH-Harburg (38) - Neuländer Straße/ B75 – Kornweide – AS HH-Stillhorn (37) der A1 ist ausgeschildert.",
+    "istparkraumeingeschraenkt": false
+   },
+   "srsName": "EPSG:4326"
+  },
+  {
+   "type": "Feature",
+   "id": "DE.HH.UP_BAUSTELLE_3468202",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.739317265707134,
+     53.584953980059765
+    ]
+   },
+   "properties": {
+    "titel": "Wedeler Landstraße / Instandsetzungsarbeiten, Ersatzneubau",
+    "organisation": "Hamburger Energienetze GmbH",
+    "anlass": "Aufgrund von notwendiger Instandsetzungsarbeiten ist eine Ersatzneubaumaßnahme zu realisieren.",
+    "umfang": "Der parallel zur Wedeler Landstraße laufende Gehweg wird temporär eingeschränkt begehbar sein.",
+    "baubeginn": "01.01.2026",
+    "bauende": "30.06.2027",
+    "letzteaktualisierung": "2026-06-26T15:14:06",
+    "istzugangeingeschraenkt": false,
+    "iststoerung": true,
+    "isthotspot": false,
+    "istfreigegeben": true,
+    "mehrwert": "Versorgungssicherheit in der Energieinfrastruktur.",
+    "istoepnveingeschraenkt": false,
+    "hatinternetlink": false,
+    "hatumleitungsbeschreibung": false,
+    "istparkraumeingeschraenkt": false
+   },
+   "srsName": "EPSG:4326"
+  }
+ ]
+}

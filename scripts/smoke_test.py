@@ -253,6 +253,25 @@ def check_autobahn() -> str:
     )
 
 
+def check_german_regional() -> str:
+    """German state (Bundesland) roadworks needs no credentials - confirmed
+    live for Hamburg (Point geometry) and Brandenburg (LineString), both
+    via WFS GeoJSON. Only these two states are wired up; Mecklenburg-
+    Vorpommern was checked and parked (GML-only, licence unconfirmed) -
+    see streetworks.ogc.germany's module docstring."""
+    from streetworks.common import from_ogc_features
+    from streetworks.ogc.germany import FIELD_MAPS, GermanRoadworksClient
+
+    with GermanRoadworksClient() as germany:
+        counts = {}
+        for state, field_map in FIELD_MAPS.items():
+            features = germany.fetch(state)
+            works = from_ogc_features(features, field_map)
+            with_coord = sum(1 for w in works if w.coordinate is not None)
+            counts[state] = (len(works), with_coord)
+    return ", ".join(f"{state}: {n} ({c} with coordinates)" for state, (n, c) in counts.items())
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -546,6 +565,8 @@ def main() -> int:
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
     # Autobahn GmbH (Germany) needs no credentials
     reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
+    # German state roadworks (Hamburg, Brandenburg) need no credentials
+    reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

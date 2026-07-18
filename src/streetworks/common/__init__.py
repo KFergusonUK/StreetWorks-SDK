@@ -7,6 +7,7 @@ type design and the record-identity rules that decide what maps where.
 
 from .from_autobahn import from_autobahn
 from .from_datex2 import from_datex2
+from .from_ogc_features import from_ogc_features
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
 from .from_trafficwales import from_trafficwales
@@ -37,4 +38,5 @@ __all__ = [
     "from_streetmanager",
     "from_wzdx",
     "from_autobahn",
+    "from_ogc_features",
 ]
