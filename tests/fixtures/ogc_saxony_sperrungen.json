@@ -1,0 +1,346 @@
+{
+ "type": "FeatureCollection",
+ "crs": {
+  "type": "name",
+  "properties": {
+   "name": "EPSG:25833"
+  }
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      440482.0429999978,
+      5689673.189999634
+     ],
+     [
+      440476.4199999978,
+      5689688.099999634
+     ],
+     [
+      440467.5549999979,
+      5689706.027999634
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "LRABZ2026B00285",
+    "Amt": "LRABZ",
+    "Aktenzeichen": "2026B00285",
+    "Verwaltungskennziffer": "0014625",
+    "Sperrung_Art": "D",
+    "Sperrung_Art_Klartext": "Vollsperrung",
+    "Sperrung_Typ": "N",
+    "Sperrung_Typ_Klartext": "Normale Sperrung",
+    "Strassenklasse": "K",
+    "Strasse": "Hauptstraße",
+    "Ort": "Oßling OT: Lieske",
+    "Ortslage": "Hauptstraße +Am Weißiger Berg/K 9226 und Bergweg (kommunal)",
+    "Sperrung_von": "26.05.2026",
+    "Sperrung_bis": "02.10.2026",
+    "Sperrung_Grund": "Verlegung Trinkwasserleitung und Straßenausbau",
+    "Umleitung_ueber": "S 95 - S 92",
+    "Behörde": "Landratsamt Bautzen Ordnungsamt SG Straßenverkehrsrecht",
+    "Adresse_Amt": "Bahnhofstraße 9 02625 Bautzen",
+    "Letzte_Aenderung": "2026-07-16",
+    "time_stamp": "20260717201140.531761"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      440499.2239999978,
+      5689700.282999635
+     ],
+     [
+      440476.6799999977,
+      5689688.229999635
+     ],
+     [
+      440446.0299999978,
+      5689674.069999635
+     ],
+     [
+      440414.1399999979,
+      5689659.829999635
+     ],
+     [
+      440398.0999999978,
+      5689654.0599996345
+     ],
+     [
+      440383.3999999978,
+      5689649.529999634
+     ],
+     [
+      440360.5399999977,
+      5689642.809999633
+     ],
+     [
+      440351.4099999977,
+      5689639.539999635
+     ],
+     [
+      440334.0699999977,
+      5689633.319999633
+     ],
+     [
+      440326.1419999977,
+      5689630.625999633
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "LRABZ2026B00285",
+    "Amt": "LRABZ",
+    "Aktenzeichen": "2026B00285",
+    "Verwaltungskennziffer": "0014625",
+    "Sperrung_Art": "D",
+    "Sperrung_Art_Klartext": "Vollsperrung",
+    "Sperrung_Typ": "N",
+    "Sperrung_Typ_Klartext": "Normale Sperrung",
+    "Strassenklasse": "K",
+    "Strasse": "Hauptstraße",
+    "Ort": "Oßling OT: Lieske",
+    "Ortslage": "Hauptstraße +Am Weißiger Berg/K 9226 und Bergweg (kommunal)",
+    "Sperrung_von": "26.05.2026",
+    "Sperrung_bis": "02.10.2026",
+    "Sperrung_Grund": "Verlegung Trinkwasserleitung und Straßenausbau",
+    "Umleitung_ueber": "S 95 - S 92",
+    "Behörde": "Landratsamt Bautzen Ordnungsamt SG Straßenverkehrsrecht",
+    "Adresse_Amt": "Bahnhofstraße 9 02625 Bautzen",
+    "Letzte_Aenderung": "2026-07-16",
+    "time_stamp": "20260717201141.1863025"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      440338.1749999978,
+      5689653.424999636
+     ],
+     [
+      440339.2699999978,
+      5689651.309999634
+     ],
+     [
+      440341.9199999978,
+      5689647.779999635
+     ],
+     [
+      440345.5999999978,
+      5689645.129999634
+     ],
+     [
+      440350.3099999977,
+      5689643.219999634
+     ],
+     [
+      440355.3299999979,
+      5689642.0199996345
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "LRABZ2026B00285",
+    "Amt": "LRABZ",
+    "Aktenzeichen": "2026B00285",
+    "Verwaltungskennziffer": "0014625",
+    "Sperrung_Art": "D",
+    "Sperrung_Art_Klartext": "Vollsperrung",
+    "Sperrung_Typ": "N",
+    "Sperrung_Typ_Klartext": "Normale Sperrung",
+    "Strassenklasse": "K",
+    "Strasse": "Hauptstraße",
+    "Ort": "Oßling OT: Lieske",
+    "Ortslage": "Hauptstraße +Am Weißiger Berg/K 9226 und Bergweg (kommunal)",
+    "Sperrung_von": "26.05.2026",
+    "Sperrung_bis": "02.10.2026",
+    "Sperrung_Grund": "Verlegung Trinkwasserleitung und Straßenausbau",
+    "Umleitung_ueber": "S 95 - S 92",
+    "Behörde": "Landratsamt Bautzen Ordnungsamt SG Straßenverkehrsrecht",
+    "Adresse_Amt": "Bahnhofstraße 9 02625 Bautzen",
+    "Letzte_Aenderung": "2026-07-16",
+    "time_stamp": "20260717201142.301273"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      313875.9869993497,
+      5621548.955997727
+     ],
+     [
+      313876.3799993499,
+      5621551.599997727
+     ],
+     [
+      313879.4879993498,
+      5621572.698997727
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "5243002026B00234",
+    "Amt": "524300",
+    "Aktenzeichen": "2026B00234",
+    "Verwaltungskennziffer": "0014524",
+    "Sperrung_Art": "D",
+    "Sperrung_Art_Klartext": "Vollsperrung",
+    "Sperrung_Typ": "N",
+    "Sperrung_Typ_Klartext": "Normale Sperrung",
+    "Strassenklasse": "G",
+    "Strasse": "Bauernweg",
+    "Ort": "Werdau, OT Leubnitz",
+    "Ortslage": "in Höhe HG 3D",
+    "Sperrung_von": "06.07.2026",
+    "Sperrung_bis": "17.07.2026",
+    "Sperrung_Grund": "Anbindungsgrube i.A. Dt. Telekom",
+    "Behörde": "Stadtverwaltung Werdau Straßenverkehrsbehörde",
+    "Adresse_Amt": "Markt 10 - 18 08412 Werdau",
+    "Letzte_Aenderung": "2026-07-06",
+    "time_stamp": "20260717201140.6142993"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      292639.509998927,
+      5594381.509995302
+     ],
+     [
+      292643.119998927,
+      5594336.069995304
+     ],
+     [
+      292652.4899989273,
+      5594302.869995306
+     ],
+     [
+      292674.0999989277,
+      5594261.90999531
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "LRAV2026V00001",
+    "Amt": "LRAV",
+    "Aktenzeichen": "2026V00001",
+    "Verwaltungskennziffer": "0014523",
+    "Sperrung_Art": "D",
+    "Sperrung_Art_Klartext": "Vollsperrung",
+    "Sperrung_Typ": "V",
+    "Sperrung_Typ_Klartext": "Veranstaltung",
+    "Strassenklasse": "K",
+    "Strasse": "Am Bahnhof",
+    "Ort": "Weischlitz OT: Kürbitz",
+    "Sperrung_von": "16.08.2026  08 Uhr",
+    "Sperrung_bis": "16.08.2026  18 Uhr",
+    "Sperrung_Grund": "27. Löwenspektakel mit 29.SR 2 Rundfahrt",
+    "Behörde": "Landratsamt Vogtlandkreis Straßenverkehrsamt",
+    "Adresse_Amt": " 08523 Plauen",
+    "Letzte_Aenderung": "2026-04-28",
+    "time_stamp": "20260717201140.587677"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      376281.4199999115,
+      5623628.264999535
+     ],
+     [
+      376291.6799999115,
+      5623645.839999535
+     ],
+     [
+      376294.1499999117,
+      5623650.539999534
+     ],
+     [
+      376298.0999999115,
+      5623656.5299995355
+     ],
+     [
+      376301.7899999116,
+      5623661.739999535
+     ],
+     [
+      376305.3699999118,
+      5623665.559999536
+     ],
+     [
+      376309.5799999116,
+      5623670.549999534
+     ],
+     [
+      376315.9599999116,
+      5623677.109999536
+     ],
+     [
+      376323.3999999117,
+      5623683.839999535
+     ],
+     [
+      376328.8099999116,
+      5623688.679999535
+     ],
+     [
+      376334.6599999118,
+      5623692.869999535
+     ],
+     [
+      376353.9599999118,
+      5623703.669999536
+     ],
+     [
+      376367.7599999118,
+      5623711.329999536
+     ],
+     [
+      376375.9859999118,
+      5623717.083999535
+     ]
+    ]
+   },
+   "properties": {
+    "ID": "LRAERZ2026-0001075",
+    "Amt": "LRAERZ",
+    "Aktenzeichen": "2026-0001075",
+    "Verwaltungskennziffer": "0014521",
+    "Sperrung_Art": "C",
+    "Sperrung_Art_Klartext": "Halbseitige Sperrung",
+    "Sperrung_Typ": "N",
+    "Sperrung_Typ_Klartext": "Normale Sperrung",
+    "Strassenklasse": "K",
+    "Strasse": "Hauptstraße / K8110",
+    "Ort": "Pockau-Lengefeld",
+    "Sperrung_von": "13.07.2026  06 Uhr",
+    "Sperrung_bis": "14.08.2026  17 Uhr",
+    "Sperrung_Grund": "Breitband - Breitbandausbau",
+    "Behörde": "Landkreis Erzgebirgskreis ",
+    "Adresse_Amt": "  ",
+    "Letzte_Aenderung": "2026-07-03",
+    "time_stamp": "20260717201140.5330276"
+   }
+  }
+ ]
+}

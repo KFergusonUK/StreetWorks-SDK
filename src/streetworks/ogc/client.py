@@ -1,5 +1,5 @@
 """Generic OGC geodata fetch client - WFS, OGC API Features, or a direct
-GeoJSON download.
+GeoJSON download (sometimes zipped).
 
 Deliberately not roadworks-specific: this client only knows how to get
 GeoJSON out of an OGC-flavoured endpoint. What the features *mean* is
@@ -10,10 +10,20 @@ than needing its own fetch layer.
 
 **GeoJSON-primary, no GML parsing.** :meth:`OGCFeaturesClient.get_wfs_features`
 always requests ``application/geo+json`` - if a server doesn't offer that
-output format (confirmed live for Mecklenburg-Vorpommern's WFS: GML-only,
-explicitly rejects ``application/geo+json`` with an ``InvalidParameterValue``
-exception), that source is out of scope for this client, not something to
-work around with a GML parser.
+output format (confirmed live for Mecklenburg-Vorpommern's and
+Saxony-Anhalt's WFS: both GML-only, both explicitly reject
+``application/geo+json``/``application/json`` with an exception), that
+source is out of scope for this client, not something to work around with
+a GML parser.
+
+**CRS is stated, never assumed - and not always WGS84.** Most sources here
+request/produce EPSG:4326; Saxony's direct-download GeoJSON is genuinely
+only available in EPSG:25833 (UTM33N) - no WGS84 variant exists anywhere
+for it (checked its WMS, its download, and its own dataset metadata).
+Same policy as this SDK's British National Grid providers (OS Open USRN,
+DataVIA, Street Manager): a non-4326 CRS is carried through and labelled
+explicitly on ``Coordinate.crs``, never silently reprojected - see
+:mod:`streetworks.common.from_ogc_features`.
 
 **Not the same client as DataVIA's.** `streetworks.datavia` is a shipped,
 credentialed, live-verified provider for a different service entirely;
@@ -24,6 +34,9 @@ generalised together, see the module's originating design notes.
 
 from __future__ import annotations
 
+import io
+import json
+import zipfile
 from typing import Any
 
 import httpx
@@ -68,6 +81,17 @@ class OGCFeaturesClient:
         serves."""
         response = self._transport.request("GET", url, params=params)
         return response.json()
+
+    def get_zipped_geojson(self, url: str, *, member: str) -> JSON:
+        """``GET url`` (a ZIP archive) and return the parsed JSON of
+        ``member``, one file inside it - the "direct GeoJSON download"
+        access mode some German states offer alongside, or instead of, a
+        WFS (confirmed live for Saxony, which has no queryable roadworks
+        service at all - just this and a WMS)."""
+        response = self._transport.request("GET", url)
+        with zipfile.ZipFile(io.BytesIO(response.content)) as archive:
+            with archive.open(member) as f:
+                return json.load(f)
 
     def get_wfs_features(
         self,

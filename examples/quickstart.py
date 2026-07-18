@@ -323,9 +323,10 @@ def _autobahn_demo() -> None:
 
 attempt("Autobahn GmbH (Germany)", _autobahn_demo)
 
-# --- German state roadworks: Hamburg + Brandenburg, OGC WFS (no credentials) ---
+# --- German state roadworks: Hamburg, Brandenburg, Saxony (no credentials) -----
+# Saxony ships in its real CRS (EPSG:25833/UTM33N, no WGS84 source exists).
 
-section("German state roadworks (Hamburg, Brandenburg)")
+section("German state roadworks (Hamburg, Brandenburg, Saxony)")
 
 
 def _germany_ogc_demo() -> None:

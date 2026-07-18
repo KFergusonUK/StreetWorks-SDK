@@ -1,23 +1,24 @@
 """Tests for streetworks.common.from_ogc_features.
 
-Uses the same real trimmed Hamburg/Brandenburg fixtures as
+Uses the same real trimmed Hamburg/Brandenburg/Saxony fixtures as
 test_ogc_germany.py - notably the three real records sharing Brandenburg
-works ID prefix "267201193", which is exactly what exercises the
-deliberate no-grouping decision (see from_ogc_features's module
-docstring for why).
+works ID prefix "267201193" (and Saxony's own equivalent, ID
+"LRABZ2026B00285"), which is exactly what exercises the deliberate
+no-grouping decision (see from_ogc_features's module docstring for why).
 """
 
 import json
 from pathlib import Path
 
 from streetworks.common import DateConfidence, SourceGrade, from_ogc_features
-from streetworks.ogc.germany import BRANDENBURG, HAMBURG, StateFieldMap
+from streetworks.ogc.germany import BRANDENBURG, HAMBURG, SAXONY, StateFieldMap
 
 FIXTURES = Path(__file__).parent / "fixtures"
 HAMBURG_PAYLOAD = json.loads((FIXTURES / "ogc_hamburg_baustellen.json").read_text())
 BRANDENBURG_PAYLOAD = json.loads(
     (FIXTURES / "ogc_brandenburg_baustelleninfo.json").read_text()
 )
+SAXONY_PAYLOAD = json.loads((FIXTURES / "ogc_saxony_sperrungen.json").read_text())
 
 
 def test_hamburg_de_date_format_and_point_geometry():
@@ -76,6 +77,55 @@ def test_missing_optional_property_does_not_crash():
     w = next(w for w in works if w.reference == "266800551_3")
     assert "Anzahl_Fahrstreifen" not in w.raw["properties"]
     assert w.sites[0].works_type == "Sperrung"  # unaffected fields still map fine
+
+
+def test_saxony_utm_coordinate_is_not_flipped():
+    # EPSG:25833 (UTM33N) has no "wrong way round" to correct - (easting,
+    # northing) as the source states it, same treatment as British
+    # National Grid elsewhere in this SDK (from_streetmanager). Eastings
+    # in this zone are ~200k-800k; northings are ~5.5-5.8 million - a
+    # flip would put a million-scale number where the easting belongs.
+    works = from_ogc_features(SAXONY_PAYLOAD["features"], SAXONY)
+    w = next(w for w in works if w.reference == "5243002026B00234")
+    assert w.coordinate.crs == "EPSG:25833"
+    easting, northing = w.coordinate.value
+    assert 200_000 < easting < 800_000
+    assert 5_500_000 < northing < 5_800_000
+
+
+def test_saxony_linestring_geometry_survives_whole():
+    works = from_ogc_features(SAXONY_PAYLOAD["features"], SAXONY)
+    w = next(w for w in works if w.reference == "LRAERZ2026-0001075")
+    assert len(w.coordinate.points) == 14
+    assert w.coordinate.value == w.coordinate.points[0]
+
+
+def test_saxony_date_with_hour_suffix_parsed():
+    # "16.08.2026  08 Uhr" - a real secondary date shape (639/3,062 real
+    # date fields), preserves the genuinely-stated hour rather than
+    # collapsing to midnight.
+    works = from_ogc_features(SAXONY_PAYLOAD["features"], SAXONY)
+    w = next(w for w in works if w.reference == "LRAV2026V00001")
+    assert str(w.sites[0].proposed_start) == "2026-08-16 08:00:00+02:00"
+    assert str(w.sites[0].proposed_end) == "2026-08-16 18:00:00+02:00"
+    assert w.sites[0].date_confidence is DateConfidence.VERIFIED
+
+
+def test_saxony_promoter_and_status_fields():
+    works = from_ogc_features(SAXONY_PAYLOAD["features"], SAXONY)
+    w = next(w for w in works if w.reference == "LRAV2026V00001")
+    assert w.promoter  # a real Behörde value
+    assert w.sites[0].status == "Veranstaltung"  # Sperrung_Typ_Klartext
+
+
+def test_no_grouping_despite_shared_id_saxony():
+    # Three real segments of one closure share ID "LRABZ2026B00285" - not
+    # grouped, same policy as Brandenburg's prefix pattern.
+    works = from_ogc_features(SAXONY_PAYLOAD["features"], SAXONY)
+    matching = [w for w in works if w.reference == "LRABZ2026B00285"]
+    assert len(matching) == 3
+    for w in matching:
+        assert len(w.sites) == 1
 
 
 def test_date_confidence_unknown_when_no_start_field_mapped():

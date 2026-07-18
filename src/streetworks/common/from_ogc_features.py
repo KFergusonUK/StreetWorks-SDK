@@ -11,27 +11,38 @@ Landesbetrieb/geoportal), not a statutory works register the way Street
 Manager or SRWR are.
 
 **1:1, no grouping** - these feeds carry no genuine works/phase grouping
-key (no works reference, no identifier prefix that's actually corroborated
-by a second field). One :class:`~streetworks.common.Works` per feature,
-carrying exactly one :class:`~streetworks.common.WorksSite`. Brandenburg's
-``ID`` field does have real prefix/suffix structure, but agreement within
-a group is only ~81-88% on dates/type/road - far short of Autobahn's
-verified 100% - and nothing else corroborates it, so it's left alone; see
-:mod:`streetworks.ogc.germany` for the full investigation.
+key confirmed strongly enough to build on. One
+:class:`~streetworks.common.Works` per feature, carrying exactly one
+:class:`~streetworks.common.WorksSite`. Both Brandenburg's ``ID`` field
+(prefix/suffix structure, but only ~81-88% agreement within a group -
+far short of Autobahn's verified 100%) and Saxony's ``ID`` field (1,531
+features, only 1,133 distinct values) show a real pattern - raised in
+:mod:`streetworks.ogc.germany`'s docstring, not acted on, per this
+project's record-identity discipline.
 
-**Geometry**: ``Point`` (Hamburg) and ``LineString`` (Brandenburg) are both
-handled - a real line keeps every vertex on ``Coordinate.points``, never
-collapsed to just its first vertex, same rule as WZDx/DATEX line geometry.
-GeoJSON's native axis order is ``(lon, lat)``; every other EPSG:4326
-``Coordinate`` in this SDK is ``(lat, lon)`` - flipped here explicitly,
-same as ``from_wzdx``/``from_autobahn``.
+**Geometry**: ``Point`` (Hamburg) and ``LineString`` (Brandenburg, Saxony)
+are both handled - a real line keeps every vertex on
+``Coordinate.points``, never collapsed to just its first vertex, same
+rule as WZDx/DATEX line geometry.
 
-**Dates**: both states state real, structured start/end dates (never
-free-text extraction, unlike Autobahn) - Hamburg ``DD.MM.YYYY``,
-Brandenburg bare ISO dates, both date-only (no time component in either
-state's real data). Represented as midnight Europe/Berlin via
-:mod:`zoneinfo`, same convention as Autobahn's date-only fields, so every
-datetime in this SDK stays comparable (never a naive one mixed in).
+**CRS is read from the field map, not assumed** - GeoJSON's native axis
+order is ``(x, y)``; for EPSG:4326 that means ``(lon, lat)``, flipped
+here to this SDK's ``(lat, lon)`` convention, same as ``from_wzdx``/
+``from_autobahn``. Saxony's real data has no WGS84 source at all
+(``EPSG:25833``/UTM33N only, confirmed exhaustively - see
+:mod:`streetworks.ogc.germany`) - for that, ``(x, y)`` is carried through
+as ``(easting, northing)`` unchanged, no flip, exactly how
+``from_streetmanager`` already handles British National Grid elsewhere in
+this SDK. ``Coordinate.crs`` always states which convention applies -
+never silently reprojected, per this SDK's standing policy.
+
+**Dates**: every state states real, structured start/end dates (never
+free-text extraction, unlike Autobahn) - Hamburg and Saxony both
+``DD.MM.YYYY``, Brandenburg alone bare ISO - every one date-only (no time
+component in any state's real data). Represented as midnight
+Europe/Berlin via :mod:`zoneinfo`, same convention as Autobahn's
+date-only fields, so every datetime in this SDK stays comparable (never a
+naive one mixed in).
 
 **``date_confidence`` is a judgement call, documented rather than
 asserted**: neither state has anything like DATEX's ``validityStatus`` or
@@ -48,6 +59,7 @@ a genuine planned-vs-active signal.
 
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -62,38 +74,73 @@ JSON = dict[str, Any]
 _BERLIN = ZoneInfo("Europe/Berlin")
 
 
+#: Saxony's "de"-format dates sometimes carry an hour suffix -
+#: ``"16.08.2026  08 Uhr"`` - confirmed live across the whole feed (2,423
+#: plain-date, 639 with this suffix, 0 unmatched - no third shape exists).
+#: Real stated information (an actual hour, not just midnight), so it's
+#: parsed rather than dropped - not the same kind of exception Autobahn's
+#: free-text extraction is, since this is still a small formatting
+#: variant on one structured field, not prose.
+_DE_DATE_WITH_HOUR = re.compile(r"^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{1,2})\s*Uhr$")
+
+
 def _parse_date(value: str | None, date_format: str) -> datetime | None:
     """Date-only fields, both formats - represented as midnight
-    Europe/Berlin, never a naive datetime (see module docstring)."""
+    Europe/Berlin unless a real hour is stated (see
+    :data:`_DE_DATE_WITH_HOUR`), never a naive datetime (see module
+    docstring)."""
     if not value:
         return None
-    try:
-        if date_format == "de":
+    if date_format == "de":
+        if m := _DE_DATE_WITH_HOUR.match(value):
+            day, month, year, hour = (int(g) for g in m.groups())
+            try:
+                return datetime(year, month, day, hour, tzinfo=_BERLIN)
+            except ValueError:
+                return None
+        try:
             day, month, year = (int(p) for p in value.split("."))
-        else:
+        except ValueError:
+            return None
+    else:
+        try:
             year, month, day = (int(p) for p in value.split("-"))
+        except ValueError:
+            return None
+    try:
         return datetime(year, month, day, tzinfo=_BERLIN)
-    except (ValueError, TypeError):
+    except ValueError:
         return None
 
 
-def _coordinate(geometry: JSON | None) -> Coordinate | None:
+def _coordinate(geometry: JSON | None, crs: str) -> Coordinate | None:
+    """EPSG:4326 sources state GeoJSON's native ``(lon, lat)`` - flipped to
+    this SDK's ``(lat, lon)`` convention, same as ``from_wzdx``/
+    ``from_autobahn``. Anything else (Saxony: EPSG:25833/UTM33N) is
+    carried through unchanged - ``(x, y)`` as the source states it, no
+    flip, matching how ``from_streetmanager`` handles British National
+    Grid: a non-4326 CRS has no "wrong way round" to correct, so this SDK
+    never guesses at one."""
     if not geometry:
         return None
     kind = geometry.get("type")
     coordinates = geometry.get("coordinates")
     if not coordinates:
         return None
+    flip = crs == "EPSG:4326"
     try:
         if kind == "Point":
-            lon, lat = coordinates
-            return Coordinate(value=(float(lat), float(lon)), crs="EPSG:4326")
+            x, y = coordinates
+            value = (float(y), float(x)) if flip else (float(x), float(y))
+            return Coordinate(value=value, crs=crs)
         if kind == "LineString":
-            points = tuple((float(lat), float(lon)) for lon, lat in coordinates)
+            points = tuple(
+                (float(y), float(x)) if flip else (float(x), float(y)) for x, y in coordinates
+            )
             if not points:
                 return None
             return Coordinate(
-                value=points[0], crs="EPSG:4326", points=points if len(points) > 1 else None
+                value=points[0], crs=crs, points=points if len(points) > 1 else None
             )
     except (TypeError, ValueError):
         return None
@@ -111,7 +158,7 @@ def _to_works(feature: JSON, field_map: StateFieldMap) -> Works:
         field_map.end.format if field_map.end else "iso",
     )
     confidence = DateConfidence.VERIFIED if start is not None else DateConfidence.UNKNOWN
-    coordinate = _coordinate(feature.get("geometry"))
+    coordinate = _coordinate(feature.get("geometry"), field_map.crs)
     road = properties.get(field_map.road_field) if field_map.road_field else None
     works_type = properties.get(field_map.title_field) if field_map.title_field else None
     status = properties.get(field_map.status_field) if field_map.status_field else None
