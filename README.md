@@ -29,7 +29,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
-| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg (open geodata over OGC WFS, GeoJSON; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific | read |
+| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -64,8 +64,8 @@ OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
 Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Autobahn GmbH/Germany,
-and the German states Hamburg and Brandenburg (all parsed against real
-live feeds).
+and the German states Hamburg, Brandenburg and Saxony (all parsed against
+real live feeds).
 
 **Autobahn GmbH's licence is unconfirmed** - checked four independent
 sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-motorways)
@@ -667,50 +667,90 @@ for w in works:
     print(w.administrative_area, w.sites[0].works_type, w.sites[0].location_description)
 ```
 
-Two states are live, both verified against real data (2026-07): **Hamburg**
-(130 features, `Point` geometry, dates `DD.MM.YYYY`) and **Brandenburg**
-(487 features, `LineString` geometry, dates ISO). Both publish under
-**Datenlizenz Deutschland — Namensnennung — Version 2.0** (dl-de/by-2-0),
-confirmed directly from each WFS's own `GetCapabilities` document, with
-exact attribution wording baked into each state's field-map entry.
+Three states are live, all verified against real data (2026-07):
+**Hamburg** (130 features, `Point` geometry, dates `DD.MM.YYYY`, via WFS),
+**Brandenburg** (487 features, `LineString`, dates ISO, via WFS), and
+**Saxony** (1,531 real closures + 813 diversions, `LineString`, dates
+`DD.MM.YYYY` with an occasional real hour suffix, via a direct GeoJSON
+download — Saxony has no queryable service at all). Hamburg and
+Brandenburg publish under **Datenlizenz Deutschland — Namensnennung —
+Version 2.0** (dl-de/by-2-0); Saxony under **Creative Commons Attribution
+4.0 International**. All three confirmed directly from each service's
+own `GetCapabilities`/catalogue metadata, with exact attribution wording
+baked into each state's field-map entry.
 
-**GeoJSON-primary, EPSG:4326 only, no GML/UTM handling** — `OGCFeaturesClient`
-always requests `application/geo+json` and an explicit `SRSNAME=EPSG:4326`,
-never trusting a server's default output format (commonly GML) or default
-CRS (commonly a UTM zone). A state offering neither is out of scope, not
-a GML-parsing project: **Mecklenburg-Vorpommern was checked and parked** —
-confirmed live GML-only (its WFS explicitly rejects `application/geo+json`
-with an `InvalidParameterValue` exception), and its licence is only
-vaguely stated ("Urheberrecht", no specific Datenlizenz Deutschland
-citation) — two independent reasons, not one.
+**GeoJSON-primary, no GML — but not every state is EPSG:4326.**
+`OGCFeaturesClient` always requests `application/geo+json` over WFS,
+never trusting a server's default output format (commonly GML). A
+GML-only state is out of scope, not a GML-parsing project — confirmed
+live for both **Mecklenburg-Vorpommern** (its WFS explicitly rejects
+`application/geo+json` with an `InvalidParameterValue` exception) and
+**Saxony-Anhalt** (rejects `application/json` too, with an
+`msPostGISLayer` exception) — both **parked**. Saxony-Anhalt has a second,
+independent reason: its `GetCapabilities` states outright *"This service
+is for non-commercial use only"* — an explicit restriction, not merely an
+unconfirmed licence, and one that conflicts with this SDK's own MIT
+licence. (The state's own web page separately calls the service "free of
+charge," which reads as open but answers a different question — cost, not
+commercial-use rights. Worth knowing before anyone reopens this one.)
+**NRW** and **Bavaria** are parked too, for a different reason each: NRW's
+open geodata is road *network* data (a gazetteer concern), not roadworks
+— its actual roadworks route is the gated Mobilithek/DATEX path already
+out of scope elsewhere; Bavaria's BAYSIS portal has no Baustellen
+(roadworks) layer at all.
+
+**CRS is stated per state, never assumed — and Saxony breaks the
+"always WGS84" pattern deliberately.** Every request states its CRS
+explicitly (`SRSNAME=EPSG:4326` for the WFS states) rather than trusting
+a server default (commonly a UTM zone). Saxony's data, checked
+exhaustively (its WMS, its direct download, even its "planned works"
+dataset's own ISO metadata), genuinely has **no WGS84 source anywhere** —
+only `EPSG:25833` (UTM33N). Rather than park a source this rich (district
+*and* municipal roadworks, not just state roads — deeper coverage than
+Hamburg or Brandenburg) over an axis-order technicality, Saxony ships
+with its real CRS carried through and labelled explicitly on
+`Coordinate.crs` — the same policy this SDK already uses for its British
+National Grid providers (OS Open USRN, DataVIA, Street Manager): a
+non-4326 CRS is never silently reprojected, just stated. GeoJSON
+coordinates in Saxony's feed are `(easting, northing)`, taken as-is, no
+axis flip — exactly how `from_streetmanager` already handles BNG.
 
 **Axis order was checked, not assumed** — WFS 2.0/EPSG:4326 can come back
 lat/lon (the reverse of GeoJSON's mandated lon/lat), the same trap the
-DataVIA WMS work already documented. Every real coordinate from both
-states falls inside Germany's true bounds (lon ~5.6–15.3, lat ~47.0–55.3),
-confirmed in a mandatory test for each state, not just eyeballed once.
+DataVIA WMS work already documented. Every real coordinate from Hamburg
+and Brandenburg falls inside Germany's true lon/lat bounds (~5.6–15.3,
+~47.0–55.3); Saxony has its own equivalent UTM bounds check. All three
+confirmed in a mandatory test per state, not just eyeballed once.
 
 **Hamburg's access mode was genuinely ambiguous — resolved, not assumed.**
 The state's open-data catalogue also lists a "direct GeoJSON download";
 confirmed live, it's a ZIP archive wrapping this same WFS's output (the
 archive contains `de_hh_up_baustelle_EPSG_4326.json`) — not a separate
 source. The direct WFS `GetFeature` call is the canonical path: one HTTP
-request, GeoJSON immediately, no archive to unpack.
+request, GeoJSON immediately, no archive to unpack. Saxony's own "direct
+GeoJSON download" is genuinely the *only* path — confirmed via the GDI-DE
+catalogue's own metadata search (5 real records for Saxony's
+SPERRINFOSYS) that the "GDI-Baustellen-WFS" once referenced in passing
+doesn't exist as a live, queryable endpoint.
 
 **One `Works` per feature, one `WorksSite`, deliberately not grouped** —
-neither state's data states a genuine works/phase grouping key. Brandenburg's
-`ID` property does have real prefix/suffix structure (e.g. `"267201193_1"`,
+no state's data states a genuine works/phase grouping key. Brandenburg's
+`ID` property has real prefix/suffix structure (e.g. `"267201193_1"`,
 `"_2"`, `"_3"`) and 140 of 164 distinct prefixes are multi-record, but
-agreement within a group is only ~81–88% on dates/type/road — far short of
-Autobahn's independently-corroborated 100% — so it ships 1:1 like every
-other provider without a genuine grouping signal, per this SDK's
-record-identity rule: raise an observed pattern, never act on it without
-real evidence. `territory="Germany"`, `administrative_area` (`"Hamburg"`/
-`"Brandenburg"`) is **endpoint provenance, not a record field** — there is
-no `bundesland` property on either state's features; the state is known
-because each field map is bound to one state's own endpoint, the same
-mechanism National Highways' `administrative_area="National Highways"`
-uses, not Spain's `provinces()` reading a real per-record field.
+agreement within a group is only ~81–88% on dates/type/road — far short
+of Autobahn's independently-corroborated 100%. Saxony shows the same
+shape of pattern through a different field: 1,531 real features, only
+1,133 distinct `ID` values — a spot-check confirms a duplicated ID is one
+closure split across several line segments, but the full pattern wasn't
+checked as thoroughly as Brandenburg's. Both ship 1:1 like every other
+provider without a genuine grouping signal, per this SDK's record-identity
+rule: raise an observed pattern, never act on it without real evidence.
+`territory="Germany"`, `administrative_area` (`"Hamburg"`/`"Brandenburg"`/
+`"Sachsen"`) is **endpoint provenance, not a record field** — there is no
+`bundesland` property on any state's features; the state is known because
+each field map is bound to one state's own endpoint, the same mechanism
+National Highways' `administrative_area="National Highways"` uses, not
+Spain's `provinces()` reading a real per-record field.
 
 Field names are UTF-8 throughout, umlauts and `ß` included — one real
 Brandenburg field name is `Straßenummner` (double "n", a typo in the
@@ -720,7 +760,7 @@ no single clean status field either — six independent boolean flags
 (`iststoerung`, `istfreigegeben`, `istoepnveingeschraenkt`, ...) instead,
 all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
-field-by-field mapping and both states' exact attribution text.
+field-by-field mapping and every state's exact attribution text.
 
 ## WZDx (US Work Zone Data Exchange)
 
@@ -928,7 +968,7 @@ arguments instead of guessing.
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
 Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, and
 DGT/Spain via the one shared converter), Autobahn GmbH/Germany, German
-state roadworks (Hamburg, Brandenburg, via the one shared
+state roadworks (Hamburg, Brandenburg, Saxony, via the one shared
 `from_ogc_features` converter), WZDx, TrafficWatchNI and Traffic Wales.
 UK Police stays outside
 the works hierarchy entirely — it's a *context* provider (area-level crime as a
@@ -1016,18 +1056,25 @@ actually is.
       unconfirmed** despite checking four independent sources — shipped
       anyway, flagged prominently, not silently assumed open
 - [x] German state (Bundesland) roadworks (`streetworks.ogc`) — a reusable
-      generic OGC WFS/Features GeoJSON client plus a declarative per-state
-      field-map registry, one shared converter reading it (adding a state
-      is a field map, not a new converter). Hamburg and Brandenburg
-      shipped, verified against real data (130 + 487 features, 100%
-      coordinate coverage, 0 out-of-bounds on the mandatory axis-order
-      check). Mecklenburg-Vorpommern checked and **parked** (GML-only,
-      licence unconfirmed). Brandenburg's `ID` field showed a real but
-      imperfect (~81-88% agreement) grouping signal — raised, not acted
-      on; ships 1:1 like every other provider without corroborated
-      grouping evidence. Client built gazetteer-ready (generic GeoJSON
-      fetch, CRS-aware) but no gazetteer features added yet — separate
-      design session pending
+      generic OGC WFS/Features/direct-download GeoJSON client plus a
+      declarative per-state field-map registry, one shared converter
+      reading it (adding a state is a field map, not a new converter).
+      Hamburg, Brandenburg and Saxony shipped, verified against real data
+      (130 + 487 + 1,531 features, 100% coordinate coverage, 0
+      out-of-bounds on the mandatory axis-order check each). Saxony has
+      no queryable service at all — WMS + a direct GeoJSON ZIP download
+      only — and no WGS84 source anywhere, so it ships in its real CRS
+      (EPSG:25833/UTM33N), carried through and labelled explicitly, never
+      reprojected, the same policy this SDK already applies to its BNG
+      providers. Mecklenburg-Vorpommern and Saxony-Anhalt checked and
+      **parked** (both GML-only; Saxony-Anhalt's licence also explicitly
+      non-commercial); NRW and Bavaria parked too (network-only geodata /
+      no Baustellen layer, not GML/CRS issues). Both Brandenburg's and
+      Saxony's `ID` fields showed a real but imperfect grouping signal —
+      raised, not acted on; ships 1:1 like every other provider without
+      corroborated grouping evidence. Client built gazetteer-ready
+      (generic GeoJSON fetch, CRS-aware) but no gazetteer features added
+      yet — separate design session pending
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against

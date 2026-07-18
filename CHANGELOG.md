@@ -4,6 +4,34 @@
 
 ### Added
 
+- **Germany: Saxony (Sachsen)** added to `streetworks.ogc` - 1,531 real
+  closures + 813 diversions, `LineString` geometry, via a direct GeoJSON
+  ZIP download (Saxony has no queryable WFS/Features service at all -
+  confirmed exhaustively via the GDI-DE catalogue's own metadata, 5 real
+  records checked, none link a working WFS despite an operator news item
+  once referencing one). Genuinely has no WGS84 source anywhere (checked
+  its WMS, its download, and its "planned works" dataset's own ISO
+  metadata) - ships in its real CRS, `EPSG:25833` (UTM33N), carried
+  through and labelled explicitly on `Coordinate.crs` rather than parked
+  or silently reprojected, the same policy this SDK already applies to
+  its British National Grid providers (OS Open USRN, DataVIA, Street
+  Manager) - `StateFieldMap` gained a `crs` field and
+  `OGCFeaturesClient`/`from_ogc_features` are now CRS-aware throughout,
+  not hardcoded to EPSG:4326. Dates are mostly `DD.MM.YYYY` but 639 of
+  3,062 real date fields (21%) carry a real hour suffix
+  (`"16.08.2026  08 Uhr"`) - parsed rather than dropped, preserving a
+  genuinely-stated time instead of collapsing to midnight. Saxony's `ID`
+  field shows the same shape of grouping signal Brandenburg's does (1,531
+  features, only 1,133 distinct values) - raised in the module docstring,
+  not acted on, consistent with the existing 1:1 policy.
+
+  Also investigated and **parked**: Saxony-Anhalt (GML-only, confirmed by
+  testing `OUTPUTFORMAT=application/json` directly against the real WFS;
+  its licence is also explicitly "non-commercial use only," not merely
+  unconfirmed), Mecklenburg-Vorpommern (unchanged from before - GML-only,
+  vague licence), NRW (publishes road network data, not roadworks - a
+  gazetteer concern; actual roadworks route to the gated Mobilithek/DATEX
+  path), and Bavaria (BAYSIS has no Baustellen/roadworks layer at all).
 - **Germany: state roadworks** (`streetworks.ogc`) - a new, reusable
   generic OGC WFS/OGC API Features GeoJSON client (`OGCFeaturesClient`,
   deliberately not roadworks-specific - built gazetteer-ready for future
