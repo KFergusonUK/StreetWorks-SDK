@@ -1,0 +1,616 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:payload xmlns:ns0="http://levelC/schema/3/d2Payload" xmlns:ns2="http://levelC/schema/3/common" xmlns:ns3="http://levelC/schema/3/situation" xmlns:ns4="http://levelC/schema/3/locationReferencing" xmlns:ns5="http://levelC/schema/3/locationReferencingSpanishExtension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sit:SituationPublication" lang="es" modelBaseVersion="3" profileName="DGT (Spain) Profile RTTI SituationPublication" profileVersion="3.7_1.0">
+  <ns2:publicationTime>2026-07-18T11:23:59.664+02:00</ns2:publicationTime>
+  <ns3:situation id="2816645">
+    <ns3:headerInformation>
+      <ns2:informationStatus>real</ns2:informationStatus>
+    </ns3:headerInformation>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="18811074" version="2">
+      <ns3:situationRecordCreationTime>2025-12-12T08:11:34.000+01:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2025-12-12T08:11:34.000+01:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2025-12-12T08:05:19.000+01:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadName>N-400</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>unknown</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.994446</ns4:latitude>
+              <ns4:longitude>-3.6054852</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Castilla - La Mancha</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>37.3</ns5:kilometerPoint>
+                <ns5:municipality>Ontígola</ns5:municipality>
+                <ns5:province>Toledo</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.993732</ns4:latitude>
+              <ns4:longitude>-3.6074991</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Castilla - La Mancha</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>37.1</ns5:kilometerPoint>
+                <ns5:municipality>Ontígola</ns5:municipality>
+                <ns5:province>Toledo</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>both</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>narrowLanes</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+  </ns3:situation>
+  <ns3:situation id="14845291">
+    <ns3:headerInformation>
+      <ns2:informationStatus>real</ns2:informationStatus>
+    </ns3:headerInformation>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="18600271" version="2">
+      <ns3:situationRecordCreationTime>2026-04-06T09:42:10.000+02:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2026-04-06T09:42:10.000+02:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2026-04-06T09:42:10.000+02:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:PointLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadDestination>AMBOS SENTIDOS</ns4:roadDestination>
+            <ns4:roadName>A-1507</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegPointLocation xsi:type="loc:TpegSimplePoint">
+          <ns4:tpegDirection>unknown</ns4:tpegDirection>
+          <ns4:tpegSimplePointLocationType>nonLinkedPoint</ns4:tpegSimplePointLocationType>
+          <ns4:point xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>40.917767</ns4:latitude>
+              <ns4:longitude>-1.3028483</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Aragón</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>1.165</ns5:kilometerPoint>
+                <ns5:municipality>Calamocha</ns5:municipality>
+                <ns5:province>Teruel</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:point>
+          <ns4:_tpegSimplePointExtension>
+            <ns4:extendedTpegSimplePoint>
+              <ns5:tpegDirectionRoad>both</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegSimplePoint>
+          </ns4:_tpegSimplePointExtension>
+        </ns4:tpegPointLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>roadClosed</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+  </ns3:situation>
+  <ns3:situation id="14590355">
+    <ns3:headerInformation>
+      <ns2:informationStatus>real</ns2:informationStatus>
+    </ns3:headerInformation>
+    <ns3:situationRecord xsi:type="sit:SpeedManagement" id="18327149" version="6">
+      <ns3:situationRecordCreationReference>TRZ_OB20251124/033289.2870499.2.1</ns3:situationRecordCreationReference>
+      <ns3:situationRecordCreationTime>2025-11-27T06:03:10.000+01:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2025-11-27T06:03:10.000+01:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2025-11-27T06:03:00.000+01:00</ns2:overallStartTime>
+          <ns2:overallEndTime>2026-07-22T17:00:00.000+02:00</ns2:overallEndTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadName>M-607</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>southEastBound</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>40.6361</ns4:latitude>
+              <ns4:longitude>-3.7304695</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Madrid, Comunidad de</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>27.8</ns5:kilometerPoint>
+                <ns5:municipality>Colmenar Viejo</ns5:municipality>
+                <ns5:province>Madrid</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>40.649975</ns4:latitude>
+              <ns4:longitude>-3.7358758</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Madrid, Comunidad de</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>29.5</ns5:kilometerPoint>
+                <ns5:municipality>Colmenar Viejo</ns5:municipality>
+                <ns5:province>Madrid</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>negative</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:speedManagementType>speedRestrictionInOperation</ns3:speedManagementType>
+      <ns3:temporarySpeedLimit>60.0</ns3:temporarySpeedLimit>
+    </ns3:situationRecord>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="18327148" version="5">
+      <ns3:situationRecordCreationReference>TRZ_OB20251124/033289.2870486.2.1</ns3:situationRecordCreationReference>
+      <ns3:situationRecordCreationTime>2025-11-27T06:03:03.000+01:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2025-11-27T06:03:03.000+01:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2025-11-27T06:03:00.000+01:00</ns2:overallStartTime>
+          <ns2:overallEndTime>2026-07-22T17:00:00.000+02:00</ns2:overallEndTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadName>M-607</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>southEastBound</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>40.6361</ns4:latitude>
+              <ns4:longitude>-3.7304695</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Madrid, Comunidad de</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>27.8</ns5:kilometerPoint>
+                <ns5:municipality>Colmenar Viejo</ns5:municipality>
+                <ns5:province>Madrid</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>40.649975</ns4:latitude>
+              <ns4:longitude>-3.7358758</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Madrid, Comunidad de</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>29.5</ns5:kilometerPoint>
+                <ns5:municipality>Colmenar Viejo</ns5:municipality>
+                <ns5:province>Madrid</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>negative</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+        <ns2:widthCharacteristic>
+          <ns2:comparisonOperator>greaterThan</ns2:comparisonOperator>
+          <ns2:vehicleWidth>3.0</ns2:vehicleWidth>
+        </ns2:widthCharacteristic>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>doNotUseSpecifiedLanesOrCarriageways</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+  </ns3:situation>
+  <ns3:situation id="20268117">
+    <ns3:headerInformation>
+      <ns2:informationStatus>real</ns2:informationStatus>
+    </ns3:headerInformation>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="25455306" version="73">
+      <ns3:situationRecordCreationTime>2026-07-14T12:02:49.000+02:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2026-07-14T12:02:49.000+02:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2026-07-14T12:02:40.000+02:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>tidalFlowLane</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadDestination>VALENCIA</ns4:roadDestination>
+            <ns4:roadName>A-3</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>northEastBound</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.54152</ns4:latitude>
+              <ns4:longitude>-1.4887686</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Comunitat Valenciana</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>250.0</ns5:kilometerPoint>
+                <ns5:municipality>Villargordo del Cabriel</ns5:municipality>
+                <ns5:province>València/Valencia</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.544956</ns4:latitude>
+              <ns4:longitude>-1.5168742</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Castilla - La Mancha</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>247.0</ns5:kilometerPoint>
+                <ns5:municipality>Minglanilla</ns5:municipality>
+                <ns5:province>Cuenca</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>positive</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>useOfSpecifiedLanesOrCarriagewaysAllowed</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="24385923" version="73">
+      <ns3:situationRecordCreationTime>2026-06-18T12:28:54.000+02:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2026-07-14T12:02:49.000+02:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2026-07-14T12:02:49.000+02:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadDestination>VALENCIA</ns4:roadDestination>
+            <ns4:roadName>A-3</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>northEastBound</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.54152</ns4:latitude>
+              <ns4:longitude>-1.4887686</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Comunitat Valenciana</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>250.0</ns5:kilometerPoint>
+                <ns5:municipality>Villargordo del Cabriel</ns5:municipality>
+                <ns5:province>València/Valencia</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.544956</ns4:latitude>
+              <ns4:longitude>-1.5168742</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Castilla - La Mancha</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>247.0</ns5:kilometerPoint>
+                <ns5:municipality>Minglanilla</ns5:municipality>
+                <ns5:province>Cuenca</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>positive</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>carriagewayClosures</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="24386127" version="68">
+      <ns3:situationRecordCreationTime>2026-06-18T12:32:53.000+02:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2026-07-14T08:57:04.000+02:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2026-07-14T08:57:04.000+02:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>roadMaintenance</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:roadMaintenanceType>roadworks</ns3:roadMaintenanceType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:SingleRoadLinearLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>leftLane</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadDestination>MADRID</ns4:roadDestination>
+            <ns4:roadName>A-3</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegLinearLocation>
+          <ns4:tpegDirection>northWestBound</ns4:tpegDirection>
+          <ns4:tpegLinearLocationType>segment</ns4:tpegLinearLocationType>
+          <ns4:to xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.54501</ns4:latitude>
+              <ns4:longitude>-1.492287</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Comunitat Valenciana</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>249.5</ns5:kilometerPoint>
+                <ns5:municipality>Villargordo del Cabriel</ns5:municipality>
+                <ns5:province>València/Valencia</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:to>
+          <ns4:from xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>39.54152</ns4:latitude>
+              <ns4:longitude>-1.4887686</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Comunitat Valenciana</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>250.0</ns5:kilometerPoint>
+                <ns5:municipality>Villargordo del Cabriel</ns5:municipality>
+                <ns5:province>València/Valencia</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:from>
+          <ns4:_tpegLinearLocationExtension>
+            <ns4:extendedTpegLinearLocation>
+              <ns5:tpegDirectionRoad>negative</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegLinearLocation>
+          </ns4:_tpegLinearLocationExtension>
+        </ns4:tpegLinearLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>laneClosures</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+  </ns3:situation>
+  <ns3:situation id="13054089">
+    <ns3:overallSeverity>highest</ns3:overallSeverity>
+    <ns3:headerInformation>
+      <ns2:informationStatus>real</ns2:informationStatus>
+    </ns3:headerInformation>
+    <ns3:situationRecord xsi:type="sit:RoadOrCarriagewayOrLaneManagement" id="16676270" version="1">
+      <ns3:situationRecordCreationTime>2025-09-30T13:43:12.000+02:00</ns3:situationRecordCreationTime>
+      <ns3:situationRecordVersionTime>2025-09-30T13:43:12.000+02:00</ns3:situationRecordVersionTime>
+      <ns3:probabilityOfOccurrence>certain</ns3:probabilityOfOccurrence>
+      <ns3:severity>highest</ns3:severity>
+      <ns3:source>
+        <ns2:sourceIdentification>DGT</ns2:sourceIdentification>
+      </ns3:source>
+      <ns3:validity>
+        <ns2:validityStatus>active</ns2:validityStatus>
+        <ns2:validityTimeSpecification>
+          <ns2:overallStartTime>2025-09-30T13:43:12.000+02:00</ns2:overallStartTime>
+        </ns2:validityTimeSpecification>
+      </ns3:validity>
+      <ns3:cause>
+        <ns3:causeType>infrastructureDamageObstruction</ns3:causeType>
+        <ns3:detailedCauseType>
+          <ns3:infrastructureDamageType>damagedRoadSurface</ns3:infrastructureDamageType>
+        </ns3:detailedCauseType>
+      </ns3:cause>
+      <ns3:locationReference xsi:type="loc:PointLocation">
+        <ns4:supplementaryPositionalDescription>
+          <ns4:carriageway>
+            <ns4:carriageway>unspecifiedCarriageway</ns4:carriageway>
+            <ns4:lane>
+              <ns4:laneUsage>allLanesCompleteCarriageway</ns4:laneUsage>
+            </ns4:lane>
+          </ns4:carriageway>
+          <ns4:roadInformation>
+            <ns4:roadName>HU-883</ns4:roadName>
+          </ns4:roadInformation>
+        </ns4:supplementaryPositionalDescription>
+        <ns4:tpegPointLocation xsi:type="loc:TpegSimplePoint">
+          <ns4:tpegDirection>unknown</ns4:tpegDirection>
+          <ns4:tpegSimplePointLocationType>nonLinkedPoint</ns4:tpegSimplePointLocationType>
+          <ns4:point xsi:type="loc:TpegNonJunctionPoint">
+            <ns4:pointCoordinates>
+              <ns4:latitude>41.705166</ns4:latitude>
+              <ns4:longitude>-0.025548847</ns4:longitude>
+            </ns4:pointCoordinates>
+            <ns4:_tpegNonJunctionPointExtension>
+              <ns4:extendedTpegNonJunctionPoint>
+                <ns5:autonomousCommunity>Aragón</ns5:autonomousCommunity>
+                <ns5:kilometerPoint>1.2</ns5:kilometerPoint>
+                <ns5:municipality>Villanueva de Sigena</ns5:municipality>
+                <ns5:province>Huesca</ns5:province>
+              </ns4:extendedTpegNonJunctionPoint>
+            </ns4:_tpegNonJunctionPointExtension>
+          </ns4:point>
+          <ns4:_tpegSimplePointExtension>
+            <ns4:extendedTpegSimplePoint>
+              <ns5:tpegDirectionRoad>both</ns5:tpegDirectionRoad>
+            </ns4:extendedTpegSimplePoint>
+          </ns4:_tpegSimplePointExtension>
+        </ns4:tpegPointLocation>
+      </ns3:locationReference>
+      <ns3:complianceOption>mandatory</ns3:complianceOption>
+      <ns3:forVehiclesWithCharacteristicsOf>
+        <ns2:vehicleType>anyVehicle</ns2:vehicleType>
+      </ns3:forVehiclesWithCharacteristicsOf>
+      <ns3:roadOrCarriagewayOrLaneManagementType>roadClosed</ns3:roadOrCarriagewayOrLaneManagementType>
+    </ns3:situationRecord>
+  </ns3:situation>
+</ns0:payload>

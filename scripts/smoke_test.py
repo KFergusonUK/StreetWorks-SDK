@@ -234,6 +234,23 @@ def check_bisonfute() -> str:
     )
 
 
+def check_dgt() -> str:
+    """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
+    reliably reachable (see streetworks.datex2.dgt). Coverage excludes
+    Catalonia and the Basque Country."""
+    from streetworks.datex2 import DGTClient
+    from streetworks.datex2.dgt import provinces
+
+    with DGTClient() as dgt:
+        situations = list(dgt.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    distinct_provinces = len(set(provinces(situations).values()))
+    return (
+        f"{len(situations):,} roadworks situations ({works:,} works records) "
+        f"across {distinct_provinces} provinces"
+    )
+
+
 def check_vegvesen() -> str:
     """Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
     streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
@@ -506,6 +523,8 @@ def main() -> int:
     reporter.check("DATEX II (IRCA/Iceland)", [], check_irca)
     # Bison Fute (France) needs no credentials
     reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
+    # DGT (Spain) needs no credentials
+    reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

@@ -9,8 +9,11 @@ Digitraffic (Finland) fixture, which has no lifecycle-status field at all
 and needs the province() lookup for administrative_area, the real IRCA
 (Iceland) fixture, the real Bison Futé (France) fixture - which needs the
 dir_regions() lookup the same shape of way, and exercises real TPEG linear
-geometry surviving as Coordinate.points - and the Vegvesen (Norway) fixture
-- **pending live verification**, real DATEX data but from Iceland's
+geometry surviving as Coordinate.points - the real DGT (Spain) fixture -
+which needs its own provinces() lookup and exercises the cause-based
+roadworks discriminator (no MaintenanceWorks/ConstructionWorks xsi:type
+exists in that feed at all) - and the Vegvesen (Norway) fixture -
+**pending live verification**, real DATEX data but from Iceland's
 sibling implementation, not Norway itself (see streetworks.datex2.vegvesen).
 """
 
@@ -22,6 +25,7 @@ from pathlib import Path
 from streetworks.common import DateConfidence, SourceGrade, from_datex2
 from streetworks.datex2 import iter_situations, iter_situations_full
 from streetworks.datex2.bisonfute import dir_regions as bisonfute_dir_regions
+from streetworks.datex2.dgt import provinces as dgt_provinces
 from streetworks.datex2.digitraffic import parse_situations as parse_digitraffic_situations
 from streetworks.datex2.digitraffic import provinces
 from streetworks.datex2.models import Location, Situation, SituationRecord, Validity
@@ -268,6 +272,30 @@ def test_from_datex2_bisonfute_france():
     # through to the common model, not just the first vertex.
     assert works.coordinate.points == ((42.92285, 0.68384415), (42.908493, 0.6984161))
     assert works.sites[0].coordinate.points == ((42.92285, 0.68384415), (42.908493, 0.6984161))
+
+
+def test_from_datex2_dgt_spain():
+    fixture = Path(__file__).parent / "fixtures" / "dgt_situations.xml"
+    situations = list(iter_situations_full(fixture))
+    regions = dgt_provinces([s for s in situations if s.roadworks])
+    situation = next(s for s in situations if s.id == "2816645")
+
+    works = from_datex2(situation, territory="Spain", administrative_area=regions.get(situation.id))
+    assert works.territory == "Spain"
+    assert works.administrative_area == "Toledo"
+    assert works.source_grade is SourceGrade.OPERATOR
+    assert works.promoter is None  # no sourceName on any real record, only sourceIdentification
+    # roadName fallback (Spain never states roadNumber)
+    assert works.sites[0].location_description == "N-400, unspecifiedCarriageway"
+    # validityStatus was "active" on every real roadworks record fetched.
+    assert works.sites[0].date_confidence is DateConfidence.VERIFIED
+
+    # The situation with two roadworks records of different xsi:types
+    # (SpeedManagement + RoadOrCarriagewayOrLaneManagement) both survive as
+    # sites - the cause-based discriminator isn't limited to one xsi:type.
+    mixed = next(s for s in situations if s.id == "14590355")
+    mixed_works = from_datex2(mixed, territory="Spain")
+    assert len(mixed_works.sites) == 2
 
 
 def test_from_datex2_irca_iceland():

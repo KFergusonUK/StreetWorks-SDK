@@ -10,7 +10,9 @@ schema, not a DATEX-II serialisation - see
 :mod:`streetworks.datex2.digitraffic` for the field-by-field mapping),
 IRCA/Vegagerðin's DATEX II snapshotPull service for Iceland (credential-free
 - see :mod:`streetworks.datex2.irca`), Bison Futé/the DIRs' DATEX II v2 feed
-for France (credential-free - see :mod:`streetworks.datex2.bisonfute`), and
+for France (credential-free - see :mod:`streetworks.datex2.bisonfute`), the
+DGT's DATEX II v3 SituationPublication for Spain, excl. Catalonia & the
+Basque Country (credential-free - see :mod:`streetworks.datex2.dgt`), and
 Statens vegvesen's DATEX II snapshotPull service for Norway (**pending live
 verification** - see :mod:`streetworks.datex2.vegvesen`).
 """
@@ -19,6 +21,10 @@ from .bisonfute import BASE_URL as BISONFUTE_BASE_URL
 from .bisonfute import CONTENT_PATH as BISONFUTE_CONTENT_PATH
 from .bisonfute import BisonFuteClient
 from .bisonfute import dir_regions as bisonfute_dir_regions
+from .dgt import BASE_URL as DGT_BASE_URL
+from .dgt import SITUATION_PUBLICATION_PATH as DGT_SITUATION_PUBLICATION_PATH
+from .dgt import DGTClient
+from .dgt import provinces as dgt_provinces
 from .digitraffic import BASE_URL as DIGITRAFFIC_BASE_URL
 from .digitraffic import DigitrafficClient
 from .digitraffic import parse_situations as parse_digitraffic_situations
@@ -63,6 +69,10 @@ __all__ = [
     "BISONFUTE_BASE_URL",
     "BISONFUTE_CONTENT_PATH",
     "bisonfute_dir_regions",
+    "DGTClient",
+    "DGT_BASE_URL",
+    "DGT_SITUATION_PUBLICATION_PATH",
+    "dgt_provinces",
     "VegvesenClient",
     "VEGVESEN_BASE_URL",
     "NVDB_BASE_URL",

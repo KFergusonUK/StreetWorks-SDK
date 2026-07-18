@@ -5,9 +5,11 @@ Highways (England SRN, JSON), Digitraffic (Finland, its own Simple-JSON -
 see :mod:`streetworks.datex2.digitraffic` for why it still produces this
 same model despite not being DATEX-shaped itself), IRCA (Iceland, XML -
 :mod:`streetworks.datex2.irca`), Bison Futé (France, XML v2 -
-:mod:`streetworks.datex2.bisonfute`), and Vegvesen (Norway, **pending live
-verification** - see :mod:`streetworks.datex2.vegvesen`) all normalise onto
-the same
+:mod:`streetworks.datex2.bisonfute`), DGT (Spain, XML v3 -
+:mod:`streetworks.datex2.dgt` - the one adapter whose roadworks records
+carry no dedicated xsi:type at all, handled in the shared parser/model, not
+here), and Vegvesen (Norway, **pending live verification** - see
+:mod:`streetworks.datex2.vegvesen`) all normalise onto the same
 :class:`~streetworks.datex2.Situation`/:class:`~streetworks.datex2.SituationRecord`
 models, so one converter covers all of them; ``source_grade`` is always
 :attr:`~streetworks.common.SourceGrade.OPERATOR` for DATEX per the spec's
@@ -52,6 +54,14 @@ guessing which adapter produced the Situation:
   interdépartementale des routes/DIR Sud-Ouest"``) is genuinely stated but
   not on the shared model, so ``dir_regions()`` reads it from ``.raw``
   instead (see :mod:`streetworks.datex2.bisonfute`).
+- DGT (Spain): ``from_datex2(situation, territory="Spain",
+  administrative_area=streetworks.datex2.dgt.provinces(situations).get(situation.id))``
+  - ``source_name`` is always ``None`` there (the ``<source>`` element states
+  only ``sourceIdentification``, the operator ``"DGT"``, never a
+  ``sourceName``), so relying on the default would leave
+  ``administrative_area`` unset for every site; the real per-record
+  ``province`` (e.g. ``"Toledo"``) is genuinely stated but, like France's DIR
+  region, not on the shared model, so ``provinces()`` reads it from ``.raw``.
 - Vegvesen (Norway, **pending live verification** - see
   :mod:`streetworks.datex2.vegvesen`): ``from_datex2(situation,
   territory="Norway")`` - no ``administrative_area`` is passed because no

@@ -277,6 +277,29 @@ def _bisonfute_demo() -> None:
 
 attempt("Bison Fute (France)", _bisonfute_demo)
 
+# --- DGT: Spanish national roadworks, excl. Catalonia & the Basque Country (no credentials) ---
+
+section("DGT (Spain)")
+
+
+def _dgt_demo() -> None:
+    from streetworks.common import from_datex2
+    from streetworks.datex2.dgt import DGTClient, provinces
+
+    with DGTClient() as dgt:
+        situations = list(dgt.iter_roadworks())
+    spanish_provinces = provinces(situations)
+    print(f"  {len(situations)} roadworks situations")
+    for situation in situations[:3]:
+        works = from_datex2(
+            situation, territory="Spain", administrative_area=spanish_provinces.get(situation.id)
+        )
+        site = works.sites[0]
+        print("  ", works.administrative_area or "?", "-", site.works_type)
+
+
+attempt("DGT (Spain)", _dgt_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")
