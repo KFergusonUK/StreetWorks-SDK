@@ -4,6 +4,33 @@
 
 ### Added
 
+- **Germany: state roadworks** (`streetworks.ogc`) - a new, reusable
+  generic OGC WFS/OGC API Features GeoJSON client (`OGCFeaturesClient`,
+  deliberately not roadworks-specific - built gazetteer-ready for future
+  work, since German gazetteers are commonly published the same way),
+  plus a declarative per-state field-map registry
+  (`streetworks.ogc.germany`) that one shared converter
+  (`streetworks.common.from_ogc_features`) reads generically - adding a
+  state means a new field-map entry, not a new converter. Two states
+  shipped, both verified against real data (2026-07): Hamburg (130
+  features, `Point` geometry, dates `DD.MM.YYYY`) and Brandenburg (487
+  features, `LineString` geometry, dates ISO, 100% coordinate coverage,
+  0 out-of-bounds on the mandatory axis-order sanity check both states'
+  tests run). Both publish under Datenlizenz Deutschland - Namensnennung -
+  Version 2.0 (dl-de/by-2-0), confirmed directly from each WFS's own
+  `GetCapabilities` document. Hamburg's access mode (WFS vs. a "direct
+  GeoJSON download") was genuinely ambiguous before checking - confirmed
+  live the download is a ZIP wrapper around the same WFS, not a separate
+  source; the direct `GetFeature` call is canonical. One real field name
+  differs from what was documented before checking: Brandenburg's road
+  field is `Straßenummner` (double "n", a typo in the source schema
+  itself). Mecklenburg-Vorpommern was checked and **parked**: confirmed
+  live GML-only (its WFS explicitly rejects `application/geo+json`) and
+  its licence is only vaguely stated, two independent reasons. Ships one
+  `Works` per feature (1:1, no grouping) - Brandenburg's `ID` field showed
+  a real but imperfect (~81-88% agreement, no corroborating field) grouping
+  signal, raised rather than acted on unilaterally, consistent with the
+  project's record-identity discipline.
 - **Germany: Autobahn GmbH** (`streetworks.autobahn`) - national motorway
   roadworks via Autobahn GmbH's own open JSON REST API, credential-free.
   Not DATEX II and not OGC/WFS, so it has its own small parser rather than
