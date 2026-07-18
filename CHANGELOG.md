@@ -4,6 +4,43 @@
 
 ### Added
 
+- **Germany: Autobahn GmbH** (`streetworks.autobahn`) - national motorway
+  roadworks via Autobahn GmbH's own open JSON REST API, credential-free.
+  Not DATEX II and not OGC/WFS, so it has its own small parser rather than
+  routing through `streetworks.datex2` - the same shape of choice as WZDx
+  for the US. Verified against a live fetch of all 113 real roads (2026-07,
+  zero failures): 2,873 roadworks records grouping into 997 works via a
+  genuine two-level identifier-prefix spine (599 multi-record groups, 599/599
+  agreeing on their overall end date, zero disagreements) - including
+  cross-road grouping, since 50/997 real prefixes span more than one road
+  (a junction works gets listed under every connecting road's own
+  response). Every real record carries `LineString` geometry (2-767
+  vertices), kept whole, not collapsed to a point; native axis order is
+  genuinely reversed within one record (`coordinate` is lat/long,
+  `geometry.coordinates` is GeoJSON lon/lat) and flipped explicitly in
+  `from_autobahn`, same as WZDx. Two real road-list traps confirmed live:
+  lowercase route suffixes (`A64a`/`A99a`), and `"A60 "` (trailing space) -
+  not a formatting quirk on the one real A60, but a genuinely separate,
+  always-empty duplicate entry that must not be stripped (stripping it
+  would silently refetch the real `"A60"` entry's 20 records under the
+  wrong id). Dates are a deliberate, documented exception to "never infer,
+  only take what's stated" (in the same register as Digitraffic's
+  `validity.status` caveat): no end-date field exists anywhere in the API,
+  and no start-date field at all for `SHORT_TERM_ROADWORKS` records
+  (0/1,184 real ones carry it) - dates for those come from parsing
+  `description[]` free text, five real shapes handled (long-term
+  Beginn/Ende, the overall-measure end, and three short-term shapes -
+  single-day, overnight/multi-day, and a recurring-weekly pattern
+  collapsed to its outer bounding window), reaching 100%
+  (`ROADWORKS`)/99.7% (`SHORT_TERM_ROADWORKS`) coverage; `Roadworks.is_start_verified`
+  distinguishes a real `startTimestamp` from a text-derived one.
+  Timezone is Europe/Berlin via `zoneinfo`, not a fixed offset - DST is
+  genuinely observed in the data. **Licence unconfirmed** despite checking
+  four independent sources (govdata.de's CKAN catalogue, the MDM portal,
+  the community `bundesAPI/autobahn-api` docs, and the official autobahn.de
+  app page - none state reuse/redistribution terms) - shipped anyway per
+  explicit instruction, flagged prominently in the module docstring and
+  README rather than silently assumed open.
 - **Spain: DGT** (`streetworks.datex2.dgt`) - the DGT (Dirección General de
   Tráfico) National Access Point's SituationPublication, genuine DATEX II
   v3 (Level C, Spanish-extended profile), credential-free. Reused through

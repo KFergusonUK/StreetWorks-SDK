@@ -28,6 +28,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
+| `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -61,8 +62,14 @@ Open Data (parsed against real published daily and monthly extracts),
 OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
-Finland, IRCA/Iceland, Bison Futé/France, and DGT/Spain (all parsed
-against real live feeds).
+Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, and Autobahn GmbH/
+Germany (all parsed against real live feeds).
+
+**Autobahn GmbH's licence is unconfirmed** - checked four independent
+sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-motorways)
+for what was checked) and none state reuse/redistribution terms. Shipped
+anyway, flagged deliberately rather than silently assumed open - confirm
+your own rights before redistributing this data.
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -544,6 +551,98 @@ scope. Published under **Creative Commons Attribution (CC BY)** — see
 `streetworks/datex2/dgt.py`'s module docstring for the attribution wording
 and full field-by-field mapping.
 
+## Autobahn GmbH (Germany, national motorways)
+
+Germany's national motorway (Autobahn) network roadworks, via Autobahn
+GmbH's own open JSON REST API — credential-free, but **not** DATEX II and
+**not** OGC/WFS, so `streetworks.autobahn` has its own small parser rather
+than routing through `streetworks.datex2` (the same shape of choice as
+WZDx for the US). Covers the national motorway network only; German state
+roads are a separate WFS-based source, out of scope here.
+
+> ⚠️ **Licence unconfirmed.** Checked govdata.de's CKAN catalogue entry for
+> this API (organisation: Mobilithek — `license_title`/`license_url` both
+> blank), the MDM portal link that entry points to (unreachable), the
+> community `bundesAPI/autobahn-api` documentation (no licence stated), and
+> the official autobahn.de app page (no terms of use found). None confirm
+> reuse/redistribution rights. Shipped anyway at the maintainer's explicit
+> instruction, flagged here deliberately — confirm your own rights before
+> redistributing this data.
+
+```python
+from streetworks.autobahn import AutobahnClient
+from streetworks.common import from_autobahn
+
+with AutobahnClient() as autobahn:
+    roads = autobahn.list_roads()               # 113 real road ids, e.g. "A1"
+    items = list(autobahn.iter_all_roadworks(roads))   # one request per road
+
+works = from_autobahn(items)                     # grouped into works + phases
+for w in works:
+    print(w.reference, len(w.sites), w.administrative_area)
+```
+
+Verified against a live fetch of all 113 roads (2026-07, zero failures):
+2,873 roadworks records, grouping into 997 works. `territory="Germany"`,
+`administrative_area="Autobahn GmbH"` — the national motorway operator IS
+the data-owning authority, same rule as National Highways for England.
+
+**Two real road-list traps, confirmed live, not just documented**:
+`"A64a"`/`"A99a"` use lowercase route suffixes — don't upper-case road
+ids. More surprising: `"A60 "` (trailing space) isn't a formatting quirk
+on the one real A60 — the list carries *two* separate entries, a plain
+`"A60"` and this space-suffixed one, and they behave differently:
+`GET .../A60/...` returns 20 real roadworks, `GET .../A60%20/...` (the
+listed id, correctly percent-encoded, not stripped) returns zero.
+Stripping the space would silently refetch the other entry's 20 records
+under the wrong road id — so despite looking like noise, road ids must be
+used exactly as listed, never stripped or reformatted.
+
+**Geometry is a real line, not a point** — every one of 2,873 real records
+carries `LineString` geometry (2–767 vertices), kept whole on
+`Coordinate.points`, same as the France/WZDx line-geometry handling.
+Native axis order is genuinely reversed *within one record*: the
+`coordinate` field is `(lat, long)`, `geometry.coordinates` is GeoJSON
+`(lon, lat)` — both native in `Roadworks`, flipped explicitly in
+`from_autobahn`, same as WZDx.
+
+**A genuine two-level spine, confirmed not assumed**: records sharing an
+identifier prefix (before its first `--`) are phases of one works — in the
+full fetch, 599 multi-record groups, and *every one* agrees on its overall
+end date (599/599, zero disagreements). Grouping is **cross-road**: 50 of
+997 real prefixes span more than one road, because a works at a junction
+gets listed under every connecting road's own response (e.g. one A1/A61
+junction project has 3 records under `A1` and 2 under `A61`) — confirmed
+safe to merge (no identifier is ever duplicated across roads).
+
+**Dates are a deliberate, documented exception to "never infer, only take
+what's stated"**, in the same honest register as Digitraffic's
+`validity.status` caveat: there is no end-date field anywhere in this API,
+and no start-date field at all for `SHORT_TERM_ROADWORKS` records (0/1,184
+real ones carry it, vs. 1,689/1,689 long-term `ROADWORKS` records that
+do). Dates for everything else come from parsing `description[]` —
+machine-generated, consistently-formatted text, not human prose, so this
+is extraction, not inference, but it's still an exception, and
+`Roadworks.is_start_verified` exists so callers can tell a verified date
+from an estimated one rather than trusting every date equally. Five real
+text shapes are handled (long-term Beginn/Ende, the overall-measure end,
+and three short-term shapes — single-day, overnight/multi-day, and a
+recurring-weekly pattern collapsed to its outer bounding window, the same
+trade-off DATEX's `Validity` makes for multi-period validity) — coverage
+is 100% for `ROADWORKS` and 99.7% (1,181/1,184) for `SHORT_TERM_ROADWORKS`;
+the remaining 3 records use free-form "valid except these days" text that
+isn't safely extractable without guessing, and are left with dates unset,
+raw text preserved. Timezone is Europe/Berlin via `zoneinfo`, not a fixed
+offset — DST is genuinely observed in the data (`+01:00`/`+02:00` both
+seen live), and `"24:00"` (also seen live) means end-of-day, handled by
+rolling to `00:00` the next day rather than rejected. See
+`streetworks/autobahn/parser.py`'s module docstring for the exact shapes
+and full field-by-field mapping.
+
+The per-item `details/roadworks/{id}` endpoint was checked and confirmed
+to add nothing over the list response (sampled 6 varied real records,
+every extra field was `null`) — skipped, avoiding ~2,900 extra requests.
+
 ## WZDx (US Work Zone Data Exchange)
 
 WZDx is the US standard for work zone data — GeoJSON-based, distinct from
@@ -749,8 +848,8 @@ arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
 Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, and
-DGT/Spain via the one shared converter), WZDx, TrafficWatchNI and Traffic
-Wales. UK Police stays outside
+DGT/Spain via the one shared converter), Autobahn GmbH/Germany, WZDx,
+TrafficWatchNI and Traffic Wales. UK Police stays outside
 the works hierarchy entirely — it's a *context* provider (area-level crime as a
 safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
@@ -826,6 +925,15 @@ actually is.
       `SituationRecord.is_roadworks` gained an additive cause-based check
       (`roadMaintenance`/`roadworks`), plus a `roadName` fallback for the
       road identifier (Spain never states `roadNumber`)
+- [x] Germany (Autobahn GmbH) national motorway adapter (`streetworks.autobahn`)
+      — its own JSON REST API, not DATEX; verified against a live fetch of
+      all 113 roads (2,873 roadworks, zero failures), no credentials. A
+      genuine two-level spine (works/phases) confirmed live, cross-road
+      grouping (a junction project can be split across two roads' API
+      responses), and a documented free-text date-parsing exception
+      (99.7% coverage on the class with no date field at all). **Licence
+      unconfirmed** despite checking four independent sources — shipped
+      anyway, flagged prominently, not silently assumed open
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -859,9 +967,11 @@ Grouped by the client shape they need:
   roadworks as an ArcGIS MapServer layer; likely a quick, self-contained win
   and the SDK's first Channel Islands coverage.
 - **Dedicated pieces** (each its own project, not a quick adapter): Germany's
-  Mobilithek (broker/subscription access, mixed schemas — D-TRO-scale effort);
-  Guernsey (appears to be an HTML site — confirm whether any structured feed
-  exists before committing, and check licensing for scraping).
+  Mobilithek *broker* (subscription access, mixed schemas — D-TRO-scale
+  effort; distinct from Autobahn GmbH's own public motorway-roadworks API,
+  already covered above); Guernsey (appears to be an HTML site — confirm
+  whether any structured feed exists before committing, and check
+  licensing for scraping).
 - Verify-the-source-first: prefer official government feeds over third-party
   API-marketplace wrappers; a couple of the researched links need their real
   upstream endpoint confirmed.
