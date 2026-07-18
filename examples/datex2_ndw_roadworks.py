@@ -13,7 +13,7 @@ with NDWClient() as ndw:
     feed = ndw.download_planned_works("ndw-planned.xml.gz")  # ~15 MB
 
 urgent = 0
-for situation in iter_roadworks(feed):
+for situation in iter_roadworks(feed, provider="NDW"):
     for works in situation.roadworks:
         if works.urgent:
             urgent += 1
@@ -29,7 +29,7 @@ for situation in iter_roadworks(feed):
         continue
     break
 
-count = sum(1 for _ in iter_roadworks(feed))
+count = sum(1 for _ in iter_roadworks(feed, provider="NDW"))
 print(f"\n{count:,} roadworks situations in the Dutch national feed ({urgent} urgent)")
 
 # Note: DATEX II coordinates are WGS84 latitude/longitude - not the British

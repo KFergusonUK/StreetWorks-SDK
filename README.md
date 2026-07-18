@@ -5,8 +5,9 @@
 [![Python](https://img.shields.io/pypi/pyversions/streetworks)](https://pypi.org/project/streetworks/)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
-An open Python SDK for UK street works APIs — one consistent, typed,
-well-tested client for the services the sector actually uses.
+An open Python SDK for street works and roadworks data — the UK's
+registers, Europe's DATEX II feeds, and the US WZDx standard, behind one
+consistent, typed, well-tested client.
 
 > We do this not because it is easy, but because it is hard.
 
@@ -26,7 +27,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), and Bison Futé (France, XML v2; no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -60,8 +61,8 @@ Open Data (parsed against real published daily and monthly extracts),
 OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
-Finland, IRCA/Iceland, and Bison Futé/France (all parsed against real live
-feeds).
+Finland, IRCA/Iceland, Bison Futé/France, and DGT/Spain (all parsed
+against real live feeds).
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -372,7 +373,7 @@ from streetworks.datex2 import NDWClient, iter_roadworks
 with NDWClient() as ndw:
     feed = ndw.download_planned_works("ndw-planned.xml.gz")
 
-for situation in iter_roadworks(feed):
+for situation in iter_roadworks(feed, provider="NDW"):
     works = situation.roadworks[0]
     print(works.source_name, works.road_maintenance_type,
           works.validity.overall_start, works.location.point)
@@ -382,6 +383,14 @@ The parser streams (the ~170 MB Dutch national feed parses in seconds at
 ~35 MB memory) and normalises locations across referencing methods.
 **Coordinates are WGS84 latitude/longitude** — not the British National Grid
 used by the UK providers here.
+
+`iter_situations`/`iter_roadworks` (and their `_full` variants) take an
+optional `provider` label, as above, naming the source in the debug-level
+log a field-mapping fallback emits when it fires (see Spain below). IRCA,
+Bison Futé and DGT pass it automatically since they own their own fetch;
+it's stated explicitly here since you're calling the parser directly
+(Digitraffic and National Highways parse JSON separately, so it doesn't
+apply there).
 
 **National Highways** (England's Strategic Road Network) publishes its
 DATEX II v3.4 extended profile as **JSON, not XML**, so it needs its own
@@ -411,19 +420,17 @@ II serialisation, unlike National Highways — so
 same shared models:
 
 ```python
-from streetworks.common import from_datex2
 from streetworks.datex2.digitraffic import DigitrafficClient, provinces
 
 with DigitrafficClient() as digitraffic:
     payload = digitraffic.get_roadworks()
     situations = digitraffic.parse(payload)
 
-situation_provinces = provinces(payload)  # province isn't on Situation itself
+situation_provinces = provinces(payload)  # {situation.id: "province name", ...}
 for situation in situations:
-    works = from_datex2(
-        situation, territory="Finland",
-        administrative_area=situation_provinces.get(situation.id),
-    )
+    works = situation.roadworks[0]
+    print(situation_provinces.get(situation.id), works.road_maintenance_type,
+          works.location.point)
 ```
 
 Verified against the live feed (2026-07): `record_type` is a documented
@@ -444,12 +451,12 @@ memory (`iter_situations_full`), unlike NDW's ~170 MB feed, so `.raw` is
 populated here where NDW's streaming parser leaves it unset:
 
 ```python
-from streetworks.common import from_datex2
 from streetworks.datex2.irca import IcelandClient
 
 with IcelandClient() as irca:
     for situation in irca.iter_roadworks():
-        works = from_datex2(situation, territory="Iceland")
+        works = situation.roadworks[0]
+        print(works.record_type, works.validity.overall_start, works.location.point)
 ```
 
 Verified against multiple independent live fetches (2026-07): reliably
@@ -470,17 +477,14 @@ DATEX II **v2** XML — again reused through the same shared parser, no
 bespoke path needed:
 
 ```python
-from streetworks.common import from_datex2
 from streetworks.datex2.bisonfute import BisonFuteClient, dir_regions
 
 with BisonFuteClient() as bf:
     situations = list(bf.iter_roadworks())
-regions = dir_regions(situations)  # DIR region isn't on the shared model
+regions = dir_regions(situations)  # {situation.id: "DIR region name", ...}
 for situation in situations:
-    works = from_datex2(
-        situation, territory="France",
-        administrative_area=regions.get(situation.id),
-    )
+    works = situation.roadworks[0]
+    print(regions.get(situation.id), works.road_maintenance_type, works.location.point)
 ```
 
 Verified against the live feed (2026-07, 256 situations, 170 roadworks):
@@ -500,6 +504,45 @@ reads it from each record's `.raw` XML directly. Published under the
 **Licence Ouverte / Open Licence 2.0 (Etalab)** — see
 `streetworks/datex2/bisonfute.py`'s module docstring for the attribution
 wording and full field-by-field mapping.
+
+**Spain's DGT** (Dirección General de Tráfico) publishes national traffic
+incidents, including roadworks, credential-free as genuine DATEX II **v3**
+(Level C, with Spanish national extensions alongside the standard elements)
+— reused through the same shared parser, no bespoke path needed:
+
+```python
+from streetworks.datex2.dgt import DGTClient, provinces
+
+with DGTClient() as dgt:
+    situations = list(dgt.iter_roadworks())
+spanish_provinces = provinces(situations)  # {situation.id: "province name", ...}
+for situation in situations:
+    works = situation.roadworks[0]
+    print(spanish_provinces.get(situation.id), works.road_maintenance_type, works.location.point)
+```
+
+Verified against the live feed (2026-07, 656 situations, 391 roadworks
+records, 100% coordinate coverage): Spain's real data is what surfaced the
+first genuine *discriminator* gap, not just a field-mapping one — DGT has
+**zero** `MaintenanceWorks`/`ConstructionWorks` records anywhere in the
+feed. It publishes roadworks as a generic record type
+(`RoadOrCarriagewayOrLaneManagement`, mostly, but also `SpeedManagement`
+and `AbnormalTraffic`) discriminated only by
+`cause/causeType=roadMaintenance` + `roadMaintenanceType=roadworks` —
+`SituationRecord.is_roadworks` now checks that pair additively when the
+xsi:type isn't one of the two dedicated types, confirmed not to change any
+other adapter's real fixture. The road identifier is stated as `roadName`
+(e.g. `"N-400"`), not `roadNumber` like NDW/France — added as a fallback,
+tried only when `roadNumber` is absent. `administrative_area` comes from a
+new `provinces()` helper (the real per-record province, e.g. `"Toledo"` —
+genuinely stated on 391/391 real records, nested in a Spanish location
+extension, not on the shared model, same shape of solution as France's
+`dir_regions()`). Coverage is national **except Catalonia and the Basque
+Country**, which run their own regional traffic authorities and publish
+separately — documented honestly, like France's non-concessionary-network
+scope. Published under **Creative Commons Attribution (CC BY)** — see
+`streetworks/datex2/dgt.py`'s module docstring for the attribution wording
+and full field-by-field mapping.
 
 ## WZDx (US Work Zone Data Exchange)
 
@@ -640,6 +683,29 @@ with SRWRClient() as srwr:
             print(site.reference, site.works_type, site.date_confidence, site.raw)
 ```
 
+A DATEX source needs two more keyword arguments, since a `Situation` can't
+state them itself — see below:
+
+```python
+from streetworks.common import from_datex2
+from streetworks.datex2.dgt import DGTClient, provinces
+
+with DGTClient() as dgt:
+    situations = list(dgt.iter_roadworks())
+spanish_provinces = provinces(situations)  # {situation.id: "province name", ...}
+for situation in situations:
+    works = from_datex2(
+        situation, territory="Spain",
+        administrative_area=spanish_provinces.get(situation.id),
+    )
+```
+
+`from_datex2` (and `from_wzdx`) take `territory`/`administrative_area` as
+keywords rather than deriving them, because neither can be read off a
+DATEX `Situation` (or a WZDx `RoadEvent`) alone — the provider sections
+above show what each source natively states — a province, a DIR region, or
+nothing at all — that you'd pass in.
+
 Two levels, deliberately not three: `Works` is the umbrella (reference,
 location, promoter — no committed dates of its own); `WorksSite` is the
 dated, actionable unit under it (Street Manager's `-01`/`-02` permits,
@@ -682,8 +748,9 @@ record alone — see their docstrings for why — and take them as keyword
 arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
-Highways, Digitraffic/Finland, IRCA/Iceland, and Bison Futé/France via the
-one shared converter), WZDx, TrafficWatchNI and Traffic Wales. UK Police stays outside
+Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, and
+DGT/Spain via the one shared converter), WZDx, TrafficWatchNI and Traffic
+Wales. UK Police stays outside
 the works hierarchy entirely — it's a *context* provider (area-level crime as a
 safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
@@ -749,6 +816,16 @@ actually is.
       credentials. Surfaced and fixed two real gaps in the shared parser
       itself (`alert_c_location` name preference, TPEG linear from/to
       geometry) - not France-specific bugs, just never exercised before
+- [x] Spain (DGT) DATEX adapter (`streetworks.datex2.dgt`) — genuine DATEX
+      II v3 (Level C, Spanish-extended profile), reused through the existing
+      shared parser; verified against the real feed (656 situations, 391
+      roadworks, 100% coordinate coverage), no credentials. Coverage excl.
+      Catalonia & the Basque Country. Surfaced and fixed a genuine
+      *discriminator* gap, not just a field-mapping one — DGT has zero
+      `MaintenanceWorks`/`ConstructionWorks` records at all, so
+      `SituationRecord.is_roadworks` gained an additive cause-based check
+      (`roadMaintenance`/`roadworks`), plus a `roadName` fallback for the
+      road identifier (Spain never states `roadNumber`)
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -771,10 +848,10 @@ Grouped by the client shape they need:
 
 - **DATEX II adapters** (thin fetchers over the existing `streetworks.datex2`
   models, Finland/National-Highways-style where the source isn't DATEX-shaped
-  itself). Norway, Iceland, and France are covered above (Iceland and France
-  shipped, Norway Phase 1). Further candidates: Denmark (Vejdirektoratet),
-  Sweden (Trafikverket — verify its SOAP/XML model is DATEX-compatible),
-  Spain (DGT NAP). Access models vary from fully open to
+  itself). Norway, Iceland, France, and Spain are covered above (Iceland,
+  France, and Spain shipped, Norway Phase 1). Further candidates: Denmark
+  (Vejdirektoratet), Sweden (Trafikverket — verify its SOAP/XML model is
+  DATEX-compatible). Access models vary from fully open to
   registration/agreement-gated — confirm per country. Note Alert-C
   location-code decoding (numeric codes → geometry, not yet supported) is
   likely needed for some of these, unlike Finland's coordinate-carrying JSON.
@@ -803,7 +880,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 pip install -e ".[dev]"
-pytest                    # 164 mocked unit tests - no credentials needed
+pytest                    # mocked unit tests - no credentials needed
 ruff check .
 ```
 

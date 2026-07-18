@@ -2,6 +2,37 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Spain: DGT** (`streetworks.datex2.dgt`) - the DGT (Dirección General de
+  Tráfico) National Access Point's SituationPublication, genuine DATEX II
+  v3 (Level C, Spanish-extended profile), credential-free. Reused through
+  the existing shared parser unchanged - no bespoke parsing path, same as
+  NDW/Iceland/France. Verified against the live feed (2026-07): 656
+  situations, 391 roadworks records, 100% coordinate coverage. Coverage is
+  national except Catalonia and the Basque Country, which run their own
+  regional traffic authorities and publish separately.
+  Surfaced and fixed a genuine *discriminator* gap in the shared
+  parser/model, not just a field-mapping one - DGT has zero
+  `MaintenanceWorks`/`ConstructionWorks` records anywhere in the feed; it
+  publishes roadworks as a generic record type
+  (`RoadOrCarriagewayOrLaneManagement`, mostly, but also `SpeedManagement`
+  and `AbnormalTraffic`) discriminated only by
+  `cause/causeType=roadMaintenance` + `roadMaintenanceType=roadworks`.
+  `SituationRecord.is_roadworks` now checks that pair additively when the
+  xsi:type isn't one of the two dedicated types (confirmed not to change
+  any other adapter's real fixture), and `road_maintenance_type` itself
+  gained a matching deep-path fallback since Spain nests it under
+  `cause/detailedCauseType` rather than as the record's direct child. The
+  road identifier is stated as `roadName` (e.g. `"N-400"`), not
+  `roadNumber` like NDW/France, so `_parse_location` gained a fallback for
+  that too. `administrative_area` comes from a new `provinces()` helper -
+  the real per-record province (e.g. `"Toledo"`), genuinely stated on
+  391/391 real roadworks records but nested in a Spanish location
+  extension, not on the shared model - same shape of solution as France's
+  `dir_regions()`. Published under Creative Commons Attribution (CC BY),
+  confirmed via the DGT NAP's own CKAN dataset metadata.
+
 ## [0.7.0] - 2026-07-13
 
 ### Added
