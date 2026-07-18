@@ -234,6 +234,25 @@ def check_bisonfute() -> str:
     )
 
 
+def check_autobahn() -> str:
+    """Autobahn GmbH (Germany, national motorways) needs no credentials -
+    confirmed live. Fetches one representative road (AUTOBAHN_ROAD, default
+    A1) rather than all ~113 - the full sweep is a one-off verification
+    step, not something to repeat on every smoke-test run. Licence for
+    this data is unconfirmed - see streetworks.autobahn's module docstring."""
+    from streetworks.autobahn import AutobahnClient
+
+    road = os.environ.get("AUTOBAHN_ROAD", "A1")
+    with AutobahnClient() as autobahn:
+        items = autobahn.roadworks(road)
+    short_term = sum(1 for i in items if i.is_short_term)
+    with_start = sum(1 for i in items if i.start is not None)
+    return (
+        f"{road}: {len(items)} roadworks ({short_term} short-term), "
+        f"{with_start}/{len(items)} with a parsed start date"
+    )
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -525,6 +544,8 @@ def main() -> int:
     reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
     # DGT (Spain) needs no credentials
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
+    # Autobahn GmbH (Germany) needs no credentials
+    reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

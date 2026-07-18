@@ -300,6 +300,29 @@ def _dgt_demo() -> None:
 
 attempt("DGT (Spain)", _dgt_demo)
 
+# --- Autobahn GmbH: German national motorway roadworks (no credentials) --------
+# Licence unconfirmed - see streetworks.autobahn's module docstring / the README.
+
+section("Autobahn GmbH (Germany)")
+
+
+def _autobahn_demo() -> None:
+    from streetworks.autobahn import AutobahnClient
+    from streetworks.common import from_autobahn
+
+    with AutobahnClient() as autobahn:
+        # A couple of roads only, for a quick demo - iter_all_roadworks(roads)
+        # with the full streetworks.autobahn.AutobahnClient.list_roads() covers
+        # all ~113 real roads (verified live, takes a few seconds).
+        items = list(autobahn.iter_all_roadworks(["A1", "A61"]))
+    works = from_autobahn(items)
+    print(f"  {len(items)} roadworks records across {len(works)} works")
+    for w in works[:3]:
+        print("  ", w.reference, "-", len(w.sites), "phase(s)")
+
+
+attempt("Autobahn GmbH (Germany)", _autobahn_demo)
+
 # --- SRWR Open Data: today's Scottish road works (no credentials) ---------------
 
 section("SRWR Open Data (Scotland)")

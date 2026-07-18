@@ -1,0 +1,158 @@
+{
+ "roadworks": [
+  {
+   "identifier": "2023-000045--vi-bs.2026-07-06_05-00-00-000.devi-zus.2024-03-23_09-00-00-000_001.f.de103",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.77080336668283,6.82365645055374,50.77158737104432,6.822219198413533",
+   "point": "50.77080336668283,6.82365645055374",
+   "startLcPosition": "100",
+   "impact": {
+    "lower": "Bliesheim",
+    "upper": "Weilerswist",
+    "symbols": [
+     "SEPARATE",
+     "CLOSED",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "BREAKDOWN_LANE"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Koblenz -> Mönchengladbach",
+   "title": "A61 | Weilerswist - Bliesheim",
+   "startTimestamp": "2026-07-06T05:00:00+02:00",
+   "coordinate": {
+    "lat": 50.77080336668283,
+    "long": 6.82365645055374
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 06.07.26 um 05:00 Uhr",
+    "Ende: 12.06.27 um 15:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 12.06.27)",
+    "",
+    "A61: Koblenz -> Mönchengladbach, zwischen 3.8 km hinter AS Weilerswist und AK Bliesheim",
+    "",
+    "Länge: 0.13 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 6.75 m",
+    "",
+    "BW Merowingerstraße"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.823656451,
+      50.770803367
+     ],
+     [
+      6.8231481,
+      50.771072101
+     ],
+     [
+      6.8225375,
+      50.771407701
+     ],
+     [
+      6.822219198,
+      50.771587371
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2023-000045--vi-bs.2026-07-06_05-00-00-000.devi-zus.2024-03-23_09-00-00-000_001.f.de105",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.77171288802188,6.821996831523379,50.775970805973834,6.816088728712173",
+   "point": "50.77171288802188,6.821996831523379",
+   "startLcPosition": "101",
+   "impact": {
+    "lower": "Erftstadt",
+    "upper": "Bliesheim",
+    "symbols": [
+     "SEPARATE",
+     "CLOSED",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "BREAKDOWN_LANE"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Koblenz -> Mönchengladbach",
+   "title": "A61 | Bliesheim - Erftstadt",
+   "startTimestamp": "2026-07-06T05:00:00+02:00",
+   "coordinate": {
+    "lat": 50.77171288802188,
+    "long": 6.821996831523379
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 06.07.26 um 05:00 Uhr",
+    "Ende: 12.06.27 um 15:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 12.06.27)",
+    "",
+    "A61: Koblenz -> Mönchengladbach, zwischen AK Bliesheim und 3.4 km vor AS Erftstadt",
+    "",
+    "Länge: 0.63 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 6 m",
+    "",
+    "BW Merowingerstraße"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.821996832,
+      50.771712888
+     ],
+     [
+      6.8219961,
+      50.771713301
+     ],
+     [
+      6.8214988,
+      50.772016401
+     ],
+     [
+      6.8206542,
+      50.772538301
+     ],
+     [
+      6.8198268,
+      50.773076401
+     ],
+     [
+      6.8188579,
+      50.773749601
+     ],
+     [
+      6.8179403,
+      50.774427001
+     ],
+     [
+      6.8170559,
+      50.775141301
+     ],
+     [
+      6.8161231,
+      50.775939101
+     ],
+     [
+      6.816088729,
+      50.775970806
+     ]
+    ]
+   }
+  }
+ ]
+}

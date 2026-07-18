@@ -1,0 +1,1055 @@
+{
+ "roadworks": [
+  {
+   "identifier": "2026-021338--vi-bs.2026-05-04_00-00-00-000.devi-bs.2026-05-04_00-00-00-000_003.de1",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "49.346849707777814,7.0145271289960665,49.34776723629659,7.015072650533098",
+   "point": "49.346849707777814,7.0145271289960665",
+   "startLcPosition": "7",
+   "impact": {
+    "lower": "Saarbrücken",
+    "upper": "Quierschied",
+    "symbols": [
+     "SEPARATE",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "CLOSED"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Saarbrücken -> Trier",
+   "title": "A1 | Quierschied - Saarbrücken",
+   "startTimestamp": "2026-05-04T00:00:00+02:00",
+   "coordinate": {
+    "lat": 49.346849707777814,
+    "long": 7.0145271289960665
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 04.05.26 um 00:00 Uhr",
+    "Ende: 31.08.26 um 00:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 31.08.26)",
+    "",
+    "A1: Saarbrücken -> Trier, zwischen 0.9 km hinter AS Quierschied und 0.8 km vor AK Saarbrücken",
+    "",
+    "Länge: 0.11 km | Maximale Durchfahrtsbreite: 7.5 m",
+    "",
+    "A1 von Quierschied (AS) nach Saarbrücken (AK) Leitungsarbeiten"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      7.014527129,
+      49.346849708
+     ],
+     [
+      7.014707,
+      49.347186101
+     ],
+     [
+      7.0149919,
+      49.347647801
+     ],
+     [
+      7.015072651,
+      49.347767236
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2026-037019--vi-bs.2026-07-26_06-00-00-000.devi-zus.2026-07-26_06-00-00-000.de3",
+   "icon": "warnkegel",
+   "isBlocked": "false",
+   "future": true,
+   "extent": "49.73338144014991,6.889230856534379,49.771743488830566,6.854695390491981",
+   "point": "49.73338144014991,6.889230856534379",
+   "startLcPosition": "28",
+   "impact": {
+    "lower": "Mehring",
+    "upper": "Hochwald-West",
+    "symbols": [
+     "CLOSED",
+     "BORDER_LEFT",
+     "CLOSED",
+     "CLOSED",
+     "ARROW_DOWN",
+     "SEPARATE",
+     "ARROW_UP",
+     "CLOSED",
+     "BORDER_RIGHT",
+     "CLOSED"
+    ]
+   },
+   "display_type": "SHORT_TERM_ROADWORKS",
+   "subtitle": " Saarbrücken -> Trier",
+   "title": "A1 | Hochwald-West - Mehring",
+   "coordinate": {
+    "lat": 49.73338144014991,
+    "long": 6.889230856534379
+   },
+   "description": [
+    "Die Baustelle ist zu folgenden Zeiträumen gültig:",
+    "26.07.26 von 06:00 bis 12:00 Uhr",
+    "",
+    "A1: Saarbrücken -> Trier, zwischen 4.8 km hinter Hochwald-West und 1.1 km vor AS Mehring",
+    "",
+    "Länge: 5.1 km | Maximale Durchfahrtsbreite: 3.5 m",
+    "",
+    "A1 von Mehring (AS) nach Hochwald-West (Raststaette) Sonstiges, kurzeitiges Anhalten in beide FR"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.889230857,
+      49.73338144
+     ],
+     [
+      6.8892294,
+      49.733387301
+     ],
+     [
+      6.8891547,
+      49.733649001
+     ],
+     [
+      6.889009,
+      49.734035601
+     ],
+     [
+      6.888879,
+      49.734341001
+     ],
+     [
+      6.888766,
+      49.734585101
+     ],
+     [
+      6.8885348,
+      49.735002301
+     ],
+     [
+      6.8882689,
+      49.735424901
+     ],
+     [
+      6.8880495,
+      49.735732401
+     ],
+     [
+      6.8877239,
+      49.736136601
+     ],
+     [
+      6.8875011,
+      49.736387501
+     ],
+     [
+      6.8871972,
+      49.736690801
+     ],
+     [
+      6.8868428,
+      49.737032701
+     ],
+     [
+      6.8864674,
+      49.737361401
+     ],
+     [
+      6.8860785,
+      49.737667301
+     ],
+     [
+      6.8857495,
+      49.737905401
+     ],
+     [
+      6.885404,
+      49.738139201
+     ],
+     [
+      6.8850795,
+      49.738348901
+     ],
+     [
+      6.8846117,
+      49.738628501
+     ],
+     [
+      6.8840695,
+      49.738928201
+     ],
+     [
+      6.8837225,
+      49.739110201
+     ],
+     [
+      6.8833192,
+      49.739319801
+     ],
+     [
+      6.883248,
+      49.739354501
+     ],
+     [
+      6.8824919,
+      49.739723101
+     ],
+     [
+      6.8813849,
+      49.740259201
+     ],
+     [
+      6.8800852,
+      49.740861501
+     ],
+     [
+      6.8791361,
+      49.741333601
+     ],
+     [
+      6.8786892,
+      49.741575101
+     ],
+     [
+      6.8777806,
+      49.742086401
+     ],
+     [
+      6.8773786,
+      49.742335801
+     ],
+     [
+      6.8769684,
+      49.742600101
+     ],
+     [
+      6.8767285,
+      49.742769601
+     ],
+     [
+      6.876318,
+      49.743073601
+     ],
+     [
+      6.8760213,
+      49.743302001
+     ],
+     [
+      6.8757208,
+      49.743567801
+     ],
+     [
+      6.8754441,
+      49.743823801
+     ],
+     [
+      6.8752181,
+      49.744031401
+     ],
+     [
+      6.8750899,
+      49.744172201
+     ],
+     [
+      6.8748486,
+      49.744439201
+     ],
+     [
+      6.8746358,
+      49.744704801
+     ],
+     [
+      6.874479,
+      49.744916001
+     ],
+     [
+      6.8743067,
+      49.745154101
+     ],
+     [
+      6.8740186,
+      49.745604501
+     ],
+     [
+      6.8739063,
+      49.745803601
+     ],
+     [
+      6.8737605,
+      49.746083501
+     ],
+     [
+      6.8736413,
+      49.746333601
+     ],
+     [
+      6.8735367,
+      49.746579001
+     ],
+     [
+      6.8733743,
+      49.747012601
+     ],
+     [
+      6.873198,
+      49.747540601
+     ],
+     [
+      6.8730753,
+      49.747945901
+     ],
+     [
+      6.8728932,
+      49.748603101
+     ],
+     [
+      6.8727216,
+      49.749252101
+     ],
+     [
+      6.8725387,
+      49.749916801
+     ],
+     [
+      6.8722976,
+      49.750677501
+     ],
+     [
+      6.872166,
+      49.751029801
+     ],
+     [
+      6.8720038,
+      49.751401901
+     ],
+     [
+      6.8718509,
+      49.751730601
+     ],
+     [
+      6.8716224,
+      49.752163001
+     ],
+     [
+      6.8713613,
+      49.752614001
+     ],
+     [
+      6.8710407,
+      49.753100001
+     ],
+     [
+      6.8707349,
+      49.753520501
+     ],
+     [
+      6.8704844,
+      49.753833601
+     ],
+     [
+      6.8702787,
+      49.754078401
+     ],
+     [
+      6.8700838,
+      49.754297401
+     ],
+     [
+      6.8698373,
+      49.754561301
+     ],
+     [
+      6.8692709,
+      49.755129401
+     ],
+     [
+      6.8689874,
+      49.755391501
+     ],
+     [
+      6.8686496,
+      49.755686501
+     ],
+     [
+      6.8682109,
+      49.756053401
+     ],
+     [
+      6.867786,
+      49.756402801
+     ],
+     [
+      6.8671446,
+      49.756892101
+     ],
+     [
+      6.8667102,
+      49.757211801
+     ],
+     [
+      6.8663212,
+      49.757496101
+     ],
+     [
+      6.865894,
+      49.757795601
+     ],
+     [
+      6.8644523,
+      49.758776401
+     ],
+     [
+      6.8629933,
+      49.759752701
+     ],
+     [
+      6.862086,
+      49.760372501
+     ],
+     [
+      6.8615887,
+      49.760728301
+     ],
+     [
+      6.8606682,
+      49.761403501
+     ],
+     [
+      6.8599802,
+      49.761941501
+     ],
+     [
+      6.85937,
+      49.762455201
+     ],
+     [
+      6.8589436,
+      49.762829501
+     ],
+     [
+      6.8584219,
+      49.763326701
+     ],
+     [
+      6.8579257,
+      49.763846501
+     ],
+     [
+      6.8574904,
+      49.764342901
+     ],
+     [
+      6.8572457,
+      49.764654201
+     ],
+     [
+      6.8570452,
+      49.764913301
+     ],
+     [
+      6.8568045,
+      49.765270601
+     ],
+     [
+      6.8565845,
+      49.765608401
+     ],
+     [
+      6.8563566,
+      49.765996501
+     ],
+     [
+      6.8561822,
+      49.766306601
+     ],
+     [
+      6.8560374,
+      49.766604601
+     ],
+     [
+      6.8559301,
+      49.766848901
+     ],
+     [
+      6.8558335,
+      49.767124301
+     ],
+     [
+      6.8557048,
+      49.767521001
+     ],
+     [
+      6.8555465,
+      49.768025201
+     ],
+     [
+      6.8554352,
+      49.768416701
+     ],
+     [
+      6.8553051,
+      49.769017801
+     ],
+     [
+      6.8551965,
+      49.769511501
+     ],
+     [
+      6.8551364,
+      49.769853701
+     ],
+     [
+      6.8548621,
+      49.771155901
+     ],
+     [
+      6.8547001,
+      49.771728101
+     ],
+     [
+      6.85469539,
+      49.771743489
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2026-036158--vi-bs.2026-07-22_20-00-00-000.devi-zus.2026-07-22_19-00-00-000_002.de3",
+   "icon": "warnkegel",
+   "isBlocked": "false",
+   "future": true,
+   "extent": "51.17862666722234,7.237807139106101,51.17998708206508,7.237624324960084",
+   "point": "51.17862666722234,7.237807139106101",
+   "startLcPosition": "82",
+   "impact": {
+    "lower": "Remscheid",
+    "upper": "Remscheid",
+    "symbols": [
+     "SEPARATE",
+     "CLOSED",
+     "ARROW_UP",
+     "ARROW_UP"
+    ]
+   },
+   "display_type": "SHORT_TERM_ROADWORKS",
+   "subtitle": " Köln -> Dortmund",
+   "title": "A1 | Remscheid - Remscheid",
+   "coordinate": {
+    "lat": 51.17862666722234,
+    "long": 7.237807139106101
+   },
+   "description": [
+    "Die Baustelle ist zu folgenden Zeiträumen gültig:",
+    "22.07.26 20:00 bis zum 23.07.26 05:00 Uhr.",
+    "23.07.26 20:00 bis zum 24.07.26 05:00 Uhr.",
+    "",
+    "A1: Köln -> Dortmund, zwischen 2.4 km hinter Remscheid und 0.1 km vor AS Remscheid",
+    "",
+    "Länge: 0.15 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 6.75 m",
+    "",
+    "A1 von Remscheid (Raststaette) nach Remscheid (AS) Brückenwartung"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      7.237807139,
+      51.178626667
+     ],
+     [
+      7.2377004,
+      51.179358101
+     ],
+     [
+      7.2376708,
+      51.179578301
+     ],
+     [
+      7.237624325,
+      51.179987082
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2026-035349--vi-bs.2026-07-21_09-00-00-000_003.de0",
+   "icon": "warnkegel",
+   "isBlocked": "false",
+   "future": true,
+   "extent": "51.42425123470291,7.519892690061553,51.43466750047945,7.533179067657072",
+   "point": "51.42425123470291,7.519892690061553",
+   "startLcPosition": "99",
+   "impact": {
+    "lower": "Schwerte",
+    "upper": "Lennhof",
+    "symbols": [
+     "SEPARATE",
+     "ARROW_UP",
+     "ARROW_UP",
+     "CLOSED"
+    ]
+   },
+   "display_type": "SHORT_TERM_ROADWORKS",
+   "subtitle": " Köln -> Dortmund",
+   "title": "A1 | Lennhof - Schwerte",
+   "coordinate": {
+    "lat": 51.42425123470291,
+    "long": 7.519892690061553
+   },
+   "description": [
+    "Die Baustelle ist zu folgenden Zeiträumen gültig:",
+    "Jeden Dienstag, Mittwoch und Donnerstag zwischen dem 21.07.26 und dem 23.07.26 von 09:00 bis 15:00 Uhr.",
+    "",
+    "A1: Köln -> Dortmund, zwischen 1.9 km hinter Lennhof und 3.3 km vor AS Schwerte",
+    "",
+    "Länge: 1.55 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 7.5 m",
+    "",
+    "A1 - Fahrbahninstandsetzung - AkD 35349"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      7.51989269,
+      51.424251235
+     ],
+     [
+      7.5200009,
+      51.424327601
+     ],
+     [
+      7.5206965,
+      51.424752801
+     ],
+     [
+      7.5214043,
+      51.425129101
+     ],
+     [
+      7.5221385,
+      51.425471801
+     ],
+     [
+      7.5230137,
+      51.425829601
+     ],
+     [
+      7.5243302,
+      51.426303901
+     ],
+     [
+      7.5253179,
+      51.426643501
+     ],
+     [
+      7.5257206,
+      51.426789201
+     ],
+     [
+      7.5262471,
+      51.426998001
+     ],
+     [
+      7.5270641,
+      51.427350801
+     ],
+     [
+      7.5280843,
+      51.427906801
+     ],
+     [
+      7.5291787,
+      51.428609301
+     ],
+     [
+      7.5298676,
+      51.429131801
+     ],
+     [
+      7.5301554,
+      51.429387201
+     ],
+     [
+      7.5305409,
+      51.429773701
+     ],
+     [
+      7.5308459,
+      51.430091401
+     ],
+     [
+      7.5310483,
+      51.430322401
+     ],
+     [
+      7.5312537,
+      51.430574201
+     ],
+     [
+      7.531609,
+      51.431037001
+     ],
+     [
+      7.5319014,
+      51.431518501
+     ],
+     [
+      7.5320473,
+      51.431789301
+     ],
+     [
+      7.5322965,
+      51.432298101
+     ],
+     [
+      7.5325101,
+      51.432833901
+     ],
+     [
+      7.5328269,
+      51.433691201
+     ],
+     [
+      7.5329562,
+      51.434056001
+     ],
+     [
+      7.533179068,
+      51.4346675
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2026-035368--vi-fbm.2026-07-13_19-00-00-000.devi-fbm.2026-07-13_19-00-00-000_001.de3",
+   "icon": "warnkegel",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.16788585755062,8.609186914198542,50.17636144231245,8.613870022164994",
+   "point": "50.16788585755062,8.609186914198542",
+   "startLcPosition": "111",
+   "impact": {
+    "lower": "Bad Homburger Kreuz",
+    "upper": "Taunusblick",
+    "symbols": [
+     "SEPARATE",
+     "CLOSED",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "ARROW_UP"
+    ]
+   },
+   "display_type": "SHORT_TERM_ROADWORKS",
+   "subtitle": " Frankfurt -> Kassel",
+   "title": "A5 | Taunusblick - Bad Homburger Kreuz",
+   "coordinate": {
+    "lat": 50.16788585755062,
+    "long": 8.609186914198542
+   },
+   "description": [
+    "Die Baustelle ist zu folgenden Zeiträumen gültig:",
+    "Die Baustelle gilt nicht an folgenden Tagen:",
+    "",
+    "A5: Frankfurt -> Kassel, zwischen 1.6 km hinter Taunusblick und 3.6 km vor AK Bad Homburger Kreuz",
+    "",
+    "Länge: 1 km | Maximale Durchfahrtsbreite: 9 m",
+    "",
+    "A5 von Bad Homburger Kreuz (AK) nach Taunusblick (Raststaette) Baustelleneinrichtung"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      8.609186914,
+      50.167885858
+     ],
+     [
+      8.6096165,
+      50.168661901
+     ],
+     [
+      8.6106028,
+      50.170458401
+     ],
+     [
+      8.6111627,
+      50.171453901
+     ],
+     [
+      8.6127354,
+      50.174293601
+     ],
+     [
+      8.6127929,
+      50.174403701
+     ],
+     [
+      8.6131526,
+      50.175055401
+     ],
+     [
+      8.6134449,
+      50.175590901
+     ],
+     [
+      8.613870022,
+      50.176361442
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2023-000045--vi-bs.2026-07-06_05-00-00-000.devi-zus.2024-03-23_09-00-00-000_001.f.de97",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.78604878905556,6.807878793147246,50.77586330139321,6.8159161178381025",
+   "point": "50.78604878905556,6.807878793147246",
+   "startLcPosition": "65",
+   "impact": {
+    "lower": "Bliesheim",
+    "upper": "Erftstadt",
+    "symbols": [
+     "SEPARATE",
+     "ARROW_UP",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "BREAKDOWN_LANE"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Köln -> Euskirchen",
+   "title": "A1 | Erftstadt - Bliesheim",
+   "startTimestamp": "2026-07-06T05:00:00+02:00",
+   "coordinate": {
+    "lat": 50.78604878905556,
+    "long": 6.807878793147246
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 06.07.26 um 05:00 Uhr",
+    "Ende: 12.06.27 um 15:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 12.06.27)",
+    "",
+    "A1: Köln -> Euskirchen, zwischen 2.1 km hinter AS Erftstadt und 0.6 km vor AK Bliesheim",
+    "",
+    "Länge: 1.27 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 9 m",
+    "",
+    "BW Merowingerstraße"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.807878793,
+      50.786048789
+     ],
+     [
+      6.8082637,
+      50.785497501
+     ],
+     [
+      6.8097605,
+      50.783323701
+     ],
+     [
+      6.8102829,
+      50.782571401
+     ],
+     [
+      6.8120364,
+      50.780085201
+     ],
+     [
+      6.8124612,
+      50.779521301
+     ],
+     [
+      6.8129118,
+      50.778961501
+     ],
+     [
+      6.8137872,
+      50.777961101
+     ],
+     [
+      6.8143334,
+      50.777378001
+     ],
+     [
+      6.8149139,
+      50.776797601
+     ],
+     [
+      6.815916118,
+      50.775863301
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2023-000045--vi-bs.2026-07-06_05-00-00-000.devi-zus.2024-03-23_09-00-00-000_001.f.de101",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.77671903661104,6.815277558315082,50.780126778131894,6.812271388403191",
+   "point": "50.77671903661104,6.815277558315082",
+   "startLcPosition": "101",
+   "impact": {
+    "lower": "Erftstadt",
+    "upper": "Bliesheim",
+    "symbols": [
+     "SEPARATE",
+     "ARROW_UP",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "BREAKDOWN_LANE"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Koblenz -> Mönchengladbach",
+   "title": "A1 | Bliesheim - Erftstadt",
+   "startTimestamp": "2026-07-06T05:00:00+02:00",
+   "coordinate": {
+    "lat": 50.77671903661104,
+    "long": 6.815277558315082
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 06.07.26 um 05:00 Uhr",
+    "Ende: 12.06.27 um 15:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 12.06.27)",
+    "",
+    "A61: Koblenz -> Mönchengladbach, zwischen 0.8 km hinter AK Bliesheim und 2.9 km vor AS Erftstadt",
+    "",
+    "Länge: 0.44 km | Max. 80 km/h | Maximale Durchfahrtsbreite: 9.5 m",
+    "",
+    "BW Merowingerstraße"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.815277558,
+      50.776719037
+     ],
+     [
+      6.8151256,
+      50.776859201
+     ],
+     [
+      6.8145022,
+      50.777497201
+     ],
+     [
+      6.813883,
+      50.778161001
+     ],
+     [
+      6.8131232,
+      50.779031901
+     ],
+     [
+      6.8126652,
+      50.779608101
+     ],
+     [
+      6.812271388,
+      50.780126778
+     ]
+    ]
+   }
+  },
+  {
+   "identifier": "2023-000045--vi-bs.2026-07-06_05-00-00-000.devi-zus.2024-03-23_09-00-00-000_001.f.de99",
+   "icon": "123",
+   "isBlocked": "false",
+   "future": false,
+   "extent": "50.775988397772565,6.816069657499233,50.77709861738715,6.814891664777494",
+   "point": "50.775988397772565,6.816069657499233",
+   "startLcPosition": "101",
+   "impact": {
+    "lower": "Erftstadt",
+    "upper": "Bliesheim",
+    "symbols": [
+     "SEPARATE",
+     "ARROW_UP",
+     "ARROW_UP",
+     "BORDER_RIGHT",
+     "BREAKDOWN_LANE"
+    ]
+   },
+   "display_type": "ROADWORKS",
+   "subtitle": " Koblenz -> Mönchengladbach",
+   "title": "A1 | Bliesheim - Erftstadt",
+   "startTimestamp": "2026-07-06T05:00:00+02:00",
+   "coordinate": {
+    "lat": 50.775988397772565,
+    "long": 6.816069657499233
+   },
+   "description": [
+    "Zeitraum dieser Bauphase:",
+    "Beginn: 06.07.26 um 05:00 Uhr",
+    "Ende: 12.06.27 um 15:00 Uhr",
+    "(Ende der Gesamtmaßnahme: 12.06.27)",
+    "",
+    "A61: Koblenz -> Mönchengladbach, zwischen 0.7 km hinter AK Bliesheim und 3.2 km vor AS Erftstadt",
+    "",
+    "Länge: 0.15 km | Maximale Durchfahrtsbreite: 6 m",
+    "",
+    "BW Merowingerstraße"
+   ],
+   "routeRecommendation": [],
+   "footer": [],
+   "lorryParkingFeatureIcons": [],
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      6.816069657,
+      50.775988398
+     ],
+     [
+      6.8151256,
+      50.776859201
+     ],
+     [
+      6.814891665,
+      50.777098617
+     ]
+    ]
+   }
+  }
+ ]
+}
