@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.657425,
+          44.54242
+        ]
+      },
+      "properties": {
+        "label": "267 Le Mas Renouard 48190 Allenc",
+        "score": 0.9394981818181817,
+        "housenumber": "267",
+        "id": "48003_c436_00267",
+        "banId": "26377563-1431-4cc5-8f8e-da743bd849d9",
+        "name": "267 Le Mas Renouard",
+        "postcode": "48190",
+        "citycode": "48003",
+        "x": 752227.23,
+        "y": 6382811.56,
+        "city": "Allenc",
+        "context": "48, Lozère, Occitanie",
+        "type": "housenumber",
+        "importance": 0.33448,
+        "depcode": "48",
+        "street": "Le Mas Renouard",
+        "_type": "address"
+      }
+    }
+  ],
+  "query": "267 Le Mas Renouard"
+}

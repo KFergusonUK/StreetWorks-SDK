@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.347222,
+          48.859393
+        ]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "8 Rue des Halles",
+        "label": "8 Rue des Halles 75001 Paris",
+        "street": "Rue des Halles",
+        "postcode": "75001",
+        "citycode": "75101",
+        "city": "Paris",
+        "oldcitycode": null,
+        "oldcity": null,
+        "district": "Paris 1er Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.58719,
+        "housenumber": "8",
+        "id": "75101_4461_00008",
+        "banId": "17755936-2d91-4f2d-9ceb-9c77bce57eda",
+        "x": 652106.35,
+        "y": 6862348.82,
+        "distance": 0,
+        "score": 1,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.347206,
+          48.859449
+        ]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "2 Place Sainte-Opportune",
+        "label": "2 Place Sainte-Opportune 75001 Paris",
+        "street": "Place Sainte-Opportune",
+        "postcode": "75001",
+        "citycode": "75101",
+        "city": "Paris",
+        "oldcitycode": null,
+        "oldcity": null,
+        "district": "Paris 1er Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.53022,
+        "housenumber": "2",
+        "id": "75101_8589_00002",
+        "banId": "7a29bc69-e140-4efc-b573-9772a662e1c6",
+        "x": 652105.23,
+        "y": 6862355.06,
+        "distance": 6,
+        "score": 0.9994,
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.347298,
+          48.859307
+        ]
+      },
+      "properties": {
+        "type": "housenumber",
+        "name": "6 Rue des Halles",
+        "label": "6 Rue des Halles 75001 Paris",
+        "street": "Rue des Halles",
+        "postcode": "75001",
+        "citycode": "75101",
+        "city": "Paris",
+        "oldcitycode": null,
+        "oldcity": null,
+        "district": "Paris 1er Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.58719,
+        "housenumber": "6",
+        "id": "75101_4461_00006",
+        "banId": "a24b0f79-c3bd-4bfc-9b2e-b289749b784a",
+        "x": 652111.84,
+        "y": 6862339.22,
+        "distance": 11,
+        "score": 0.9989,
+        "_type": "address"
+      }
+    }
+  ]
+}

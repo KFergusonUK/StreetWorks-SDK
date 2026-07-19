@@ -1,0 +1,4 @@
+id;id_fantoir;numero;rep;nom_voie;code_postal;code_insee;nom_commune;code_insee_ancienne_commune;nom_ancienne_commune;x;y;lon;lat;type_position;alias;nom_ld;libelle_acheminement;nom_afnor;source_position;source_nom_voie;certification_commune;cad_parcelles
+29001_428m6b_00004;;4;;Impasse des Chênes;29560;29001;Argol;;;158472.07;6819341.57;-4.305744;48.248791;entrée;;;ARGOL;IMPASSE DES CHENES;commune;commune;1;29001000ZN0162
+48003_c436_00267;48003_C436;267;;Le Mas Renouard;48190;48003;Allenc;;;752227.23;6382811.56;3.657425;44.54242;entrée;;;ALLENC;LE MAS RENOUARD;commune;commune;1;
+48003_c365_00110;48003_C365;110;;Le Mas Pouget;48190;48003;Allenc;;;752573.43;6383193.81;3.661823;44.545835;entrée;;;ALLENC;LE MAS POUGET;commune;commune;1;

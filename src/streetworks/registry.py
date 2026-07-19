@@ -471,6 +471,26 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.openusrn import OpenUSRNClient",
     ),
     ProviderEntry(
+        key="ban",
+        name="BAN (Base Adresse Nationale)",
+        description="France's national address base - ~25M addresses, no street register.",
+        kind=Kind.GAZETTEER,
+        territories=frozenset({"France"}),
+        scope_note=(
+            "An address base, not a street register like the UK gazetteers - streets/"
+            "lieux-dits aren't published as their own entities, only recoverable as a "
+            "derived grouping under addresses. See the module docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        # No "france" alias, for the same reason bisonfute's was removed:
+        # two providers now cover France - get_provider("france") should
+        # raise AmbiguousProviderError naming both, not silently pick one.
+        _module="streetworks.ban",
+        _client_name="BANClient",
+        import_line="from streetworks.ban import BANClient",
+    ),
+    ProviderEntry(
         key="ndw",
         name="NDW (Nationale Databank Wegverkeersgegevens)",
         description="The Netherlands' national roadworks and traffic-events feed.",
@@ -549,7 +569,9 @@ _REGISTRY: list[ProviderEntry] = [
         credentials=None,
         licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
         source_grade="operator",
-        aliases=frozenset({"france"}),
+        # No "france" alias: France now has two providers (this one and the
+        # ban gazetteer) - get_provider("france") resolves through the
+        # territory-ambiguity path instead, same as "germany".
         _module="streetworks.datex2",
         _client_name="BisonFuteClient",
         import_line="from streetworks.datex2 import BisonFuteClient",

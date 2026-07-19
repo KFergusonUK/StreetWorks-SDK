@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.346704,
+          48.85976
+        ]
+      },
+      "properties": {
+        "label": "Rue des Halles 75001 Paris",
+        "score": 0.962471818181818,
+        "id": "75101_4461",
+        "banId": "17094f29-9da4-4fbd-b746-dd789050c4e7",
+        "name": "Rue des Halles",
+        "postcode": "75001",
+        "citycode": "75101",
+        "x": 652068.68,
+        "y": 6862389.95,
+        "city": "Paris",
+        "district": "Paris 1er Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "type": "street",
+        "importance": 0.58719,
+        "depcode": "75",
+        "street": "Rue des Halles",
+        "_type": "address"
+      }
+    }
+  ],
+  "query": "Rue des Halles"
+}

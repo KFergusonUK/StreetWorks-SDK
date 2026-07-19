@@ -400,6 +400,37 @@ def check_openusrn() -> str:
     return summary
 
 
+def check_ban() -> str:
+    """France's BAN needs no credentials. Only exercises the geocoding API
+    (search + reverse) - the bulk files are ~900 MB-1.4 GB, too big for a
+    smoke test. Set BAN_TEST_DEPT (a département code, e.g. "48") to also
+    verify a real bulk-file download+parse of that département."""
+    from streetworks.ban import BANClient
+
+    with BANClient() as ban:
+        hits = ban.search("8 rue des halles paris")
+        if not hits:
+            raise RuntimeError("search returned no results for a known real address")
+        first = hits[0]
+        reverse_hits = ban.reverse(first.lon, first.lat)
+        summary = (
+            f"search -> {len(hits)} hit(s), top: {first.street!r} ({first.commune_nom}); "
+            f"reverse -> {len(reverse_hits)} hit(s)"
+        )
+
+        dept = os.environ.get("BAN_TEST_DEPT")
+        if dept:
+            import tempfile
+
+            from streetworks.ban import iter_addresses
+
+            with tempfile.TemporaryDirectory() as tmp:
+                path = ban.download_departement(dept, f"{tmp}/dept.csv.gz")
+                addresses = list(iter_addresses(path))
+                summary += f"; dept {dept} bulk file: {len(addresses):,} addresses"
+    return summary
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -554,6 +585,7 @@ def main() -> int:
     reporter.check("SRWR Open Data", [], check_srwr)
     # OS Open USRN needs no credentials (metadata check only by default)
     reporter.check("OS Open USRN", [], check_openusrn)
+    reporter.check("BAN (France)", [], check_ban)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

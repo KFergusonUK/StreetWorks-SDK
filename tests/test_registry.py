@@ -88,7 +88,7 @@ def test_providers_unknown_territory_warns_and_returns_empty():
 
 def test_providers_kind_filter():
     gazetteers = providers(kind="gazetteer")
-    assert {e.key for e in gazetteers} == {"datavia", "openusrn"}
+    assert {e.key for e in gazetteers} == {"datavia", "openusrn", "ban"}
     assert all(e.kind is Kind.GAZETTEER for e in gazetteers)
     # Enum and string both accepted.
     assert providers(kind=Kind.GAZETTEER) == gazetteers
@@ -135,7 +135,6 @@ def test_get_provider_returns_class_not_instance():
         ("iceland", "irca"),
         ("netherlands", "ndw"),
         ("scotland", "srwr"),
-        ("france", "bisonfute"),
         ("norway", "vegvesen"),
     ],
 )
@@ -148,7 +147,7 @@ def test_get_provider_case_insensitive():
     assert get_provider("SPAIN") is get_provider("spain")
 
 
-@pytest.mark.parametrize("key", ["germany", "england", "wales"])
+@pytest.mark.parametrize("key", ["germany", "england", "wales", "france"])
 def test_get_provider_ambiguous_key_raises_naming_candidates(key):
     with pytest.raises(AmbiguousProviderError) as exc_info:
         get_provider(key)
@@ -234,7 +233,7 @@ def test_capabilities_detect_write_publish_including_nested_sub_apis():
 
 
 def test_capabilities_do_not_false_positive_on_read_only_clients():
-    for key in ("dgt", "srwr", "openusrn", "police", "ndw"):
+    for key in ("dgt", "srwr", "openusrn", "police", "ndw", "ban"):
         entry = next(e for e in _REGISTRY if e.key == key)
         assert "write/publish" not in entry.capabilities()
 

@@ -1,0 +1,96 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.347222,
+          48.859393
+        ]
+      },
+      "properties": {
+        "label": "8 Rue des Halles 75001 Paris",
+        "score": 0.962471818181818,
+        "housenumber": "8",
+        "id": "75101_4461_00008",
+        "banId": "17755936-2d91-4f2d-9ceb-9c77bce57eda",
+        "name": "8 Rue des Halles",
+        "postcode": "75001",
+        "citycode": "75101",
+        "x": 652106.35,
+        "y": 6862348.82,
+        "city": "Paris",
+        "district": "Paris 1er Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "type": "housenumber",
+        "importance": 0.58719,
+        "depcode": "75",
+        "street": "Rue des Halles",
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.333137,
+          48.830769
+        ]
+      },
+      "properties": {
+        "label": "8 Rue Hallé 75014 Paris",
+        "score": 0.6266321487603306,
+        "housenumber": "8",
+        "id": "75114_4458_00008",
+        "banId": "0813a9ad-11e4-45ea-9b3e-9217199cdc89",
+        "name": "8 Rue Hallé",
+        "postcode": "75014",
+        "citycode": "75114",
+        "x": 651046.09,
+        "y": 6859174.76,
+        "city": "Paris",
+        "district": "Paris 14e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "type": "housenumber",
+        "importance": 0.75659,
+        "depcode": "75",
+        "street": "Rue Hallé",
+        "_type": "address"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.398168,
+          48.878872
+        ]
+      },
+      "properties": {
+        "label": "8 Rue de l'Inspecteur Allès 75019 Paris",
+        "score": 0.4505927272727272,
+        "housenumber": "8",
+        "id": "75119_4720_00008",
+        "banId": "3adb5bdc-ffa8-499d-af91-f689bd2d3c6b",
+        "name": "8 Rue de l'Inspecteur Allès",
+        "postcode": "75019",
+        "citycode": "75119",
+        "x": 655860.64,
+        "y": 6864485.06,
+        "city": "Paris",
+        "district": "Paris 19e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "type": "housenumber",
+        "importance": 0.70652,
+        "depcode": "75",
+        "street": "Rue de l'Inspecteur Allès",
+        "_type": "address"
+      }
+    }
+  ],
+  "query": "8 rue des halles paris"
+}
