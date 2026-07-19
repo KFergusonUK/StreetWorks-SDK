@@ -431,6 +431,37 @@ def check_ban() -> str:
     return summary
 
 
+def check_bag() -> str:
+    """Netherlands BAG needs no credentials. Exercises the Locatieserver
+    (search + reverse) and the Atom feed's discovery of the current
+    GeoPackage/extract URLs - not the bulk files themselves (~7.8 GB/
+    ~3.6 GB, too big for a smoke test). Set BAG_GPKG to a local downloaded
+    bag-light.gpkg to also verify a real table read."""
+    from streetworks.bag import BAGClient
+
+    with BAGClient() as bag:
+        hits = bag.search("Dam 1 Amsterdam")
+        if not hits:
+            raise RuntimeError("search returned no results for a known real address")
+        first = hits[0]
+        reverse_hits = bag.reverse(first.lon, first.lat)
+        downloads = bag.discover_downloads()
+        summary = (
+            f"search -> {len(hits)} hit(s), top: {first.weergavenaam!r}; "
+            f"reverse -> {len(reverse_hits)} hit(s); "
+            f"Atom feed -> {len(downloads)} download(s)"
+        )
+
+        local = os.environ.get("BAG_GPKG")
+        if local:
+            from streetworks.bag import BAGDatabase
+
+            with BAGDatabase(local) as db:
+                tables = db.tables()
+                summary += f"; local gpkg: {len(tables)} table(s)"
+    return summary
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -586,6 +617,7 @@ def main() -> int:
     # OS Open USRN needs no credentials (metadata check only by default)
     reporter.check("OS Open USRN", [], check_openusrn)
     reporter.check("BAN (France)", [], check_ban)
+    reporter.check("BAG (Netherlands)", [], check_bag)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

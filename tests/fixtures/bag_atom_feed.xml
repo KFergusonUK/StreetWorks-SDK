@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://service.pdok.nl/atom/style/style.xsl" type="text/xsl" media="screen"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss" xml:lang="nl">
+ <id>https://service.pdok.nl/kadaster/bag/atom/bag.xml</id>
+ <title>BAG</title>
+ <subtitle>De gegevens in deze Atom downloadservice bestaan uit de downloads van BAG gegevens. De Atom download service wordt maandelijks geactualiseerd.</subtitle>
+ <link href="https://service.pdok.nl/kadaster/bag/atom/bag.xml" rel="self" hreflang="nl"></link>
+ <link href="https://service.pdok.nl/kadaster/bag/atom/index.xml" rel="up" type="application/atom+xml" hreflang="nl" title="Top Atom Download Service Feed"></link>
+ <link href="https://www.nationaalgeoregister.nl/geonetwork/srv/dut/csw?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementsetname=full&amp;id=aa3b5e6e-7baa-40c0-8972-3353e927ec2f" rel="describedby" type="application/xml" hreflang="nl"></link>
+ <link href="https://www.nationaalgeoregister.nl/geonetwork/srv/dut/catalog.search#/metadata/aa3b5e6e-7baa-40c0-8972-3353e927ec2f" rel="describedby" type="text/html" hreflang="nl" title="NGR pagina voor deze dataset"></link>
+ <rights>https://creativecommons.org/publicdomain/zero/1.0/deed.nl</rights>
+ <updated>2026-07-19T00:00:00Z</updated>
+ <author>
+  <name>kadaster</name>
+  <email>beheerpdok@kadaster.nl</email>
+ </author>
+ <entry>
+  <id>https://service.pdok.nl/kadaster/bag/atom/bag_epsg28992_geopackage.xml</id>
+  <title>BAG (EPSG:28992) Geopackage</title>
+  <content>De BAG Geopackage bevat de belangrijkste BAG gegevens (zonder historie). Om de Geopackage eenvoudig te houden zijn niet alle BAG gegevens opgenomen. Voor meer informatie zie https://www.kadaster.nl/zakelijk/producten/adressen-en-gebouwen/bag-geopackage.</content>
+  <link href="https://service.pdok.nl/kadaster/bag/atom/downloads/bag-light.gpkg" rel="alternate" type="application/geopackage+sqlite3" hreflang="nl" length="7801561088" title="BAG (EPSG:28992) Geopackage - bag-light.gpkg"></link>
+  <rights>https://creativecommons.org/publicdomain/zero/1.0/deed.nl</rights>
+  <updated>2026-07-19T00:00:00Z</updated>
+  <georss:polygon>50.71447 2.354173 50.71447 7.5553527 55.66948 7.5553527 55.66948 2.354173 50.71447 2.354173</georss:polygon>
+  <category term="https://www.opengis.net/def/crs/EPSG/0/28992" label="Amersfoort / RD New"></category>
+ </entry>
+ <entry>
+  <id>https://service.pdok.nl/kadaster/bag/atom/bag_epsg28992_zip_archief.xml</id>
+  <title>BAG (EPSG:28992) Zip archief</title>
+  <content>Het BAG 2.0 Extract is een volledige kopie van de gegevens uit de LV BAG van heel Nederland (inclusief historie). Deze gegevens worden als XML-bestanden aan u geleverd.</content>
+  <link href="https://service.pdok.nl/kadaster/bag/atom/downloads/lvbag-extract-nl.zip" rel="alternate" type="application/zip" hreflang="nl" length="3610187048" title="BAG (EPSG:28992) Zip archief - lvbag-extract-nl.zip"></link>
+  <rights>https://creativecommons.org/publicdomain/zero/1.0/deed.nl</rights>
+  <updated>2026-07-19T00:00:00Z</updated>
+  <georss:polygon>50.71447 2.354173 50.71447 7.5553527 55.66948 7.5553527 55.66948 2.354173 50.71447 2.354173</georss:polygon>
+  <category term="https://www.opengis.net/def/crs/EPSG/0/28992" label="Amersfoort / RD New"></category>
+ </entry>
+</feed>

@@ -491,6 +491,25 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.ban import BANClient",
     ),
     ProviderEntry(
+        key="bag",
+        name="BAG (Basisregistratie Adressen en Gebouwen)",
+        description="Netherlands' national addresses and buildings register.",
+        kind=Kind.GAZETTEER,
+        territories=frozenset({"Netherlands"}),
+        scope_note=(
+            "Street identity (openbare ruimte) is a real, versioned BAG object, "
+            "but the bulk GeoPackage this SDK reads flattens it onto every address "
+            "rather than giving it a table of its own. See the module docstring."
+        ),
+        credentials=None,
+        licence="CC0 1.0 Universal",
+        # No "netherlands" alias, for the same reason ndw's was removed:
+        # two providers now cover the Netherlands.
+        _module="streetworks.bag",
+        _client_name="BAGClient",
+        import_line="from streetworks.bag import BAGClient",
+    ),
+    ProviderEntry(
         key="ndw",
         name="NDW (Nationale Databank Wegverkeersgegevens)",
         description="The Netherlands' national roadworks and traffic-events feed.",
@@ -500,7 +519,9 @@ _REGISTRY: list[ProviderEntry] = [
         licence=None,
         licence_confirmed=False,  # checked live, 2026-07 - no statement found, see module docstring
         source_grade="operator",
-        aliases=frozenset({"netherlands"}),
+        # No "netherlands" alias: the Netherlands now has two providers
+        # (this one and the bag gazetteer) - get_provider("netherlands")
+        # resolves through the territory-ambiguity path, same as "france".
         _module="streetworks.datex2",
         _client_name="NDWClient",
         import_line="from streetworks.datex2 import NDWClient",

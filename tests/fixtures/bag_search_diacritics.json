@@ -1,0 +1,41 @@
+{
+  "response": {
+    "numFound": 21759,
+    "start": 0,
+    "maxScore": 17.063143,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "bron": "BAG/NWB",
+        "woonplaatscode": "1343",
+        "type": "weg",
+        "woonplaatsnaam": "Lochem",
+        "nwb_id": "438383",
+        "openbareruimtetype": "Weg",
+        "gemeentecode": "0262",
+        "rdf_seealso": "http://bag.basisregistraties.overheid.nl/bag/id/openbare-ruimte/0262300000000713",
+        "weergavenaam": "Ruïnelaan, Lochem",
+        "suggest": [
+          "Ruïnelaan, Lochem"
+        ],
+        "straatnaam_verkort": "Ruïneln",
+        "id": "weg-4d221fd48a580ea00bbe43f944b53e72",
+        "gemeentenaam": "Lochem",
+        "identificatie": "0262300000000713",
+        "openbareruimte_id": "0262300000000713",
+        "geometrie_ll": "MULTILINESTRING((6.46466 52.16001,6.46301 52.15845),(6.46301 52.15845,6.46953 52.15757),(6.46052 52.15788,6.45924 52.15806),(6.45924 52.15806,6.45972 52.15892,6.46301 52.15845),(6.45488 52.15869,6.45924 52.15806))",
+        "provinciecode": "PV25",
+        "provincienaam": "Gelderland",
+        "centroide_ll": "POINT(6.46222623 52.15855756)",
+        "geometrie_rd": "MULTILINESTRING((228725 464086,228615 463910),(228615 463910,229062 463820),(228445 463844,228357 463864),(228357 463864,228389 463960,228615 463910),(228058 463929,228357 463864))",
+        "provincieafkorting": "GD",
+        "centroide_rd": "POINT(228560.842 463921.802)",
+        "straatnaam": "Ruïnelaan",
+        "shards": "bag",
+        "_version_": 1871112681508831235,
+        "typesortering": 3.0,
+        "shard": "bag"
+      }
+    ]
+  }
+}

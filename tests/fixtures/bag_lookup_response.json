@@ -1,0 +1,46 @@
+{
+  "response": {
+    "numFound": 1,
+    "start": 0,
+    "maxScore": 7.219551,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "bron": "BAG",
+        "woonplaatscode": "3594",
+        "type": "adres",
+        "woonplaatsnaam": "Amsterdam",
+        "wijkcode": "WK0363AE",
+        "huis_nlt": "1",
+        "openbareruimtetype": "Weg",
+        "buurtnaam": "Oude Kerk e.o.",
+        "gemeentecode": "0363",
+        "rdf_seealso": "http://bag.basisregistraties.overheid.nl/bag/id/nummeraanduiding/0363200003761447",
+        "weergavenaam": "Dam 1, 1012JS Amsterdam",
+        "straatnaam_verkort": "Dam",
+        "id": "adr-2a8dc1af055da20b8bcdc8e4dbda1eaa",
+        "gekoppeld_perceel": [
+          "ASD04-F-6417",
+          "ASD04-F-7285"
+        ],
+        "gemeentenaam": "Amsterdam",
+        "buurtcode": "BU0363AE02",
+        "wijknaam": "Burgwallen-Oude Zijde",
+        "identificatie": "0363010003761571-0363200003761447",
+        "openbareruimte_id": "0363300000003186",
+        "waterschapsnaam": "Waterschap Amstel, Gooi en Vecht",
+        "provinciecode": "PV27",
+        "postcode": "1012JS",
+        "provincienaam": "Noord-Holland",
+        "centroide_ll": "POINT(4.8937175 52.37329259)",
+        "nummeraanduiding_id": "0363200003761447",
+        "waterschapscode": "11",
+        "adresseerbaarobject_id": "0363010003761571",
+        "huisnummer": 1,
+        "provincieafkorting": "NH",
+        "centroide_rd": "POINT(121394 487383)",
+        "straatnaam": "Dam"
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "response": {
+    "numFound": 270,
+    "start": 0,
+    "maxScore": 10.585739,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "type": "weg",
+        "weergavenaam": "Damrak, Amsterdam",
+        "id": "weg-81c29298a0fcc1e5f933da43c190788a",
+        "score": 10.585739
+      },
+      {
+        "type": "weg",
+        "weergavenaam": "Damraksteeg, Amsterdam",
+        "id": "weg-908372751cb39d33819744f4400da09b",
+        "score": 7.921026
+      },
+      {
+        "type": "adres",
+        "weergavenaam": "Damrak 18-1, Amsterdam",
+        "adrestype": "hoofdadres",
+        "id": "adr-752c9dc94829724b41532eb4ba38392a",
+        "score": 7.2040124
+      }
+    ]
+  },
+  "highlighting": {
+    "weg-81c29298a0fcc1e5f933da43c190788a": {
+      "suggest": [
+        "<b>Damrak</b>, <b>Amsterdam</b>"
+      ]
+    },
+    "weg-908372751cb39d33819744f4400da09b": {
+      "suggest": [
+        "<b>Damraksteeg</b>, <b>Amsterdam</b>"
+      ]
+    },
+    "adr-752c9dc94829724b41532eb4ba38392a": {
+      "suggest": [
+        "<b>Damrak</b> 18-1, <b>Amsterdam</b>"
+      ]
+    }
+  },
+  "spellcheck": {
+    "suggestions": [],
+    "collations": []
+  }
+}
