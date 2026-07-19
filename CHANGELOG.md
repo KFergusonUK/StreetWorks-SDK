@@ -1,131 +1,6 @@
 # Changelog
 
-## [Unreleased]
-
-### Added
-
-- **Germany: Saxony (Sachsen)** added to `streetworks.ogc` - 1,531 real
-  closures + 813 diversions, `LineString` geometry, via a direct GeoJSON
-  ZIP download (Saxony has no queryable WFS/Features service at all -
-  confirmed exhaustively via the GDI-DE catalogue's own metadata, 5 real
-  records checked, none link a working WFS despite an operator news item
-  once referencing one). Genuinely has no WGS84 source anywhere (checked
-  its WMS, its download, and its "planned works" dataset's own ISO
-  metadata) - ships in its real CRS, `EPSG:25833` (UTM33N), carried
-  through and labelled explicitly on `Coordinate.crs` rather than parked
-  or silently reprojected, the same policy this SDK already applies to
-  its British National Grid providers (OS Open USRN, DataVIA, Street
-  Manager) - `StateFieldMap` gained a `crs` field and
-  `OGCFeaturesClient`/`from_ogc_features` are now CRS-aware throughout,
-  not hardcoded to EPSG:4326. Dates are mostly `DD.MM.YYYY` but 639 of
-  3,062 real date fields (21%) carry a real hour suffix
-  (`"16.08.2026  08 Uhr"`) - parsed rather than dropped, preserving a
-  genuinely-stated time instead of collapsing to midnight. Saxony's `ID`
-  field shows the same shape of grouping signal Brandenburg's does (1,531
-  features, only 1,133 distinct values) - raised in the module docstring,
-  not acted on, consistent with the existing 1:1 policy.
-
-  Also investigated and **parked**: Saxony-Anhalt (GML-only, confirmed by
-  testing `OUTPUTFORMAT=application/json` directly against the real WFS;
-  its licence is also explicitly "non-commercial use only," not merely
-  unconfirmed), Mecklenburg-Vorpommern (unchanged from before - GML-only,
-  vague licence), NRW (publishes road network data, not roadworks - a
-  gazetteer concern; actual roadworks route to the gated Mobilithek/DATEX
-  path), and Bavaria (BAYSIS has no Baustellen/roadworks layer at all).
-- **Germany: state roadworks** (`streetworks.ogc`) - a new, reusable
-  generic OGC WFS/OGC API Features GeoJSON client (`OGCFeaturesClient`,
-  deliberately not roadworks-specific - built gazetteer-ready for future
-  work, since German gazetteers are commonly published the same way),
-  plus a declarative per-state field-map registry
-  (`streetworks.ogc.germany`) that one shared converter
-  (`streetworks.common.from_ogc_features`) reads generically - adding a
-  state means a new field-map entry, not a new converter. Two states
-  shipped, both verified against real data (2026-07): Hamburg (130
-  features, `Point` geometry, dates `DD.MM.YYYY`) and Brandenburg (487
-  features, `LineString` geometry, dates ISO, 100% coordinate coverage,
-  0 out-of-bounds on the mandatory axis-order sanity check both states'
-  tests run). Both publish under Datenlizenz Deutschland - Namensnennung -
-  Version 2.0 (dl-de/by-2-0), confirmed directly from each WFS's own
-  `GetCapabilities` document. Hamburg's access mode (WFS vs. a "direct
-  GeoJSON download") was genuinely ambiguous before checking - confirmed
-  live the download is a ZIP wrapper around the same WFS, not a separate
-  source; the direct `GetFeature` call is canonical. One real field name
-  differs from what was documented before checking: Brandenburg's road
-  field is `Straßenummner` (double "n", a typo in the source schema
-  itself). Mecklenburg-Vorpommern was checked and **parked**: confirmed
-  live GML-only (its WFS explicitly rejects `application/geo+json`) and
-  its licence is only vaguely stated, two independent reasons. Ships one
-  `Works` per feature (1:1, no grouping) - Brandenburg's `ID` field showed
-  a real but imperfect (~81-88% agreement, no corroborating field) grouping
-  signal, raised rather than acted on unilaterally, consistent with the
-  project's record-identity discipline.
-- **Germany: Autobahn GmbH** (`streetworks.autobahn`) - national motorway
-  roadworks via Autobahn GmbH's own open JSON REST API, credential-free.
-  Not DATEX II and not OGC/WFS, so it has its own small parser rather than
-  routing through `streetworks.datex2` - the same shape of choice as WZDx
-  for the US. Verified against a live fetch of all 113 real roads (2026-07,
-  zero failures): 2,873 roadworks records grouping into 997 works via a
-  genuine two-level identifier-prefix spine (599 multi-record groups, 599/599
-  agreeing on their overall end date, zero disagreements) - including
-  cross-road grouping, since 50/997 real prefixes span more than one road
-  (a junction works gets listed under every connecting road's own
-  response). Every real record carries `LineString` geometry (2-767
-  vertices), kept whole, not collapsed to a point; native axis order is
-  genuinely reversed within one record (`coordinate` is lat/long,
-  `geometry.coordinates` is GeoJSON lon/lat) and flipped explicitly in
-  `from_autobahn`, same as WZDx. Two real road-list traps confirmed live:
-  lowercase route suffixes (`A64a`/`A99a`), and `"A60 "` (trailing space) -
-  not a formatting quirk on the one real A60, but a genuinely separate,
-  always-empty duplicate entry that must not be stripped (stripping it
-  would silently refetch the real `"A60"` entry's 20 records under the
-  wrong id). Dates are a deliberate, documented exception to "never infer,
-  only take what's stated" (in the same register as Digitraffic's
-  `validity.status` caveat): no end-date field exists anywhere in the API,
-  and no start-date field at all for `SHORT_TERM_ROADWORKS` records
-  (0/1,184 real ones carry it) - dates for those come from parsing
-  `description[]` free text, five real shapes handled (long-term
-  Beginn/Ende, the overall-measure end, and three short-term shapes -
-  single-day, overnight/multi-day, and a recurring-weekly pattern
-  collapsed to its outer bounding window), reaching 100%
-  (`ROADWORKS`)/99.7% (`SHORT_TERM_ROADWORKS`) coverage; `Roadworks.is_start_verified`
-  distinguishes a real `startTimestamp` from a text-derived one.
-  Timezone is Europe/Berlin via `zoneinfo`, not a fixed offset - DST is
-  genuinely observed in the data. **Licence unconfirmed** despite checking
-  four independent sources (govdata.de's CKAN catalogue, the MDM portal,
-  the community `bundesAPI/autobahn-api` docs, and the official autobahn.de
-  app page - none state reuse/redistribution terms) - shipped anyway per
-  explicit instruction, flagged prominently in the module docstring and
-  README rather than silently assumed open.
-- **Spain: DGT** (`streetworks.datex2.dgt`) - the DGT (Dirección General de
-  Tráfico) National Access Point's SituationPublication, genuine DATEX II
-  v3 (Level C, Spanish-extended profile), credential-free. Reused through
-  the existing shared parser unchanged - no bespoke parsing path, same as
-  NDW/Iceland/France. Verified against the live feed (2026-07): 656
-  situations, 391 roadworks records, 100% coordinate coverage. Coverage is
-  national except Catalonia and the Basque Country, which run their own
-  regional traffic authorities and publish separately.
-  Surfaced and fixed a genuine *discriminator* gap in the shared
-  parser/model, not just a field-mapping one - DGT has zero
-  `MaintenanceWorks`/`ConstructionWorks` records anywhere in the feed; it
-  publishes roadworks as a generic record type
-  (`RoadOrCarriagewayOrLaneManagement`, mostly, but also `SpeedManagement`
-  and `AbnormalTraffic`) discriminated only by
-  `cause/causeType=roadMaintenance` + `roadMaintenanceType=roadworks`.
-  `SituationRecord.is_roadworks` now checks that pair additively when the
-  xsi:type isn't one of the two dedicated types (confirmed not to change
-  any other adapter's real fixture), and `road_maintenance_type` itself
-  gained a matching deep-path fallback since Spain nests it under
-  `cause/detailedCauseType` rather than as the record's direct child. The
-  road identifier is stated as `roadName` (e.g. `"N-400"`), not
-  `roadNumber` like NDW/France, so `_parse_location` gained a fallback for
-  that too. `administrative_area` comes from a new `provinces()` helper -
-  the real per-record province (e.g. `"Toledo"`), genuinely stated on
-  391/391 real roadworks records but nested in a Spanish location
-  extension, not on the shared model - same shape of solution as France's
-  `dir_regions()`. Published under Creative Commons Attribution (CC BY),
-  confirmed via the DGT NAP's own CKAN dataset metadata.
-
-## [0.7.0] - 2026-07-13
+## [0.7.0] - 2026-07-19
 
 ### Added
 
@@ -228,6 +103,138 @@
   (`None` for a real point location), with `points[0] == value` always.
   Fixed in `from_wzdx`, `from_streetmanager`, and `from_datex2` together,
   once, rather than per-provider.
+- **Spain: DGT** (`streetworks.datex2.dgt`) - the DGT (Dirección General de
+  Tráfico) National Access Point's SituationPublication, genuine DATEX II
+  v3 (Level C, Spanish-extended profile), credential-free. Reused through
+  the existing shared parser unchanged - no bespoke parsing path, same as
+  NDW/Iceland/France. Verified against the live feed (2026-07): 656
+  situations, 391 roadworks records, 100% coordinate coverage. Coverage is
+  national except Catalonia and the Basque Country, which run their own
+  regional traffic authorities and publish separately.
+  Surfaced and fixed a genuine *discriminator* gap in the shared
+  parser/model, not just a field-mapping one - DGT has zero
+  `MaintenanceWorks`/`ConstructionWorks` records anywhere in the feed; it
+  publishes roadworks as a generic record type
+  (`RoadOrCarriagewayOrLaneManagement`, mostly, but also `SpeedManagement`
+  and `AbnormalTraffic`) discriminated only by
+  `cause/causeType=roadMaintenance` + `roadMaintenanceType=roadworks`.
+  `SituationRecord.is_roadworks` now checks that pair additively when the
+  xsi:type isn't one of the two dedicated types (confirmed not to change
+  any other adapter's real fixture), and `road_maintenance_type` itself
+  gained a matching deep-path fallback since Spain nests it under
+  `cause/detailedCauseType` rather than as the record's direct child. The
+  road identifier is stated as `roadName` (e.g. `"N-400"`), not
+  `roadNumber` like NDW/France, so `_parse_location` gained a fallback for
+  that too. `administrative_area` comes from a new `provinces()` helper -
+  the real per-record province (e.g. `"Toledo"`), genuinely stated on
+  391/391 real roadworks records but nested in a Spanish location
+  extension, not on the shared model - same shape of solution as France's
+  `dir_regions()`. Published under Creative Commons Attribution (CC BY),
+  confirmed via the DGT NAP's own CKAN dataset metadata.
+- **`streetworks.datex2.parser` gained an optional `provider` keyword** on
+  all four public entry points (`iter_situations`/`iter_roadworks` and
+  their `_full` variants), threaded through parsing - a public,
+  backwards-compatible API addition, independent of any one country.
+  Field-mapping fallbacks (the Spain-motivated ones above, and any future
+  ones) now log at DEBUG level naming the provider, field, record id and
+  the value used, so a future source doing something a third way is
+  visible rather than silent. IRCA, Bison Fute and DGT pass their own
+  label automatically; NDW's documented usage calls the parser directly,
+  so the README example now passes `provider="NDW"` explicitly.
+- **Germany: Autobahn GmbH** (`streetworks.autobahn`) - national motorway
+  roadworks via Autobahn GmbH's own open JSON REST API, credential-free.
+  Not DATEX II and not OGC/WFS, so it has its own small parser rather than
+  routing through `streetworks.datex2` - the same shape of choice as WZDx
+  for the US. Verified against a live fetch of all 113 real roads (2026-07,
+  zero failures): 2,873 roadworks records grouping into 997 works via a
+  genuine two-level identifier-prefix spine (599 multi-record groups, 599/599
+  agreeing on their overall end date, zero disagreements) - including
+  cross-road grouping, since 50/997 real prefixes span more than one road
+  (a junction works gets listed under every connecting road's own
+  response). Every real record carries `LineString` geometry (2-767
+  vertices), kept whole, not collapsed to a point; native axis order is
+  genuinely reversed within one record (`coordinate` is lat/long,
+  `geometry.coordinates` is GeoJSON lon/lat) and flipped explicitly in
+  `from_autobahn`, same as WZDx. Two real road-list traps confirmed live:
+  lowercase route suffixes (`A64a`/`A99a`), and `"A60 "` (trailing space) -
+  not a formatting quirk on the one real A60, but a genuinely separate,
+  always-empty duplicate entry that must not be stripped (stripping it
+  would silently refetch the real `"A60"` entry's 20 records under the
+  wrong id). Dates are a deliberate, documented exception to "never infer,
+  only take what's stated" (in the same register as Digitraffic's
+  `validity.status` caveat): no end-date field exists anywhere in the API,
+  and no start-date field at all for `SHORT_TERM_ROADWORKS` records
+  (0/1,184 real ones carry it) - dates for those come from parsing
+  `description[]` free text, five real shapes handled (long-term
+  Beginn/Ende, the overall-measure end, and three short-term shapes -
+  single-day, overnight/multi-day, and a recurring-weekly pattern
+  collapsed to its outer bounding window), reaching 100%
+  (`ROADWORKS`)/99.7% (`SHORT_TERM_ROADWORKS`) coverage; `Roadworks.is_start_verified`
+  distinguishes a real `startTimestamp` from a text-derived one.
+  Timezone is Europe/Berlin via `zoneinfo`, not a fixed offset - DST is
+  genuinely observed in the data. **Licence unconfirmed** despite checking
+  four independent sources (govdata.de's CKAN catalogue, the MDM portal,
+  the community `bundesAPI/autobahn-api` docs, and the official autobahn.de
+  app page - none state reuse/redistribution terms) - shipped deliberately
+  with this caveat, flagged prominently in the module docstring and
+  README rather than silently assumed open; test fixtures are
+  structurally-real synthetic data, not committed real records, for the
+  same reason.
+- **Germany: state roadworks** (`streetworks.ogc`) - a new, reusable
+  generic OGC WFS/OGC API Features GeoJSON client (`OGCFeaturesClient`,
+  deliberately not roadworks-specific - built gazetteer-ready for future
+  work, since German gazetteers are commonly published the same way),
+  plus a declarative per-state field-map registry
+  (`streetworks.ogc.germany`) that one shared converter
+  (`streetworks.common.from_ogc_features`) reads generically - adding a
+  state means a new field-map entry, not a new converter. Two states
+  shipped, both verified against real data (2026-07): Hamburg (130
+  features, `Point` geometry, dates `DD.MM.YYYY`) and Brandenburg (487
+  features, `LineString` geometry, dates ISO, 100% coordinate coverage,
+  0 out-of-bounds on the mandatory axis-order sanity check both states'
+  tests run). Both publish under Datenlizenz Deutschland - Namensnennung -
+  Version 2.0 (dl-de/by-2-0), confirmed directly from each WFS's own
+  `GetCapabilities` document. Hamburg's access mode (WFS vs. a "direct
+  GeoJSON download") was genuinely ambiguous before checking - confirmed
+  live the download is a ZIP wrapper around the same WFS, not a separate
+  source; the direct `GetFeature` call is canonical. One real field name
+  differs from what was documented before checking: Brandenburg's road
+  field is `Straßenummner` (double "n", a typo in the source schema
+  itself). Mecklenburg-Vorpommern was checked and **parked**: confirmed
+  live GML-only (its WFS explicitly rejects `application/geo+json`) and
+  its licence is only vaguely stated, two independent reasons. Ships one
+  `Works` per feature (1:1, no grouping) - Brandenburg's `ID` field showed
+  a real but imperfect (~81-88% agreement, no corroborating field) grouping
+  signal, raised rather than acted on unilaterally, consistent with the
+  project's record-identity discipline.
+- **Germany: Saxony (Sachsen)** added to `streetworks.ogc` - 1,531 real
+  closures + 813 diversions, `LineString` geometry, via a direct GeoJSON
+  ZIP download (Saxony has no queryable WFS/Features service at all -
+  confirmed exhaustively via the GDI-DE catalogue's own metadata, 5 real
+  records checked, none link a working WFS despite an operator news item
+  once referencing one). Genuinely has no WGS84 source anywhere (checked
+  its WMS, its download, and its "planned works" dataset's own ISO
+  metadata) - ships in its real CRS, `EPSG:25833` (UTM33N), carried
+  through and labelled explicitly on `Coordinate.crs` rather than parked
+  or silently reprojected, the same policy this SDK already applies to
+  its British National Grid providers (OS Open USRN, DataVIA, Street
+  Manager) - `StateFieldMap` gained a `crs` field and
+  `OGCFeaturesClient`/`from_ogc_features` are now CRS-aware throughout,
+  not hardcoded to EPSG:4326. Dates are mostly `DD.MM.YYYY` but 639 of
+  3,062 real date fields (21%) carry a real hour suffix
+  (`"16.08.2026  08 Uhr"`) - parsed rather than dropped, preserving a
+  genuinely-stated time instead of collapsing to midnight. Saxony's `ID`
+  field shows the same shape of grouping signal Brandenburg's does (1,531
+  features, only 1,133 distinct values) - raised in the module docstring,
+  not acted on, consistent with the existing 1:1 policy.
+
+  Also investigated and **parked**: Saxony-Anhalt (GML-only, confirmed by
+  testing `OUTPUTFORMAT=application/json` directly against the real WFS;
+  its licence is also explicitly "non-commercial use only," not merely
+  unconfirmed), Mecklenburg-Vorpommern (unchanged from before - GML-only,
+  vague licence), NRW (publishes road network data, not roadworks - a
+  gazetteer concern; actual roadworks route to the gated Mobilithek/DATEX
+  path), and Bavaria (BAYSIS has no Baustellen/roadworks layer at all).
 
 ### Fixed
 

@@ -6,8 +6,8 @@
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 An open Python SDK for street works and roadworks data — the UK's
-registers, Europe's DATEX II feeds, and the US WZDx standard, behind one
-consistent, typed, well-tested client.
+registers, Europe's national roadworks feeds, and the US WZDx standard,
+behind one consistent, typed, well-tested client.
 
 > We do this not because it is easy, but because it is hard.
 
@@ -29,7 +29,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
-| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific | read |
+| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -56,7 +56,7 @@ gets you connected and typed; the linked docs tell you what to send.
 ## Status
 
 Early alpha. **Authentication and read/consume access are verified against
-the real systems for all providers:** Street Manager (SANDBOX), Geoplace
+the real systems for all providers except one, noted below:** Street Manager (SANDBOX), Geoplace
 DataVIA (live — including a real feature query), D-TRO (production token +
 events search), the Open Data SNS parsing/verification pipeline, SRWR
 Open Data (parsed against real published daily and monthly extracts),
@@ -72,6 +72,15 @@ sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-m
 for what was checked) and none state reuse/redistribution terms. Shipped
 anyway, flagged deliberately rather than silently assumed open - confirm
 your own rights before redistributing this data.
+
+**The one unverified provider is Norway** (`streetworks.datex2.vegvesen`):
+implemented to Statens vegvesen's published specs and covered by mocked
+tests, but **never run against real Norwegian data** — the authenticated
+pull is blocked pending credentials. It ships as a scaffold and is
+excluded from the verified-providers claim above; see the module
+docstring for precisely what's confirmed vs. still open. **If you have
+Statens vegvesen API credentials, running the smoke test against it and
+reporting back would be a genuinely valuable contribution.**
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -567,8 +576,8 @@ roads are a separate WFS-based source, out of scope here.
 > blank), the MDM portal link that entry points to (unreachable), the
 > community `bundesAPI/autobahn-api` documentation (no licence stated), and
 > the official autobahn.de app page (no terms of use found). None confirm
-> reuse/redistribution rights. Shipped anyway at the maintainer's explicit
-> instruction, flagged here deliberately — confirm your own rights before
+> reuse/redistribution rights. Shipped deliberately with this caveat rather
+> than silently assumed open — confirm your own rights before
 > redistributing this data.
 
 ```python
@@ -653,7 +662,10 @@ to, Autobahn GmbH's national-motorway API above. `streetworks.ogc` is a
 generic OGC-features GeoJSON client (`OGCFeaturesClient`), plus a
 declarative per-state field-map registry (`streetworks.ogc.germany`) that
 one shared converter reads — adding a state is writing a new field-map
-entry, not a new converter:
+entry, not a new converter. (`streetworks.ogc` is new infrastructure in
+0.7.0 and its interface is **provisional** — it was deliberately built
+generic so the future gazetteer work can reuse it, and that work may
+reshape it in 0.8.0.)
 
 ```python
 from streetworks.common import from_ogc_features
