@@ -4,6 +4,63 @@
 
 ### Added
 
+- **Netherlands: BAG (Basisregistratie Adressen en Gebouwen)**
+  (`streetworks.bag`) - the third gazetteer, and the last before the
+  canonical-model design session (per the design brief's own framing),
+  native only. Wraps the credential-free PDOK Locatieserver (`search`/
+  `suggest`/`reverse`/`lookup`) and the bulk GeoPackage (`bag-light.gpkg`,
+  current status only, no history), whose download URL is discovered from
+  an Atom feed every call rather than hardcoded - PDOK republishes monthly
+  and the filename can change, the same NDW lesson.
+  **THE critical first check - is `openbare ruimte` (street) its own
+  object? - was answered against the real, full, 7.8 GB national
+  GeoPackage, downloaded in full over this session (~26 minutes), not
+  sampled or assumed from documentation**: no, it isn't - `gpkg_contents`
+  lists exactly five tables (`woonplaats`, `pand`, `verblijfsobject`,
+  `standplaats`, `ligplaats`), all five carrying real geometry, and street
+  name/id survive only as `openbare_ruimte_naam`/
+  `openbare_ruimte_identificatie` flattened onto every address. Verified
+  at full national scale via direct SQL, not sampled: grouping all
+  ~10.04M addressable objects (`verblijfsobject`/`standplaats`/`ligplaats`)
+  by that id gives 245,893 / 2,980 / 1,546 distinct real street ids
+  respectively, zero of which map to more than one distinct street name in
+  any table, and zero rows with a null street id anywhere.
+  The fuller picture needed checking the *other* real product too: the
+  full-history XML extract (investigated via HTTP range requests against
+  the real 3.6 GB zip - a nested zip-of-zips, one member per BAG object
+  type - without downloading it whole; not parsed, per the brief's own
+  scope) confirms `openbare ruimte` genuinely *is* a first-class,
+  separately-versioned BAG object there, with its own identity and a real
+  `status` lifecycle - but still carries no geometry of its own in either
+  product (confirmed: zero of 36 real national `OpenbareRuimte` XML member
+  files contain a geometry element, for any of its real `type` values,
+  while `Woonplaats`/`Standplaats`/`Ligplaats` all do). So the honest
+  answer has three parts, not two: a street is a genuine registered
+  object, with a real lifecycle; it never carries geometry, in any
+  product; and *which* product you pull from changes whether you can see
+  it directly as a row at all - a three-part shape distinct from both the
+  UK (street = geometry) and France (street has neither a row nor
+  geometry, and only one product exists to check).
+  Also confirmed live in the XML extract: a bitemporal `voorkomen`
+  versioning model (validity period *and* registration period tracked
+  separately) - documented, not parsed, the same "investigate, don't
+  build" scope the design brief drew around this product.
+  A correction to the design brief: "Gemeente" (municipality) is not part
+  of the BAG at all, per Kadaster's own disclaimer in the (explicitly
+  unofficial) `GEM-WPL-RELATIE` helper file - `Woonplaats` (settlement) is
+  BAG's real administrative concept. Also corrected: the live Atom feed's
+  own `<rights>` element names **CC0 1.0 Universal**, not the "Public
+  Domain Mark 1.0" the brief named - a different (if similarly permissive)
+  legal instrument. A `"weg"` (street) Locatieserver result can carry a
+  real `MULTILINESTRING` geometry with `fl=*`, but its `bron` field says
+  `"BAG/NWB"` - that line comes from NWB (a separate national roads
+  dataset), not BAG itself, so it's kept reachable via `.raw` rather than
+  promoted to a field that would misattribute it. Registered in
+  `streetworks.registry` as `bag` (`kind="gazetteer"`) - the Netherlands
+  now has two providers, so the `"netherlands"` alias was removed from
+  both `bag` and the existing `ndw` roadworks provider, matching how
+  `"france"` was handled for BAN.
+
 - **France: BAN (Base Adresse Nationale)** (`streetworks.ban`) - the first
   non-UK gazetteer, native only (no canonical gazetteer type, no
   `streetworks.common` converter - deliberate, same as how the works side
