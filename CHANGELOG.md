@@ -1,5 +1,52 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **Provider discovery** (`streetworks.registry`, exposed as
+  `streetworks.providers()`/`get_provider()`) - purely additive: no existing
+  import path, class, or behaviour changed. Answers "what covers X" and
+  "give me Y's client" without needing to already know which technology a
+  country publishes over - `providers(territory="Wales")`,
+  `providers(kind="gazetteer")`, `providers(credentials=False)`,
+  `get_provider("spain")`. One registry entry per provider (21 total,
+  covering every provider package in the SDK - a coverage test asserts
+  this stays true), each carrying territory, credentials, licence,
+  source grade, and the exact working import line.
+  Capabilities (`entry.capabilities()`) are **derived by inspecting the
+  real client class**, never a hand-maintained dict - including one level
+  into known sub-API objects (Street Manager's `.work`/`.reporting`
+  attributes, discovered by reading `__init__`'s own source, not
+  hardcoded), which is what lets `streetmanager`'s write/publish and
+  planning-artifact capabilities show up correctly despite living on
+  nested classes rather than flat methods.
+  Ambiguous lookups (`get_provider("germany")` → four providers,
+  `"england"` → seven) raise naming every real candidate rather than
+  guessing; an unknown territory passed to `providers()` warns and returns
+  empty rather than raising or silently returning nothing.
+  A genuine performance bug was caught and fixed before shipping, not
+  after: the first working version imported `SourceGrade` from
+  `streetworks.common.models`, which (via `streetworks.common`'s package
+  `__init__`) transitively imported every `from_<provider>` converter and
+  therefore every provider's client module, including httpx - pulling in
+  24 heavy modules just to import the registry, exactly the cost this
+  module's own design was supposed to rule out. Fixed by storing
+  `source_grade` as a plain string (a `str` `Enum`'s members compare equal
+  to their string values either way) instead of importing the real enum
+  type; confirmed live that `import streetworks.registry` and
+  `import streetworks` now pull in zero httpx/pydantic modules, and that
+  `get_provider()` still imports the target client lazily, only on call.
+  Two real, previously-undocumented gaps surfaced while verifying every
+  territory/licence claim against actual module docstrings rather than
+  copying the design brief on trust: Street Manager and DataVIA never
+  state their territory anywhere in code or README prose (England+Wales
+  here is inferred by elimination against SRWR/TrafficWatchNI covering the
+  other nations separately, not an explicit statement); NDW and
+  Digitraffic state no licence anywhere either, and a live check of both
+  portals found nothing (`licence_confirmed=False`, the same honest-gap
+  convention Autobahn's module already established).
+
 ## [0.7.0] - 2026-07-19
 
 ### Added

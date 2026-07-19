@@ -1,4 +1,9 @@
-"""streetworks - an open SDK for UK street works APIs.
+"""streetworks - an open SDK for street works and roadworks data.
+
+Don't know where to start? ``streetworks.providers()``/``get_provider()``
+answer "what covers X" and "give me Y's client" without needing to already
+know which technology a country/nation publishes over - see
+:mod:`streetworks.registry`.
 
 Providers:
     streetworks.streetmanager - DfT Street Manager (V6/V7, sandbox + production)
@@ -8,11 +13,13 @@ Providers:
 
 from .exceptions import (
     AccountLockedError,
+    AmbiguousProviderError,
     APIError,
     AuthenticationError,
     ForbiddenError,
     NotFoundError,
     OrganisationSuspendedError,
+    ProviderNotFoundError,
     RateLimitError,
     RequestValidationError,
     ServerError,
@@ -20,16 +27,21 @@ from .exceptions import (
     StreetworksError,
     TransportError,
 )
+from .registry import Kind, ProviderEntry, get_provider, providers
 
 __version__ = "0.3.0"  # keep in sync with pyproject.toml
 
 __all__ = [
     "APIError",
     "AccountLockedError",
+    "AmbiguousProviderError",
     "AuthenticationError",
     "ForbiddenError",
+    "Kind",
     "NotFoundError",
     "OrganisationSuspendedError",
+    "ProviderEntry",
+    "ProviderNotFoundError",
     "RateLimitError",
     "RequestValidationError",
     "ServerError",
@@ -37,4 +49,6 @@ __all__ = [
     "StreetworksError",
     "TransportError",
     "__version__",
+    "get_provider",
+    "providers",
 ]

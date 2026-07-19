@@ -19,6 +19,46 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
     submitted = sm.reporting.permits(status="submitted")
 ```
 
+## Finding a provider
+
+Everything below this is organised by *technology* — you need to already
+know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
+find the right import. `streetworks.providers()`/`get_provider()` answer the
+question the other way round — "what covers X" and "give me Y's client" —
+without needing that specialist knowledge first:
+
+```python
+>>> from streetworks import providers, get_provider
+>>> providers(territory="Wales")
+Street Manager
+  England and Wales's statutory street works register - permits, works, inspections.
+  Credentials: Street Manager API account (email + password)
+  from streetworks.streetmanager import StreetManagerClient
+
+Traffic Wales
+  Wales's motorway/trunk-road roadworks feed, from the Welsh Government.
+  Credentials: No credentials required
+  from streetworks.trafficwales import TrafficWalesClient
+
+... (5 more — OS Open USRN, DataVIA, D-TRO, Street Manager Open Data, UK Police)
+
+>>> DGTClient = get_provider("spain")   # the class, not an instance - constructors vary
+>>> with DGTClient() as dgt:
+...     situations = list(dgt.iter_roadworks())
+```
+
+`providers()` filters by `territory` (case-insensitive; `"UK"` expands to
+the four nations — a query-time convenience only, never stored data),
+`kind` (`"roadworks"` / `"gazetteer"` / `"context"`), and `credentials`
+(`False` for the credential-free ones). `get_provider()` resolves a single
+provider or a curated alias (`"spain"`, `"finland"`, `"france"`, ...); an
+ambiguous name (`"germany"` → four providers, `"england"` → several) raises
+naming every real candidate rather than guessing which one you meant.
+
+This is a discovery layer over the native interfaces below, not a
+replacement for them — every provider still has its own full-fidelity
+client, documented in its own section, exactly as before.
+
 | Module | Service | Direction |
 |---|---|---|
 | `streetworks.streetmanager` | [DfT Street Manager](https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/) — all nine APIs (Work, Reporting, Street Lookup, GeoJSON, Party, Data Export, Event, Sampling, Worklist), V6 & V7, sandbox & production | read + write |

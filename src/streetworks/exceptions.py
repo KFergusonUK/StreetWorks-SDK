@@ -76,6 +76,17 @@ class SignatureVerificationError(StreetworksError):
     """An SNS message failed signature verification (streetworks.opendata)."""
 
 
+class ProviderNotFoundError(StreetworksError, LookupError):
+    """streetworks.get_provider() received a key with no registry match.
+    The message names the closest real keys, so a typo doesn't dead-end."""
+
+
+class AmbiguousProviderError(StreetworksError, LookupError):
+    """streetworks.get_provider() received a key matching more than one
+    provider (e.g. a country with several providers) - resolved by raising,
+    never by guessing. The message names every candidate key."""
+
+
 _STATUS_MAP: dict[int, type[APIError]] = {
     400: RequestValidationError,
     401: AuthenticationError,
