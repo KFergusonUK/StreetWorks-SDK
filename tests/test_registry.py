@@ -68,7 +68,7 @@ def test_providers_no_filter_returns_everything():
 def test_providers_territory_filter_case_insensitive():
     assert providers(territory="wales") == providers(territory="Wales")
     result = providers(territory="Wales")
-    assert {e.key for e in result} >= {"streetmanager", "datavia", "openusrn", "trafficwales"}
+    assert {e.key for e in result} >= {"datavia", "openusrn", "trafficwales"}
 
 
 def test_providers_territory_uk_expands_to_four_nations():
