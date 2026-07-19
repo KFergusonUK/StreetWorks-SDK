@@ -29,16 +29,11 @@ without needing that specialist knowledge first:
 
 ```python
 >>> from streetworks import providers, get_provider
->>> providers(territory="Wales")
+>>> providers(territory="England")
 Street Manager
   England and Wales's statutory street works register - permits, works, inspections.
   Credentials: Street Manager API account (email + password)
   from streetworks.streetmanager import StreetManagerClient
-
-Traffic Wales
-  Wales's motorway/trunk-road roadworks feed, from the Welsh Government.
-  Credentials: No credentials required
-  from streetworks.trafficwales import TrafficWalesClient
 
 ... (5 more — OS Open USRN, DataVIA, D-TRO, Street Manager Open Data, UK Police)
 
