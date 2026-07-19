@@ -378,13 +378,13 @@ _REGISTRY: list[ProviderEntry] = [
         key="streetmanager",
         name="Street Manager",
         description=(
-            "England and Wales's statutory street works register - "
+            "England's statutory street works register - "
             "permits, works, inspections."
         ),
         kind=Kind.ROADWORKS,
-        territories=frozenset({"England", "Wales"}),  # inferred by elimination, see above
+        territories=frozenset({"England"}),  # inferred by elimination, see above
         scope_note=(
-            "Not Scotland (see the srwr provider) or Northern Ireland "
+            "Not Scotland (see the srwr provider), Wales (see trafficwales), or Northern Ireland "
             "(see trafficwatchni)."
         ),
         credentials="Street Manager API account (email + password)",
@@ -402,7 +402,7 @@ _REGISTRY: list[ProviderEntry] = [
             "receive-only, same coverage as Street Manager itself."
         ),
         kind=Kind.ROADWORKS,
-        territories=frozenset({"England", "Wales"}),
+        territories=frozenset({"England"}),
         scope_note="Receive-only - you host the HTTPS endpoint AWS SNS pushes to.",
         credentials="A Street Manager Open Data subscription (no per-call auth)",
         licence="N/A - access-controlled service, not open data",
