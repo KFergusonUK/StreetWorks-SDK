@@ -46,9 +46,10 @@ Street Manager
 the four nations — a query-time convenience only, never stored data),
 `kind` (`"roadworks"` / `"gazetteer"` / `"context"`), and `credentials`
 (`False` for the credential-free ones). `get_provider()` resolves a single
-provider or a curated alias (`"spain"`, `"finland"`, `"france"`, ...); an
-ambiguous name (`"germany"` → four providers, `"england"` → several) raises
-naming every real candidate rather than guessing which one you meant.
+provider or a curated alias (`"spain"`, `"finland"`, `"netherlands"`, ...);
+an ambiguous name (`"germany"` → four providers, `"france"` → two, a
+roadworks feed and a gazetteer, `"england"` → several) raises naming every
+real candidate rather than guessing which one you meant.
 
 This is a discovery layer over the native interfaces below, not a
 replacement for them — every provider still has its own full-fidelity
@@ -62,6 +63,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
+| `streetworks.ban` | [BAN (Base Adresse Nationale)](https://adresse.data.gouv.fr/) — France's national address base, ~25M addresses, geocoding API + bulk per-département/national files (no credentials). **An address base, not a street register** — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
@@ -99,8 +101,9 @@ OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
 Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Autobahn GmbH/Germany,
-and the German states Hamburg, Brandenburg and Saxony (all parsed against
-real live feeds).
+the German states Hamburg, Brandenburg and Saxony (all parsed against
+real live feeds), and BAN/France (search, reverse and bulk-file parsing
+all verified against `data.geopf.fr`/`adresse.data.gouv.fr`).
 
 **Autobahn GmbH's licence is unconfirmed** - checked four independent
 sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-motorways)
@@ -411,6 +414,45 @@ with UsrnDatabase(extract_gpkg(archive)) as db:
     street = db.get(33909869)
     print(street.geometry)        # WKT, British National Grid (EPSG:27700)
 ```
+
+## Base Adresse Nationale (BAN)
+
+French national address base — ~25M addresses, no credentials. **This is
+an address base, not a street register** — unlike OS Open USRN above, a UK
+reader's first assumption (a downloadable street with its own key) is
+wrong here: BAN publishes addresses as its primary entity, and a street
+("voie") or hamlet ("lieu-dit") only exists as an implicit grouping under
+the addresses that sit on it. `streetworks.ban` wraps both the credential-
+free geocoding API and the bulk per-département/national files (streamed,
+never loaded whole — the national file is ~1 GB+ gzipped):
+
+```python
+from streetworks.ban import BANClient
+
+with BANClient() as ban:
+    hits = ban.search("8 rue des halles paris")     # geocoding API
+    print(hits[0].street, hits[0].commune_nom, hits[0].toponyme_id)
+
+    path = ban.download_departement("48", "dept48.csv.gz")   # bulk file
+    for address in ban.iter_addresses(path):
+        print(address.id, address.lon, address.lat)          # WGS84
+```
+
+`toponyme_id` is **derived by this SDK**, not a literal BAN field — BAN
+carries no `id_ban_toponyme` column under any format currently served, but
+every real address `id` is exactly `{street prefix}_{numero}`, so stripping
+the numero recovers a stable per-street grouping key (verified: 6/6 real
+addresses on one real street share it). Because a street's identifier
+starts with its commune's INSEE code, a street crossing a commune boundary
+gets a different `toponyme_id` on each side, by construction. See
+`streetworks.ban.models`'s module docstring for the full finding, including
+a confirmed-live join from BAN's own data to DGFiP's **TOPO** register
+(FANTOIR's July-2023 replacement) — investigated, not built into this SDK
+yet.
+
+The documented API endpoint (`api-adresse.data.gouv.fr`) is past its
+2026-01-31 sunset; this client targets its confirmed-live replacement,
+`data.geopf.fr/geocodage`. Licence Ouverte / Open Licence 2.0 (Etalab).
 
 ## DATEX II (European roadworks)
 
@@ -1122,6 +1164,26 @@ actually is.
       corroborated grouping evidence. Client built gazetteer-ready
       (generic GeoJSON fetch, CRS-aware) but no gazetteer features added
       yet — separate design session pending
+- [x] **Provider registry & discovery** (`streetworks.providers()`/
+      `get_provider()`, `streetworks.registry`) — territory/kind/credentials
+      browsing and single-provider lookup over every provider above, derived
+      capabilities (never a hand-maintained per-provider flag), registered
+      keeping heavy imports lazy (importing the registry pulls in zero
+      provider client modules). See [Finding a provider](#finding-a-provider)
+- [x] France BAN (Base Adresse Nationale) — the first non-UK gazetteer
+      (`streetworks.ban`), native only, no canonical gazetteer type yet (see
+      [International gazetteers](#international-gazetteers--separate-strand)).
+      Verified live: the documented API endpoint had moved and the design
+      brief's own claim it 400'd did not reproduce; two of four bulk CSV
+      formats named in the brief don't exist as real files; there is no
+      `id_ban_toponyme` field, but a street's identity is recoverable by
+      stripping the numero from any real address `id` (verified: 6/6 real
+      addresses on one street share it); BAN's `banId`/`uid_adresse`
+      identifiers were confirmed, live, to be the *same* UUID as each other,
+      not just similarly-shaped. Also surfaced BAN's `id_fantoir` column is,
+      despite the name, already a post-2023 TOPO-length code — confirmed via
+      a live join to DGFiP's TOPO register, FANTOIR's real (and now
+      archived) replacement
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -1167,16 +1229,26 @@ Grouped by the client shape they need:
 ### International gazetteers — separate strand
 
 The European equivalents of OS Open USRN (address/street reference layers, not
-roadworks — keep distinct from the feeds above): France BAN, Spain Catastro,
-Norway Kartverket, Netherlands PDOK, Germany Geoportal, Portugal SNIG, plus the
-UK GeoPlace gazetteer SOAP API. These eventually connect to the **common
-models** work; formats differ widely, so each needs its own mapping design.
-Germany's own state gazetteers are commonly published the same way as the
-regional roadworks above (WFS/OGC API Features) — `streetworks.ogc`'s
+roadworks — keep distinct from the feeds above). France's BAN shipped in
+0.8.0 (native, see below) — still open: Spain Catastro, Norway Kartverket,
+Netherlands PDOK, Germany Geoportal, Portugal SNIG, plus the UK GeoPlace
+gazetteer SOAP API. These eventually connect to the **common models** work;
+formats differ widely (BAN's own shape — an address base with no
+downloadable street entity — is itself evidence of that), so each needs its
+own mapping design, deferred until a few real, disagreeing shapes are in
+hand. Germany's own state gazetteers are commonly published the same way as
+the regional roadworks above (WFS/OGC API Features) — `streetworks.ogc`'s
 `OGCFeaturesClient` was deliberately kept generic (GeoJSON in, features
 out, CRS-aware, nothing roadworks-specific) so this future work can reuse
 it rather than needing its own fetch layer; no gazetteer-specific code
-exists yet, that's still its own design session.
+exists yet beyond BAN's own, that's still its own design session.
+
+Also investigated, not built: France's street *names* now live in DGFiP's
+**TOPO** register (which replaced FANTOIR in July 2023 — FANTOIR is
+archived), a separate dataset from BAN with no geometry of its own. BAN's
+plain `csv` bulk format carries a real, live-confirmed join to it (see
+`streetworks.ban`'s module docstring) — worth its own module or folding into
+`streetworks.ban`, a decision for the canonical-gazetteer design session.
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 

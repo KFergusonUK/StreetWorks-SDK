@@ -4,15 +4,64 @@
 
 ### Added
 
+- **France: BAN (Base Adresse Nationale)** (`streetworks.ban`) - the first
+  non-UK gazetteer, native only (no canonical gazetteer type, no
+  `streetworks.common` converter - deliberate, same as how the works side
+  shipped natively across 0.3.0-0.4.0 before `Works`/`WorksSite` existed).
+  Wraps both the credential-free geocoding API (`search`/`reverse`) and the
+  bulk per-département/national `csv-bal` files (streamed, never loaded
+  whole - the national file is ~1.4 GB gzipped). Verified live, not
+  assumed: the documented API endpoint (`api-adresse.data.gouv.fr`) is past
+  its stated 2026-01-31 sunset, so this client targets its confirmed-live
+  replacement, `data.geopf.fr/geocodage`; the design brief's own claim that
+  the new endpoint returned HTTP 400 did not reproduce - a plain
+  `q=`/`lon=`&`lat=` request succeeds. Of the four bulk CSV format variants
+  the brief named, only two (`csv`, `csv-bal`) exist as real downloadable
+  files today - `csv-with-ids` and `csv-bal-with-lang` do not.
+  **BAN is an address base, not a street register**: there is no
+  `id_ban_toponyme` field under any format checked, but a street's identity
+  is recoverable - every real address `id` is exactly
+  `{street prefix}_{numero}`, and stripping the numero reproduces the same
+  prefix for every address on the same street within one commune (verified:
+  6/6 real addresses on one real street share it). This SDK exposes that
+  as a derived `toponyme_id`, explicitly documented as not a literal BAN
+  field. Also confirmed live: the API's `banId` and the bulk `csv-bal`
+  format's `uid_adresse` are the *same* permanent UUID for the same real
+  address, not just similarly-shaped identifiers; the plain `csv` bulk
+  format carries neither, only the compact `id`.
+  A user-supplied addendum mid-build corrected the brief's claim that
+  street naming belongs to FANTOIR: FANTOIR was replaced by DGFiP's
+  **TOPO** register in July 2023 and is now archived. Investigated live in
+  response: BAN's plain `csv` format's `id_fantoir` column is, despite its
+  name, already populated with post-2023 TOPO-length codes (9 characters,
+  never the old 10-character FANTOIR form, across every département
+  sampled) - and a real BAN `id_fantoir` value was confirmed, live, to
+  join cleanly to DGFiP's TOPO API and return the matching street name.
+  TOPO itself has no geometry column at all, so even a perfect join only
+  recovers a street's name/history, never a centreline - France
+  genuinely splits street *identity* (TOPO, DGFiP) from street *position*
+  (BAN, IGN/communes), unlike the UK's unified USRN. TOPO is not wrapped by
+  this SDK yet - investigated and documented, not built, per the addendum's
+  own scope. Coordinates are WGS84 (`lon`/`lat`) throughout - confirmed
+  consistent across the API and both bulk formats, and across mainland
+  France and five sampled overseas départements; the bulk files' `x`/`y`
+  columns are preserved in `.raw` but not modelled as a coordinate, since
+  each overseas département uses its own local projection the file itself
+  never states. Licence Ouverte / Open Licence 2.0 (Etalab). Registered in
+  `streetworks.registry` as `ban` (`kind="gazetteer"`) - France now has two
+  providers, so the `"france"` alias was removed from both `ban` and the
+  existing `bisonfute` roadworks provider, and `get_provider("france")`
+  now raises `AmbiguousProviderError` naming both, the same as `"germany"`.
+
 - **Provider discovery** (`streetworks.registry`, exposed as
   `streetworks.providers()`/`get_provider()`) - purely additive: no existing
   import path, class, or behaviour changed. Answers "what covers X" and
   "give me Y's client" without needing to already know which technology a
   country publishes over - `providers(territory="Wales")`,
   `providers(kind="gazetteer")`, `providers(credentials=False)`,
-  `get_provider("spain")`. One registry entry per provider (21 total,
-  covering every provider package in the SDK - a coverage test asserts
-  this stays true), each carrying territory, credentials, licence,
+  `get_provider("spain")`. One registry entry per provider (22 total as of
+  this release, covering every provider package in the SDK - a coverage
+  test asserts this stays true), each carrying territory, credentials, licence,
   source grade, and the exact working import line.
   Capabilities (`entry.capabilities()`) are **derived by inspecting the
   real client class**, never a hand-maintained dict - including one level
