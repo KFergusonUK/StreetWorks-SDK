@@ -2,7 +2,154 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **`streetworks.registry`'s `Kind.GAZETTEER` split into `Kind.ADDRESSES` and
+  `Kind.STREETS`** - a categorisation fix, not a cosmetic rename: with only
+  BAN, BAG and Kartverket as examples of `"gazetteer"`, `providers()`
+  supported the false conclusion "European gazetteers have no street
+  geometry." They do - it lives in a *street* register, published
+  separately by a different body, in every territory checked so far except
+  the UK (which uniquely unifies both under the NSG). Reassigned: `datavia`
+  and `openusrn` to `kind="streets"`; `ban`, `bag` and `kartverket` to
+  `kind="addresses"`. Judgement call recorded, not agonised over: Kartverket
+  also wraps SSR (Norway's official place-names register - settlements,
+  natural features), which is neither addresses nor streets; kept under
+  `addresses` rather than minting a third category for one member, noted in
+  its own registry entry and this changelog. `ProviderEntry.capabilities()`
+  now reports `"address lookup"`/`"street lookup"` in place of the old
+  `"gazetteer/street lookup"`. This is purely additive to behaviour (no
+  client, import path, or method signature changed) but **is** a breaking
+  change to any code matching on `kind="gazetteer"` directly - there was no
+  deprecation path available for an enum value rename, so this ships as a
+  clean break, flagged here rather than silently.
+  With the split, `providers()` is now a real coverage map, not just a
+  filter: the UK has two `streets` providers (`datavia`, `openusrn`) and
+  **zero** `addresses` - a genuine gap, not an oversight, since AddressBase
+  is an OS Premium product, not open data (noted in the README's roadmap,
+  not solved here - it may be the one territory where the address layer is
+  genuinely blocked, the inverse of the European picture). France and
+  Norway have `addresses` only, zero `streets`, until their own street
+  registers are investigated; the Netherlands had the same gap until NWB
+  (below) gave it the first territory with both layers.
+
 ### Added
+
+- **Netherlands: NWB (Nationaal Wegenbestand)** (`streetworks.nwb`) - the
+  first non-UK street-geometry provider, native only, the `kind="streets"`
+  counterpart to `bag`'s `kind="addresses"`. Wraps the credential-free WFS
+  (`query`/`count`, real `CQL_FILTER` support) and a two-hop Atom feed
+  (bulk GeoPackage discovery + streamed download - unlike every other Atom
+  feed in this SDK, NWB's index feed points to a second per-dataset feed,
+  which only then lists the real download).
+  **A real, stated join to BAG exists, confirmed live**: `bag_orl`
+  (carried on every wegvak/road-segment) is literally BAG's own
+  `openbare_ruimte_identificatie` - same format, same commune-code prefix,
+  verified by matching a real wegvak's `bag_orl` against BAG's own id
+  space - making the Netherlands the first territory in this SDK where an
+  address register and a street-geometry register can be joined by a
+  stated identifier, not a name match. Verified at real municipality
+  scale (Harlingen, 1,886 wegvakken), not sampled: grouping by `bag_orl`
+  gives 378 clean groups, zero mapping to more than one street name - but
+  the join isn't universal (96 of 1,886 real wegvakken, ~5%, carry no
+  `bag_orl` at all), and name-based grouping alone is measurably less
+  reliable (7 of 385 real (municipality, name) groups span two different
+  real `bag_orl` values - e.g. "Sédyk" is one display name covering two
+  genuinely different BAG street objects). `Wegvak.toponyme_id()` returns
+  `bag_orl` where present and `None` otherwise, never falling back to the
+  name, which would silently over-merge in exactly these real cases.
+  Corrected the design brief's own WFS paging warning, live: `count`
+  paging works fine - the brief's two failed attempts almost certainly
+  hit an unencoded `+` in `outputFormat=application/geopackage+sqlite3`,
+  which decodes server-side as a literal space (confirmed: that exact
+  rejection message reproduces the failure). But a real bug of the same
+  shape was found in its place: **PDOK's WFS silently ignores
+  `CQL_FILTER` entirely** - a query filtered to one real municipality
+  returned wegvakken from 280+ different municipalities, unfiltered, both
+  for actual features and for `resultType=hits` counts - while
+  Rijkswaterstaat's own WFS filters correctly on the identical query
+  (confirmed: exactly the requested municipality, matching the bulk-file
+  count exactly). Since filtering is the entire point of a live-query
+  route, `NWBClient.query()`/`count()` target Rijkswaterstaat directly;
+  the bulk GeoPackage download stays on PDOK's Atom feed, which is
+  unaffected (a static file, not a filtered query) and matches this SDK's
+  existing convention for other Dutch open data. Also confirmed live:
+  geometry is route-dependent (the WFS's GeoJSON reports plain
+  `LineString`; the bulk GeoPackage encodes every real wegvak as a
+  `MULTILINESTRING` wrapping exactly one line part, a GeoPackage/FME
+  export convention, not genuinely multi-part segments - carried through
+  unconverted, never silently unwrapped); CRS is EPSG:28992, matching
+  BAG; licence is CC0 1.0 Universal, matching BAG too, confirmed from the
+  Atom feed's own `<rights>` element rather than a portal page (the same
+  correction BAG's own licence needed). Registered in
+  `streetworks.registry` as `nwb` (`kind="streets"`) - the Netherlands
+  now has three providers (`ndw` roadworks, `bag` addresses, `nwb`
+  streets), so `get_provider("netherlands")` raises
+  `AmbiguousProviderError` naming all three.
+
+- **Norway: Kartverket (Matrikkelen Adresse + SSR stedsnavn)**
+  (`streetworks.kartverket`) - the fourth gazetteer, and the last before
+  the canonical-model design session, native only. Wraps the
+  credential-free address REST API (`search`/`search_nearby`), the SSR
+  place-names REST API (`search_places`/`search_names`/`nearby_places`/
+  `object_types`/`languages`), and bulk CSV downloads discovered via an
+  Atom feed - genuinely not GML-only, unlike Spain: Kartverket publishes
+  CSV, FGDB, GML, PostGIS and SOSI side by side for the same dataset,
+  confirmed live via the Geonorge catalogue, so CSV was picked
+  deliberately for the same standard-library-only reason every other bulk
+  provider in this SDK was.
+  **Multilingual naming - the finding the design brief flagged as most
+  likely to change the canonical model - lives on the SSR *place*, not the
+  address, confirmed live, not assumed**: a real place
+  (Karasjok/Kárášjohka/Kaarasjoki, `stedsnummer` 868181) carries three
+  parallel official names (Norwegian, Northern Sámi, Kven) in one
+  `stedsnavn` array, each independently statused (two `"godkjent og
+  prioritert"` - approved and prioritised; the Kven one only `"foreslått
+  og prioritert"` - proposed, not yet approved). But a real address in the
+  same Sámi-majority municipality ("Čalbmebealskáidi 1") carries exactly
+  one `adressenavn`, in Northern Sámi, with no parallel Norwegian name
+  anywhere on the record - even though SSR does have a real, dedicated
+  `"Adressenavn"` object type (one of 291 real legal types confirmed live),
+  that street's own entry there is single-language too. So multilingual
+  officialdom turned out to be a property of some SSR places, not a
+  systematic property of Norwegian street addressing - `PlaceName.names`
+  is modelled as a list for exactly this reason.
+  `adressekode` (a street key carried *inside* the address dataset itself
+  - between the UK's separate street register and France's separate tax
+  register) is real, clean and municipality-scoped: verified at full
+  scale, not sampled, via the same over-merge check BAN's `toponyme_id`
+  and BAG's `openbare_ruimte_identificatie` both got - two whole real
+  municipalities' bulk files (Karasjok, 1,896 addresses/139 codes; Oslo,
+  106,154 addresses/2,535 codes), zero codes mapping to more than one
+  street name in either. The same live search that surfaced this also
+  confirmed the municipality-scoping directly: "Karl Johans gate 1"
+  resolves to three different real addresses in three different
+  municipalities, each with its own `adressekode`.
+  No product checked gives a street geometry of its own - a separate
+  Kartverket/Statens vegvesen product, NVDB Vegnett, does hold real
+  road-network line geometry, noted but not built, the same treatment
+  France's TOPO and the Netherlands' NWB got. That makes three of the four
+  European gazetteers built in this SDK with no street centreline of their
+  own.
+  Two design-brief corrections, both live-verified: SSR's default output
+  CRS is the *same* `EPSG:4258` as the address API (the brief suggested
+  checking for a difference; only the query's *input* flexibility differs,
+  accepting `25833` alongside `4258` via `koordsys`) - and the "requires an
+  agreement with Kartverket" note some catalogues attach turned out to
+  name a completely different, SOAP-based, access-restricted service
+  (`MatrikkelAPI`), not the open REST APIs this module wraps. Also found:
+  the bulk Atom feed mislabels every entry's `type` attribute as
+  `application/gml+xml` even for real CSV entries (this module reads the
+  URL's filename, never the `type`), and per-entry `<rights>` isn't always
+  `"Kartverket"` - some municipalities (confirmed: Karasjok) name the real
+  local data steward instead.
+  Registered in `streetworks.registry` as `kartverket` (`kind="gazetteer"`)
+  - Norway now has two providers, so the `"norway"` alias was removed from
+  both `kartverket` and the existing `vegvesen` roadworks provider (this
+  SDK's one unverified provider, blocked on different credentials from a
+  different Norwegian agency - the ironic contrast the design brief asked
+  to have recorded), and `get_provider("norway")` now raises
+  `AmbiguousProviderError` naming both, matching `"france"`/`"netherlands"`.
 
 - **Netherlands: BAG (Basisregistratie Adressen en Gebouwen)**
   (`streetworks.bag`) - the third gazetteer, and the last before the
