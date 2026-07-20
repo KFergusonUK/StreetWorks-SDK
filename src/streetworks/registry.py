@@ -500,9 +500,9 @@ _REGISTRY: list[ProviderEntry] = [
         ),
         credentials=None,
         licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
-        # No "france" alias, for the same reason bisonfute's was removed:
-        # two providers now cover France - get_provider("france") should
-        # raise AmbiguousProviderError naming both, not silently pick one.
+        # No "france" alias: France now has three providers (this one,
+        # bisonfute, and bdtopo) - get_provider("france") resolves
+        # through the territory-ambiguity path, naming all three.
         _module="streetworks.ban",
         _client_name="BANClient",
         import_line="from streetworks.ban import BANClient",
@@ -572,6 +572,29 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.nwb",
         _client_name="NWBClient",
         import_line="from streetworks.nwb import NWBClient",
+    ),
+    ProviderEntry(
+        key="bdtopo",
+        name="BD TOPO (IGN)",
+        description=(
+            "France's national road network (transport theme) - segments and named streets."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"France"}),
+        scope_note=(
+            "The counterpart to ban's addresses - troncon_de_route segments join to BAN "
+            "via a real, stated identifier (identifiant_voie_ban), and voie_nommee gives "
+            "a genuine named-street entity above them. WFS only - no bulk GeoPackage "
+            "download route was found, see the module docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence ETALAB 2.0",
+        # No "france" alias: France now has three providers (bisonfute,
+        # ban, and this one) - get_provider("france") resolves through
+        # the territory-ambiguity path, naming all three.
+        _module="streetworks.bdtopo",
+        _client_name="BDTopoClient",
+        import_line="from streetworks.bdtopo import BDTopoClient",
     ),
     ProviderEntry(
         key="ndw",
@@ -654,9 +677,9 @@ _REGISTRY: list[ProviderEntry] = [
         credentials=None,
         licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
         source_grade="operator",
-        # No "france" alias: France now has two providers (this one and the
-        # ban gazetteer) - get_provider("france") resolves through the
-        # territory-ambiguity path instead, same as "germany".
+        # No "france" alias: France now has three providers (this one,
+        # ban, and bdtopo) - get_provider("france") resolves through
+        # the territory-ambiguity path instead, same as "germany".
         _module="streetworks.datex2",
         _client_name="BisonFuteClient",
         import_line="from streetworks.datex2 import BisonFuteClient",

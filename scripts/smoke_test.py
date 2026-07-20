@@ -521,6 +521,25 @@ def check_nwb() -> str:
     return summary
 
 
+def check_bdtopo() -> str:
+    """France BD TOPO (IGN) needs no credentials. Exercises the
+    Géoplateforme WFS (a filtered query, a count, and a voie_nommee
+    lookup) - there is no bulk download route built (see the package
+    docstring for why)."""
+    from streetworks.bdtopo import BDTopoClient
+
+    with BDTopoClient() as bdtopo:
+        troncons = bdtopo.query_troncons(cql_filter="insee_commune_gauche='01004'", count=5)
+        if not troncons:
+            raise RuntimeError("query returned no results for a known real commune")
+        total = bdtopo.count_troncons(cql_filter="insee_commune_gauche='01004'")
+        voies = bdtopo.query_voies_nommees(cql_filter="insee_commune='01004'", count=5)
+        return (
+            f"troncons -> {len(troncons)} hit(s), top: {troncons[0].nom_voie_ban_gauche!r}; "
+            f"count(01004) -> {total}; voies_nommees -> {len(voies)} hit(s)"
+        )
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -679,6 +698,7 @@ def main() -> int:
     reporter.check("BAG (Netherlands)", [], check_bag)
     reporter.check("Kartverket (Norway)", [], check_kartverket)
     reporter.check("NWB (Netherlands)", [], check_nwb)
+    reporter.check("BD TOPO (France)", [], check_bdtopo)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

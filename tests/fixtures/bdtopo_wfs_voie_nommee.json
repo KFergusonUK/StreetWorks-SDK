@@ -1,0 +1,115 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "voie_nommee.1",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              5.36688679,
+              45.96617356
+            ],
+            [
+              5.36678849,
+              45.96611075
+            ],
+            [
+              5.36663944,
+              45.96591928
+            ],
+            [
+              5.3666079,
+              45.96587669
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometrie",
+      "properties": {
+        "cleabs": "VOIE_NOM0000002336861171",
+        "identifiant_voie_ban": "01004_0668",
+        "nom_voie_ban": "Impasse de Mollon",
+        "insee_commune": "01004",
+        "nom_commune": "Ambérieu-en-Bugey",
+        "source_voie_ban": "commune",
+        "nom_collaboratif": "IMP DE MOLLON",
+        "type_voie": "impasse",
+        "mot_directeur": "Mollon",
+        "lieux_dits_ban": "",
+        "liens_vers_supports": "TRONROUT0000002005899987",
+        "insee_communes_deleguees_ban": "",
+        "noms_communes_deleguees_ban": "",
+        "date_creation": "2023-12-07T12:27:26.605Z",
+        "date_modification": "2024-03-08T14:53:45.791Z",
+        "nom_normalise": "IMP DE MOLLON",
+        "id_ban_odonyme": "24e7b6f4-dfe3-4ad9-b8b6-60f922289243"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "voie_nommee.2",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              5.3411002,
+              45.95811171
+            ],
+            [
+              5.34155486,
+              45.95841492
+            ]
+          ],
+          [
+            [
+              5.34047384,
+              45.95771927
+            ],
+            [
+              5.34079977,
+              45.95791162
+            ],
+            [
+              5.3411002,
+              45.95811171
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometrie",
+      "properties": {
+        "cleabs": "VOIE_NOM0000002336861172",
+        "identifiant_voie_ban": "01004_rsu0wh",
+        "nom_voie_ban": "Rue du Stade",
+        "insee_commune": "01004",
+        "nom_commune": "Ambérieu-en-Bugey",
+        "source_voie_ban": "commune",
+        "nom_collaboratif": "IMP DU STADE",
+        "type_voie": "rue",
+        "mot_directeur": "Stade",
+        "lieux_dits_ban": null,
+        "liens_vers_supports": "TRONROUT0000000009084224/TRONROUT0000000009084311",
+        "insee_communes_deleguees_ban": null,
+        "noms_communes_deleguees_ban": null,
+        "date_creation": "2023-12-07T12:27:26.605Z",
+        "date_modification": "2025-06-17T22:32:51.055Z",
+        "nom_normalise": "R DU STADE",
+        "id_ban_odonyme": "d8f80464-0956-4b15-b7e9-79d1c003438d"
+      }
+    }
+  ],
+  "totalFeatures": 2375971,
+  "numberMatched": 2375971,
+  "numberReturned": 2,
+  "timeStamp": "2026-07-20T12:51:44.107Z",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::4326"
+    }
+  }
+}
