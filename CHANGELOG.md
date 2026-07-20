@@ -35,6 +35,59 @@
 
 ### Added
 
+- **Norway: NVDB (Nasjonal vegdatabank)** (`streetworks.nvdb`) - the
+  fourth non-UK street-geometry provider, native only, the
+  `kind="streets"` counterpart to `kartverket`'s `kind="addresses"`, and
+  the last planned provider in the international-gazetteers strand.
+  **Task one, checked first, per the design brief's own instruction**: no
+  credentials required for reads - confirmed live (only a required
+  `X-Client` self-identifying header, not an API key; a bare request
+  without it returns HTTP 400) and confirmed in NVDB's own API
+  documentation ("Det er ikke nødvendig å registrere en bruker..." - "It
+  is not necessary to register a user..."). This is the striking
+  asymmetry the brief asked about: Statens vegvesen's own DATEX roadworks
+  feed (`streetworks.datex2.vegvesen`) remains this SDK's one
+  credential-blocked, unverified provider, while NVDB, from the same
+  agency, is wide open.
+  **`veglenkesekvens` (road link sequence) is purely topological -
+  confirmed live, it carries no name of its own**, only `lengde`,
+  `porter` (network junctions) and `veglenker` (its own geometry-bearing
+  sub-links with linear-referencing ranges). Naming and addressing live
+  in a separate object type (`Adresse`, NVDB type 538), whose
+  `adressekode` is confirmed live to be the *same* identifier
+  `streetworks.kartverket` already models - a real, stated join to
+  Matrikkelen addresses, never a name match.
+  **The genuinely important structural finding, confirmed live**: one
+  real address (`adressekode` 1140, "Dalveien") is placed on *two
+  different, topologically-unrelated* link sequences (384 and 2399262) -
+  so Norway's naming layer and topological layer are not nested the way
+  France's `voie_nommee`/`troncon_de_route` are (one aggregating its own
+  clean set of segments via a direct link field). Two "two-level
+  spines," two different organising principles - exactly the disagreement
+  this design strand needed. A third identifier system exists too,
+  `vegsystemreferanser` (administrative road-numbering, e.g. the real
+  `"KV1140 S1D1 m0-65"`), preserved in `.raw`, not modelled as a
+  first-class field.
+  **CRS corrected live: EPSG:5973, not the design brief's expected
+  EPSG:25833** - a compound 3D CRS ("ETRS89-NOR [EUREF89] / UTM zone 33N
+  + NN2000 height"), not a plain 2D UTM33 one; every real geometry
+  checked is a genuine `LINESTRING Z` with real altitude values, matching
+  exactly. **Licence corrected too: NLOD 1.0 (Norsk lisens for offentlige
+  data), not Elveg's CC BY 4.0** - confirmed from the NVDB API's own
+  documentation (`nvdb-vegdata/apidokumentasjon` on GitHub, the real
+  source behind `api.vegdata.no`) rather than assumed from Kartverket's
+  Elveg distribution metadata, per the brief's own instruction. Same
+  underlying road network, two different publishers, two different
+  licences.
+  REST is this module's only access route - both endpoints paginate with
+  a real cursor and accept a `kommune` filter, confirmed live at real
+  scale, so the CSV export service (`nvdb-eksport`) was evaluated and not
+  built, per the brief's "don't build two routes for the same job."
+  Registered in `streetworks.registry` as `nvdb` (`kind="streets"`) -
+  Norway now has three providers (`vegvesen` roadworks, `kartverket`
+  addresses, `nvdb` streets), so `get_provider("norway")` raises
+  `AmbiguousProviderError` naming all three.
+
 - **France: BD TOPO (IGN)** (`streetworks.bdtopo`) - the third non-UK
   street-geometry provider, native only, the `kind="streets"` counterpart
   to `ban`'s `kind="addresses"`. Wraps the credential-free Géoplateforme

@@ -69,6 +69,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.ban` | [BAN (Base Adresse Nationale)](https://adresse.data.gouv.fr/) — France's national address base, ~25M addresses, geocoding API + bulk per-département/national files (no credentials). **An address base, not a street register** — see below | read |
 | `streetworks.bag` | [BAG (Basisregistratie Adressen en Gebouwen)](https://www.kadaster.nl/zakelijk/producten/adressen-en-gebouwen/bag-geopackage) — Netherlands' national addresses/buildings register, PDOK Locatieserver + a ~7.8 GB national GeoPackage (no credentials). Street identity is real but not its own table — see below | read |
 | `streetworks.kartverket` | [Kartverket](https://www.geonorge.no/) — Norway's national address register + official (multilingual) place names, REST APIs + bulk CSV (no credentials). Not the same agency as the (credential-blocked) Vegvesen roadworks provider — see below | read |
+| `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
@@ -119,11 +120,15 @@ against `ws.geonorge.no`/`nedlasting.geonorge.no`, including a full-scale
 NWB/Netherlands (WFS queries, counts and the two-hop Atom feed verified
 against `geo.rijkswaterstaat.nl`/`service.pdok.nl`, including a real
 municipality-scale `bag_orl` over-merge check and the live discovery that
-PDOK's WFS silently ignores `CQL_FILTER`), and BD TOPO/France (WFS queries
+PDOK's WFS silently ignores `CQL_FILTER`), BD TOPO/France (WFS queries
 and counts verified against `data.geopf.fr`, including a real commune-scale
 `identifiant_voie_ban` over-merge check on two whole communes, mainland
 and overseas - the bulk GeoPackage route was investigated but not found
-to be automatable, see below).
+to be automatable, see below), and NVDB/Norway (`/vegnett` and
+`/vegobjekter` verified against `nvdbapiles.atlas.vegvesen.no`, including
+the live confirmation - both by direct testing and in the API's own
+documentation - that no credentials are required for reads, unlike
+Statens vegvesen's own DATEX roadworks feed).
 
 **Autobahn GmbH's licence is unconfirmed** - checked four independent
 sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-motorways)
@@ -569,14 +574,63 @@ real, clean, and municipality-scoped: verified at full scale, not
 sampled, across two whole municipalities' bulk files (Karasjok, 1,896
 addresses/139 codes; Oslo, 106,154 addresses/2,535 codes), zero codes
 mapped to more than one street name in either. No product checked gives a
-street its own geometry — a separate Kartverket/Statens vegvesen product,
-NVDB Vegnett, does hold real road-network geometry, noted but not built,
-the same treatment as France's TOPO (the Netherlands' own street-geometry
-counterpart, NWB, shipped — see below).
+street its own geometry through this client — a separate Statens
+vegvesen product, NVDB, does, and is Norway's own `streets` counterpart —
+see below.
 
 Licence: Creative Commons BY 4.0 (confirmed independently for both the
 address API and SSR, per the design brief's own instruction not to assume
 they matched).
+
+## NVDB (Norway)
+
+Norwegian national road network (Statens vegvesen) — no credentials.
+**Worth saying plainly: this is the opposite access story to Norway's
+own roadworks provider a second time** — `streetworks.datex2.vegvesen`
+(same agency, DATEX) is this SDK's one credential-blocked, unverified
+provider, while NVDB is wide open, confirmed both live and in the API's
+own documentation. The `streets` counterpart to `kartverket`'s
+`addresses`:
+
+```python
+from streetworks.nvdb import NVDBClient
+
+with NVDBClient(client_name="my-app") as nvdb:
+    sequences = nvdb.veglenkesekvenser(kommune=4201)      # link topology
+    addresses = nvdb.adresser(kommune=4201)               # naming layer
+    print(addresses[0].adressenavn, addresses[0].veglenkesekvens_ids)
+```
+
+**`veglenkesekvens` (road link sequence) is purely topological — it has
+no name of its own**, confirmed live: a real sequence carries only
+`lengde`, `porter` (the network junctions it connects to) and `veglenker`
+(its own geometry-bearing sub-links with linear-referencing ranges) —
+nothing resembling a name. Naming lives in a separate object type
+(`Adresse`, NVDB type 538), and its `adressekode` is confirmed live to be
+the *same* identifier `streetworks.kartverket` already models — a real,
+stated join to Matrikkelen addresses, never a name match.
+
+**The genuinely important finding: one address can span multiple,
+unrelated link sequences** — confirmed live on a real object ("Dalveien",
+`adressekode` 1140, placed on sequences 384 *and* 2399262). So Norway's
+naming layer and its topological layer are not nested the way France's
+`voie_nommee`/`troncon_de_route` are (see above) — two "two-level
+spines," two different organising principles, which is exactly the
+disagreement this design strand needed. A third identifier system exists
+too, `vegsystemreferanser` (administrative road-numbering, e.g. the real
+`"KV1140 S1D1 m0-65"`) — independent of both, preserved in `.raw`, not
+modelled as a first-class field.
+
+CRS is **EPSG:5973, not the design brief's expected EPSG:25833** —
+confirmed live on every real geometry checked. It's a compound *3D* CRS
+("ETRS89-NOR / UTM zone 33N + NN2000 height"), not a plain 2D UTM33 one —
+every real geometry is a genuine `LINESTRING Z` with real altitude
+values, matching the CRS exactly. Licence is **NLOD 1.0** (Norsk lisens
+for offentlige data), confirmed from the NVDB API's own documentation —
+not Elveg/Kartverket's CC BY 4.0, which covers a different distribution
+of the same underlying network. Elveg / NVDB Vegnett Pluss (Kartverket's
+own SOSI/GML-only distribution) is noted, not built, the same treatment
+as BD TOPO's unreachable bulk route.
 
 ## NWB (Netherlands)
 
@@ -1522,6 +1576,30 @@ actually is.
       built. CRS is also
       route-specific: the WFS is WGS84, confirmed live; the unreachable
       bulk file's documented Lambert-93 is not independently re-confirmed
+- [x] Norway NVDB (Nasjonal vegdatabank) — the fourth non-UK
+      street-geometry provider (`streetworks.nvdb`), native only, the
+      `streets` counterpart to `kartverket`. **Task one, checked first as
+      the brief demanded**: no credentials required for reads, confirmed
+      both live and in the API's own documentation — the opposite access
+      story to Statens vegvesen's own DATEX roadworks feed
+      (`streetworks.datex2.vegvesen`, this SDK's one credential-blocked
+      provider), from the same agency. Confirmed live: `veglenkesekvens`
+      is purely topological, no name of its own; naming lives in a
+      separate `Adresse` object type (NVDB type 538) whose `adressekode`
+      is confirmed to be the *same* identifier `streetworks.kartverket`
+      already models — a real join, not a name match. The genuinely
+      important structural finding: one real address can span multiple,
+      topologically-unrelated link sequences (confirmed live,
+      `adressekode` 1140 "Dalveien" placed on two different sequences) —
+      Norway's naming and topological layers are not nested the way
+      France's `voie_nommee`/`troncon_de_route` are, a real disagreement
+      between two "two-level spines." CRS corrected live: EPSG:5973 (a
+      compound 3D CRS, UTM33N + NN2000 height), not the design brief's
+      plain EPSG:25833 guess — every real geometry is genuine
+      `LINESTRING Z` with real altitude values, matching. Licence
+      corrected too: NLOD 1.0, confirmed from the NVDB API's own
+      documentation, not Elveg's CC BY 4.0 — same network, different
+      publisher, different licence
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -1567,21 +1645,34 @@ Grouped by the client shape they need:
 ### International gazetteers — separate strand
 
 The European equivalents of OS Open USRN (address/street reference layers, not
-roadworks — keep distinct from the feeds above). Four real, disagreeing
-shapes are now in hand: the UK pair (street-centric, unified identity and
-geometry), France's BAN (address-centric, street identity elsewhere, no
-street geometry at all), the Netherlands' BAG (street *is* a genuine
-first-class registered object with a real lifecycle — but whether you can
-see it as its own row, and whether it has geometry, depends on which real
-product you pull from, not on a fixed property of the country), and
-Norway's Kartverket (a street code lives *inside* the address dataset
-itself, unlike the UK's separate register or France's separate tax
-register — and multilingual official naming is real, but a property of
-some *places*, not a systematic property of street addressing). That was
-this strand's own stated exit condition — a canonical-gazetteer design
-session is the natural next step, before further gazetteers (Spain Catastro,
-Germany Geoportal, Portugal SNIG, the UK GeoPlace gazetteer SOAP API) get
-built against a shape that isn't settled yet. Germany's own state
+roadworks — keep distinct from the feeds above). **NVDB was this strand's
+last planned provider** — four `addresses` registers and three non-UK
+`streets` registers are now in hand, and every one disagrees with the
+others in a real, load-bearing way:
+
+- the UK pair — street-centric, unified identity and geometry under one register;
+- France's BAN — address-centric, street identity lives in a *different
+  dataset* (DGFiP's TOPO) with no street geometry anywhere; BD TOPO then
+  showed the *street*-geometry side has its own two-level spine
+  (`voie_nommee`/`troncon_de_route`), organised by *name*, with a real
+  stated join back to BAN;
+- the Netherlands' BAG — street *is* a genuine first-class registered
+  object with a real lifecycle, but whether you can see it as its own row,
+  and whether it has geometry, depends on which real product you pull
+  from; NWB's `bag_orl` gave a real, stated join back to it, not universal
+  and less reliable by name than by id;
+- Norway's Kartverket — a street code (`adressekode`) lives *inside* the
+  address dataset itself; NVDB then showed its own two-level spine
+  (`veglenkesekvens`/`Adresse`) is organised by *network topology*, not
+  name, and — the real disagreement this strand needed — one named
+  address can span several topologically-unrelated link sequences, so
+  Norway's two spines aren't nested the same way France's are, despite
+  both being called "two-level."
+
+That's the exit condition this strand set for itself. A canonical-gazetteer
+design session is the natural next step, before further gazetteers (Spain
+Catastro, Germany Geoportal, Portugal SNIG, the UK GeoPlace gazetteer SOAP
+API) get built against a shape that isn't settled yet. Germany's own state
 gazetteers are commonly published the same way as the regional roadworks
 above (WFS/OGC API Features) — `streetworks.ogc`'s `OGCFeaturesClient` was
 deliberately kept generic (GeoJSON in, features out, CRS-aware, nothing
@@ -1599,11 +1690,10 @@ turned `providers()` into an actual coverage map: the UK has two
 `streets` providers (`datavia`, `openusrn`) and **zero** `addresses` — a
 real gap, not an oversight, since AddressBase is an OS Premium product,
 not open data, which may make the UK the one territory where the address
-layer is genuinely blocked, the inverse of the European picture. Norway
-currently has `addresses` only, zero `streets`. The Netherlands and
-France both had the same gap until NWB and BD TOPO (`streetworks.nwb`,
-`streetworks.bdtopo`, see above) gave them both layers - the Netherlands
-first, France second.
+layer is genuinely blocked, the inverse of the European picture. The
+Netherlands, France and Norway each had the same `addresses`-only gap
+until NWB, BD TOPO and NVDB (`streetworks.nwb`, `streetworks.bdtopo`,
+`streetworks.nvdb`, see above) gave all three both layers, in that order.
 
 Also investigated, not built: France's street *names* now live in DGFiP's
 **TOPO** register (which replaced FANTOIR in July 2023 — FANTOIR is
