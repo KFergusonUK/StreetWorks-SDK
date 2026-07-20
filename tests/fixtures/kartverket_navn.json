@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "side": 1,
+    "sokeStreng": "sok=Karasjok&treffPerSide=3",
+    "totaltAntallTreff": 1,
+    "treffPerSide": 3,
+    "viserFra": 1,
+    "viserTil": 3
+  },
+  "navn": [
+    {
+      "fylker": [
+        {
+          "fylkesnavn": "Finnmark - Finnmárku - Finmarkku",
+          "fylkesnummer": "56"
+        }
+      ],
+      "kommuner": [
+        {
+          "kommunenavn": "Kárášjohka - Karasjok",
+          "kommunenummer": "5610"
+        }
+      ],
+      "navneobjekttype": "Tettsted",
+      "navnestatus": "hovednavn",
+      "representasjonspunkt": {
+        "nord": 69.47188,
+        "øst": 25.51113
+      },
+      "skrivemåte": "Karasjok",
+      "skrivemåtestatus": "godkjent og prioritert",
+      "språk": "Norsk",
+      "stedsnummer": 868181,
+      "stedstatus": "aktiv"
+    }
+  ]
+}

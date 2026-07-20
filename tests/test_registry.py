@@ -86,12 +86,19 @@ def test_providers_unknown_territory_warns_and_returns_empty():
     assert result == []
 
 
-def test_providers_kind_filter():
-    gazetteers = providers(kind="gazetteer")
-    assert {e.key for e in gazetteers} == {"datavia", "openusrn", "ban", "bag"}
-    assert all(e.kind is Kind.GAZETTEER for e in gazetteers)
+def test_providers_kind_filter_streets():
+    streets = providers(kind="streets")
+    assert {e.key for e in streets} == {"datavia", "openusrn", "nwb"}
+    assert all(e.kind is Kind.STREETS for e in streets)
     # Enum and string both accepted.
-    assert providers(kind=Kind.GAZETTEER) == gazetteers
+    assert providers(kind=Kind.STREETS) == streets
+
+
+def test_providers_kind_filter_addresses():
+    addresses = providers(kind="addresses")
+    assert {e.key for e in addresses} == {"ban", "bag", "kartverket"}
+    assert all(e.kind is Kind.ADDRESSES for e in addresses)
+    assert providers(kind=Kind.ADDRESSES) == addresses
 
 
 def test_providers_credentials_filter():
@@ -134,7 +141,6 @@ def test_get_provider_returns_class_not_instance():
         ("finland", "digitraffic"),
         ("iceland", "irca"),
         ("scotland", "srwr"),
-        ("norway", "vegvesen"),
     ],
 )
 def test_single_provider_place_names_are_aliased(alias, expected_key):
@@ -146,7 +152,9 @@ def test_get_provider_case_insensitive():
     assert get_provider("SPAIN") is get_provider("spain")
 
 
-@pytest.mark.parametrize("key", ["germany", "england", "wales", "france", "netherlands"])
+@pytest.mark.parametrize(
+    "key", ["germany", "england", "wales", "france", "netherlands", "norway"]
+)
 def test_get_provider_ambiguous_key_raises_naming_candidates(key):
     with pytest.raises(AmbiguousProviderError) as exc_info:
         get_provider(key)
@@ -232,13 +240,14 @@ def test_capabilities_detect_write_publish_including_nested_sub_apis():
 
 
 def test_capabilities_do_not_false_positive_on_read_only_clients():
-    for key in ("dgt", "srwr", "openusrn", "police", "ndw", "ban", "bag"):
+    for key in ("dgt", "srwr", "openusrn", "police", "ndw", "ban", "bag", "kartverket", "nwb"):
         entry = next(e for e in _REGISTRY if e.key == key)
         assert "write/publish" not in entry.capabilities()
 
 
 def test_capabilities_reflect_kind():
-    assert "gazetteer/street lookup" in get_entry("openusrn").capabilities()
+    assert "street lookup" in get_entry("openusrn").capabilities()
+    assert "address lookup" in get_entry("ban").capabilities()
     assert "safety context" in get_entry("police").capabilities()
     assert "roadworks retrieval" in get_entry("dgt").capabilities()
 

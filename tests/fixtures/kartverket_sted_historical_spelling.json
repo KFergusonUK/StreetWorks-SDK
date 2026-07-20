@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "side": 1,
+    "sokeStreng": "sok=%C4%8Calbmebealsk%C3%A1idi",
+    "totaltAntallTreff": 2,
+    "treffPerSide": 10,
+    "viserFra": 1,
+    "viserTil": 10
+  },
+  "navn": [
+    {
+      "fylker": [
+        {
+          "fylkesnavn": "Finnmark - Finnmárku - Finmarkku",
+          "fylkesnummer": "56"
+        }
+      ],
+      "geojson": {
+        "geometry": {
+          "coordinates": [
+            [
+              25.27075,
+              69.12141
+            ],
+            [
+              25.27076,
+              69.12142
+            ],
+            [
+              25.28893,
+              69.11639
+            ],
+            [
+              25.28893,
+              69.11638
+            ]
+          ],
+          "type": "MultiPoint"
+        }
+      },
+      "kommuner": [
+        {
+          "kommunenavn": "Kárášjohka - Karasjok",
+          "kommunenummer": "5610"
+        }
+      ],
+      "navneobjekttype": "Nes ved elver",
+      "oppdateringsdato": "2023-12-29T10:31:31",
+      "representasjonspunkt": {
+        "nord": 69.12141,
+        "øst": 25.27075
+      },
+      "stedsnavn": [
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Čalbmebealskáidi",
+          "skrivemåtestatus": "godkjent og prioritert",
+          "språk": "Nordsamisk",
+          "stedsnavnnummer": 1
+        },
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Čalbmebælskaidi",
+          "skrivemåtestatus": "historisk",
+          "språk": "Nordsamisk",
+          "stedsnavnnummer": 1
+        }
+      ],
+      "stedsnummer": 382830,
+      "stedstatus": "aktiv"
+    },
+    {
+      "fylker": [
+        {
+          "fylkesnavn": "Finnmark - Finnmárku - Finmarkku",
+          "fylkesnummer": "56"
+        }
+      ],
+      "geojson": {
+        "geometry": {
+          "coordinates": [
+            25.31742,
+            69.08608
+          ],
+          "type": "Point"
+        }
+      },
+      "kommuner": [
+        {
+          "kommunenavn": "Kárášjohka - Karasjok",
+          "kommunenummer": "5610"
+        }
+      ],
+      "navneobjekttype": "Adressenavn",
+      "oppdateringsdato": "2023-12-29T10:16:16",
+      "representasjonspunkt": {
+        "nord": 69.08608,
+        "øst": 25.31742
+      },
+      "stedsnavn": [
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Čalbmebealskáidi",
+          "skrivemåtestatus": "godkjent og prioritert",
+          "språk": "Nordsamisk",
+          "stedsnavnnummer": 1
+        }
+      ],
+      "stedsnummer": 1080674,
+      "stedstatus": "aktiv"
+    }
+  ]
+}

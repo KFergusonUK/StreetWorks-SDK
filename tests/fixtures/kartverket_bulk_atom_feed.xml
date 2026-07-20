@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <generator version="2024.2.5.0" uri="https://nedlasting.geonorge.no/fmeserver" />
+ <id>https://nedlasting.geonorge.no</id>
+ <link rel="self" href="https://nedlasting.geonorge.no" type="application/atom+xml" />
+ <rights>Kartverket</rights>
+ <subtitle>CSV-format</subtitle>
+ <title>Matrikkelen - Adresse</title>
+ <updated>2026-07-20T04:15Z</updated>
+ <entry>
+  <author>
+   <name>Kartverket</name>
+  </author>
+  <category term="EPSG:25833" scheme="http://www.opengis.net/def/crs/" label="EPSG/0/25833" />
+  <content type="html">Trykk på linken for å laste ned landsdekkende data i koordinatsystemet EPSG:25833. &lt;br /&gt;  &lt;a href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_25833_MatrikkelenAdresse_CSV.zip"&gt;CSV-format, Landsdekkende&lt;\a&gt;</content>
+  <id>https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_25833_MatrikkelenAdresse_CSV.zip_2026-07-18T16:21:07</id>
+  <link rel="alternate" href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_25833_MatrikkelenAdresse_CSV.zip" type="application/gml+xml;version=3.2.1" title="Datasettet som GML-fil i EPSG:25833" />
+  <published>2026-07-20T06:15:27+02:00</published>
+  <rights>Kartverket</rights>
+  <title>CSV-format, Landsdekkende</title>
+  <updated>2026-07-18T16:21:07</updated>
+ </entry>
+ <entry>
+  <author>
+   <name>Kartverket</name>
+  </author>
+  <category term="EPSG:4258" scheme="http://www.opengis.net/def/crs/" label="EPSG/0/4258" />
+  <content type="html">Trykk på linken for å laste ned landsdekkende data i koordinatsystemet EPSG:4258. &lt;br /&gt;  &lt;a href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_4258_MatrikkelenAdresse_CSV.zip"&gt;CSV-format, Landsdekkende&lt;\a&gt;</content>
+  <id>https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_4258_MatrikkelenAdresse_CSV.zip_2026-07-18T16:21:09</id>
+  <link rel="alternate" href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_0000_Norge_4258_MatrikkelenAdresse_CSV.zip" type="application/gml+xml;version=3.2.1" title="Datasettet som GML-fil i EPSG:4258" />
+  <published>2026-07-20T06:15:27+02:00</published>
+  <rights>Kartverket</rights>
+  <title>CSV-format, Landsdekkende</title>
+  <updated>2026-07-18T16:21:09</updated>
+ </entry>
+ <entry>
+  <author>
+   <name>Kartverket</name>
+  </author>
+  <category term="EPSG:25833" scheme="http://www.opengis.net/def/crs/" label="EPSG/0/25833" />
+  <category term="Kommune" label="Karasjok" />
+  <content type="html">Trykk på linken for å laste ned data for kommune 5610, Karasjok i koordinatsystemet EPSG:25833. &lt;br /&gt;  &lt;a href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25833_MatrikkelenAdresse_CSV.zip"&gt;CSV-format,  5610, Karasjok&lt;\a&gt;</content>
+  <id>https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25833_MatrikkelenAdresse_CSV.zip_2026-07-01T10:20:59</id>
+  <link rel="alternate" href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25833_MatrikkelenAdresse_CSV.zip" type="application/gml+xml;version=3.2.1" title="Datasettet som GML-fil i EPSG:25833" />
+  <published>2026-07-20T06:15:27+02:00</published>
+  <rights>DSB - Sivilforsvaret og brannvesenet.</rights>
+  <title>CSV-format,  5610, Karasjok</title>
+  <updated>2026-07-01T10:20:59</updated>
+ </entry>
+ <entry>
+  <author>
+   <name>Kartverket</name>
+  </author>
+  <category term="EPSG:25835" scheme="http://www.opengis.net/def/crs/" label="EPSG/0/25835" />
+  <category term="Kommune" label="Karasjok" />
+  <content type="html">Trykk på linken for å laste ned data for kommune 5610, Karasjok i koordinatsystemet EPSG:25835. &lt;br /&gt;  &lt;a href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25835_MatrikkelenAdresse_CSV.zip"&gt;CSV-format,  5610, Karasjok&lt;\a&gt;</content>
+  <id>https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25835_MatrikkelenAdresse_CSV.zip_2026-07-01T10:20:59</id>
+  <link rel="alternate" href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_25835_MatrikkelenAdresse_CSV.zip" type="application/gml+xml;version=3.2.1" title="Datasettet som GML-fil i EPSG:25835" />
+  <published>2026-07-20T06:15:27+02:00</published>
+  <rights>DSB - Sivilforsvaret og brannvesenet.</rights>
+  <title>CSV-format,  5610, Karasjok</title>
+  <updated>2026-07-01T10:20:59</updated>
+ </entry>
+ <entry>
+  <author>
+   <name>Kartverket</name>
+  </author>
+  <category term="EPSG:4258" scheme="http://www.opengis.net/def/crs/" label="EPSG/0/4258" />
+  <category term="Kommune" label="Karasjok" />
+  <content type="html">Trykk på linken for å laste ned data for kommune 5610, Karasjok i koordinatsystemet EPSG:4258. &lt;br /&gt;  &lt;a href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_4258_MatrikkelenAdresse_CSV.zip"&gt;CSV-format,  5610, Karasjok&lt;\a&gt;</content>
+  <id>https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_4258_MatrikkelenAdresse_CSV.zip_2026-07-01T10:21:00</id>
+  <link rel="alternate" href="https://nedlasting.geonorge.no/geonorge/Basisdata/MatrikkelenAdresse/CSV/Basisdata_5610_Karasjok_4258_MatrikkelenAdresse_CSV.zip" type="application/gml+xml;version=3.2.1" title="Datasettet som GML-fil i EPSG:4258" />
+  <published>2026-07-20T06:15:27+02:00</published>
+  <rights>DSB - Sivilforsvaret og brannvesenet.</rights>
+  <title>CSV-format,  5610, Karasjok</title>
+  <updated>2026-07-01T10:21:00</updated>
+ </entry>
+</feed>

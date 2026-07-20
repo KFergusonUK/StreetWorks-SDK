@@ -462,6 +462,65 @@ def check_bag() -> str:
     return summary
 
 
+def check_kartverket() -> str:
+    """Norway's Kartverket gazetteer needs no credentials (unlike the
+    Vegvesen roadworks adapter, still blocked on credentials - see
+    streetworks.kartverket's module docstring). Exercises the address API,
+    SSR place-names API and the bulk Atom feed discovery - not the bulk
+    files themselves. Set KARTVERKET_BULK_ZIP to a local downloaded
+    MatrikkelenAdresse CSV zip to also verify a real bulk parse."""
+    from streetworks.kartverket import KartverketClient
+
+    with KartverketClient() as kv:
+        hits = kv.search(sok="Karl Johans gate 1")
+        if not hits:
+            raise RuntimeError("search returned no results for a known real address")
+        places = kv.search_places(sok="Karasjok")
+        downloads = kv.discover_bulk_downloads()
+        summary = (
+            f"search -> {len(hits)} hit(s); "
+            f"SSR -> {len(places)} place(s), "
+            f"{len(places[0].names) if places else 0} name form(s); "
+            f"bulk feed -> {len(downloads)} download(s)"
+        )
+
+        local = os.environ.get("KARTVERKET_BULK_ZIP")
+        if local:
+            from streetworks.kartverket import iter_addresses
+
+            n = sum(1 for _ in iter_addresses(local))
+            summary += f"; local bulk file: {n:,} addresses"
+    return summary
+
+
+def check_nwb() -> str:
+    """Netherlands NWB (road network) needs no credentials. Exercises the
+    WFS (a filtered query + a count) and the two-hop Atom feed discovery -
+    not the ~1 GB bulk GeoPackage itself. Set NWB_GPKG to a local
+    downloaded nwb_wegen.gpkg to also verify a real table read."""
+    from streetworks.nwb import NWBClient
+
+    with NWBClient() as nwb:
+        segments = nwb.query(cql_filter="gme_naam='Harlingen'", count=5)
+        if not segments:
+            raise RuntimeError("query returned no results for a known real municipality")
+        total = nwb.count(cql_filter="gme_naam='Harlingen'")
+        entry = nwb.discover_download()
+        summary = (
+            f"query -> {len(segments)} hit(s), top: {segments[0].stt_naam!r}; "
+            f"count(Harlingen) -> {total}; bulk download -> {entry.title!r}"
+        )
+
+        local = os.environ.get("NWB_GPKG")
+        if local:
+            from streetworks.nwb import NWBDatabase
+
+            with NWBDatabase(local) as db:
+                tables = db.tables()
+                summary += f"; local gpkg: {len(tables)} table(s)"
+    return summary
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -618,6 +677,8 @@ def main() -> int:
     reporter.check("OS Open USRN", [], check_openusrn)
     reporter.check("BAN (France)", [], check_ban)
     reporter.check("BAG (Netherlands)", [], check_bag)
+    reporter.check("Kartverket (Norway)", [], check_kartverket)
+    reporter.check("NWB (Netherlands)", [], check_nwb)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

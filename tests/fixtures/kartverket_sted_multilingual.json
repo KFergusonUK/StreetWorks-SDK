@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "side": 1,
+    "sokeStreng": "sok=Karasjok&treffPerSide=3",
+    "totaltAntallTreff": 1,
+    "treffPerSide": 3,
+    "viserFra": 1,
+    "viserTil": 3
+  },
+  "navn": [
+    {
+      "fylker": [
+        {
+          "fylkesnavn": "Finnmark - Finnmárku - Finmarkku",
+          "fylkesnummer": "56"
+        }
+      ],
+      "geojson": {
+        "geometry": {
+          "coordinates": [
+            [
+              25.51112,
+              69.47188
+            ],
+            [
+              25.51112,
+              69.47188
+            ],
+            [
+              25.51115,
+              69.47187
+            ]
+          ],
+          "type": "MultiPoint"
+        }
+      },
+      "kommuner": [
+        {
+          "kommunenavn": "Kárášjohka - Karasjok",
+          "kommunenummer": "5610"
+        }
+      ],
+      "navneobjekttype": "Tettsted",
+      "oppdateringsdato": "2023-12-29T10:31:31",
+      "representasjonspunkt": {
+        "nord": 69.47188,
+        "øst": 25.51113
+      },
+      "stedsnavn": [
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Kárášjohka",
+          "skrivemåtestatus": "godkjent og prioritert",
+          "språk": "Nordsamisk",
+          "stedsnavnnummer": 2
+        },
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Karasjok",
+          "skrivemåtestatus": "godkjent og prioritert",
+          "språk": "Norsk",
+          "stedsnavnnummer": 1
+        },
+        {
+          "navnestatus": "hovednavn",
+          "skrivemåte": "Kaarasjoki",
+          "skrivemåtestatus": "foreslått og prioritert",
+          "språk": "Kvensk",
+          "stedsnavnnummer": 3
+        }
+      ],
+      "stedsnummer": 868181,
+      "stedstatus": "aktiv"
+    }
+  ]
+}

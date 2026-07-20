@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://service.pdok.nl/atom/style/style.xsl" type="text/xsl" media="screen"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss" xml:lang="nl">
+ <id>https://service.pdok.nl/rws/nationaal-wegenbestand-wegen/atom/nwb_wegen.xml</id>
+ <title>NWB - Wegen</title>
+ <subtitle>Dit is de atomfeed service van het Nationaal Wegen Bestand (NWB) - wegen. Deze dataset bevat alleen de wegvakken en hectometerpunten.</subtitle>
+ <link href="https://service.pdok.nl/rws/nationaal-wegenbestand-wegen/atom/nwb_wegen.xml" rel="self" hreflang="nl"></link>
+ <link href="https://service.pdok.nl/rws/nationaal-wegenbestand-wegen/atom/index.xml" rel="up" type="application/atom+xml" hreflang="nl" title="Top Atom Download Service Feed"></link>
+ <link href="https://www.nationaalgeoregister.nl/geonetwork/srv/dut/csw?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementsetname=full&amp;id=a9b7026e-0a81-4813-93bd-ba49e6f28502" rel="describedby" type="application/xml" hreflang="nl"></link>
+ <link href="https://www.nationaalgeoregister.nl/geonetwork/srv/dut/catalog.search#/metadata/a9b7026e-0a81-4813-93bd-ba49e6f28502" rel="describedby" type="text/html" hreflang="nl" title="NGR pagina voor deze dataset"></link>
+ <rights>https://creativecommons.org/publicdomain/zero/1.0/deed.nl</rights>
+ <updated>2026-07-03T00:00:00Z</updated>
+ <author>
+  <name>Rijkswaterstaat</name>
+  <email>servicedesk-data@rws.nl</email>
+ </author>
+ <entry>
+  <id>https://service.pdok.nl/rws/nationaal-wegenbestand-wegen/atom/nwb_wegen_inspire_epsg28992_geopackage.xml</id>
+  <title>NWB - Wegen - INSPIRE (EPSG:28992) Geopackage</title>
+  <content>Deze download betreft de geopackage uit de atomfeed service van het Nationaal Wegen Bestand - wegen.</content>
+  <link href="https://service.pdok.nl/rws/nationaal-wegenbestand-wegen/atom/downloads/nwb_wegen.gpkg" rel="alternate" type="application/geopackage+sqlite3" hreflang="nl" length="1029582848" title="NWB - Wegen - INSPIRE (EPSG:28992) Geopackage - nwb_wegen.gpkg"></link>
+  <rights>https://creativecommons.org/publicdomain/zero/1.0/deed.nl</rights>
+  <updated>2026-07-03T00:00:00Z</updated>
+  <georss:polygon>50.71447 2.354173 50.71447 7.5553527 55.66948 7.5553527 55.66948 2.354173 50.71447 2.354173</georss:polygon>
+  <category term="https://www.opengis.net/def/crs/EPSG/0/28992" label="Amersfoort / RD New"></category>
+ </entry>
+</feed>

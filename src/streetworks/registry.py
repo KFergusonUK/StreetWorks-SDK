@@ -28,9 +28,9 @@ inspects what the client class actually implements (method names, including
 one level into known sub-API objects like ``StreetManagerClient.work``) each
 time it's called, rather than reading from a hand-maintained dict that would
 drift from reality within two releases. Only categories this SDK genuinely
-models are reported: roadworks retrieval, planning artifacts, gazetteer/
-street lookup, safety context, write/publish. If a capability can't be
-derived cleanly for some provider's shape, it's just absent from that
+models are reported: roadworks retrieval, planning artifacts, address
+lookup, street lookup, safety context, write/publish. If a capability can't
+be derived cleanly for some provider's shape, it's just absent from that
 provider's result - never guessed to fill a gap.
 
 **Registry vs. README duplication - registry is the source of truth for
@@ -81,12 +81,26 @@ __all__ = ["Kind", "ProviderEntry", "providers", "get_provider"]
 
 
 class Kind(str, Enum):
-    """What a provider fundamentally *is* - the three shapes this SDK
+    """What a provider fundamentally *is* - the four shapes this SDK
     actually models. Not a finer domain taxonomy (no "national-motorway"
-    vs. "regional" split) - that's what ``scope_note`` is for."""
+    vs. "regional" split) - that's what ``scope_note`` is for.
+
+    ``ADDRESSES`` and ``STREETS`` used to be one ``"gazetteer"`` value -
+    split because lumping them together produced a real analytical error:
+    "European gazetteers have no street geometry" looked true when BAN,
+    BAG and Kartverket (all address registers) were the only three
+    examples, but it's false - the geometry lives in a *street*-register,
+    published separately by a different body in every territory checked
+    so far (the NSG/USRN in the UK, NWB in the Netherlands). The UK is
+    unusual in unifying both under one register (the NSG); everywhere
+    else this SDK has checked, they're two different publishers with two
+    different `kind`s, and `providers()` can only show that gap once the
+    two are told apart.
+    """
 
     ROADWORKS = "roadworks"
-    GAZETTEER = "gazetteer"
+    ADDRESSES = "addresses"
+    STREETS = "streets"
     CONTEXT = "context"
 
 
@@ -193,8 +207,10 @@ class ProviderEntry:
         caps: list[str] = []
         if self.kind is Kind.ROADWORKS:
             caps.append("roadworks retrieval")
-        elif self.kind is Kind.GAZETTEER:
-            caps.append("gazetteer/street lookup")
+        elif self.kind is Kind.ADDRESSES:
+            caps.append("address lookup")
+        elif self.kind is Kind.STREETS:
+            caps.append("street lookup")
         elif self.kind is Kind.CONTEXT:
             caps.append("safety context")
         if any(name.startswith(_WRITE_METHOD_PREFIXES) for name in names):
@@ -264,7 +280,8 @@ def providers(
     >>> providers()                          # everything
     >>> providers(territory="Wales")         # every provider covering Wales
     >>> providers(territory="UK")            # expands to the four nations
-    >>> providers(kind="gazetteer")
+    >>> providers(kind="addresses")         # address registers
+    >>> providers(kind="streets")           # street/road-network registers
     >>> providers(credentials=False)         # the credential-free ones
 
     Territory matching is case-insensitive and tolerant of obvious variants
@@ -418,7 +435,7 @@ _REGISTRY: list[ProviderEntry] = [
             "England and Wales's National Street Gazetteer - the "
             "definitive street/highway reference layers."
         ),
-        kind=Kind.GAZETTEER,
+        kind=Kind.STREETS,
         territories=frozenset({"England", "Wales"}),  # inferred by elimination, see above
         credentials="DataVIA account (Basic auth or OAuth2 client credentials)",
         licence="N/A - access-controlled service, not open data",
@@ -461,7 +478,7 @@ _REGISTRY: list[ProviderEntry] = [
         key="openusrn",
         name="OS Open USRN",
         description="Every Great British street (USRN) with geometry, from Ordnance Survey.",
-        kind=Kind.GAZETTEER,
+        kind=Kind.STREETS,
         territories=frozenset({"England", "Scotland", "Wales"}),
         scope_note="Great Britain only - no Northern Ireland.",
         credentials=None,
@@ -474,7 +491,7 @@ _REGISTRY: list[ProviderEntry] = [
         key="ban",
         name="BAN (Base Adresse Nationale)",
         description="France's national address base - ~25M addresses, no street register.",
-        kind=Kind.GAZETTEER,
+        kind=Kind.ADDRESSES,
         territories=frozenset({"France"}),
         scope_note=(
             "An address base, not a street register like the UK gazetteers - streets/"
@@ -494,7 +511,7 @@ _REGISTRY: list[ProviderEntry] = [
         key="bag",
         name="BAG (Basisregistratie Adressen en Gebouwen)",
         description="Netherlands' national addresses and buildings register.",
-        kind=Kind.GAZETTEER,
+        kind=Kind.ADDRESSES,
         territories=frozenset({"Netherlands"}),
         scope_note=(
             "Street identity (openbare ruimte) is a real, versioned BAG object, "
@@ -508,6 +525,53 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.bag",
         _client_name="BAGClient",
         import_line="from streetworks.bag import BAGClient",
+    ),
+    ProviderEntry(
+        key="kartverket",
+        name="Kartverket (Matrikkelen Adresse + SSR stedsnavn)",
+        description="Norway's national address register and official place names.",
+        kind=Kind.ADDRESSES,
+        territories=frozenset({"Norway"}),
+        scope_note=(
+            "Wide open and credential-free - unlike the vegvesen roadworks provider "
+            "(same country, different agency, still blocked on credentials). Place "
+            "names can carry several parallel official names (Norwegian, Sámi, Kven), "
+            "each independently statused - see the module docstring. Classified as "
+            "addresses for the address register (Matrikkelen Adresse); this client "
+            "also wraps SSR, the official place-names register (settlements, "
+            "natural features) - neither addresses nor streets, kept here rather "
+            "than minting a third kind for one member, see the module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        # No "norway" alias, for the same reason vegvesen's was removed:
+        # two providers now cover Norway.
+        _module="streetworks.kartverket",
+        _client_name="KartverketClient",
+        import_line="from streetworks.kartverket import KartverketClient",
+    ),
+    ProviderEntry(
+        key="nwb",
+        name="NWB (Nationaal Wegenbestand)",
+        description=(
+            "Netherlands' national road network - every named/numbered road, with geometry."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Netherlands"}),
+        scope_note=(
+            "The counterpart to bag's addresses - a street is a *set* of wegvakken "
+            "(road segments), joined back together via bag_orl, BAG's own street "
+            "identifier, where present (not universal, not a name match). See the "
+            "module docstring."
+        ),
+        credentials=None,
+        licence="CC0 1.0 Universal",
+        # No "netherlands" alias: the Netherlands now has three providers
+        # (this one, ndw, and bag) - get_provider("netherlands") resolves
+        # through the territory-ambiguity path, naming all three.
+        _module="streetworks.nwb",
+        _client_name="NWBClient",
+        import_line="from streetworks.nwb import NWBClient",
     ),
     ProviderEntry(
         key="ndw",
@@ -627,7 +691,9 @@ _REGISTRY: list[ProviderEntry] = [
         licence_confirmed=False,  # blocked on credentials for Phase 2, see module docstring
         source_grade="operator",
         verified=False,
-        aliases=frozenset({"norway"}),
+        # No "norway" alias: Norway now has two providers (this one and the
+        # kartverket gazetteer) - get_provider("norway") resolves through
+        # the territory-ambiguity path instead, same as "france".
         _module="streetworks.datex2",
         _client_name="VegvesenClient",
         import_line="from streetworks.datex2 import VegvesenClient",

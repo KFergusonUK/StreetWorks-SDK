@@ -1,0 +1,1166 @@
+[
+  {
+    "navneobjekttype": "Militært bygg/anlegg",
+    "navneobjekttypekode": "militærtByggAnlegg"
+  },
+  {
+    "navneobjekttype": "Fornøyelsespark",
+    "navneobjekttypekode": "fornøyelsespark"
+  },
+  {
+    "navneobjekttype": "Idrettshall",
+    "navneobjekttypekode": "idrettshall"
+  },
+  {
+    "navneobjekttype": "Alpinanlegg",
+    "navneobjekttypekode": "alpinanlegg"
+  },
+  {
+    "navneobjekttype": "Skiheis",
+    "navneobjekttypekode": "skiheis"
+  },
+  {
+    "navneobjekttype": "Innsjø",
+    "navneobjekttypekode": "innsjø"
+  },
+  {
+    "navneobjekttype": "Idrettsanlegg",
+    "navneobjekttypekode": "idrettsanlegg"
+  },
+  {
+    "navneobjekttype": "Park",
+    "navneobjekttypekode": "park"
+  },
+  {
+    "navneobjekttype": "Gruppe av vann",
+    "navneobjekttypekode": "gruppeAvVann"
+  },
+  {
+    "navneobjekttype": "Boligfelt",
+    "navneobjekttypekode": "boligfelt"
+  },
+  {
+    "navneobjekttype": "Stup",
+    "navneobjekttypekode": "stup"
+  },
+  {
+    "navneobjekttype": "Annen vanndetalj",
+    "navneobjekttypekode": "annenVanndetalj"
+  },
+  {
+    "navneobjekttype": "Hylle",
+    "navneobjekttypekode": "hylle"
+  },
+  {
+    "navneobjekttype": "Turisthytte",
+    "navneobjekttypekode": "turisthytte"
+  },
+  {
+    "navneobjekttype": "Forskningsstasjon",
+    "navneobjekttypekode": "forskningsstasjon"
+  },
+  {
+    "navneobjekttype": "Campingplass",
+    "navneobjekttypekode": "campingplass"
+  },
+  {
+    "navneobjekttype": "Fengsel",
+    "navneobjekttypekode": "fengsel"
+  },
+  {
+    "navneobjekttype": "Annen industri- og lagerbygning",
+    "navneobjekttypekode": "annenIndustri-OgLagerbygning"
+  },
+  {
+    "navneobjekttype": "Fabrikk",
+    "navneobjekttypekode": "fabrikk"
+  },
+  {
+    "navneobjekttype": "Forretningsbygg",
+    "navneobjekttypekode": "forretningsbygg"
+  },
+  {
+    "navneobjekttype": "Serveringssted",
+    "navneobjekttypekode": "serveringssted"
+  },
+  {
+    "navneobjekttype": "Hotell",
+    "navneobjekttypekode": "hotell"
+  },
+  {
+    "navneobjekttype": "Pensjonat",
+    "navneobjekttypekode": "pensjonat"
+  },
+  {
+    "navneobjekttype": "Hammar",
+    "navneobjekttypekode": "hammar"
+  },
+  {
+    "navneobjekttype": "Busstasjon",
+    "navneobjekttypekode": "busstasjon"
+  },
+  {
+    "navneobjekttype": "Friluftsområde",
+    "navneobjekttypekode": "friluftsområde"
+  },
+  {
+    "navneobjekttype": "Egg",
+    "navneobjekttypekode": "egg"
+  },
+  {
+    "navneobjekttype": "Jernbanetunnel",
+    "navneobjekttypekode": "jernbanetunnel"
+  },
+  {
+    "navneobjekttype": "Våtmarksområde",
+    "navneobjekttypekode": "våtmarksområde"
+  },
+  {
+    "navneobjekttype": "Jernbanebru",
+    "navneobjekttypekode": "jernbanebru"
+  },
+  {
+    "navneobjekttype": "Mindre brukonstruksjon",
+    "navneobjekttypekode": "mindreBrukonstruksjon"
+  },
+  {
+    "navneobjekttype": "Del av vann",
+    "navneobjekttypekode": "delAvVann"
+  },
+  {
+    "navneobjekttype": "Fjellvegg",
+    "navneobjekttypekode": "fjellvegg"
+  },
+  {
+    "navneobjekttype": "Sjømerke med indirekte belysning",
+    "navneobjekttypekode": "sjømerkeMedIndirekteBelysning"
+  },
+  {
+    "navneobjekttype": "Støls-/setereiendom",
+    "navneobjekttypekode": "stølsSetereiendom"
+  },
+  {
+    "navneobjekttype": "Eiendomsteig",
+    "navneobjekttypekode": "eiendomsteig"
+  },
+  {
+    "navneobjekttype": "Tuft",
+    "navneobjekttypekode": "tuft"
+  },
+  {
+    "navneobjekttype": "Helikopterlandingsplass",
+    "navneobjekttypekode": "helikopterlandingsplass"
+  },
+  {
+    "navneobjekttype": "Reinbeitedistrikt",
+    "navneobjekttypekode": "reinbeitedistrikt"
+  },
+  {
+    "navneobjekttype": "Fjellovergang",
+    "navneobjekttypekode": "fjellovergang"
+  },
+  {
+    "navneobjekttype": "Sva",
+    "navneobjekttypekode": "sva"
+  },
+  {
+    "navneobjekttype": "Vannstandsmåler",
+    "navneobjekttypekode": "vannstandsmåler"
+  },
+  {
+    "navneobjekttype": "Overbygg",
+    "navneobjekttypekode": "overbygg"
+  },
+  {
+    "navneobjekttype": "Kultur-/messehall",
+    "navneobjekttypekode": "kulturMessehall"
+  },
+  {
+    "navneobjekttype": "Vannverk",
+    "navneobjekttypekode": "vannverk"
+  },
+  {
+    "navneobjekttype": "Boinstitusjon",
+    "navneobjekttypekode": "boinstitusjon"
+  },
+  {
+    "navneobjekttype": "Sjøvarde",
+    "navneobjekttypekode": "sjøvarde"
+  },
+  {
+    "navneobjekttype": "Strand i sjø",
+    "navneobjekttypekode": "strandISjø"
+  },
+  {
+    "navneobjekttype": "Øyr",
+    "navneobjekttypekode": "øyr"
+  },
+  {
+    "navneobjekttype": "Eid i sjø",
+    "navneobjekttypekode": "eidISjø"
+  },
+  {
+    "navneobjekttype": "Skredområde",
+    "navneobjekttypekode": "skredområde"
+  },
+  {
+    "navneobjekttype": "Våg i sjø",
+    "navneobjekttypekode": "vågISjø"
+  },
+  {
+    "navneobjekttype": "Fjordmunning",
+    "navneobjekttypekode": "fjordmunning"
+  },
+  {
+    "navneobjekttype": "Sjøstykke",
+    "navneobjekttypekode": "sjøstykke"
+  },
+  {
+    "navneobjekttype": "Fiskeplass i sjø",
+    "navneobjekttypekode": "fiskeplassISjø"
+  },
+  {
+    "navneobjekttype": "Fjord",
+    "navneobjekttypekode": "fjord"
+  },
+  {
+    "navneobjekttype": "Holme i sjø",
+    "navneobjekttypekode": "holmeISjø"
+  },
+  {
+    "navneobjekttype": "Øygruppe i sjø",
+    "navneobjekttypekode": "øygruppeISjø"
+  },
+  {
+    "navneobjekttype": "Nes i sjø",
+    "navneobjekttypekode": "nesISjø"
+  },
+  {
+    "navneobjekttype": "Holmegruppe i sjø",
+    "navneobjekttypekode": "holmegruppeISjø"
+  },
+  {
+    "navneobjekttype": "Vik i sjø",
+    "navneobjekttypekode": "vikISjø"
+  },
+  {
+    "navneobjekttype": "Halvøy i sjø",
+    "navneobjekttypekode": "halvøyISjø"
+  },
+  {
+    "navneobjekttype": "Sund i sjø",
+    "navneobjekttypekode": "sundISjø"
+  },
+  {
+    "navneobjekttype": "Soneinndeling til havs",
+    "navneobjekttypekode": "soneinndelingTilHavs"
+  },
+  {
+    "navneobjekttype": "Vegbom",
+    "navneobjekttypekode": "vegbom"
+  },
+  {
+    "navneobjekttype": "Verneområde",
+    "navneobjekttypekode": "verneområde"
+  },
+  {
+    "navneobjekttype": "Rasteplass",
+    "navneobjekttypekode": "rasteplass"
+  },
+  {
+    "navneobjekttype": "Skytebane",
+    "navneobjekttypekode": "skytebane"
+  },
+  {
+    "navneobjekttype": "Garasje/hangarbygg",
+    "navneobjekttypekode": "garasjeHangarbygg"
+  },
+  {
+    "navneobjekttype": "Skytefelt",
+    "navneobjekttypekode": "skytefelt"
+  },
+  {
+    "navneobjekttype": "Sjødetalj",
+    "navneobjekttypekode": "sjødetalj"
+  },
+  {
+    "navneobjekttype": "Tunnel",
+    "navneobjekttypekode": "tunnel"
+  },
+  {
+    "navneobjekttype": "Bru",
+    "navneobjekttypekode": "bru"
+  },
+  {
+    "navneobjekttype": "Klopp",
+    "navneobjekttypekode": "klopp"
+  },
+  {
+    "navneobjekttype": "Fjellheis",
+    "navneobjekttypekode": "fjellheis"
+  },
+  {
+    "navneobjekttype": "Taubane",
+    "navneobjekttypekode": "taubane"
+  },
+  {
+    "navneobjekttype": "Ur",
+    "navneobjekttypekode": "ur"
+  },
+  {
+    "navneobjekttype": "Stein",
+    "navneobjekttypekode": "stein"
+  },
+  {
+    "navneobjekttype": "Sand",
+    "navneobjekttypekode": "sand"
+  },
+  {
+    "navneobjekttype": "Elvemel",
+    "navneobjekttypekode": "elvemel"
+  },
+  {
+    "navneobjekttype": "Skar",
+    "navneobjekttypekode": "skar"
+  },
+  {
+    "navneobjekttype": "Skogholt",
+    "navneobjekttypekode": "skogholt"
+  },
+  {
+    "navneobjekttype": "Juv",
+    "navneobjekttypekode": "juv"
+  },
+  {
+    "navneobjekttype": "Skog",
+    "navneobjekttypekode": "skog"
+  },
+  {
+    "navneobjekttype": "Dal",
+    "navneobjekttypekode": "dal"
+  },
+  {
+    "navneobjekttype": "Botn",
+    "navneobjekttypekode": "botn"
+  },
+  {
+    "navneobjekttype": "Dalføre",
+    "navneobjekttypekode": "dalføre"
+  },
+  {
+    "navneobjekttype": "Krater",
+    "navneobjekttypekode": "krater"
+  },
+  {
+    "navneobjekttype": "Søkk",
+    "navneobjekttypekode": "søkk"
+  },
+  {
+    "navneobjekttype": "Senkning",
+    "navneobjekttypekode": "senkning"
+  },
+  {
+    "navneobjekttype": "Severdighet",
+    "navneobjekttypekode": "severdighet"
+  },
+  {
+    "navneobjekttype": "Utsiktspunkt",
+    "navneobjekttypekode": "utsiktspunkt"
+  },
+  {
+    "navneobjekttype": "Offersted",
+    "navneobjekttypekode": "offersted"
+  },
+  {
+    "navneobjekttype": "Annen kulturdetalj",
+    "navneobjekttypekode": "annenKulturdetalj"
+  },
+  {
+    "navneobjekttype": "Bomstasjon",
+    "navneobjekttypekode": "bomstasjon"
+  },
+  {
+    "navneobjekttype": "Allmenning",
+    "navneobjekttypekode": "allmenning"
+  },
+  {
+    "navneobjekttype": "Tjern",
+    "navneobjekttypekode": "tjern"
+  },
+  {
+    "navneobjekttype": "Del av innsjø",
+    "navneobjekttypekode": "delAvInnsjø"
+  },
+  {
+    "navneobjekttype": "Vann",
+    "navneobjekttypekode": "vann"
+  },
+  {
+    "navneobjekttype": "Dam",
+    "navneobjekttypekode": "dam"
+  },
+  {
+    "navneobjekttype": "Fjell i dagen",
+    "navneobjekttypekode": "fjellIDagen"
+  },
+  {
+    "navneobjekttype": "Gruppe av tjern",
+    "navneobjekttypekode": "gruppeAvTjern"
+  },
+  {
+    "navneobjekttype": "Pytt",
+    "navneobjekttypekode": "pytt"
+  },
+  {
+    "navneobjekttype": "Matrikkeladressenavn",
+    "navneobjekttypekode": "matrikkeladressenavn"
+  },
+  {
+    "navneobjekttype": "Adressetilleggsnavn",
+    "navneobjekttypekode": "adressetilleggsnavn"
+  },
+  {
+    "navneobjekttype": "Adressenavn",
+    "navneobjekttypekode": "adressenavn"
+  },
+  {
+    "navneobjekttype": "Traktorveg",
+    "navneobjekttypekode": "traktorveg"
+  },
+  {
+    "navneobjekttype": "Havområde",
+    "navneobjekttypekode": "havområde"
+  },
+  {
+    "navneobjekttype": "Havstrøm",
+    "navneobjekttypekode": "havstrøm"
+  },
+  {
+    "navneobjekttype": "Stasjon",
+    "navneobjekttypekode": "stasjon"
+  },
+  {
+    "navneobjekttype": "Holdeplass",
+    "navneobjekttypekode": "holdeplass"
+  },
+  {
+    "navneobjekttype": "Banestrekning",
+    "navneobjekttypekode": "banestrekning"
+  },
+  {
+    "navneobjekttype": "Sykehus",
+    "navneobjekttypekode": "sykehus"
+  },
+  {
+    "navneobjekttype": "Oppdrettsanlegg",
+    "navneobjekttypekode": "oppdrettsanlegg"
+  },
+  {
+    "navneobjekttype": "Helseinstitusjon",
+    "navneobjekttypekode": "helseinstitusjon"
+  },
+  {
+    "navneobjekttype": "Barnehage",
+    "navneobjekttypekode": "barnehage"
+  },
+  {
+    "navneobjekttype": "Skole",
+    "navneobjekttypekode": "skole"
+  },
+  {
+    "navneobjekttype": "Universitet/høgskole",
+    "navneobjekttypekode": "universitetHøgskole"
+  },
+  {
+    "navneobjekttype": "Badeplass",
+    "navneobjekttypekode": "badeplass"
+  },
+  {
+    "navneobjekttype": "Strand",
+    "navneobjekttypekode": "strand"
+  },
+  {
+    "navneobjekttype": "Vik",
+    "navneobjekttypekode": "vik"
+  },
+  {
+    "navneobjekttype": "Halvøy",
+    "navneobjekttypekode": "halvøy"
+  },
+  {
+    "navneobjekttype": "Nes",
+    "navneobjekttypekode": "nes"
+  },
+  {
+    "navneobjekttype": "Holme",
+    "navneobjekttypekode": "holme"
+  },
+  {
+    "navneobjekttype": "Stø",
+    "navneobjekttypekode": "stø"
+  },
+  {
+    "navneobjekttype": "Småbåthavn",
+    "navneobjekttypekode": "småbåthavn"
+  },
+  {
+    "navneobjekttype": "Ankringsplass",
+    "navneobjekttypekode": "ankringsplass"
+  },
+  {
+    "navneobjekttype": "Ferjekai ",
+    "navneobjekttypekode": "ferjekai"
+  },
+  {
+    "navneobjekttype": "Fløtningsanlegg",
+    "navneobjekttypekode": "fløtningsanlegg"
+  },
+  {
+    "navneobjekttype": "Brygge",
+    "navneobjekttypekode": "brygge"
+  },
+  {
+    "navneobjekttype": "Kai",
+    "navneobjekttypekode": "kai"
+  },
+  {
+    "navneobjekttype": "Høl",
+    "navneobjekttypekode": "høl"
+  },
+  {
+    "navneobjekttype": "Gass-/oljefelt i sjø",
+    "navneobjekttypekode": "gass-OljefeltISjø"
+  },
+  {
+    "navneobjekttype": "Havn",
+    "navneobjekttypekode": "havn"
+  },
+  {
+    "navneobjekttype": "Lon",
+    "navneobjekttypekode": "lon"
+  },
+  {
+    "navneobjekttype": "Kontinentalsokkel",
+    "navneobjekttypekode": "kontinentalsokkel"
+  },
+  {
+    "navneobjekttype": "Ferjestrekning",
+    "navneobjekttypekode": "ferjestrekning"
+  },
+  {
+    "navneobjekttype": "Hylle i sjø",
+    "navneobjekttypekode": "hylleISjø"
+  },
+  {
+    "navneobjekttype": "Molo",
+    "navneobjekttypekode": "molo"
+  },
+  {
+    "navneobjekttype": "Undersjøisk vegg",
+    "navneobjekttypekode": "undersjøiskVegg"
+  },
+  {
+    "navneobjekttype": "Havdyp",
+    "navneobjekttypekode": "havdyp"
+  },
+  {
+    "navneobjekttype": "Farled/skipslei",
+    "navneobjekttypekode": "farledSkipslei"
+  },
+  {
+    "navneobjekttype": "Administrativ bydel",
+    "navneobjekttypekode": "administrativBydel"
+  },
+  {
+    "navneobjekttype": "Grunnkrets",
+    "navneobjekttypekode": "grunnkrets"
+  },
+  {
+    "navneobjekttype": "Flyplass",
+    "navneobjekttypekode": "flyplass"
+  },
+  {
+    "navneobjekttype": "Fylke",
+    "navneobjekttypekode": "fylke"
+  },
+  {
+    "navneobjekttype": "Landingsplass",
+    "navneobjekttypekode": "landingsplass"
+  },
+  {
+    "navneobjekttype": "Kommune",
+    "navneobjekttypekode": "kommune"
+  },
+  {
+    "navneobjekttype": "TV-/radio- eller mobiltelefontårn",
+    "navneobjekttypekode": "tV-Radio-EllerMobiltelefontårn"
+  },
+  {
+    "navneobjekttype": "Nasjon",
+    "navneobjekttypekode": "nasjon"
+  },
+  {
+    "navneobjekttype": "Stryk",
+    "navneobjekttypekode": "stryk"
+  },
+  {
+    "navneobjekttype": "Os",
+    "navneobjekttypekode": "os"
+  },
+  {
+    "navneobjekttype": "Grøft",
+    "navneobjekttypekode": "grøft"
+  },
+  {
+    "navneobjekttype": "Foss",
+    "navneobjekttypekode": "foss"
+  },
+  {
+    "navneobjekttype": "Elv",
+    "navneobjekttypekode": "elv"
+  },
+  {
+    "navneobjekttype": "Bekk",
+    "navneobjekttypekode": "bekk"
+  },
+  {
+    "navneobjekttype": "Grustak/steinbrudd",
+    "navneobjekttypekode": "grustakSteinbrudd"
+  },
+  {
+    "navneobjekttype": "Torvtak",
+    "navneobjekttypekode": "torvtak"
+  },
+  {
+    "navneobjekttype": "Valgkrets",
+    "navneobjekttypekode": "valgkrets"
+  },
+  {
+    "navneobjekttype": "Skolekrets",
+    "navneobjekttypekode": "skolekrets"
+  },
+  {
+    "navneobjekttype": "Poststed",
+    "navneobjekttypekode": "poststed"
+  },
+  {
+    "navneobjekttype": "Sokn",
+    "navneobjekttypekode": "sokn"
+  },
+  {
+    "navneobjekttype": "Grensemerke",
+    "navneobjekttypekode": "grensemerke"
+  },
+  {
+    "navneobjekttype": "Statistisk tettsted",
+    "navneobjekttypekode": "statistiskTettsted"
+  },
+  {
+    "navneobjekttype": "Annen administrativ inndeling",
+    "navneobjekttypekode": "annenAdministrativInndeling"
+  },
+  {
+    "navneobjekttype": "Kilde",
+    "navneobjekttypekode": "kilde"
+  },
+  {
+    "navneobjekttype": "Elvesving",
+    "navneobjekttypekode": "elvesving"
+  },
+  {
+    "navneobjekttype": "Nes ved elver",
+    "navneobjekttypekode": "nesVedElver"
+  },
+  {
+    "navneobjekttype": "Bakke",
+    "navneobjekttypekode": "bakke"
+  },
+  {
+    "navneobjekttype": "Fjellside",
+    "navneobjekttypekode": "fjellside"
+  },
+  {
+    "navneobjekttype": "Li",
+    "navneobjekttypekode": "li"
+  },
+  {
+    "navneobjekttype": "Basseng i sjø",
+    "navneobjekttypekode": "bassengISjø"
+  },
+  {
+    "navneobjekttype": "Parkeringsplass",
+    "navneobjekttypekode": "parkeringsplass"
+  },
+  {
+    "navneobjekttype": "Banke ",
+    "navneobjekttypekode": "banke"
+  },
+  {
+    "navneobjekttype": "Grind",
+    "navneobjekttypekode": "grind"
+  },
+  {
+    "navneobjekttype": "Vad",
+    "navneobjekttypekode": "vad"
+  },
+  {
+    "navneobjekttype": "Eng",
+    "navneobjekttypekode": "eng"
+  },
+  {
+    "navneobjekttype": "Jorde",
+    "navneobjekttypekode": "jorde"
+  },
+  {
+    "navneobjekttype": "Havnehage",
+    "navneobjekttypekode": "havnehage"
+  },
+  {
+    "navneobjekttype": "Setervoll",
+    "navneobjekttypekode": "setervoll"
+  },
+  {
+    "navneobjekttype": "Myr",
+    "navneobjekttypekode": "myr"
+  },
+  {
+    "navneobjekttype": "Melkeplass",
+    "navneobjekttypekode": "melkeplass"
+  },
+  {
+    "navneobjekttype": "Utmark",
+    "navneobjekttypekode": "utmark"
+  },
+  {
+    "navneobjekttype": "Isbre",
+    "navneobjekttypekode": "isbre"
+  },
+  {
+    "navneobjekttype": "Fyllplass",
+    "navneobjekttypekode": "fyllplass"
+  },
+  {
+    "navneobjekttype": "Bergverk",
+    "navneobjekttypekode": "bergverk"
+  },
+  {
+    "navneobjekttype": "Iskuppel",
+    "navneobjekttypekode": "iskuppel"
+  },
+  {
+    "navneobjekttype": "Fonn",
+    "navneobjekttypekode": "fonn"
+  },
+  {
+    "navneobjekttype": "Vegsving",
+    "navneobjekttypekode": "vegsving"
+  },
+  {
+    "navneobjekttype": "Bakke (Veg)",
+    "navneobjekttypekode": "bakkeVeg"
+  },
+  {
+    "navneobjekttype": "Varde",
+    "navneobjekttypekode": "varde"
+  },
+  {
+    "navneobjekttype": "Jernstang",
+    "navneobjekttypekode": "jernstang"
+  },
+  {
+    "navneobjekttype": "Lanterne",
+    "navneobjekttypekode": "lanterne"
+  },
+  {
+    "navneobjekttype": "Fyrlykt",
+    "navneobjekttypekode": "fyrlykt"
+  },
+  {
+    "navneobjekttype": "Fyrstasjon",
+    "navneobjekttypekode": "fyrstasjon"
+  },
+  {
+    "navneobjekttype": "Overett",
+    "navneobjekttypekode": "overett"
+  },
+  {
+    "navneobjekttype": "Båke",
+    "navneobjekttypekode": "båke"
+  },
+  {
+    "navneobjekttype": "Lysbøye",
+    "navneobjekttypekode": "lysbøye"
+  },
+  {
+    "navneobjekttype": "Stake",
+    "navneobjekttypekode": "stake"
+  },
+  {
+    "navneobjekttype": "Skjær",
+    "navneobjekttypekode": "skjær"
+  },
+  {
+    "navneobjekttype": "Busstopp",
+    "navneobjekttypekode": "busstopp"
+  },
+  {
+    "navneobjekttype": "Båe ",
+    "navneobjekttypekode": "båe"
+  },
+  {
+    "navneobjekttype": "Tømmervelte",
+    "navneobjekttypekode": "tømmervelte"
+  },
+  {
+    "navneobjekttype": "Grunne",
+    "navneobjekttypekode": "grunne"
+  },
+  {
+    "navneobjekttype": "Øy i sjø",
+    "navneobjekttypekode": "øyISjø"
+  },
+  {
+    "navneobjekttype": "Kraftledning",
+    "navneobjekttypekode": "kraftledning"
+  },
+  {
+    "navneobjekttype": "Kraftstasjon",
+    "navneobjekttypekode": "kraftstasjon"
+  },
+  {
+    "navneobjekttype": "Rådhus",
+    "navneobjekttypekode": "rådhus"
+  },
+  {
+    "navneobjekttype": "Vaktstasjon/beredsskapsbygning",
+    "navneobjekttypekode": "vaktstasjonBeredsskapsbygning"
+  },
+  {
+    "navneobjekttype": "Bygg for jordbruk, fiske og fangst",
+    "navneobjekttypekode": "byggForJordbrukFiskeOgFangst"
+  },
+  {
+    "navneobjekttype": "Eiendom",
+    "navneobjekttypekode": "eiendom"
+  },
+  {
+    "navneobjekttype": "Grotte",
+    "navneobjekttypekode": "grotte"
+  },
+  {
+    "navneobjekttype": "Gravplass",
+    "navneobjekttypekode": "gravplass"
+  },
+  {
+    "navneobjekttype": "Heller",
+    "navneobjekttypekode": "heller"
+  },
+  {
+    "navneobjekttype": "Annen bygning for religionsutøvelse",
+    "navneobjekttypekode": "annenBygningForReligionsutøvelse"
+  },
+  {
+    "navneobjekttype": "Annen terrengdetalj",
+    "navneobjekttypekode": "annenTerrengdetalj"
+  },
+  {
+    "navneobjekttype": "Kirke",
+    "navneobjekttypekode": "kirke"
+  },
+  {
+    "navneobjekttype": "Geologisk struktur",
+    "navneobjekttypekode": "geologiskStruktur"
+  },
+  {
+    "navneobjekttype": "Forsamlingshus/kulturhus",
+    "navneobjekttypekode": "forsamlingshusKulturhus"
+  },
+  {
+    "navneobjekttype": "Museum/galleri/bibliotek",
+    "navneobjekttypekode": "museumGalleriBibliotek"
+  },
+  {
+    "navneobjekttype": "Tettbebyggelse",
+    "navneobjekttypekode": "tettbebyggelse"
+  },
+  {
+    "navneobjekttype": "Tettsteddel",
+    "navneobjekttypekode": "tettsteddel"
+  },
+  {
+    "navneobjekttype": "Grend",
+    "navneobjekttypekode": "grend"
+  },
+  {
+    "navneobjekttype": "Bygdelag (bygd)",
+    "navneobjekttypekode": "bygdelagBygd"
+  },
+  {
+    "navneobjekttype": "Hyttefelt",
+    "navneobjekttypekode": "hyttefelt"
+  },
+  {
+    "navneobjekttype": "Ås",
+    "navneobjekttypekode": "ås"
+  },
+  {
+    "navneobjekttype": "Gard",
+    "navneobjekttypekode": "gard"
+  },
+  {
+    "navneobjekttype": "Navnegard",
+    "navneobjekttypekode": "navnegard"
+  },
+  {
+    "navneobjekttype": "Slette",
+    "navneobjekttypekode": "slette"
+  },
+  {
+    "navneobjekttype": "Mo",
+    "navneobjekttypekode": "mo"
+  },
+  {
+    "navneobjekttype": "Enebolig/mindre boligbygg",
+    "navneobjekttypekode": "eneboligMindreBoligbygg"
+  },
+  {
+    "navneobjekttype": "Fritidsbolig",
+    "navneobjekttypekode": "fritidsbolig"
+  },
+  {
+    "navneobjekttype": "Boligblokk",
+    "navneobjekttypekode": "boligblokk"
+  },
+  {
+    "navneobjekttype": "Borettslag",
+    "navneobjekttypekode": "borettslag"
+  },
+  {
+    "navneobjekttype": "Industriområde",
+    "navneobjekttypekode": "industriområde"
+  },
+  {
+    "navneobjekttype": "Gammel bosettingsplass",
+    "navneobjekttypekode": "gammelBosettingsplass"
+  },
+  {
+    "navneobjekttype": "Historisk bosetting",
+    "navneobjekttypekode": "historiskBosetting"
+  },
+  {
+    "navneobjekttype": "Torg",
+    "navneobjekttypekode": "torg"
+  },
+  {
+    "navneobjekttype": "Gjerde",
+    "navneobjekttypekode": "gjerde"
+  },
+  {
+    "navneobjekttype": "Bruk",
+    "navneobjekttypekode": "bruk"
+  },
+  {
+    "navneobjekttype": "Seter/støl",
+    "navneobjekttypekode": "seterStøl"
+  },
+  {
+    "navneobjekttype": "Korallrev",
+    "navneobjekttypekode": "korallrev"
+  },
+  {
+    "navneobjekttype": "Båe i sjø",
+    "navneobjekttypekode": "båeISjø"
+  },
+  {
+    "navneobjekttype": "Klakk i sjø",
+    "navneobjekttypekode": "klakkISjø"
+  },
+  {
+    "navneobjekttype": "Grunne i sjø",
+    "navneobjekttypekode": "grunneISjø"
+  },
+  {
+    "navneobjekttype": "Skjær i sjø",
+    "navneobjekttypekode": "skjærISjø"
+  },
+  {
+    "navneobjekttype": "Fjellkant",
+    "navneobjekttypekode": "fjellkant"
+  },
+  {
+    "navneobjekttype": "Hei",
+    "navneobjekttypekode": "hei"
+  },
+  {
+    "navneobjekttype": "Topp",
+    "navneobjekttypekode": "topp"
+  },
+  {
+    "navneobjekttype": "Bydel",
+    "navneobjekttypekode": "bydel"
+  },
+  {
+    "navneobjekttype": "Tettsted",
+    "navneobjekttypekode": "tettsted"
+  },
+  {
+    "navneobjekttype": "By",
+    "navneobjekttypekode": "by"
+  },
+  {
+    "navneobjekttype": "Fjell",
+    "navneobjekttypekode": "fjell"
+  },
+  {
+    "navneobjekttype": "Berg",
+    "navneobjekttypekode": "berg"
+  },
+  {
+    "navneobjekttype": "Rygg",
+    "navneobjekttypekode": "rygg"
+  },
+  {
+    "navneobjekttype": "Haug",
+    "navneobjekttypekode": "haug"
+  },
+  {
+    "navneobjekttype": "Høyde",
+    "navneobjekttypekode": "høyde"
+  },
+  {
+    "navneobjekttype": "Øygruppe",
+    "navneobjekttypekode": "øygruppe"
+  },
+  {
+    "navneobjekttype": "Øy",
+    "navneobjekttypekode": "øy"
+  },
+  {
+    "navneobjekttype": "Rev i sjø",
+    "navneobjekttypekode": "revISjø"
+  },
+  {
+    "navneobjekttype": "Kanal",
+    "navneobjekttypekode": "kanal"
+  },
+  {
+    "navneobjekttype": "Landskapsområde",
+    "navneobjekttypekode": "landskapsområde"
+  },
+  {
+    "navneobjekttype": "Bakke i sjø",
+    "navneobjekttypekode": "bakkeISjø"
+  },
+  {
+    "navneobjekttype": "Bakketopp i sjø",
+    "navneobjekttypekode": "bakketoppISjø"
+  },
+  {
+    "navneobjekttype": "Vidde",
+    "navneobjekttypekode": "vidde"
+  },
+  {
+    "navneobjekttype": "Fjellområde",
+    "navneobjekttypekode": "fjellområde"
+  },
+  {
+    "navneobjekttype": "Banke i sjø",
+    "navneobjekttypekode": "bankeISjø"
+  },
+  {
+    "navneobjekttype": "Rygg i sjø",
+    "navneobjekttypekode": "ryggISjø"
+  },
+  {
+    "navneobjekttype": "Skogområde",
+    "navneobjekttypekode": "skogområde"
+  },
+  {
+    "navneobjekttype": "Morenerygg i sjø",
+    "navneobjekttypekode": "moreneryggISjø"
+  },
+  {
+    "navneobjekttype": "Søkk i sjø",
+    "navneobjekttypekode": "søkkISjø"
+  },
+  {
+    "navneobjekttype": "Renne/Kløft i sjø",
+    "navneobjekttypekode": "renneKløftISjø"
+  },
+  {
+    "navneobjekttype": "Egg i sjø",
+    "navneobjekttypekode": "eggISjø"
+  },
+  {
+    "navneobjekttype": "Sluse",
+    "navneobjekttypekode": "sluse"
+  },
+  {
+    "navneobjekttype": "Ras i sjø",
+    "navneobjekttypekode": "rasISjø"
+  },
+  {
+    "navneobjekttype": "Fjelltopp i sjø",
+    "navneobjekttypekode": "fjelltoppISjø"
+  },
+  {
+    "navneobjekttype": "Utstikker",
+    "navneobjekttypekode": "utstikker"
+  },
+  {
+    "navneobjekttype": "Fjellkjede i sjø",
+    "navneobjekttypekode": "fjellkjedeISjø"
+  },
+  {
+    "navneobjekttype": "Sadel i sjø",
+    "navneobjekttypekode": "sadelISjø"
+  },
+  {
+    "navneobjekttype": "Sokkel i sjø",
+    "navneobjekttypekode": "sokkelISjø"
+  },
+  {
+    "navneobjekttype": "Eid",
+    "navneobjekttypekode": "eid"
+  },
+  {
+    "navneobjekttype": "Vulkan i sjø",
+    "navneobjekttypekode": "vulkanISjø"
+  },
+  {
+    "navneobjekttype": "Sund",
+    "navneobjekttypekode": "sund"
+  },
+  {
+    "navneobjekttype": "Platå i sjø",
+    "navneobjekttypekode": "platåISjø"
+  },
+  {
+    "navneobjekttype": "Oljeinstallasjon",
+    "navneobjekttypekode": "oljeinstallasjon"
+  },
+  {
+    "navneobjekttype": "Kabel",
+    "navneobjekttypekode": "kabel"
+  },
+  {
+    "navneobjekttype": "Rørledning",
+    "navneobjekttypekode": "rørledning"
+  },
+  {
+    "navneobjekttype": "Kraftgate (rørgate)",
+    "navneobjekttypekode": "kraftgateRørgate"
+  },
+  {
+    "navneobjekttype": "Vegstrekning",
+    "navneobjekttypekode": "vegstrekning"
+  },
+  {
+    "navneobjekttype": "Sti",
+    "navneobjekttypekode": "sti"
+  },
+  {
+    "navneobjekttype": "Vegkryss",
+    "navneobjekttypekode": "vegkryss"
+  }
+]

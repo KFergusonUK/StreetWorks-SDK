@@ -1,0 +1,74 @@
+[
+  {
+    "språk": "Skoltesamisk",
+    "språkkode": "sms"
+  },
+  {
+    "språk": "Tysk",
+    "språkkode": "deu"
+  },
+  {
+    "språk": "Islandsk",
+    "språkkode": "isl"
+  },
+  {
+    "språk": "Dansk",
+    "språkkode": "dan"
+  },
+  {
+    "språk": "Russisk",
+    "språkkode": "rus"
+  },
+  {
+    "språk": "Kvensk",
+    "språkkode": "fkv"
+  },
+  {
+    "språk": "Sørsamisk",
+    "språkkode": "sma"
+  },
+  {
+    "språk": "Norsk",
+    "språkkode": "nor"
+  },
+  {
+    "språk": "Nederlandsk",
+    "språkkode": "nld"
+  },
+  {
+    "språk": "Svensk",
+    "språkkode": "swe"
+  },
+  {
+    "språk": "Finsk",
+    "språkkode": "fin"
+  },
+  {
+    "språk": "Færøysk",
+    "språkkode": "fao"
+  },
+  {
+    "språk": "Grønlandsk",
+    "språkkode": "kal"
+  },
+  {
+    "språk": "Fransk",
+    "språkkode": "fra"
+  },
+  {
+    "språk": "Lulesamisk",
+    "språkkode": "smj"
+  },
+  {
+    "språk": "Nordsamisk",
+    "språkkode": "sme"
+  },
+  {
+    "språk": "Engelsk",
+    "språkkode": "eng"
+  },
+  {
+    "språk": "Irsk",
+    "språkkode": "gle"
+  }
+]

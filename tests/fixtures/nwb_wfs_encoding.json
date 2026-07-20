@@ -1,0 +1,193 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "wegvakken.3897",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            97133,
+            434490
+          ],
+          [
+            97150,
+            434507
+          ],
+          [
+            97157,
+            434516
+          ],
+          [
+            97162,
+            434526
+          ],
+          [
+            97166,
+            434537
+          ],
+          [
+            97167.81,
+            434544.26
+          ],
+          [
+            97167.41,
+            434562.92
+          ],
+          [
+            97158.723,
+            434602.118
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 194268061,
+        "wvk_begdat": "2026-07-01T00:00:00+02:00",
+        "jte_id_beg": 194268065,
+        "jte_id_end": 194269279,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "GRB",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "H",
+        "stt_naam": "IJsselmondseplein",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Rotterdam",
+        "gme_id": 599,
+        "gme_naam": "Rotterdam",
+        "hnrstrlnks": "N",
+        "hnrstrrhts": "N",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": null,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": null,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "599",
+        "wegbehnaam": "Rotterdam",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "S",
+        "routenr": 106,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 30,
+        "geobron_nm": "Kaart Mutatiebeheerder (grafisch verantwoord)",
+        "bronjaar": 2024,
+        "openlr": "CwM7qiTnXSyjAgAjAGUsDg==",
+        "bag_orl": "0599300000005172",
+        "frc": "5",
+        "fow": "4",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": -1,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.620",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            131474.9931,
+            447378.1824
+          ],
+          [
+            131478.0512,
+            447378.6824
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 600771049,
+        "wvk_begdat": "2024-06-01T00:00:00+02:00",
+        "jte_id_beg": 262294058,
+        "jte_id_end": 600225197,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "RB",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Marga Klompéstraat",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "IJsselstein",
+        "gme_id": 353,
+        "gme_naam": "IJsselstein",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "B",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": 1,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": 4,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "353",
+        "wegbehnaam": "IJsselstein",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 10,
+        "geobron_nm": "Hartlijnenbestand Topografische Dienst",
+        "bronjaar": 2002,
+        "openlr": "CwOWVCT86TPHAAAEAAAzFw==",
+        "bag_orl": "0353300000015134",
+        "frc": "6",
+        "fow": "3",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    }
+  ],
+  "totalFeatures": 5,
+  "numberMatched": 5,
+  "numberReturned": 1,
+  "timeStamp": "2026-07-20T11:35:43.318Z",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::28992"
+    }
+  }
+}

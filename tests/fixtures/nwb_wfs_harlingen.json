@@ -1,0 +1,726 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "wegvakken.1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157459.192,
+            575533.315
+          ],
+          [
+            157456.646,
+            575489.013
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 314551046,
+        "wvk_begdat": "2019-01-01T00:00:00+01:00",
+        "jte_id_beg": 314551086,
+        "jte_id_end": 314550058,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "VP",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Alexiastraat",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "E",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": 2,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": 10,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 50,
+        "geobron_nm": "Kaart Mutatiebeheerder (niet grafisch verantwoord)",
+        "bronjaar": 2018,
+        "openlr": "CwPbZyXOqT/wAP/8/9g/AA==",
+        "bag_orl": "0072300000319612",
+        "frc": "7",
+        "fow": "7",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.5473",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157459.192,
+            575533.315
+          ],
+          [
+            157459.192,
+            575579.144
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 314551047,
+        "wvk_begdat": "2019-01-01T00:00:00+01:00",
+        "jte_id_beg": 314551086,
+        "jte_id_end": 314551085,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "VP",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Alexiastraat",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "O",
+        "hnrstrrhts": "",
+        "e_hnr_lnks": 9,
+        "e_hnr_rhts": null,
+        "l_hnr_lnks": 1,
+        "l_hnr_rhts": null,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 50,
+        "geobron_nm": "Kaart Mutatiebeheerder (niet grafisch verantwoord)",
+        "bronjaar": 2018,
+        "openlr": "CwPbZyXOqT/gAAAAACk/EA==",
+        "bag_orl": "0072300000319612",
+        "frc": "7",
+        "fow": "7",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.42168",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157479.561,
+            575532.042
+          ],
+          [
+            157485.417,
+            575577.616
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 314551043,
+        "wvk_begdat": "2019-01-01T00:00:00+01:00",
+        "jte_id_beg": 314551084,
+        "jte_id_end": 314551083,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "VP",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Alexiastraat",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "O",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": 19,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": 11,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 50,
+        "geobron_nm": "Kaart Mutatiebeheerder (niet grafisch verantwoord)",
+        "bronjaar": 2018,
+        "openlr": "CwPbdiXOqT/gAAAJACk/EA==",
+        "bag_orl": "0072300000319612",
+        "frc": "7",
+        "fow": "7",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.140922",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157923.4494,
+            579102.3224
+          ],
+          [
+            157922.82,
+            579105.59
+          ],
+          [
+            157922.95,
+            579106.58
+          ],
+          [
+            157923.78,
+            579109.55
+          ],
+          [
+            157926.67,
+            579115.87
+          ],
+          [
+            157927.56,
+            579117.44
+          ],
+          [
+            157930.27,
+            579121.51
+          ],
+          [
+            157941.4015,
+            579137.6146
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 600456974,
+        "wvk_begdat": "2026-07-01T00:00:00+02:00",
+        "jte_id_beg": 315557010,
+        "jte_id_end": 600126673,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "RB",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Sédyk",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": null,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": null,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 21,
+        "geobron_nm": "Basisregistratie Grootschalige Topografie (BGT)",
+        "bronjaar": 2025,
+        "openlr": "CwPcrCXUgCOBAAAbACAjEw==",
+        "bag_orl": "0072300000285375",
+        "frc": "4",
+        "fow": "3",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.1055448",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157991.78,
+            579210.045
+          ],
+          [
+            157996.76,
+            579215.71
+          ],
+          [
+            157998.04,
+            579217.87
+          ],
+          [
+            158005.33,
+            579231.03
+          ],
+          [
+            158012.12,
+            579244.4
+          ],
+          [
+            158023.3,
+            579266.76
+          ],
+          [
+            158059.43,
+            579338.14
+          ],
+          [
+            158072.72,
+            579365.04
+          ],
+          [
+            158083.54,
+            579387.57
+          ],
+          [
+            158100.38,
+            579423.87
+          ],
+          [
+            158114.61,
+            579455.86
+          ],
+          [
+            158129.69,
+            579492.91
+          ],
+          [
+            158145.84,
+            579534.92
+          ],
+          [
+            158156.37,
+            579563.01
+          ],
+          [
+            158183.28,
+            579638.35
+          ],
+          [
+            158206.98,
+            579704.21
+          ],
+          [
+            158248.58,
+            579822.09
+          ],
+          [
+            158258.86,
+            579850.27
+          ],
+          [
+            158268.85,
+            579878.56
+          ],
+          [
+            158325.95,
+            580038.68
+          ],
+          [
+            158332.73,
+            580057.5
+          ],
+          [
+            158343.14,
+            580085.64
+          ],
+          [
+            158364.31,
+            580141.79
+          ],
+          [
+            158368.02,
+            580151.08
+          ],
+          [
+            158373.85,
+            580164.73
+          ],
+          [
+            158384.05,
+            580187.36
+          ],
+          [
+            158388.36,
+            580196.43
+          ],
+          [
+            158390.68,
+            580200.87
+          ],
+          [
+            158400.36,
+            580218.38
+          ],
+          [
+            158407.81,
+            580231.41
+          ],
+          [
+            158422.93,
+            580257.32
+          ],
+          [
+            158435.61,
+            580278.87
+          ],
+          [
+            158438.23,
+            580283.12
+          ],
+          [
+            158447.1364,
+            580295.2797
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 315558002,
+        "wvk_begdat": "2026-07-01T00:00:00+02:00",
+        "jte_id_beg": 315558001,
+        "jte_id_end": 316560001,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "RB",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Sédyk",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Wijnaldum",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "E",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": 4,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": 6,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 21,
+        "geobron_nm": "Basisregistratie Grootschalige Topografie (BGT)",
+        "bronjaar": 2025,
+        "openlr": "CwPc3CXUrSODFAKrA88jEw==",
+        "bag_orl": "0072300000285575",
+        "frc": "4",
+        "fow": "3",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.113623",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            157092.3903,
+            576529.5054
+          ],
+          [
+            157092.49,
+            576546.63
+          ],
+          [
+            157096.12,
+            576581.49
+          ],
+          [
+            157098.8521,
+            576595.7081
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 314553027,
+        "wvk_begdat": "2026-07-01T00:00:00+02:00",
+        "jte_id_beg": 314553005,
+        "jte_id_end": 314553038,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "FP",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "B",
+        "stt_naam": "Grote Sluisbrug",
+        "stt_bron": "Anders",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": null,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": null,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 10,
+        "geobron_nm": "Hartlijnenbestand Topografische Dienst",
+        "bronjaar": 1996,
+        "openlr": "CwPaaCXQSj/gAQAKADs/EA==",
+        "bag_orl": "",
+        "frc": "7",
+        "fow": "7",
+        "alt_naam": "Raadhuisbrug",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "wegvakken.3647",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            158060.6251,
+            575205.6815
+          ],
+          [
+            158056.35,
+            575203.23
+          ],
+          [
+            158029.18,
+            575199.82
+          ],
+          [
+            158018.48,
+            575199.87
+          ],
+          [
+            158015.4031,
+            575199.4445
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "wvk_id": 601346612,
+        "wvk_begdat": "2026-07-01T00:00:00+02:00",
+        "jte_id_beg": 600309880,
+        "jte_id_end": 600309855,
+        "wegbehsrt": "G",
+        "wegnummer": "",
+        "wegdeelltr": "#",
+        "hecto_lttr": "#",
+        "bst_code": "FP",
+        "rpe_code": "#",
+        "admrichtng": "",
+        "rijrichtng": "H",
+        "stt_naam": "Achlumerdijk",
+        "stt_bron": "BAG schrijfwijze",
+        "wpsnaam": "Harlingen",
+        "gme_id": 72,
+        "gme_naam": "Harlingen",
+        "hnrstrlnks": "",
+        "hnrstrrhts": "",
+        "e_hnr_lnks": null,
+        "e_hnr_rhts": null,
+        "l_hnr_lnks": null,
+        "l_hnr_rhts": null,
+        "begafstand": null,
+        "endafstand": null,
+        "beginkm": null,
+        "eindkm": null,
+        "pos_tv_wol": "",
+        "wegbehcode": "72",
+        "wegbehnaam": "Harlingen",
+        "distrcode": 0,
+        "distrnaam": "",
+        "dienstcode": "",
+        "dienstnaam": "",
+        "wegtype": "",
+        "wgtype_oms": "",
+        "routeltr": "",
+        "routenr": null,
+        "routeltr2": "",
+        "routenr2": null,
+        "routeltr3": "",
+        "routenr3": null,
+        "routeltr4": "",
+        "routenr4": null,
+        "wegnr_aw": "",
+        "wegnr_hmp": "",
+        "geobron_id": 21,
+        "geobron_nm": "Basisregistratie Grootschalige Topografie (BGT)",
+        "bronjaar": 2025,
+        "openlr": "CwPdCiXOID/2AP+8//o/Bw==",
+        "bag_orl": "0072300000285450",
+        "frc": "7",
+        "fow": "7",
+        "alt_naam": "",
+        "alt_nr": "",
+        "rel_hoogte": null,
+        "gdb_geomattr_data": null
+      }
+    }
+  ],
+  "totalFeatures": 7,
+  "numberMatched": 7,
+  "numberReturned": 7,
+  "timeStamp": "2026-07-20T11:35:18.918Z",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::28992"
+    }
+  }
+}

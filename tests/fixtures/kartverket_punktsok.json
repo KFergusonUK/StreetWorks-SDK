@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "sokeStreng": "lat=59.9139&lon=10.7522&radius=200&treffPerSide=3",
+    "asciiKompatibel": true,
+    "treffPerSide": 3,
+    "side": 0,
+    "viserTil": 3,
+    "viserFra": 0,
+    "totaltAntallTreff": 137
+  },
+  "adresser": [
+    {
+      "adressenavn": "Storgata",
+      "adressetekst": "Storgata 28B",
+      "adressetilleggsnavn": null,
+      "adressekode": 17059,
+      "nummer": 28,
+      "bokstav": "B",
+      "kommunenummer": "0301",
+      "kommunenavn": "OSLO",
+      "gardsnummer": 208,
+      "bruksnummer": 646,
+      "festenummer": 0,
+      "undernummer": null,
+      "bruksenhetsnummer": [
+        "H0301",
+        "H0302",
+        "H0401",
+        "H0402",
+        "H0501"
+      ],
+      "objtype": "Vegadresse",
+      "poststed": "OSLO",
+      "postnummer": "0184",
+      "adressetekstutenadressetilleggsnavn": "Storgata 28B",
+      "stedfestingverifisert": false,
+      "representasjonspunkt": {
+        "epsg": "EPSG:4258",
+        "lat": 59.913936667806645,
+        "lon": 10.752150011736182
+      },
+      "oppdateringsdato": "2026-03-26T19:41:41",
+      "meterDistanseTilPunkt": 4.938666576488176
+    },
+    {
+      "adressenavn": "Storgata",
+      "adressetekst": "Storgata 28A",
+      "adressetilleggsnavn": null,
+      "adressekode": 17059,
+      "nummer": 28,
+      "bokstav": "A",
+      "kommunenummer": "0301",
+      "kommunenavn": "OSLO",
+      "gardsnummer": 208,
+      "bruksnummer": 646,
+      "festenummer": 0,
+      "undernummer": null,
+      "bruksenhetsnummer": [
+        "H0301",
+        "H0401",
+        "H0402",
+        "H0501",
+        "H0502"
+      ],
+      "objtype": "Vegadresse",
+      "poststed": "OSLO",
+      "postnummer": "0184",
+      "adressetekstutenadressetilleggsnavn": "Storgata 28A",
+      "stedfestingverifisert": false,
+      "representasjonspunkt": {
+        "epsg": "EPSG:4258",
+        "lat": 59.91395343031553,
+        "lon": 10.752240325614943
+      },
+      "oppdateringsdato": "2026-03-26T19:41:41",
+      "meterDistanseTilPunkt": 6.3499638686264905
+    },
+    {
+      "adressenavn": "Storgata",
+      "adressetekst": "Storgata 26",
+      "adressetilleggsnavn": null,
+      "adressekode": 17059,
+      "nummer": 26,
+      "bokstav": "",
+      "kommunenummer": "0301",
+      "kommunenavn": "OSLO",
+      "gardsnummer": 208,
+      "bruksnummer": 644,
+      "festenummer": 0,
+      "undernummer": null,
+      "bruksenhetsnummer": [],
+      "objtype": "Vegadresse",
+      "poststed": "OSLO",
+      "postnummer": "0184",
+      "adressetekstutenadressetilleggsnavn": "Storgata 26",
+      "stedfestingverifisert": false,
+      "representasjonspunkt": {
+        "epsg": "EPSG:4258",
+        "lat": 59.91394825604604,
+        "lon": 10.751953875941378
+      },
+      "oppdateringsdato": "2026-03-26T19:41:41",
+      "meterDistanseTilPunkt": 14.731362403662002
+    }
+  ]
+}
