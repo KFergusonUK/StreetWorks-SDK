@@ -70,6 +70,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.bag` | [BAG (Basisregistratie Adressen en Gebouwen)](https://www.kadaster.nl/zakelijk/producten/adressen-en-gebouwen/bag-geopackage) — Netherlands' national addresses/buildings register, PDOK Locatieserver + a ~7.8 GB national GeoPackage (no credentials). Street identity is real but not its own table — see below | read |
 | `streetworks.kartverket` | [Kartverket](https://www.geonorge.no/) — Norway's national address register + official (multilingual) place names, REST APIs + bulk CSV (no credentials). Not the same agency as the (credential-blocked) Vegvesen roadworks provider — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
+| `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
@@ -118,7 +119,11 @@ against `ws.geonorge.no`/`nedlasting.geonorge.no`, including a full-scale
 NWB/Netherlands (WFS queries, counts and the two-hop Atom feed verified
 against `geo.rijkswaterstaat.nl`/`service.pdok.nl`, including a real
 municipality-scale `bag_orl` over-merge check and the live discovery that
-PDOK's WFS silently ignores `CQL_FILTER`).
+PDOK's WFS silently ignores `CQL_FILTER`), and BD TOPO/France (WFS queries
+and counts verified against `data.geopf.fr`, including a real commune-scale
+`identifiant_voie_ban` over-merge check on two whole communes, mainland
+and overseas - the bulk GeoPackage route was investigated but not found
+to be automatable, see below).
 
 **Autobahn GmbH's licence is unconfirmed** - checked four independent
 sources (see the [Autobahn GmbH section below](#autobahn-gmbh-germany-national-motorways)
@@ -617,6 +622,73 @@ only uses PDOK's Atom feed for the (unaffected) bulk GeoPackage download.
 CRS is EPSG:28992, matching BAG; licence is CC0 1.0 Universal, matching
 BAG too — confirmed from the Atom feed's own `<rights>` element, not a
 portal page.
+
+## BD TOPO (France)
+
+French national road network (IGN) — no credentials. **The `streets`
+counterpart to `ban`'s `addresses`**: France is now the second territory
+(after the Netherlands) with both layers. Two findings settle the
+strongest open questions from this strand: does a named-street entity
+exist above the segments, and is there a real join to the address
+register?
+
+```python
+from streetworks.bdtopo import BDTopoClient
+
+with BDTopoClient() as bdtopo:
+    segments = bdtopo.query_troncons(cql_filter="insee_commune_gauche='01004'")
+    print(segments[0].nom_voie_ban_gauche, segments[0].toponyme_id_gauche())  # BAN join
+
+    streets = bdtopo.query_voies_nommees(cql_filter="insee_commune='01004'")
+    print(streets[0].nom_voie_ban, streets[0].liens_vers_supports)  # -> a real troncon cleabs
+```
+
+**Both answers are yes, confirmed live, and BD TOPO's are richer than
+NWB's.** `voie_nommee` (named street) is a genuine first-class layer with
+its own stable id (`cleabs`) and a real link down to `troncon_de_route`
+(`liens_vers_supports`, confirmed live to resolve to the matching real
+segment) — a true two-level spine, the strongest input this design
+strand has had. And every segment carries `identifiant_voie_ban` —
+exactly BAN's own compact toponyme-id format — *plus* `id_ban_odonyme`,
+a street-level BAN UUID that BAN's own API/bulk files never expose
+directly. Verified at real commune scale, not sampled, on two whole
+communes (Ambérieu-en-Bugey, mainland; Basse-Terre, Guadeloupe,
+overseas): grouping by `identifiant_voie_ban` and checking against
+`nom_voie_ban` (BAN's own name) gives **zero** over-merged groups in
+either. A real, minor nuance surfaced along the way: BD TOPO's own
+crowd-sourced name field (`nom_collaboratif`) had one abbreviation
+variant under the same BAN id in Basse-Terre — not a genuine conflict,
+and gone entirely once checked against `nom_voie_ban` instead, which is
+why both name fields are kept rather than one being treated as noise.
+
+**`id_ban_odonyme` is worth calling out on its own — it isn't just a
+cross-reference, it's an identifier BAN itself keeps internal.** Neither
+BAN's geocoding API nor its bulk `csv`/`csv-bal` files ever return this
+UUID (confirmed across both, see `streetworks.ban`); it only surfaces
+here, in IGN's data. That means joining a French street to its BAN
+address cloud by a real permanent id — not the derived `toponyme_id`
+this SDK has to construct for BAN on its own, and not a name match — is
+something this SDK can do by combining two providers that neither
+provider makes possible alone. A French developer reaching for BAN or BD
+TOPO individually would not expect this; it only becomes visible by
+having both native interfaces side by side.
+
+BD TOPO also models something neither NWB nor the UK's USRN does:
+**left/right structure is real**, not a documentation artefact — a
+segment carries independent `_gauche`/`_droite` names, BAN ids, and even
+INSEE commune codes (a segment on a commune boundary can genuinely have
+two different communes, one per side).
+
+Only the WFS is built here — **no automated bulk-download route was
+found**, a genuine, thoroughly-investigated gap: IGN's documented download
+portal now redirects to a JavaScript single-page app with no discoverable
+static resource list (checked: `data.gouv.fr`'s 149-resource listing,
+`geoservices.ign.fr`, the legacy `wxs.ign.fr`, and the WFS's own output
+formats, which don't include GeoPackage). CRS is also route-specific
+here: the WFS declares WGS84 on every real response, mainland and
+overseas alike; IGN's documentation states the (unreachable) bulk file
+uses Lambert-93 — plausible, not independently re-confirmed. Licence
+ouverte / Open Licence ETALAB 2.0, matching `ban`.
 
 ## DATEX II (European roadworks)
 
@@ -1423,6 +1495,33 @@ actually is.
       (unaffected, a static file). Licence corrected the same way BAG's
       was: CC0 1.0 Universal, confirmed from the Atom feed's own
       `<rights>` element
+- [x] France BD TOPO (IGN) — the third non-UK street-geometry provider
+      (`streetworks.bdtopo`), native only, the `streets` counterpart to
+      `ban`. Confirmed live: `voie_nommee` (named street) is real and
+      gives France a genuine two-level spine — its own stable id
+      (`cleabs`), a real link down to `troncon_de_route`
+      (`liens_vers_supports`, confirmed to resolve to the matching real
+      segment) — the strongest structural input this design strand has
+      had. Every segment also carries a real, stated join to BAN
+      (`identifiant_voie_ban`, exactly BAN's own compact toponyme-id
+      format, plus `id_ban_odonyme`, a street-level BAN UUID BAN's own
+      API never exposes directly), verified clean at real commune scale
+      on two whole communes, mainland and overseas, zero over-merged
+      against BAN's own name field. Real left/right structure confirmed
+      too (independent names, BAN ids, even INSEE commune codes per
+      side — neither NWB nor the UK's USRN has this). Also worth flagging on
+      its own: `id_ban_odonyme` isn't just a cross-reference - it's a
+      street-level BAN UUID that BAN's own API/bulk files never expose
+      directly, so this SDK can join a French street to its BAN address
+      cloud by a real permanent id that isn't obviously reachable from
+      either provider alone. **No automated bulk GeoPackage route was
+      found** despite substantial live investigation (IGN's download
+      portal now redirects to a JS SPA with no static resource list; the
+      legacy host no longer resolves; the WFS itself doesn't offer
+      GeoPackage output) — a genuine, documented gap: only the WFS is
+      built. CRS is also
+      route-specific: the WFS is WGS84, confirmed live; the unreachable
+      bulk file's documented Lambert-93 is not independently re-confirmed
 - [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
@@ -1500,17 +1599,22 @@ turned `providers()` into an actual coverage map: the UK has two
 `streets` providers (`datavia`, `openusrn`) and **zero** `addresses` — a
 real gap, not an oversight, since AddressBase is an OS Premium product,
 not open data, which may make the UK the one territory where the address
-layer is genuinely blocked, the inverse of the European picture. France
-and Norway currently have `addresses` only, zero `streets`; the
-Netherlands had the same gap until NWB (`streetworks.nwb`, see above)
-gave it the first territory with both.
+layer is genuinely blocked, the inverse of the European picture. Norway
+currently has `addresses` only, zero `streets`. The Netherlands and
+France both had the same gap until NWB and BD TOPO (`streetworks.nwb`,
+`streetworks.bdtopo`, see above) gave them both layers - the Netherlands
+first, France second.
 
 Also investigated, not built: France's street *names* now live in DGFiP's
 **TOPO** register (which replaced FANTOIR in July 2023 — FANTOIR is
-archived), a separate dataset from BAN with no geometry of its own. BAN's
-plain `csv` bulk format carries a real, live-confirmed join to it (see
-`streetworks.ban`'s module docstring) — worth its own module or folding into
-`streetworks.ban`, a decision for the canonical-gazetteer design session.
+archived), a separate dataset from BAN with no geometry of its own -
+**not to be confused with IGN's BD TOPO** (`streetworks.bdtopo`, above),
+an unrelated product from a different agency that happens to share the
+name almost exactly; worth stating plainly since the two are easy to
+conflate. BAN's plain `csv` bulk format carries a real, live-confirmed
+join to DGFiP's TOPO (see `streetworks.ban`'s module docstring) — worth
+its own module or folding into `streetworks.ban`, a decision for the
+canonical-gazetteer design session.
 Likewise, BAG's full-history XML extract (its own `openbare ruimte` object
 with a bitemporal `voorkomen` versioning model) is investigated, documented
 in `streetworks.bag.models`, and not parsed — the same deferral. Norway's

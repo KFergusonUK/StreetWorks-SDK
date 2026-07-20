@@ -35,6 +35,71 @@
 
 ### Added
 
+- **France: BD TOPO (IGN)** (`streetworks.bdtopo`) - the third non-UK
+  street-geometry provider, native only, the `kind="streets"` counterpart
+  to `ban`'s `kind="addresses"`. Wraps the credential-free Géoplateforme
+  WFS (`query_troncons`/`query_voies_nommees`/`count_troncons`, real
+  `CQL_FILTER` support confirmed live, including for `resultType=hits`
+  counts).
+  **`voie_nommee` (named street) is real, confirmed live, and gives
+  France a genuine two-level spine** - the strongest structural finding
+  this design strand has had: every real `voie_nommee` carries its own
+  stable `cleabs` and a real `liens_vers_supports` link down to a
+  `troncon_de_route` segment, confirmed live end to end (a real
+  `voie_nommee`'s link resolved to the expected segment, with matching
+  name and BAN fields). Neither NWB nor the UK's USRN has this two-level
+  structure.
+  **The join to BAN is real, stated, and richer than NWB's `bag_orl`**:
+  both `voie_nommee` and every `troncon_de_route` carry
+  `identifiant_voie_ban` in exactly BAN's own compact toponyme-id format,
+  *and* a second, independent identifier, `id_ban_odonyme` (a street-level
+  BAN UUID that BAN's own API/bulk files never expose directly).
+  Verified at real commune scale, not sampled, on two whole communes
+  (Ambérieu-en-Bugey, mainland; Basse-Terre, Guadeloupe, overseas):
+  grouping by `identifiant_voie_ban` and checking against `nom_voie_ban`
+  (BAN's own name) gives zero over-merged groups in either. A real, minor
+  nuance surfaced along the way: BD TOPO's own crowd-sourced name field
+  (`nom_collaboratif`) had one abbreviation variant under the same BAN id
+  in Basse-Terre ("R SALVADOR ALLENDE" vs "Rue du Président Salvador
+  Allende") - not a genuine identity conflict, and gone entirely once
+  checked against `nom_voie_ban` instead, which is why both name fields
+  are kept rather than one being treated as noise.
+  **Left/right structure is real**, confirmed live: `troncon_de_route`
+  carries independent `_gauche`/`_droite` names, BAN ids, and even INSEE
+  commune codes (a segment on a commune boundary can genuinely have two
+  different communes, one per side) - a real structural difference from
+  both NWB and the UK's USRN.
+  **No automated bulk GeoPackage download route was found**, a genuine,
+  thoroughly-investigated gap, not an oversight: IGN's documented download
+  portal (`geoservices.ign.fr/telechargement`) now redirects to
+  `cartes.gouv.fr`, a JavaScript single-page app with no discoverable
+  static resource list; `data.gouv.fr`'s own BD TOPO dataset lists 149
+  resources, none an actual GeoPackage file; the legacy `wxs.ign.fr` host
+  no longer resolves; and the WFS itself does not offer GeoPackage as an
+  output format (confirmed live via its own `GetCapabilities` - only GML,
+  GeoJSON, KML and CSV). Only the WFS is built as an access route. A
+  `BDTopoDatabase` GeoPackage reader is still provided, for a file
+  obtained manually from `cartes.gouv.fr`, but - flagged plainly, not
+  hidden - it was never verified against a real downloaded file, only
+  against the WFS's own confirmed-live table/column naming, which IGN
+  documents as generated from the same underlying data model.
+  CRS is also route-specific here: the WFS declares WGS84 (EPSG:4326) on
+  every real response checked, mainland and overseas alike; IGN's
+  documentation states the (unreachable) bulk GeoPackage uses RGF93 /
+  Lambert-93 (EPSG:2154) instead - plausible and consistent with every
+  other IGN product, but not independently re-confirmed here. Real 3D
+  coordinates (a genuine altitude third value) are confirmed present on
+  `troncon_de_route`. Licence Ouverte / Open Licence ETALAB 2.0, confirmed
+  via data.gouv.fr's dataset metadata - the same licence as `ban` and
+  `bisonfute`.
+  A note on naming, worth stating plainly: this is unrelated to DGFiP's
+  **TOPO** register (`ban`'s FANTOIR successor, see below) despite the
+  near-identical name - different agency, different product.
+  Registered in `streetworks.registry` as `bdtopo` (`kind="streets"`) -
+  France now has three providers (`bisonfute` roadworks, `ban` addresses,
+  `bdtopo` streets), so `get_provider("france")` raises
+  `AmbiguousProviderError` naming all three.
+
 - **Netherlands: NWB (Nationaal Wegenbestand)** (`streetworks.nwb`) - the
   first non-UK street-geometry provider, native only, the `kind="streets"`
   counterpart to `bag`'s `kind="addresses"`. Wraps the credential-free WFS
