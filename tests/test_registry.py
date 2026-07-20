@@ -88,7 +88,7 @@ def test_providers_unknown_territory_warns_and_returns_empty():
 
 def test_providers_kind_filter_streets():
     streets = providers(kind="streets")
-    assert {e.key for e in streets} == {"datavia", "openusrn", "nwb", "bdtopo"}
+    assert {e.key for e in streets} == {"datavia", "openusrn", "nwb", "bdtopo", "nvdb"}
     assert all(e.kind is Kind.STREETS for e in streets)
     # Enum and string both accepted.
     assert providers(kind=Kind.STREETS) == streets
@@ -242,6 +242,7 @@ def test_capabilities_detect_write_publish_including_nested_sub_apis():
 def test_capabilities_do_not_false_positive_on_read_only_clients():
     for key in (
         "dgt", "srwr", "openusrn", "police", "ndw", "ban", "bag", "kartverket", "nwb", "bdtopo",
+        "nvdb",
     ):
         entry = next(e for e in _REGISTRY if e.key == key)
         assert "write/publish" not in entry.capabilities()

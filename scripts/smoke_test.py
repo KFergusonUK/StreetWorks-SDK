@@ -540,6 +540,23 @@ def check_bdtopo() -> str:
         )
 
 
+def check_nvdb() -> str:
+    """Norway NVDB needs no credentials, just an X-Client header (see
+    streetworks.nvdb's module docstring - confirmed live, not gated the
+    way streetworks.datex2.vegvesen's DATEX feed is)."""
+    from streetworks.nvdb import NVDBClient
+
+    with NVDBClient(client_name="streetworks-sdk-smoke-test") as nvdb:
+        sequences = nvdb.veglenkesekvenser(kommune=4201, count=3)
+        if not sequences:
+            raise RuntimeError("query returned no results for a known real municipality")
+        addresses = nvdb.adresser(kommune=4201, count=3)
+        return (
+            f"veglenkesekvenser -> {len(sequences)} hit(s); "
+            f"adresser -> {len(addresses)} hit(s), top: {addresses[0].adressenavn!r}"
+        )
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -699,6 +716,7 @@ def main() -> int:
     reporter.check("Kartverket (Norway)", [], check_kartverket)
     reporter.check("NWB (Netherlands)", [], check_nwb)
     reporter.check("BD TOPO (France)", [], check_bdtopo)
+    reporter.check("NVDB (Norway)", [], check_nvdb)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

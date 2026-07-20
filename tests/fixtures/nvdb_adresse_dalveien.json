@@ -1,0 +1,122 @@
+{
+  "id": 646,
+  "href": "https://nvdbapiles.atlas.vegvesen.no/vegobjekter/538/646",
+  "metadata": {
+    "type": {
+      "id": 538,
+      "navn": "Adresse"
+    },
+    "versjon": 1,
+    "startdato": "2020-05-24",
+    "sist_modifisert": "2025-05-01T08:05:41Z"
+  },
+  "egenskaper": [
+    {
+      "id": 4588,
+      "navn": "Adressekode",
+      "verdi": 1140,
+      "egenskapstype": "Heltall"
+    },
+    {
+      "id": 4589,
+      "navn": "Adressenavn",
+      "verdi": "Dalveien",
+      "egenskapstype": "Tekst"
+    },
+    {
+      "id": 12622,
+      "navn": "Kommune",
+      "verdi": "4202",
+      "egenskapstype": "Tekst"
+    }
+  ],
+  "geometri": {
+    "wkt": "LINESTRING Z (123995.67 6483373.56 28.483,123992.01 6483370.58 28.703,123981.75 6483361.57 29.303,123973.86 6483354.5 29.753,123966.53 6483347 30.503,123956.25 6483335.64 31.933,123946.17 6483324.85 33.283,123938.52 6483318.17 34.333,123935.66 6483315.86 34.333)",
+    "srid": 5973,
+    "egengeometri": false
+  },
+  "lokasjon": {
+    "kommuner": [
+      4202
+    ],
+    "fylker": [
+      42
+    ],
+    "adresser": [
+      {
+        "navn": "Dalveien",
+        "adressekode": 1140
+      }
+    ],
+    "vegsystemreferanser": [
+      {
+        "vegsystem": {
+          "vegkategori": "K",
+          "fase": "V",
+          "nummer": 1140
+        },
+        "strekning": {
+          "strekning": 1,
+          "delstrekning": 1,
+          "arm": false,
+          "adskilte_løp": "Nei",
+          "trafikantgruppe": "K",
+          "retning": "MED",
+          "fra_meter": 0.0,
+          "til_meter": 65.219
+        },
+        "metrertLokasjon": {
+          "retning": "MED"
+        },
+        "kortform": "KV1140 S1D1 m0-65"
+      },
+      {
+        "vegsystem": {
+          "vegkategori": "K",
+          "fase": "V",
+          "nummer": 1140
+        },
+        "strekning": {
+          "strekning": 1,
+          "delstrekning": 100,
+          "arm": false,
+          "adskilte_løp": "Nei",
+          "trafikantgruppe": "K",
+          "retning": "MED",
+          "fra_meter": 0.0,
+          "til_meter": 18.393
+        },
+        "metrertLokasjon": {
+          "retning": "MED"
+        },
+        "kortform": "KV1140 S1D100 m0-18"
+      }
+    ],
+    "stedfestinger": [
+      {
+        "type": "Linje",
+        "veglenkesekvensid": 384,
+        "startposisjon": 0.0,
+        "sluttposisjon": 1.0,
+        "retning": "MED",
+        "kjørefelt": [],
+        "kortform": "0.0-1.0@384"
+      },
+      {
+        "type": "Linje",
+        "veglenkesekvensid": 2399262,
+        "startposisjon": 0.0,
+        "sluttposisjon": 1.0,
+        "retning": "MED",
+        "kjørefelt": [],
+        "kortform": "0.0-1.0@2399262"
+      }
+    ],
+    "geometri": {
+      "wkt": "LINESTRING Z (123995.67 6483373.56 28.483,123992.01 6483370.58 28.703,123981.75 6483361.57 29.303,123973.86 6483354.5 29.753,123966.53 6483347 30.503,123956.25 6483335.64 31.933,123946.17 6483324.85 33.283,123938.52 6483318.17 34.333,123935.66 6483315.86 34.333)",
+      "srid": 5973
+    },
+    "lengde": 83.612
+  },
+  "relasjoner": {}
+}

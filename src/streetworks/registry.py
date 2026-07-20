@@ -544,11 +544,33 @@ _REGISTRY: list[ProviderEntry] = [
         ),
         credentials=None,
         licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
-        # No "norway" alias, for the same reason vegvesen's was removed:
-        # two providers now cover Norway.
+        # No "norway" alias: Norway now has three providers (this one,
+        # vegvesen, and nvdb) - get_provider("norway") resolves through
+        # the territory-ambiguity path, naming all three.
         _module="streetworks.kartverket",
         _client_name="KartverketClient",
         import_line="from streetworks.kartverket import KartverketClient",
+    ),
+    ProviderEntry(
+        key="nvdb",
+        name="NVDB (Nasjonal vegdatabank)",
+        description="Norway's national road network - link topology and address placements.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Norway"}),
+        scope_note=(
+            "The counterpart to kartverket's addresses. veglenkesekvenser (link "
+            "sequences) are purely topological, no name of their own; naming/addressing "
+            "lives in a separate Adresse road-object type carrying the same adressekode "
+            "kartverket already models - a real join, not a name match, and one address "
+            "can span several link sequences. See the module docstring."
+        ),
+        credentials=None,
+        licence="Norsk lisens for offentlige data (NLOD) 1.0",
+        # No "norway" alias, for the same reason kartverket's was removed:
+        # three providers now cover Norway.
+        _module="streetworks.nvdb",
+        _client_name="NVDBClient",
+        import_line="from streetworks.nvdb import NVDBClient",
     ),
     ProviderEntry(
         key="nwb",
@@ -714,8 +736,8 @@ _REGISTRY: list[ProviderEntry] = [
         licence_confirmed=False,  # blocked on credentials for Phase 2, see module docstring
         source_grade="operator",
         verified=False,
-        # No "norway" alias: Norway now has two providers (this one and the
-        # kartverket gazetteer) - get_provider("norway") resolves through
+        # No "norway" alias: Norway now has three providers (this one,
+        # kartverket, and nvdb) - get_provider("norway") resolves through
         # the territory-ambiguity path instead, same as "france".
         _module="streetworks.datex2",
         _client_name="VegvesenClient",
