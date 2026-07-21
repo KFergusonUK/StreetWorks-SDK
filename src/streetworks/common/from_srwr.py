@@ -17,6 +17,22 @@ file-section reference data, not activity data), so they can't be read off
 ``iter_records(source, record_types=["099"])``) via ``districts``; without
 one, the bare district ID is used - still genuinely provider-stated, just
 undecoded, rather than left empty.
+
+**``WorksSite.street_ref`` is deliberately left ``None`` here** (streetworks
+0.8.0's canonical-gazetteer/works connection point) - checked against real
+data before writing this, per that design brief's own instruction. SRWR
+*does* state street identity (record type ``004``, ``activity.streets``:
+each carries its own ``usrn`` plus ``is_provisional``/
+``provisional_street_details``), but at the *activity* level, and an
+activity can genuinely carry more than one real ``004`` record with no
+``phase_number`` or other field joining a given street to a given phase.
+The header's own ``001.usrn`` (used for ``Works.location_usrn`` above) is
+a single value that may not represent every phase where an activity spans
+several real streets. Copying either onto every ``WorksSite.street_ref``
+would state a per-site link this source doesn't actually make - the
+name-is-not-a-join rule's identifier-side equivalent. If SRWR's real data
+turns out to make phase-to-street attribution possible after all (e.g. a
+future extract version adds a join key), this is the place to revisit.
 """
 
 from __future__ import annotations

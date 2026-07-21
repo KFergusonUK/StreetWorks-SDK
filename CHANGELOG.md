@@ -35,6 +35,62 @@
 
 ### Added
 
+- **Canonical gazetteer model: `Street`, `Segment`, `Address`**
+  (`streetworks.common.gazetteer`) - the gazetteer equivalent of what
+  `Works`/`WorksSite` did for roadworks at 0.5.0, designed after the eight
+  native street/address adapters (`datavia`, `openusrn`, `bdtopo`, `nvdb`,
+  `nwb`, `ban`, `bag`, `kartverket`), from their real shapes, closing the
+  international-gazetteers strand's design-session exit condition. Additive
+  only - native interfaces unchanged. New converters:
+  `from_datavia`/`from_openusrn`/`from_bdtopo`/`from_nvdb`/`from_nwb`/
+  `from_ban`/`from_bag`/`from_kartverket`.
+  **Three types, not two**: `Segment` is independent of `Street`, not a
+  child of it - real data proves street/segment is many-to-many, not
+  one-to-many (a real DataVIA ESU, `esuid` `4276210541888`, belongs to two
+  distinct designated streets at once - Church Street and Church Street
+  Villas, Durham; NVDB's real "Dalveien" address spans two
+  topologically-unrelated `veglenkesekvenser`).
+  **No synthetic streets**: `from_nwb` emits no `Street` at all - NWB
+  states segments with a `bag_orl` reference, but this SDK's only built BAG
+  route has no street row to be a `Street`, so Dutch street names arrive
+  only via `Address.street_name`, a real gap flagged rather than worked
+  around.
+  **`Coordinate` gained two additive fields**: every point may now be a
+  2-tuple or 3-tuple (Z survives, e.g. NVDB's real `LINESTRING Z` under
+  EPSG:5973, never defaulted to 0), and a new `parts` field holds a real
+  `MultiLineString`'s other lines (DataVIA's `StreetLines`) - existing
+  2-tuple-only converters are unaffected.
+  **`WorksSite` gained `street_ref: Identifier | None`** - populated from
+  Street Manager's per-permit USRN; investigated and deliberately left
+  `None` for SRWR, which states street identity only at the activity
+  level (record type `004`) with no phase/site join, so populating it
+  would have fabricated a link the source doesn't make.
+  **Two design-brief assumptions corrected against real data**: the brief
+  expected `Segment.names` to be BD-TOPO-only, but NWB's real `stt_naam`
+  (even purely-numbered roads carry one, e.g. a real A79 motorway segment)
+  populates it too; and DataVIA's real ESU schema (confirmed via WFS
+  `DescribeFeatureType`, live, mid-session) has *no name field at all*,
+  closing the brief's own open question about whether a real named
+  sub-street ("Anchorage Terrace", part of Church Street, Durham) is
+  recoverable from DataVIA at any level - it isn't, structurally, not just
+  unpopulated.
+  **Native promotions**: `nwb.Wegvak` gained `wvk_begdat` and six real
+  house-number-range fields (`hnrstrlnks`/`hnrstrrhts`/`e_hnr_lnks`/
+  `e_hnr_rhts`/`l_hnr_lnks`/`l_hnr_rhts`), previously only in `.raw`;
+  `nvdb.Veglenke` gained `type_veg`/`type_veg_sosi` (the real `typeVeg`/
+  `typeVeg_sosi` road-classification fields), likewise promoted from
+  `.raw`.
+  **New real fixtures**: two real DataVIA `StreetLines` payloads (Carr
+  Street USRN 33909869, Church Street USRN 11713561) and a real
+  `ESUStreets` payload, captured live this session with Durham-scoped
+  credentials (field shapes are national, confirmed via
+  `DescribeFeatureType`; field values are local to Durham) - DataVIA had no
+  fixture of any kind before this. A synthetic, clearly-labelled bilingual
+  fixture (Durham has no Welsh street names) exercises the `_eng`/`_cym`
+  name-pair path.
+  See `docs/gazetteer-field-dump.md` for the full field-by-field survey
+  this model was built from.
+
 - **Norway: NVDB (Nasjonal vegdatabank)** (`streetworks.nvdb`) - the
   fourth non-UK street-geometry provider, native only, the
   `kind="streets"` counterpart to `kartverket`'s `kind="addresses"`, and

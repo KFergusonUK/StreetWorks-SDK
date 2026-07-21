@@ -145,7 +145,23 @@ pull is blocked pending credentials. It ships as a scaffold and is
 excluded from the verified-providers claim above; see the module
 docstring for precisely what's confirmed vs. still open. **If you have
 Statens vegvesen API credentials, running the smoke test against it and
-reporting back would be a genuinely valuable contribution.**
+reporting back would be a genuinely valuable contribution.** Free;
+[request access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/)
+to the "Road traffic information" publication (nationwide — roadworks,
+closures, accidents, weather events); registration issues a username and
+password, not an API key (see `VEGVESEN_USERNAME`/`VEGVESEN_PASSWORD` in
+`.env.example`). Licensed under NLOD — credit the Norwegian Public Roads
+Administration (NPRA/Statens vegvesen) as source.
+
+**Before concluding this adapter is broken, check the DATEX version your
+credentials actually serve.** This scaffold targets v3.1
+(`datex-server-get-v3-1.atlas.vegvesen.no`, confirmed live since
+2023-02-01), but data.norge.no's own service catalogue still describes
+Statens vegvesen's DATEX offering as v2.0, with older services running in
+parallel pending phase-out. If what you're issued turns out to serve v2 (or
+the v2 endpoint is what's actually reachable), that's a version/endpoint
+mismatch to fix, not evidence the parser-reuse hypothesis is wrong — see the
+module docstring's "What's still open" list.
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -195,6 +211,7 @@ never in code.
 | DataVIA | A [Geoplace DataVIA](https://datavia.geoplace.co.uk/) account (username/password) or issued OAuth2 client credentials | `DATAVIA_USER` + `DATAVIA_PASSWORD`, or `DATAVIA_CLIENT_ID` + `DATAVIA_CLIENT_SECRET` |
 | D-TRO | Register an application via the [D-TRO service](https://d-tro.dft.gov.uk/) for an app id and OAuth2 client credentials (integration first, then production) | `DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID` |
 | National Highways | Free account at the [developer portal](https://developer.data.nationalhighways.co.uk/) — create a "Subscription" for an API key | `NH_SUBSCRIPTION_KEY` |
+| Statens vegvesen (Norway, DATEX II) — **pending live verification, see below** | Free; [request access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/) to the "Road traffic information" publication — registration issues a username/password, not an API key | `VEGVESEN_USERNAME` + `VEGVESEN_PASSWORD`, or `VEGVESEN_TOKEN` (Bearer) |
 
 Credentials are **per-environment** — sandbox/integration credentials do not
 work against production, and vice versa.
@@ -1355,6 +1372,96 @@ safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
 actually is.
 
+## Canonical gazetteer model (`Street`, `Segment`, `Address`)
+
+The gazetteer equivalent of the works model above — canonical types for the
+eight street/address providers (`datavia`, `openusrn`, `bdtopo`, `nvdb`,
+`nwb`, `ban`, `bag`, `kartverket`), designed *after* those native adapters,
+from their real shapes, the same way `Works`/`WorksSite` was at 0.5.0. Same
+rule: additive only, never replacing the native interfaces, `.raw` always
+points back at the source.
+
+```python
+from streetworks.common import from_bdtopo
+from streetworks.bdtopo.models import troncon_from_feature
+
+troncon = troncon_from_feature(feature)  # one WFS feature
+segment = from_bdtopo(troncon)
+print(segment.names[0].value, segment.street_refs, segment.geometry.crs)
+```
+
+**Three types, not two.** `Segment` is independent, not a child list of
+`Street` — real data proves the relationship is many-to-many, not
+one-to-many: a real DataVIA ESU (`esuid` `4276210541888`, Durham) belongs to
+*two* distinct designated streets at once (`usrns="11713562;11713561"` —
+Church Street and Church Street Villas), and NVDB's real "Dalveien" address
+spans two topologically-unrelated `veglenkesekvenser`. Containment would
+misstate both, so `Segment.street_refs` and `Street.segment_refs` are both
+plural lists of `Identifier`, resolved by the caller, never nested.
+
+**The trim test.** This model serves exactly three use cases — plotting
+streets on a map, linking streets to roadworks, and pulling street names
+from address gazetteers — and no more; anything more complex is expected to
+use the native interfaces directly shown earlier in this README. A field
+only exists here if it serves one of those three, *or* a source states it
+and dropping it would lose real data (this project's evidence discipline
+never drops stated data) — where those conflict, the field stays and is
+marked optional.
+
+**No synthetic streets.** A `Street` is only ever emitted by a provider
+that publishes a street entity — never derived by grouping addresses or
+segments. Consequence, stated plainly: `from_nwb` emits **no `Street` at
+all** — NWB publishes segments with a `bag_orl` reference, and this SDK's
+only built BAG route (the light GeoPackage) has no street row of its own to
+be a `Street` (only the not-built full XML extract does). So Dutch street
+names reach this model only via `Address.street_name`, never a Dutch
+`Street` — a real gap with a real fix waiting, not a design flaw.
+
+`Identifier.scope` matters because most European street/address
+identifiers are *municipality-scoped*, not nationally unique — BAN's
+derived `toponyme_id` splits at commune boundaries, and Kartverket's real
+`adressekode` reuses the same numeric code for unrelated streets in
+different kommuner (confirmed live: "Karl Johans gate 1" resolves to three
+different real addresses across three municipalities, each its own
+`adressekode` — 15100/13630/3620). An unscoped identifier is a trap;
+`scope` is what makes comparing two `Identifier`s safe.
+
+Some fields are stated by only one provider so far — `Segment.names` (NWB's
+`stt_naam` too, in practice, despite this being written up during design as
+a BD-TOPO-only field — see `from_nwb`'s docstring) and
+`Segment.address_ranges` (NWB's six real house-number-range fields) are the
+weakest, single-source points in this model; kept because stated data is
+never dropped, not because they're load-bearing everywhere.
+
+`WorksSite.street_ref` (an `Identifier`, singular) is this model's
+connection back to the works side: Street Manager states a USRN per permit
+row, so `from_streetmanager` populates it directly. SRWR was checked, not
+assumed — it states street identity too (record type `004`), but at the
+*activity* level, with no field joining a given street to a given phase, so
+`from_srwr` deliberately leaves `street_ref` `None` rather than
+guessing which of possibly several real streets a phase belongs to.
+
+Two additions to `Coordinate`, both additive: every point may be a 2-tuple
+or a 3-tuple (`(x, y)` or `(x, y, z)`) — Z survives where a source states it
+(NVDB's real `LINESTRING Z` under EPSG:5973, a compound 3D CRS), never
+defaulted to 0 where it's absent — and a new `parts` field holds a real
+`MultiLineString`'s other lines (DataVIA's `StreetLines`: one street
+aggregating several ESUs' geometry) — `value`/`points` still describe the
+first part alone, so every existing point/line consumer keeps working
+unchanged.
+
+Out of scope, deliberately: linear referencing/extents (NVDB's fractional
+`startposisjon`/`sluttposisjon` is the only real candidate, and even it
+isn't modelled here), sub-name street extents (investigated and closed —
+DataVIA's own ESU schema has no name field at all, so a real local name
+like "Anchorage Terrace" for part of Church Street, Durham, isn't
+recoverable from this source at any level), a `unit`/flat concept (no
+built source has one — addresses use `housenumber`+`suffix`, e.g. BAN's
+real `numero`+`suffixe` decomposition, `4`+`"bis"`), and reprojection
+(CRS is always labelled as given, varying by *route* as well as provider —
+BD TOPO's WFS states WGS84, its bulk GeoPackage is documented, not
+independently confirmed, as Lambert-93).
+
 ## Design principles
 
 1. **Never block the user.** Typed methods for confirmed, common endpoints;
@@ -1604,7 +1711,10 @@ actually is.
       — **Phase 1 scaffold built, pending live verification.** Blocked on
       credentials for the actual authenticated pull; not usable against
       real Norwegian data yet — see the module docstring for what's confirmed
-      vs. still open
+      vs. still open. Free access request, credentials/env vars and the
+      known v2-vs-v3.1 version caveat are documented in the credentials
+      section above and `.env.example` — check the version actually served
+      before concluding the adapter itself is broken
 - [ ] Further DATEX II adapters: Mobilithek (DE), transport.data.gouv.fr (FR)
       — per-NAP verification needed
 - [x] **WZDx (US Work Zone Data Exchange)** parser (`streetworks.wzdx`,
@@ -1669,10 +1779,12 @@ others in a real, load-bearing way:
   Norway's two spines aren't nested the same way France's are, despite
   both being called "two-level."
 
-That's the exit condition this strand set for itself. A canonical-gazetteer
-design session is the natural next step, before further gazetteers (Spain
-Catastro, Germany Geoportal, Portugal SNIG, the UK GeoPlace gazetteer SOAP
-API) get built against a shape that isn't settled yet. Germany's own state
+That's the exit condition this strand set for itself, and the
+canonical-gazetteer design session it called for has now happened — see
+[Canonical gazetteer model](#canonical-gazetteer-model-street-segment-address)
+above. Further gazetteers (Spain Catastro, Germany Geoportal, Portugal
+SNIG, the UK GeoPlace gazetteer SOAP API) now have a settled shape to build
+against. Germany's own state
 gazetteers are commonly published the same way as the regional roadworks
 above (WFS/OGC API Features) — `streetworks.ogc`'s `OGCFeaturesClient` was
 deliberately kept generic (GeoJSON in, features out, CRS-aware, nothing

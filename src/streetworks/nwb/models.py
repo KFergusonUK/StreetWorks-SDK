@@ -126,6 +126,11 @@ class Wegvak:
     """One NWB road segment (wegvak) - a *part* of a street, not a street
     itself; see the module docstring for how they group. Every field not
     promoted here (there are ~55 real columns) is preserved in ``.raw``.
+
+    ``wvk_begdat`` and the six ``*hnr*`` fields were promoted from ``.raw``
+    for the canonical-gazetteer model (``as_at``/``address_ranges`` -
+    see :mod:`streetworks.common.gazetteer`): real, present in every
+    sampled fixture, previously only reachable via ``.raw``.
     """
 
     wvk_id: int
@@ -146,6 +151,13 @@ class Wegvak:
     jte_id_beg: int | None
     jte_id_end: int | None
     rijrichtng: str | None
+    wvk_begdat: str | None = None
+    hnrstrlnks: str | None = None
+    hnrstrrhts: str | None = None
+    e_hnr_lnks: int | None = None
+    e_hnr_rhts: int | None = None
+    l_hnr_lnks: int | None = None
+    l_hnr_rhts: int | None = None
     geometry: str | None = None
     raw: dict[str, Any] = field(default_factory=dict)
 
@@ -202,6 +214,13 @@ def wegvak_from_row(row: dict[str, Any], *, geometry: str | None = None) -> Wegv
         jte_id_beg=_int_or_none(row.get("jte_id_beg")),
         jte_id_end=_int_or_none(row.get("jte_id_end")),
         rijrichtng=_str_or_none(row.get("rijrichtng")),
+        wvk_begdat=_str_or_none(row.get("wvk_begdat")),
+        hnrstrlnks=_str_or_none(row.get("hnrstrlnks")),
+        hnrstrrhts=_str_or_none(row.get("hnrstrrhts")),
+        e_hnr_lnks=_int_or_none(row.get("e_hnr_lnks")),
+        e_hnr_rhts=_int_or_none(row.get("e_hnr_rhts")),
+        l_hnr_lnks=_int_or_none(row.get("l_hnr_lnks")),
+        l_hnr_rhts=_int_or_none(row.get("l_hnr_rhts")),
         geometry=geometry,
         raw=dict(row),
     )

@@ -112,3 +112,16 @@ def test_from_srwr_decodes_administrative_area_when_districts_map_given():
     activity = next(iter_activities(io.StringIO(SECTION)))
     works = from_srwr(activity, districts={9066001: "Fife Council"})
     assert works.administrative_area == "Fife Council"
+
+
+def test_from_srwr_leaves_site_street_ref_none_despite_a_stated_header_usrn():
+    # streetworks 0.8.0: SRWR states street identity (001.usrn, used for
+    # Works.location_usrn above, and separately real 004 "streets" records)
+    # but never ties it to a specific phase/site - so WorksSite.street_ref
+    # stays None rather than copying the activity-level usrn onto every
+    # site, which could misattribute street identity where an activity
+    # spans more than one real street. See from_srwr's module docstring.
+    activity = next(iter_activities(io.StringIO(SECTION)))
+    works = from_srwr(activity)
+    assert works.location_usrn == "84202034"  # stated at the Works level
+    assert works.sites[0].street_ref is None  # not attributed per-site

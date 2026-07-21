@@ -112,11 +112,34 @@ Administration (Statens vegvesen)" per NLOD's attribution requirement
 wherever Norwegian roadworks data from this module is displayed or
 redistributed.
 
+**Credentials**: free; request access to the "Road traffic information"
+publication (nationwide - roadworks, closures, accidents, weather events)
+at
+`vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access
+<https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/>`_.
+Registration issues a **username and password**, not an API key - see
+:class:`VegvesenClient`'s ``username``/``password`` (or ``token``, unconfirmed
+which scheme is actually issued - see "Auth" above). Env vars:
+``VEGVESEN_USERNAME``/``VEGVESEN_PASSWORD`` or ``VEGVESEN_TOKEN`` (see
+``.env.example``, ``scripts/smoke_test.py``).
+
+**A version discrepancy to check before assuming this adapter is broken**:
+this module targets v3.1 (confirmed live at ``BASE_URL``, available since
+2023-02-01 per Statens vegvesen's own release notes), but data.norge.no's
+own service catalogue still describes Statens vegvesen's DATEX offering as
+**v2.0**, with older services said to be running in parallel pending
+phase-out. Whether real issued credentials serve v3.1 at the endpoint this
+module targets, or land on a v2 service instead, is exactly item 1 below -
+**a tester should confirm the served version first**, since a mismatch
+there would look like a broken adapter but actually be a wrong endpoint/
+version for the credentials in hand.
+
 **What's still open until Phase 2** (a real credentialed pull):
 
-1. The exact DATEX version actually served (WSDL says v3.1; the roadworks
-   *profile* details - which optional elements Norway populates - are
-   unconfirmed).
+1. The exact DATEX version actually served (WSDL says v3.1; data.norge.no's
+   catalogue still says v2.0 with legacy services in parallel - see above;
+   the roadworks *profile* details - which optional elements Norway
+   populates - are unconfirmed either way).
 2. Whether the existing shared parser handles a real Norwegian response
    unchanged, or needs adjustment (e.g. for an NVDB-specific location
    extension the Iceland fixture didn't exercise).

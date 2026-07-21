@@ -15,7 +15,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from streetworks.common import DateConfidence, SourceGrade, from_streetmanager
+from streetworks.common import DateConfidence, Identifier, SourceGrade, from_streetmanager
 
 FIXTURE = json.loads(
     (Path(__file__).parent / "fixtures" / "streetmanager_permits_sandbox.json").read_text(
@@ -111,3 +111,14 @@ def test_forward_plan_attaches_to_an_existing_works_when_reference_matches():
     assert works.plannings[0].kind == "forward_plan"
     # No extra free-standing Works was added - the plan attached in place.
     assert all(w.reference is not None for w in works_list)
+
+
+def test_works_site_street_ref_populated_from_real_usrn():
+    # streetworks 0.8.0: the works<->gazetteer connection point. Street
+    # Manager states a USRN per permit row, so it's the one converter that
+    # can populate WorksSite.street_ref directly - see from_srwr for a real
+    # source that states street identity but can't be attributed per-site.
+    works_list = from_streetmanager(FIXTURE["rows"])
+    by_ref = _works_by_reference(works_list)
+    site = by_ref["UG00065061596"].sites[0]
+    assert site.street_ref == Identifier(scheme="usrn", value="33909869")

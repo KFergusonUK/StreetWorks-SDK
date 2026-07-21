@@ -1,0 +1,51 @@
+{
+  "_fixture_note": "SYNTHETIC - not a real DataVIA response. Durham has no Welsh-named streets, so this fixture is hand-constructed (same real StreetLines field shape as datavia_streetlines_durham.json, invented Welsh values in the _cym fields) purely to exercise the bilingual-name path. Do not treat any value here as a real DataVIA record.",
+  "type": "FeatureCollection",
+  "name": "StreetLines",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "usrn": 90000001,
+        "provider_id": "9999",
+        "provider": "Synthetic",
+        "record_type": "1",
+        "record_type_text": "Designated Street Name",
+        "street_descriptor_eng": "HIGH STREET",
+        "street_descriptor_cym": "STRYD FAWR",
+        "locality_name_eng": "",
+        "locality_name_cym": "",
+        "town_name_eng": "EXAMPLE TOWN",
+        "town_name_cym": "TREF ENGHRAIFFT",
+        "administrative_area": "EXAMPLE",
+        "language": "BIL",
+        "state_code": "2",
+        "state": "Open",
+        "surface_code": "1",
+        "surface": "Metalled",
+        "street_status": "Maintainable at public expense",
+        "street_status_id": "1",
+        "maintaining_authority": "Example Council",
+        "street_start_date": "2014/07/10 00:00:00",
+        "record_entry_date": "2008/04/21 00:00:00",
+        "last_update_date": "2023/07/14 00:00:00",
+        "reinstatement_record": "Carriageway type 4 (up to 0.5 MSA)",
+        "special_surface_record": 0,
+        "special_construction_record": 0,
+        "protected_street_record": 0,
+        "pedestrian_crossings_record": 0,
+        "traffic_sensitive_record": 0,
+        "special_engineering_difficulty_record": 0,
+        "esuids": "9000000000001;9000000000002"
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [ [ -3.5, 51.5 ], [ -3.501, 51.501 ] ],
+          [ [ -3.501, 51.501 ], [ -3.502, 51.502 ] ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+    "type": "FeatureCollection",
+    "name": "ESUStreets",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "esuid": 4276210541888,
+                "esuidstring": "4276210541888",
+                "provider_id": "1355",
+                "provider_name": "Durham",
+                "one_way": 0,
+                "national_cycle_route": 0,
+                "national_cycle_route_number": "",
+                "prow": 0,
+                "prow_number": "",
+                "highway_dedication_code_text": "All vehicles",
+                "highway_dedication_code": "8",
+                "one_way_exemption": 0,
+                "road_classification": "C98",
+                "works_prohibited": 0,
+                "planning_order": 0,
+                "obstruction": 0,
+                "quiet_route": 0,
+                "usrns": "11713562;11713561;11713562;11713561",
+                "last_update_date": "2008/04/21 00:00:00",
+                "record_entry_date": "2008/04/21 00:00:00"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -1.5720342,
+                        54.7714618
+                    ],
+                    [
+                        -1.5720889,
+                        54.7713301
+                    ],
+                    [
+                        -1.5722791,
+                        54.7709802
+                    ],
+                    [
+                        -1.5723581,
+                        54.7708547
+                    ],
+                    [
+                        -1.5728788,
+                        54.7701196
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "esuid": 4276410541965,
+                "esuidstring": "4276410541965",
+                "provider_id": "1355",
+                "provider_name": "Durham",
+                "one_way": 0,
+                "national_cycle_route": 0,
+                "national_cycle_route_number": "",
+                "prow": 0,
+                "prow_number": "",
+                "highway_dedication_code_text": "All vehicles",
+                "highway_dedication_code": "8",
+                "one_way_exemption": 0,
+                "road_classification": "C98",
+                "works_prohibited": 0,
+                "planning_order": 0,
+                "obstruction": 0,
+                "quiet_route": 0,
+                "usrns": "11713561",
+                "last_update_date": "2015/07/07 00:00:00",
+                "record_entry_date": "2015/07/07 00:00:00"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -1.5716597,
+                        54.7722272
+                    ],
+                    [
+                        -1.5717137,
+                        54.7721364
+                    ],
+                    [
+                        -1.5717543,
+                        54.7720555
+                    ],
+                    [
+                        -1.5718121,
+                        54.7719444
+                    ],
+                    [
+                        -1.5719169,
+                        54.7717294
+                    ],
+                    [
+                        -1.5720342,
+                        54.7714618
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "esuid": 4276710542051,
+                "esuidstring": "4276710542051",
+                "provider_id": "1355",
+                "provider_name": "Durham",
+                "one_way": 0,
+                "national_cycle_route": 0,
+                "national_cycle_route_number": "",
+                "prow": 0,
+                "prow_number": "",
+                "highway_dedication_code_text": "All vehicles",
+                "highway_dedication_code": "8",
+                "one_way_exemption": 0,
+                "road_classification": "C98",
+                "works_prohibited": 0,
+                "planning_order": 0,
+                "obstruction": 0,
+                "quiet_route": 0,
+                "usrns": "11713561",
+                "last_update_date": "2008/04/21 00:00:00",
+                "record_entry_date": "2008/04/21 00:00:00"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -1.5711076,
+                        54.7729891
+                    ],
+                    [
+                        -1.571218,
+                        54.7728367
+                    ],
+                    [
+                        -1.571344,
+                        54.7726844
+                    ],
+                    [
+                        -1.5714386,
+                        54.7725589
+                    ],
+                    [
+                        -1.5716124,
+                        54.7722899
+                    ],
+                    [
+                        -1.5716597,
+                        54.7722272
+                    ]
+                ]
+            }
+        }
+    ]
+}

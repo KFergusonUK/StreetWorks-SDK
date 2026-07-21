@@ -89,7 +89,15 @@ def _egenskaper_by_name(egenskaper: list[dict[str, Any]]) -> dict[str, Any]:
 class Veglenke:
     """One sub-link within a :class:`Veglenkesekvens` - the actual
     geometry-bearing unit, with its own linear-referencing range on the
-    parent sequence. Every field not promoted here is in ``.raw``."""
+    parent sequence. Every field not promoted here is in ``.raw``.
+
+    ``type_veg``/``type_veg_sosi`` (the real ``typeVeg``/``typeVeg_sosi``
+    fields) were promoted from ``.raw`` for the canonical-gazetteer model
+    (``street_type`` - see :mod:`streetworks.common.gazetteer`): real road
+    classification (e.g. ``"Enkel bilveg"``/``"enkelBilveg"``), previously
+    only reachable via ``.raw``. Carried as stated, undecoded - a plain
+    label plus a parallel SOSI code string, not a code needing a lookup.
+    """
 
     veglenkenummer: int | None
     type: str | None
@@ -99,6 +107,8 @@ class Veglenke:
     kommune: int | None
     geometry: str | None
     srid: int | None
+    type_veg: str | None = None
+    type_veg_sosi: str | None = None
     raw: dict[str, Any] = field(default_factory=dict)
 
 
@@ -156,6 +166,8 @@ def _veglenke_from_json(v: dict[str, Any]) -> Veglenke:
         kommune=geometri.get("kommune"),
         geometry=geometri.get("wkt"),
         srid=geometri.get("srid"),
+        type_veg=v.get("typeVeg"),
+        type_veg_sosi=v.get("typeVeg_sosi"),
         raw=v,
     )
 

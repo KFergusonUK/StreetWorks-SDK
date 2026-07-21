@@ -27,7 +27,10 @@ from typing import Any
 __all__ = [
     "SourceGrade",
     "DateConfidence",
+    "Point2D",
+    "Point3D",
     "Coordinate",
+    "Identifier",
     "Notice",
     "WorksSite",
     "WorksPlanning",
@@ -53,6 +56,10 @@ class DateConfidence(str, Enum):
     UNKNOWN = "unknown"  #: no date signal firm enough to grade
 
 
+Point2D = tuple[float, float]
+Point3D = tuple[float, float, float]
+
+
 @dataclass(frozen=True)
 class Coordinate:
     """A location value plus its coordinate reference system, explicit and
@@ -68,11 +75,58 @@ class Coordinate:
     ``LinearLocation``/TPEG segment), it holds every vertex in the same
     order/axis convention as ``value``, with ``points[0] == value`` always.
     Populated only where a converter has real multi-vertex geometry to give
-    - never synthesised from a single point."""
+    - never synthesised from a single point.
 
-    value: tuple[float, float]
+    **Z (added for the canonical-gazetteer model, streetworks 0.8.0):** every
+    point - in ``value``, ``points``, or ``parts`` - is either a 2-tuple
+    ``(x, y)`` or a 3-tuple ``(x, y, z)``. Additive and backwards-compatible:
+    every existing converter still produces plain 2-tuples, unchanged. Z
+    appears where a source states genuine 3D geometry (NVDB's real
+    ``LINESTRING Z`` under EPSG:5973, a compound CRS - UTM33N + the NN2000
+    height datum, already carried in the CRS label, so no separate datum
+    field is needed) - never defaulted to 0 where a source is 2D, since a
+    fabricated zero is indistinguishable from real sea level.
+
+    **``parts`` (added alongside Z):** ``None`` for a single-line/point
+    geometry (the existing, still-default shape). Populated only where a
+    source states a genuine ``MultiLineString`` (DataVIA's ``StreetLines``:
+    one ``Street`` aggregates several ESUs' worth of line geometry in one
+    real MultiLineString) - each element is one part's ordered vertex tuple,
+    in source order. ``value``/``points`` still describe the *first* part
+    alone, so point-only and single-line consumers keep working unchanged;
+    ``parts`` is the only place the other parts live. **Positional
+    correspondence between ``parts`` and any sibling id list (e.g.
+    ``Street.segment_refs`` from DataVIA's ``esuids``) is never assumed by
+    this type or by any converter** - verify it against real data before
+    relying on it, per the same source.
+    """
+
+    value: Point2D | Point3D
     crs: str
-    points: tuple[tuple[float, float], ...] | None = None
+    points: tuple[Point2D | Point3D, ...] | None = None
+    parts: tuple[tuple[Point2D | Point3D, ...], ...] | None = None
+
+
+@dataclass(frozen=True)
+class Identifier:
+    """One identifier a source states for something - a street, segment or
+    address. Lives here (not in :mod:`.gazetteer`) because it's shared by
+    :class:`WorksSite.street_ref` as well as every gazetteer type.
+
+    ``scope`` records the uniqueness scope, which matters because most
+    European street/address identifiers are *municipality-scoped*, not
+    nationally unique (BAN's ``toponyme_id`` splits at commune boundaries;
+    Kartverket's ``adressekode`` is per-kommune, and the same code is real
+    and reused for unrelated streets in different kommuner - confirmed live,
+    e.g. code 1300 means different streets in different municipalities). A
+    field called "identifier" holding a non-unique value on its own is a
+    trap; ``scope`` (e.g. the commune/kommune code) is what makes it safe to
+    compare. ``None`` where a source's identifier genuinely is nationally
+    unique (e.g. DataVIA/OS Open USRN's ``usrn``, BD TOPO's ``cleabs``)."""
+
+    scheme: str
+    value: str
+    scope: str | None = None
 
 
 @dataclass
@@ -92,7 +146,21 @@ class WorksSite:
     """A dated, actionable unit of works - the primary query surface
     ("what's happening on road X, when"). Emitted wherever the source
     genuinely carries dates/closure information, even if best-effort
-    extracted; never fabricated where the source has none."""
+    extracted; never fabricated where the source has none.
+
+    ``street_ref`` (streetworks 0.8.0, the gazetteer-model connection point)
+    is singular, unlike ``Segment.street_refs`` - a UK permit is per-USRN by
+    statute (a job spanning two streets is several ``WorksSite`` records
+    under one ``Works``), so singular reflects every built provider's real
+    data, not a structural guarantee. **Populated only where a source states
+    a street identifier** - Street Manager states a USRN per permit; most
+    DATEX providers state a road name/number and no identifier, so those
+    populate nothing here, per the name-is-not-a-join rule. Real data
+    already found one source (SRWR) that states street identity at the
+    *activity* level, potentially for more than one real street, with no
+    stated per-phase/per-site join back to a specific ``WorksSite`` - see
+    :mod:`.from_srwr`'s docstring for why that source leaves this ``None``
+    rather than guessing which site a given street belongs to."""
 
     reference: str | None = None
     works_type: str | None = None
@@ -100,6 +168,7 @@ class WorksSite:
     location_usrn: str | None = None
     location_description: str | None = None
     coordinate: Coordinate | None = None
+    street_ref: Identifier | None = None
     proposed_start: datetime | None = None
     proposed_end: datetime | None = None
     actual_start: datetime | None = None

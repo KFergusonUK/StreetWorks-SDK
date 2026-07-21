@@ -24,6 +24,11 @@ and no field in the reporting response states which UK nation a permit is
 in, so there's nothing to key off if Welsh authorities also report through
 it. ``administrative_area`` comes straight off ``highway_authority``, which
 every observed row carries.
+
+``WorksSite.street_ref`` (streetworks 0.8.0) is populated from each row's own
+``usrn`` - every permit row carries one, genuinely per-site (unlike SRWR,
+see :mod:`.from_srwr`), so this is the one converter where a stated,
+per-``WorksSite`` street identifier is available.
 """
 
 from __future__ import annotations
@@ -32,7 +37,15 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any
 
-from .models import Coordinate, DateConfidence, SourceGrade, Works, WorksPlanning, WorksSite
+from .models import (
+    Coordinate,
+    DateConfidence,
+    Identifier,
+    SourceGrade,
+    Works,
+    WorksPlanning,
+    WorksSite,
+)
 
 __all__ = ["from_streetmanager"]
 
@@ -85,6 +98,12 @@ def _date_confidence(
     return DateConfidence.UNKNOWN
 
 
+def _street_ref(usrn: Any) -> Identifier | None:
+    """USRN is nationally unique (no ``scope`` needed) - see
+    :class:`~streetworks.common.models.Identifier`."""
+    return Identifier(scheme="usrn", value=str(usrn)) if usrn is not None else None
+
+
 def _to_site(row: JSON) -> WorksSite:
     actual_start = _dt(row.get("actual_start_date"))
     proposed_start = _dt(row.get("proposed_start_date"))
@@ -95,6 +114,7 @@ def _to_site(row: JSON) -> WorksSite:
         location_usrn=str(row["usrn"]) if row.get("usrn") is not None else None,
         location_description=row.get("location_description") or row.get("street"),
         coordinate=_coordinate(row.get("works_coordinates")),
+        street_ref=_street_ref(row.get("usrn")),
         proposed_start=proposed_start,
         proposed_end=_dt(row.get("proposed_end_date")),
         actual_start=actual_start,
