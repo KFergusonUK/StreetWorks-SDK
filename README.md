@@ -75,6 +75,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
+| `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
@@ -1158,6 +1159,103 @@ all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
 field-by-field mapping and every state's exact attribution text.
 
+## Jersey RoadWorkx and TIGERweb (ArcGIS REST)
+
+The third client shape in this SDK, after the DATEX/JSON adapters and
+`OGCFeaturesClient`: `ArcGISFeatureClient` fetches/pages GeoJSON from any
+ArcGIS REST `MapServer`/`FeatureServer` layer — no GDAL, no shapefile, no
+file geodatabase. Built fresh for this protocol, not a generalisation of
+`OGCFeaturesClient` or `DataViaClient` — they share almost nothing but
+"fetches geodata over HTTP."
+
+**Pagination is the real trap this client exists to handle — verified live
+against two genuinely different real services, not assumed from either
+one alone.** Jersey's real `RoadWorks` layer states
+`supportsPagination: false`, and it's telling the truth in an unusually
+literal way: a live `resultOffset` request returns HTTP 200 with a
+plausible page of records, but it's silently the *same* first page every
+time, at any offset — confirmed at offsets 0/500/1000/2000/21000. The real
+total is 22,105 records behind a `maxRecordCount` of 1,000 — a naive
+one-shot query silently returns under 5% of the data with no error.
+TIGERweb's layers state (and, verified live, genuinely honour)
+`supportsPagination: true`. `ArcGISFeatureClient.iter_features` doesn't
+trust the metadata either way — it verifies live, by comparing the first
+two pages fetched with different offsets, and falls back to object-id-range
+paging (`WHERE {oid_field} > {last} ORDER BY {oid_field}` — confirmed live
+to genuinely work for Jersey) the moment offset-paging fails to advance.
+If neither strategy is usable, it raises `TruncatedResultError` rather than
+silently handing back a partial result.
+
+```python
+from streetworks.arcgis.jersey import JerseyRoadworksClient
+from streetworks.common import from_jersey
+
+with JerseyRoadworksClient() as jersey:
+    works_list = from_jersey(list(jersey.iter_roadworks()))
+for works in works_list:
+    print(works.reference, len(works.sites), works.administrative_area)
+```
+
+Jersey RoadWorkx — this SDK's first Channel Islands coverage — groups real
+`RoadWorks` features by `PROJID` into one `Works` per project (confirmed
+live: `NAME`/`PROJID` are always identical, and several `JOBID`s share one
+`PROJID` — the same real shape as Street Manager's
+`work_reference_number`/`permit_reference_number`). The real `STATUS`
+field (`"In Progress"`/`"Finished"`/`"Pending"`) *is* the planned/future
+dimension — `"Pending"` records land on `proposed_start`/`proposed_end`
+with `ESTIMATED` confidence, no separate layer or type needed. Geometry is
+real `EPSG:3109` ("ETRS89 / Jersey Transverse Mercator") — confirmed live
+via a sibling service on the same deployment that states the `wkid`
+directly, cross-checked byte-for-byte against EPSG:3109's own published
+WKT parameters; `outSR` is **not** honoured by this service (confirmed
+live), so this is carried through exactly as received, never reprojected.
+**No explicit licence document found** — no `copyrightText` anywhere on the
+service, not catalogued on Jersey's own open-data portal, and the
+public-facing site gates behind a login even though the ArcGIS REST API
+itself needs none — but the service is openly, unauthenticatedly
+queryable by design and Jersey's data is confirmed intended for open
+public consumption, so real, live-captured records are committed as this
+module's test fixtures, the same basis Autobahn GmbH's roadworks shipped
+on; see `streetworks/arcgis/jersey.py`'s module docstring.
+
+```python
+from streetworks.arcgis.tigerweb import TIGERwebClient, LOCAL_ROADS_LAYER
+from streetworks.common import from_tigerweb
+
+dc_bbox = (-77.05, 38.89, -77.03, 38.91)  # (xmin, ymin, xmax, ymax), WGS84
+with TIGERwebClient() as tiger:
+    segments = [from_tigerweb(f) for f in tiger.iter_roads(LOCAL_ROADS_LAYER, bbox=dc_bbox)]
+```
+
+TIGERweb (US Census Bureau) is a statistical/cartographic product, not a
+legal street register — there's no USRN equivalent; real identifiers
+(`OID`, a TIGER/Line TLID-shaped string) are dataset-scoped, exactly what
+`Identifier.scope` exists for. Layers 0–9 are a real cartographic scale
+pyramid, not distinct road classes — confirmed live by comparing feature
+counts (layers 1/2 both report 17,612 features nationally, 4/5/6 all
+248,106, 7/8 both 16,150,491 — the same underlying data at different
+generalisation tiers). `from_tigerweb` queries the three genuinely
+non-redundant full-detail layers (Primary `S1100`, Secondary `S1200`,
+Local `S1400` — MTFCC carried undecoded, no lookup table bundled) and
+produces **`Segment` only, never a `Street`** — checked, not assumed: no
+layer anywhere in the service aggregates segments under a named-street
+entity, so per the no-synthetic-streets rule this is the same shape as
+the Netherlands. No Address Ranges layer exists over this REST service
+either (checked across all 35 real `TIGERweb/` services) — `Segment
+.address_ranges` stays on its NWB-only footing. Public domain (17 U.S.C.
+§ 105, a work of the US federal government) — real fixtures are committed.
+Query with a real bounding box; layer 8 alone has 16,150,491 features
+nationally, the largest dataset this SDK queries through a REST API.
+
+**Not built here, noted as the obvious follow-on**: USDOT's **National
+Address Database (NAD)** — a national address *point* file (last compiled
+2026-06-30), distributed as flat text, readable with the standard library
+and needing no new client shape — would give the US its first `Address`
+provider, the counterpart to TIGERweb's `Segment`. The **USGS National
+Transportation Dataset** is readable today (GeoPackage) but is TIGER
+supplemented with HERE commercial data — its licence needs care before
+building against it. Neither is built in this release.
+
 ## WZDx (US Work Zone Data Exchange)
 
 WZDx is the US standard for work zone data — GeoJSON-based, distinct from
@@ -1739,15 +1837,22 @@ Grouped by the client shape they need:
   registration/agreement-gated — confirm per country. Note Alert-C
   location-code decoding (numeric codes → geometry, not yet supported) is
   likely needed for some of these, unlike Finland's coordinate-carrying JSON.
-- **ArcGIS REST** (a new client shape — Esri `/query?f=json`). Jersey publishes
-  roadworks as an ArcGIS MapServer layer; likely a quick, self-contained win
-  and the SDK's first Channel Islands coverage.
+- **ArcGIS REST** — shipped. Jersey RoadWorkx (`streetworks.arcgis.jersey`,
+  see above) was this strand's ArcGIS candidate; turned out to need a real
+  pagination-truncation fallback strategy, not just a quick fetch — see
+  `streetworks.arcgis.client`'s module docstring. Guernsey remains open —
+  it still appears to be an HTML site with no confirmed structured feed.
 - **Dedicated pieces** (each its own project, not a quick adapter): Germany's
   Mobilithek *broker* (subscription access, mixed schemas — D-TRO-scale
   effort; distinct from Autobahn GmbH's own public motorway-roadworks API,
-  already covered above); Guernsey (appears to be an HTML site — confirm
-  whether any structured feed exists before committing, and check
-  licensing for scraping).
+  already covered above).
+- **UK local-authority ArcGIS roadworks** — the same `ArcGISFeatureClient`
+  shape Jersey uses, but a per-authority cluster like the German states
+  (West Berkshire and others each publish their own ArcGIS
+  MapServer/FeatureServer roadworks layer). Noted, not built — West
+  Berkshire's own service was the real-world reference this session used
+  to anticipate the "`Supports Pagination: false`" trap, but wasn't itself
+  built into a converter.
 - Verify-the-source-first: prefer official government feeds over third-party
   API-marketplace wrappers; a couple of the researched links need their real
   upstream endpoint confirmed.

@@ -35,6 +35,59 @@
 
 ### Added
 
+- **`streetworks.arcgis` - a generic ArcGIS REST (MapServer/FeatureServer)
+  client**, the third client shape in this SDK after the DATEX/JSON
+  adapters and `OGCFeaturesClient`, plus its first two consumers: **Jersey
+  RoadWorkx** (`streetworks.arcgis.jersey`, `kind="roadworks"`,
+  `territories={"Jersey"}` - this SDK's first Channel Islands coverage) and
+  **TIGERweb** (`streetworks.arcgis.tigerweb`, `kind="streets"`,
+  `territories={"USA"}`). Built fresh, not a generalisation of
+  `OGCFeaturesClient`/`DataViaClient` - they share almost nothing but
+  "fetches geodata over HTTP."
+  **The real pagination trap this client exists to handle, confirmed live
+  against two genuinely different services**: Jersey's real `RoadWorks`
+  layer states `supportsPagination: false`, and it's true in an unusually
+  literal way - `resultOffset` returns HTTP 200 with a plausible page every
+  time, but it's silently the *same* first page regardless of offset
+  (confirmed at offsets 0/500/1000/2000/21000); the real total is 22,105
+  records behind a `maxRecordCount` of 1,000, so a naive query silently
+  returns under 5% of the data with no error. TIGERweb's layers state (and
+  genuinely honour) `supportsPagination: true`. `ArcGISFeatureClient
+  .iter_features` verifies live rather than trusting either metadata claim,
+  falling back to object-id-range paging (confirmed live to work for
+  Jersey) the moment offset-paging fails to advance, and raises the new
+  `TruncatedResultError` if neither strategy is usable - never silently
+  returns a partial result. Live-verified this session to retrieve all
+  22,105 real Jersey records with zero duplicates.
+  **Jersey**: real `RoadWorks` features group by `PROJID` into one `Works`
+  per project (confirmed the same real shape as Street Manager's
+  `work_reference_number`/`permit_reference_number`); the real `STATUS`
+  field (`"In Progress"`/`"Finished"`/`"Pending"`) *is* the planned/future
+  dimension, no separate layer needed. CRS confirmed live to be EPSG:3109
+  ("ETRS89 / Jersey Transverse Mercator") via a sibling service on the same
+  deployment stating the `wkid` directly, cross-checked byte-for-byte
+  against EPSG:3109's own published WKT - `outSR` is not honoured by this
+  service (also confirmed live). **No explicit licence document found** (no
+  `copyrightText` anywhere, not catalogued on Jersey's own open-data
+  portal, and the public-facing site gates behind a login the REST API
+  itself doesn't need) - but the data is confirmed intended for open
+  public consumption, so real, live-captured records are committed as test
+  fixtures, the same basis Autobahn GmbH's roadworks shipped on.
+  **TIGERweb**: layers 0-9 are a real cartographic scale pyramid, not
+  distinct road classes - confirmed live by comparing feature counts
+  (layers 1/2 both 17,612 nationally, 4/5/6 all 248,106, 7/8 both
+  16,150,491 - the same data at different generalisation tiers, a real
+  correction to the initial design brief's framing). Produces `Segment`
+  only, never a `Street` - checked live, not assumed: no layer anywhere in
+  the service aggregates segments under a named-street entity, the same
+  shape as the Netherlands. No Address Ranges layer exists over this REST
+  service either (checked across all 35 real `TIGERweb/` services) -
+  `Segment.address_ranges` stays on its NWB-only footing. MTFCC carried
+  undecoded (`S1100`/`S1200`/`S1400`/others observed live e.g. `S1630`), no
+  lookup table bundled. Public domain (17 U.S.C. Sec. 105) - real fixtures
+  committed.
+  New exception: `streetworks.exceptions.TruncatedResultError`.
+
 - **Canonical gazetteer model: `Street`, `Segment`, `Address`**
   (`streetworks.common.gazetteer`) - the gazetteer equivalent of what
   `Works`/`WorksSite` did for roadworks at 0.5.0, designed after the eight

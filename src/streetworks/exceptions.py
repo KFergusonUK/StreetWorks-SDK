@@ -76,6 +76,17 @@ class SignatureVerificationError(StreetworksError):
     """An SNS message failed signature verification (streetworks.opendata)."""
 
 
+class TruncatedResultError(StreetworksError):
+    """A query returned a truncated page (the server's own transfer limit
+    was hit) and this SDK could not page past it - e.g. an ArcGIS layer
+    that both hits ``maxRecordCount`` and doesn't genuinely support
+    ``resultOffset``/``resultRecordCount`` paging despite what its own
+    metadata claims (confirmed live for Jersey's RoadWorks layer - see
+    :mod:`streetworks.arcgis`). Raised rather than silently returning a
+    partial result, since a silently truncated national dataset would be
+    the worst possible failure for a caller to discover after the fact."""
+
+
 class ProviderNotFoundError(StreetworksError, LookupError):
     """streetworks.get_provider() received a key with no registry match.
     The message names the closest real keys, so a typo doesn't dead-end."""

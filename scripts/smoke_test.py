@@ -557,6 +557,41 @@ def check_nvdb() -> str:
         )
 
 
+def check_jersey() -> str:
+    """Jersey RoadWorkx needs no credentials - the ArcGIS REST API is
+    reachable without authentication even though the human-facing site
+    gates behind a login (see streetworks.arcgis.jersey's module
+    docstring). Only fetches a small, filtered slice (one real WHERE
+    clause), not the full 22,105-record layer - a full pull is exercised
+    live in this session's own verification, not repeated here on every
+    smoke-test run."""
+    from streetworks.arcgis.jersey import JerseyRoadworksClient
+
+    with JerseyRoadworksClient() as jersey:
+        records = list(jersey.iter_roadworks(where="STATUS='In Progress'"))
+    if not records:
+        raise RuntimeError("query returned no in-progress roadworks - real data may have changed")
+    sample = records[0]["properties"]
+    return f"{len(records)} in-progress record(s), e.g. PROJID={sample.get('PROJID')!r}"
+
+
+def check_tigerweb() -> str:
+    """TIGERweb (US Census Bureau) needs no credentials. Queries a small
+    real bounding box (downtown Washington DC) rather than the full
+    national dataset (16.15M local-road features alone - see
+    streetworks.arcgis.tigerweb's module docstring)."""
+    from streetworks.arcgis.tigerweb import LOCAL_ROADS_LAYER, TIGERwebClient
+
+    dc_bbox = (-77.05, 38.89, -77.03, 38.91)
+    with TIGERwebClient() as tiger:
+        roads = list(tiger.iter_roads(LOCAL_ROADS_LAYER, bbox=dc_bbox))
+    if not roads:
+        raise RuntimeError("bbox query returned no results for a known real area")
+    named = [r for r in roads if r["properties"].get("NAME")]
+    sample_name = named[0]["properties"]["NAME"]
+    return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -717,6 +752,9 @@ def main() -> int:
     reporter.check("NWB (Netherlands)", [], check_nwb)
     reporter.check("BD TOPO (France)", [], check_bdtopo)
     reporter.check("NVDB (Norway)", [], check_nvdb)
+    # Jersey RoadWorkx and TIGERweb (US) need no credentials
+    reporter.check("Jersey RoadWorkx", [], check_jersey)
+    reporter.check("TIGERweb (USA)", [], check_tigerweb)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

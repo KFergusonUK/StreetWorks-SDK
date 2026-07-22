@@ -26,6 +26,7 @@ from .exceptions import (
     SignatureVerificationError,
     StreetworksError,
     TransportError,
+    TruncatedResultError,
 )
 from .registry import Kind, ProviderEntry, get_provider, providers
 
@@ -48,6 +49,7 @@ __all__ = [
     "SignatureVerificationError",
     "StreetworksError",
     "TransportError",
+    "TruncatedResultError",
     "__version__",
     "get_provider",
     "providers",

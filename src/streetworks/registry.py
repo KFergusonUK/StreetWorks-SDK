@@ -875,4 +875,43 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="PoliceClient",
         import_line="from streetworks.police import PoliceClient",
     ),
+    ProviderEntry(
+        key="jersey",
+        name="Jersey RoadWorkx",
+        description="Jersey's roadworks register, over its public ArcGIS Feature Service.",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Jersey"}),
+        scope_note=(
+            "This SDK's first Channel Islands coverage. The real layer truncates "
+            "at 1,000 of 22,105 records and its own resultOffset paging is "
+            "silently broken - streetworks.arcgis.jersey pages around it. "
+            "Licence unconfirmed - see the module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.arcgis.jersey",
+        _client_name="JerseyRoadworksClient",
+        import_line="from streetworks.arcgis.jersey import JerseyRoadworksClient",
+    ),
+    ProviderEntry(
+        key="tigerweb",
+        name="TIGERweb (US Census Bureau)",
+        description="The US national road-segment network, over the TIGERweb ArcGIS service.",
+        kind=Kind.STREETS,
+        territories=frozenset({"USA"}),
+        scope_note=(
+            "A statistical/cartographic product, not a legal street register - "
+            "no USRN equivalent, real identifiers are dataset-scoped. Segment "
+            "only, no Street entity exists in this service - see the module "
+            "docstring. No 'usa'/'us' alias: wzdx already owns those; use "
+            "providers(territory='USA') or the 'tigerweb' key directly."
+        ),
+        credentials=None,
+        licence="Public domain (17 U.S.C. Sec. 105 - a work of the United States Government)",
+        _module="streetworks.arcgis.tigerweb",
+        _client_name="TIGERwebClient",
+        import_line="from streetworks.arcgis.tigerweb import TIGERwebClient",
+    ),
 ]

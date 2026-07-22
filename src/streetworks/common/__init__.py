@@ -13,6 +13,7 @@ from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
+from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
@@ -20,6 +21,7 @@ from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
+from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
 from .from_wzdx import from_wzdx
@@ -79,4 +81,6 @@ __all__ = [
     "from_ban",
     "from_bag",
     "from_kartverket",
+    "from_jersey",
+    "from_tigerweb",
 ]
