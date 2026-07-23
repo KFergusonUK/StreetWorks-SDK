@@ -83,8 +83,16 @@ client, documented in its own section, exactly as before.
 | `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 
 Shared across all modules: automatic retries with exponential backoff and
-jitter, `Retry-After`-aware 429 handling, a single exception hierarchy, and
-both **sync and async** clients built on [httpx](https://www.python-httpx.org/).
+jitter, `Retry-After`-aware 429 handling, and a single exception hierarchy,
+all built on [httpx](https://www.python-httpx.org/). **Async is per-module,
+not universal** — checked directly against the source, not assumed: Street
+Manager, DataVIA, D-TRO, SRWR, OS Open USRN, BAN, Kartverket, NVDB, NWB and
+BD TOPO each ship an `Async<Name>Client` mirror; BAG, DATEX II (all of NDW/
+National Highways/Digitraffic/IRCA/Bison Futé/DGT/Vegvesen), Autobahn GmbH,
+the German state roadworks client, WZDx, TrafficWatchNI, Traffic Wales, UK
+Police, and the ArcGIS-based providers (Jersey, TIGERweb) are sync-only
+today. Check a given module for an `Async*Client` before assuming one
+exists.
 
 ## What this is (and isn't)
 
@@ -1378,6 +1386,43 @@ would otherwise mislead:
    crime or shoplifting says little about risk to a road crew. That's why
    `safety_signal()` filters to the categories that actually bear on it
    rather than reporting the raw total.
+
+### Neighbourhood policing teams
+
+```python
+with PoliceClient() as police:
+    teams = police.neighbourhoods("leicestershire")
+    boundary = police.neighbourhood_boundary("leicestershire", teams[0]["id"])
+    crimes = police.street_level_crimes_in_area(boundary, date="2026-05")
+```
+
+`neighbourhoods(force)` lists every neighbourhood policing team;
+`neighbourhood(force, id)` gets one team's details (centre point, contact
+details, links); `neighbourhood_boundary(force, id)` returns the team's
+boundary as `(lat, lng)` pairs, in the same order `street_level_crimes_in_area`
+already expects — feed one straight into the other with no reordering.
+Verified live, not from the docs: the API states each boundary coordinate as
+a **string**, coerced to `float` here; it's always a **single, closed ring**
+(no multipolygon, no holes — a physically disjoint neighbourhood can't be
+represented); and real rings aren't guaranteed simple (near-duplicate
+consecutive vertices and the odd spike, confirmed on a real ring — returned
+as-is, never silently repaired).
+
+A neighbourhood boundary can be hundreds of vertices — too long for a GET
+query string. `street_level_crimes_in_area` handles this itself: coordinates
+are written to 5 decimal places (~1m, far finer than the source data's own
+anonymisation), and if the query would still exceed a safe URL length, it's
+sent as a form-encoded `POST` to the same endpoint automatically — same
+public signature either way. A `503` (the API's own response when a polygon
+is too complex to process, even over `POST`) raises
+`streetworks.exceptions.ServerError` naming the problem, never silently
+returns `[]` — an empty result and an unqueried polygon must not look the
+same. A response landing at exactly the API's 10,000-result cap emits a
+`UserWarning`, since that count may be a truncation.
+
+See [`examples/crime_context/`](examples/crime_context/) for a full worked
+example: a neighbourhood-banded recorded-crime context map for a whole
+force, built entirely on these methods.
 
 ## Common models
 

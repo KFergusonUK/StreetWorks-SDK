@@ -48,6 +48,49 @@
 
 ### Added
 
+- **`streetworks.police` neighbourhood support**: `PoliceClient.neighbourhoods(force)`,
+  `.neighbourhood(force, id)`, and `.neighbourhood_boundary(force, id)`
+  (`GET /{force}/neighbourhoods`, `/{force}/{id}`, `/{force}/{id}/boundary`).
+  Verified live, not from the docs: boundary coordinates are stated as
+  **strings** (coerced to `float` here); a boundary is always a single,
+  closed ring - no multipolygon, no holes; and real rings aren't guaranteed
+  simple (a real ring, Leicestershire's `NC04`, has near-duplicate
+  consecutive vertices and at least one spike) - returned exactly as
+  received, never silently repaired. `neighbourhood_boundary()` returns
+  `(lat, lng)` pairs in the same order `street_level_crimes_in_area`
+  already expects.
+  **`street_level_crimes_in_area` now survives large polygons** (a real
+  neighbourhood boundary can be hundreds of vertices - Leicestershire's
+  `NA41` is 2,972 points, confirmed live) - public signature unchanged.
+  Coordinates are written to 5 decimal places (~1m, far finer than the
+  source data's own anonymisation), and the request switches from `GET` to
+  a form-encoded `POST` automatically once the query would exceed a safe
+  URL length - live-verified against a real 2,972-point boundary (`GET` for
+  the small boundary fetch, `POST` for the resulting crimes query). A `503`
+  (the API's real response when a polygon is too complex, even over `POST`)
+  now raises `streetworks.exceptions.ServerError` naming the problem
+  instead of the shared transport's generic message - silently returning
+  `[]` here would make an unqueried area look crime-free. A response at
+  exactly the API's 10,000-result cap now emits a `UserWarning`, since that
+  count may be a truncation, not the true total.
+  **New example**: `examples/crime_context/` - a neighbourhood-banded
+  recorded-crime context map for a whole force (rolling 12-month window,
+  the two most recent months always excluded, rates shrunk toward the
+  force mean and banded into quintiles *within* the force only, a
+  sequential single-hue ramp rather than red/amber/green, and a
+  method/limitations panel embedded in the page itself rather than a
+  footnote) - built entirely on the two additions above plus the existing
+  `SAFETY_RELEVANT_CATEGORIES`. See its own README for the full method and
+  what it deliberately does not attempt (no per-street scoring, no
+  cross-force comparison, not a risk assessment).
+  **Also corrected**: the README's "sync and async clients" claim was
+  inaccurate for several modules, not just this one - checked directly
+  against the source rather than assumed. `streetworks.police` has no
+  `AsyncPoliceClient` (nor do `bag`, DATEX II, `autobahn`, `ogc`, `wzdx`,
+  `trafficwatchni`, `trafficwales`, or the ArcGIS-based providers) - the
+  README now names which modules do and don't, rather than claiming async
+  everywhere.
+
 - **D-TRO `v4.0.0` publish models** (`streetworks.dtro.models.v4_0_0`),
   generated from DfT's real schema with the existing
   `scripts/generate_dtro_models.py` tooling - additive, `v3.5.1` models

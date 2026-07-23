@@ -1,0 +1,20 @@
+{
+  "id": "NC04",
+  "name": "City Centre",
+  "url_force": "http://www.leics.police.uk/local-policing/city-centre",
+  "centre": {
+    "latitude": "52.6389",
+    "longitude": "-1.13619"
+  },
+  "population": "0",
+  "contact_details": {},
+  "links": [
+    {
+      "title": "Leicester City Council",
+      "description": null,
+      "url": "http://www.leicester.gov.uk/"
+    }
+  ],
+  "locations": [],
+  "description": "<p>The Castle neighbourhood\u00a0is\u00a0a diverse\u00a0covering all of the City Centre. In addition it covers De Montfort University, the University of Leicester,\u00a0Leicester Royal Infirmary, the Leicester Tigers rugby ground and\u00a0the Clarendon Park and Riverside communities.</p>\n<p>The Highcross and Haymarket shopping centres\u00a0and Leicester's famous Market are all covered by\u00a0this neighbourhood.</p>"
+}

@@ -17,3 +17,11 @@ uv.lock
 # Raw (untrimmed) API responses saved while developing against live services -
 # large and may contain more real-world detail than we want committed.
 tests/fixtures/*_raw.json
+
+# examples/crime_context/'s disk cache of real API responses - regenerated
+# per force on demand, not meant to be committed.
+examples/crime_context/cache/
+
+# generated map output (run generate_map.py to produce your own) - not
+# meant to be committed, same reasoning as the cache above.
+examples/crime_context/*.html
