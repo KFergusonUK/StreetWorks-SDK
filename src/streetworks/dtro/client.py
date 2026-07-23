@@ -169,8 +169,21 @@ class DTROClient:
         Cross-field conditional rules (the schema's ``if/then/else``) are still
         enforced by the service on submission, so a payload that passes here can
         still be rejected on ``create_dtro`` - but the common mistakes are
-        caught first. ``version`` selects the schema namespace (only
-        ``v3_5_1`` ships today).
+        caught first. ``version`` selects the schema namespace - pass it
+        explicitly.
+
+        **The default (``"v3_5_1"``) does not track which schema is
+        "current".** DfT's v4.0.0 schema became the production default on
+        2026-06-01, but the D-TRO service continues to accept v3.5.0/v3.5.1
+        payloads too (confirmed via the schema's own release notes - see
+        ``docs/DTRO_SCHEMAS.md``), so this default is not simply wrong. It
+        *is* however a real trap left as-is deliberately, not fixed silently:
+        a caller who submits a v4.0.0-shaped payload (``regulation`` as an
+        object, not a 1-item array - see ``docs/DTRO_SCHEMAS.md``) and calls
+        ``validate_payload()`` with no ``version`` gets a confusing local
+        ``ValidationError`` against the wrong schema shape, not a clean "you
+        forgot to specify a version" error. Pass ``version`` explicitly for
+        anything other than a genuine v3.5.1 payload.
 
         Requires the models to be importable; they are generated into the
         package, so this works out of the box for the shipped version(s).
@@ -181,7 +194,8 @@ class DTROClient:
             module = importlib.import_module(f"streetworks.dtro.models.{version}")
         except ModuleNotFoundError as exc:
             raise ValueError(
-                f"No generated D-TRO models for {version!r}. Available today: 'v3_5_1'."
+                f"No generated D-TRO models for {version!r}. "
+                "Available today: 'v3_5_1', 'v4_0_0'."
             ) from exc
         module.Model.model_validate(payload)
         return payload

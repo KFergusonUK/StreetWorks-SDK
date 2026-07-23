@@ -169,10 +169,13 @@ and covered by mocked tests: the **write/publish** paths (Street Manager work
 submission and assessment; D-TRO create/update and provisions). These are
 publisher-scoped and deliberately excluded from the read-only smoke test.
 
-Known reconciliation items: D-TRO `v4.0.0` is now the production schema
-(confirmed at a DfT technical webinar, July 2026) — this SDK still ships
-`v3.5.1` models, pending regeneration; the `streetworks.exceptions` API
-and client method surface may change before `1.0`. See
+Known reconciliation items: D-TRO `v4.0.0` is the production schema (live
+since 2026-06-01, confirmed directly from DfT's own repo and separately at
+a DfT technical webinar, July 2026) — this SDK now generates and ships
+`v4.0.0` models alongside `v3.5.1` (production still accepts both; see
+[docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md) for the full payload-shape
+diff — it's a real migration, not a drop-in swap); the `streetworks.exceptions`
+API and client method surface may change before `1.0`. See
 [docs/INTEGRATION.md](docs/INTEGRATION.md) for how to verify against the
 real systems yourself. First-contact reports welcome.
 
@@ -1580,9 +1583,15 @@ independently confirmed, as Lambert-93).
 - [x] Auto-pagination helpers for the Reporting API (`iter_permits()` etc.)
 - [x] DataVIA WMS support (`get_map`, `get_feature_info`, `wms_capabilities`)
 - [x] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
-      — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md). **`v4.0.0` is now the
-      production schema** (confirmed at a DfT technical webinar, July 2026);
-      this SDK still ships `v3.5.1` models, pending regeneration
+      — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md). **`v4.0.0`, the
+      production schema since 2026-06-01, is now generated and shipped
+      alongside `v3.5.1`** (production still accepts both). Real, not
+      cosmetic: `regulation` moved from a 1-item array to a plain object,
+      `condition`/`conditionSet` were restructured, 8 `vehicleType` values
+      moved to `vehicleUsageType`, `regulation.timeZone` is now fixed to
+      `"Europe/London"` — see DTRO_SCHEMAS.md for the full diff.
+      `DTROClient.validate_payload()`'s default stayed `v3_5_1`, deliberately
+      not changed silently — pass `version="v4_0_0"` explicitly for v4 payloads
 - [ ] D-TRO `v5.0.0` — in development, not yet built. Presented contents
       include refactored speed-limit regulation modelling, a new attribute
       distinguishing diversion-route geometry styles, additional

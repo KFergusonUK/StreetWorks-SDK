@@ -35,6 +35,47 @@
 
 ### Added
 
+- **D-TRO `v4.0.0` publish models** (`streetworks.dtro.models.v4_0_0`),
+  generated from DfT's real schema with the existing
+  `scripts/generate_dtro_models.py` tooling - additive, `v3.5.1` models
+  untouched. v4.0.0 became the production schema on 2026-06-01 (confirmed
+  directly from the DfT repo's own release announcements); production
+  continues to accept v3.5.0/v3.5.1 payloads too, so this is additive
+  coverage, not a cut-over.
+  **A real, non-cosmetic payload-shape migration**, not a drop-in schema
+  swap - see `docs/DTRO_SCHEMAS.md` for the full diff, verified against
+  both DfT's own written release notes and the two schemas' real `$defs`
+  directly: `regulation` moved from a 1-item array to a plain object;
+  `condition`/`conditions`/`conditionSet` were restructured (`conditionSet`
+  is now a single object, not an array; `condition` gained its own nested
+  `conditionSet` property; a new `permitCondition` type exists with no
+  v3.5.1 equivalent - found in the schema diff, not mentioned by name in
+  DfT's own notes); `regulation.timeZone` is now fixed
+  (`"const": "Europe/London"`); 8 real `vehicleType` values
+  (`policeVehicle`, `schoolBus`, and 6 others) moved to `vehicleUsageType`;
+  `sourceActionType` gained `"fullRevoke"`. Tests validate a real DfT
+  v4.0.0 example payload and exercise three of these changes directly
+  (`tests/test_dtro_models_v4_0_0.py`).
+  **`DTROClient.validate_payload()`'s default stayed `v3_5_1`, deliberately
+  not changed silently** - production genuinely still accepts both shapes,
+  so there's no single obviously-correct default; flagged as a real trap
+  instead (a v4.0.0 payload validated with the default gets a confusing
+  `ValidationError` against the wrong schema shape, not a clean version
+  error) in the method's own docstring and in DTRO_SCHEMAS.md. Its "no
+  models for this version" error message now lists both shipped versions.
+  Checked and found unchanged: client endpoints, headers, auth, payload
+  limits. Two real v4.0.0-era changes are **not** schema concerns and are
+  reported, not built here: a new polygon-based spatial search capability
+  on `POST /search` (Integration only as of the DfT announcement checked),
+  and new service-generated response metadata (creation/update/up-version
+  timestamps) that isn't part of the publish schema this SDK validates
+  against.
+  D-TRO `v5.0.0` (in development, not yet built) was checked against this
+  namespacing pattern: it scales cleanly (purely parametrised on the
+  version string) except for that one hardcoded error-message string,
+  which needs a one-line update whenever a version is added - noted in
+  DTRO_SCHEMAS.md so it isn't forgotten next time.
+
 - **`streetworks.arcgis` - a generic ArcGIS REST (MapServer/FeatureServer)
   client**, the third client shape in this SDK after the DATEX/JSON
   adapters and `OGCFeaturesClient`, plus its first two consumers: **Jersey
