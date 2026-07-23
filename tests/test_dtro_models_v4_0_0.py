@@ -134,7 +134,28 @@ def test_client_validate_payload_helper_with_explicit_version():
     assert DTROClient.validate_payload(VALID_SOURCE, version="v4_0_0") is VALID_SOURCE
     assert AsyncDTROClient.validate_payload(VALID_SOURCE, version="v4_0_0") is VALID_SOURCE
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError, match="v4_0_0 Model"):
         bad = copy.deepcopy(VALID_SOURCE)
         del bad["source"]["troName"]
         DTROClient.validate_payload(bad, version="v4_0_0")
+
+
+def test_client_validate_payload_helper_defaults_to_v4_0_0():
+    # v4.0.0 is DfT's production schema since 2026-06-01 - the client's
+    # default changed to match (was v3_5_1) - see client.py's docstring.
+    from streetworks.dtro import AsyncDTROClient, DTROClient
+
+    assert DTROClient.validate_payload(VALID_SOURCE) is VALID_SOURCE
+    assert AsyncDTROClient.validate_payload(VALID_SOURCE) is VALID_SOURCE
+
+
+def test_validation_error_names_the_schema_version():
+    # Two versions now share the same generated class name (Model), so the
+    # error message names which schema actually rejected the payload.
+    from streetworks.dtro import DTROClient
+
+    bad = copy.deepcopy(VALID_SOURCE)
+    del bad["source"]["troName"]
+    with pytest.raises(ValidationError) as exc_info:
+        DTROClient.validate_payload(bad, version="v4_0_0")
+    assert "v4_0_0 Model" in str(exc_info.value)

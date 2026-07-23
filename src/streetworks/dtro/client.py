@@ -160,7 +160,7 @@ class DTROClient:
         return self._oauth.last_token_response
 
     @staticmethod
-    def validate_payload(payload: JSON, *, version: str = "v3_5_1") -> JSON:
+    def validate_payload(payload: JSON, *, version: str = "v4_0_0") -> JSON:
         """Validate a publish payload against the generated D-TRO data-model
         models before sending it, raising ``pydantic.ValidationError`` on a bad
         payload and returning it unchanged on success.
@@ -170,25 +170,33 @@ class DTROClient:
         enforced by the service on submission, so a payload that passes here can
         still be rejected on ``create_dtro`` - but the common mistakes are
         caught first. ``version`` selects the schema namespace - pass it
-        explicitly.
+        explicitly if you're not targeting the default.
 
-        **The default (``"v3_5_1"``) does not track which schema is
-        "current".** DfT's v4.0.0 schema became the production default on
-        2026-06-01, but the D-TRO service continues to accept v3.5.0/v3.5.1
-        payloads too (confirmed via the schema's own release notes - see
-        ``docs/DTRO_SCHEMAS.md``), so this default is not simply wrong. It
-        *is* however a real trap left as-is deliberately, not fixed silently:
-        a caller who submits a v4.0.0-shaped payload (``regulation`` as an
-        object, not a 1-item array - see ``docs/DTRO_SCHEMAS.md``) and calls
-        ``validate_payload()`` with no ``version`` gets a confusing local
-        ``ValidationError`` against the wrong schema shape, not a clean "you
-        forgot to specify a version" error. Pass ``version`` explicitly for
-        anything other than a genuine v3.5.1 payload.
+        **Defaults to ``"v4_0_0"``**, DfT's production schema since
+        2026-06-01 (see ``docs/DTRO_SCHEMAS.md``) - changed from ``"v3_5_1"``,
+        this SDK's previous default, now that both are generated and shipped.
+        Production still accepts v3.5.0/v3.5.1 payloads too, so pass
+        ``version="v3_5_1"`` explicitly if that's genuinely what you're
+        validating; the two schemas are a real structural migration, not
+        interchangeable (``regulation`` is a 1-item array in v3.5.1 vs. a
+        plain object in v4.0.0, among other changes - see
+        ``docs/DTRO_SCHEMAS.md``), so validating against the wrong one
+        reliably fails, and now says so.
+
+        The raised ``pydantic.ValidationError`` names the schema version it
+        validated against directly in its message (e.g. "validation error
+        for v4_0_0 Model") - added because two versions now share the same
+        generated class name (``Model``), which made a bare traceback
+        genuinely ambiguous about which schema rejected a payload.
 
         Requires the models to be importable; they are generated into the
         package, so this works out of the box for the shipped version(s).
         """
         import importlib
+        from typing import cast
+
+        from pydantic import ValidationError
+        from pydantic_core import InitErrorDetails
 
         try:
             module = importlib.import_module(f"streetworks.dtro.models.{version}")
@@ -197,7 +205,17 @@ class DTROClient:
                 f"No generated D-TRO models for {version!r}. "
                 "Available today: 'v3_5_1', 'v4_0_0'."
             ) from exc
-        module.Model.model_validate(payload)
+        try:
+            module.Model.model_validate(payload)
+        except ValidationError as exc:
+            # .errors() returns ErrorDetails (adds `msg`/`url` keys beyond what
+            # InitErrorDetails declares) - pydantic-core accepts it fine at
+            # runtime; the cast just satisfies the stricter input type mypy
+            # checks from_exception_data against.
+            line_errors = cast(list[InitErrorDetails], exc.errors())
+            raise ValidationError.from_exception_data(
+                title=f"{version} Model", line_errors=line_errors
+            ) from None
         return payload
 
     # --- provisions (publisher scope; require the App-Id header) ------------ #

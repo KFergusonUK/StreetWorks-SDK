@@ -94,14 +94,17 @@ def test_rejects_wrong_type():
 def test_client_validate_payload_helper():
     from streetworks.dtro import AsyncDTROClient, DTROClient
 
-    # Returns the payload unchanged on success (sync and async share the helper)
-    assert DTROClient.validate_payload(VALID_SOURCE) is VALID_SOURCE
-    assert AsyncDTROClient.validate_payload(VALID_SOURCE) is VALID_SOURCE
+    # VALID_SOURCE is v3.5.1-shaped (regulation as a 1-item array) - the
+    # client's default is now v4.0.0 (see client.py), so this fixture must
+    # name its version explicitly, exactly the trap the default's own
+    # docstring warns about.
+    assert DTROClient.validate_payload(VALID_SOURCE, version="v3_5_1") is VALID_SOURCE
+    assert AsyncDTROClient.validate_payload(VALID_SOURCE, version="v3_5_1") is VALID_SOURCE
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError, match="v3_5_1 Model"):
         bad = copy.deepcopy(VALID_SOURCE)
         del bad["source"]["troName"]
-        DTROClient.validate_payload(bad)
+        DTROClient.validate_payload(bad, version="v3_5_1")
 
     with pytest.raises(ValueError, match="No generated D-TRO models"):
         DTROClient.validate_payload(VALID_SOURCE, version="v9_9_9")

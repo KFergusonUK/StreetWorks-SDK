@@ -1590,8 +1590,10 @@ independently confirmed, as Lambert-93).
       `condition`/`conditionSet` were restructured, 8 `vehicleType` values
       moved to `vehicleUsageType`, `regulation.timeZone` is now fixed to
       `"Europe/London"` — see DTRO_SCHEMAS.md for the full diff.
-      `DTROClient.validate_payload()`'s default stayed `v3_5_1`, deliberately
-      not changed silently — pass `version="v4_0_0"` explicitly for v4 payloads
+      `DTROClient.validate_payload()`'s default is now `v4_0_0` (was
+      `v3_5_1`) to match production — pass `version="v3_5_1"` explicitly for
+      v3.5.1 payloads, and the raised `ValidationError` names which schema
+      version it validated against, since both share the class name `Model`
 - [ ] D-TRO `v5.0.0` — in development, not yet built. Presented contents
       include refactored speed-limit regulation modelling, a new attribute
       distinguishing diversion-route geometry styles, additional

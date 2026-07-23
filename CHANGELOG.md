@@ -4,6 +4,19 @@
 
 ### Changed
 
+- **Breaking: `DTROClient.validate_payload()`'s default `version` changed
+  from `"v3_5_1"` to `"v4_0_0"`**, matching DfT's production D-TRO schema
+  since 2026-06-01 (see D-TRO `v4.0.0` below). Production still accepts
+  v3.5.1 payloads, so this isn't simply a correction - pass
+  `version="v3_5_1"` explicitly if that's genuinely what you're validating;
+  calling `validate_payload()` with no `version` on a v3.5.1-shaped payload
+  (`regulation` as a 1-item array) now fails, the mirror image of the
+  previous default's trap against v4.0.0 payloads. The raised
+  `pydantic.ValidationError` now also names the schema version directly in
+  its message (`"...for v4_0_0 Model"`) - both versions' generated classes
+  share the name `Model`, so a bare traceback couldn't otherwise say which
+  schema actually rejected a payload.
+
 - **`streetworks.registry`'s `Kind.GAZETTEER` split into `Kind.ADDRESSES` and
   `Kind.STREETS`** - a categorisation fix, not a cosmetic rename: with only
   BAN, BAG and Kartverket as examples of `"gazetteer"`, `providers()`
@@ -56,13 +69,12 @@
   `sourceActionType` gained `"fullRevoke"`. Tests validate a real DfT
   v4.0.0 example payload and exercise three of these changes directly
   (`tests/test_dtro_models_v4_0_0.py`).
-  **`DTROClient.validate_payload()`'s default stayed `v3_5_1`, deliberately
-  not changed silently** - production genuinely still accepts both shapes,
-  so there's no single obviously-correct default; flagged as a real trap
-  instead (a v4.0.0 payload validated with the default gets a confusing
-  `ValidationError` against the wrong schema shape, not a clean version
-  error) in the method's own docstring and in DTRO_SCHEMAS.md. Its "no
-  models for this version" error message now lists both shipped versions.
+  **`DTROClient.validate_payload()`'s default is now `v4_0_0`** (was
+  `v3_5_1`) - see the "Changed" section above for this as its own flagged
+  behaviour change. Its "no models for this version" error message now
+  lists both shipped versions, and a raised `ValidationError` now names
+  which schema version it validated against, since both versions' generated
+  classes share the name `Model`.
   Checked and found unchanged: client endpoints, headers, auth, payload
   limits. Two real v4.0.0-era changes are **not** schema concerns and are
   reported, not built here: a new polygon-based spatial search capability

@@ -72,20 +72,22 @@ payload before publishing:
 ```python
 from streetworks.dtro import DTROClient
 
-DTROClient.validate_payload(payload)                    # v3_5_1 default - see warning below
+DTROClient.validate_payload(payload)                    # v4_0_0 default
 DTROClient.validate_payload(payload, version="v3_5_1")  # explicit
-DTROClient.validate_payload(payload, version="v4_0_0")  # explicit
+DTROClient.validate_payload(payload, version="v4_0_0")  # explicit, same as no version
 ```
 
-**The `v3_5_1` default was not changed** — production genuinely still
-accepts both shapes (see the version map above), so there's no single
-"correct" default to switch to, and this SDK doesn't change a public default
-silently. But it *is* a real trap now that two versions ship: a v4.0.0-shaped
-payload validated with no explicit `version` gets a confusing local
-`ValidationError` against the wrong (v3.5.1) schema shape, not a clean "you
-forgot to specify a version" error. **Pass `version` explicitly** unless
-you're specifically targeting v3.5.1. See `DTROClient.validate_payload`'s own
-docstring.
+**Behaviour change: the default is now `v4_0_0`** (was `v3_5_1`) — matching
+DfT's production schema since 2026-06-01. Production genuinely still
+accepts v3.5.1 payloads too (see the version map above), so pass
+`version="v3_5_1"` explicitly if that's what you're actually validating —
+calling `validate_payload()` with no `version` on a v3.5.1-shaped payload
+now fails, the mirror image of the previous default's trap. The raised
+`pydantic.ValidationError` names the schema version directly in its
+message (`"...for v4_0_0 Model"`/`"...for v3_5_1 Model"`) precisely because
+both versions' generated classes share the name `Model` and a bare
+traceback couldn't otherwise tell you which schema rejected a payload. See
+`DTROClient.validate_payload`'s own docstring.
 
 This raises `pydantic.ValidationError` on structural, type, enum, or
 required-field errors, and returns the payload unchanged on success. Two
