@@ -16,8 +16,9 @@ its release notes before relying on them — deprecation timelines can move.
 
 | Schema version | Role | Notes |
 |---|---|---|
-| `v4.0.0` | Latest / upcoming | Target to have publish models ready for ahead of its production cut-over |
-| `v3.5.1` | **Supported — matches production today** | The version to generate publish models against first |
+| `v5.0.0` | In development | Not yet built. Confirmed contents so far: refactored speed-limit regulation modelling, a new attribute distinguishing diversion-route geometry styles, additional `vehicleType`/`regulationType` values, and new validation rules (`pointGeometry` no longer usable for speed limits; `directedLinear` mandatory for some `regulationType`s) |
+| `v4.0.0` | **Current production schema** (confirmed at a DfT technical webinar, July 2026) | This SDK still ships `v3.5.1` models — pending regeneration, not yet done |
+| `v3.5.1` | Shipped by this SDK today | Generated publish models target this version; no longer matches production, see `v4.0.0` above |
 | `v3.5.0` | Supported | |
 | `v3.4.1` | Deprecating | The version the current SDK examples were first written against |
 | `v3.4.0` | Deprecating | |
@@ -38,8 +39,10 @@ payload locally before sending — see below.
 ## Generated publish models (v3.5.1 shipped)
 
 Version-namespaced Pydantic models are generated from the DfT JSON schema
-into `streetworks.dtro.models.<version>` — `v3_5_1` ships today, matching
-production. Validate a payload before publishing:
+into `streetworks.dtro.models.<version>` — `v3_5_1` ships today. **This no
+longer matches production**, which moved to `v4.0.0` in July 2026 (confirmed
+at a DfT technical webinar) — regeneration against `v4.0.0` is pending, not
+yet done. Validate a payload before publishing:
 
 ```python
 from streetworks.dtro import DTROClient
@@ -56,7 +59,7 @@ on submission, not locally; and formatted strings (email/uri/date) validate
 leniently as plain strings. A payload that passes here can still be rejected
 by the service — but the common mistakes are caught first.
 
-To add a new version (e.g. `v4_0_0` when it lands):
+To add a new version (e.g. `v4_0_0`, now the production schema, not yet regenerated here):
 
 1. Download its JSON schema from the repo's version folder into
    `specs/dtro/<version>/`.

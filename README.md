@@ -169,11 +169,12 @@ and covered by mocked tests: the **write/publish** paths (Street Manager work
 submission and assessment; D-TRO create/update and provisions). These are
 publisher-scoped and deliberately excluded from the read-only smoke test.
 
-Known reconciliation items: D-TRO `v4.0.0` schema models to follow when it
-lands (production cut-over expected mid-2026; `v3.5.1` models ship now); the
-`streetworks.exceptions` API and client method surface may change before
-`1.0`. See [docs/INTEGRATION.md](docs/INTEGRATION.md) for how to verify
-against the real systems yourself. First-contact reports welcome.
+Known reconciliation items: D-TRO `v4.0.0` is now the production schema
+(confirmed at a DfT technical webinar, July 2026) — this SDK still ships
+`v3.5.1` models, pending regeneration; the `streetworks.exceptions` API
+and client method surface may change before `1.0`. See
+[docs/INTEGRATION.md](docs/INTEGRATION.md) for how to verify against the
+real systems yourself. First-contact reports welcome.
 
 ## Install
 
@@ -1579,7 +1580,15 @@ independently confirmed, as Lambert-93).
 - [x] Auto-pagination helpers for the Reporting API (`iter_permits()` etc.)
 - [x] DataVIA WMS support (`get_map`, `get_feature_info`, `wms_capabilities`)
 - [x] D-TRO publish models generated from the DfT JSON schemas, version-namespaced
-      (`v3.5.1` to match production, `v4.0.0` to follow) — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md)
+      — see [docs/DTRO_SCHEMAS.md](docs/DTRO_SCHEMAS.md). **`v4.0.0` is now the
+      production schema** (confirmed at a DfT technical webinar, July 2026);
+      this SDK still ships `v3.5.1` models, pending regeneration
+- [ ] D-TRO `v5.0.0` — in development, not yet built. Presented contents
+      include refactored speed-limit regulation modelling, a new attribute
+      distinguishing diversion-route geometry styles, additional
+      `vehicleType` and `regulationType` values, and new validation rules
+      (`pointGeometry` no longer usable for speed limits; `directedLinear`
+      mandatory for some `regulationType`s)
 - [x] Scottish Road Works Register - Open Data provider (`streetworks.srwr`).
       The authenticated SRWR/Aurora web-services API is restricted to Scottish
       authorities and utilities; contributions from SRWR users welcome.
