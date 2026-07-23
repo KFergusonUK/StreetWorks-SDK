@@ -169,19 +169,30 @@ class TestBandingTiers:
 # --------------------------------------------------------------------------- #
 
 
+class TestLatestAvailableMonth:
+    def test_returns_the_max_reported_date(self):
+        availability = [{"date": "2026-03"}, {"date": "2026-05"}, {"date": "2026-04"}]
+        assert gm.latest_available_month(availability) == "2026-05"
+
+    def test_ignores_list_order(self):
+        availability = [{"date": "2023-06"}, {"date": "2026-05"}, {"date": "2024-01"}]
+        assert gm.latest_available_month(availability) == "2026-05"
+
+
 class TestMonthWindow:
     def test_returns_requested_number_of_months_oldest_first(self):
-        months = gm.month_window("2026-07-15", window_months=12, skip_recent=2)
+        months = gm.month_window("2026-07", window_months=12)
         assert len(months) == 12
         assert months == sorted(months)
 
-    def test_skips_the_requested_number_of_recent_months(self):
-        months = gm.month_window("2026-07-15", window_months=12, skip_recent=2)
-        # July, skip 2 -> latest queried month is May.
+    def test_ends_at_the_given_latest_month_with_no_extra_offset(self):
+        # No hidden skip - the caller passes the real latest available
+        # month (from latest_available_month()) and the window ends there.
+        months = gm.month_window("2026-05", window_months=3)
         assert months[-1] == "2026-05"
 
     def test_crosses_a_year_boundary_correctly(self):
-        months = gm.month_window("2026-01-15", window_months=3, skip_recent=0)
+        months = gm.month_window("2026-01", window_months=3)
         assert months == ["2025-11", "2025-12", "2026-01"]
 
 

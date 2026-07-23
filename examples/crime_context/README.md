@@ -28,9 +28,13 @@ for no reason.
    anti-social behaviour, robbery, possession of weapons - **not** property
    crime, which this SDK's own `SAFETY_RELEVANT_CATEGORIES` deliberately
    excludes, see its own comment in `streetworks/police/client.py`).
-3. The two most recent months are always skipped - the API publishes in
-   arrears, and querying them returns partial/empty data that reads as
-   falsely "safe".
+3. The window always ends at the most recent month
+   `PoliceClient.street_level_availability()` itself reports data for -
+   never a fixed number of months guessed back from today. An earlier
+   version guessed (`crime-last-updated`'s month minus a further 2-month
+   buffer), which silently compounded into a 4-5 month lag rather than the
+   ~2 months intended; querying a month the API hasn't published yet
+   returns an empty result that reads as falsely "safe".
 4. The denominator is the neighbourhood boundary's own area in km² (the API
    states no population or address count). Rates are shrunk toward the
    force-wide mean, more for smaller areas, then banded into quintiles
@@ -102,6 +106,16 @@ wired up here.
 - **Every popup shows its own workings**: raw count, area, raw rate,
   shrunk/adjusted rate, band. Anyone looking at one cell can see exactly
   why it's shaded the way it is, not just trust the colour.
+- **The legend always lists "too few crimes to band"**, whether or not a
+  given run happened to suppress anything - a reader needs to be able to
+  tell suppressed-grey from a real band the moment they see it, not only
+  after the fact.
+- **Basemap tiles are CARTO Positron, not the standard OSM style.** OSM's
+  own tile usage policy excludes this kind of embedded/redistributed use,
+  and the tiles 403 outright when this file is opened over `file://` (no
+  `Referer` header to satisfy them). The muted grey basemap is also the
+  better cartographic choice - a busier basemap competes with the
+  choropleth for attention.
 
 ## Dependencies
 

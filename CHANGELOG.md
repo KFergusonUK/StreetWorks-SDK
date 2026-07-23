@@ -74,15 +74,18 @@
   exactly the API's 10,000-result cap now emits a `UserWarning`, since that
   count may be a truncation, not the true total.
   **New example**: `examples/crime_context/` - a neighbourhood-banded
-  recorded-crime context map for a whole force (rolling 12-month window,
-  the two most recent months always excluded, rates shrunk toward the
-  force mean and banded into quintiles *within* the force only, a
-  sequential single-hue ramp rather than red/amber/green, and a
-  method/limitations panel embedded in the page itself rather than a
+  recorded-crime context map for a whole force (rolling 3-month window,
+  ending at the most recent month `street_level_availability()` itself
+  reports data for rather than a fixed guess back from today, rates
+  shrunk toward the force mean and banded into quintiles - falling back to
+  terciles, or refusing to band at all below a minimum area count - *within*
+  the force only, a sequential single-hue ramp rather than red/amber/green,
+  and a method/limitations panel embedded in the page itself rather than a
   footnote) - built entirely on the two additions above plus the existing
-  `SAFETY_RELEVANT_CATEGORIES`. See its own README for the full method and
-  what it deliberately does not attempt (no per-street scoring, no
-  cross-force comparison, not a risk assessment).
+  `SAFETY_RELEVANT_CATEGORIES`. Live-verified against Durham Constabulary's
+  71 real neighbourhoods. See its own README for the full method and what it
+  deliberately does not attempt (no per-street scoring, no cross-force
+  comparison, not a risk assessment).
   **Also corrected**: the README's "sync and async clients" claim was
   inaccurate for several modules, not just this one - checked directly
   against the source rather than assumed. `streetworks.police` has no

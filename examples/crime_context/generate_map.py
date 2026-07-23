@@ -44,6 +44,25 @@ the count floor is about whether there's enough data to trust, not about
 producing a target amount of colour on the map.
 
 -------------------------------------------------------------------------
+Where the window ends: the API's own reported availability, not a guess
+-------------------------------------------------------------------------
+The window ends at whatever month PoliceClient.street_level_availability()
+itself reports as the latest with data - see latest_available_month() -
+never a fixed number of months counted back from today. An earlier version
+of this script guessed (crime-last-updated's month, minus a further 2-month
+buffer "to be safe"), which silently compounded: crime-last-updated was
+already ~2 months behind today, and the extra buffer stacked on top of
+that, landing 4-5 months behind today rather than the ~2 the guess assumed
+- discarding real, already-published months for no reason. Live-verified
+against Durham: street_level_availability()'s latest reported month
+returned a normal, non-empty crime count in line with neighbouring months;
+the month *after* it returned zero (not yet published) - so trusting the
+API's own answer directly, with no extra guessed buffer, is both more
+current and no less safe than the fixed-skip approach it replaced. See
+street_level_availability()'s own docstring for the endpoint this relies
+on (`GET /crimes-street-dates`).
+
+-------------------------------------------------------------------------
 Why area (km^2), not population or address count
 -------------------------------------------------------------------------
 The Police API states neither. Area, from the boundary polygon this SDK
@@ -78,11 +97,6 @@ Point = tuple[float, float]
 
 #: See the module docstring's "Why a 3-month window" section before changing.
 DEFAULT_WINDOW_MONTHS = 3
-
-#: The API publishes street-level crime in arrears; the most recent month or
-#: two commonly comes back partial or empty, which would misleadingly read
-#: as "safe". Always skipped, counted back from the API's own last_updated().
-SKIP_RECENT_MONTHS = 2
 
 #: Below this many safety-relevant crimes over the *whole* window, a
 #: neighbourhood is rendered unshaded/"too few crimes to band" rather than
@@ -170,13 +184,20 @@ def _shift_month(year: int, month: int, delta: int) -> tuple[int, int]:
     return total // 12, total % 12 + 1
 
 
-def month_window(latest_available: str, *, window_months: int, skip_recent: int) -> list[str]:
-    """``latest_available`` is ``PoliceClient.last_updated()``'s own
-    ``YYYY-MM-DD`` - only year/month are used. Returns ``window_months``
-    real ``"YYYY-MM"`` strings, oldest first, ending ``skip_recent`` months
-    before the API's own latest."""
-    year, month = (int(p) for p in latest_available.split("-")[:2])
-    year, month = _shift_month(year, month, -skip_recent)
+def latest_available_month(availability: list[JSON]) -> str:
+    """``availability`` is ``PoliceClient.street_level_availability()``'s own
+    response - the real months the API confirms it holds street-level crime
+    data for, ground truth rather than a guess. Returns the most recent
+    ``"YYYY-MM"``. See the module docstring's "Where the window ends"
+    section for why this replaced a fixed-offset guess from today."""
+    return max(entry["date"] for entry in availability)
+
+
+def month_window(latest_month: str, *, window_months: int) -> list[str]:
+    """Returns ``window_months`` real ``"YYYY-MM"`` strings, oldest first,
+    ending at ``latest_month`` (see :func:`latest_available_month`) - not
+    counted back from today, and not a fixed number of months before it."""
+    year, month = (int(p) for p in latest_month.split("-"))
     months = []
     for _ in range(window_months):
         months.append(f"{year:04d}-{month:02d}")
@@ -415,8 +436,11 @@ _METHOD_PANEL_HTML = """
     confrontation/threat/assault risk actually tracks (violent crime, public
     order, anti-social behaviour, robbery, possession of weapons) - not property
     crime.</li>
-    <li>The two most recent months are always excluded - the API publishes in
-    arrears and recent months read as falsely "safe".</li>
+    <li>The window always ends at the most recent month data.police.uk itself
+    confirms it has published (via <code>street_level_availability()</code>),
+    never a fixed number of months guessed back from today - querying a month
+    the API hasn't published yet returns an empty result that would read as
+    falsely "safe".</li>
     <li>Rates are crimes per km&sup2; of the neighbourhood's boundary polygon -
     the API states no population or address count. An address count or
     population figure would be a better denominator; this is the honest cheap
@@ -494,14 +518,22 @@ def render_html(
         f'<span style="background:{color}"></span> {html.escape(label)}<br>'
         for label, color in seen.items()
     )
-    # band=None cells can carry two different real reasons (suppressed for
-    # too few crimes in that one area, vs. the whole force going unbanded) -
-    # show whichever of those actually occur, not just the first one found.
-    unbanded_labels = dict.fromkeys(s["band_label"] for s in stats if s["band"] is None)
-    legend_items += "".join(
-        f'<span style="background:{SUPPRESSED_COLOR}"></span> {html.escape(label)}<br>'
-        for label in unbanded_labels
-    ).removesuffix("<br>")
+    # Always shown, whether or not this particular run happened to suppress
+    # anything - a reader needs to be able to interpret grey the moment they
+    # see it on the map, not only after the fact, and quiet rural
+    # neighbourhoods (exactly where suppression is most likely) are the
+    # whole reason this map is interesting.
+    legend_items += (
+        f'<span style="background:{SUPPRESSED_COLOR}"></span> too few crimes to band<br>'
+    )
+    # The rarer whole-force refusal (see compute_bands()'s banding_note)
+    # gets its own legend entry only when it actually happens.
+    if any(s["band_label"] == "too few neighbourhoods in this force to band" for s in stats):
+        legend_items += (
+            f'<span style="background:{SUPPRESSED_COLOR}"></span> '
+            "too few neighbourhoods in this force to band<br>"
+        )
+    legend_items = legend_items.removesuffix("<br>")
 
     all_lats = [lat for s in stats for lat, _ in s["boundary"]]
     all_lngs = [lng for s in stats for _, lng in s["boundary"]]
@@ -549,9 +581,14 @@ def render_html(
 <div id="legend">{legend_items}</div>
 <script>
   const map = L.map('map').setView({json.dumps(center)}, 11);
-  L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-    attribution: '&copy; OpenStreetMap contributors',
-    maxZoom: 18,
+  // CARTO Positron, not the OSM tile servers: OSM's own usage policy excludes
+  // this kind of embedded/redistributed use, and the OSM tiles 403 anyway when
+  // this file is opened over file:// (no Referer header to satisfy them). The
+  // muted grey basemap is also the better cartographic choice here - a busier
+  // basemap would compete with the choropleth for attention.
+  L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+    attribution: '&copy; OpenStreetMap contributors, &copy; CARTO',
+    maxZoom: 19,
   }}).addTo(map);
 
   const features = {json.dumps(features)};
@@ -590,11 +627,13 @@ def main() -> None:
     args = parser.parse_args()
 
     with PoliceClient() as police:
-        latest = cached(args.cache_dir, "last_updated", police.last_updated)
-        months = month_window(
-            latest, window_months=args.window_months, skip_recent=SKIP_RECENT_MONTHS
+        availability = cached(
+            args.cache_dir, "availability", police.street_level_availability
         )
+        latest_month = latest_available_month(availability)
+        months = month_window(latest_month, window_months=args.window_months)
         print(f"Force: {args.force}", file=sys.stderr)
+        print(f"Latest month the API reports data for: {latest_month}", file=sys.stderr)
         print(f"Window: {months[0]} to {months[-1]} ({len(months)} months)", file=sys.stderr)
         stats = build_stats(police, args.cache_dir, args.force, months)
 
