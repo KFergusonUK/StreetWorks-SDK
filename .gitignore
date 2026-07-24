@@ -25,3 +25,7 @@ examples/crime_context/cache/
 # generated map output (run generate_map.py to produce your own) - not
 # meant to be committed, same reasoning as the cache above.
 examples/crime_context/*.html
+
+# same reasoning, for the LSOA-level successor example.
+examples/crime_context_lsoa/cache/
+examples/crime_context_lsoa/*.html

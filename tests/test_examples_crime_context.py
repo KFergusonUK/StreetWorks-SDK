@@ -23,6 +23,7 @@ live run.
 """
 
 import importlib.util
+import math
 import sys
 from pathlib import Path
 
@@ -218,8 +219,17 @@ class TestDecimateRing:
         assert gm.decimate_ring(ring, target_vertices=150) == ring
 
     def test_long_ring_is_reduced_but_stays_closed(self):
-        ring = [(float(i) * 0.001, float(i) * 0.001) for i in range(500)]
-        ring[-1] = ring[0]  # close it, like a real boundary ring
+        # A real (non-degenerate) ring - points around a small circle, not a
+        # straight line - so this exercises meaningfully whichever path
+        # decimate_ring takes: shapely's simplify() correctly empties out a
+        # degenerate all-collinear "ring" via buffer(0), which a straight
+        # line always is, so the fixture has to be a real shape instead.
+        n = 500
+        ring = [
+            (math.sin(2 * math.pi * i / n) * 0.01, math.cos(2 * math.pi * i / n) * 0.01)
+            for i in range(n)
+        ]
+        ring.append(ring[0])  # close it, like a real boundary ring
         decimated = gm.decimate_ring(ring, target_vertices=50)
 
         assert len(decimated) < len(ring)

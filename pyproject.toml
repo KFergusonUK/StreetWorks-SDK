@@ -42,6 +42,7 @@ dev = [
   "mypy>=1.10",
   "cryptography>=42",
   "datamodel-code-generator>=0.25",
+  "shapely>=2.0",
 ]
 
 [project.urls]

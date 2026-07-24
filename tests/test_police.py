@@ -7,6 +7,12 @@ beyond shape and query parameters). The neighbourhood fixtures
 because the boundary endpoint's real shape (string coordinates, a closed
 but non-simple ring) matters for what :meth:`PoliceClient.neighbourhood_boundary`
 must do with it, and a hand-built sample would risk hiding exactly that.
+
+The ``police_data_*`` fixtures (download form HTML, fetch-page HTML, a
+small real zip) are real captures too, trimmed to a handful of genuine rows
+in the zip's case - the custom CSV download's real shape (a CSRF-protected
+HTML form, an async job, a small real zip) is exactly the thing worth
+testing against real bytes rather than a hand-built stand-in.
 """
 
 import json
@@ -20,11 +26,45 @@ from streetworks.exceptions import ServerError
 from streetworks.police import PoliceClient
 
 BASE = "https://data.police.uk/api"
+DATA_BASE = "https://data.police.uk/data"
 FIXTURES = Path(__file__).parent / "fixtures"
+FETCH_UUID = "6d051463-2288-4672-9b37-229350f91007"
 
 
 def _fixture(name: str):
     return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+
+
+def _fixture_text(name: str) -> str:
+    return (FIXTURES / name).read_text(encoding="utf-8")
+
+
+def _fixture_bytes(name: str) -> bytes:
+    return (FIXTURES / name).read_bytes()
+
+
+def _mock_download_flow(zip_url: str, *, post_response: httpx.Response | None = None) -> None:
+    """Wires up the full custom-CSV-download flow's respx mocks: GET the
+    form (real HTML), POST it (302 to a real-shaped fetch URL, or a caller-
+    supplied response for testing failure paths), GET the fetch page
+    (follow_redirects=True means httpx issues this automatically), GET the
+    progress endpoint (ready immediately), GET the zip itself."""
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    respx.post(f"{DATA_BASE}/").mock(
+        return_value=post_response
+        or httpx.Response(302, headers={"Location": f"/data/fetch/{FETCH_UUID}/"})
+    )
+    respx.get(f"{DATA_BASE}/fetch/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_fetch_page.html"))
+    )
+    respx.get(f"{DATA_BASE}/progress/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, json={"status": "ready", "url": zip_url})
+    )
+    respx.get(zip_url).mock(
+        return_value=httpx.Response(200, content=_fixture_bytes("police_durham_2026-05_small.zip"))
+    )
 
 SAMPLE_CRIME = {
     "category": "anti-social-behaviour",
@@ -365,3 +405,183 @@ def test_fewer_than_10000_results_does_not_warn():
         with warnings.catch_warnings():
             warnings.simplefilter("error")
             police.street_level_crimes_in_area(points)  # must not raise/warn
+
+
+# --------------------------------------------------------------------------- #
+# bulk_download_csv - the custom CSV download (CSRF form + async job), not
+# a JSON endpoint like everything else tested above.
+# --------------------------------------------------------------------------- #
+
+
+@respx.mock
+def test_bulk_download_csv_parses_a_real_zip():
+    zip_url = "https://policeuk-data.s3.amazonaws.com/download/test-happy-path.zip"
+    _mock_download_flow(zip_url)
+
+    with PoliceClient() as police:
+        rows = police.bulk_download_csv("durham", date_from="2026-05", date_to="2026-05")
+
+    assert len(rows) == 15
+    assert rows[0] == {
+        "Crime ID": "165128013480a16b1995eb3b523eda7b92db96a67fd4c6cbc10fa3f127f301ac",
+        "Month": "2026-05",
+        "Reported by": "Durham Constabulary",
+        "Falls within": "Durham Constabulary",
+        "Longitude": "-3.363793",
+        "Latitude": "54.891441",
+        "Location": "On or near Dick Trod Lane",
+        "LSOA code": "E01019127",
+        "LSOA name": "Allerdale 001B",
+        "Crime type": "Other crime",
+        "Last outcome category": "Investigation complete; no suspect identified",
+        "Context": "",
+    }
+    # Real, varied categories from the fixture - confirms the zip's multi-
+    # category content survives parsing, not just row 0.
+    types = {row["Crime type"] for row in rows}
+    assert {"Violence and sexual offences", "Anti-social behaviour", "Burglary"} <= types
+
+
+@respx.mock
+def test_bulk_download_csv_sends_repeated_forces_correctly():
+    zip_url = "https://policeuk-data.s3.amazonaws.com/download/test-multi-force.zip"
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    post_route = respx.post(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(302, headers={"Location": f"/data/fetch/{FETCH_UUID}/"})
+    )
+    respx.get(f"{DATA_BASE}/fetch/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_fetch_page.html"))
+    )
+    respx.get(f"{DATA_BASE}/progress/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, json={"status": "ready", "url": zip_url})
+    )
+    respx.get(zip_url).mock(
+        return_value=httpx.Response(200, content=_fixture_bytes("police_durham_2026-05_small.zip"))
+    )
+
+    with PoliceClient() as police:
+        police.bulk_download_csv(
+            ["durham", "leicestershire"], date_from="2026-05", date_to="2026-05"
+        )
+
+    # httpx form-encodes list values as repeated keys - both forces must
+    # appear, not just the last one silently overwriting the first.
+    body = post_route.calls.last.request.content.decode()
+    assert "forces=durham" in body
+    assert "forces=leicestershire" in body
+
+
+@respx.mock
+def test_bulk_download_csv_retries_a_transient_403(monkeypatch):
+    import streetworks.police.client as client_module
+
+    monkeypatch.setattr(client_module.time, "sleep", lambda _seconds: None)
+
+    zip_url = "https://policeuk-data.s3.amazonaws.com/download/test-retry.zip"
+    get_route = respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    respx.post(f"{DATA_BASE}/").mock(
+        side_effect=[
+            httpx.Response(403, text="CSRF verification failed. Request aborted."),
+            httpx.Response(302, headers={"Location": f"/data/fetch/{FETCH_UUID}/"}),
+        ]
+    )
+    respx.get(f"{DATA_BASE}/fetch/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_fetch_page.html"))
+    )
+    respx.get(f"{DATA_BASE}/progress/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, json={"status": "ready", "url": zip_url})
+    )
+    respx.get(zip_url).mock(
+        return_value=httpx.Response(200, content=_fixture_bytes("police_durham_2026-05_small.zip"))
+    )
+
+    with PoliceClient() as police:
+        rows = police.bulk_download_csv("durham", date_from="2026-05", date_to="2026-05")
+
+    assert len(rows) == 15
+    # Confirmed the retry actually happened, not that the first attempt
+    # secretly succeeded some other way.
+    assert get_route.calls.call_count == 2  # two GETs (one per attempt)
+
+
+@respx.mock
+def test_bulk_download_csv_403_persists_past_retries(monkeypatch):
+    import streetworks.police.client as client_module
+
+    monkeypatch.setattr(client_module.time, "sleep", lambda _seconds: None)
+
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    respx.post(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(403, text="CSRF verification failed. Request aborted.")
+    )
+
+    with PoliceClient() as police:
+        with pytest.raises(ServerError):
+            police.bulk_download_csv("durham", date_from="2026-05", date_to="2026-05")
+
+
+@respx.mock
+def test_bulk_download_csv_missing_csrf_token_raises():
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text="<html><body>no token here</body></html>")
+    )
+
+    with PoliceClient() as police:
+        with pytest.raises(ServerError, match="CSRF token"):
+            police.bulk_download_csv("durham", date_from="2026-05", date_to="2026-05")
+
+
+@respx.mock
+def test_bulk_download_csv_unexpected_redirect_shape_raises():
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    # Redirects somewhere that isn't a /data/fetch/<uuid>/ page - simulates
+    # the download flow changing shape.
+    respx.post(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(302, headers={"Location": "/data/"})
+    )
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+
+    with PoliceClient() as police:
+        with pytest.raises(ServerError, match="fetch"):
+            police.bulk_download_csv("durham", date_from="2026-05", date_to="2026-05")
+
+
+@respx.mock
+def test_bulk_download_csv_poll_timeout_raises(monkeypatch):
+    import streetworks.police.client as client_module
+
+    monkeypatch.setattr(client_module.time, "sleep", lambda _seconds: None)
+
+    respx.get(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_download_form.html"))
+    )
+    respx.post(f"{DATA_BASE}/").mock(
+        return_value=httpx.Response(302, headers={"Location": f"/data/fetch/{FETCH_UUID}/"})
+    )
+    respx.get(f"{DATA_BASE}/fetch/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, text=_fixture_text("police_data_fetch_page.html"))
+    )
+    # Never reports ready - the job hung, or the flow changed shape.
+    respx.get(f"{DATA_BASE}/progress/{FETCH_UUID}/").mock(
+        return_value=httpx.Response(200, json={"status": "pending", "url": ""})
+    )
+
+    with PoliceClient() as police:
+        with pytest.raises(ServerError, match="didn't finish"):
+            police.bulk_download_csv(
+                "durham",
+                date_from="2026-05",
+                date_to="2026-05",
+                poll_interval=0.01,
+                poll_timeout=0.05,
+            )

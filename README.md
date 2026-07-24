@@ -1424,6 +1424,41 @@ See [`examples/crime_context/`](examples/crime_context/) for a full worked
 example: a neighbourhood-banded recorded-crime context map for a whole
 force, built entirely on these methods.
 
+### Bulk CSV download
+
+```python
+with PoliceClient() as police:
+    rows = police.bulk_download_csv("durham", date_from="2025-06", date_to="2026-05")
+    categories = police.crime_categories()  # name/url pairs map the CSV's
+                                             # "Crime type" strings to the
+                                             # JSON API's slugs, exactly
+```
+
+`bulk_download_csv(forces, *, date_from, date_to, ...)` drives
+data.police.uk's custom CSV download (https://data.police.uk/data/) — a
+CSRF-protected HTML form plus an async job, not a JSON endpoint like every
+other method here, but fully scriptable with a plain cookie jar and no
+browser. Verified live end-to-end for 1-, 3-, and 12-month single-force
+requests, all ready within seconds (a 12-month Durham request: a 3.5MB zip,
+one file per month). Returns every row from every requested month's
+street-level crime CSV, keyed by the CSV's own real column names (`Crime
+ID`, `Month`, `LSOA code`, `Crime type`, …) — the CSV's `Crime type` is a
+human string ("Violence and sexual offences"), not the JSON API's slug
+("violent-crime"); `crime_categories()`'s `name`/`url` pairs are, confirmed
+live character-for-character, the mapping between the two, so no separate
+lookup file is needed. A per-force export can carry a small amount of real
+geographic cross-force contamination (confirmed live for Durham, ~0.4% of
+rows) — `Falls within` isn't a geographic filter (every row, including the
+contaminating ones, carries that force's own name in that column); scope by
+`LSOA code` against whatever LSOA set matters to your use case instead.
+
+See [`examples/crime_context_lsoa/`](examples/crime_context_lsoa/) for a
+full worked example: LSOA-level (not neighbourhood-team-level) crime
+context, keyed to a specific worksite, with a real population denominator —
+the finer-grained successor to `examples/crime_context/` above, and a
+demonstration of `streetworks.police`, `streetworks.arcgis`, and (for its
+USRN input path) `streetworks.openusrn` working together.
+
 ## Common models
 
 Every provider above has its own native, full-fidelity shape — that's

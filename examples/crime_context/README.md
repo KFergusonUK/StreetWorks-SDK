@@ -6,6 +6,15 @@ built entirely on `streetworks.police.PoliceClient` and
 context for lone-worker and night-shift planning around street works - not a
 risk score, not a risk assessment, and not a substitute for one.
 
+See [`examples/crime_context_lsoa/`](../crime_context_lsoa/) for a
+finer-grained successor to this example: LSOA-level geography (~1,500
+residents each, versus one whole neighbourhood policing team), a real
+population denominator instead of area, and output keyed to a specific
+worksite rather than a force-wide ranking. That README also explains why
+its ingestion (a bulk CSV download) is a fundamentally cheaper - and so a
+fundamentally different - trade-off than this example's live polygon
+queries.
+
 ```bash
 python generate_map.py --force leicestershire
 ```

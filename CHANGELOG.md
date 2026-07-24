@@ -48,6 +48,46 @@
 
 ### Added
 
+- **`streetworks.police` bulk CSV download**:
+  `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
+  data.police.uk's custom CSV download (https://data.police.uk/data/) - a
+  CSRF-protected HTML form plus an async job, not a JSON endpoint like every
+  other method on this client, but fully scriptable with a plain cookie jar
+  and no browser. Verified live end-to-end for 1-, 3-, and 12-month
+  single-force requests (all ready within seconds; 12 months of Durham is a
+  3.5MB zip). Adds a small local retry (fresh CSRF token each attempt) for a
+  transient 403 observed live under repeated use - not one of the shared
+  transport's retryable statuses, since 403 correctly means "no" everywhere
+  else in this SDK. Returns every row keyed by the CSV's own real column
+  names; the CSV's `Crime type` ("Violence and sexual offences") maps to the
+  JSON API's slug (`violent-crime`) via `crime_categories()`'s existing
+  `name`/`url` pairs, confirmed live to match exactly - no separate mapping
+  file needed, despite there being a published one
+  (`police-uk-category-mappings.csv`) that maps something else entirely.
+  Also documents a real, live-verified caveat: a per-force export can carry
+  a small amount of geographic cross-force contamination (~0.4% of rows for
+  one real Durham check) that `Falls within` cannot be used to filter
+  (confirmed live: every row, including the contaminating ones, carries
+  that force's own name in that column).
+  **New example**: `examples/crime_context_lsoa/` - LSOA-level (not
+  neighbourhood-team-level) crime context keyed to a specific worksite
+  (point + radius, live-tested; or a USRN against an already-downloaded OS
+  Open USRN GeoPackage, implemented but not live-tested end-to-end - see its
+  own README), with a real 2021 Census population denominator instead of
+  area. Population and boundary geometry both come from one ONS ArcGIS
+  FeatureServer query (via the existing `streetworks.arcgis.ArcGISFeatureClient`),
+  which structurally removes the 2011/2021 LSOA-vintage-mixing risk at the
+  source rather than just checking for it downstream. Defaults to a 12-month
+  window (versus the neighbourhood example's 3) now that ingestion is a
+  single bulk download rather than hundreds of live polygon queries -
+  shrinkage, quintile/tercile/refuse-to-band tiers, and suppression for
+  too-few-crimes areas all carry over from the neighbourhood example's
+  design. Live-verified against Durham Constabulary, worksite centred on
+  Newton Aycliffe town centre. See its own README for the full method,
+  the architectural split (police ingestion in `streetworks.police`; ONS
+  population/boundary and worksite geometry kept example-local, not
+  promoted into the library), and what it deliberately does not attempt.
+
 - **`streetworks.police` neighbourhood support**: `PoliceClient.neighbourhoods(force)`,
   `.neighbourhood(force, id)`, and `.neighbourhood_boundary(force, id)`
   (`GET /{force}/neighbourhoods`, `/{force}/{id}`, `/{force}/{id}/boundary`).
