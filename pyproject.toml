@@ -62,6 +62,7 @@ addopts = "-m 'not integration'"
 markers = [
     "integration: makes real calls to live test/sandbox systems (needs credentials)",
 ]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
