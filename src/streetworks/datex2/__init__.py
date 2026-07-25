@@ -17,7 +17,11 @@ Verkeerscentrum Vlaanderen's DATEX II v3 feed for Belgium/Flanders only,
 not all-Belgium (credential-free - see :mod:`streetworks.datex2.belgium`
 for the coverage question and a real non-WGS84 CRS finding), Ponts et
 Chaussées' DATEX II v2.3 feed for Luxembourg (credential-free - see
-:mod:`streetworks.datex2.luxembourg`), and Statens vegvesen's DATEX II
+:mod:`streetworks.datex2.luxembourg`), the Road Infrastructure Agency's
+DATEX II v2.3 "Short-term Road Construction" feed for Bulgaria
+(credential-free - see :mod:`streetworks.datex2.bulgaria` for the wrong
+NAP-listed host, the date-stamped catalogue-then-file fetch, and a real
+mislabelled-encoding finding), and Statens vegvesen's DATEX II
 snapshotPull service for Norway (**pending live verification** - see
 :mod:`streetworks.datex2.vegvesen`).
 """
@@ -30,6 +34,9 @@ from .bisonfute import BASE_URL as BISONFUTE_BASE_URL
 from .bisonfute import CONTENT_PATH as BISONFUTE_CONTENT_PATH
 from .bisonfute import BisonFuteClient
 from .bisonfute import dir_regions as bisonfute_dir_regions
+from .bulgaria import BASE_URL as BULGARIA_BASE_URL
+from .bulgaria import CATALOGUE_PATH as BULGARIA_CATALOGUE_PATH
+from .bulgaria import BulgariaClient
 from .dgt import BASE_URL as DGT_BASE_URL
 from .dgt import SITUATION_PUBLICATION_PATH as DGT_SITUATION_PUBLICATION_PATH
 from .dgt import DGTClient
@@ -95,4 +102,7 @@ __all__ = [
     "LuxembourgClient",
     "LUXEMBOURG_BASE_URL",
     "LUXEMBOURG_DATEX_PATH",
+    "BulgariaClient",
+    "BULGARIA_BASE_URL",
+    "BULGARIA_CATALOGUE_PATH",
 ]

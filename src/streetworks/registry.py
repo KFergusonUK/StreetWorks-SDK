@@ -763,6 +763,30 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2.luxembourg import LuxembourgClient",
     ),
     ProviderEntry(
+        key="bulgaria",
+        name="Road Infrastructure Agency (LIMA)",
+        description="Bulgaria's national roadworks feed.",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Bulgaria"}),
+        scope_note=(
+            "The NAP-listed host (lima.api.bg) is unreachable - the real, "
+            "working host is datasheet.api.bg, confirmed live. Fetches the "
+            "'Short-term Road Construction' (r03) dataset, confirmed live to "
+            "be a strict superset of the other two roadworks categories "
+            "('Closed Roads'/r01, 'Closed Roadways'/r02)."
+        ),
+        credentials=None,
+        licence=(
+            "Unconfirmed - no licence text on the reachable host "
+            "(datasheet.api.bg); the real terms page (lima.api.bg) could not "
+            "be reached directly to verify secondhand claims"
+        ),
+        source_grade="operator",
+        _module="streetworks.datex2",
+        _client_name="BulgariaClient",
+        import_line="from streetworks.datex2.bulgaria import BulgariaClient",
+    ),
+    ProviderEntry(
         key="vegvesen",
         name="Statens vegvesen",
         description="Norway's national roadworks feed.",
@@ -951,5 +975,30 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.arcgis.tigerweb",
         _client_name="TIGERwebClient",
         import_line="from streetworks.arcgis.tigerweb import TIGERwebClient",
+    ),
+    ProviderEntry(
+        key="vialietuva",
+        name="Via Lietuva",
+        description="Lithuania's national roadworks feed (open data.gov.lt route).",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Lithuania"}),
+        administrative_area="Via Lietuva",
+        scope_note=(
+            "The open data.gov.lt route (CC BY 4.0), not the RTTI NAP - that "
+            "listed NAP is agreement-gated and 403s without one. Only the "
+            "'Remontas' (road repairs) table is modelled as roadworks; "
+            "'Kliutis' (obstacles) and 'Renginys' (events) were checked and "
+            "are genuinely not roadworks (condition hazards / event "
+            "closures) - see the module docstring. Coordinates are real "
+            "Lithuanian LKS-94 (EPSG:3346), WKT axis order (Northing, "
+            "Easting) - reversed from the usual WKT convention, confirmed "
+            "live."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="operator",
+        _module="streetworks.vialietuva",
+        _client_name="ViaLietuvaClient",
+        import_line="from streetworks.vialietuva import ViaLietuvaClient",
     ),
 ]

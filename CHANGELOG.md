@@ -89,6 +89,83 @@
   Both registered in `streetworks.registry` (`kind="roadworks"`) and
   wired into `scripts/smoke_test.py`.
 
+- **Bulgaria (Road Infrastructure Agency/LIMA) DATEX adapter**
+  (`streetworks.datex2.bulgaria`) - DATEX II v2.3, credential-free, reused
+  through the existing shared parser/model. Live-verified: 150 real
+  roadworks records. Two real findings, one adapter-local, one shared:
+  - The NAP-listed host (`lima.api.bg`) is unreachable (connection
+    refused); the real, working host is `datasheet.api.bg`, which serves
+    roadworks at a date-stamped URL rather than a fixed one, so
+    `BulgariaClient.get_situations()` is a two-step fetch (resolve today's
+    file link from the catalogue page, then fetch it). LIMA's roadworks
+    catalogue also splits into three datasets ("Closed Roads"/r01, 14
+    records; "Closed Roadways"/r02, 46 records; "Short-term Road
+    Construction"/r03, 150 records) - checking real record IDs across all
+    three confirmed r03 is a strict superset of the other two, so this
+    adapter fetches r03 alone rather than merging and de-duplicating
+    three files. The real file's own XML declaration also claims
+    `encoding="UTF-16"` while the actual bytes are UTF-8 - a genuine
+    mislabelling a strict parser rejects outright; corrected before
+    parsing, kept local to this adapter since no other feed in this SDK
+    has shown the same issue.
+  - A third, distinct discriminator type: every real record uses the bare
+    `Roadworks` xsi:type directly - not schema-typical (`Roadworks` is
+    normally DATEX II's abstract base, not a concrete `xsi:type`), but
+    real, live data, and distinct in shape from both Spain's cause-based
+    check and Belgium's generic-value case. Added to
+    `streetworks.datex2.models.ROADWORKS_TYPES` - confirmed zero drift via
+    a live before/after roadworks-count regression across France, Spain
+    and Belgium.
+
+  Real WGS84 coordinates throughout, but every location states three
+  points, of which the shared parser captures only the first - same
+  behaviour as every other point-kind location in this SDK, documented
+  rather than changed. **Licence unconfirmed**: no licence text exists on
+  the reachable host, and the real terms page sits behind the unreachable
+  `lima.api.bg`, so - per the Autobahn GmbH/Belgium precedent - the test
+  fixture is **synthetic** (real confirmed shape, invented values).
+  Registered in `streetworks.registry` (`kind="roadworks"`) and wired into
+  `scripts/smoke_test.py`.
+
+- **Lithuania (Via Lietuva) roadworks adapter** (`streetworks.vialietuva`,
+  `streetworks.common.from_vialietuva`) - the **open data.gov.lt CSV
+  route**, not the RTTI NAP NAPCORE lists (that listed NAP is
+  agreement-gated and 403s without one); CSV, not DATEX, so it has its own
+  small parser, the same shape of choice already made for Autobahn/WZDx.
+  Live-verified: 9,762 real `Remontas` (road repairs) rows, 100%
+  coordinate coverage.
+  - Checked all four of the dataset's tables, not just the one modelled.
+    `Kliutis` (obstacles - real road-condition hazards, e.g. "weakened by
+    spring thaw") and `Renginys` (events - real car-rally-stage closures)
+    are genuinely not roadworks, not forced into `Works` - the same call
+    already made for UK Police. `KelioAtkarpa` (road sections) is
+    gazetteer-shaped reference data (road number/name/km-range, no
+    restriction content); confirmed live every real `road_id` joins to it
+    (886/886), exposed as `ViaLietuvaClient.road_sections()`, the same
+    auxiliary-lookup role `dir_regions()`/`provinces()` play for Bison
+    Futé/DGT.
+  - **Real coordinates are Lithuanian LKS-94 (`EPSG:3346`)**, not WGS84 -
+    the third non-WGS84 roadworks provider in this SDK, after Belgium's
+    Lambert 72. **The source's own WKT axis order is also reversed** -
+    `POINT (northing easting)`, not the usual `(easting, northing)`,
+    confirmed from real value ranges (first number always in Lithuania's
+    real northing band, second always in its real easting band). Carried
+    through unconverted, both facts stated explicitly via
+    `from_vialietuva`'s `crs` parameter and its own docstring, not
+    assumed.
+  - A repair's full path (a real `MULTILINESTRING`) is preferred when
+    stated (6,984/9,762 real rows, 71.6%); the rest are point-only - 100%
+    coordinate coverage either way.
+  - Real, honest data-quality finding: 25/9,762 real rows (~0.26%) are
+    plainly unfiltered test data (`aprasymas` literally `"test"`/
+    `"testuojam;"` or similar), structurally identical to a genuine row
+    otherwise.
+
+  Real trimmed fixtures used throughout (CC BY 4.0 confirmed via the
+  dataset's own licence field on data.gov.lt). Registered in
+  `streetworks.registry` (`kind="roadworks"`) and wired into
+  `scripts/smoke_test.py`.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a

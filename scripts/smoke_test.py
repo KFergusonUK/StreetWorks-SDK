@@ -253,6 +253,26 @@ def check_autobahn() -> str:
     )
 
 
+def check_vialietuva() -> str:
+    """Via Lietuva (Lithuania) needs no credentials - confirmed live via
+    the open data.gov.lt route (CC BY 4.0), not the agreement-gated RTTI
+    NAP. Fetches the 'Remontas' (road repairs) table only - see
+    streetworks.vialietuva's module docstring for why 'Kliutis'/'Renginys'
+    aren't modelled. Coordinates are real LKS-94 (EPSG:3346), not WGS84."""
+    from streetworks.common import from_vialietuva
+    from streetworks.vialietuva import ViaLietuvaClient
+
+    with ViaLietuvaClient() as lt:
+        repairs = lt.road_repairs()
+    works = from_vialietuva(repairs)
+    with_coord = sum(1 for w in works if w.sites[0].coordinate is not None)
+    with_line = sum(1 for w in works if w.sites[0].coordinate and w.sites[0].coordinate.parts)
+    return (
+        f"{len(works):,} road repairs, {with_coord}/{len(works)} with coordinates "
+        f"({with_line} with a full line, the rest point-only)"
+    )
+
+
 def check_german_regional() -> str:
     """German state (Bundesland) roadworks needs no credentials - confirmed
     live for Hamburg (Point, WFS), Brandenburg (LineString, WFS), and
@@ -321,6 +341,21 @@ def check_luxembourg() -> str:
 
     with LuxembourgClient() as lu:
         situations = list(lu.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return f"{len(situations):,} roadworks situations ({works:,} works records)"
+
+
+def check_bulgaria() -> str:
+    """Road Infrastructure Agency/LIMA (Bulgaria, DATEX II v2.3) needs no
+    credentials - confirmed live and reliably reachable via
+    datasheet.api.bg, not the NAP-listed lima.api.bg (see
+    streetworks.datex2.bulgaria). Fetches the 'Short-term Road
+    Construction' (r03) dataset, confirmed a strict superset of the other
+    two roadworks categories."""
+    from streetworks.datex2 import BulgariaClient
+
+    with BulgariaClient() as bg:
+        situations = list(bg.iter_roadworks())
     works = sum(len(s.roadworks) for s in situations)
     return f"{len(situations):,} roadworks situations ({works:,} works records)"
 
@@ -804,8 +839,12 @@ def main() -> int:
     reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
     # Ponts et Chaussées/CITA (Luxembourg) needs no credentials
     reporter.check("DATEX II (Luxembourg)", [], check_luxembourg)
+    # Road Infrastructure Agency/LIMA (Bulgaria) needs no credentials
+    reporter.check("DATEX II (Bulgaria)", [], check_bulgaria)
     # Autobahn GmbH (Germany) needs no credentials
     reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
+    # Via Lietuva (Lithuania) needs no credentials
+    reporter.check("Via Lietuva (Lithuania)", [], check_vialietuva)
     # German state roadworks (Hamburg, Brandenburg) need no credentials
     reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
     # WZDx (US Work Zone Data Exchange) needs no credentials

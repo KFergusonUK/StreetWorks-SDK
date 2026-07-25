@@ -72,8 +72,9 @@ client, documented in its own section, exactly as before.
 | `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), and Ponts et Chaussées (Luxembourg, XML v2.3; no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), and the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
+| `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
@@ -88,8 +89,8 @@ all built on [httpx](https://www.python-httpx.org/). **Async is per-module,
 not universal** — checked directly against the source, not assumed: Street
 Manager, DataVIA, D-TRO, SRWR, OS Open USRN, BAN, Kartverket, NVDB, NWB and
 BD TOPO each ship an `Async<Name>Client` mirror; BAG, DATEX II (all of NDW/
-National Highways/Digitraffic/IRCA/Bison Futé/DGT/Belgium/Luxembourg/Vegvesen),
-Autobahn GmbH,
+National Highways/Digitraffic/IRCA/Bison Futé/DGT/Belgium/Luxembourg/Bulgaria/Vegvesen),
+Autobahn GmbH, Via Lietuva,
 the German state roadworks client, WZDx, TrafficWatchNI, Traffic Wales, UK
 Police, and the ArcGIS-based providers (Jersey, TIGERweb) are sync-only
 today. Check a given module for an `Async*Client` before assuming one
@@ -119,7 +120,7 @@ OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
 Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Belgium/Flanders,
-Luxembourg, Autobahn GmbH/Germany,
+Luxembourg, Bulgaria, Autobahn GmbH/Germany, Via Lietuva/Lithuania,
 the German states Hamburg, Brandenburg and Saxony (all parsed against
 real live feeds), BAN/France (search, reverse and bulk-file parsing
 all verified against `data.geopf.fr`/`adresse.data.gouv.fr`), and
@@ -1040,6 +1041,48 @@ trimmed fixture data is used directly. See
 `streetworks/datex2/luxembourg.py`'s module docstring for the full
 field-by-field mapping.
 
+**Bulgaria's Road Infrastructure Agency (LIMA)** publishes current roadworks
+on the republican road network credential-free, as genuine DATEX II **v2.3**:
+
+```python
+from streetworks.datex2.bulgaria import BulgariaClient
+from streetworks.common import from_datex2
+
+with BulgariaClient() as bg:
+    situations = list(bg.iter_roadworks())
+for situation in situations:
+    works = from_datex2(situation, territory="Bulgaria")
+```
+
+The NAP-listed host (`lima.api.bg`) is **unreachable** — connection refused,
+consistently. The real working host is `datasheet.api.bg`, a separate public
+download front for the same LIMA platform. That host doesn't serve roadworks
+at a fixed URL either: each dataset's catalogue page links a same-day file
+(`/files/YYYYMMDD_roadworks_r03.xml`), so `BulgariaClient.get_situations()` is
+a two-step fetch — resolve today's real file link from the catalogue page,
+then fetch it. LIMA's roadworks catalogue also splits into three separate
+datasets ("Closed Roads"/r01, "Closed Roadways"/r02, "Short-term Road
+Construction"/r03); checking real record IDs across all three confirmed r03
+is a strict superset of the other two, so this adapter fetches r03 alone.
+Verified against the live feed (2026-07, 150 real roadworks records, all
+three categories): every record uses the bare `Roadworks` xsi:type directly
+— a **third dedicated discriminator type**, distinct from both
+`MaintenanceWorks`/`ConstructionWorks` and Belgium's generic-value case,
+added to `ROADWORKS_TYPES` (confirmed zero drift across every other
+adapter's real fixture data — see the live-regression check in
+`streetworks/datex2/models.py`). The real file's own XML declaration claims
+`encoding="UTF-16"`, but the actual bytes are UTF-8 — a genuine mislabelling
+that a strict XML parser rejects outright; `get_situations()` corrects the
+declaration before parsing. Every location states three real WGS84 points
+per record (not one), of which the shared parser captures only the first, as
+it does for every other point-kind location in this SDK. **Licence
+unconfirmed**: no licence text exists on the reachable host, and the real
+terms page sits behind the unreachable `lima.api.bg` — so, per the Autobahn
+GmbH/Belgium precedent, the test fixture is synthetic (real confirmed shape,
+invented values) rather than trimmed from a live pull. See
+`streetworks/datex2/bulgaria.py`'s module docstring for the full
+field-by-field mapping.
+
 ## Autobahn GmbH (Germany, national motorways)
 
 Germany's national motorway (Autobahn) network roadworks, via Autobahn
@@ -1131,6 +1174,63 @@ and full field-by-field mapping.
 The per-item `details/roadworks/{id}` endpoint was checked and confirmed
 to add nothing over the list response (sampled 6 varied real records,
 every extra field was `null`) — skipped, avoiding ~2,900 extra requests.
+
+## Via Lietuva (Lithuania)
+
+Lithuania's national roadworks, via **the open data.gov.lt route, not the
+RTTI NAP NAPCORE lists** — that listed NAP is agreement-gated and returns
+403 without one. The open dataset ("Eismo ribojimai valstybinės reikšmės
+keliuose" — traffic restrictions on state roads, provider Via Lietuva) is
+published separately as CSV/JSON, licensed **CC BY 4.0**, credential-free.
+It's CSV, not DATEX, so `streetworks.vialietuva` has its own small parser,
+same shape of choice as Autobahn/WZDx:
+
+```python
+from streetworks.vialietuva import ViaLietuvaClient
+from streetworks.common import from_vialietuva
+
+with ViaLietuvaClient() as lt:
+    repairs = lt.road_repairs()
+works = from_vialietuva(repairs)
+```
+
+The dataset has **four** tables; only one is roadworks. Verified against
+the live feed (2026-07): `Remontas` (road repairs, 9,762 real rows) is the
+roadworks core, modelled here. `Kliutis` (obstacles) and `Renginys`
+(events) were checked and are genuinely **not** roadworks — `Kliutis` is
+real road-condition hazards ("Silpna, nelygi kelio danga" — weak, uneven
+road surface), closer to an incident register than planned works;
+`Renginys` is closures for organised events (car rally stages), not
+construction/maintenance at all — neither is forced into `Works`, the
+same call already made for UK Police. `KelioAtkarpa` (road sections) is
+real reference data (road number, name, km range) with no
+restriction/date/coordinate content — gazetteer-shaped, not roadworks;
+confirmed live that every `RoadRepair.road_id` joins to a real
+`KelioAtkarpa` row (886/886), exposed as `ViaLietuvaClient.road_sections()`
+for callers who want it, the same auxiliary-lookup role `dir_regions()`/
+`provinces()` play for Bison Futé/DGT.
+
+**CRS — the important finding.** Coordinates are real Lithuanian national
+grid, **LKS-94 (`EPSG:3346`)**, not WGS84 — the third non-WGS84 roadworks
+provider in this SDK, after Belgium's Lambert 72. **The WKT axis order is
+also reversed from the usual convention** — `POINT (6061836 567621)`
+states `(Northing, Easting)`, not `(Easting, Northing)`, confirmed from
+real value ranges (the first number is always in Lithuania's real northing
+band, ~5,990,000–6,265,000; the second always in its real easting band,
+~300,000–720,000). Carried through unconverted, both the CRS and the axis
+order stated explicitly rather than assumed — see
+`streetworks/common/from_vialietuva.py`'s module docstring.
+
+A repair's full path (a real `MULTILINESTRING`, present on 6,984/9,762
+real rows, 71.6%) is preferred when stated; the rest are point-only —
+100% coordinate coverage either way. Two other honest findings confirmed
+against the real feed: `koord_validacija` (coordinate-validated) is
+`True` on every single row checked (9,762/9,762) — a real field, but not a
+useful discriminator in practice — and 25/9,762 real rows (~0.26%) are
+plainly test data (`aprasymas` literally `"test"`/`"testuojam;"` or
+similar), structurally identical to a real row otherwise and not filtered
+by the source. See `streetworks/vialietuva/models.py`'s module docstring
+for the full field-by-field mapping.
 
 ## German state roadworks (OGC WFS)
 
@@ -1626,10 +1726,12 @@ arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
 Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain,
-Belgium/Flanders, and Luxembourg via the one shared converter — Belgium's
-own real, non-WGS84 CRS is passed through its `crs` parameter, see
+Belgium/Flanders, Luxembourg, and Bulgaria via the one shared converter —
+Belgium's own real, non-WGS84 CRS is passed through its `crs` parameter, see
 [DATEX II (European roadworks)](#datex-ii-european-roadworks) above),
-Autobahn GmbH/Germany, German
+Autobahn GmbH/Germany, Via Lietuva/Lithuania (own real, non-WGS84 CRS —
+LKS-94, `EPSG:3346` — and reversed WKT axis order, see
+[Via Lietuva (Lithuania)](#via-lietuva-lithuania) above), German
 state roadworks (Hamburg, Brandenburg, Saxony, via the one shared
 `from_ogc_features` converter), WZDx, TrafficWatchNI and Traffic Wales.
 UK Police stays outside
@@ -1835,6 +1937,29 @@ independently confirmed, as Lambert-93).
       redistribution to third parties, so its test fixture is synthetic
       (real shape, invented values) rather than trimmed from a live pull —
       Luxembourg's is real, under CC0
+- [x] Bulgaria (Road Infrastructure Agency/LIMA) DATEX adapter
+      (`streetworks.datex2.bulgaria`) — DATEX II v2.3, credential-free,
+      reused through the existing shared parser. Verified against the real
+      feed: 150 roadworks records (the "Short-term Road Construction"/r03
+      dataset, confirmed a strict superset of the other two roadworks
+      categories LIMA publishes, "Closed Roads"/r01 and "Closed
+      Roadways"/r02 — checked by comparing real record IDs across all
+      three, not assumed). The NAP-listed host (`lima.api.bg`) is
+      unreachable; the real host is `datasheet.api.bg`, whose file URL is
+      date-stamped, so this adapter is a two-step catalogue-then-file
+      fetch. Surfaced a third, distinct discriminator type — every real
+      record uses the bare `Roadworks` xsi:type directly (not
+      `MaintenanceWorks`/`ConstructionWorks`, not a generic-value case like
+      Belgium's) — added to `ROADWORKS_TYPES`, confirmed zero drift across
+      every other adapter's real fixture data. Also surfaced a genuine
+      mislabelled-encoding bug in the source feed itself (XML declares
+      `encoding="UTF-16"`; actual bytes are UTF-8), corrected before
+      parsing. Real WGS84 coordinates, but three points per location where
+      the shared parser captures only the first, same as every other
+      point-kind location in this SDK. **Licence unconfirmed** — no
+      licence text on the reachable host, and the real terms page sits
+      behind the unreachable `lima.api.bg` — so, per the Autobahn
+      GmbH/Belgium precedent, its test fixture is synthetic
 - [x] Germany (Autobahn GmbH) national motorway adapter (`streetworks.autobahn`)
       — its own JSON REST API, not DATEX; verified against a live fetch of
       all 113 roads (2,873 roadworks, zero failures), no credentials. A
@@ -1844,6 +1969,25 @@ independently confirmed, as Lambert-93).
       (99.7% coverage on the class with no date field at all). **Licence
       unconfirmed** despite checking four independent sources — shipped
       anyway, flagged prominently, not silently assumed open
+- [x] Lithuania (Via Lietuva) roadworks adapter (`streetworks.vialietuva`)
+      — the open data.gov.lt CSV route (CC BY 4.0), not the agreement-gated
+      RTTI NAP (403s without one); own small parser, not DATEX. Verified
+      against the real feed: 9,762 real `Remontas` (road repairs) rows,
+      100% coordinate coverage. Checked all four of the dataset's tables,
+      not just the one modelled — `Kliutis` (obstacles, real road-condition
+      hazards) and `Renginys` (events, real car-rally closures) are
+      genuinely not roadworks, not forced into `Works`; `KelioAtkarpa`
+      (road sections) is gazetteer-shaped reference data, exposed as a
+      separate `road_sections()` lookup (confirmed live: every real
+      `road_id` joins, 886/886), the same role `dir_regions()`/`provinces()`
+      play for Bison Futé/DGT. Real coordinates are Lithuanian LKS-94
+      (`EPSG:3346`), not WGS84 — the third non-WGS84 roadworks provider in
+      this SDK — **and** the source's own WKT states axis order as
+      `(Northing, Easting)`, reversed from the usual WKT convention,
+      confirmed from real value ranges, not assumed. Also surfaced a real
+      data-quality quirk: 25/9,762 real rows (~0.26%) are unfiltered test
+      data, structurally identical to genuine rows otherwise. Real trimmed
+      fixtures used throughout (CC BY 4.0 confirmed)
 - [x] German state (Bundesland) roadworks (`streetworks.ogc`) — a reusable
       generic OGC WFS/Features/direct-download GeoJSON client plus a
       declarative per-state field-map registry, one shared converter

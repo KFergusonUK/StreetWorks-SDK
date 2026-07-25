@@ -30,7 +30,7 @@ from typing import Any
 
 __all__ = ["Situation", "SituationRecord", "Validity", "Period", "Location"]
 
-ROADWORKS_TYPES = frozenset({"MaintenanceWorks", "ConstructionWorks"})
+ROADWORKS_TYPES = frozenset({"MaintenanceWorks", "ConstructionWorks", "Roadworks"})
 
 
 @dataclass(frozen=True)
@@ -125,6 +125,19 @@ class SituationRecord:
         # appear in any other adapter's real fixture (DGT's own 7 real
         # RoadOrCarriagewayOrLaneManagement records use different values
         # entirely), so this is additive here too.
+        #
+        # Bulgaria (LIMA/datasheet.api.bg) surfaced a third dedicated
+        # xsi:type, distinct from both siblings above: real records use the
+        # bare abstract name `Roadworks` as their own concrete xsi:type
+        # (14/14 in one live pull, all also carrying
+        # `roadworks/maintenanceWorks/roadMaintenanceType=roadworks` a level
+        # too deep for the direct-child lookup that populates
+        # `road_maintenance_type` to reach) rather than instantiating
+        # `MaintenanceWorks`/`ConstructionWorks` directly - not schema-typical,
+        # but real, live data. Added straight to `ROADWORKS_TYPES` rather than
+        # as another generic-value check since it's already an unambiguous
+        # dedicated type by name; confirmed no other adapter's real fixture
+        # uses `xsi:type="Roadworks"` for anything.
         return (
             self.record_type in ROADWORKS_TYPES
             or (self.cause_type == "roadMaintenance" and self.road_maintenance_type == "roadworks")

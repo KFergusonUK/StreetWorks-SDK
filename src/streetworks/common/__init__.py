@@ -24,6 +24,7 @@ from .from_streetmanager import from_streetmanager
 from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
+from .from_vialietuva import from_vialietuva
 from .from_wzdx import from_wzdx
 from .gazetteer import (
     Address,
@@ -72,6 +73,7 @@ __all__ = [
     "from_streetmanager",
     "from_wzdx",
     "from_autobahn",
+    "from_vialietuva",
     "from_ogc_features",
     "from_datavia",
     "from_openusrn",
