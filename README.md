@@ -322,6 +322,11 @@ pip install -e ".[gen]"
 python scripts/generate_models.py --version v6 --from-dir specs/streetmanager/v6
 ```
 
+See [`examples/collaboration_finder.py`](examples/collaboration_finder.py)
+for a worked example of finding same-street, close-in-time works worth
+coordinating (the reusable matching logic is commented separately from the
+fetch/print code, since that's the bit worth lifting into your own script).
+
 ## Street Manager Open Data (SNS push)
 
 Open Data is a *push* model: Street Manager POSTs event notifications to an
@@ -1739,6 +1744,12 @@ the works hierarchy entirely — it's a *context* provider (area-level crime as 
 safety signal), not a works
 provider, and forcing it into a `WorksSite` would misrepresent what it
 actually is.
+
+See [`examples/compare_active_works.py`](examples/compare_active_works.py)
+for this normalisation in practice — active works in a Street Manager area
+and a DGT/Spain area, side by side, printed with one shared bit of code
+working unmodified on both (default areas: Newton Aycliffe vs. a radius
+around Alcúdia, Mallorca; both parameterisable).
 
 ## Canonical gazetteer model (`Street`, `Segment`, `Address`)
 
