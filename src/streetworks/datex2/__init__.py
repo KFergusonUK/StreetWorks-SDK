@@ -12,11 +12,20 @@ IRCA/Vegagerðin's DATEX II snapshotPull service for Iceland (credential-free
 - see :mod:`streetworks.datex2.irca`), Bison Futé/the DIRs' DATEX II v2 feed
 for France (credential-free - see :mod:`streetworks.datex2.bisonfute`), the
 DGT's DATEX II v3 SituationPublication for Spain, excl. Catalonia & the
-Basque Country (credential-free - see :mod:`streetworks.datex2.dgt`), and
-Statens vegvesen's DATEX II snapshotPull service for Norway (**pending live
-verification** - see :mod:`streetworks.datex2.vegvesen`).
+Basque Country (credential-free - see :mod:`streetworks.datex2.dgt`),
+Verkeerscentrum Vlaanderen's DATEX II v3 feed for Belgium/Flanders only,
+not all-Belgium (credential-free - see :mod:`streetworks.datex2.belgium`
+for the coverage question and a real non-WGS84 CRS finding), Ponts et
+Chaussées' DATEX II v2.3 feed for Luxembourg (credential-free - see
+:mod:`streetworks.datex2.luxembourg`), and Statens vegvesen's DATEX II
+snapshotPull service for Norway (**pending live verification** - see
+:mod:`streetworks.datex2.vegvesen`).
 """
 
+from .belgium import BASE_URL as BELGIUM_BASE_URL
+from .belgium import CRS as BELGIUM_CRS
+from .belgium import DATEX_PATH as BELGIUM_DATEX_PATH
+from .belgium import BelgiumClient
 from .bisonfute import BASE_URL as BISONFUTE_BASE_URL
 from .bisonfute import CONTENT_PATH as BISONFUTE_CONTENT_PATH
 from .bisonfute import BisonFuteClient
@@ -32,6 +41,9 @@ from .digitraffic import provinces as digitraffic_provinces
 from .irca import BASE_URL as IRCA_BASE_URL
 from .irca import SITUATION_ENDPOINT as IRCA_SITUATION_ENDPOINT
 from .irca import IcelandClient
+from .luxembourg import BASE_URL as LUXEMBOURG_BASE_URL
+from .luxembourg import DATEX_PATH as LUXEMBOURG_DATEX_PATH
+from .luxembourg import LuxembourgClient
 from .models import Location, Period, Situation, SituationRecord, Validity
 from .nationalhighways import BASE_URL as NH_BASE_URL
 from .nationalhighways import ClosureType, NationalHighwaysClient
@@ -76,4 +88,11 @@ __all__ = [
     "VegvesenClient",
     "VEGVESEN_BASE_URL",
     "NVDB_BASE_URL",
+    "BelgiumClient",
+    "BELGIUM_BASE_URL",
+    "BELGIUM_DATEX_PATH",
+    "BELGIUM_CRS",
+    "LuxembourgClient",
+    "LUXEMBOURG_BASE_URL",
+    "LUXEMBOURG_DATEX_PATH",
 ]

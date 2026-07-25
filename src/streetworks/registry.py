@@ -725,6 +725,44 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2.dgt import DGTClient",
     ),
     ProviderEntry(
+        key="belgium",
+        name="Verkeerscentrum Vlaanderen",
+        description="Flanders' (not all-Belgium's) roadworks feed.",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Belgium"}),
+        scope_note=(
+            "Flanders only - confirmed live (supplierIdentification/"
+            "nationalIdentifier states \"BETICV\", Belgium Traffic Information "
+            "Centre Vlaanderen). Wallonia publishes its own separate feed, not "
+            "wrapped here; Brussels wasn't checked. Coordinates are real "
+            "EPSG:31370 (Belgian Lambert 72), not WGS84 - pass "
+            "streetworks.datex2.belgium.CRS to from_datex2()."
+        ),
+        credentials=None,
+        licence=(
+            "No permissive licence - transportdata.be's own terms of use "
+            "prohibit commercial redistribution to third parties"
+        ),
+        source_grade="operator",
+        aliases=frozenset({"flanders"}),
+        _module="streetworks.datex2",
+        _client_name="BelgiumClient",
+        import_line="from streetworks.datex2.belgium import BelgiumClient",
+    ),
+    ProviderEntry(
+        key="luxembourg",
+        name="Ponts et Chaussées",
+        description="Luxembourg's national roadworks feed.",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Luxembourg"}),
+        credentials=None,
+        licence="CC0 1.0 Universal (Public Domain Dedication)",
+        source_grade="operator",
+        _module="streetworks.datex2",
+        _client_name="LuxembourgClient",
+        import_line="from streetworks.datex2.luxembourg import LuxembourgClient",
+    ),
+    ProviderEntry(
         key="vegvesen",
         name="Statens vegvesen",
         description="Norway's national roadworks feed.",

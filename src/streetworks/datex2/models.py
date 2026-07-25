@@ -92,6 +92,9 @@ class SituationRecord:
     road_maintenance_type: str | None = None
     construction_work_type: str | None = None
     subject_type_of_works: str | None = None
+    # RoadOrCarriagewayOrLaneManagement's own type field - see is_roadworks
+    # for why this is a second, independent roadworks signal from Spain's.
+    road_or_carriageway_or_lane_management_type: str | None = None
     raw: Any = None
 
     @property
@@ -107,8 +110,25 @@ class SituationRecord:
         # check is additive (never true for a feed that never sets
         # `cause_type`/`road_maintenance_type` this way - confirmed against
         # every other adapter's fixtures, none use a `cause` element at all).
-        return self.record_type in ROADWORKS_TYPES or (
-            self.cause_type == "roadMaintenance" and self.road_maintenance_type == "roadworks"
+        #
+        # Belgium (Flanders) surfaced a second, independent generic-record
+        # case: 67/195 real roadworks-relevant records in one live pull were
+        # `RoadOrCarriagewayOrLaneManagement` with
+        # `roadOrCarriagewayOrLaneManagementType=newRoadworksLayout` - a real
+        # DATEX II v3 standard enum value (not Belgium-specific), unambiguous
+        # by name, sitting alongside 61 other records of the same xsi:type
+        # with genuinely non-works values (`narrowLanes`, `roadClosed`,
+        # `contraflow`, `singleAlternateLineTraffic`) that are deliberately
+        # NOT matched here - those can arise from accidents/events, not just
+        # works, so treating the whole xsi:type as roadworks the way Spain's
+        # fix does would over-match. Confirmed this exact value doesn't
+        # appear in any other adapter's real fixture (DGT's own 7 real
+        # RoadOrCarriagewayOrLaneManagement records use different values
+        # entirely), so this is additive here too.
+        return (
+            self.record_type in ROADWORKS_TYPES
+            or (self.cause_type == "roadMaintenance" and self.road_maintenance_type == "roadworks")
+            or self.road_or_carriageway_or_lane_management_type == "newRoadworksLayout"
         )
 
 

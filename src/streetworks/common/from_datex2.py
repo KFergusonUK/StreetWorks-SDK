@@ -8,7 +8,10 @@ same model despite not being DATEX-shaped itself), IRCA (Iceland, XML -
 :mod:`streetworks.datex2.bisonfute`), DGT (Spain, XML v3 -
 :mod:`streetworks.datex2.dgt` - the one adapter whose roadworks records
 carry no dedicated xsi:type at all, handled in the shared parser/model, not
-here), and Vegvesen (Norway, **pending live verification** - see
+here), Belgium/Flanders (XML v3 - :mod:`streetworks.datex2.belgium` - the
+one adapter whose real coordinates are **not** WGS84, see ``crs`` below),
+Luxembourg (XML v2.3 - :mod:`streetworks.datex2.luxembourg`), and Vegvesen
+(Norway, **pending live verification** - see
 :mod:`streetworks.datex2.vegvesen`) all normalise onto the same
 :class:`~streetworks.datex2.Situation`/:class:`~streetworks.datex2.SituationRecord`
 models, so one converter covers all of them; ``source_grade`` is always
@@ -69,6 +72,24 @@ guessing which adapter produced the Situation:
   region field exists; it falls back to this converter's own default
   (``source_name``), which is itself unconfirmed to be an authority name for
   Norway. Revisit once Phase 2 shows real data.
+- Belgium (Flanders): ``from_datex2(situation, territory="Belgium",
+  administrative_area="Flanders", crs="EPSG:31370")`` - the ``crs``
+  override is not optional here: confirmed live, every real coordinate in
+  this feed is Belgian Lambert 72, not WGS84, despite the source XML using
+  the same ``<latitude>``/``<longitude>`` tag names every WGS84 DATEX feed
+  does. ``administrative_area="Flanders"`` is passed as a fixed literal,
+  not read per-record, because the feed's own
+  ``supplierIdentification/nationalIdentifier`` (``"BETICV"`` - Belgium
+  Traffic Information Centre Vlaanderen) and dataset name
+  ("Verkeerscentrum Vlaanderen") both confirm this source is Flanders-only,
+  not all-Belgium; see :mod:`streetworks.datex2.belgium` for the coverage
+  question and why Wallonia isn't covered here.
+- Luxembourg: ``from_datex2(situation, territory="Luxembourg")`` - no
+  ``administrative_area`` override needed: ``source_name`` is always the
+  real, if abbreviated, authority initials (``"PCH"`` - Ponts et
+  Chaussées), confirmed on 100% of real roadworks records, so the
+  converter's own default already gives a meaningful value; see
+  :mod:`streetworks.datex2.luxembourg`.
 """
 
 from __future__ import annotations
@@ -103,21 +124,36 @@ def _location_description(record: SituationRecord) -> str | None:
     return text or None
 
 
-def _coordinate(location_points: tuple[tuple[float, float], ...]) -> Coordinate | None:
-    """DATEX ``Location.points`` is already (latitude, longitude), no flip
-    needed. 2+ points is real line geometry (a ``LinearLocation``/posList,
-    or a TPEG segment's from/to pair) - kept whole on ``points``, not just
-    the first vertex; see ``Coordinate`` for why that used to be a loss."""
+def _coordinate(
+    location_points: tuple[tuple[float, float], ...], *, crs: str = "EPSG:4326"
+) -> Coordinate | None:
+    """DATEX ``Location.points`` is already in whatever order/CRS the
+    source states - no flip, no reprojection. 2+ points is real line
+    geometry (a ``LinearLocation``/posList, or a TPEG segment's from/to
+    pair) - kept whole on ``points``, not just the first vertex; see
+    ``Coordinate`` for why that used to be a loss.
+
+    ``crs`` defaults to ``EPSG:4326`` (WGS84), true for every DATEX
+    adapter checked before Belgium - but Belgium's own feed (Flanders,
+    Verkeerscentrum) states real geometry in **EPSG:31370** (Belgian
+    Lambert 72), confirmed live: every ``srsName`` attribute in the feed
+    says so, and the values themselves (hundred-thousands, not the ~49-52/
+    ~2-6 degree range Belgium's real latitude/longitude would be) confirm
+    it - even though the source XML tags are still literally named
+    ``<latitude>``/``<longitude>``, which is genuinely misleading if taken
+    at face value. Per this SDK's standing CRS policy (never silently
+    reproject), the caller states the real CRS explicitly rather than this
+    function assuming WGS84 for everyone."""
     if not location_points:
         return None
     return Coordinate(
         value=location_points[0],
-        crs="EPSG:4326",
+        crs=crs,
         points=location_points if len(location_points) > 1 else None,
     )
 
 
-def _to_site(record: SituationRecord) -> WorksSite:
+def _to_site(record: SituationRecord, *, crs: str) -> WorksSite:
     status = record.validity.status
     confidence = _date_confidence(status)
     overall_start = record.validity.overall_start
@@ -129,7 +165,10 @@ def _to_site(record: SituationRecord) -> WorksSite:
         overall_start if confidence is DateConfidence.VERIFIED else None
     )
     works_type = (
-        record.road_maintenance_type or record.construction_work_type or record.record_type
+        record.road_maintenance_type
+        or record.construction_work_type
+        or record.road_or_carriageway_or_lane_management_type
+        or record.record_type
     )
 
     return WorksSite(
@@ -137,7 +176,7 @@ def _to_site(record: SituationRecord) -> WorksSite:
         works_type=works_type,
         status=status,
         location_description=_location_description(record),
-        coordinate=_coordinate(record.location.points),
+        coordinate=_coordinate(record.location.points, crs=crs),
         proposed_start=overall_start,
         proposed_end=overall_end,
         actual_start=actual_start,
@@ -153,18 +192,24 @@ def from_datex2(
     *,
     territory: str | None = None,
     administrative_area: str | None = None,
+    crs: str = "EPSG:4326",
 ) -> Works:
     """Convert one DATEX II :class:`~streetworks.datex2.Situation` (from
     either the NDW or National Highways adapter) into a
     :class:`~streetworks.common.Works`. See module docstring for
     ``territory``/``administrative_area`` - they can't be derived from the
-    Situation alone, so pass them explicitly."""
+    Situation alone, so pass them explicitly.
+
+    ``crs`` defaults to ``EPSG:4326`` (WGS84), true for every DATEX
+    adapter except Belgium (Flanders) - pass ``crs="EPSG:31370"`` for that
+    one; see :func:`_coordinate`'s own docstring for how that was
+    confirmed live, not assumed."""
     roadworks = situation.roadworks
     first = roadworks[0] if roadworks else None
     return Works(
         reference=situation.id,
         promoter=first.source_name if first else None,
-        coordinate=_coordinate(first.location.points) if first is not None else None,
+        coordinate=_coordinate(first.location.points, crs=crs) if first is not None else None,
         territory=territory,
         administrative_area=(
             administrative_area
@@ -172,6 +217,6 @@ def from_datex2(
             else (first.source_name if first else None)
         ),
         source_grade=SourceGrade.OPERATOR,
-        sites=tuple(_to_site(record) for record in roadworks),
+        sites=tuple(_to_site(record, crs=crs) for record in roadworks),
         raw=situation,
     )

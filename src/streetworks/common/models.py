@@ -64,9 +64,14 @@ Point3D = tuple[float, float, float]
 class Coordinate:
     """A location value plus its coordinate reference system, explicit and
     never silently converted. UK register/gazetteer providers use British
-    National Grid (``EPSG:27700`` easting/northing); DATEX providers use
-    WGS84 (``EPSG:4326`` latitude/longitude). Mixed-CRS comparisons are the
-    caller's informed choice, not something this SDK guesses at.
+    National Grid (``EPSG:27700`` easting/northing); DATEX providers
+    overwhelmingly use WGS84 (``EPSG:4326`` latitude/longitude) - except
+    Belgium (Flanders), confirmed live to state real geometry in Belgian
+    Lambert 72 (``EPSG:31370``) despite using the same ``<latitude>``/
+    ``<longitude>`` tag names every WGS84 DATEX feed does; see
+    :mod:`streetworks.common.from_datex2`'s own docstring. Mixed-CRS
+    comparisons are the caller's informed choice, not something this SDK
+    guesses at.
 
     ``value`` is always one representative point - the first vertex, for a
     line - so every existing point-only consumer keeps working unchanged.

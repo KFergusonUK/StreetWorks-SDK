@@ -290,6 +290,41 @@ def check_dgt() -> str:
     )
 
 
+def check_belgium() -> str:
+    """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
+    credentials - confirmed live and reliably reachable (see
+    streetworks.datex2.belgium). Coverage is Flanders only, not
+    all-Belgium; coordinates are real EPSG:31370 (Lambert 72), not WGS84 -
+    reports how many roadworks records came from each of the two real
+    discriminator paths (dedicated xsi:type vs. the generic
+    RoadOrCarriagewayOrLaneManagement/newRoadworksLayout signal)."""
+    from streetworks.datex2 import BelgiumClient
+
+    with BelgiumClient() as be:
+        situations = list(be.iter_roadworks())
+    works = [r for s in situations for r in s.roadworks]
+    dedicated = sum(1 for r in works if r.record_type in {"MaintenanceWorks", "ConstructionWorks"})
+    generic = len(works) - dedicated
+    with_coord = sum(1 for r in works if r.location.points)
+    return (
+        f"{len(situations):,} roadworks situations ({len(works):,} works records: "
+        f"{dedicated} dedicated xsi:type, {generic} generic/newRoadworksLayout), "
+        f"{with_coord}/{len(works)} with Lambert 72 coordinates"
+    )
+
+
+def check_luxembourg() -> str:
+    """Ponts et Chaussées/CITA (Luxembourg, DATEX II v2.3) needs no
+    credentials - confirmed live and reliably reachable (see
+    streetworks.datex2.luxembourg)."""
+    from streetworks.datex2 import LuxembourgClient
+
+    with LuxembourgClient() as lu:
+        situations = list(lu.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return f"{len(situations):,} roadworks situations ({works:,} works records)"
+
+
 def check_vegvesen() -> str:
     """Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
     streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
@@ -765,6 +800,10 @@ def main() -> int:
     reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
     # DGT (Spain) needs no credentials
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
+    # Verkeerscentrum Vlaanderen (Belgium/Flanders) needs no credentials
+    reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
+    # Ponts et Chaussées/CITA (Luxembourg) needs no credentials
+    reporter.check("DATEX II (Luxembourg)", [], check_luxembourg)
     # Autobahn GmbH (Germany) needs no credentials
     reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
     # German state roadworks (Hamburg, Brandenburg) need no credentials

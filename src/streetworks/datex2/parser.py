@@ -285,6 +285,9 @@ def _parse_record(element: Element, *, provider: str | None = None) -> Situation
         road_maintenance_type=road_maintenance_type,
         construction_work_type=_deep_text(element, "constructionWorkType"),
         subject_type_of_works=_deep_text(element, "subjects", "subjectTypeOfWorks"),
+        road_or_carriageway_or_lane_management_type=_deep_text(
+            element, "roadOrCarriagewayOrLaneManagementType"
+        ),
     )
 
 

@@ -72,7 +72,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), and DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), and Ponts et Chaussées (Luxembourg, XML v2.3; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
@@ -88,7 +88,8 @@ all built on [httpx](https://www.python-httpx.org/). **Async is per-module,
 not universal** — checked directly against the source, not assumed: Street
 Manager, DataVIA, D-TRO, SRWR, OS Open USRN, BAN, Kartverket, NVDB, NWB and
 BD TOPO each ship an `Async<Name>Client` mirror; BAG, DATEX II (all of NDW/
-National Highways/Digitraffic/IRCA/Bison Futé/DGT/Vegvesen), Autobahn GmbH,
+National Highways/Digitraffic/IRCA/Bison Futé/DGT/Belgium/Luxembourg/Vegvesen),
+Autobahn GmbH,
 the German state roadworks client, WZDx, TrafficWatchNI, Traffic Wales, UK
 Police, and the ArcGIS-based providers (Jersey, TIGERweb) are sync-only
 today. Check a given module for an `Async*Client` before assuming one
@@ -117,7 +118,8 @@ Open Data (parsed against real published daily and monthly extracts),
 OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
-Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Autobahn GmbH/Germany,
+Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Belgium/Flanders,
+Luxembourg, Autobahn GmbH/Germany,
 the German states Hamburg, Brandenburg and Saxony (all parsed against
 real live feeds), BAN/France (search, reverse and bulk-file parsing
 all verified against `data.geopf.fr`/`adresse.data.gouv.fr`), and
@@ -959,6 +961,85 @@ scope. Published under **Creative Commons Attribution (CC BY)** — see
 `streetworks/datex2/dgt.py`'s module docstring for the attribution wording
 and full field-by-field mapping.
 
+**Belgium's Verkeerscentrum Vlaanderen** publishes real-time traffic
+situations, including roadworks, credential-free as genuine DATEX II **v3**
+— reused through the same shared parser, but this feed forced two real
+changes to the *shared* code, not just this adapter:
+
+```python
+from streetworks.datex2.belgium import BelgiumClient, CRS
+from streetworks.common import from_datex2
+
+with BelgiumClient() as be:
+    situations = list(be.iter_roadworks())
+for situation in situations:
+    works = from_datex2(
+        situation, territory="Belgium", administrative_area="Flanders", crs=CRS,
+    )
+```
+
+Verified against the live feed (2026-07, ~100 situations, 86 roadworks
+records): a **second, differently-shaped discriminator gap** from Spain's —
+of 86 real roadworks-relevant records, only 19 used the dedicated
+`MaintenanceWorks` xsi:type; the other 67 were the generic
+`RoadOrCarriagewayOrLaneManagement` record, discriminated only by
+`roadOrCarriagewayOrLaneManagementType=newRoadworksLayout` (a real DATEX II
+v3 standard value, not Belgium-specific) — added to
+`SituationRecord.is_roadworks` additively, confirmed not to over-match the
+61 other real records of that same xsi:type with genuinely different
+values (`narrowLanes`, `roadClosed`, `contraflow`,
+`singleAlternateLineTraffic`), which can arise from accidents or events,
+not just works. More significantly: **every real coordinate in this feed is
+Belgian Lambert 72 (`EPSG:31370`), not WGS84** — confirmed from the feed's
+own `srsName` attribute and from the coordinate values themselves (the
+source XML still calls the fields `<latitude>`/`<longitude>`, which is
+genuinely misleading taken at face value). `from_datex2()` gained a `crs`
+parameter (default `EPSG:4326`, true for every DATEX source checked before
+this one) so Belgium's real CRS can be stated explicitly rather than
+assumed — coordinates are carried through unconverted, per this SDK's
+standing CRS policy. Coverage is **Flanders only** — confirmed live via
+`supplierIdentification/nationalIdentifier` (`"BETICV"`) and the dataset's
+own name; Wallonia publishes separately and isn't wrapped here. **No
+permissive licence**: transportdata.be's own terms of use prohibit
+distributing the data to third parties for commercial purposes — real
+fixture data was judged too close to that restriction for this openly
+redistributed SDK, so the test fixture is synthetic (real shape, invented
+values), the same call already made for Autobahn GmbH's unconfirmed
+licence. See `streetworks/datex2/belgium.py`'s module docstring for the
+full verbatim licence text (French original + English translation) and
+field-by-field mapping.
+
+**Luxembourg's Ponts et Chaussées** (via CITA) publishes current roadworks
+on the national road network credential-free, as genuine DATEX II **v2.3**
+— the same version France uses:
+
+```python
+from streetworks.datex2.luxembourg import LuxembourgClient
+from streetworks.common import from_datex2
+
+with LuxembourgClient() as lu:
+    situations = list(lu.iter_roadworks())
+for situation in situations:
+    works = from_datex2(situation, territory="Luxembourg")
+```
+
+Verified against the live feed (2026-07, ~110 situations, 161 roadworks
+records): a clean result — every roadworks record uses the dedicated
+`MaintenanceWorks` xsi:type (no `ConstructionWorks`, no discriminator
+issue), 100% genuine WGS84 coordinate coverage, `source_name` always the
+real `"PCH"` (Ponts et Chaussées's own initials), so `administrative_area`
+needs no override. Two honest, real gaps confirmed against the live feed:
+every record's comment is the identical placeholder text
+`"Titre:Nouvelle tape"` (not a real per-site description), and
+`validity.status` is always the literal `"definedByValidityTimeSpec"`,
+never `"active"`/`"planned"`/`"suspended"` — so `date_confidence` comes out
+`UNKNOWN` for every Luxembourg site even though the dates themselves are
+real. Published under **CC0 1.0 Universal (Public Domain Dedication)** —
+the least restricted licence of any DATEX adapter in this SDK; real
+trimmed fixture data is used directly. See
+`streetworks/datex2/luxembourg.py`'s module docstring for the full
+field-by-field mapping.
+
 ## Autobahn GmbH (Germany, national motorways)
 
 Germany's national motorway (Autobahn) network roadworks, via Autobahn
@@ -1544,8 +1625,11 @@ record alone — see their docstrings for why — and take them as keyword
 arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
-Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, and
-DGT/Spain via the one shared converter), Autobahn GmbH/Germany, German
+Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain,
+Belgium/Flanders, and Luxembourg via the one shared converter — Belgium's
+own real, non-WGS84 CRS is passed through its `crs` parameter, see
+[DATEX II (European roadworks)](#datex-ii-european-roadworks) above),
+Autobahn GmbH/Germany, German
 state roadworks (Hamburg, Brandenburg, Saxony, via the one shared
 `from_ogc_features` converter), WZDx, TrafficWatchNI and Traffic Wales.
 UK Police stays outside
@@ -1730,6 +1814,27 @@ independently confirmed, as Lambert-93).
       `SituationRecord.is_roadworks` gained an additive cause-based check
       (`roadMaintenance`/`roadworks`), plus a `roadName` fallback for the
       road identifier (Spain never states `roadNumber`)
+- [x] Belgium (Verkeerscentrum Vlaanderen) and Luxembourg (Ponts et
+      Chaussées/CITA) DATEX adapters (`streetworks.datex2.belgium`,
+      `streetworks.datex2.luxembourg`) — DATEX II v3 and v2.3 respectively,
+      both credential-free, both reused through the existing shared parser.
+      Verified against real feeds: Belgium ~100 situations/86 roadworks
+      records, Luxembourg ~110 situations/161 roadworks records. Belgium
+      surfaced two real, *shared*-code-level findings: a second, differently
+      shaped discriminator gap from Spain's (`RoadOrCarriagewayOrLaneManagement`
+      + `roadOrCarriagewayOrLaneManagementType=newRoadworksLayout`, additive,
+      confirmed not to over-match the 61 real same-xsi:type records with
+      genuinely different values), and real coordinates stated in Belgian
+      Lambert 72 (`EPSG:31370`), not WGS84 — `from_datex2()` gained a `crs`
+      parameter (default `EPSG:4326`) so this is stated explicitly rather
+      than assumed, coordinates carried through unconverted per this SDK's
+      CRS policy. Belgium's coverage is Flanders only (confirmed via
+      `nationalIdentifier="BETICV"`), not all-Belgium — documented like
+      France's/Spain's own partial-coverage precedent. Belgium's real
+      licence (transportdata.be's own terms) prohibits commercial
+      redistribution to third parties, so its test fixture is synthetic
+      (real shape, invented values) rather than trimmed from a live pull —
+      Luxembourg's is real, under CC0
 - [x] Germany (Autobahn GmbH) national motorway adapter (`streetworks.autobahn`)
       — its own JSON REST API, not DATEX; verified against a live fetch of
       all 113 roads (2,873 roadworks, zero failures), no credentials. A

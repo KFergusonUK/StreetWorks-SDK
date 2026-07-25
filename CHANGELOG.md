@@ -48,6 +48,47 @@
 
 ### Added
 
+- **Belgium (Verkeerscentrum Vlaanderen) and Luxembourg (Ponts et
+  Chaussées/CITA) DATEX adapters** (`streetworks.datex2.belgium`,
+  `streetworks.datex2.luxembourg`) - DATEX II v3 and v2.3 respectively,
+  both credential-free, reused through the existing shared parser/model.
+  Live-verified: Belgium ~100 situations/86 roadworks records, Luxembourg
+  ~110 situations/161 roadworks records. Two real findings surfaced by
+  Belgium's data changed *shared* code, not just this adapter:
+  - A second, differently-shaped discriminator gap from Spain/DGT's:
+    67/86 real roadworks-relevant records use the generic
+    `RoadOrCarriagewayOrLaneManagement` xsi:type, discriminated only by
+    `roadOrCarriagewayOrLaneManagementType=newRoadworksLayout` (a real
+    DATEX II v3 standard value). Added to
+    `SituationRecord.is_roadworks` additively - confirmed this doesn't
+    over-match the 61 real same-xsi:type records with genuinely different
+    values (`narrowLanes`, `roadClosed`, `contraflow`,
+    `singleAlternateLineTraffic`), which can arise from accidents/events,
+    not just works.
+  - Real coordinates are stated in **Belgian Lambert 72 (`EPSG:31370`)**,
+    not WGS84 - confirmed from the feed's own `srsName` attribute and the
+    coordinate values themselves (the source XML still calls the fields
+    `<latitude>`/`<longitude>`, which is genuinely misleading taken at
+    face value). `streetworks.common.from_datex2()` gained a `crs`
+    keyword parameter (default `EPSG:4326`, unchanged behaviour for every
+    other DATEX adapter) so this is stated explicitly, never silently
+    reprojected, per this SDK's standing CRS policy - the same choice
+    already made for Saxony's UTM33N and the UK's British National Grid
+    providers.
+
+  Belgium's coverage is **Flanders only**, not all-Belgium - confirmed
+  live via `supplierIdentification/nationalIdentifier` (`"BETICV"`,
+  Belgium Traffic Information Centre Vlaanderen) and the dataset's own
+  name; Wallonia publishes a separate feed, not wrapped here. Belgium's
+  real licence (transportdata.be's own terms of use) prohibits
+  distributing the data to third parties for commercial purposes, so -
+  since this SDK is itself redistributed openly - its test fixture is
+  **synthetic** (real confirmed shape, invented values), the same call
+  already made for Autobahn GmbH's unconfirmed licence; Luxembourg's
+  fixture is real, trimmed from a live pull, under **CC0 1.0 Universal**.
+  Both registered in `streetworks.registry` (`kind="roadworks"`) and
+  wired into `scripts/smoke_test.py`.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a
