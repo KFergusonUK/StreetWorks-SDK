@@ -309,6 +309,52 @@
     its own dedicated future investigation (licence there is genuinely
     unresolved), not folded into this build.
 
+- **Basque Country (Euskadi) roadworks adapter**
+  (`streetworks.datex2.euskadi`) - fills the other of DGT's two
+  documented exclusions, via the existing shared `from_datex2` converter
+  (no bespoke converter needed). Genuine DATEX II **v1.0** - the oldest
+  schema version in this SDK. Live-verified: 96/119 real situations carry
+  a roadworks record (101 records total).
+  - **A real, additive parser fix, found by reading the "pleasant
+    surprise" of a zero-code-change parse more carefully, per this
+    project's own standing habit**: `tpeglinearLocation` (lower-case),
+    not the v2/v3 `tpegLinearLocation` - confirmed by direct byte search
+    of the real feed (74/74 real linear-location records use the
+    lower-case v1.0 spelling, 0 use the v2/v3 one). Before the fix, the
+    shared parser's two-point `from`/`to` extraction never matched it,
+    silently degrading a real 2-point line into a single point via the
+    generic fallback. Fixed as a second, fallback lookup in
+    `streetworks/datex2/parser.py` (v2/v3 spelling tried first) -
+    confirmed via a live before/after regression across France, Spain,
+    Belgium, Luxembourg and Bulgaria: identical roadworks counts and
+    multi-point-location counts, zero drift.
+  - **Coordinate coverage is genuinely partial - the only Spanish/DATEX
+    adapter in this SDK below 100%**: of 101 real roadworks records, 36
+    have a real 2+-point line, 6 a single point, and 59 state location
+    purely via Alert-C plus a road number and distance along it (no
+    coordinates at all).
+  - A real per-record province field (`administrativeArea`, nested three
+    levels deep) is exposed via its own `provinces()` helper, the same
+    shape as DGT's own - all three Basque provinces confirmed live,
+    genuinely inconsistent casing kept as stated, not normalised; a real
+    `"Desconocida"` (unknown) placeholder is excluded, not treated as a
+    name.
+  - `network_scope=multi_authority_interurban`, the same shape as DGT's
+    and SCT's own real data (state roads plus all three Diputación Foral
+    networks). CRS is WGS84, confirmed live from real point values.
+  - **Licence: the publisher states "No licence - No contract" -
+    literally, not "unconfirmed."** Genuinely more restrictive than an
+    unconfirmed licence, not less - absence of a licence grants no
+    permission, since copyright is automatic and default-restrictive; a
+    licence is what *adds* permissions. Never documented as "assumed
+    open" anywhere. Calling the public endpoint needs no licence, so the
+    client is built freely, but the test fixture is **synthetic** (real
+    confirmed shape, invented content) - committing real records here
+    would be redistribution, which nothing here permits.
+  - As the fourth Spain roadworks provider, `get_provider("spain")` now
+    names all four (`dgt`, `euskadi`, `mallorca`, `sct`) via the
+    territory-ambiguity path.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a

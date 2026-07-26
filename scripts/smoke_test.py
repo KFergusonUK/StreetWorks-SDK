@@ -310,6 +310,25 @@ def check_dgt() -> str:
     )
 
 
+def check_euskadi() -> str:
+    """Basque Country (DATEX II v1.0) needs no credentials - confirmed live
+    (see streetworks.datex2.euskadi). Licence is explicitly absent, not
+    unconfirmed - see the module docstring. Reports coordinate coverage,
+    genuinely partial for this source unlike every other Spanish/DATEX
+    adapter."""
+    from streetworks.datex2.euskadi import EuskadiClient, provinces
+
+    with EuskadiClient() as euskadi:
+        situations = list(euskadi.iter_roadworks())
+    works = [r for s in situations for r in s.roadworks]
+    with_coord = sum(1 for r in works if r.location.points)
+    distinct_provinces = len(set(provinces(situations).values()))
+    return (
+        f"{len(situations):,} roadworks situations ({len(works):,} works records), "
+        f"{with_coord}/{len(works)} with coordinates, across {distinct_provinces} provinces"
+    )
+
+
 def check_mallorca() -> str:
     """Consell de Mallorca (IDEmallorca WFS) needs no credentials -
     confirmed live over plain HTTP (HTTPS doesn't connect at all - see
@@ -865,6 +884,8 @@ def main() -> int:
     reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
     # DGT (Spain) needs no credentials
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
+    # Basque Country (Euskadi) needs no credentials
+    reporter.check("DATEX II (Euskadi/Basque Country)", [], check_euskadi)
     # Consell de Mallorca (IDEmallorca) needs no credentials
     reporter.check("Consell de Mallorca (IDEmallorca)", [], check_mallorca)
     # Servei Català de Trànsit (Catalonia) needs no credentials

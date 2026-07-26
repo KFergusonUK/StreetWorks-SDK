@@ -53,13 +53,14 @@ for why lumping them together was a real mistake), and `credentials`
 provider or a curated alias (`"finland"`, `"iceland"`, `"scotland"`, ...);
 an ambiguous name (`"germany"` → four providers, `"france"`/`"netherlands"`/
 `"norway"` → two each, a roadworks feed and an address register, `"spain"`
-→ three roadworks feeds (DGT `multi_authority_interurban` national ex-
+→ four roadworks feeds (DGT `multi_authority_interurban` national ex-
 Catalonia/Basque, Consell de Mallorca `regional` insular — overlapping
 with DGT, not disjoint, see
 [Never deduplicate across providers](#never-deduplicate-across-providers)
-— and SCT `multi_authority_interurban` for Catalonia specifically),
-`"england"` → several) raises naming every real candidate rather than
-guessing which one you meant.
+— SCT `multi_authority_interurban` for Catalonia, and Euskadi
+`multi_authority_interurban` for the Basque Country — DGT's two
+exclusions, both now filled), `"england"` → several) raises naming every
+real candidate rather than guessing which one you meant.
 
 Every roadworks entry also carries a `network_scope` (`comprehensive` /
 `multi_authority_interurban` / `strategic` / `motorway` / `regional` /
@@ -88,7 +89,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), and the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
@@ -106,8 +107,8 @@ all built on [httpx](https://www.python-httpx.org/). **Async is per-module,
 not universal** — checked directly against the source, not assumed: Street
 Manager, DataVIA, D-TRO, SRWR, OS Open USRN, BAN, Kartverket, NVDB, NWB and
 BD TOPO each ship an `Async<Name>Client` mirror; BAG, DATEX II (all of NDW/
-National Highways/Digitraffic/IRCA/Bison Futé/DGT/Belgium/Luxembourg/Bulgaria/Vegvesen),
-Autobahn GmbH, Via Lietuva,
+National Highways/Digitraffic/IRCA/Bison Futé/DGT/Belgium/Luxembourg/Bulgaria/Euskadi/Vegvesen),
+Autobahn GmbH, Via Lietuva, Consell de Mallorca, Servei Català de Trànsit,
 the German state roadworks client, WZDx, TrafficWatchNI, Traffic Wales, UK
 Police, and the ArcGIS-based providers (Jersey, TIGERweb) are sync-only
 today. Check a given module for an `Async*Client` before assuming one
@@ -137,7 +138,8 @@ OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
 `safety_signal()` and category queries against `data.police.uk`), WZDx
 (parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
 Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Belgium/Flanders,
-Luxembourg, Bulgaria, Autobahn GmbH/Germany, Via Lietuva/Lithuania,
+Luxembourg, Bulgaria, Euskadi/Basque Country, Autobahn GmbH/Germany,
+Via Lietuva/Lithuania, Consell de Mallorca, Servei Català de Trànsit,
 the German states Hamburg, Brandenburg and Saxony (all parsed against
 real live feeds), BAN/France (search, reverse and bulk-file parsing
 all verified against `data.geopf.fr`/`adresse.data.gouv.fr`), and
@@ -1536,6 +1538,81 @@ session, so the test fixture is real, trimmed from a live pull, not
 synthetic. See `streetworks/sct/models.py`'s module docstring for the
 full field-by-field mapping.
 
+## Basque Country (Euskadi)
+
+The Basque Country's road incidents, credential-free, fill the *other*
+of DGT's two documented exclusions:
+
+```python
+from streetworks.datex2.euskadi import EuskadiClient, provinces
+from streetworks.common import from_datex2
+
+with EuskadiClient() as euskadi:
+    situations = list(euskadi.iter_roadworks())
+basque_provinces = provinces(situations)
+for situation in situations:
+    works = from_datex2(
+        situation, territory="Spain",
+        administrative_area=basque_provinces.get(situation.id),
+    )
+```
+
+Published by the Basque Government's own traffic directorate on Spain's
+national NAP, as genuine **DATEX II v1.0** — the oldest schema version in
+this SDK (every other adapter targets v2.x/v3.x). Reusing the shared
+parser worked out of the box for the roadworks classification itself
+(`MaintenanceWorks`/`ConstructionWorks`, already in `ROADWORKS_TYPES`) —
+but reading it carefully, per this SDK's "a pleasant surprise deserves a
+second look" habit, surfaced one real, additive parser fix:
+
+**`tpeglinearLocation` (lower-case), not `tpegLinearLocation`** — confirmed
+by direct byte search of the real feed (74/74 real linear-location
+records use the lower-case v1.0 spelling; zero use the v2/v3 PascalCase
+one). Before the fix, the shared parser's two-point `from`/`to`
+extraction never matched it, silently degrading a real 2-point line into
+a single point via the generic fallback. Fixed as a second, fallback
+lookup in `streetworks/datex2/parser.py` (v2/v3 spelling tried first, so
+nothing else changes) — confirmed via a live before/after regression
+across France, Spain, Belgium, Luxembourg and Bulgaria: identical
+roadworks counts and multi-point-location counts, zero drift.
+
+**Coordinate coverage is genuinely partial — the only Spanish/DATEX
+adapter in this SDK where it isn't 100%.** Of 101 real roadworks records
+checked live, 36 have a real 2+-point line, 6 a single point, and 59
+state their location purely via Alert-C codes plus a road number and
+distance along it (captured as `road_number`; the distance itself has no
+canonical slot and stays in `.raw`) — no coordinates at all. Reported
+honestly, not padded.
+
+**`administrativeArea` — a real per-record province field**, exposed via
+its own `provinces()` helper, the same pattern DGT's own uses. Real values
+confirmed across all three Basque provinces (`GIPUZKOA`/`BIZKAIA`/`ARABA`,
+genuinely inconsistent casing across records, kept as stated) plus a real
+literal `"Desconocida"` ("unknown") placeholder — treated as unstated, not
+a real province name. **Network scope: `multi_authority_interurban`**,
+the same shape as DGT's and SCT's own real data (state roads plus all
+three Diputación Foral networks). **CRS: WGS84, confirmed live** from
+real point values.
+
+**Licence: the publisher states "No licence - No contract" — literally,
+not "unconfirmed."** This is more restrictive than an unconfirmed
+licence, not less: absence of a licence means no permission has been
+granted, since copyright is automatic and default-restrictive — a licence
+is what *adds* permissions. **Never read this as "assumed open."**
+Calling the public endpoint needs no licence, so the client is built
+freely, but the test fixture is **synthetic** (real confirmed shape,
+invented content) — committing real records into this openly-
+redistributed, MIT-licensed repository would be redistribution, which
+nothing here permits. This is Spanish public-sector information, and
+Spain's own transposition of the EU PSI/open-data directive creates a
+general presumption that public-sector information is reusable unless
+stated otherwise, so it is *probably* reusable in practice — but
+"probably, under PSI law" is not the same as "the publisher granted a
+licence," and only the honest version belongs here. **Confirm your own
+rights before relying on this commercially.** See
+`streetworks/datex2/euskadi.py`'s module docstring for the full
+field-by-field mapping.
+
 ## Jersey RoadWorkx and TIGERweb (ArcGIS REST)
 
 The third client shape in this SDK, after the DATEX/JSON adapters and
@@ -1910,8 +1987,10 @@ arguments instead of guessing.
 
 Converters currently cover SRWR, Street Manager, DATEX II (NDW, National
 Highways, Digitraffic/Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain,
-Belgium/Flanders, Luxembourg, and Bulgaria via the one shared converter —
-Belgium's own real, non-WGS84 CRS is passed through its `crs` parameter, see
+Belgium/Flanders, Luxembourg, Bulgaria, and Euskadi/Basque Country (DATEX
+II v1.0 — the oldest schema version this converter handles) via the one
+shared converter — Belgium's own real, non-WGS84 CRS is passed through
+its `crs` parameter, see
 [DATEX II (European roadworks)](#datex-ii-european-roadworks) above),
 Autobahn GmbH/Germany, Via Lietuva/Lithuania (own real, non-WGS84 CRS —
 LKS-94, `EPSG:3346` — and reversed WKT axis order, see
@@ -2337,6 +2416,36 @@ independently confirmed, as Lambert-93).
       `docs/catalonia-sct-investigation.md` for a genuinely promising
       finding (a real, live DATEX II feed this SDK's existing shared
       parser already reads with zero code changes)
+- [x] Basque Country (Euskadi) DATEX adapter (`streetworks.datex2.euskadi`)
+      - fills DGT's other documented exclusion, via the shared `from_datex2`
+      converter (no bespoke converter needed). Genuine DATEX II **v1.0**,
+      the oldest schema version in this SDK - reading it carefully
+      surfaced a real, additive parser fix, not just a config tweak:
+      `tpeglinearLocation` (lower-case), not the v2/v3
+      `tpegLinearLocation` - confirmed by direct byte search (74/74 real
+      linear-location records use the lower-case spelling), which had been
+      silently degrading a real 2-point line into a single point via the
+      generic fallback. Fixed as a second, fallback lookup, tried after
+      the v2/v3 spelling - confirmed via a live before/after regression
+      across France, Spain, Belgium, Luxembourg and Bulgaria that nothing
+      else changed. Live-verified: 96/119 real situations carry a
+      roadworks record (101 records total), coordinate coverage is
+      genuinely partial (42/101, ~42%) - the only Spanish/DATEX adapter in
+      this SDK below 100%, the rest stating location via Alert-C plus a
+      road number and distance only. A real per-record province field
+      (`administrativeArea`, all three Basque provinces confirmed,
+      genuinely inconsistent casing kept as stated) is exposed via its own
+      `provinces()` helper, the same shape as DGT's; a real
+      `"Desconocida"` (unknown) placeholder is excluded, not treated as a
+      name. `network_scope` is `multi_authority_interurban`, the same
+      shape as DGT's and SCT's own real data. **Licence: the publisher
+      states "No licence - No contract" - literally, not "unconfirmed,"
+      genuinely more restrictive than an unconfirmed licence** (absence of
+      a licence grants no permission - it is not "free to use"), so the
+      test fixture is synthetic, never real data, and the README/docstrings
+      never say "assumed open." As the fourth Spain roadworks provider,
+      `get_provider("spain")` now names all four (`dgt`, `euskadi`,
+      `mallorca`, `sct`)
 - [x] **Provider registry & discovery** (`streetworks.providers()`/
       `get_provider()`, `streetworks.registry`) — territory/kind/credentials
       browsing and single-provider lookup over every provider above, derived

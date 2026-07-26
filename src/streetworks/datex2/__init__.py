@@ -21,9 +21,12 @@ Chaussées' DATEX II v2.3 feed for Luxembourg (credential-free - see
 DATEX II v2.3 "Short-term Road Construction" feed for Bulgaria
 (credential-free - see :mod:`streetworks.datex2.bulgaria` for the wrong
 NAP-listed host, the date-stamped catalogue-then-file fetch, and a real
-mislabelled-encoding finding), and Statens vegvesen's DATEX II
-snapshotPull service for Norway (**pending live verification** - see
-:mod:`streetworks.datex2.vegvesen`).
+mislabelled-encoding finding), the Basque Government's DATEX II **v1.0**
+feed for the Basque Country (credential-free, licence explicitly absent -
+see :mod:`streetworks.datex2.euskadi` for the oldest schema version in
+this SDK and a real, additive parser fix it needed), and Statens
+vegvesen's DATEX II snapshotPull service for Norway (**pending live
+verification** - see :mod:`streetworks.datex2.vegvesen`).
 """
 
 from .belgium import BASE_URL as BELGIUM_BASE_URL
@@ -45,6 +48,10 @@ from .digitraffic import BASE_URL as DIGITRAFFIC_BASE_URL
 from .digitraffic import DigitrafficClient
 from .digitraffic import parse_situations as parse_digitraffic_situations
 from .digitraffic import provinces as digitraffic_provinces
+from .euskadi import BASE_URL as EUSKADI_BASE_URL
+from .euskadi import SITUATION_PATH as EUSKADI_SITUATION_PATH
+from .euskadi import EuskadiClient
+from .euskadi import provinces as euskadi_provinces
 from .irca import BASE_URL as IRCA_BASE_URL
 from .irca import SITUATION_ENDPOINT as IRCA_SITUATION_ENDPOINT
 from .irca import IcelandClient
@@ -92,6 +99,10 @@ __all__ = [
     "DGT_BASE_URL",
     "DGT_SITUATION_PUBLICATION_PATH",
     "dgt_provinces",
+    "EuskadiClient",
+    "EUSKADI_BASE_URL",
+    "EUSKADI_SITUATION_PATH",
+    "euskadi_provinces",
     "VegvesenClient",
     "VEGVESEN_BASE_URL",
     "NVDB_BASE_URL",

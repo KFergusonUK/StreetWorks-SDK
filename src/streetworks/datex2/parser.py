@@ -152,7 +152,19 @@ def _parse_location(record: Element, *, provider: str | None = None) -> Location
     # plain "first pointCoordinates anywhere" search silently dropped `from`
     # - a real loss, not a documented convention, since both are genuinely
     # present.
+    #
+    # DATEX II v1.0 (Euskadi) spells this element lower-case -
+    # `tpeglinearLocation`, not `tpegLinearLocation` - confirmed live (74/74
+    # real linear-location records in one pull use the lower-case form, 0
+    # use the v2/v3 spelling). Without this, the two-point "from"/"to" path
+    # never fired for v1.0 data - it silently fell through to the
+    # single-point fallback below, degrading a real 2-point line into just
+    # one point. Tried second, after the v2/v3 spelling, so no other
+    # adapter's real fixture is affected (confirmed: none use the
+    # lower-case form).
     tpeg_linear = _first_descendant(location, "tpegLinearLocation")
+    if tpeg_linear is None:
+        tpeg_linear = _first_descendant(location, "tpeglinearLocation")
     if tpeg_linear is not None:
         for tag in ("from", "to"):
             endpoint = _find(tpeg_linear, tag)

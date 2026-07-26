@@ -899,6 +899,51 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.sct import SCTClient",
     ),
     ProviderEntry(
+        key="euskadi",
+        name="Dirección de Tráfico del Gobierno Vasco",
+        description="Basque Country roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MULTI_AUTHORITY_INTERURBAN,
+        territories=frozenset({"Spain"}),
+        scope_note=(
+            "Fills the other of DGT's two documented exclusions (DGT "
+            "explicitly omits Catalonia - see sct - and the Basque "
+            "Country). DATEX II v1.0, the oldest schema version in this "
+            "SDK - reading it surfaced a real, additive parser fix "
+            "(lower-case 'tpeglinearLocation', not the v2/v3 "
+            "'tpegLinearLocation' - see the module docstring), confirmed "
+            "via a live regression not to affect any other DATEX adapter. "
+            "Coordinate coverage is genuinely partial (~42% in one live "
+            "pull) - the rest state location via Alert-C + a road number "
+            "and distance only, no other Spanish/DATEX adapter in this "
+            "SDK has less than 100%. Real road numbers span the state "
+            "network (N-/AP-) and all three Diputación Foral networks "
+            "(GI-/Gipuzkoa, BI-/Bizkaia, Araba's own) - the same multi-"
+            "authority shape as DGT's and SCT's own real data. Province "
+            "(administrativeArea) is a real per-record field, exposed via "
+            "the euskadi_provinces() helper - a real 'Desconocida' "
+            "(unknown) placeholder is excluded, not treated as a name."
+        ),
+        credentials=None,
+        licence=(
+            "No licence - No contract, stated literally by the publisher "
+            "on Spain's national NAP - genuinely more restrictive than an "
+            "unconfirmed licence (absence of a licence grants no "
+            "permission; it is not the same as 'free to use'). Probably "
+            "reusable in practice under Spain's PSI/open-data "
+            "transposition, but that is not the same as a granted "
+            "licence - confirm your own rights before relying on this"
+        ),
+        # licence_confirmed=True (the default): the "No licence - No
+        # contract" statement itself is confirmed, verbatim, on the NAP
+        # dataset page - this is a confirmed absence, not an unconfirmed
+        # guess, see module docstring for why that distinction matters.
+        source_grade="operator",
+        _module="streetworks.datex2",
+        _client_name="EuskadiClient",
+        import_line="from streetworks.datex2.euskadi import EuskadiClient",
+    ),
+    ProviderEntry(
         key="belgium",
         name="Verkeerscentrum Vlaanderen",
         description="Flanders' (not all-Belgium's) roadworks feed.",
