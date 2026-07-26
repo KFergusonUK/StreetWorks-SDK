@@ -326,6 +326,20 @@ def check_mallorca() -> str:
     return f"{len(works):,} roadworks incidents ({with_line} with a joined tram line)"
 
 
+def check_sct() -> str:
+    """Servei Català de Trànsit (Catalonia) needs no credentials -
+    confirmed live (see streetworks.sct). Filters to descripcio_tipus
+    "Obres" and reports coordinate coverage."""
+    from streetworks.common import from_sct
+    from streetworks.sct import SCTClient
+
+    with SCTClient() as sct:
+        roadworks = list(sct.iter_roadworks())
+    works = from_sct(roadworks)
+    with_coord = sum(1 for w in works if w.sites[0].coordinate is not None)
+    return f"{len(works):,} roadworks incidents ({with_coord}/{len(works)} with coordinates)"
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -853,6 +867,8 @@ def main() -> int:
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
     # Consell de Mallorca (IDEmallorca) needs no credentials
     reporter.check("Consell de Mallorca (IDEmallorca)", [], check_mallorca)
+    # Servei Català de Trànsit (Catalonia) needs no credentials
+    reporter.check("Servei Català de Trànsit (Catalonia)", [], check_sct)
     # Verkeerscentrum Vlaanderen (Belgium/Flanders) needs no credentials
     reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
     # Ponts et Chaussées/CITA (Luxembourg) needs no credentials

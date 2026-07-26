@@ -259,6 +259,56 @@
     kinds), the same "can't ship without it" discipline the registry's
     own package-coverage test already applies.
 
+- **Servei Català de Trànsit (Catalonia) roadworks adapter**
+  (`streetworks.sct`, `streetworks.common.from_sct`) - built from a
+  dedicated recon pass (`docs/catalonia-sct-investigation.md`), filling
+  the larger of DGT's two documented exclusions (DGT explicitly omits
+  Catalonia and the Basque Country). Live-verified: 165 real current
+  incidents, 136 typed `descripcio_tipus` `"Obres"` (roadworks).
+  - The real feed (`incidenciesGML.xml`) is genuine WFS/GML - a
+    `wfs:FeatureCollection` with real `gml:Point` geometry - but flat and
+    simple (one geometry plus a dozen scalar fields per record, no
+    nesting), so it gets its own small, contained parser (plain
+    `ElementTree`, no new dependency), the same shape of choice already
+    made for Autobahn GmbH. **Deliberately does not touch or depend on**
+    this SDK's parked general INSPIRE-GML-reader decision.
+  - Discriminator (`descripcio_tipus`) is clean: checked, not assumed,
+    that the two non-`"Obres"` real values (`"Retenció"`/congestion,
+    `"Cons"`/temporary lane measures) genuinely aren't roadworks -
+    including one real edge case (a `"Retenció"` record whose free-text
+    `causa` says `"Obres"`), deliberately not reclassified, since the
+    dedicated type field is trusted over a secondary free-text hint.
+  - **No start/end validity window exists anywhere in this feed** - a
+    genuinely real-time, continuously-refreshed current-state feed, not
+    a works schedule (confirmed via the dataset's own metadata and by
+    watching `Last-Modified` change between live pulls). `date_confidence`
+    is always `unknown` and no proposed/actual dates are populated -
+    the one real timestamp this feed states reads as "when this record
+    was last reported," not "when the works start," so it's never
+    promoted into a date field it would misrepresent.
+  - CRS is WGS84, confirmed live - the simplest CRS story of any Spanish
+    adapter in this SDK, no reprojection question at all.
+  - `network_scope=multi_authority_interurban`, the same shape as DGT's
+    own real data - real road-number prefixes span the Generalitat's own
+    network plus all four provincial councils' networks plus some state
+    roads within Catalan territory.
+  - Licence is Catalonia's own "Llicència oberta d'ús d'informació" -
+    confirmed genuinely open (reuse, distribution and derivative works
+    permitted worldwide, attribution required), so the test fixture is
+    real, trimmed from a live pull - the cleanest licence of any Spanish
+    source checked this session.
+  - As a third Spain roadworks provider, `get_provider("spain")` now
+    names all three (`dgt`, `mallorca`, `sct`) via the territory-
+    ambiguity path.
+  - **The Basque Country (DGT's other exclusion) was investigated
+    alongside this, not built** - a genuinely promising finding: a real,
+    live DATEX II v1.0 feed (`infocar.dgt.es/datex2/dt-gv/...`) that this
+    SDK's existing shared parser already reads successfully with zero
+    code changes (120 situations, 96 with roadworks, a clean
+    `MaintenanceWorks`/`ConstructionWorks` discriminator) - flagged for
+    its own dedicated future investigation (licence there is genuinely
+    unresolved), not folded into this build.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a

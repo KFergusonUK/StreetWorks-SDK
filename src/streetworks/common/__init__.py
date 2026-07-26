@@ -20,6 +20,7 @@ from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
 from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
+from .from_sct import from_sct
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
 from .from_tigerweb import from_tigerweb
@@ -77,6 +78,7 @@ __all__ = [
     "from_vialietuva",
     "from_ogc_features",
     "from_mallorca",
+    "from_sct",
     "from_datavia",
     "from_openusrn",
     "from_bdtopo",

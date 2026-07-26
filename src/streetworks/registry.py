@@ -863,6 +863,42 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.ogc.mallorca import MallorcaClient",
     ),
     ProviderEntry(
+        key="sct",
+        name="Servei Català de Trànsit",
+        description="Catalonia's real-time road incidents feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MULTI_AUTHORITY_INTERURBAN,
+        territories=frozenset({"Spain"}),
+        administrative_area="Servei Català de Trànsit",
+        scope_note=(
+            "Fills the larger of DGT's two documented exclusions (DGT "
+            "explicitly omits Catalonia and the Basque Country). Real "
+            "road-number prefixes span the Generalitat's own network (C-) "
+            "and all four provincial councils' networks (B-/BV-/BP-, "
+            "GI-/GIV-/GIP-, T-/TV-/TP-, L-/LV-) and some state roads within "
+            "Catalan territory (N-/A-/AP-) - the same multi-authority shape "
+            "as DGT's own real data. No overlap with DGT checked (DGT "
+            "excludes Catalonia entirely, so none is expected), but never "
+            "deduplicate matches across providers regardless - see the "
+            "README's standing note. No start/end validity window exists "
+            "anywhere in this feed - a genuinely real-time, continuously-"
+            "refreshed current-state feed, not a works schedule; "
+            "date_confidence is always unknown, see the module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "Llicència oberta d'ús d'informació - Catalunya (reuse, "
+            "distribution and derivative works permitted worldwide, "
+            "attribution required: \"Generalitat de Catalunya. Departament "
+            "d'Interior\") - confirmed live via the dataset's own metadata "
+            "and administraciodigital.gencat.cat's licence page"
+        ),
+        source_grade="operator",
+        _module="streetworks.sct",
+        _client_name="SCTClient",
+        import_line="from streetworks.sct import SCTClient",
+    ),
+    ProviderEntry(
         key="belgium",
         name="Verkeerscentrum Vlaanderen",
         description="Flanders' (not all-Belgium's) roadworks feed.",
