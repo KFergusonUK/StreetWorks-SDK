@@ -15,6 +15,7 @@ from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
+from .from_mallorca import from_mallorca
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
 from .from_ogc_features import from_ogc_features
@@ -75,6 +76,7 @@ __all__ = [
     "from_autobahn",
     "from_vialietuva",
     "from_ogc_features",
+    "from_mallorca",
     "from_datavia",
     "from_openusrn",
     "from_bdtopo",

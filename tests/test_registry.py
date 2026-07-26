@@ -129,7 +129,7 @@ def test_providers_repr_includes_import_line():
 
 
 def test_get_provider_returns_class_not_instance():
-    cls = get_provider("spain")
+    cls = get_provider("dgt")
     assert isinstance(cls, type)
     from streetworks.datex2.dgt import DGTClient
 
@@ -139,7 +139,6 @@ def test_get_provider_returns_class_not_instance():
 @pytest.mark.parametrize(
     "alias,expected_key",
     [
-        ("spain", "dgt"),
         ("finland", "digitraffic"),
         ("iceland", "irca"),
         ("scotland", "srwr"),
@@ -151,11 +150,11 @@ def test_single_provider_place_names_are_aliased(alias, expected_key):
 
 
 def test_get_provider_case_insensitive():
-    assert get_provider("SPAIN") is get_provider("spain")
+    assert get_provider("MALLORCA") is get_provider("mallorca")
 
 
 @pytest.mark.parametrize(
-    "key", ["germany", "england", "wales", "france", "netherlands", "norway"]
+    "key", ["germany", "england", "wales", "france", "netherlands", "norway", "spain"]
 )
 def test_get_provider_ambiguous_key_raises_naming_candidates(key):
     with pytest.raises(AmbiguousProviderError) as exc_info:

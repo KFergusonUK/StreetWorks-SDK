@@ -719,10 +719,38 @@ _REGISTRY: list[ProviderEntry] = [
         credentials=None,
         licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
         source_grade="operator",
-        aliases=frozenset({"spain"}),
+        # No "spain" alias: Spain now has two providers (this one and
+        # mallorca) - get_provider("spain") resolves through the
+        # territory-ambiguity path instead, same as "france"/"norway"/
+        # "germany".
         _module="streetworks.datex2",
         _client_name="DGTClient",
         import_line="from streetworks.datex2.dgt import DGTClient",
+    ),
+    ProviderEntry(
+        key="mallorca",
+        name="Consell de Mallorca (IDEmallorca)",
+        description="Mallorca's island roadworks feed.",
+        kind=Kind.ROADWORKS,
+        territories=frozenset({"Spain"}),
+        administrative_area="Consell de Mallorca",
+        scope_note=(
+            "Mallorca's own island-managed road network - genuinely additive "
+            "to DGT, which doesn't carry Consell-managed roads (confirmed live: "
+            "an Alcúdia-area DGT query returned ~5 works island-wide). Mallorca "
+            "only, not a Balearic cluster - Menorca and Eivissa were checked "
+            "and don't publish the same way (see the module docstring)."
+        ),
+        credentials=None,
+        licence=(
+            "Unconfirmed - checked the WFS capabilities (Fees/AccessConstraints "
+            "both blank, not a deliberate statement), the IDEmallorca geoportal, "
+            "and the Consell's general legal notice; no explicit reuse terms found"
+        ),
+        source_grade="operator",
+        _module="streetworks.ogc.mallorca",
+        _client_name="MallorcaClient",
+        import_line="from streetworks.ogc.mallorca import MallorcaClient",
     ),
     ProviderEntry(
         key="belgium",

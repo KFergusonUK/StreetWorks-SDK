@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "totalFeatures": 3,
+  "features": [
+    {
+      "type": "Feature",
+      "id": "incidencies_tram.90001",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [[499900.0, 4399900.0], [499950.0, 4399950.0], [500000.0, 4400000.0], [500050.0, 4400050.0]]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {"codi": 90001, "color": 2}
+    },
+    {
+      "type": "Feature",
+      "id": "incidencies_tram.90002",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [[509900.0, 4409900.0], [509950.0, 4409950.0], [510000.0, 4410000.0]],
+          [[510100.0, 4410100.0], [510150.0, 4410150.0]]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {"codi": 90002, "color": 2}
+    },
+    {
+      "type": "Feature",
+      "id": "incidencies_tram.90003",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [[519900.0, 4419900.0], [520000.0, 4420000.0], [520100.0, 4420100.0]]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {"codi": 90003, "color": 1}
+    }
+  ],
+  "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::25831"}}
+}

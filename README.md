@@ -37,7 +37,7 @@ Street Manager
 
 ... (5 more — OS Open USRN, DataVIA, D-TRO, Street Manager Open Data, UK Police)
 
->>> DGTClient = get_provider("spain")   # the class, not an instance - constructors vary
+>>> DGTClient = get_provider("dgt")   # the class, not an instance - constructors vary
 >>> with DGTClient() as dgt:
 ...     situations = list(dgt.iter_roadworks())
 ```
@@ -48,11 +48,12 @@ the four nations — a query-time convenience only, never stored data),
 from one `"gazetteer"` value, see [below](#international-gazetteers--separate-strand)
 for why lumping them together was a real mistake), and `credentials`
 (`False` for the credential-free ones). `get_provider()` resolves a single
-provider or a curated alias (`"spain"`, `"finland"`, `"iceland"`, ...); an
-ambiguous name (`"germany"` → four providers, `"france"`/`"netherlands"`/
-`"norway"` → two each, a roadworks feed and an address register, `"england"`
-→ several) raises naming every real candidate rather than guessing which
-one you meant.
+provider or a curated alias (`"finland"`, `"iceland"`, `"scotland"`, ...);
+an ambiguous name (`"germany"` → four providers, `"france"`/`"netherlands"`/
+`"norway"` → two each, a roadworks feed and an address register, `"spain"`
+→ two roadworks feeds (DGT national, Consell de Mallorca insular),
+`"england"` → several) raises naming every real candidate rather than
+guessing which one you meant.
 
 This is a discovery layer over the native interfaces below, not a
 replacement for them — every provider still has its own full-fidelity
@@ -75,7 +76,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3 + v2), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), and the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
-| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
+| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
@@ -1357,6 +1358,82 @@ all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
 field-by-field mapping and every state's exact attribution text.
 
+## Consell de Mallorca (island roadworks)
+
+Mallorca island-road works via the IDEmallorca GeoServer WFS — credential
+-free, no citizen registration, reusing the same `OGCFeaturesClient` the
+German states use. This is the *insular* layer beneath DGT: DGT's national
+DATEX feed doesn't carry Consell-managed island roads at all (confirmed
+live — a DGT query around Alcúdia returned only ~5 works island-wide), so
+this is genuinely additive coverage, not a duplicate — DGT covers Spain's
+national roads, the Consell covers the island's own network, and together
+they give fuller Mallorca coverage than either alone (a concrete example
+of the national/regional/insular layering also seen in Germany's
+state-vs-national split and France's autoroute-concessionaire split):
+
+```python
+from streetworks.ogc.mallorca import MallorcaClient
+from streetworks.common import from_mallorca
+
+with MallorcaClient() as mallorca:
+    icons = mallorca.fetch_roadworks_icons()  # tipoinc filtered - Obres/Manteniment
+    trams = mallorca.fetch_trams()            # affected-segment lines, joined by codi
+works = from_mallorca(icons, trams)
+```
+
+Built from a dedicated recon pass (`docs/idemallorca-investigation.md`),
+then verified again while building. Two layers, joined by a shared `codi`:
+`incidencies_icon` (one point per incident — type, dates, description,
+road, direction) is the spine; `incidencies_tram` supplies the affected
+road segment(s) as a real `MultiLineString` (one real record genuinely has
+2 parts, not always a single-part wrapper). **The join isn't total** —
+16/17 real icons in one live pull had a matching tram; one (a lane closure
+on Ma-13) is point-only, handled honestly (a real `Coordinate`, `parts`
+left `None`, never a fabricated line).
+
+**A real, masked-failure format gotcha**, not a documentation gap: this
+GeoServer genuinely rejects `OGCFeaturesClient`'s own default
+`output_format="application/geo+json"` — but with **HTTP 200**, wrapping
+an XML `InvalidParameterValue` exception body, not an error status. Every
+call here passes `output_format="application/json"` explicitly instead
+(a call-site override, not a change to the client's default), and
+`MallorcaClient` validates the decoded payload really is a
+`FeatureCollection` before returning it, as a second guard against exactly
+this kind of quiet failure.
+
+**CRS: ETRS89/UTM31N (`EPSG:25831`), confirmed live, not reprojected** —
+the server *can* reproject to WGS84 server-side on request (tested,
+genuinely correct), but per this SDK's standing CRS policy the native CRS
+is requested and labelled instead, the same choice already made for
+Belgium's Lambert 72 and Lithuania's LKS-94.
+
+**Discriminator: `tipoinc`**, clean and explicit (`"Obres"`/
+`"Manteniment"`/`"Altres"` — three real values in one live 17-incident
+pull) — not the free-text-inference problem some sources have.
+`fetch_roadworks_icons()` filters to the first two; the one real `Altres`
+record checked reads as a DGT-imposed restriction on a Consell road
+(`"Restriccions de la DGT..."`), not Consell's own works programme, so
+it's excluded rather than assumed roadworks. `territory="Spain"`,
+`administrative_area="Consell de Mallorca"` — the island authority is the
+data-owning operator, the same rule already applied to Autobahn GmbH/
+National Highways/Via Lietuva.
+
+**Licence unconfirmed** — checked the WFS capabilities
+(`Fees`/`AccessConstraints` both blank, GeoServer's own unconfigured
+defaults, not a deliberate statement), the IDEmallorca geoportal, and the
+Consell's general legal notice; no explicit reuse terms found anywhere.
+Per the Autobahn GmbH/Belgium/Bulgaria precedent, the test fixture is
+synthetic (real confirmed shape, invented values) — **verify your own
+reuse rights before relying on this commercially.**
+
+**Mallorca only, not a Balearic cluster** — the investigation checked
+Menorca (its own separate IDE, no incidents layer located) and Eivissa (a
+differently-shaped open-data portal with a broken TLS certificate, nothing
+roadworks-related found); the pattern doesn't uniformly generalise, so
+this ships as one additive provider, not the head of a committed cluster.
+See `streetworks/ogc/mallorca.py`'s module docstring for the full
+field-by-field mapping.
+
 ## Jersey RoadWorkx and TIGERweb (ArcGIS REST)
 
 The third client shape in this SDK, after the DATEX/JSON adapters and
@@ -1738,7 +1815,10 @@ Autobahn GmbH/Germany, Via Lietuva/Lithuania (own real, non-WGS84 CRS —
 LKS-94, `EPSG:3346` — and reversed WKT axis order, see
 [Via Lietuva (Lithuania)](#via-lietuva-lithuania) above), German
 state roadworks (Hamburg, Brandenburg, Saxony, via the one shared
-`from_ogc_features` converter), WZDx, TrafficWatchNI and Traffic Wales.
+`from_ogc_features` converter), Consell de Mallorca (its own `from_mallorca`
+converter, for the two-layer icon/tram join — see
+[Consell de Mallorca (island roadworks)](#consell-de-mallorca-island-roadworks)
+above), WZDx, TrafficWatchNI and Traffic Wales.
 UK Police stays outside
 the works hierarchy entirely — it's a *context* provider (area-level crime as a
 safety signal), not a works
@@ -1746,10 +1826,15 @@ provider, and forcing it into a `WorksSite` would misrepresent what it
 actually is.
 
 See [`examples/compare_active_works.py`](examples/compare_active_works.py)
-for this normalisation in practice — active works in a Street Manager area
-and a DGT/Spain area, side by side, printed with one shared bit of code
-working unmodified on both (default areas: Newton Aycliffe vs. a radius
-around Alcúdia, Mallorca; both parameterisable).
+for this normalisation in practice — active works in a Street Manager
+area, a DGT/Spain (national) area, and a Consell de Mallorca (insular)
+area, side by side, printed with one shared bit of code working
+unmodified across all three (default areas: Newton Aycliffe vs. a shared
+radius around Alcúdia, Mallorca; parameterisable). DGT and Consell de
+Mallorca share the same centre/radius on purpose — same geographic area,
+genuinely different road networks, so the comparison makes the
+national/insular coverage gap visible in the output itself (DGT
+typically comes back empty for Alcúdia; Consell de Mallorca doesn't).
 
 ## Canonical gazetteer model (`Street`, `Segment`, `Address`)
 
@@ -2019,6 +2104,29 @@ independently confirmed, as Lambert-93).
       corroborated grouping evidence. Client built gazetteer-ready
       (generic GeoJSON fetch, CRS-aware) but no gazetteer features added
       yet — separate design session pending
+- [x] Consell de Mallorca (island roadworks) adapter (`streetworks.ogc.mallorca`,
+      `streetworks.common.from_mallorca`) — built from a dedicated recon
+      pass (`docs/idemallorca-investigation.md`) confirming this is
+      genuinely additive to DGT, not a duplicate (DGT doesn't carry
+      Consell-managed island roads at all). Reuses `OGCFeaturesClient`
+      directly, no new client shape. Two real findings from the build,
+      not just the recon: this GeoServer masks a bad `output_format` as
+      HTTP 200 wrapping an XML error rather than an error status (worked
+      around at the call site, not in the shared client, plus an explicit
+      `FeatureCollection` validation as a second guard); and the two-layer
+      icon/tram join (`codi`-keyed) isn't total — 16/17 real incidents in
+      one live pull had a matching affected-segment line, one is
+      point-only, handled honestly (a real point `Coordinate`, never a
+      fabricated line). CRS is real ETRS89/UTM31N (`EPSG:25831`), labelled
+      and not reprojected, despite the server offering a genuinely correct
+      server-side WGS84 transform. Discriminator (`tipoinc`) is clean;
+      `"Altres"` (other) is excluded after checking its one real example
+      read as a DGT-imposed restriction, not Consell's own works.
+      **Licence unconfirmed** (checked capabilities, geoportal, and legal
+      notice — none state terms), so the fixture is synthetic, same
+      precedent as Autobahn GmbH/Belgium/Bulgaria. Mallorca only — Menorca
+      and Eivissa were checked and don't publish the same way, so this
+      isn't the head of a committed Balearic cluster
 - [x] **Provider registry & discovery** (`streetworks.providers()`/
       `get_provider()`, `streetworks.registry`) — territory/kind/credentials
       browsing and single-provider lookup over every provider above, derived

@@ -166,6 +166,48 @@
   `streetworks.registry` (`kind="roadworks"`) and wired into
   `scripts/smoke_test.py`.
 
+- **Consell de Mallorca (island roadworks) adapter**
+  (`streetworks.ogc.mallorca`, `streetworks.common.from_mallorca`) - built
+  from a dedicated recon pass (`docs/idemallorca-investigation.md`), then
+  live-verified again during the build. Genuinely additive to DGT (Spain),
+  not a duplicate: DGT's national DATEX feed doesn't carry Consell-managed
+  island roads at all (confirmed live - a DGT query around Alcúdia
+  returned only ~5 works island-wide). Reuses `OGCFeaturesClient` directly,
+  no new client shape.
+  - **A real, masked-failure format gotcha**: this GeoServer rejects the
+    client's own `output_format="application/geo+json"` default, but with
+    HTTP 200 wrapping an XML error body, not an error status. Every call
+    here passes `output_format="application/json"` explicitly at the call
+    site (not a change to the shared client's default), plus an explicit
+    `FeatureCollection` shape check as a second guard against this exact
+    kind of quiet failure.
+  - **A two-layer join, verified not total**: `incidencies_icon` (points,
+    all real content) and `incidencies_tram` (affected-segment
+    `MultiLineString`s - one real record genuinely has 2 parts) are joined
+    by a shared `codi`. 16/17 real incidents in one live pull had a
+    matching tram; one is point-only, handled honestly (a real
+    `Coordinate`, `parts` left `None`, never a fabricated line).
+  - Real CRS is ETRS89/UTM31N (`EPSG:25831`), labelled and carried through
+    unconverted, despite the server offering a genuinely correct
+    server-side WGS84 reprojection - not used, per this SDK's standing CRS
+    policy (the same choice already made for Belgium/Lithuania).
+  - Discriminator (`tipoinc`) is clean: `"Obres"`/`"Manteniment"` are
+    fetched as roadworks; `"Altres"` is excluded after checking its one
+    real example read as a DGT-imposed restriction, not Consell's own
+    works.
+  - `territory="Spain"`, `administrative_area="Consell de Mallorca"` - as
+    a second Spain roadworks provider, DGT's `"spain"` alias is removed
+    (`get_provider("spain")` now resolves through the territory-ambiguity
+    path, same as `"france"`/`"norway"`/`"germany"`).
+
+  **Licence unconfirmed** (checked the WFS capabilities, the IDEmallorca
+  geoportal, and the Consell's general legal notice - no explicit reuse
+  terms found anywhere), so the test fixture is synthetic, same precedent
+  as Autobahn GmbH/Belgium/Bulgaria. **Mallorca only, not a Balearic
+  cluster** - Menorca and Eivissa were checked and don't publish the same
+  way. Registered in `streetworks.registry` (`kind="roadworks"`) and wired
+  into `scripts/smoke_test.py`.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a

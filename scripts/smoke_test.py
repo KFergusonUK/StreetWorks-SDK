@@ -310,6 +310,22 @@ def check_dgt() -> str:
     )
 
 
+def check_mallorca() -> str:
+    """Consell de Mallorca (IDEmallorca WFS) needs no credentials -
+    confirmed live over plain HTTP (HTTPS doesn't connect at all - see
+    streetworks.ogc.mallorca). Filters to Obres/Manteniment
+    (excludes Altres) and reports the icon/tram join totality."""
+    from streetworks.common import from_mallorca
+    from streetworks.ogc.mallorca import MallorcaClient
+
+    with MallorcaClient() as mallorca:
+        icons = mallorca.fetch_roadworks_icons()
+        trams = mallorca.fetch_trams()
+    works = from_mallorca(icons, trams)
+    with_line = sum(1 for w in works if w.sites[0].coordinate and w.sites[0].coordinate.parts)
+    return f"{len(works):,} roadworks incidents ({with_line} with a joined tram line)"
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -835,6 +851,8 @@ def main() -> int:
     reporter.check("DATEX II (Bison Fute/France)", [], check_bisonfute)
     # DGT (Spain) needs no credentials
     reporter.check("DATEX II (DGT/Spain)", [], check_dgt)
+    # Consell de Mallorca (IDEmallorca) needs no credentials
+    reporter.check("Consell de Mallorca (IDEmallorca)", [], check_mallorca)
     # Verkeerscentrum Vlaanderen (Belgium/Flanders) needs no credentials
     reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
     # Ponts et Chaussées/CITA (Luxembourg) needs no credentials

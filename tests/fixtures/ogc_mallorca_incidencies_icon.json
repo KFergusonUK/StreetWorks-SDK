@@ -1,0 +1,103 @@
+{
+  "type": "FeatureCollection",
+  "totalFeatures": 4,
+  "features": [
+    {
+      "type": "Feature",
+      "id": "incidencies_icon.90001",
+      "geometry": {"type": "Point", "coordinates": [500000.0, 4400000.0]},
+      "geometry_name": "shape",
+      "properties": {
+        "codi": 90001,
+        "icon": 0,
+        "tipoinc": "Obres",
+        "inici": "01/08/2026 09:00",
+        "fin": "05/08/2026 18:00",
+        "lastupd": "2026/07/20 10:00",
+        "observacions": "TALL DE CARRIL, obres de renovació de ferm",
+        "carretera": "Ma-15",
+        "pkinici": 3.5,
+        "desinici": "",
+        "pkfin": 6.2,
+        "desfin": "",
+        "sentit": 0,
+        "sentit_desc": "ambdós sentits",
+        "restriccio": "Tall de carril",
+        "color": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "incidencies_icon.90002",
+      "geometry": {"type": "Point", "coordinates": [510000.0, 4410000.0]},
+      "geometry_name": "shape",
+      "properties": {
+        "codi": 90002,
+        "icon": 4,
+        "tipoinc": "Manteniment",
+        "inici": "10/08/2026 22:00",
+        "fin": "15/08/2026 05:00",
+        "lastupd": "2026/07/21 12:30",
+        "observacions": "ESTRENYIMENT DE CALÇADA per feines de manteniment nocturn",
+        "carretera": "Ma-20",
+        "pkinici": 7.0,
+        "desinici": "",
+        "pkfin": 8.0,
+        "desfin": "",
+        "sentit": 2,
+        "sentit_desc": "sentit descendent",
+        "restriccio": "Estrenyiment de calçada",
+        "color": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "incidencies_icon.90003",
+      "geometry": {"type": "Point", "coordinates": [520000.0, 4420000.0]},
+      "geometry_name": "shape",
+      "properties": {
+        "codi": 90003,
+        "icon": 11,
+        "tipoinc": "Altres",
+        "inici": "12/08/2026 10:00",
+        "fin": "20/08/2026 22:00",
+        "lastupd": "2026/07/22 09:15",
+        "observacions": "Restriccions de la DGT, cada dia de 10 a 22h",
+        "carretera": "Ma-2210",
+        "pkinici": 2.0,
+        "desinici": "",
+        "pkfin": 19.6,
+        "desfin": "",
+        "sentit": 0,
+        "sentit_desc": "ambdós sentits",
+        "restriccio": "Tancada",
+        "color": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "incidencies_icon.90004",
+      "geometry": {"type": "Point", "coordinates": [530000.0, 4430000.0]},
+      "geometry_name": "shape",
+      "properties": {
+        "codi": 90004,
+        "icon": 0,
+        "tipoinc": "Obres",
+        "inici": "28/07/2026 09:00",
+        "fin": "30/07/2026 15:00",
+        "lastupd": "2026/07/22 13:52",
+        "observacions": "TALL DEL CARRIL DRET, cada dia laborable de 09:00 a 15:00 hores per obres",
+        "carretera": "Ma-13",
+        "pkinici": 50.0,
+        "desinici": "",
+        "pkfin": null,
+        "desfin": "",
+        "sentit": 1,
+        "sentit_desc": "sentit ascendent",
+        "restriccio": "Tall de carril",
+        "color": 2
+      }
+    }
+  ],
+  "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::25831"}}
+}
