@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 
 from streetworks.exceptions import AmbiguousProviderError, ProviderNotFoundError
-from streetworks.registry import _REGISTRY, Kind, get_provider, providers
+from streetworks.registry import _REGISTRY, Kind, NetworkScope, get_provider, providers
 
 PACKAGE_ROOT = Path(inspect.getfile(inspect.getmodule(providers))).parent
 
@@ -190,6 +190,34 @@ def test_every_provider_package_is_registered():
     }
     missing = real_packages - _NON_PROVIDER_MODULES - registered_top_level
     assert not missing, f"provider package(s) with no registry entry: {missing}"
+
+
+def test_every_roadworks_provider_has_a_network_scope():
+    """Every roadworks entry must set network_scope explicitly - to a real
+    audited value, or NetworkScope.UNKNOWN if genuinely unaudited (never
+    the bare None default, which means "this concept doesn't apply" -
+    reserved for non-roadworks kinds). Mirrors
+    test_every_provider_package_is_registered's discipline: a new
+    roadworks provider can't silently ship without a scope any more than
+    it can ship without a registry entry at all."""
+    missing = [e.key for e in _REGISTRY if e.kind is Kind.ROADWORKS and e.network_scope is None]
+    assert not missing, f"roadworks provider(s) with no network_scope set: {missing}"
+
+
+def test_non_roadworks_providers_have_no_network_scope():
+    """The inverse check - network_scope is roadworks-only, so a
+    gazetteer/address/street/context entry should never have one set
+    (that would imply the concept applies where it doesn't)."""
+    wrongly_set = [
+        e.key for e in _REGISTRY if e.kind is not Kind.ROADWORKS and e.network_scope is not None
+    ]
+    assert not wrongly_set, f"non-roadworks provider(s) with a network_scope set: {wrongly_set}"
+
+
+def test_network_scope_values_are_real_enum_members():
+    for entry in _REGISTRY:
+        if entry.network_scope is not None:
+            assert isinstance(entry.network_scope, NetworkScope)
 
 
 def test_registry_top_level_modules_match_readme_provider_table():

@@ -77,7 +77,7 @@ from .exceptions import AmbiguousProviderError, ProviderNotFoundError
 # (`streetworks.common.SourceGrade.OPERATOR == "operator"` is True - it's a
 # `str` Enum) - equality works both ways without importing the type.
 
-__all__ = ["Kind", "ProviderEntry", "providers", "get_provider"]
+__all__ = ["Kind", "NetworkScope", "ProviderEntry", "providers", "get_provider"]
 
 
 class Kind(str, Enum):
@@ -96,12 +96,79 @@ class Kind(str, Enum):
     else this SDK has checked, they're two different publishers with two
     different `kind`s, and `providers()` can only show that gap once the
     two are told apart.
+
+    Still not a finer domain taxonomy on its own - "national-motorway" vs.
+    "regional" now lives in :class:`NetworkScope` instead, a deliberately
+    separate, roadworks-only field (see its own docstring for why it isn't
+    folded in here).
     """
 
     ROADWORKS = "roadworks"
     ADDRESSES = "addresses"
     STREETS = "streets"
     CONTEXT = "context"
+
+
+class NetworkScope(str, Enum):
+    """What tier of the road network a roadworks provider's real data
+    actually reaches - a second, orthogonal classification to
+    :class:`Kind`, roadworks-only (``None`` on every gazetteer/address/
+    street/context entry - see :attr:`ProviderEntry.network_scope`).
+
+    Added from a dedicated audit (``docs/network-scope-audit.md``) after
+    a real, live-confirmed surprise: DGT (Spain)'s own real data reaches
+    several regional/provincial/insular road authorities' works besides
+    the state network its name implies (``CV-``/Comunidad Valenciana,
+    ``M-``/Madrid, ``Ma-``/``Me-``/the Balearic insular councils, ~10
+    prefixes checked live), not just "the roads DGT itself owns" - a
+    provider's stated remit is not proof of its real data's actual reach,
+    checked here the same "verify, don't assume" way as everything else
+    in this SDK.
+
+    Deliberately **not** a finer split than the audit's real findings
+    warrant: two providers (``trafficwatchni``, ``saxony``) have a
+    genuine two-tier scope depending on which part of their own feed is
+    queried - that nuance lives in the existing free-text ``scope_note``
+    field, not a new enum value each, so this enum stays small and
+    filterable rather than growing one value per provider's own
+    idiosyncrasy. ``wzdx`` (a schema ~40+ agencies publish independently,
+    not one provider's coverage) and ``dtro`` (a legal-orders register,
+    not a works-progress feed - the concept doesn't apply the same way)
+    both get ``UNKNOWN``/``NOT_APPLICABLE`` plus a ``scope_note``
+    explaining why, rather than a forced, misleading single value.
+    """
+
+    #: All roads, all promoters - the permit-register tier (Street
+    #: Manager, SRWR, Jersey; live-confirmed via real promoter/authority
+    #: diversity in each case - see the audit).
+    COMPREHENSIVE = "comprehensive"
+    #: Several road authorities' interurban networks aggregated by one
+    #: provider (state + regional/provincial/insular), but never reaching
+    #: municipal streets - the DGT shape, live-confirmed via real
+    #: road-number prefixes, not assumed from DGT's own "national" remit.
+    MULTI_AUTHORITY_INTERURBAN = "multi_authority_interurban"
+    #: One national/state road authority's own network only - explicitly
+    #: excludes local/municipal roads (National Highways' SRN, Bison
+    #: Futé's RRN, Autobahn's non-motorway siblings, and the single-
+    #: national-authority DATEX/CSV adapters: Digitraffic, IRCA, Bulgaria,
+    #: Via Lietuva, Luxembourg).
+    STRATEGIC = "strategic"
+    #: Motorways only - a stricter subset of STRATEGIC (Autobahn).
+    MOTORWAY = "motorway"
+    #: One sub-national authority's own network, not that area's
+    #: municipal streets and not the whole country (Belgium/Flanders,
+    #: Consell de Mallorca).
+    REGIONAL = "regional"
+    #: A multi-agency schema, not one provider's coverage - scope varies
+    #: feed-by-feed and can't be summarised as one value (WZDx).
+    VARIES_BY_FEED = "varies_by_feed"
+    #: Not a works-progress register at all - a different kind of thing
+    #: network scope doesn't meaningfully classify (D-TRO).
+    NOT_APPLICABLE = "not_applicable"
+    #: Never verified against real data - the honest default, not a
+    #: guess (Vegvesen; also the default for any newly-added roadworks
+    #: provider until it's actually audited).
+    UNKNOWN = "unknown"
 
 
 #: Query-expansion only - "UK" is never stored on a registry entry, never
@@ -180,6 +247,16 @@ class ProviderEntry:
     import_line: str
     administrative_area: str | None = None
     scope_note: str | None = None
+    #: Which tier of the road network this provider's real data reaches -
+    #: see :class:`NetworkScope`. Roadworks-only: left ``None`` (the
+    #: dataclass default) on every gazetteer/address/street/context entry,
+    #: since the concept doesn't apply there. Every ``kind=Kind.ROADWORKS``
+    #: entry must set this explicitly - to a real audited value, or to
+    #: ``NetworkScope.UNKNOWN`` if genuinely unaudited (Vegvesen) - never
+    #: left at the bare ``None`` default, which is reserved for "this
+    #: concept doesn't apply to this provider at all". Enforced by
+    #: ``test_every_roadworks_provider_has_a_network_scope``.
+    network_scope: NetworkScope | None = None
     credentials: str | None = None  # None means genuinely credential-free
     licence: str | None = None
     licence_confirmed: bool = True  # False = "unconfirmed", not "none exists"
@@ -222,6 +299,8 @@ class ProviderEntry:
     def __str__(self) -> str:
         lines = [f"{self.name}"]
         lines.append(f"  {self.description}")
+        if self.network_scope is not None:
+            lines.append(f"  Network scope: {self.network_scope.value.replace('_', ' ')}")
         if self.scope_note:
             lines.append(f"  Scope: {self.scope_note}")
         creds = self.credentials or "No credentials required"
@@ -399,6 +478,7 @@ _REGISTRY: list[ProviderEntry] = [
             "permits, works, inspections."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"England"}),  # inferred by elimination, see above
         scope_note=(
             "Not Scotland (see the srwr provider), Wales (see trafficwales), or Northern Ireland "
@@ -419,6 +499,7 @@ _REGISTRY: list[ProviderEntry] = [
             "receive-only, same coverage as Street Manager itself."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"England"}),
         scope_note="Receive-only - you host the HTTPS endpoint AWS SNS pushes to.",
         credentials="A Street Manager Open Data subscription (no per-call auth)",
@@ -451,6 +532,7 @@ _REGISTRY: list[ProviderEntry] = [
             "restrictions - as machine-readable data."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.NOT_APPLICABLE,
         territories=frozenset({"England", "Wales"}),  # one inferential step past Street Manager
         scope_note="A register of legal orders, not a works-progress register itself.",
         credentials="D-TRO API credentials (OAuth2 client id/secret + app id)",
@@ -465,6 +547,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Scottish Road Works Register (SRWR)",
         description="Scotland's national road works register, as Open Data CSV extracts.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"Scotland"}),
         credentials=None,
         licence="Open Government Licence v3.0 (OGL v3)",
@@ -623,6 +706,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="NDW (Nationale Databank Wegverkeersgegevens)",
         description="The Netherlands' national roadworks and traffic-events feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"Netherlands"}),
         credentials=None,
         licence=None,
@@ -640,6 +724,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="National Highways",
         description="England's Strategic Road Network - motorways and major A-roads.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"England"}),
         administrative_area="National Highways",
         scope_note="The Strategic Road Network (SRN) only - not local roads.",
@@ -655,6 +740,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Digitraffic",
         description="Finland's national roadworks feed, from Fintraffic's open data platform.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Finland"}),
         credentials=None,
         licence=None,
@@ -673,6 +759,7 @@ _REGISTRY: list[ProviderEntry] = [
             "Coastal Administration."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Iceland"}),
         credentials=None,
         licence=(
@@ -691,6 +778,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Bison Futé / the DIRs",
         description="France's national (non-motorway-concession) roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"France"}),
         scope_note=(
             "The non-concessionary national road network (the state-run RRN) "
@@ -711,10 +799,20 @@ _REGISTRY: list[ProviderEntry] = [
         name="DGT (Dirección General de Tráfico)",
         description="Spain's national roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MULTI_AUTHORITY_INTERURBAN,
         territories=frozenset({"Spain"}),
         scope_note=(
             "National except Catalonia and the Basque Country, which run their "
-            "own regional traffic authorities and publish separately."
+            "own regional traffic authorities and publish separately. Not "
+            "state-roads-only despite the name - real road-number prefixes "
+            "reach several regional/provincial/insular authorities too (CV-/"
+            "Comunidad Valenciana, M-/Madrid, Ma-/Me-/the Balearic insular "
+            "councils, ~10 checked live), though never municipal streets. "
+            "Confirmed live: overlaps with mallorca for at least some "
+            "higher-impact Balearic works (matching road, km-range and end-"
+            "date) - the two are complementary, not disjoint; never dedupe "
+            "matches across them (or any two providers) - see mallorca's own "
+            "scope_note and the README's 'never dedupe across providers' note."
         ),
         credentials=None,
         licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
@@ -732,14 +830,26 @@ _REGISTRY: list[ProviderEntry] = [
         name="Consell de Mallorca (IDEmallorca)",
         description="Mallorca's island roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.REGIONAL,
         territories=frozenset({"Spain"}),
         administrative_area="Consell de Mallorca",
         scope_note=(
-            "Mallorca's own island-managed road network - genuinely additive "
-            "to DGT, which doesn't carry Consell-managed roads (confirmed live: "
-            "an Alcúdia-area DGT query returned ~5 works island-wide). Mallorca "
-            "only, not a Balearic cluster - Menorca and Eivissa were checked "
-            "and don't publish the same way (see the module docstring)."
+            "Mallorca's own island-managed road network, in far more detail "
+            "than DGT's national feed carries for the island (16-17 current "
+            "records here vs. DGT's ~4-5). Confirmed live, not 'genuinely "
+            "additive, not a duplicate' as first assumed: 2 of DGT's Balearic "
+            "records match records here almost exactly on road, km-range and "
+            "end-date (republication of the same real works, not a "
+            "jurisdiction-boundary case - no independent reference field "
+            "exists on DGT's side to attribute it otherwise, and the matched "
+            "geometry sits within, not beside, the same work-zone span). Not "
+            "a confirmed strict superset of DGT's Balearic entries either - "
+            "at least 2 DGT Mallorca-area records had no live match here at "
+            "check time (a data-lag artefact, not conclusively resolved). "
+            "Never deduplicate matches against DGT (or any two providers) - "
+            "see the README's standing note on this. Mallorca only, not a "
+            "Balearic cluster - Menorca and Eivissa were checked and don't "
+            "publish the same way (see the module docstring)."
         ),
         credentials=None,
         licence=(
@@ -757,6 +867,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Verkeerscentrum Vlaanderen",
         description="Flanders' (not all-Belgium's) roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.REGIONAL,
         territories=frozenset({"Belgium"}),
         scope_note=(
             "Flanders only - confirmed live (supplierIdentification/"
@@ -782,6 +893,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Ponts et Chaussées",
         description="Luxembourg's national roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Luxembourg"}),
         credentials=None,
         licence="CC0 1.0 Universal (Public Domain Dedication)",
@@ -795,6 +907,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Road Infrastructure Agency (LIMA)",
         description="Bulgaria's national roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Bulgaria"}),
         scope_note=(
             "The NAP-listed host (lima.api.bg) is unreachable - the real, "
@@ -819,6 +932,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Statens vegvesen",
         description="Norway's national roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
         territories=frozenset({"Norway"}),
         scope_note="Phase 1 scaffold - never run against real Norwegian data, see below.",
         credentials="Statens vegvesen API credentials (Basic or Bearer) + IP allow-listing",
@@ -838,6 +952,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MOTORWAY,
         territories=frozenset({"Germany"}),
         administrative_area="Autobahn GmbH",
         scope_note=(
@@ -857,6 +972,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Hamburg",
         description="Hamburg's state roadworks feed (Baustellen).",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Germany"}),
         administrative_area="Hamburg",
         credentials=None,
@@ -871,6 +987,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Brandenburg",
         description="Brandenburg's state roadworks feed (Baustelleninfo).",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Germany"}),
         administrative_area="Brandenburg",
         credentials=None,
@@ -890,9 +1007,15 @@ _REGISTRY: list[ProviderEntry] = [
             "district and municipal included."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"Germany"}),
         administrative_area="Sachsen",
-        scope_note="Coordinates are EPSG:25833 (UTM33N), not WGS84 - see the module docstring.",
+        scope_note=(
+            "Coordinates are EPSG:25833 (UTM33N), not WGS84 - see the module "
+            "docstring. Genuinely broader than its hamburg/brandenburg "
+            "siblings, which are state-network-only - Saxony aggregates "
+            "district and municipal roadworks alongside state roads."
+        ),
         credentials=None,
         licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
         source_grade="operator",
@@ -906,6 +1029,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="WZDx (Work Zone Data Exchange)",
         description="The US standard for work-zone data, published independently by ~40+ agencies.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.VARIES_BY_FEED,
         territories=frozenset({"USA"}),
         scope_note=(
             "Not one provider's coverage - a schema ~40+ agencies publish "
@@ -928,7 +1052,16 @@ _REGISTRY: list[ProviderEntry] = [
             "Traffic Information and Control Centre."
         ),
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Northern Ireland"}),
+        scope_note=(
+            "Genuinely two-tier, not a single scope: trunk roads and "
+            "motorways NI-wide (the STRATEGIC classification here), but "
+            "*all* roads within Greater Belfast specifically - see the "
+            "client's own BELFAST feed variant. Query the right feed for "
+            "the area in question rather than assuming NI-wide strategic-"
+            "only coverage everywhere."
+        ),
         credentials=None,
         licence="Attribution required (DfI TICC) - no named reuse licence stated by the publisher",
         source_grade="traveller_info",
@@ -941,6 +1074,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Traffic Wales",
         description="Wales's motorway/trunk-road roadworks feed, from the Welsh Government.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Wales"}),
         credentials=None,
         licence=(
@@ -970,6 +1104,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Jersey RoadWorkx",
         description="Jersey's roadworks register, over its public ArcGIS Feature Service.",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
         territories=frozenset({"Jersey"}),
         scope_note=(
             "This SDK's first Channel Islands coverage. The real layer truncates "
@@ -1009,6 +1144,7 @@ _REGISTRY: list[ProviderEntry] = [
         name="Via Lietuva",
         description="Lithuania's national roadworks feed (open data.gov.lt route).",
         kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Lithuania"}),
         administrative_area="Via Lietuva",
         scope_note=(

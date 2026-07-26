@@ -18,6 +18,23 @@ what the DGT NAP's own CKAN dataset metadata confirms (dataset
 run their own regional traffic authorities and publish separately - the
 DGT feed states this itself (it's a national, not all-Spain, publication).
 
+**Not state-roads-only, despite the name - confirmed live via a network-
+scope audit (``docs/network-scope-audit.md``), not assumed from "national"
+in the description.** Real road-number prefixes reach several regional/
+provincial/insular road authorities too, not just the state's own network
+(``A-``/``N-``/``AP-``): ``CV-`` (Comunidad Valenciana, 16 records checked
+live across València/Castelló/Alacant), ``M-`` (Madrid, 15),
+``RM-``/``EX-``/``TF-`` (Murcia/Extremadura/Tenerife, ~8 each), and
+``Ma-``/``Me-`` (the Balearic insular councils - Consell de Mallorca and
+Consell Insular de Menorca, 5). Never municipal/urban streets in any real
+record checked - this is a multi-authority *interurban* aggregator, not a
+comprehensive register. **Confirmed overlap with** :mod:`streetworks.ogc.mallorca`:
+2 of DGT's real Balearic records matched Consell de Mallorca's own records
+almost exactly on road, km-range and end-date - the same real works
+republished in both feeds, not two authorities' records for adjacent land.
+Never deduplicate matches between the two (or any two providers) - see the
+README's "Never deduplicate across providers" note.
+
 **Standard DATEX v3, no bespoke parsing path** - reused through the
 existing shared :func:`~streetworks.datex2.parser.iter_situations_full` /
 :func:`~streetworks.datex2.parser.iter_roadworks_full`, same as NDW/Iceland/

@@ -208,6 +208,57 @@
   way. Registered in `streetworks.registry` (`kind="roadworks"`) and wired
   into `scripts/smoke_test.py`.
 
+- **Network-scope audit + `network_scope` registry field**
+  (`docs/network-scope-audit.md`) - audited every roadworks provider for
+  what tier of the road network its *real* data actually reaches, not its
+  stated remit, and wired the result into `streetworks.registry`: a new
+  `NetworkScope` enum (`comprehensive` / `multi_authority_interurban` /
+  `strategic` / `motorway` / `regional` / `varies_by_feed` /
+  `not_applicable` / `unknown`) and a `network_scope` field on every
+  `ProviderEntry`, surfaced directly in `providers()`'s own rendering -
+  additive, no client behaviour changes.
+  - **Corrects an already-shipped claim, stated plainly rather than
+    quietly edited.** The Consell de Mallorca adapter above shipped
+    describing DGT and Consell de Mallorca as "genuinely additive, not a
+    duplicate." A live check found this wrong: DGT's own real data
+    reaches Mallorca (`Ma-`/`Me-` prefixed records, confirmed via real
+    road-number prefixes, not assumed from DGT's "national" description),
+    and 2 of DGT's Balearic records were checked directly against Consell
+    de Mallorca's own feed and matched almost exactly on road, km-range
+    and end-date - republication of the same real works, not two
+    authorities' records for adjacent land (no independent reference
+    field exists on DGT's side to attribute it otherwise, and the matched
+    geometry sits within, not beside, the same work-zone span). Corrected
+    everywhere the original claim appeared: this changelog's own history
+    is left as-is (a record of what was believed at the time), but the
+    README, `docs/idemallorca-investigation.md`, both modules' own
+    docstrings, and `examples/compare_active_works.py` are all updated.
+  - DGT itself turned out broader than "national roads" implies: real
+    road-number prefixes reach ~10 regional/provincial/insular
+    authorities too (`CV-`/Comunidad Valenciana, `M-`/Madrid, and the
+    Balearic ones above), never municipal streets - reclassified
+    `multi_authority_interurban`, a new enum value the original 5-value
+    proposal didn't anticipate.
+  - Two providers turned out genuinely two-tier depending on which part
+    of their own feed is queried - TrafficWatchNI (NI-wide strategic,
+    all-roads within Belfast) and Saxony (broader than its Hamburg/
+    Brandenburg siblings, aggregating district and municipal roadworks
+    alongside state roads). Kept in the existing free-text `scope_note`
+    rather than growing the enum per-provider, per the audit's own
+    restraint.
+  - New standing principle, added to the README:
+    [never deduplicate near-identical works across providers](#never-deduplicate-across-providers) -
+    a permit is issued per authority, not per physical worksite, so two
+    providers' records for what looks like the same location can both be
+    genuinely correct; the same lesson `examples/collaboration_finder.py`
+    already applies one level down (never merging a Street Manager permit
+    with its own amendment), one level up.
+  - `tests/test_registry.py` extended: every `kind="roadworks"` entry must
+    set `network_scope` explicitly (never the bare `None` default, which
+    now means "this concept doesn't apply" - reserved for non-roadworks
+    kinds), the same "can't ship without it" discipline the registry's
+    own package-coverage test already applies.
+
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
   data.police.uk's custom CSV download (https://data.police.uk/data/) - a

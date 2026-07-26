@@ -13,14 +13,19 @@ Consell de Mallorca: a GeoServer WFS, UTM31N coordinates, also no status
 field).
 
 **DGT vs. Consell de Mallorca is also the clearer, concrete point of
-including both**: they cover the *same geographic area* (Alcúdia,
-Mallorca) but genuinely different road networks - DGT is Spain's national
-network, which doesn't include Consell-managed island roads at all
-(confirmed live - see streetworks.ogc.mallorca's module docstring). Run
-this and you'll typically see DGT come back empty or near-empty for
-Alcúdia while Consell de Mallorca shows real, current works - not a bug in
-either fetch, just the national/insular layering made visible in one
-script's output.
+including both** - they cover the *same geographic area* (Alcúdia,
+Mallorca), and their networks genuinely overlap rather than being cleanly
+disjoint (corrected from an earlier "DGT doesn't include Consell-managed
+island roads at all" claim - see docs/network-scope-audit.md: DGT's own
+real data does reach Mallorca, and 2 of its Balearic records were checked
+directly against Consell de Mallorca's own feed and matched almost
+exactly on road, km-range and end-date - republication of the same real
+works). Run this and you'll typically see DGT come back empty or
+near-empty for Alcúdia while Consell de Mallorca shows real, current
+works, since DGT's Balearic coverage is thin and Consell de Mallorca's is
+rich - not a bug in either fetch, and **never a reason to deduplicate
+matches between the two if both happen to return something** - see the
+README's "Never deduplicate across providers" note.
 
 Run: python examples/compare_active_works.py
 Needs SM_EMAIL / SM_PASSWORD for the Street Manager third (SM_ENV=sandbox|
@@ -33,7 +38,8 @@ Areas are parameterised (--sm-town, --spain-point, --spain-radius-km)
 rather than hardcoded; the defaults are the brief's own areas: Newton
 Aycliffe (County Durham) and a 20km radius around Alcúdia, Mallorca -
 shared between DGT and Consell de Mallorca so the comparison is
-apples-to-apples, same centre and radius, two different road networks.
+apples-to-apples, same centre and radius, two overlapping-but-not-
+identical road networks.
 
 Three honest, real findings from running this live, worth knowing before
 reading the output as-is:

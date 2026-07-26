@@ -31,7 +31,9 @@ without needing that specialist knowledge first:
 >>> from streetworks import providers, get_provider
 >>> providers(territory="England")
 Street Manager
-  England and Wales's statutory street works register - permits, works, inspections.
+  England's statutory street works register - permits, works, inspections.
+  Network scope: comprehensive
+  Scope: Not Scotland (see the srwr provider), Wales (see trafficwales), or Northern Ireland (see trafficwatchni).
   Credentials: Street Manager API account (email + password)
   from streetworks.streetmanager import StreetManagerClient
 
@@ -51,9 +53,20 @@ for why lumping them together was a real mistake), and `credentials`
 provider or a curated alias (`"finland"`, `"iceland"`, `"scotland"`, ...);
 an ambiguous name (`"germany"` → four providers, `"france"`/`"netherlands"`/
 `"norway"` → two each, a roadworks feed and an address register, `"spain"`
-→ two roadworks feeds (DGT national, Consell de Mallorca insular),
+→ two roadworks feeds (DGT `multi_authority_interurban`, Consell de
+Mallorca `regional` — overlapping, not disjoint, see
+[Never deduplicate across providers](#never-deduplicate-across-providers)),
 `"england"` → several) raises naming every real candidate rather than
 guessing which one you meant.
+
+Every roadworks entry also carries a `network_scope` (`comprehensive` /
+`multi_authority_interurban` / `strategic` / `motorway` / `regional` /
+`varies_by_feed` / `not_applicable` / `unknown`) — what tier of the road
+network its real data actually reaches, checked live rather than assumed
+from a provider's stated remit (`docs/network-scope-audit.md`). This is
+the field that stops "DGT covers Spain" from being misread as "DGT covers
+every street in Valencia" — shown in `providers()`'s own rendering (see
+`Network scope:` above), not just stored.
 
 This is a discovery layer over the native interfaces below, not a
 replacement for them — every provider still has its own full-fidelity
@@ -964,7 +977,18 @@ extension, not on the shared model, same shape of solution as France's
 `dir_regions()`). Coverage is national **except Catalonia and the Basque
 Country**, which run their own regional traffic authorities and publish
 separately — documented honestly, like France's non-concessionary-network
-scope. Published under **Creative Commons Attribution (CC BY)** — see
+scope.
+
+**Not state-roads-only, despite the name** — a later network-scope audit
+(`docs/network-scope-audit.md`) found real road-number prefixes reach
+several regional/provincial/insular authorities too (`CV-`/Comunidad
+Valenciana, `M-`/Madrid, `Ma-`/`Me-`/the Balearic insular councils, ~10
+checked live), never municipal streets — a genuine multi-authority
+*interurban* aggregator, not a single national road authority's own
+network. This also means DGT **overlaps with Consell de Mallorca**
+(see below), not the disjoint "genuinely additive" picture first assumed
+— see [Never deduplicate across providers](#never-deduplicate-across-providers).
+Published under **Creative Commons Attribution (CC BY)** — see
 `streetworks/datex2/dgt.py`'s module docstring for the attribution wording
 and full field-by-field mapping.
 
@@ -1362,14 +1386,27 @@ field-by-field mapping and every state's exact attribution text.
 
 Mallorca island-road works via the IDEmallorca GeoServer WFS — credential
 -free, no citizen registration, reusing the same `OGCFeaturesClient` the
-German states use. This is the *insular* layer beneath DGT: DGT's national
-DATEX feed doesn't carry Consell-managed island roads at all (confirmed
-live — a DGT query around Alcúdia returned only ~5 works island-wide), so
-this is genuinely additive coverage, not a duplicate — DGT covers Spain's
-national roads, the Consell covers the island's own network, and together
-they give fuller Mallorca coverage than either alone (a concrete example
-of the national/regional/insular layering also seen in Germany's
-state-vs-national split and France's autoroute-concessionaire split):
+German states use. This is the *insular* layer beneath DGT — but
+**overlapping, not disjoint, corrected from an earlier "genuinely
+additive, not a duplicate" claim** (see
+[`docs/network-scope-audit.md`](docs/network-scope-audit.md), the audit
+that found this): DGT's own real data does reach Mallorca (`Ma-`/`Me-`
+prefixed records, confirmed via a live road-number check, not assumed),
+and 2 of DGT's Balearic records were checked directly against Consell de
+Mallorca's own feed and matched almost exactly on road, km-range, and end
+-date — republication of the same real works, not two authorities'
+records for adjacent land (no independent reference field exists on
+DGT's side to attribute it otherwise, and the matched geometry sits
+within, not beside, the same work-zone span). Consell de Mallorca is
+still by far the richer, more detailed, and larger source for the island
+(16-17 current records vs. DGT's ~4-5), and DGT itself turns out to carry
+real works for several other Spanish regional/provincial/insular
+authorities too, not just its own state network (see DGT's own section
+above) — so this remains a genuinely useful additional source, just not
+a clean disjoint layer the way Germany's state-vs-national split is.
+**Never deduplicate matches across the two** (or any two providers) — see
+[Never deduplicate across providers](#never-deduplicate-across-providers)
+below:
 
 ```python
 from streetworks.ogc.mallorca import MallorcaClient
@@ -1832,9 +1869,46 @@ area, side by side, printed with one shared bit of code working
 unmodified across all three (default areas: Newton Aycliffe vs. a shared
 radius around Alcúdia, Mallorca; parameterisable). DGT and Consell de
 Mallorca share the same centre/radius on purpose — same geographic area,
-genuinely different road networks, so the comparison makes the
-national/insular coverage gap visible in the output itself (DGT
-typically comes back empty for Alcúdia; Consell de Mallorca doesn't).
+overlapping but not identical road-network coverage (see below), so the
+comparison usually shows DGT thinner and Consell de Mallorca richer for
+the same real area, not a clean present/absent split.
+
+### Never deduplicate across providers
+
+A live-verified real case, not a hypothetical: DGT and Consell de
+Mallorca were first documented as "genuinely additive, not a duplicate"
+(`docs/idemallorca-investigation.md`'s original framing) — a later audit
+(`docs/network-scope-audit.md`) found this wrong. 2 of DGT's Balearic
+records match Consell de Mallorca's own records almost exactly on road,
+km-range and end-date — the same real works republished in both feeds,
+confirmed by checking the actual geometry and dates, not assumed from
+either provider's stated remit. DGT itself turned out to reach several
+other Spanish regional/provincial/insular road authorities' works too,
+not just its own state network (see [DGT](#datex-ii-european-roadworks)
+above) — so a territory carrying both a `strategic`/`multi_authority
+_interurban` provider and a `regional`/`comprehensive` one for the same
+area (Spain: DGT + Consell de Mallorca; England: National Highways +
+Street Manager) should be expected to overlap at the edges, not treated
+as two disjoint slices that sum to the whole.
+
+**This SDK never deduplicates near-identical works across providers, and
+never will without a shared, verified reference id.** The same lesson
+already learned one level down, inside a single provider —
+[`examples/collaboration_finder.py`](examples/collaboration_finder.py)
+deliberately excludes pairs sharing one Street Manager
+`work_reference_number`, because matching on place-and-date alone would
+wrongly treat a permit and its own amendment as two separate works — the
+cross-provider case is the same risk, one level up: matching two
+providers' records on place-and-date alone would just as wrongly merge
+two authorities' legitimate, independently-issued permits into one,
+losing whichever provider's record didn't win the merge. A permit is
+issued *per authority*, not per physical worksite, so two records for
+what looks like the same location can both be correct — collapsing them
+on a look-alike heuristic is a bug users would only find months later,
+which is worse than showing an occasional duplicate plainly. If
+aggregation across providers is ever built, it must preserve every
+source record with its own provenance, never dedupe, and flag likely
+duplicates for a human to judge rather than resolving automatically.
 
 ## Canonical gazetteer model (`Street`, `Segment`, `Address`)
 
@@ -2106,10 +2180,15 @@ independently confirmed, as Lambert-93).
       yet — separate design session pending
 - [x] Consell de Mallorca (island roadworks) adapter (`streetworks.ogc.mallorca`,
       `streetworks.common.from_mallorca`) — built from a dedicated recon
-      pass (`docs/idemallorca-investigation.md`) confirming this is
-      genuinely additive to DGT, not a duplicate (DGT doesn't carry
-      Consell-managed island roads at all). Reuses `OGCFeaturesClient`
-      directly, no new client shape. Two real findings from the build,
+      pass (`docs/idemallorca-investigation.md`), which first (wrongly)
+      framed this as "genuinely additive to DGT, not a duplicate." A
+      later audit (`docs/network-scope-audit.md`) corrected this: DGT's
+      own data does reach Mallorca, and overlaps with Consell de Mallorca
+      for at least some higher-impact works (same road/km-range/end-date,
+      confirmed live) — see
+      [Never deduplicate across providers](#never-deduplicate-across-providers).
+      Reuses `OGCFeaturesClient` directly, no new client shape. Two real
+      findings from the build,
       not just the recon: this GeoServer masks a bad `output_format` as
       HTTP 200 wrapping an XML error rather than an error status (worked
       around at the call site, not in the shared client, plus an explicit
@@ -2127,6 +2206,32 @@ independently confirmed, as Lambert-93).
       precedent as Autobahn GmbH/Belgium/Bulgaria. Mallorca only — Menorca
       and Eivissa were checked and don't publish the same way, so this
       isn't the head of a committed Balearic cluster
+- [x] **Network-scope audit + `network_scope` registry field**
+      (`docs/network-scope-audit.md`) — audited every roadworks provider's
+      *real* network reach (not its stated remit) and wired the result
+      into `streetworks.registry` as a new `NetworkScope` enum
+      (`comprehensive` / `multi_authority_interurban` / `strategic` /
+      `motorway` / `regional` / `varies_by_feed` / `not_applicable` /
+      `unknown`), shown directly in `providers()`'s own rendering. The
+      headline finding corrected an already-shipped claim: DGT (Spain)
+      turned out to be a multi-authority interurban aggregator (state +
+      ~10 real regional/provincial/insular prefixes, confirmed live), not
+      a single national network, and genuinely overlaps with Consell de
+      Mallorca for some higher-impact Balearic works — the "genuinely
+      additive, not a duplicate" framing shipped with the Mallorca
+      adapter was wrong, corrected here rather than quietly, everywhere
+      it appeared (this README, the investigation doc, both modules'
+      docstrings, the `compare_active_works.py` example). Also surfaced
+      two genuine two-tier providers (TrafficWatchNI: NI-wide strategic
+      plus all-roads-in-Belfast; Saxony: state+district+municipal,
+      broader than its Hamburg/Brandenburg siblings) — kept in the
+      existing free-text `scope_note` rather than growing the enum one
+      value per idiosyncrasy, per the audit's own restraint. Established
+      a standing principle from this:
+      [never deduplicate near-identical works across providers](#never-deduplicate-across-providers) —
+      a permit is issued per authority, not per physical worksite, so two
+      providers' records for what looks like the same location can both
+      be genuinely correct
 - [x] **Provider registry & discovery** (`streetworks.providers()`/
       `get_provider()`, `streetworks.registry`) — territory/kind/credentials
       browsing and single-provider lookup over every provider above, derived
