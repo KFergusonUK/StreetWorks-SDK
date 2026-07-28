@@ -48,6 +48,59 @@
 
 ### Added
 
+- **Sweden (Trafikverket) and Denmark (Vejdirektoratet) DATEX-family
+  roadworks scaffolds** (`streetworks.datex2.trafikverket`,
+  `streetworks.datex2.vejdirektoratet`) - Phase 1 scaffolds, **not verified
+  builds**, grouped with Norway (`vegvesen`) under a new **"Credentials
+  wanted"** README section, since all three share the same shape of gap:
+  implemented to a confirmed API/schema shape, covered by mocked tests
+  against synthetic fixtures, but never run against a real authenticated
+  response - genuinely blocked on credentials this project doesn't have,
+  not on unfinished code.
+  - **Sweden**: Trafikverket's own bespoke XML-request/JSON-response
+    envelope, not DATEX II - like Digitraffic wraps Finland, needs its own
+    request/parse path onto the shared `Situation`/`SituationRecord`
+    models rather than the streaming DATEX parser. Confirmed live via a
+    deliberate invalid-key probe: the endpoint, the `Situation` object
+    name, and schema version `1.5` (a genuine structured `401`, not a
+    generic error page). The real `MessageType`/`MessageCode` value that
+    means roadworks specifically is genuinely unconfirmed after checking
+    several sources - rather than guess, `record_type` preserves
+    `MessageType` verbatim, so `iter_roadworks()` honestly returns nothing
+    until a credentialed pull confirms the real discriminator value;
+    `iter_situations()` is the way to see everything in the meantime.
+    Licence: CC0 1.0 Universal.
+  - **Denmark**: genuine DATEX II 3.2, confirmed directly from
+    Vejdirektoratet's own protocol specification (`sit:ConstructionWorks`/
+    `sit:MaintenanceWorks` and their full `constructionWorkType`/
+    `roadMaintenanceType` enumerations stated explicitly, not inferred),
+    so it reuses the existing shared streaming parser unchanged, the same
+    shape of solution as `vegvesen`. The open metadata catalogue
+    (196 datasets, no auth) was re-verified live; the specific roadworks
+    dataset confirmed road-work-themed and **CC BY 4.0**-licensed
+    per-dataset, not assumed from the catalogue in general. No public data
+    URL exists - the real per-dataset pull address and HTTP Basic Auth
+    credentials are both issued together at registration, so
+    `VejdirektoratetClient` takes `base_url` as a required argument rather
+    than a module constant, unlike every other DATEX adapter here.
+  - Both ship an import-time `UserWarning` pointing at the "help wanted"
+    issue tracker - a genuinely new mechanism, added here and retrofitted
+    onto `vegvesen` too for consistency (previously signalled only via a
+    docstring admonition and `ProviderEntry(verified=False, ...)`, which
+    still remain the source of truth for tooling).
+  - Both registered in `streetworks.registry` (`kind="roadworks"`,
+    `network_scope=NetworkScope.UNKNOWN` - honest default, not a guess,
+    same as `vegvesen`), wired into `scripts/smoke_test.py`
+    (`check_trafikverket`/`check_vejdirektoratet`, skip-guarded on missing
+    credentials) and `.env.example`. Test fixtures are **synthetic**
+    (structurally real shapes, invented values) since neither adapter has
+    ever seen real data - `tests/test_trafikverket.py` deliberately
+    asserts `iter_roadworks()` stays empty even for a deviation a human
+    would recognise as roadworks (`MessageType: "Vägarbete"`), to keep
+    that honesty regression-tested.
+  - Drafted (not opened) `help wanted` GitHub issue text for both, plus
+    Norway's, in `docs/credentials-wanted-issues.md`.
+
 - **Belgium (Verkeerscentrum Vlaanderen) and Luxembourg (Ponts et
   Chaussées/CITA) DATEX adapters** (`streetworks.datex2.belgium`,
   `streetworks.datex2.luxembourg`) - DATEX II v3 and v2.3 respectively,

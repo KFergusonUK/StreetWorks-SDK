@@ -1,0 +1,67 @@
+{
+  "_note": "SYNTHETIC fixture, not real data - see streetworks.datex2.trafikverket module docstring. The authenticated data pull has never been exercised; only the endpoint/auth/schema-version have been confirmed live (via a deliberate invalid-key probe). Field names here are documented, not verified, cross-referenced across third-party client libraries - see module docstring. Deliberately includes a MessageType a human would recognise as roadworks ('Vägarbete'), to demonstrate that iter_roadworks() honestly returns nothing for it (see ROADWORKS_MESSAGE_TYPES / record_type discussion in the module docstring) until Phase 2 confirms the real discriminator value.",
+  "RESPONSE": {
+    "RESULT": [
+      {
+        "Situation": [
+          {
+            "Id": "SE-TV-SIT-1001",
+            "Deviation": [
+              {
+                "Id": "SE-TV-DEV-1001",
+                "Header": "Vägarbete",
+                "Message": "Vägarbete pågår, nedsatt hastighet och ett körfält avstängt.",
+                "MessageType": "Vägarbete",
+                "MessageCode": "roadWork",
+                "IconId": "roadWork",
+                "SeverityCode": "5",
+                "SeverityText": "Stor påverkan",
+                "RoadNumber": "E4",
+                "StartTime": "2026-07-10T05:00:00.000+02:00",
+                "EndTime": "2026-09-01T18:00:00.000+02:00",
+                "TemporaryLimit": "70",
+                "TrafficRestrictionType": "otherRestrictions",
+                "ValidUntilFurtherNotice": false,
+                "WebLink": "https://www.trafikverket.se/vagarbeten/e4",
+                "Geometry": {
+                  "WGS84": "POINT (18.0686 59.3293)"
+                },
+                "ModifiedTime": "2026-07-20T09:00:00.000+02:00"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Situation": [
+          {
+            "Id": "SE-TV-SIT-2002",
+            "Deviation": [
+              {
+                "Id": "SE-TV-DEV-2002",
+                "Header": "Färjor",
+                "Message": "Färjeturen är inställd på grund av tekniskt fel.",
+                "MessageType": "Färjor",
+                "MessageCode": "ferryTraffic",
+                "IconId": "ferry",
+                "SeverityCode": "3",
+                "SeverityText": "Liten påverkan",
+                "RoadNumber": null,
+                "StartTime": "2026-07-19T14:00:00.000+02:00",
+                "EndTime": null,
+                "TemporaryLimit": null,
+                "TrafficRestrictionType": null,
+                "ValidUntilFurtherNotice": true,
+                "WebLink": null,
+                "Geometry": {
+                  "WGS84": "POINT (11.9668 57.7089)"
+                },
+                "ModifiedTime": "2026-07-19T14:05:00.000+02:00"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

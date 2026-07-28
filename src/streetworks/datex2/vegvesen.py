@@ -165,6 +165,7 @@ fixture's comments are now correctly populated - see
 from __future__ import annotations
 
 import io
+import warnings
 from collections.abc import Iterator
 
 import httpx
@@ -175,6 +176,18 @@ from .parser import iter_roadworks as _iter_roadworks
 from .parser import iter_situations as _iter_situations
 
 __all__ = ["BASE_URL", "NVDB_BASE_URL", "VegvesenClient"]
+
+warnings.warn(
+    "streetworks.datex2.vegvesen is a Credentials-wanted scaffold: built to "
+    "Statens vegvesen's documented API shape (see module docstring), not "
+    "yet verified against real Norwegian data. Have vegvesen credentials? "
+    "Running the smoke test and reporting back one real trimmed record "
+    "would confirm this adapter - see the 'help wanted' issues at "
+    "https://github.com/KFergusonUK/StreetWorks-SDK/issues for exactly "
+    "what's needed.",
+    UserWarning,
+    stacklevel=2,
+)
 
 BASE_URL = "https://datex-server-get-v3-1.atlas.vegvesen.no"
 _SITUATION_PATH = "datexapi/GetSituation/pullsnapshotdata"

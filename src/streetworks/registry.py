@@ -1029,6 +1029,49 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2 import VegvesenClient",
     ),
     ProviderEntry(
+        key="trafikverket",
+        name="Trafikverket",
+        description="Sweden's national roadworks-relevant deviations feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Sweden"}),
+        scope_note=(
+            "Phase 1 scaffold - endpoint/auth/schema-version confirmed live "
+            "via an invalid-key probe, but never run against real "
+            "authenticated Swedish data, see below."
+        ),
+        credentials="Trafikverket API key (free self-service registration)",
+        licence="CC0 1.0 Universal (Public Domain Dedication)",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.datex2",
+        _client_name="TrafikverketClient",
+        import_line="from streetworks.datex2 import TrafikverketClient",
+    ),
+    ProviderEntry(
+        key="vejdirektoratet",
+        name="Vejdirektoratet",
+        description="Denmark's national roadworks feed (Dataudveksleren).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Denmark"}),
+        scope_note=(
+            "Phase 1 scaffold - DATEX II 3.2 schema and the open metadata "
+            "catalogue confirmed live, but the credential-gated data pull "
+            "itself never exercised, see below."
+        ),
+        credentials=(
+            "Dataudveksleren HTTP Basic Auth username/password + a "
+            "per-dataset pull URL, both issued at registration"
+        ),
+        licence="CC BY 4.0",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.datex2",
+        _client_name="VejdirektoratetClient",
+        import_line="from streetworks.datex2 import VejdirektoratetClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",

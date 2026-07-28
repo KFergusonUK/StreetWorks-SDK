@@ -43,6 +43,17 @@ skipped if its variables are absent.
     # ... or:
     export VEGVESEN_TOKEN="..."
 
+    # Trafikverket (Sweden) - PENDING LIVE VERIFICATION, see
+    # streetworks.datex2.trafikverket. Free self-service registration.
+    export TRAFIKVERKET_API_KEY="..."
+
+    # Vejdirektoratet (Denmark) - PENDING LIVE VERIFICATION, see
+    # streetworks.datex2.vejdirektoratet. Credentials + pull URL are both
+    # issued per-dataset at registration - see module docstring.
+    export VEJDIREKTORATET_URL="..."
+    export VEJDIREKTORATET_USERNAME="..."
+    export VEJDIREKTORATET_PASSWORD="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -121,6 +132,10 @@ def target_environments() -> dict[str, str]:
         envs["National Highways"] = "live"  # single environment, no sandbox
     if os.environ.get("VEGVESEN_TOKEN") or os.environ.get("VEGVESEN_USERNAME"):
         envs["Statens vegvesen (Norway)"] = "live"  # single environment, no sandbox
+    if os.environ.get("TRAFIKVERKET_API_KEY"):
+        envs["Trafikverket (Sweden)"] = "live"  # single environment, no sandbox
+    if os.environ.get("VEJDIREKTORATET_URL"):
+        envs["Vejdirektoratet (Denmark)"] = "live"  # single environment, no sandbox
     return envs
 
 
@@ -437,6 +452,51 @@ def check_vegvesen() -> str:
         f"{method} auth, {len(situations):,} roadworks situations "
         f"({works:,} works records) - first real Norwegian data seen, "
         "compare against module docstring's open questions"
+    )
+
+
+def check_trafikverket() -> str:
+    """Trafikverket (Sweden) - PENDING LIVE VERIFICATION, see
+    streetworks.datex2.trafikverket. Requires an API key
+    (TRAFIKVERKET_API_KEY, free self-service registration). This is the
+    first real authenticated pull this SDK will have made against
+    Trafikverket - if you run this, please also compare
+    Deviation.MessageType/MessageCode against the module docstring's open
+    question about the real roadworks-discriminator value and report back
+    (see the module docstring's linked issue)."""
+    from streetworks.datex2 import TrafikverketClient
+
+    with TrafikverketClient(api_key=os.environ["TRAFIKVERKET_API_KEY"]) as trafikverket:
+        situations = list(trafikverket.iter_situations())
+    roadworks = sum(1 for s in situations if s.roadworks)
+    message_types = sorted({r.record_type for s in situations for r in s.records})
+    return (
+        f"{len(situations):,} situations ({roadworks:,} flagged roadworks by "
+        f"the current, likely-incomplete filter) - real MessageType values "
+        f"seen: {message_types[:10]!r} - first real Swedish data seen, "
+        "compare against module docstring's open questions"
+    )
+
+
+def check_vejdirektoratet() -> str:
+    """Vejdirektoratet (Denmark) - PENDING LIVE VERIFICATION, see
+    streetworks.datex2.vejdirektoratet. Requires VEJDIREKTORATET_URL (the
+    per-dataset pull address issued at registration - there is no public
+    default) plus HTTP Basic VEJDIREKTORATET_USERNAME/
+    VEJDIREKTORATET_PASSWORD."""
+    from streetworks.datex2 import VejdirektoratetClient
+
+    with VejdirektoratetClient(
+        base_url=os.environ["VEJDIREKTORATET_URL"],
+        username=os.environ["VEJDIREKTORATET_USERNAME"],
+        password=os.environ["VEJDIREKTORATET_PASSWORD"],
+    ) as vejdirektoratet:
+        situations = list(vejdirektoratet.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return (
+        f"{len(situations):,} roadworks situations ({works:,} works "
+        "records) - first real Danish data seen, compare against module "
+        "docstring's open questions"
     )
 
 
@@ -858,6 +918,14 @@ def main() -> int:
             ["VEGVESEN_USERNAME", "VEGVESEN_PASSWORD"],
             check_vegvesen,
         )
+    reporter.check(
+        "DATEX II (Trafikverket/Sweden)", ["TRAFIKVERKET_API_KEY"], check_trafikverket
+    )
+    reporter.check(
+        "DATEX II (Vejdirektoratet/Denmark)",
+        ["VEJDIREKTORATET_URL", "VEJDIREKTORATET_USERNAME", "VEJDIREKTORATET_PASSWORD"],
+        check_vejdirektoratet,
+    )
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)
     # SRWR Open Data needs no credentials either (set SRWR_ARCHIVE to use a

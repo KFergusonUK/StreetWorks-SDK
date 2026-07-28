@@ -24,9 +24,14 @@ NAP-listed host, the date-stamped catalogue-then-file fetch, and a real
 mislabelled-encoding finding), the Basque Government's DATEX II **v1.0**
 feed for the Basque Country (credential-free, licence explicitly absent -
 see :mod:`streetworks.datex2.euskadi` for the oldest schema version in
-this SDK and a real, additive parser fix it needed), and Statens
-vegvesen's DATEX II snapshotPull service for Norway (**pending live
-verification** - see :mod:`streetworks.datex2.vegvesen`).
+this SDK and a real, additive parser fix it needed), and three
+**Credentials wanted** scaffolds - built to a confirmed API/schema shape
+but not yet verified against real authenticated data, pending a tester
+with credentials: Statens vegvesen for Norway (see
+:mod:`streetworks.datex2.vegvesen`), Trafikverket for Sweden (its own
+bespoke XML-request/JSON-response API, not DATEX - see
+:mod:`streetworks.datex2.trafikverket`), and Vejdirektoratet for Denmark
+(genuine DATEX II 3.2 - see :mod:`streetworks.datex2.vejdirektoratet`).
 """
 
 from .belgium import BASE_URL as BELGIUM_BASE_URL
@@ -64,8 +69,13 @@ from .nationalhighways import ClosureType, NationalHighwaysClient
 from .nationalhighways import parse_situations as parse_nationalhighways_situations
 from .ndw import BASE_URL, PLANNED_WORKS_FEED, NDWClient
 from .parser import iter_roadworks, iter_roadworks_full, iter_situations, iter_situations_full
+from .trafikverket import BASE_URL as TRAFIKVERKET_BASE_URL
+from .trafikverket import DATA_PATH as TRAFIKVERKET_DATA_PATH
+from .trafikverket import TrafikverketClient
+from .trafikverket import parse_situations as parse_trafikverket_situations
 from .vegvesen import BASE_URL as VEGVESEN_BASE_URL
 from .vegvesen import NVDB_BASE_URL, VegvesenClient
+from .vejdirektoratet import VejdirektoratetClient
 
 __all__ = [
     "iter_situations",
@@ -116,4 +126,9 @@ __all__ = [
     "BulgariaClient",
     "BULGARIA_BASE_URL",
     "BULGARIA_CATALOGUE_PATH",
+    "TrafikverketClient",
+    "TRAFIKVERKET_BASE_URL",
+    "TRAFIKVERKET_DATA_PATH",
+    "parse_trafikverket_situations",
+    "VejdirektoratetClient",
 ]
