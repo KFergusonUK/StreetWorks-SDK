@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.8.0] - 2026-07-28
 
 ### Changed
 
@@ -46,60 +46,427 @@
   registers are investigated; the Netherlands had the same gap until NWB
   (below) gave it the first territory with both layers.
 
-### Added
+### Added — Canonical gazetteer model
+
+- **Canonical gazetteer model: `Street`, `Segment`, `Address`**
+  (`streetworks.common.gazetteer`) - the gazetteer equivalent of what
+  `Works`/`WorksSite` did for roadworks at 0.5.0, designed after the eight
+  native street/address adapters (`datavia`, `openusrn`, `bdtopo`, `nvdb`,
+  `nwb`, `ban`, `bag`, `kartverket`), from their real shapes, closing the
+  international-gazetteers strand's design-session exit condition. Additive
+  only - native interfaces unchanged. New converters:
+  `from_datavia`/`from_openusrn`/`from_bdtopo`/`from_nvdb`/`from_nwb`/
+  `from_ban`/`from_bag`/`from_kartverket`.
+  **Three types, not two**: `Segment` is independent of `Street`, not a
+  child of it - real data proves street/segment is many-to-many, not
+  one-to-many (a real DataVIA ESU, `esuid` `4276210541888`, belongs to two
+  distinct designated streets at once - Church Street and Church Street
+  Villas, Durham; NVDB's real "Dalveien" address spans two
+  topologically-unrelated `veglenkesekvenser`).
+  **No synthetic streets**: `from_nwb` emits no `Street` at all - NWB
+  states segments with a `bag_orl` reference, but this SDK's only built BAG
+  route has no street row to be a `Street`, so Dutch street names arrive
+  only via `Address.street_name`, a real gap flagged rather than worked
+  around.
+  **`Coordinate` gained two additive fields**: every point may now be a
+  2-tuple or 3-tuple (Z survives, e.g. NVDB's real `LINESTRING Z` under
+  EPSG:5973, never defaulted to 0), and a new `parts` field holds a real
+  `MultiLineString`'s other lines (DataVIA's `StreetLines`) - existing
+  2-tuple-only converters are unaffected.
+  **`WorksSite` gained `street_ref: Identifier | None`** - populated from
+  Street Manager's per-permit USRN; investigated and deliberately left
+  `None` for SRWR, which states street identity only at the activity
+  level (record type `004`) with no phase/site join, so populating it
+  would have fabricated a link the source doesn't make.
+  **Two design-brief assumptions corrected against real data**: the brief
+  expected `Segment.names` to be BD-TOPO-only, but NWB's real `stt_naam`
+  (even purely-numbered roads carry one, e.g. a real A79 motorway segment)
+  populates it too; and DataVIA's real ESU schema (confirmed via WFS
+  `DescribeFeatureType`, live, mid-session) has *no name field at all*,
+  closing the brief's own open question about whether a real named
+  sub-street ("Anchorage Terrace", part of Church Street, Durham) is
+  recoverable from DataVIA at any level - it isn't, structurally, not just
+  unpopulated.
+  **Native promotions**: `nwb.Wegvak` gained `wvk_begdat` and six real
+  house-number-range fields (`hnrstrlnks`/`hnrstrrhts`/`e_hnr_lnks`/
+  `e_hnr_rhts`/`l_hnr_lnks`/`l_hnr_rhts`), previously only in `.raw`;
+  `nvdb.Veglenke` gained `type_veg`/`type_veg_sosi` (the real `typeVeg`/
+  `typeVeg_sosi` road-classification fields), likewise promoted from
+  `.raw`.
+  **New real fixtures**: two real DataVIA `StreetLines` payloads (Carr
+  Street USRN 33909869, Church Street USRN 11713561) and a real
+  `ESUStreets` payload, captured live this session with Durham-scoped
+  credentials (field shapes are national, confirmed via
+  `DescribeFeatureType`; field values are local to Durham) - DataVIA had no
+  fixture of any kind before this. A synthetic, clearly-labelled bilingual
+  fixture (Durham has no Welsh street names) exercises the `_eng`/`_cym`
+  name-pair path.
+  See `docs/gazetteer-field-dump.md` for the full field-by-field survey
+  this model was built from.
+
+### Added — Gazetteer providers
+
+- **France: BAN (Base Adresse Nationale)** (`streetworks.ban`) - the first
+  non-UK gazetteer, native only (no canonical gazetteer type, no
+  `streetworks.common` converter - deliberate, same as how the works side
+  shipped natively across 0.3.0-0.4.0 before `Works`/`WorksSite` existed).
+  Wraps both the credential-free geocoding API (`search`/`reverse`) and the
+  bulk per-département/national `csv-bal` files (streamed, never loaded
+  whole - the national file is ~1.4 GB gzipped). Verified live, not
+  assumed: the documented API endpoint (`api-adresse.data.gouv.fr`) is past
+  its stated 2026-01-31 sunset, so this client targets its confirmed-live
+  replacement, `data.geopf.fr/geocodage`; the design brief's own claim that
+  the new endpoint returned HTTP 400 did not reproduce - a plain
+  `q=`/`lon=`&`lat=` request succeeds. Of the four bulk CSV format variants
+  the brief named, only two (`csv`, `csv-bal`) exist as real downloadable
+  files today - `csv-with-ids` and `csv-bal-with-lang` do not.
+  **BAN is an address base, not a street register**: there is no
+  `id_ban_toponyme` field under any format checked, but a street's identity
+  is recoverable - every real address `id` is exactly
+  `{street prefix}_{numero}`, and stripping the numero reproduces the same
+  prefix for every address on the same street within one commune (verified:
+  6/6 real addresses on one real street share it). This SDK exposes that
+  as a derived `toponyme_id`, explicitly documented as not a literal BAN
+  field. Also confirmed live: the API's `banId` and the bulk `csv-bal`
+  format's `uid_adresse` are the *same* permanent UUID for the same real
+  address, not just similarly-shaped identifiers; the plain `csv` bulk
+  format carries neither, only the compact `id`.
+  A user-supplied addendum mid-build corrected the brief's claim that
+  street naming belongs to FANTOIR: FANTOIR was replaced by DGFiP's
+  **TOPO** register in July 2023 and is now archived. Investigated live in
+  response: BAN's plain `csv` format's `id_fantoir` column is, despite its
+  name, already populated with post-2023 TOPO-length codes (9 characters,
+  never the old 10-character FANTOIR form, across every département
+  sampled) - and a real BAN `id_fantoir` value was confirmed, live, to
+  join cleanly to DGFiP's TOPO API and return the matching street name.
+  TOPO itself has no geometry column at all, so even a perfect join only
+  recovers a street's name/history, never a centreline - France
+  genuinely splits street *identity* (TOPO, DGFiP) from street *position*
+  (BAN, IGN/communes), unlike the UK's unified USRN. TOPO is not wrapped by
+  this SDK yet - investigated and documented, not built, per the addendum's
+  own scope. Coordinates are WGS84 (`lon`/`lat`) throughout - confirmed
+  consistent across the API and both bulk formats, and across mainland
+  France and five sampled overseas départements; the bulk files' `x`/`y`
+  columns are preserved in `.raw` but not modelled as a coordinate, since
+  each overseas département uses its own local projection the file itself
+  never states. Licence Ouverte / Open Licence 2.0 (Etalab). Registered in
+  `streetworks.registry` as `ban` (`kind="gazetteer"`) - France now has two
+  providers, so the `"france"` alias was removed from both `ban` and the
+  existing `bisonfute` roadworks provider, and `get_provider("france")`
+  now raises `AmbiguousProviderError` naming both, the same as `"germany"`.
+
+- **Netherlands: BAG (Basisregistratie Adressen en Gebouwen)**
+  (`streetworks.bag`) - the third gazetteer, and the last before the
+  canonical-model design session (per the design brief's own framing),
+  native only. Wraps the credential-free PDOK Locatieserver (`search`/
+  `suggest`/`reverse`/`lookup`) and the bulk GeoPackage (`bag-light.gpkg`,
+  current status only, no history), whose download URL is discovered from
+  an Atom feed every call rather than hardcoded - PDOK republishes monthly
+  and the filename can change, the same NDW lesson.
+  **THE critical first check - is `openbare ruimte` (street) its own
+  object? - was answered against the real, full, 7.8 GB national
+  GeoPackage, downloaded in full over this session (~26 minutes), not
+  sampled or assumed from documentation**: no, it isn't - `gpkg_contents`
+  lists exactly five tables (`woonplaats`, `pand`, `verblijfsobject`,
+  `standplaats`, `ligplaats`), all five carrying real geometry, and street
+  name/id survive only as `openbare_ruimte_naam`/
+  `openbare_ruimte_identificatie` flattened onto every address. Verified
+  at full national scale via direct SQL, not sampled: grouping all
+  ~10.04M addressable objects (`verblijfsobject`/`standplaats`/`ligplaats`)
+  by that id gives 245,893 / 2,980 / 1,546 distinct real street ids
+  respectively, zero of which map to more than one distinct street name in
+  any table, and zero rows with a null street id anywhere.
+  The fuller picture needed checking the *other* real product too: the
+  full-history XML extract (investigated via HTTP range requests against
+  the real 3.6 GB zip - a nested zip-of-zips, one member per BAG object
+  type - without downloading it whole; not parsed, per the brief's own
+  scope) confirms `openbare ruimte` genuinely *is* a first-class,
+  separately-versioned BAG object there, with its own identity and a real
+  `status` lifecycle - but still carries no geometry of its own in either
+  product (confirmed: zero of 36 real national `OpenbareRuimte` XML member
+  files contain a geometry element, for any of its real `type` values,
+  while `Woonplaats`/`Standplaats`/`Ligplaats` all do). So the honest
+  answer has three parts, not two: a street is a genuine registered
+  object, with a real lifecycle; it never carries geometry, in any
+  product; and *which* product you pull from changes whether you can see
+  it directly as a row at all - a three-part shape distinct from both the
+  UK (street = geometry) and France (street has neither a row nor
+  geometry, and only one product exists to check).
+  Also confirmed live in the XML extract: a bitemporal `voorkomen`
+  versioning model (validity period *and* registration period tracked
+  separately) - documented, not parsed, the same "investigate, don't
+  build" scope the design brief drew around this product.
+  A correction to the design brief: "Gemeente" (municipality) is not part
+  of the BAG at all, per Kadaster's own disclaimer in the (explicitly
+  unofficial) `GEM-WPL-RELATIE` helper file - `Woonplaats` (settlement) is
+  BAG's real administrative concept. Also corrected: the live Atom feed's
+  own `<rights>` element names **CC0 1.0 Universal**, not the "Public
+  Domain Mark 1.0" the brief named - a different (if similarly permissive)
+  legal instrument. A `"weg"` (street) Locatieserver result can carry a
+  real `MULTILINESTRING` geometry with `fl=*`, but its `bron` field says
+  `"BAG/NWB"` - that line comes from NWB (a separate national roads
+  dataset), not BAG itself, so it's kept reachable via `.raw` rather than
+  promoted to a field that would misattribute it. Registered in
+  `streetworks.registry` as `bag` (`kind="gazetteer"`) - the Netherlands
+  now has two providers, so the `"netherlands"` alias was removed from
+  both `bag` and the existing `ndw` roadworks provider, matching how
+  `"france"` was handled for BAN.
+
+- **Norway: Kartverket (Matrikkelen Adresse + SSR stedsnavn)**
+  (`streetworks.kartverket`) - the fourth gazetteer, and the last before
+  the canonical-model design session, native only. Wraps the
+  credential-free address REST API (`search`/`search_nearby`), the SSR
+  place-names REST API (`search_places`/`search_names`/`nearby_places`/
+  `object_types`/`languages`), and bulk CSV downloads discovered via an
+  Atom feed - genuinely not GML-only, unlike Spain: Kartverket publishes
+  CSV, FGDB, GML, PostGIS and SOSI side by side for the same dataset,
+  confirmed live via the Geonorge catalogue, so CSV was picked
+  deliberately for the same standard-library-only reason every other bulk
+  provider in this SDK was.
+  **Multilingual naming - the finding the design brief flagged as most
+  likely to change the canonical model - lives on the SSR *place*, not the
+  address, confirmed live, not assumed**: a real place
+  (Karasjok/Kárášjohka/Kaarasjoki, `stedsnummer` 868181) carries three
+  parallel official names (Norwegian, Northern Sámi, Kven) in one
+  `stedsnavn` array, each independently statused (two `"godkjent og
+  prioritert"` - approved and prioritised; the Kven one only `"foreslått
+  og prioritert"` - proposed, not yet approved). But a real address in the
+  same Sámi-majority municipality ("Čalbmebealskáidi 1") carries exactly
+  one `adressenavn`, in Northern Sámi, with no parallel Norwegian name
+  anywhere on the record - even though SSR does have a real, dedicated
+  `"Adressenavn"` object type (one of 291 real legal types confirmed live),
+  that street's own entry there is single-language too. So multilingual
+  officialdom turned out to be a property of some SSR places, not a
+  systematic property of Norwegian street addressing - `PlaceName.names`
+  is modelled as a list for exactly this reason.
+  `adressekode` (a street key carried *inside* the address dataset itself
+  - between the UK's separate street register and France's separate tax
+  register) is real, clean and municipality-scoped: verified at full
+  scale, not sampled, via the same over-merge check BAN's `toponyme_id`
+  and BAG's `openbare_ruimte_identificatie` both got - two whole real
+  municipalities' bulk files (Karasjok, 1,896 addresses/139 codes; Oslo,
+  106,154 addresses/2,535 codes), zero codes mapping to more than one
+  street name in either. The same live search that surfaced this also
+  confirmed the municipality-scoping directly: "Karl Johans gate 1"
+  resolves to three different real addresses in three different
+  municipalities, each with its own `adressekode`.
+  No product checked gives a street geometry of its own - a separate
+  Kartverket/Statens vegvesen product, NVDB Vegnett, does hold real
+  road-network line geometry, noted but not built, the same treatment
+  France's TOPO and the Netherlands' NWB got. That makes three of the four
+  European gazetteers built in this SDK with no street centreline of their
+  own.
+  Two design-brief corrections, both live-verified: SSR's default output
+  CRS is the *same* `EPSG:4258` as the address API (the brief suggested
+  checking for a difference; only the query's *input* flexibility differs,
+  accepting `25833` alongside `4258` via `koordsys`) - and the "requires an
+  agreement with Kartverket" note some catalogues attach turned out to
+  name a completely different, SOAP-based, access-restricted service
+  (`MatrikkelAPI`), not the open REST APIs this module wraps. Also found:
+  the bulk Atom feed mislabels every entry's `type` attribute as
+  `application/gml+xml` even for real CSV entries (this module reads the
+  URL's filename, never the `type`), and per-entry `<rights>` isn't always
+  `"Kartverket"` - some municipalities (confirmed: Karasjok) name the real
+  local data steward instead.
+  Registered in `streetworks.registry` as `kartverket` (`kind="gazetteer"`)
+  - Norway now has two providers, so the `"norway"` alias was removed from
+  both `kartverket` and the existing `vegvesen` roadworks provider (a
+  different Norwegian agency, with the opposite access story - see
+  Credentials wanted, below), and `get_provider("norway")` now raises
+  `AmbiguousProviderError` naming both, matching `"france"`/`"netherlands"`.
+
+- **Netherlands: NWB (Nationaal Wegenbestand)** (`streetworks.nwb`) - the
+  first non-UK street-geometry provider, native only, the `kind="streets"`
+  counterpart to `bag`'s `kind="addresses"`. Wraps the credential-free WFS
+  (`query`/`count`, real `CQL_FILTER` support) and a two-hop Atom feed
+  (bulk GeoPackage discovery + streamed download - unlike every other Atom
+  feed in this SDK, NWB's index feed points to a second per-dataset feed,
+  which only then lists the real download).
+  **A real, stated join to BAG exists, confirmed live**: `bag_orl`
+  (carried on every wegvak/road-segment) is literally BAG's own
+  `openbare_ruimte_identificatie` - same format, same commune-code prefix,
+  verified by matching a real wegvak's `bag_orl` against BAG's own id
+  space - making the Netherlands the first territory in this SDK where an
+  address register and a street-geometry register can be joined by a
+  stated identifier, not a name match. Verified at real municipality
+  scale (Harlingen, 1,886 wegvakken), not sampled: grouping by `bag_orl`
+  gives 378 clean groups, zero mapping to more than one street name - but
+  the join isn't universal (96 of 1,886 real wegvakken, ~5%, carry no
+  `bag_orl` at all), and name-based grouping alone is measurably less
+  reliable (7 of 385 real (municipality, name) groups span two different
+  real `bag_orl` values - e.g. "Sédyk" is one display name covering two
+  genuinely different BAG street objects). `Wegvak.toponyme_id()` returns
+  `bag_orl` where present and `None` otherwise, never falling back to the
+  name, which would silently over-merge in exactly these real cases.
+  Corrected the design brief's own WFS paging warning, live: `count`
+  paging works fine - the brief's two failed attempts almost certainly
+  hit an unencoded `+` in `outputFormat=application/geopackage+sqlite3`,
+  which decodes server-side as a literal space (confirmed: that exact
+  rejection message reproduces the failure). But a real bug of the same
+  shape was found in its place: **PDOK's WFS silently ignores
+  `CQL_FILTER` entirely** - a query filtered to one real municipality
+  returned wegvakken from 280+ different municipalities, unfiltered, both
+  for actual features and for `resultType=hits` counts - while
+  Rijkswaterstaat's own WFS filters correctly on the identical query
+  (confirmed: exactly the requested municipality, matching the bulk-file
+  count exactly). Since filtering is the entire point of a live-query
+  route, `NWBClient.query()`/`count()` target Rijkswaterstaat directly;
+  the bulk GeoPackage download stays on PDOK's Atom feed, which is
+  unaffected (a static file, not a filtered query) and matches this SDK's
+  existing convention for other Dutch open data. Also confirmed live:
+  geometry is route-dependent (the WFS's GeoJSON reports plain
+  `LineString`; the bulk GeoPackage encodes every real wegvak as a
+  `MULTILINESTRING` wrapping exactly one line part, a GeoPackage/FME
+  export convention, not genuinely multi-part segments - carried through
+  unconverted, never silently unwrapped); CRS is EPSG:28992, matching
+  BAG; licence is CC0 1.0 Universal, matching BAG too, confirmed from the
+  Atom feed's own `<rights>` element rather than a portal page (the same
+  correction BAG's own licence needed). Registered in
+  `streetworks.registry` as `nwb` (`kind="streets"`) - the Netherlands
+  now has three providers (`ndw` roadworks, `bag` addresses, `nwb`
+  streets), so `get_provider("netherlands")` raises
+  `AmbiguousProviderError` naming all three.
+
+- **France: BD TOPO (IGN)** (`streetworks.bdtopo`) - the third non-UK
+  street-geometry provider, native only, the `kind="streets"` counterpart
+  to `ban`'s `kind="addresses"`. Wraps the credential-free Géoplateforme
+  WFS (`query_troncons`/`query_voies_nommees`/`count_troncons`, real
+  `CQL_FILTER` support confirmed live, including for `resultType=hits`
+  counts).
+  **`voie_nommee` (named street) is real, confirmed live, and gives
+  France a genuine two-level spine** - the strongest structural finding
+  this design strand has had: every real `voie_nommee` carries its own
+  stable `cleabs` and a real `liens_vers_supports` link down to a
+  `troncon_de_route` segment, confirmed live end to end (a real
+  `voie_nommee`'s link resolved to the expected segment, with matching
+  name and BAN fields). Neither NWB nor the UK's USRN has this two-level
+  structure.
+  **The join to BAN is real, stated, and richer than NWB's `bag_orl`**:
+  both `voie_nommee` and every `troncon_de_route` carry
+  `identifiant_voie_ban` in exactly BAN's own compact toponyme-id format,
+  *and* a second, independent identifier, `id_ban_odonyme` (a street-level
+  BAN UUID that BAN's own API/bulk files never expose directly).
+  Verified at real commune scale, not sampled, on two whole communes
+  (Ambérieu-en-Bugey, mainland; Basse-Terre, Guadeloupe, overseas):
+  grouping by `identifiant_voie_ban` and checking against `nom_voie_ban`
+  (BAN's own name) gives zero over-merged groups in either. A real, minor
+  nuance surfaced along the way: BD TOPO's own crowd-sourced name field
+  (`nom_collaboratif`) had one abbreviation variant under the same BAN id
+  in Basse-Terre ("R SALVADOR ALLENDE" vs "Rue du Président Salvador
+  Allende") - not a genuine identity conflict, and gone entirely once
+  checked against `nom_voie_ban` instead, which is why both name fields
+  are kept rather than one being treated as noise.
+  **Left/right structure is real**, confirmed live: `troncon_de_route`
+  carries independent `_gauche`/`_droite` names, BAN ids, and even INSEE
+  commune codes (a segment on a commune boundary can genuinely have two
+  different communes, one per side) - a real structural difference from
+  both NWB and the UK's USRN.
+  **No automated bulk GeoPackage download route was found**, a genuine,
+  thoroughly-investigated gap, not an oversight: IGN's documented download
+  portal (`geoservices.ign.fr/telechargement`) now redirects to
+  `cartes.gouv.fr`, a JavaScript single-page app with no discoverable
+  static resource list; `data.gouv.fr`'s own BD TOPO dataset lists 149
+  resources, none an actual GeoPackage file; the legacy `wxs.ign.fr` host
+  no longer resolves; and the WFS itself does not offer GeoPackage as an
+  output format (confirmed live via its own `GetCapabilities` - only GML,
+  GeoJSON, KML and CSV). Only the WFS is built as an access route. A
+  `BDTopoDatabase` GeoPackage reader is still provided, for a file
+  obtained manually from `cartes.gouv.fr`, but - flagged plainly, not
+  hidden - it was never verified against a real downloaded file, only
+  against the WFS's own confirmed-live table/column naming, which IGN
+  documents as generated from the same underlying data model.
+  CRS is also route-specific here: the WFS declares WGS84 (EPSG:4326) on
+  every real response checked, mainland and overseas alike; IGN's
+  documentation states the (unreachable) bulk GeoPackage uses RGF93 /
+  Lambert-93 (EPSG:2154) instead - plausible and consistent with every
+  other IGN product, but not independently re-confirmed here. Real 3D
+  coordinates (a genuine altitude third value) are confirmed present on
+  `troncon_de_route`. Licence Ouverte / Open Licence ETALAB 2.0, confirmed
+  via data.gouv.fr's dataset metadata - the same licence as `ban` and
+  `bisonfute`.
+  A note on naming, worth stating plainly: this is unrelated to DGFiP's
+  **TOPO** register (`ban`'s FANTOIR successor, see above) despite the
+  near-identical name - different agency, different product.
+  Registered in `streetworks.registry` as `bdtopo` (`kind="streets"`) -
+  France now has three providers (`bisonfute` roadworks, `ban` addresses,
+  `bdtopo` streets), so `get_provider("france")` raises
+  `AmbiguousProviderError` naming all three.
+
+- **Norway: NVDB (Nasjonal vegdatabank)** (`streetworks.nvdb`) - the
+  fourth non-UK street-geometry provider, native only, the
+  `kind="streets"` counterpart to `kartverket`'s `kind="addresses"`, and
+  the last planned provider in the international-gazetteers strand.
+  **Task one, checked first, per the design brief's own instruction**: no
+  credentials required for reads - confirmed live (only a required
+  `X-Client` self-identifying header, not an API key; a bare request
+  without it returns HTTP 400) and confirmed in NVDB's own API
+  documentation ("Det er ikke nødvendig å registrere en bruker..." - "It
+  is not necessary to register a user..."). This is the striking
+  asymmetry the brief asked about: Statens vegvesen's own DATEX roadworks
+  feed (`streetworks.datex2.vegvesen`) remains one of this SDK's
+  credential-blocked, unverified providers (see Credentials wanted,
+  below), while NVDB, from the same agency, is wide open.
+  **`veglenkesekvens` (road link sequence) is purely topological -
+  confirmed live, it carries no name of its own**, only `lengde`,
+  `porter` (network junctions) and `veglenker` (its own geometry-bearing
+  sub-links with linear-referencing ranges). Naming and addressing live
+  in a separate object type (`Adresse`, NVDB type 538), whose
+  `adressekode` is confirmed live to be the *same* identifier
+  `streetworks.kartverket` already models - a real, stated join to
+  Matrikkelen addresses, never a name match.
+  **The genuinely important structural finding, confirmed live**: one
+  real address (`adressekode` 1140, "Dalveien") is placed on *two
+  different, topologically-unrelated* link sequences (384 and 2399262) -
+  so Norway's naming layer and topological layer are not nested the way
+  France's `voie_nommee`/`troncon_de_route` are (one aggregating its own
+  clean set of segments via a direct link field). Two "two-level
+  spines," two different organising principles - exactly the disagreement
+  this design strand needed. A third identifier system exists too,
+  `vegsystemreferanser` (administrative road-numbering, e.g. the real
+  `"KV1140 S1D1 m0-65"`), preserved in `.raw`, not modelled as a
+  first-class field.
+  **CRS corrected live: EPSG:5973, not the design brief's expected
+  EPSG:25833** - a compound 3D CRS ("ETRS89-NOR [EUREF89] / UTM zone 33N
+  + NN2000 height"), not a plain 2D UTM33 one; every real geometry
+  checked is a genuine `LINESTRING Z` with real altitude values, matching
+  exactly. **Licence corrected too: NLOD 1.0 (Norsk lisens for offentlige
+  data), not Elveg's CC BY 4.0** - confirmed from the NVDB API's own
+  documentation (`nvdb-vegdata/apidokumentasjon` on GitHub, the real
+  source behind `api.vegdata.no`) rather than assumed from Kartverket's
+  Elveg distribution metadata, per the brief's own instruction. Same
+  underlying road network, two different publishers, two different
+  licences.
+  REST is this module's only access route - both endpoints paginate with
+  a real cursor and accept a `kommune` filter, confirmed live at real
+  scale, so the CSV export service (`nvdb-eksport`) was evaluated and not
+  built, per the brief's "don't build two routes for the same job."
+  Registered in `streetworks.registry` as `nvdb` (`kind="streets"`) -
+  Norway now has three providers (`vegvesen` roadworks, `kartverket`
+  addresses, `nvdb` streets), so `get_provider("norway")` raises
+  `AmbiguousProviderError` naming all three.
+
+- **USA: TIGERweb** (`streetworks.arcgis.tigerweb`, `kind="streets"`,
+  `territories={"USA"}`) - the fifth non-UK street-geometry provider, and
+  the first outside Europe, built on the new `ArcGISFeatureClient` (see
+  Client infrastructure, below). Layers 0-9 are a real cartographic scale
+  pyramid, not distinct road classes - confirmed live by comparing feature
+  counts (layers 1/2 both 17,612 nationally, 4/5/6 all 248,106, 7/8 both
+  16,150,491 - the same data at different generalisation tiers, a real
+  correction to the initial design brief's framing). Produces `Segment`
+  only, never a `Street` - checked live, not assumed: no layer anywhere in
+  the service aggregates segments under a named-street entity, the same
+  shape as the Netherlands. No Address Ranges layer exists over this REST
+  service either (checked across all 35 real `TIGERweb/` services) -
+  `Segment.address_ranges` stays on its NWB-only footing. MTFCC carried
+  undecoded (`S1100`/`S1200`/`S1400`/others observed live e.g. `S1630`), no
+  lookup table bundled. Public domain (17 U.S.C. Sec. 105) - real fixtures
+  committed.
+
+### Added — Roadworks providers
 
 - **Sweden (Trafikverket) and Denmark (Vejdirektoratet) DATEX-family
   roadworks scaffolds** (`streetworks.datex2.trafikverket`,
-  `streetworks.datex2.vejdirektoratet`) - Phase 1 scaffolds, **not verified
-  builds**, grouped with Norway (`vegvesen`) under a new **"Credentials
-  wanted"** README section, since all three share the same shape of gap:
-  implemented to a confirmed API/schema shape, covered by mocked tests
-  against synthetic fixtures, but never run against a real authenticated
-  response - genuinely blocked on credentials this project doesn't have,
-  not on unfinished code.
-  - **Sweden**: Trafikverket's own bespoke XML-request/JSON-response
-    envelope, not DATEX II - like Digitraffic wraps Finland, needs its own
-    request/parse path onto the shared `Situation`/`SituationRecord`
-    models rather than the streaming DATEX parser. Confirmed live via a
-    deliberate invalid-key probe: the endpoint, the `Situation` object
-    name, and schema version `1.5` (a genuine structured `401`, not a
-    generic error page). The real `MessageType`/`MessageCode` value that
-    means roadworks specifically is genuinely unconfirmed after checking
-    several sources - rather than guess, `record_type` preserves
-    `MessageType` verbatim, so `iter_roadworks()` honestly returns nothing
-    until a credentialed pull confirms the real discriminator value;
-    `iter_situations()` is the way to see everything in the meantime.
-    Licence: CC0 1.0 Universal.
-  - **Denmark**: genuine DATEX II 3.2, confirmed directly from
-    Vejdirektoratet's own protocol specification (`sit:ConstructionWorks`/
-    `sit:MaintenanceWorks` and their full `constructionWorkType`/
-    `roadMaintenanceType` enumerations stated explicitly, not inferred),
-    so it reuses the existing shared streaming parser unchanged, the same
-    shape of solution as `vegvesen`. The open metadata catalogue
-    (196 datasets, no auth) was re-verified live; the specific roadworks
-    dataset confirmed road-work-themed and **CC BY 4.0**-licensed
-    per-dataset, not assumed from the catalogue in general. No public data
-    URL exists - the real per-dataset pull address and HTTP Basic Auth
-    credentials are both issued together at registration, so
-    `VejdirektoratetClient` takes `base_url` as a required argument rather
-    than a module constant, unlike every other DATEX adapter here.
-  - Both ship an import-time `UserWarning` pointing at the "help wanted"
-    issue tracker - a genuinely new mechanism, added here and retrofitted
-    onto `vegvesen` too for consistency (previously signalled only via a
-    docstring admonition and `ProviderEntry(verified=False, ...)`, which
-    still remain the source of truth for tooling).
-  - Both registered in `streetworks.registry` (`kind="roadworks"`,
-    `network_scope=NetworkScope.UNKNOWN` - honest default, not a guess,
-    same as `vegvesen`), wired into `scripts/smoke_test.py`
-    (`check_trafikverket`/`check_vejdirektoratet`, skip-guarded on missing
-    credentials) and `.env.example`. Test fixtures are **synthetic**
-    (structurally real shapes, invented values) since neither adapter has
-    ever seen real data - `tests/test_trafikverket.py` deliberately
-    asserts `iter_roadworks()` stays empty even for a deviation a human
-    would recognise as roadworks (`MessageType: "Vägarbete"`), to keep
-    that honesty regression-tested.
-  - Drafted (not opened) `help wanted` GitHub issue text for both, plus
-    Norway's, in `docs/credentials-wanted-issues.md`.
+  `streetworks.datex2.vejdirektoratet`) - see Credentials wanted, below.
 
 - **Belgium (Verkeerscentrum Vlaanderen) and Luxembourg (Ponts et
   Chaussées/CITA) DATEX adapters** (`streetworks.datex2.belgium`,
@@ -261,57 +628,6 @@
   way. Registered in `streetworks.registry` (`kind="roadworks"`) and wired
   into `scripts/smoke_test.py`.
 
-- **Network-scope audit + `network_scope` registry field**
-  (`docs/network-scope-audit.md`) - audited every roadworks provider for
-  what tier of the road network its *real* data actually reaches, not its
-  stated remit, and wired the result into `streetworks.registry`: a new
-  `NetworkScope` enum (`comprehensive` / `multi_authority_interurban` /
-  `strategic` / `motorway` / `regional` / `varies_by_feed` /
-  `not_applicable` / `unknown`) and a `network_scope` field on every
-  `ProviderEntry`, surfaced directly in `providers()`'s own rendering -
-  additive, no client behaviour changes.
-  - **Corrects an already-shipped claim, stated plainly rather than
-    quietly edited.** The Consell de Mallorca adapter above shipped
-    describing DGT and Consell de Mallorca as "genuinely additive, not a
-    duplicate." A live check found this wrong: DGT's own real data
-    reaches Mallorca (`Ma-`/`Me-` prefixed records, confirmed via real
-    road-number prefixes, not assumed from DGT's "national" description),
-    and 2 of DGT's Balearic records were checked directly against Consell
-    de Mallorca's own feed and matched almost exactly on road, km-range
-    and end-date - republication of the same real works, not two
-    authorities' records for adjacent land (no independent reference
-    field exists on DGT's side to attribute it otherwise, and the matched
-    geometry sits within, not beside, the same work-zone span). Corrected
-    everywhere the original claim appeared: this changelog's own history
-    is left as-is (a record of what was believed at the time), but the
-    README, `docs/idemallorca-investigation.md`, both modules' own
-    docstrings, and `examples/compare_active_works.py` are all updated.
-  - DGT itself turned out broader than "national roads" implies: real
-    road-number prefixes reach ~10 regional/provincial/insular
-    authorities too (`CV-`/Comunidad Valenciana, `M-`/Madrid, and the
-    Balearic ones above), never municipal streets - reclassified
-    `multi_authority_interurban`, a new enum value the original 5-value
-    proposal didn't anticipate.
-  - Two providers turned out genuinely two-tier depending on which part
-    of their own feed is queried - TrafficWatchNI (NI-wide strategic,
-    all-roads within Belfast) and Saxony (broader than its Hamburg/
-    Brandenburg siblings, aggregating district and municipal roadworks
-    alongside state roads). Kept in the existing free-text `scope_note`
-    rather than growing the enum per-provider, per the audit's own
-    restraint.
-  - New standing principle, added to the README:
-    [never deduplicate near-identical works across providers](#never-deduplicate-across-providers) -
-    a permit is issued per authority, not per physical worksite, so two
-    providers' records for what looks like the same location can both be
-    genuinely correct; the same lesson `examples/collaboration_finder.py`
-    already applies one level down (never merging a Street Manager permit
-    with its own amendment), one level up.
-  - `tests/test_registry.py` extended: every `kind="roadworks"` entry must
-    set `network_scope` explicitly (never the bare `None` default, which
-    now means "this concept doesn't apply" - reserved for non-roadworks
-    kinds), the same "can't ship without it" discipline the registry's
-    own package-coverage test already applies.
-
 - **Servei Català de Trànsit (Catalonia) roadworks adapter**
   (`streetworks.sct`, `streetworks.common.from_sct`) - built from a
   dedicated recon pass (`docs/catalonia-sct-investigation.md`), filling
@@ -367,20 +683,8 @@
   documented exclusions, via the existing shared `from_datex2` converter
   (no bespoke converter needed). Genuine DATEX II **v1.0** - the oldest
   schema version in this SDK. Live-verified: 96/119 real situations carry
-  a roadworks record (101 records total).
-  - **A real, additive parser fix, found by reading the "pleasant
-    surprise" of a zero-code-change parse more carefully, per this
-    project's own standing habit**: `tpeglinearLocation` (lower-case),
-    not the v2/v3 `tpegLinearLocation` - confirmed by direct byte search
-    of the real feed (74/74 real linear-location records use the
-    lower-case v1.0 spelling, 0 use the v2/v3 one). Before the fix, the
-    shared parser's two-point `from`/`to` extraction never matched it,
-    silently degrading a real 2-point line into a single point via the
-    generic fallback. Fixed as a second, fallback lookup in
-    `streetworks/datex2/parser.py` (v2/v3 spelling tried first) -
-    confirmed via a live before/after regression across France, Spain,
-    Belgium, Luxembourg and Bulgaria: identical roadworks counts and
-    multi-point-location counts, zero drift.
+  a roadworks record (101 records total). **Also surfaced a real, additive
+  shared-parser bug, fixed alongside this adapter - see Fixed, below.**
   - **Coordinate coverage is genuinely partial - the only Spanish/DATEX
     adapter in this SDK below 100%**: of 101 real roadworks records, 36
     have a real 2+-point line, 6 a single point, and 59 state location
@@ -407,6 +711,154 @@
   - As the fourth Spain roadworks provider, `get_provider("spain")` now
     names all four (`dgt`, `euskadi`, `mallorca`, `sct`) via the
     territory-ambiguity path.
+
+- **Jersey RoadWorkx** (`streetworks.arcgis.jersey`, `kind="roadworks"`,
+  `territories={"Jersey"}`) - this SDK's first Channel Islands coverage,
+  built on the new `ArcGISFeatureClient` (see Client infrastructure,
+  below), and the client's proving ground for a real pagination trap: its
+  `RoadWorks` layer states `supportsPagination: false`, and it's true in
+  an unusually literal way - `resultOffset` returns HTTP 200 with a
+  plausible page every time, but it's silently the *same* first page
+  regardless of offset (confirmed at offsets 0/500/1000/2000/21000); the
+  real total is 22,105 records behind a `maxRecordCount` of 1,000, so a
+  naive query silently returns under 5% of the data with no error.
+  Live-verified this session to retrieve all 22,105 real Jersey records
+  with zero duplicates via `ArcGISFeatureClient`'s object-id-range
+  fallback.
+  Real `RoadWorks` features group by `PROJID` into one `Works` per
+  project (confirmed the same real shape as Street Manager's
+  `work_reference_number`/`permit_reference_number`); the real `STATUS`
+  field (`"In Progress"`/`"Finished"`/`"Pending"`) *is* the planned/future
+  dimension, no separate layer needed. CRS confirmed live to be EPSG:3109
+  ("ETRS89 / Jersey Transverse Mercator") via a sibling service on the same
+  deployment stating the `wkid` directly, cross-checked byte-for-byte
+  against EPSG:3109's own published WKT - `outSR` is not honoured by this
+  service (also confirmed live). **No explicit licence document found** (no
+  `copyrightText` anywhere, not catalogued on Jersey's own open-data
+  portal, and the public-facing site gates behind a login the REST API
+  itself doesn't need) - but the data is confirmed intended for open
+  public consumption, so real, live-captured records are committed as test
+  fixtures, the same basis Autobahn GmbH's roadworks shipped on.
+
+### Added — Registry & discovery
+
+- **Network-scope audit + `network_scope` registry field**
+  (`docs/network-scope-audit.md`) - audited every roadworks provider for
+  what tier of the road network its *real* data actually reaches, not its
+  stated remit, and wired the result into `streetworks.registry`: a new
+  `NetworkScope` enum (`comprehensive` / `multi_authority_interurban` /
+  `strategic` / `motorway` / `regional` / `varies_by_feed` /
+  `not_applicable` / `unknown`) and a `network_scope` field on every
+  `ProviderEntry`, surfaced directly in `providers()`'s own rendering -
+  additive, no client behaviour changes.
+  - **Corrects an already-shipped claim, stated plainly rather than
+    quietly edited.** The Consell de Mallorca adapter above shipped
+    describing DGT and Consell de Mallorca as "genuinely additive, not a
+    duplicate." A live check found this wrong: DGT's own real data
+    reaches Mallorca (`Ma-`/`Me-` prefixed records, confirmed via real
+    road-number prefixes, not assumed from DGT's "national" description),
+    and 2 of DGT's Balearic records were checked directly against Consell
+    de Mallorca's own feed and matched almost exactly on road, km-range
+    and end-date - republication of the same real works, not two
+    authorities' records for adjacent land (no independent reference
+    field exists on DGT's side to attribute it otherwise, and the matched
+    geometry sits within, not beside, the same work-zone span). Corrected
+    everywhere the original claim appeared: this changelog's own history
+    is left as-is (a record of what was believed at the time), but the
+    README, `docs/idemallorca-investigation.md`, both modules' own
+    docstrings, and `examples/compare_active_works.py` are all updated.
+  - DGT itself turned out broader than "national roads" implies: real
+    road-number prefixes reach ~10 regional/provincial/insular
+    authorities too (`CV-`/Comunidad Valenciana, `M-`/Madrid, and the
+    Balearic ones above), never municipal streets - reclassified
+    `multi_authority_interurban`, a new enum value the original 5-value
+    proposal didn't anticipate.
+  - Two providers turned out genuinely two-tier depending on which part
+    of their own feed is queried - TrafficWatchNI (NI-wide strategic,
+    all-roads within Belfast) and Saxony (broader than its Hamburg/
+    Brandenburg siblings, aggregating district and municipal roadworks
+    alongside state roads). Kept in the existing free-text `scope_note`
+    rather than growing the enum per-provider, per the audit's own
+    restraint.
+  - New standing principle, added to the README:
+    [never deduplicate near-identical works across providers](#never-deduplicate-across-providers) -
+    a permit is issued per authority, not per physical worksite, so two
+    providers' records for what looks like the same location can both be
+    genuinely correct; the same lesson `examples/collaboration_finder.py`
+    already applies one level down (never merging a Street Manager permit
+    with its own amendment), one level up.
+  - `tests/test_registry.py` extended: every `kind="roadworks"` entry must
+    set `network_scope` explicitly (never the bare `None` default, which
+    now means "this concept doesn't apply" - reserved for non-roadworks
+    kinds), the same "can't ship without it" discipline the registry's
+    own package-coverage test already applies.
+
+- **Provider discovery** (`streetworks.registry`, exposed as
+  `streetworks.providers()`/`get_provider()`) - purely additive: no existing
+  import path, class, or behaviour changed. Answers "what covers X" and
+  "give me Y's client" without needing to already know which technology a
+  country publishes over - `providers(territory="Wales")`,
+  `providers(kind="gazetteer")`, `providers(credentials=False)`,
+  `get_provider("spain")`. One registry entry per provider, each carrying
+  territory, credentials, licence, source grade, and the exact working
+  import line.
+  Capabilities (`entry.capabilities()`) are **derived by inspecting the
+  real client class**, never a hand-maintained dict - including one level
+  into known sub-API objects (Street Manager's `.work`/`.reporting`
+  attributes, discovered by reading `__init__`'s own source, not
+  hardcoded), which is what lets `streetmanager`'s write/publish and
+  planning-artifact capabilities show up correctly despite living on
+  nested classes rather than flat methods.
+  Ambiguous lookups (`get_provider("germany")` → four providers,
+  `"england"` → seven) raise naming every real candidate rather than
+  guessing; an unknown territory passed to `providers()` warns and returns
+  empty rather than raising or silently returning nothing.
+  A genuine performance bug was caught and fixed before shipping, not
+  after: the first working version imported `SourceGrade` from
+  `streetworks.common.models`, which (via `streetworks.common`'s package
+  `__init__`) transitively imported every `from_<provider>` converter and
+  therefore every provider's client module, including httpx - pulling in
+  24 heavy modules just to import the registry, exactly the cost this
+  module's own design was supposed to rule out. Fixed by storing
+  `source_grade` as a plain string (a `str` `Enum`'s members compare equal
+  to their string values either way) instead of importing the real enum
+  type; confirmed live that `import streetworks.registry` and
+  `import streetworks` now pull in zero httpx/pydantic modules, and that
+  `get_provider()` still imports the target client lazily, only on call.
+  Two real, previously-undocumented gaps surfaced while verifying every
+  territory/licence claim against actual module docstrings rather than
+  copying the design brief on trust: Street Manager and DataVIA never
+  state their territory anywhere in code or README prose (England+Wales
+  here is inferred by elimination against SRWR/TrafficWatchNI covering the
+  other nations separately, not an explicit statement); NDW and
+  Digitraffic state no licence anywhere either, and a live check of both
+  portals found nothing (`licence_confirmed=False`, the same honest-gap
+  convention Autobahn's module already established).
+
+### Added — Client infrastructure
+
+- **`streetworks.arcgis` - a generic ArcGIS REST (MapServer/FeatureServer)
+  client**, the third client shape in this SDK after the DATEX/JSON
+  adapters and `OGCFeaturesClient`. Built fresh, not a generalisation of
+  `OGCFeaturesClient`/`DataViaClient` - they share almost nothing but
+  "fetches geodata over HTTP." Verified against two genuinely different
+  real consumers - Jersey RoadWorkx and TIGERweb (see Roadworks providers
+  and Gazetteer providers, above).
+  **The real pagination trap this client exists to handle**: some ArcGIS
+  services report `supportsPagination` metadata that doesn't match their
+  real behaviour (Jersey's `RoadWorks` layer claims `false`, and
+  `resultOffset` silently returns the same first page at every offset,
+  confirmed live at 0/500/1000/2000/21000 - a naive query would return
+  under 5% of the data with no error). `ArcGISFeatureClient.iter_features`
+  verifies live rather than trusting either metadata claim, falling back
+  to object-id-range paging the moment offset-paging fails to advance
+  (confirmed live to work for Jersey; TIGERweb's own layers state, and
+  genuinely honour, real offset pagination), and raises the new
+  `TruncatedResultError` if neither strategy is usable - never silently
+  returns a partial result.
+  New exception: `streetworks.exceptions.TruncatedResultError`.
+
+### Added — UK Police: worker-safety context
 
 - **`streetworks.police` bulk CSV download**:
   `PoliceClient.bulk_download_csv(forces, *, date_from, date_to, ...)` drives
@@ -494,6 +946,8 @@
   README now names which modules do and don't, rather than claiming async
   everywhere.
 
+### Added — D-TRO v4.0.0
+
 - **D-TRO `v4.0.0` publish models** (`streetworks.dtro.models.v4_0_0`),
   generated from DfT's real schema with the existing
   `scripts/generate_dtro_models.py` tooling - additive, `v3.5.1` models
@@ -516,7 +970,7 @@
   v4.0.0 example payload and exercise three of these changes directly
   (`tests/test_dtro_models_v4_0_0.py`).
   **`DTROClient.validate_payload()`'s default is now `v4_0_0`** (was
-  `v3_5_1`) - see the "Changed" section above for this as its own flagged
+  `v3_5_1`) - see the Changed section above for this as its own flagged
   behaviour change. Its "no models for this version" error message now
   lists both shipped versions, and a raised `ValidationError` now names
   which schema version it validated against, since both versions' generated
@@ -534,497 +988,77 @@
   which needs a one-line update whenever a version is added - noted in
   DTRO_SCHEMAS.md so it isn't forgotten next time.
 
-- **`streetworks.arcgis` - a generic ArcGIS REST (MapServer/FeatureServer)
-  client**, the third client shape in this SDK after the DATEX/JSON
-  adapters and `OGCFeaturesClient`, plus its first two consumers: **Jersey
-  RoadWorkx** (`streetworks.arcgis.jersey`, `kind="roadworks"`,
-  `territories={"Jersey"}` - this SDK's first Channel Islands coverage) and
-  **TIGERweb** (`streetworks.arcgis.tigerweb`, `kind="streets"`,
-  `territories={"USA"}`). Built fresh, not a generalisation of
-  `OGCFeaturesClient`/`DataViaClient` - they share almost nothing but
-  "fetches geodata over HTTP."
-  **The real pagination trap this client exists to handle, confirmed live
-  against two genuinely different services**: Jersey's real `RoadWorks`
-  layer states `supportsPagination: false`, and it's true in an unusually
-  literal way - `resultOffset` returns HTTP 200 with a plausible page every
-  time, but it's silently the *same* first page regardless of offset
-  (confirmed at offsets 0/500/1000/2000/21000); the real total is 22,105
-  records behind a `maxRecordCount` of 1,000, so a naive query silently
-  returns under 5% of the data with no error. TIGERweb's layers state (and
-  genuinely honour) `supportsPagination: true`. `ArcGISFeatureClient
-  .iter_features` verifies live rather than trusting either metadata claim,
-  falling back to object-id-range paging (confirmed live to work for
-  Jersey) the moment offset-paging fails to advance, and raises the new
-  `TruncatedResultError` if neither strategy is usable - never silently
-  returns a partial result. Live-verified this session to retrieve all
-  22,105 real Jersey records with zero duplicates.
-  **Jersey**: real `RoadWorks` features group by `PROJID` into one `Works`
-  per project (confirmed the same real shape as Street Manager's
-  `work_reference_number`/`permit_reference_number`); the real `STATUS`
-  field (`"In Progress"`/`"Finished"`/`"Pending"`) *is* the planned/future
-  dimension, no separate layer needed. CRS confirmed live to be EPSG:3109
-  ("ETRS89 / Jersey Transverse Mercator") via a sibling service on the same
-  deployment stating the `wkid` directly, cross-checked byte-for-byte
-  against EPSG:3109's own published WKT - `outSR` is not honoured by this
-  service (also confirmed live). **No explicit licence document found** (no
-  `copyrightText` anywhere, not catalogued on Jersey's own open-data
-  portal, and the public-facing site gates behind a login the REST API
-  itself doesn't need) - but the data is confirmed intended for open
-  public consumption, so real, live-captured records are committed as test
-  fixtures, the same basis Autobahn GmbH's roadworks shipped on.
-  **TIGERweb**: layers 0-9 are a real cartographic scale pyramid, not
-  distinct road classes - confirmed live by comparing feature counts
-  (layers 1/2 both 17,612 nationally, 4/5/6 all 248,106, 7/8 both
-  16,150,491 - the same data at different generalisation tiers, a real
-  correction to the initial design brief's framing). Produces `Segment`
-  only, never a `Street` - checked live, not assumed: no layer anywhere in
-  the service aggregates segments under a named-street entity, the same
-  shape as the Netherlands. No Address Ranges layer exists over this REST
-  service either (checked across all 35 real `TIGERweb/` services) -
-  `Segment.address_ranges` stays on its NWB-only footing. MTFCC carried
-  undecoded (`S1100`/`S1200`/`S1400`/others observed live e.g. `S1630`), no
-  lookup table bundled. Public domain (17 U.S.C. Sec. 105) - real fixtures
-  committed.
-  New exception: `streetworks.exceptions.TruncatedResultError`.
+### Added — Credentials wanted (scaffolds, unverified)
 
-- **Canonical gazetteer model: `Street`, `Segment`, `Address`**
-  (`streetworks.common.gazetteer`) - the gazetteer equivalent of what
-  `Works`/`WorksSite` did for roadworks at 0.5.0, designed after the eight
-  native street/address adapters (`datavia`, `openusrn`, `bdtopo`, `nvdb`,
-  `nwb`, `ban`, `bag`, `kartverket`), from their real shapes, closing the
-  international-gazetteers strand's design-session exit condition. Additive
-  only - native interfaces unchanged. New converters:
-  `from_datavia`/`from_openusrn`/`from_bdtopo`/`from_nvdb`/`from_nwb`/
-  `from_ban`/`from_bag`/`from_kartverket`.
-  **Three types, not two**: `Segment` is independent of `Street`, not a
-  child of it - real data proves street/segment is many-to-many, not
-  one-to-many (a real DataVIA ESU, `esuid` `4276210541888`, belongs to two
-  distinct designated streets at once - Church Street and Church Street
-  Villas, Durham; NVDB's real "Dalveien" address spans two
-  topologically-unrelated `veglenkesekvenser`).
-  **No synthetic streets**: `from_nwb` emits no `Street` at all - NWB
-  states segments with a `bag_orl` reference, but this SDK's only built BAG
-  route has no street row to be a `Street`, so Dutch street names arrive
-  only via `Address.street_name`, a real gap flagged rather than worked
-  around.
-  **`Coordinate` gained two additive fields**: every point may now be a
-  2-tuple or 3-tuple (Z survives, e.g. NVDB's real `LINESTRING Z` under
-  EPSG:5973, never defaulted to 0), and a new `parts` field holds a real
-  `MultiLineString`'s other lines (DataVIA's `StreetLines`) - existing
-  2-tuple-only converters are unaffected.
-  **`WorksSite` gained `street_ref: Identifier | None`** - populated from
-  Street Manager's per-permit USRN; investigated and deliberately left
-  `None` for SRWR, which states street identity only at the activity
-  level (record type `004`) with no phase/site join, so populating it
-  would have fabricated a link the source doesn't make.
-  **Two design-brief assumptions corrected against real data**: the brief
-  expected `Segment.names` to be BD-TOPO-only, but NWB's real `stt_naam`
-  (even purely-numbered roads carry one, e.g. a real A79 motorway segment)
-  populates it too; and DataVIA's real ESU schema (confirmed via WFS
-  `DescribeFeatureType`, live, mid-session) has *no name field at all*,
-  closing the brief's own open question about whether a real named
-  sub-street ("Anchorage Terrace", part of Church Street, Durham) is
-  recoverable from DataVIA at any level - it isn't, structurally, not just
-  unpopulated.
-  **Native promotions**: `nwb.Wegvak` gained `wvk_begdat` and six real
-  house-number-range fields (`hnrstrlnks`/`hnrstrrhts`/`e_hnr_lnks`/
-  `e_hnr_rhts`/`l_hnr_lnks`/`l_hnr_rhts`), previously only in `.raw`;
-  `nvdb.Veglenke` gained `type_veg`/`type_veg_sosi` (the real `typeVeg`/
-  `typeVeg_sosi` road-classification fields), likewise promoted from
-  `.raw`.
-  **New real fixtures**: two real DataVIA `StreetLines` payloads (Carr
-  Street USRN 33909869, Church Street USRN 11713561) and a real
-  `ESUStreets` payload, captured live this session with Durham-scoped
-  credentials (field shapes are national, confirmed via
-  `DescribeFeatureType`; field values are local to Durham) - DataVIA had no
-  fixture of any kind before this. A synthetic, clearly-labelled bilingual
-  fixture (Durham has no Welsh street names) exercises the `_eng`/`_cym`
-  name-pair path.
-  See `docs/gazetteer-field-dump.md` for the full field-by-field survey
-  this model was built from.
+- **Sweden (Trafikverket) and Denmark (Vejdirektoratet) DATEX-family
+  roadworks scaffolds** (`streetworks.datex2.trafikverket`,
+  `streetworks.datex2.vejdirektoratet`) - Phase 1 scaffolds, **not verified
+  builds**, grouped with Norway (`vegvesen`, shipped 0.7.0) under a new
+  **"Credentials wanted"** README section, since all three share the same
+  shape of gap: implemented to a confirmed API/schema shape, covered by
+  mocked tests against synthetic fixtures, but never run against a real
+  authenticated response - genuinely blocked on credentials this project
+  doesn't have, not on unfinished code.
+  - **Sweden**: Trafikverket's own bespoke XML-request/JSON-response
+    envelope, not DATEX II - like Digitraffic wraps Finland, needs its own
+    request/parse path onto the shared `Situation`/`SituationRecord`
+    models rather than the streaming DATEX parser. Confirmed live via a
+    deliberate invalid-key probe: the endpoint, the `Situation` object
+    name, and schema version `1.5` (a genuine structured `401`, not a
+    generic error page). The real `MessageType`/`MessageCode` value that
+    means roadworks specifically is genuinely unconfirmed after checking
+    several sources - rather than guess, `record_type` preserves
+    `MessageType` verbatim, so `iter_roadworks()` honestly returns nothing
+    until a credentialed pull confirms the real discriminator value;
+    `iter_situations()` is the way to see everything in the meantime.
+    Licence: CC0 1.0 Universal.
+  - **Denmark**: genuine DATEX II 3.2, confirmed directly from
+    Vejdirektoratet's own protocol specification (`sit:ConstructionWorks`/
+    `sit:MaintenanceWorks` and their full `constructionWorkType`/
+    `roadMaintenanceType` enumerations stated explicitly, not inferred),
+    so it reuses the existing shared streaming parser unchanged, the same
+    shape of solution as `vegvesen`. The open metadata catalogue
+    (196 datasets, no auth) was re-verified live; the specific roadworks
+    dataset confirmed road-work-themed and **CC BY 4.0**-licensed
+    per-dataset, not assumed from the catalogue in general. No public data
+    URL exists - the real per-dataset pull address and HTTP Basic Auth
+    credentials are both issued together at registration, so
+    `VejdirektoratetClient` takes `base_url` as a required argument rather
+    than a module constant, unlike every other DATEX adapter here.
+  - Both ship an import-time `UserWarning` pointing at the "help wanted"
+    issue tracker - a genuinely new mechanism, added here and retrofitted
+    onto `vegvesen` too for consistency (previously signalled only via a
+    docstring admonition and `ProviderEntry(verified=False, ...)`, which
+    still remain the source of truth for tooling).
+  - Both registered in `streetworks.registry` (`kind="roadworks"`,
+    `network_scope=NetworkScope.UNKNOWN` - honest default, not a guess,
+    same as `vegvesen`), wired into `scripts/smoke_test.py`
+    (`check_trafikverket`/`check_vejdirektoratet`, skip-guarded on missing
+    credentials) and `.env.example`. Test fixtures are **synthetic**
+    (structurally real shapes, invented values) since neither adapter has
+    ever seen real data - `tests/test_trafikverket.py` deliberately
+    asserts `iter_roadworks()` stays empty even for a deviation a human
+    would recognise as roadworks (`MessageType: "Vägarbete"`), to keep
+    that honesty regression-tested.
+  - Drafted (not opened) `help wanted` GitHub issue text for both, plus
+    Norway's, in `docs/credentials-wanted-issues.md`.
 
-- **Norway: NVDB (Nasjonal vegdatabank)** (`streetworks.nvdb`) - the
-  fourth non-UK street-geometry provider, native only, the
-  `kind="streets"` counterpart to `kartverket`'s `kind="addresses"`, and
-  the last planned provider in the international-gazetteers strand.
-  **Task one, checked first, per the design brief's own instruction**: no
-  credentials required for reads - confirmed live (only a required
-  `X-Client` self-identifying header, not an API key; a bare request
-  without it returns HTTP 400) and confirmed in NVDB's own API
-  documentation ("Det er ikke nødvendig å registrere en bruker..." - "It
-  is not necessary to register a user..."). This is the striking
-  asymmetry the brief asked about: Statens vegvesen's own DATEX roadworks
-  feed (`streetworks.datex2.vegvesen`) remains this SDK's one
-  credential-blocked, unverified provider, while NVDB, from the same
-  agency, is wide open.
-  **`veglenkesekvens` (road link sequence) is purely topological -
-  confirmed live, it carries no name of its own**, only `lengde`,
-  `porter` (network junctions) and `veglenker` (its own geometry-bearing
-  sub-links with linear-referencing ranges). Naming and addressing live
-  in a separate object type (`Adresse`, NVDB type 538), whose
-  `adressekode` is confirmed live to be the *same* identifier
-  `streetworks.kartverket` already models - a real, stated join to
-  Matrikkelen addresses, never a name match.
-  **The genuinely important structural finding, confirmed live**: one
-  real address (`adressekode` 1140, "Dalveien") is placed on *two
-  different, topologically-unrelated* link sequences (384 and 2399262) -
-  so Norway's naming layer and topological layer are not nested the way
-  France's `voie_nommee`/`troncon_de_route` are (one aggregating its own
-  clean set of segments via a direct link field). Two "two-level
-  spines," two different organising principles - exactly the disagreement
-  this design strand needed. A third identifier system exists too,
-  `vegsystemreferanser` (administrative road-numbering, e.g. the real
-  `"KV1140 S1D1 m0-65"`), preserved in `.raw`, not modelled as a
-  first-class field.
-  **CRS corrected live: EPSG:5973, not the design brief's expected
-  EPSG:25833** - a compound 3D CRS ("ETRS89-NOR [EUREF89] / UTM zone 33N
-  + NN2000 height"), not a plain 2D UTM33 one; every real geometry
-  checked is a genuine `LINESTRING Z` with real altitude values, matching
-  exactly. **Licence corrected too: NLOD 1.0 (Norsk lisens for offentlige
-  data), not Elveg's CC BY 4.0** - confirmed from the NVDB API's own
-  documentation (`nvdb-vegdata/apidokumentasjon` on GitHub, the real
-  source behind `api.vegdata.no`) rather than assumed from Kartverket's
-  Elveg distribution metadata, per the brief's own instruction. Same
-  underlying road network, two different publishers, two different
-  licences.
-  REST is this module's only access route - both endpoints paginate with
-  a real cursor and accept a `kommune` filter, confirmed live at real
-  scale, so the CSV export service (`nvdb-eksport`) was evaluated and not
-  built, per the brief's "don't build two routes for the same job."
-  Registered in `streetworks.registry` as `nvdb` (`kind="streets"`) -
-  Norway now has three providers (`vegvesen` roadworks, `kartverket`
-  addresses, `nvdb` streets), so `get_provider("norway")` raises
-  `AmbiguousProviderError` naming all three.
+### Fixed
 
-- **France: BD TOPO (IGN)** (`streetworks.bdtopo`) - the third non-UK
-  street-geometry provider, native only, the `kind="streets"` counterpart
-  to `ban`'s `kind="addresses"`. Wraps the credential-free Géoplateforme
-  WFS (`query_troncons`/`query_voies_nommees`/`count_troncons`, real
-  `CQL_FILTER` support confirmed live, including for `resultType=hits`
-  counts).
-  **`voie_nommee` (named street) is real, confirmed live, and gives
-  France a genuine two-level spine** - the strongest structural finding
-  this design strand has had: every real `voie_nommee` carries its own
-  stable `cleabs` and a real `liens_vers_supports` link down to a
-  `troncon_de_route` segment, confirmed live end to end (a real
-  `voie_nommee`'s link resolved to the expected segment, with matching
-  name and BAN fields). Neither NWB nor the UK's USRN has this two-level
-  structure.
-  **The join to BAN is real, stated, and richer than NWB's `bag_orl`**:
-  both `voie_nommee` and every `troncon_de_route` carry
-  `identifiant_voie_ban` in exactly BAN's own compact toponyme-id format,
-  *and* a second, independent identifier, `id_ban_odonyme` (a street-level
-  BAN UUID that BAN's own API/bulk files never expose directly).
-  Verified at real commune scale, not sampled, on two whole communes
-  (Ambérieu-en-Bugey, mainland; Basse-Terre, Guadeloupe, overseas):
-  grouping by `identifiant_voie_ban` and checking against `nom_voie_ban`
-  (BAN's own name) gives zero over-merged groups in either. A real, minor
-  nuance surfaced along the way: BD TOPO's own crowd-sourced name field
-  (`nom_collaboratif`) had one abbreviation variant under the same BAN id
-  in Basse-Terre ("R SALVADOR ALLENDE" vs "Rue du Président Salvador
-  Allende") - not a genuine identity conflict, and gone entirely once
-  checked against `nom_voie_ban` instead, which is why both name fields
-  are kept rather than one being treated as noise.
-  **Left/right structure is real**, confirmed live: `troncon_de_route`
-  carries independent `_gauche`/`_droite` names, BAN ids, and even INSEE
-  commune codes (a segment on a commune boundary can genuinely have two
-  different communes, one per side) - a real structural difference from
-  both NWB and the UK's USRN.
-  **No automated bulk GeoPackage download route was found**, a genuine,
-  thoroughly-investigated gap, not an oversight: IGN's documented download
-  portal (`geoservices.ign.fr/telechargement`) now redirects to
-  `cartes.gouv.fr`, a JavaScript single-page app with no discoverable
-  static resource list; `data.gouv.fr`'s own BD TOPO dataset lists 149
-  resources, none an actual GeoPackage file; the legacy `wxs.ign.fr` host
-  no longer resolves; and the WFS itself does not offer GeoPackage as an
-  output format (confirmed live via its own `GetCapabilities` - only GML,
-  GeoJSON, KML and CSV). Only the WFS is built as an access route. A
-  `BDTopoDatabase` GeoPackage reader is still provided, for a file
-  obtained manually from `cartes.gouv.fr`, but - flagged plainly, not
-  hidden - it was never verified against a real downloaded file, only
-  against the WFS's own confirmed-live table/column naming, which IGN
-  documents as generated from the same underlying data model.
-  CRS is also route-specific here: the WFS declares WGS84 (EPSG:4326) on
-  every real response checked, mainland and overseas alike; IGN's
-  documentation states the (unreachable) bulk GeoPackage uses RGF93 /
-  Lambert-93 (EPSG:2154) instead - plausible and consistent with every
-  other IGN product, but not independently re-confirmed here. Real 3D
-  coordinates (a genuine altitude third value) are confirmed present on
-  `troncon_de_route`. Licence Ouverte / Open Licence ETALAB 2.0, confirmed
-  via data.gouv.fr's dataset metadata - the same licence as `ban` and
-  `bisonfute`.
-  A note on naming, worth stating plainly: this is unrelated to DGFiP's
-  **TOPO** register (`ban`'s FANTOIR successor, see below) despite the
-  near-identical name - different agency, different product.
-  Registered in `streetworks.registry` as `bdtopo` (`kind="streets"`) -
-  France now has three providers (`bisonfute` roadworks, `ban` addresses,
-  `bdtopo` streets), so `get_provider("france")` raises
-  `AmbiguousProviderError` naming all three.
-
-- **Netherlands: NWB (Nationaal Wegenbestand)** (`streetworks.nwb`) - the
-  first non-UK street-geometry provider, native only, the `kind="streets"`
-  counterpart to `bag`'s `kind="addresses"`. Wraps the credential-free WFS
-  (`query`/`count`, real `CQL_FILTER` support) and a two-hop Atom feed
-  (bulk GeoPackage discovery + streamed download - unlike every other Atom
-  feed in this SDK, NWB's index feed points to a second per-dataset feed,
-  which only then lists the real download).
-  **A real, stated join to BAG exists, confirmed live**: `bag_orl`
-  (carried on every wegvak/road-segment) is literally BAG's own
-  `openbare_ruimte_identificatie` - same format, same commune-code prefix,
-  verified by matching a real wegvak's `bag_orl` against BAG's own id
-  space - making the Netherlands the first territory in this SDK where an
-  address register and a street-geometry register can be joined by a
-  stated identifier, not a name match. Verified at real municipality
-  scale (Harlingen, 1,886 wegvakken), not sampled: grouping by `bag_orl`
-  gives 378 clean groups, zero mapping to more than one street name - but
-  the join isn't universal (96 of 1,886 real wegvakken, ~5%, carry no
-  `bag_orl` at all), and name-based grouping alone is measurably less
-  reliable (7 of 385 real (municipality, name) groups span two different
-  real `bag_orl` values - e.g. "Sédyk" is one display name covering two
-  genuinely different BAG street objects). `Wegvak.toponyme_id()` returns
-  `bag_orl` where present and `None` otherwise, never falling back to the
-  name, which would silently over-merge in exactly these real cases.
-  Corrected the design brief's own WFS paging warning, live: `count`
-  paging works fine - the brief's two failed attempts almost certainly
-  hit an unencoded `+` in `outputFormat=application/geopackage+sqlite3`,
-  which decodes server-side as a literal space (confirmed: that exact
-  rejection message reproduces the failure). But a real bug of the same
-  shape was found in its place: **PDOK's WFS silently ignores
-  `CQL_FILTER` entirely** - a query filtered to one real municipality
-  returned wegvakken from 280+ different municipalities, unfiltered, both
-  for actual features and for `resultType=hits` counts - while
-  Rijkswaterstaat's own WFS filters correctly on the identical query
-  (confirmed: exactly the requested municipality, matching the bulk-file
-  count exactly). Since filtering is the entire point of a live-query
-  route, `NWBClient.query()`/`count()` target Rijkswaterstaat directly;
-  the bulk GeoPackage download stays on PDOK's Atom feed, which is
-  unaffected (a static file, not a filtered query) and matches this SDK's
-  existing convention for other Dutch open data. Also confirmed live:
-  geometry is route-dependent (the WFS's GeoJSON reports plain
-  `LineString`; the bulk GeoPackage encodes every real wegvak as a
-  `MULTILINESTRING` wrapping exactly one line part, a GeoPackage/FME
-  export convention, not genuinely multi-part segments - carried through
-  unconverted, never silently unwrapped); CRS is EPSG:28992, matching
-  BAG; licence is CC0 1.0 Universal, matching BAG too, confirmed from the
-  Atom feed's own `<rights>` element rather than a portal page (the same
-  correction BAG's own licence needed). Registered in
-  `streetworks.registry` as `nwb` (`kind="streets"`) - the Netherlands
-  now has three providers (`ndw` roadworks, `bag` addresses, `nwb`
-  streets), so `get_provider("netherlands")` raises
-  `AmbiguousProviderError` naming all three.
-
-- **Norway: Kartverket (Matrikkelen Adresse + SSR stedsnavn)**
-  (`streetworks.kartverket`) - the fourth gazetteer, and the last before
-  the canonical-model design session, native only. Wraps the
-  credential-free address REST API (`search`/`search_nearby`), the SSR
-  place-names REST API (`search_places`/`search_names`/`nearby_places`/
-  `object_types`/`languages`), and bulk CSV downloads discovered via an
-  Atom feed - genuinely not GML-only, unlike Spain: Kartverket publishes
-  CSV, FGDB, GML, PostGIS and SOSI side by side for the same dataset,
-  confirmed live via the Geonorge catalogue, so CSV was picked
-  deliberately for the same standard-library-only reason every other bulk
-  provider in this SDK was.
-  **Multilingual naming - the finding the design brief flagged as most
-  likely to change the canonical model - lives on the SSR *place*, not the
-  address, confirmed live, not assumed**: a real place
-  (Karasjok/Kárášjohka/Kaarasjoki, `stedsnummer` 868181) carries three
-  parallel official names (Norwegian, Northern Sámi, Kven) in one
-  `stedsnavn` array, each independently statused (two `"godkjent og
-  prioritert"` - approved and prioritised; the Kven one only `"foreslått
-  og prioritert"` - proposed, not yet approved). But a real address in the
-  same Sámi-majority municipality ("Čalbmebealskáidi 1") carries exactly
-  one `adressenavn`, in Northern Sámi, with no parallel Norwegian name
-  anywhere on the record - even though SSR does have a real, dedicated
-  `"Adressenavn"` object type (one of 291 real legal types confirmed live),
-  that street's own entry there is single-language too. So multilingual
-  officialdom turned out to be a property of some SSR places, not a
-  systematic property of Norwegian street addressing - `PlaceName.names`
-  is modelled as a list for exactly this reason.
-  `adressekode` (a street key carried *inside* the address dataset itself
-  - between the UK's separate street register and France's separate tax
-  register) is real, clean and municipality-scoped: verified at full
-  scale, not sampled, via the same over-merge check BAN's `toponyme_id`
-  and BAG's `openbare_ruimte_identificatie` both got - two whole real
-  municipalities' bulk files (Karasjok, 1,896 addresses/139 codes; Oslo,
-  106,154 addresses/2,535 codes), zero codes mapping to more than one
-  street name in either. The same live search that surfaced this also
-  confirmed the municipality-scoping directly: "Karl Johans gate 1"
-  resolves to three different real addresses in three different
-  municipalities, each with its own `adressekode`.
-  No product checked gives a street geometry of its own - a separate
-  Kartverket/Statens vegvesen product, NVDB Vegnett, does hold real
-  road-network line geometry, noted but not built, the same treatment
-  France's TOPO and the Netherlands' NWB got. That makes three of the four
-  European gazetteers built in this SDK with no street centreline of their
-  own.
-  Two design-brief corrections, both live-verified: SSR's default output
-  CRS is the *same* `EPSG:4258` as the address API (the brief suggested
-  checking for a difference; only the query's *input* flexibility differs,
-  accepting `25833` alongside `4258` via `koordsys`) - and the "requires an
-  agreement with Kartverket" note some catalogues attach turned out to
-  name a completely different, SOAP-based, access-restricted service
-  (`MatrikkelAPI`), not the open REST APIs this module wraps. Also found:
-  the bulk Atom feed mislabels every entry's `type` attribute as
-  `application/gml+xml` even for real CSV entries (this module reads the
-  URL's filename, never the `type`), and per-entry `<rights>` isn't always
-  `"Kartverket"` - some municipalities (confirmed: Karasjok) name the real
-  local data steward instead.
-  Registered in `streetworks.registry` as `kartverket` (`kind="gazetteer"`)
-  - Norway now has two providers, so the `"norway"` alias was removed from
-  both `kartverket` and the existing `vegvesen` roadworks provider (this
-  SDK's one unverified provider, blocked on different credentials from a
-  different Norwegian agency - the ironic contrast the design brief asked
-  to have recorded), and `get_provider("norway")` now raises
-  `AmbiguousProviderError` naming both, matching `"france"`/`"netherlands"`.
-
-- **Netherlands: BAG (Basisregistratie Adressen en Gebouwen)**
-  (`streetworks.bag`) - the third gazetteer, and the last before the
-  canonical-model design session (per the design brief's own framing),
-  native only. Wraps the credential-free PDOK Locatieserver (`search`/
-  `suggest`/`reverse`/`lookup`) and the bulk GeoPackage (`bag-light.gpkg`,
-  current status only, no history), whose download URL is discovered from
-  an Atom feed every call rather than hardcoded - PDOK republishes monthly
-  and the filename can change, the same NDW lesson.
-  **THE critical first check - is `openbare ruimte` (street) its own
-  object? - was answered against the real, full, 7.8 GB national
-  GeoPackage, downloaded in full over this session (~26 minutes), not
-  sampled or assumed from documentation**: no, it isn't - `gpkg_contents`
-  lists exactly five tables (`woonplaats`, `pand`, `verblijfsobject`,
-  `standplaats`, `ligplaats`), all five carrying real geometry, and street
-  name/id survive only as `openbare_ruimte_naam`/
-  `openbare_ruimte_identificatie` flattened onto every address. Verified
-  at full national scale via direct SQL, not sampled: grouping all
-  ~10.04M addressable objects (`verblijfsobject`/`standplaats`/`ligplaats`)
-  by that id gives 245,893 / 2,980 / 1,546 distinct real street ids
-  respectively, zero of which map to more than one distinct street name in
-  any table, and zero rows with a null street id anywhere.
-  The fuller picture needed checking the *other* real product too: the
-  full-history XML extract (investigated via HTTP range requests against
-  the real 3.6 GB zip - a nested zip-of-zips, one member per BAG object
-  type - without downloading it whole; not parsed, per the brief's own
-  scope) confirms `openbare ruimte` genuinely *is* a first-class,
-  separately-versioned BAG object there, with its own identity and a real
-  `status` lifecycle - but still carries no geometry of its own in either
-  product (confirmed: zero of 36 real national `OpenbareRuimte` XML member
-  files contain a geometry element, for any of its real `type` values,
-  while `Woonplaats`/`Standplaats`/`Ligplaats` all do). So the honest
-  answer has three parts, not two: a street is a genuine registered
-  object, with a real lifecycle; it never carries geometry, in any
-  product; and *which* product you pull from changes whether you can see
-  it directly as a row at all - a three-part shape distinct from both the
-  UK (street = geometry) and France (street has neither a row nor
-  geometry, and only one product exists to check).
-  Also confirmed live in the XML extract: a bitemporal `voorkomen`
-  versioning model (validity period *and* registration period tracked
-  separately) - documented, not parsed, the same "investigate, don't
-  build" scope the design brief drew around this product.
-  A correction to the design brief: "Gemeente" (municipality) is not part
-  of the BAG at all, per Kadaster's own disclaimer in the (explicitly
-  unofficial) `GEM-WPL-RELATIE` helper file - `Woonplaats` (settlement) is
-  BAG's real administrative concept. Also corrected: the live Atom feed's
-  own `<rights>` element names **CC0 1.0 Universal**, not the "Public
-  Domain Mark 1.0" the brief named - a different (if similarly permissive)
-  legal instrument. A `"weg"` (street) Locatieserver result can carry a
-  real `MULTILINESTRING` geometry with `fl=*`, but its `bron` field says
-  `"BAG/NWB"` - that line comes from NWB (a separate national roads
-  dataset), not BAG itself, so it's kept reachable via `.raw` rather than
-  promoted to a field that would misattribute it. Registered in
-  `streetworks.registry` as `bag` (`kind="gazetteer"`) - the Netherlands
-  now has two providers, so the `"netherlands"` alias was removed from
-  both `bag` and the existing `ndw` roadworks provider, matching how
-  `"france"` was handled for BAN.
-
-- **France: BAN (Base Adresse Nationale)** (`streetworks.ban`) - the first
-  non-UK gazetteer, native only (no canonical gazetteer type, no
-  `streetworks.common` converter - deliberate, same as how the works side
-  shipped natively across 0.3.0-0.4.0 before `Works`/`WorksSite` existed).
-  Wraps both the credential-free geocoding API (`search`/`reverse`) and the
-  bulk per-département/national `csv-bal` files (streamed, never loaded
-  whole - the national file is ~1.4 GB gzipped). Verified live, not
-  assumed: the documented API endpoint (`api-adresse.data.gouv.fr`) is past
-  its stated 2026-01-31 sunset, so this client targets its confirmed-live
-  replacement, `data.geopf.fr/geocodage`; the design brief's own claim that
-  the new endpoint returned HTTP 400 did not reproduce - a plain
-  `q=`/`lon=`&`lat=` request succeeds. Of the four bulk CSV format variants
-  the brief named, only two (`csv`, `csv-bal`) exist as real downloadable
-  files today - `csv-with-ids` and `csv-bal-with-lang` do not.
-  **BAN is an address base, not a street register**: there is no
-  `id_ban_toponyme` field under any format checked, but a street's identity
-  is recoverable - every real address `id` is exactly
-  `{street prefix}_{numero}`, and stripping the numero reproduces the same
-  prefix for every address on the same street within one commune (verified:
-  6/6 real addresses on one real street share it). This SDK exposes that
-  as a derived `toponyme_id`, explicitly documented as not a literal BAN
-  field. Also confirmed live: the API's `banId` and the bulk `csv-bal`
-  format's `uid_adresse` are the *same* permanent UUID for the same real
-  address, not just similarly-shaped identifiers; the plain `csv` bulk
-  format carries neither, only the compact `id`.
-  A user-supplied addendum mid-build corrected the brief's claim that
-  street naming belongs to FANTOIR: FANTOIR was replaced by DGFiP's
-  **TOPO** register in July 2023 and is now archived. Investigated live in
-  response: BAN's plain `csv` format's `id_fantoir` column is, despite its
-  name, already populated with post-2023 TOPO-length codes (9 characters,
-  never the old 10-character FANTOIR form, across every département
-  sampled) - and a real BAN `id_fantoir` value was confirmed, live, to
-  join cleanly to DGFiP's TOPO API and return the matching street name.
-  TOPO itself has no geometry column at all, so even a perfect join only
-  recovers a street's name/history, never a centreline - France
-  genuinely splits street *identity* (TOPO, DGFiP) from street *position*
-  (BAN, IGN/communes), unlike the UK's unified USRN. TOPO is not wrapped by
-  this SDK yet - investigated and documented, not built, per the addendum's
-  own scope. Coordinates are WGS84 (`lon`/`lat`) throughout - confirmed
-  consistent across the API and both bulk formats, and across mainland
-  France and five sampled overseas départements; the bulk files' `x`/`y`
-  columns are preserved in `.raw` but not modelled as a coordinate, since
-  each overseas département uses its own local projection the file itself
-  never states. Licence Ouverte / Open Licence 2.0 (Etalab). Registered in
-  `streetworks.registry` as `ban` (`kind="gazetteer"`) - France now has two
-  providers, so the `"france"` alias was removed from both `ban` and the
-  existing `bisonfute` roadworks provider, and `get_provider("france")`
-  now raises `AmbiguousProviderError` naming both, the same as `"germany"`.
-
-- **Provider discovery** (`streetworks.registry`, exposed as
-  `streetworks.providers()`/`get_provider()`) - purely additive: no existing
-  import path, class, or behaviour changed. Answers "what covers X" and
-  "give me Y's client" without needing to already know which technology a
-  country publishes over - `providers(territory="Wales")`,
-  `providers(kind="gazetteer")`, `providers(credentials=False)`,
-  `get_provider("spain")`. One registry entry per provider (22 total as of
-  this release, covering every provider package in the SDK - a coverage
-  test asserts this stays true), each carrying territory, credentials, licence,
-  source grade, and the exact working import line.
-  Capabilities (`entry.capabilities()`) are **derived by inspecting the
-  real client class**, never a hand-maintained dict - including one level
-  into known sub-API objects (Street Manager's `.work`/`.reporting`
-  attributes, discovered by reading `__init__`'s own source, not
-  hardcoded), which is what lets `streetmanager`'s write/publish and
-  planning-artifact capabilities show up correctly despite living on
-  nested classes rather than flat methods.
-  Ambiguous lookups (`get_provider("germany")` → four providers,
-  `"england"` → seven) raise naming every real candidate rather than
-  guessing; an unknown territory passed to `providers()` warns and returns
-  empty rather than raising or silently returning nothing.
-  A genuine performance bug was caught and fixed before shipping, not
-  after: the first working version imported `SourceGrade` from
-  `streetworks.common.models`, which (via `streetworks.common`'s package
-  `__init__`) transitively imported every `from_<provider>` converter and
-  therefore every provider's client module, including httpx - pulling in
-  24 heavy modules just to import the registry, exactly the cost this
-  module's own design was supposed to rule out. Fixed by storing
-  `source_grade` as a plain string (a `str` `Enum`'s members compare equal
-  to their string values either way) instead of importing the real enum
-  type; confirmed live that `import streetworks.registry` and
-  `import streetworks` now pull in zero httpx/pydantic modules, and that
-  `get_provider()` still imports the target client lazily, only on call.
-  Two real, previously-undocumented gaps surfaced while verifying every
-  territory/licence claim against actual module docstrings rather than
-  copying the design brief on trust: Street Manager and DataVIA never
-  state their territory anywhere in code or README prose (England+Wales
-  here is inferred by elimination against SRWR/TrafficWatchNI covering the
-  other nations separately, not an explicit statement); NDW and
-  Digitraffic state no licence anywhere either, and a live check of both
-  portals found nothing (`licence_confirmed=False`, the same honest-gap
-  convention Autobahn's module already established).
+- **DATEX v1.0 linear locations silently degraded to a single point.**
+  Found by reading the "pleasant surprise" of Euskadi's zero-code-change
+  parse more carefully, per this project's own standing habit: the shared
+  parser only recognised `tpegLinearLocation` (the v2/v3 spelling), not
+  v1.0's own `tpeglinearLocation` (lower-case `l`) - confirmed by direct
+  byte search of the real Basque feed (74/74 real linear-location records
+  use the lower-case v1.0 spelling, 0 use the v2/v3 one). Before the fix,
+  the shared parser's two-point `from`/`to` extraction never matched it,
+  silently degrading a real 2-point line into a single point via the
+  generic fallback. Fixed as a second, fallback lookup in
+  `streetworks/datex2/parser.py` (v2/v3 spelling tried first) - confirmed
+  via a live before/after regression across France, Spain, Belgium,
+  Luxembourg and Bulgaria: identical roadworks counts and multi-point-
+  location counts, zero drift.
 
 ## [0.7.0] - 2026-07-19
 
