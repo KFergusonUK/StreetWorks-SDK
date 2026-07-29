@@ -1,14 +1,14 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for three `help wanted` issues, one per provider in the
+Draft text for four `help wanted` issues, one per provider in the
 [README's Credentials wanted section](../README.md#credentials-wanted).
 None of these have been opened yet — this file is the text to paste in when
-opening them (or to point someone at ahead of time). All three modules'
+opening them (or to point someone at ahead of time). All four modules'
 import-time `UserWarning` and the README table link to
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
-Suggested labels for all three: `help wanted`, `credentials-wanted`.
+Suggested labels for all four: `help wanted`, `credentials-wanted`.
 
 ---
 
@@ -144,3 +144,59 @@ can be swapped for real data and the open questions above closed out.
 
 See `src/streetworks/datex2/vejdirektoratet.py`'s module docstring for the
 full detail behind each claim above.
+
+---
+
+## Issue: TfNSW Live Traffic (New South Wales) — confirm the adapter against real data
+
+**Title:** `Credentials wanted: verify streetworks.au.nsw against real NSW data`
+
+**Body:**
+
+`streetworks.au.nsw` is a Phase 1 scaffold: built directly from Transport
+for NSW's own "Live Traffic NSW Developer Guide" (read in full, not
+summarised) plus a live, credential-free probe of the real endpoint — but
+no authenticated response has ever been seen. This SDK's first Australian
+provider — there is no national statutory works register in Australia
+(unlike the UK's Street Manager), so this is a state traffic-disruption
+feed, roadworks alongside incidents/fires/floods/other hazards.
+
+**Confirmed:**
+- The endpoint, live: a bare request returns a genuine structured `401`
+  from a real API gateway (`Layer7-API-Gateway`), not a generic error page.
+- The full GeoJSON schema, directly from the guide's own tables (not
+  inferred): `FeatureCollection` → `Feature` → `properties`, the semantic
+  0/-1 "no data" sentinel on `expectedDelay`, and the guide's own
+  "disregard empty/null properties" rule.
+- The test fixture is **one real feature**, transcribed verbatim from the
+  guide itself (id `82681`, "Nelligen Bridge replacement project") — not
+  synthetic.
+
+**Pending:**
+1. **The exact `Authorization` header format** — the 42-page guide never
+   states it anywhere (searched the full text directly). This scaffold
+   defaults to `apikey <key>` (the convention used by other TfNSW Open
+   Data APIs, not confirmed for this one) — override via
+   `NswLiveTrafficClient(header_format="Bearer {key}")` if that's wrong.
+2. Whether the real endpoint filenames are `roadwork-open.json`-style
+   (this scaffold's choice, per the guide's own Table 1) or
+   `roadwork/open`-style (an earlier investigation's paraphrase) — a 404
+   vs real data will settle it immediately.
+3. Whether the main `roadwork` layer includes council/local-road works,
+   or whether those are siloed in the separate `regional-lga-*` layers
+   this scaffold doesn't fetch.
+4. Real coverage of `encodedPolylines` (the one real sample has none) —
+   the polyline decoder is written to the standard published algorithm
+   but has never decoded a real TfNSW value.
+
+**Credential needed:** an API key from free self-service registration on
+the [TfNSW API Gateway](https://opendata.transport.nsw.gov.au/).
+
+**What to report back:** run `python scripts/smoke_test.py` with
+`NSW_LIVETRAFFIC_API_KEY` set, paste the result line, confirm which
+`Authorization` header format actually worked, and — ideally — one real
+trimmed feature (anything sensitive stripped) so the open questions above
+can be closed out.
+
+See `src/streetworks/au/nsw.py`'s module docstring for the full detail
+behind each claim above.

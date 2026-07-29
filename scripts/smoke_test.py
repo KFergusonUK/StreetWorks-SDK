@@ -54,6 +54,10 @@ skipped if its variables are absent.
     export VEJDIREKTORATET_USERNAME="..."
     export VEJDIREKTORATET_PASSWORD="..."
 
+    # TfNSW Live Traffic (New South Wales, Australia) - PENDING LIVE
+    # VERIFICATION, see streetworks.au.nsw. Free self-service registration.
+    export NSW_LIVETRAFFIC_API_KEY="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -136,6 +140,8 @@ def target_environments() -> dict[str, str]:
         envs["Trafikverket (Sweden)"] = "live"  # single environment, no sandbox
     if os.environ.get("VEJDIREKTORATET_URL"):
         envs["Vejdirektoratet (Denmark)"] = "live"  # single environment, no sandbox
+    if os.environ.get("NSW_LIVETRAFFIC_API_KEY"):
+        envs["TfNSW Live Traffic (NSW, Australia)"] = "live"  # single environment, no sandbox
     return envs
 
 
@@ -497,6 +503,25 @@ def check_vejdirektoratet() -> str:
         f"{len(situations):,} roadworks situations ({works:,} works "
         "records) - first real Danish data seen, compare against module "
         "docstring's open questions"
+    )
+
+
+def check_nsw_livetraffic() -> str:
+    """TfNSW Live Traffic (New South Wales, Australia) - PENDING LIVE
+    VERIFICATION, see streetworks.au.nsw. Requires an API Gateway key
+    (NSW_LIVETRAFFIC_API_KEY, free self-service registration). This is
+    the first real authenticated pull this SDK will have made against
+    TfNSW - if you run this, please also confirm which Authorization
+    header format actually worked (the module defaults to
+    'apikey <key>', unconfirmed - see module docstring) and report back
+    (see the module docstring's linked issue)."""
+    from streetworks.au import NswLiveTrafficClient
+
+    with NswLiveTrafficClient(api_key=os.environ["NSW_LIVETRAFFIC_API_KEY"]) as nsw:
+        features = nsw.iter_roadworks()
+    return (
+        f"{len(features):,} roadwork features - first real NSW data seen, "
+        "compare against module docstring's open questions"
     )
 
 
@@ -925,6 +950,9 @@ def main() -> int:
         "DATEX II (Vejdirektoratet/Denmark)",
         ["VEJDIREKTORATET_URL", "VEJDIREKTORATET_USERNAME", "VEJDIREKTORATET_PASSWORD"],
         check_vejdirektoratet,
+    )
+    reporter.check(
+        "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
     )
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)

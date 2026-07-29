@@ -1,5 +1,86 @@
 # Changelog
 
+## [Unreleased]
+
+### Added — Credentials wanted (scaffolds, unverified)
+
+- **Australia: New South Wales (TfNSW Live Traffic Hazards) roadworks
+  scaffold** (`streetworks.au.nsw`, `streetworks.common.from_nsw_livetraffic`)
+  - this SDK's first Australian provider, opening a new `streetworks.au`
+  cluster (the same per-country-file shape as `streetworks.datex2`/
+  `streetworks.ogc`, since Australia has no national statutory works
+  register like the UK's Street Manager - each state publishes its own
+  traffic-disruption feed instead). A Phase 1 scaffold, grouped with
+  Norway/Sweden/Denmark under **Credentials wanted** - not DATEX-family
+  like those three, TfNSW's own GeoJSON hazards schema (roadworks is one
+  of six hazard types sharing one API).
+  Built from a dedicated investigation brief, then independently
+  re-verified this session by reading TfNSW's own 42-page "Live Traffic
+  NSW Developer Guide" (v1.9) directly rather than trusting the brief's
+  paraphrase, plus a live, credential-free probe of the real endpoint.
+  - **Confirmed live**: a bare request against
+    `api.transport.nsw.gov.au/v1/live/hazards/roadwork-open.json` returns
+    a genuine structured `401` from a real API gateway
+    (`Layer7-API-Gateway`), not a generic error page - confirming the
+    endpoint independent of any documentation's own claims. The CC-BY
+    licence was independently re-confirmed via the TfNSW Open Data Hub's
+    own catalogue page.
+  - **A correction to the source investigation brief**: the brief
+    described the roadwork endpoints as `roadwork/open`/`roadwork/closed`/
+    `roadwork/all`; reading the guide's own Table 1 directly gives
+    different literal filenames - `roadwork-open.json`/
+    `roadwork-closed.json`/`roadwork.json`. Both path shapes return an
+    identical generic 401 from the gateway, so this couldn't be settled
+    by a live probe alone - the guide's own literal text is followed here
+    as the more authoritative source, flagged as worth re-checking once
+    real credentials are available.
+  - **The exact `Authorization` header format is genuinely unconfirmed** -
+    searched the full 42-page guide directly for "Authorization"/
+    "apikey"/"Bearer": zero matches. Defaults to `apikey <key>` (the
+    convention documented for other TfNSW Open Data APIs, not
+    independently confirmed for this one), overridable via
+    `NswLiveTrafficClient(header_format=...)` with no code change needed -
+    the same "don't guess, make it correctable" discipline as Norway's
+    Basic-vs-Bearer uncertainty.
+  - **Test fixture is one real feature, not synthetic** - transcribed
+    verbatim from the Developer Guide's own embedded worked example (id
+    `82681`, "Nelligen Bridge replacement project"), CC-BY licensed, read
+    directly from the PDF rather than trusted from a secondary summary
+    (which, checked against the primary text, had hallucinated an
+    `Authorization: Bearer <apikey>` claim the guide never actually
+    states - caught and discarded before it could be shipped as fact).
+  - **A real, previously-unflagged footgun found in that sample**: the
+    real `subCategoryA` field holds the *literal string* `"null"`, not
+    the JSON value `null` - `_clean_properties` (the guide's own
+    documented "disregard empty/null properties" rule) deliberately does
+    not treat the string as empty, only genuine `None`/`""`/whitespace/`[]`.
+  - **No gazetteer join key exists anywhere in this feed** - `roads[]` is
+    free text only (`mainStreet`/`crossStreet`/`suburb`/`region`/...),
+    weaker than NWB's `bag_orl` gap (which at least carries an id) - there
+    is nothing to join on at all, documented as a hard gap rather than
+    worked around.
+  - Coordinates are GeoJSON-native `[lon, lat]` (confirmed from the real
+    sample - `[150.14, -35.65]` is genuine coastal NSW), never flipped to
+    DATEX's `(lat, lon)` convention. Point geometry is a centroid;
+    `encodedPolylines` (Google's Encoded Polyline Algorithm Format,
+    decoded via a small new local decoder - no new dependency) grades
+    higher when present, though the one real fixture record has none.
+  - `start`/`end` map to `proposed_start`/`proposed_end` with `ESTIMATED`
+    confidence throughout, never `actual_*` - the guide's own field
+    description calls `end` the date a hazard "is **scheduled** to end,"
+    true even once a record is closed, since nothing distinguishes a
+    confirmed completion time from the last-known schedule.
+  - Registered in `streetworks.registry` as `nsw`
+    (`kind="roadworks"`, `territories={"Australia"}`,
+    `network_scope=NetworkScope.UNKNOWN` - honest default, since it's
+    unconfirmed whether the main layer includes council roads or only
+    state roads), wired into `scripts/smoke_test.py`
+    (`check_nsw_livetraffic`, skip-guarded on missing credentials) and
+    `.env.example`. Ships the same import-time `UserWarning` mechanism as
+    the other three Credentials-wanted providers.
+  - Drafted (not opened) `help wanted` GitHub issue text in
+    `docs/credentials-wanted-issues.md`, alongside the existing three.
+
 ## [0.8.0] - 2026-07-28
 
 ### Changed

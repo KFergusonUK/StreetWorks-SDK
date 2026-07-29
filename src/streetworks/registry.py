@@ -1072,6 +1072,30 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2 import VejdirektoratetClient",
     ),
     ProviderEntry(
+        key="nsw",
+        name="Transport for NSW - Live Traffic Hazards",
+        description="New South Wales roadwork hazards feed (Australia).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area="Transport for NSW",
+        scope_note=(
+            "Phase 1 scaffold - endpoint confirmed live via a real 401 "
+            "probe, and the test fixture is one real feature transcribed "
+            "from TfNSW's own Developer Guide, but the authenticated data "
+            "pull itself never exercised, see below. Unconfirmed whether "
+            "the main roadwork layer includes council/local-road works or "
+            "only state roads."
+        ),
+        credentials="TfNSW API Gateway key (free self-service registration)",
+        licence="CC BY 4.0",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.au",
+        _client_name="NswLiveTrafficClient",
+        import_line="from streetworks.au import NswLiveTrafficClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",
