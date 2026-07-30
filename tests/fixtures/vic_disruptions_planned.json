@@ -1,0 +1,74 @@
+{
+  "_note": "SYNTHETIC fixture, not real data - see streetworks.au.vic module docstring. No real Planned Disruptions payload has ever been obtained: the OpenAPI spec's own Swagger UI cannot preview it (response too large, per the spec's own description), and the linked technical documentation PDF returns PublicAccessNotPermitted (confirmed live this session, not just 'not yet fetched'). This fixture is structurally correct per the real OpenAPI 3.0.1 schema (component PlannedDisruptionGeoJSON, fetched and parsed directly), with invented field values, including a guessed ISO-8601 timestamp format for duration.start/end that is explicitly NOT confirmed against any real response.",
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "GeometryCollection",
+        "geometries": [
+          {
+            "type": "LineString",
+            "coordinates": [
+              [145.0123, -37.8123],
+              [145.0156, -37.8098]
+            ]
+          },
+          {
+            "type": "Point",
+            "coordinates": [145.0123, -37.8123]
+          }
+        ]
+      },
+      "properties": {
+        "id": "VIC-PD-100234",
+        "source": {
+          "sourceName": "DTP Permits Team",
+          "sourceId": "PERMIT-559812"
+        },
+        "status": "Active",
+        "closedRoadName": "Springvale Road",
+        "startIntersectionRoadName": "Burwood Highway",
+        "startIntersectionLocality": "Nunawading",
+        "localGovernmentArea": "Whitehorse",
+        "rmaClass": "Arterial",
+        "eventType": "Roadworks",
+        "eventSubtype": "Resurfacing",
+        "eventDueTo": "Maintenance",
+        "impact": {
+          "direction": "Both directions",
+          "impactType": "Lane closure",
+          "delay": "15",
+          "numberLanesImpacted": "1",
+          "speedLimitOnSite": "40"
+        },
+        "duration": {
+          "start": "2026-08-03T07:00:00+10:00",
+          "end": "2026-08-28T17:00:00+10:00",
+          "recurrences": [
+            {
+              "startDay": "Monday",
+              "daysDuration": 5,
+              "startTime": "07:00",
+              "duration": "10h",
+              "allDay": false
+            },
+            {
+              "startDay": "Saturday",
+              "daysDuration": 1,
+              "startTime": "00:00",
+              "duration": "24h",
+              "allDay": true
+            }
+          ]
+        },
+        "description": "Road resurfacing works, single lane closure with traffic control.",
+        "lastUpdated": "2026-07-29T09:15:00+10:00"
+      }
+    }
+  ],
+  "nextPageDetails": {
+    "nextPageToken": "",
+    "hasMoreRecords": false
+  }
+}

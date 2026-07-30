@@ -294,12 +294,18 @@ def get_entry(key: str):
 
 
 def test_credentials_wanted_is_the_only_unverified_tier():
-    """Norway, Sweden, Denmark, and NSW (Australia) are the "Credentials
-    wanted" tier - built to a confirmed API/schema shape but never run
-    against real authenticated data. Every other provider is verified
-    against real data."""
+    """Norway, Sweden, Denmark, NSW, and Victoria (Australia) are the
+    "Credentials wanted" tier - built to a confirmed API/schema shape but
+    never run against real authenticated data. Every other provider is
+    verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
-    assert {e.key for e in unverified} == {"vegvesen", "trafikverket", "vejdirektoratet", "nsw"}
+    assert {e.key for e in unverified} == {
+        "vegvesen",
+        "trafikverket",
+        "vejdirektoratet",
+        "nsw",
+        "vic",
+    }
 
 
 def test_unverified_provider_flagged_in_rendered_output():

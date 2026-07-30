@@ -1,6 +1,26 @@
-"""New South Wales: TfNSW Live Traffic Hazards - roadworks, one of six
-hazard types (Incident/Fire/Flood/Alpine/MajorEvent/Roadwork) published in
-one shared GeoJSON API. This SDK's first Australian provider.
+"""New South Wales: TfNSW Live Traffic Hazards - roadworks and major
+events, two of six hazard types (Incident/Fire/Flood/Alpine/MajorEvent/
+Roadwork) published in one shared GeoJSON API. This SDK's first
+Australian provider.
+
+**Architecture: one adapter, parameterised over layer - not one adapter
+per layer.** All six hazard types (plus the differently-shaped
+``regional-lga-*`` composites) share the identical ``FeatureCollection``/
+``Feature`` schema, confirmed directly from the guide's own schema
+tables, and differ only in ``layerName`` and the endpoint filename. A
+separate module per layer would be several near-duplicate parsers over
+one real schema. This module covers the two **planned** (works-relevant)
+layers - ``roadwork`` and ``majorevent`` - via :meth:`NswLiveTrafficClient.get_features`/
+:meth:`~NswLiveTrafficClient.iter_features`, plus the ``roadwork``-only
+:meth:`~NswLiveTrafficClient.get_roadworks`/:meth:`~NswLiveTrafficClient.iter_roadworks`
+convenience pair (unchanged from this module's first version) and the
+equivalent ``majorevent``-only
+:meth:`~NswLiveTrafficClient.get_major_events`/:meth:`~NswLiveTrafficClient.iter_major_events`.
+The four **unplanned** layers (``incident``/``fire``/``flood``/``alpine``)
+and the ``regional-lga-*`` composites are deliberately **not** built here -
+out of scope for a works SDK, per the source investigation brief - though
+adding one is a small, mechanical extension of :data:`LAYERS` if ever
+needed, not a design change.
 
 .. attention::
    **PENDING LIVE VERIFICATION.** Built directly from Transport for NSW's
@@ -42,17 +62,28 @@ authoritative source. **Worth re-checking in Phase 2** if a real key
 returns 404 rather than real data.
 
 **Not DATEX II - TfNSW's own hazards GeoJSON schema**, shared across all
-six hazard types, roadwork included. Confirmed directly from the guide's
-own schema tables (not inferred): a ``FeatureCollection`` with
-``rights``/``layerName``/``lastPublished``/``features``, each ``Feature``
-a standard ``{type, id, geometry, properties}`` shape. ``layerName`` is
-confirmed to be the literal string ``"RoadWork"`` for this endpoint.
-Since these files are already filtered to roadworks by TfNSW (unlike
-Sweden's own broader ``Situation`` feed - see
-:mod:`streetworks.datex2.trafikverket`), no in-record roadworks
-discriminator is needed here, the same shape of confidence Digitraffic's
-endpoint has (see :mod:`streetworks.datex2.digitraffic`) - not something
-derived from a field.
+six hazard types. Confirmed directly from the guide's own schema tables
+(not inferred): a ``FeatureCollection`` with ``rights``/``layerName``/
+``lastPublished``/``features``, each ``Feature`` a standard
+``{type, id, geometry, properties}`` shape. ``layerName`` is confirmed to
+be the literal string ``"RoadWork"`` for the roadwork endpoint (the
+guide's own schema table also lists ``"MajorEvent"`` as a valid value,
+though no real ``majorevent`` sample was available to confirm it against
+- see "What's still open" below). Since these files are already filtered
+by layer by TfNSW (unlike Sweden's own broader ``Situation`` feed - see
+:mod:`streetworks.datex2.trafikverket`), no in-record discriminator is
+needed to tell roadwork/major-event features apart from other hazard
+types - the same shape of confidence Digitraffic's endpoint has (see
+:mod:`streetworks.datex2.digitraffic`).
+
+**``id`` is unique only within a layer, confirmed from the guide's own
+property table** ("Uniquely identifies this hazard from all other
+hazards in the same layer") - a real roadwork ``82681`` and a real
+major-event ``82681`` are not guaranteed distinct. Every parsed feature
+carries ``layerName`` alongside ``id`` (see :func:`parse_features`), and
+:func:`streetworks.common.from_nsw_livetraffic.from_nsw_livetraffic`
+builds ``Works.reference`` as the composite ``f"{layerName}:{id}"`` -
+never the bare ``id`` alone, once a caller might mix layers.
 
 **Auth**: an ``Authorization`` header carrying an API key from free
 self-service registration on the TfNSW API Gateway (confirmed: the guide
@@ -152,6 +183,14 @@ session). Env var: ``NSW_LIVETRAFFIC_API_KEY`` (see ``.env.example``,
 4. Real coverage of ``encodedPolylines`` (the one real sample has none) -
    the local decoder is written to the standard published algorithm but
    has never decoded a real TfNSW polyline.
+5. **``majorevent`` has no real sample at all** - the guide's schema
+   table lists identical fields to ``roadwork`` and confirms
+   ``"MajorEvent"`` as a valid ``layerName``, but every field-population
+   claim in this module was checked against a *roadwork* example only.
+   Treat :meth:`~NswLiveTrafficClient.get_major_events`/
+   :meth:`~NswLiveTrafficClient.iter_major_events` as more speculative
+   than the ``roadwork`` methods until a real major-event feature is
+   seen.
 """
 
 from __future__ import annotations
@@ -163,7 +202,7 @@ import httpx
 
 from .._transport import RetryConfig, SyncTransport
 
-__all__ = ["BASE_URL", "NswLiveTrafficClient", "parse_features"]
+__all__ = ["BASE_URL", "LAYERS", "NswLiveTrafficClient", "parse_features"]
 
 warnings.warn(
     "streetworks.au.nsw is a Credentials-wanted scaffold: built to TfNSW's "
@@ -178,13 +217,26 @@ warnings.warn(
 )
 
 JSON = dict[str, Any]
+Layer = Literal["roadwork", "majorevent"]
+Status = Literal["open", "closed", "all"]
 
 BASE_URL = "https://api.transport.nsw.gov.au/v1/live/hazards"
-_PATHS = {
-    "open": "roadwork-open.json",
-    "closed": "roadwork-closed.json",
-    "all": "roadwork.json",
-}
+
+#: The two *planned* (works-relevant) hazard layers this module covers -
+#: see module docstring's "Architecture" note for why the four unplanned
+#: layers and the regional-lga composites are deliberately out of scope.
+LAYERS: tuple[Layer, ...] = ("roadwork", "majorevent")
+
+
+def _path(layer: Layer, status: Status) -> str:
+    """Every layer shares the same ``<layer>-<status>.json``/``<layer>.json``
+    filename convention, confirmed from the guide's own Table 1 for
+    ``roadwork`` - not independently re-confirmed for ``majorevent``,
+    which the table describes identically but no live probe has targeted."""
+    if status == "all":
+        return f"{layer}.json"
+    return f"{layer}-{status}.json"
+
 
 #: Fields the Developer Guide states use 0/-1 as an explicit "no data"
 #: sentinel, not a real zero - see module docstring.
@@ -225,17 +277,21 @@ def _clean_properties(properties: JSON) -> JSON:
 
 def parse_features(payload: JSON) -> list[JSON]:
     """Parse a real ``FeatureCollection`` response into a list of cleaned
-    feature dicts (``{"type", "id", "geometry", "properties"}``, empty/
-    null properties stripped per :func:`_clean_properties`) - the shape
-    :func:`streetworks.common.from_nsw_livetraffic` (not yet built - see
-    the source investigation brief's own next-steps list) would consume."""
+    feature dicts (``{"layerName", "type", "id", "geometry", "properties"}``,
+    empty/null properties stripped per :func:`_clean_properties`) - the
+    shape :func:`streetworks.common.from_nsw_livetraffic.from_nsw_livetraffic`
+    consumes. ``layerName`` is copied from the collection onto every
+    feature (real features don't carry it themselves - only the
+    surrounding ``FeatureCollection`` does) since ``id`` is only unique
+    *within* a layer - see module docstring."""
     features = payload.get("features") or []
+    layer_name = payload.get("layerName")
     cleaned: list[JSON] = []
     for feature in features:
         if not isinstance(feature, dict):
             continue
         properties = _clean_properties(feature.get("properties") or {})
-        cleaned.append({**feature, "properties": properties})
+        cleaned.append({**feature, "properties": properties, "layerName": layer_name})
     return cleaned
 
 
@@ -273,26 +329,49 @@ class NswLiveTrafficClient:
             retry=retry or RetryConfig(), timeout=timeout, client=client
         )
 
-    def get_roadworks(self, *, status: Literal["open", "closed", "all"] = "open") -> JSON:
-        """``GET roadwork-<status>.json`` (or ``roadwork.json`` for
+    def get_features(self, layer: Layer, *, status: Status = "open") -> JSON:
+        """``GET <layer>-<status>.json`` (or ``<layer>.json`` for
         ``"all"``) - see module docstring for why these literal filenames
-        are used rather than the investigation brief's ``roadwork/<status>``
-        paraphrase. Returns the parsed JSON ``FeatureCollection``."""
-        path = _PATHS[status]
+        are used rather than the investigation brief's ``<layer>/<status>``
+        paraphrase, and for why only ``"roadwork"``/``"majorevent"`` are
+        valid here (see :data:`LAYERS`). Returns the parsed JSON
+        ``FeatureCollection``."""
         response = self._transport.request(
             "GET",
-            f"{self.base_url}/{path}",
+            f"{self.base_url}/{_path(layer, status)}",
             headers={"Authorization": self.header_format.format(key=self.api_key)},
         )
         return response.json()
 
-    def iter_roadworks(
-        self, *, status: Literal["open", "closed", "all"] = "open"
-    ) -> list[JSON]:
-        """Every roadwork feature, empty/null properties stripped (see
-        :func:`parse_features`). Already roadworks-only by construction -
-        no in-record filtering needed, see module docstring."""
-        return parse_features(self.get_roadworks(status=status))
+    def iter_features(self, layer: Layer, *, status: Status = "open") -> list[JSON]:
+        """Every feature for ``layer``, empty/null properties stripped and
+        ``layerName`` attached to each (see :func:`parse_features`).
+        Already filtered to ``layer`` by construction - no in-record
+        filtering needed, see module docstring."""
+        return parse_features(self.get_features(layer, status=status))
+
+    def get_roadworks(self, *, status: Status = "open") -> JSON:
+        """``layer="roadwork"`` convenience wrapper over
+        :meth:`get_features` - this module's best-confirmed layer (a real
+        embedded sample exists; see module docstring)."""
+        return self.get_features("roadwork", status=status)
+
+    def iter_roadworks(self, *, status: Status = "open") -> list[JSON]:
+        """``layer="roadwork"`` convenience wrapper over
+        :meth:`iter_features`."""
+        return self.iter_features("roadwork", status=status)
+
+    def get_major_events(self, *, status: Status = "open") -> JSON:
+        """``layer="majorevent"`` convenience wrapper over
+        :meth:`get_features` - **more speculative than** :meth:`get_roadworks`,
+        no real major-event sample has been seen, see module docstring's
+        "What's still open" item 5."""
+        return self.get_features("majorevent", status=status)
+
+    def iter_major_events(self, *, status: Status = "open") -> list[JSON]:
+        """``layer="majorevent"`` convenience wrapper over
+        :meth:`iter_features`. See :meth:`get_major_events`."""
+        return self.iter_features("majorevent", status=status)
 
     def close(self) -> None:
         self._transport.close()

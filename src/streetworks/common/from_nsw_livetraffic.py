@@ -9,6 +9,15 @@ feed linking separate hazards into one project (unlike Jersey's
 the state road authority IS the data-owning operator, the same rule
 already applied to Autobahn GmbH/Via Lietuva/National Highways.
 
+**``Works.reference`` is the composite ``f"{layerName}:{id}"``, never the
+bare ``id``** - confirmed from the Developer Guide's own property table,
+``id`` is unique only *within* a layer, so a real roadwork ``82681`` and a
+real major-event ``82681`` are not guaranteed distinct once a caller
+fetches both :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_roadworks`
+and :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_major_events` and
+converts them together. ``layerName`` is attached to every feature by
+:func:`streetworks.au.nsw.parse_features` - never re-derived here.
+
 See :mod:`streetworks.au.nsw`'s own module docstring for the full set of
 real findings this mapping is built from (the sentinel-value convention,
 the ``"null"``-string footgun, the missing gazetteer join key, why dates
@@ -133,12 +142,22 @@ def _notices(properties: JSON) -> tuple[Notice, ...]:
     )
 
 
+def _reference(feature: JSON) -> str | None:
+    """``f"{layerName}:{id}"`` - see module docstring for why the bare
+    ``id`` alone is not safe once more than one layer is in play."""
+    id_ = feature.get("id")
+    if id_ is None:
+        return None
+    layer_name = feature.get("layerName")
+    return f"{layer_name}:{id_}" if layer_name else str(id_)
+
+
 def _to_site(feature: JSON) -> WorksSite:
     properties = feature.get("properties") or {}
     start = _epoch_millis_to_dt(properties.get("start"))
     end = _epoch_millis_to_dt(properties.get("end"))
     return WorksSite(
-        reference=str(feature.get("id")) if feature.get("id") is not None else None,
+        reference=_reference(feature),
         works_type=properties.get("mainCategory"),
         status="ended" if properties.get("ended") else "active",
         location_description=_location_description(properties),
@@ -155,10 +174,13 @@ def _to_site(feature: JSON) -> WorksSite:
 
 
 def from_nsw_livetraffic(features: list[JSON]) -> list[Works]:
-    """Convert real TfNSW roadwork features (from
-    :meth:`streetworks.au.nsw.NswLiveTrafficClient.iter_roadworks`) into
-    :class:`~streetworks.common.Works` - one per feature, each with a
-    single ``WorksSite``. See module docstring."""
+    """Convert real TfNSW roadwork/major-event features (from
+    :meth:`streetworks.au.nsw.NswLiveTrafficClient.iter_roadworks`/
+    :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_major_events`)
+    into :class:`~streetworks.common.Works` - one per feature, each with a
+    single ``WorksSite``. Safe to call with a combined list from both
+    layers - see module docstring for the composite-reference handling
+    that makes that safe."""
     works_list: list[Works] = []
     for feature in features:
         site = _to_site(feature)

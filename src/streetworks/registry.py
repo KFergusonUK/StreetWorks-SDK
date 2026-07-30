@@ -1096,6 +1096,30 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.au import NswLiveTrafficClient",
     ),
     ProviderEntry(
+        key="vic",
+        name="Department of Transport and Planning - Planned Disruptions",
+        description="Victoria planned road disruptions feed (Australia).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area="Department of Transport and Planning",
+        scope_note=(
+            "Phase 1 scaffold - more speculative than nsw: no real sample "
+            "has ever been obtained (the OpenAPI spec's own Swagger UI "
+            "can't preview it, and the linked technical PDF is not "
+            "publicly accessible). Endpoint and auth behaviour confirmed "
+            "live via a real gateway probe, which also caught the OpenAPI "
+            "spec's own advertised auth header being wrong, see below."
+        ),
+        credentials="Transport Victoria Open Data Hub subscription key (free)",
+        licence="CC BY 4.0",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.au",
+        _client_name="VicDisruptionsClient",
+        import_line="from streetworks.au import VicDisruptionsClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",

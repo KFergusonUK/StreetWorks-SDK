@@ -46,13 +46,20 @@ def test_parse_features_coerces_sentinel_values_to_none():
     assert properties["speedLimit"] == 40  # a real, non-sentinel value survives untouched
 
 
+def test_parse_features_attaches_layer_name_to_every_feature():
+    features = parse_features(FIXTURE_JSON)
+    assert features[0]["layerName"] == "RoadWork"
+
+
 def test_from_nsw_livetraffic_maps_the_real_nelligen_bridge_feature():
     features = parse_features(FIXTURE_JSON)
     works = from_nsw_livetraffic(features)
     assert len(works) == 1
 
     item = works[0]
-    assert item.reference == "82681"
+    # Composite layerName:id - id alone (82681) is only unique within a
+    # layer, see module docstring.
+    assert item.reference == "RoadWork:82681"
     assert item.territory == "Australia"
     assert item.administrative_area == "Transport for NSW"
     assert item.coordinate.value == (150.1431796, -35.6474524)
@@ -71,6 +78,19 @@ def test_from_nsw_livetraffic_maps_the_real_nelligen_bridge_feature():
     assert "Saturday 8:00am-1:00pm" in site.operating_window
     assert "Alternating (stop/slow)" in site.traffic_management
     assert site.notices[0].text == "Nelligen Bridge replacement project"
+
+
+def test_composite_reference_avoids_collision_across_layers():
+    """A real roadwork 82681 and a real major-event 82681 are not
+    guaranteed distinct (id is only unique within a layer, per the
+    Developer Guide's own property table) - Works.reference must not
+    collide when features from both layers are converted together."""
+    roadwork_feature = parse_features(FIXTURE_JSON)[0]
+    majorevent_feature = {**roadwork_feature, "layerName": "MajorEvent"}
+
+    works = from_nsw_livetraffic([roadwork_feature, majorevent_feature])
+    references = {item.reference for item in works}
+    assert references == {"RoadWork:82681", "MajorEvent:82681"}
 
 
 def test_client_requires_api_key():
@@ -101,3 +121,30 @@ def test_client_header_format_is_overridable():
 
     request = respx.calls.last.request
     assert request.headers["Authorization"] == "Bearer test-key"
+
+
+@respx.mock
+def test_client_iter_major_events_hits_the_majorevent_path():
+    respx.get(f"{BASE_URL}/majorevent-open.json").mock(
+        return_value=httpx.Response(200, json=FIXTURE_JSON)
+    )
+    with NswLiveTrafficClient(api_key="test-key") as nsw:
+        features = nsw.iter_major_events()
+    assert len(features) == 1
+
+    request = respx.calls.last.request
+    assert request.url.path.endswith("/majorevent-open.json")
+
+
+@respx.mock
+def test_client_get_features_is_the_shared_primitive_for_all_layers():
+    respx.get(f"{BASE_URL}/roadwork.json").mock(
+        return_value=httpx.Response(200, json=FIXTURE_JSON)
+    )
+    respx.get(f"{BASE_URL}/majorevent.json").mock(
+        return_value=httpx.Response(200, json=FIXTURE_JSON)
+    )
+    with NswLiveTrafficClient(api_key="test-key") as nsw:
+        roadwork_features = nsw.iter_features("roadwork", status="all")
+        majorevent_features = nsw.iter_features("majorevent", status="all")
+    assert len(roadwork_features) == len(majorevent_features) == 1

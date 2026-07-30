@@ -4,20 +4,42 @@
 
 ### Added — Credentials wanted (scaffolds, unverified)
 
-- **Australia: New South Wales (TfNSW Live Traffic Hazards) roadworks
-  scaffold** (`streetworks.au.nsw`, `streetworks.common.from_nsw_livetraffic`)
-  - this SDK's first Australian provider, opening a new `streetworks.au`
-  cluster (the same per-country-file shape as `streetworks.datex2`/
-  `streetworks.ogc`, since Australia has no national statutory works
-  register like the UK's Street Manager - each state publishes its own
-  traffic-disruption feed instead). A Phase 1 scaffold, grouped with
-  Norway/Sweden/Denmark under **Credentials wanted** - not DATEX-family
-  like those three, TfNSW's own GeoJSON hazards schema (roadworks is one
-  of six hazard types sharing one API).
+- **Australia: New South Wales (TfNSW Live Traffic Hazards) roadworks and
+  major-events scaffold** (`streetworks.au.nsw`,
+  `streetworks.common.from_nsw_livetraffic`) - this SDK's first Australian
+  provider, opening a new `streetworks.au` cluster (the same
+  per-country-file shape as `streetworks.datex2`/`streetworks.ogc`, since
+  Australia has no national statutory works register like the UK's Street
+  Manager - each state publishes its own traffic-disruption feed
+  instead). A Phase 1 scaffold, grouped with Norway/Sweden/Denmark under
+  **Credentials wanted** - not DATEX-family like those three, TfNSW's own
+  GeoJSON hazards schema.
   Built from a dedicated investigation brief, then independently
   re-verified this session by reading TfNSW's own 42-page "Live Traffic
   NSW Developer Guide" (v1.9) directly rather than trusting the brief's
   paraphrase, plus a live, credential-free probe of the real endpoint.
+  - **One adapter, parameterised over layer - not one per layer.** All
+    six of TfNSW's hazard types (plus the differently-shaped
+    `regional-lga-*` composites) share one real schema, confirmed from
+    the guide's own tables, differing only in `layerName` and endpoint
+    filename. `NswLiveTrafficClient.get_features`/`iter_features` are
+    the general primitives; `get_roadworks`/`iter_roadworks` and the new
+    `get_major_events`/`iter_major_events` are convenience wrappers over
+    the two **planned** (works-relevant) layers this module covers - the
+    four unplanned layers (incident/fire/flood/alpine) and the
+    `regional-lga-*` composites are deliberately out of scope for a works
+    SDK. `majorevent` has no real sample seen anywhere (unlike
+    `roadwork` - see below), so its methods are flagged more speculative
+    in the module docstring.
+  - **`id` is unique only within a layer, confirmed from the guide's own
+    property table** - a real roadwork `82681` and a real major-event
+    `82681` are not guaranteed distinct. Every parsed feature now carries
+    `layerName` alongside `id` (`parse_features` copies it down from the
+    `FeatureCollection`), and `from_nsw_livetraffic` builds
+    `Works.reference` as the composite `f"{layerName}:{id}"`, never the
+    bare `id` - regression-tested by converting synthetic same-`id`
+    roadwork/major-event features together and asserting distinct
+    references.
   - **Confirmed live**: a bare request against
     `api.transport.nsw.gov.au/v1/live/hazards/roadwork-open.json` returns
     a genuine structured `401` from a real API gateway
@@ -75,11 +97,93 @@
     `network_scope=NetworkScope.UNKNOWN` - honest default, since it's
     unconfirmed whether the main layer includes council roads or only
     state roads), wired into `scripts/smoke_test.py`
-    (`check_nsw_livetraffic`, skip-guarded on missing credentials) and
-    `.env.example`. Ships the same import-time `UserWarning` mechanism as
-    the other three Credentials-wanted providers.
+    (`check_nsw_livetraffic` - checks both layers, but a `majorevent`
+    failure doesn't fail the whole check given how speculative that layer
+    is, skip-guarded on missing credentials) and `.env.example`. Ships
+    the same import-time `UserWarning` mechanism as the other three
+    Credentials-wanted providers.
   - Drafted (not opened) `help wanted` GitHub issue text in
     `docs/credentials-wanted-issues.md`, alongside the existing three.
+
+- **Australia: Victoria (DTP Planned Disruptions - Road) scaffold**
+  (`streetworks.au.vic`, `streetworks.common.from_vic_disruptions`) - the
+  second `streetworks.au` cluster member, and the **weakest-confirmed**
+  Credentials-wanted provider yet: no real payload has ever been obtained
+  anywhere (the OpenAPI spec's own Swagger UI can't preview one due to
+  response size, and the linked technical documentation PDF returns
+  `PublicAccessNotPermitted` from its blob storage - confirmed live this
+  session, not just "not yet fetched"). Built from the real,
+  machine-readable OpenAPI 3.0.1 spec - fetched and parsed directly this
+  session, not trusted from a summary - plus a live gateway probe.
+  - **A separate module from NSW, deliberately not one adapter per
+    country.** NSW's "one adapter, parameterised over layer" pattern
+    relies on every layer sharing one schema; Victoria publishes two
+    independent APIs (planned vs. unplanned disruptions) on different
+    version tracks with different schemas, so this module covers planned
+    only - unplanned (v3, backed by a different system, the Road
+    Incident Database) is out of scope, matching the source
+    investigation's own explicit warning not to over-apply the NSW
+    precedent here.
+  - **A decisive, live-verified correction to the source investigation's
+    own bet on a real docs-vs-docs conflict**: the investigation flagged
+    that the human-facing dataset page names the auth header `KeyID`
+    while the OpenAPI spec's own `securitySchemes` name
+    `Ocp-Apim-Subscription-Key`/`subscription-key` (the standard Azure
+    APIM names), and bet on the APIM names being right at the real
+    gateway. A live probe settles it the other way: the gateway's own
+    `WWW-Authenticate` error message reads `"Failed to find key field:
+    KeyId"` for every header tried except `KeyID` itself, which instead
+    gets `"API Key not authorized: <value>"` - proof the gateway
+    recognises the field name and is rejecting the value, not failing to
+    find it. The OpenAPI spec is simply wrong about its own gateway here
+    - this module sends `KeyID`, not the spec's advertised scheme. The
+    same live probe also resolved the investigation's other three
+    docs-vs-docs conflicts (rate limit 10/min not 20, token-based
+    pagination not page/limit, 10-minute cache not 30), all independently
+    confirmed straight from the real spec text.
+  - **A correction to this module's own design brief**: the brief
+    proposed `administrative_area = localGovernmentArea`. Checked against
+    `Works.administrative_area`'s own documented semantics (data
+    *ownership*, not geography) - an LGA is where a disruption sits, not
+    who owns the data, so `administrative_area` is set to "Department of
+    Transport and Planning" instead (the real publishing authority, per
+    the spec's own description), with `localGovernmentArea` folded into
+    `WorksSite.location_description` alongside the road-name fields
+    instead, where it belongs as a geography detail.
+  - Real, richer-typed schema than NSW's, confirmed field-by-field from
+    the spec's own `components.schemas`: a `duration.recurrences[]` with
+    a genuine `daysDuration` integer and `allDay` boolean (versus NSW's
+    free-text `periods[]`), a structured `impact` object - though its
+    `delay`/`numberLanesImpacted`/`speedLimitOnSite` fields are **all
+    typed `string` even where the names look numeric**, carried through
+    unconverted rather than coerced to a number that might silently
+    misparse a shape never seen live. `source.sourceName`/`sourceId`
+    maps to `Works.promoter` - a do-not-deduplicate signal, the same
+    multi-source-provenance lesson DGT/Consell de Mallorca's real
+    republication case already established.
+  - Geometry is a `GeometryCollection` wrapping Point/LineString entries
+    (confirmed from the real schema, not NSW's bare-Point shape) -
+    parsed preferring the first LineString for `Coordinate.points`, else
+    the first Point. Coordinate order presumed GeoJSON `[lon, lat]`, and
+    `duration.start`/`end`'s timestamp format presumed ISO-8601 via the
+    SDK's existing tolerant parser - both genuinely unconfirmed, the
+    parser fails to `None` rather than guess epoch-millis (NSW's format)
+    if that assumption is wrong, the safer failure mode since a
+    genuine-format date run through the wrong parser produces an
+    obviously-implausible result rather than a plausible-looking wrong
+    one.
+  - Test fixture is **synthetic** (structurally correct per the real
+    spec, invented values) - the first Credentials-wanted scaffold in
+    this SDK with no real sample basis at all, unlike NSW's transcribed
+    real example.
+  - Registered in `streetworks.registry` as `vic` (`kind="roadworks"`,
+    `territories={"Australia"}`, `network_scope=NetworkScope.UNKNOWN`),
+    wired into `scripts/smoke_test.py` (`check_vic_disruptions`,
+    skip-guarded on missing credentials) and `.env.example`. Ships the
+    same import-time `UserWarning` mechanism as every other
+    Credentials-wanted provider.
+  - Drafted (not opened) `help wanted` GitHub issue text in
+    `docs/credentials-wanted-issues.md`, alongside the existing four.
 
 ## [0.8.0] - 2026-07-28
 

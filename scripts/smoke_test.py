@@ -58,6 +58,11 @@ skipped if its variables are absent.
     # VERIFICATION, see streetworks.au.nsw. Free self-service registration.
     export NSW_LIVETRAFFIC_API_KEY="..."
 
+    # DTP Planned Disruptions (Victoria, Australia) - PENDING LIVE
+    # VERIFICATION, see streetworks.au.vic. More speculative than NSW - no
+    # real sample seen anywhere. Free subscription key.
+    export VIC_DISRUPTIONS_API_KEY="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -142,6 +147,8 @@ def target_environments() -> dict[str, str]:
         envs["Vejdirektoratet (Denmark)"] = "live"  # single environment, no sandbox
     if os.environ.get("NSW_LIVETRAFFIC_API_KEY"):
         envs["TfNSW Live Traffic (NSW, Australia)"] = "live"  # single environment, no sandbox
+    if os.environ.get("VIC_DISRUPTIONS_API_KEY"):
+        envs["DTP Planned Disruptions (VIC, Australia)"] = "live"  # single env, no sandbox
     return envs
 
 
@@ -513,15 +520,47 @@ def check_nsw_livetraffic() -> str:
     the first real authenticated pull this SDK will have made against
     TfNSW - if you run this, please also confirm which Authorization
     header format actually worked (the module defaults to
-    'apikey <key>', unconfirmed - see module docstring) and report back
-    (see the module docstring's linked issue)."""
+    'apikey <key>', unconfirmed - see module docstring), and report back
+    whether majorevent-open.json returns real data too (no real sample
+    has ever been seen for that layer - see the module docstring's
+    "What's still open" item 5 and its linked issue)."""
     from streetworks.au import NswLiveTrafficClient
 
     with NswLiveTrafficClient(api_key=os.environ["NSW_LIVETRAFFIC_API_KEY"]) as nsw:
-        features = nsw.iter_roadworks()
+        roadworks = nsw.iter_roadworks()
+        # majorevent is more speculative than roadwork (no real sample has
+        # ever been seen for it - module docstring item 5) - a failure
+        # here is itself useful information, but shouldn't fail the whole
+        # check when the better-confirmed roadwork layer just succeeded.
+        try:
+            major_events_count = f"{len(nsw.iter_major_events()):,}"
+        except StreetworksError as exc:
+            major_events_count = f"FAILED ({type(exc).__name__})"
     return (
-        f"{len(features):,} roadwork features - first real NSW data seen, "
-        "compare against module docstring's open questions"
+        f"{len(roadworks):,} roadwork + {major_events_count} major-event "
+        "features - first real NSW data seen, compare against module "
+        "docstring's open questions"
+    )
+
+
+def check_vic_disruptions() -> str:
+    """DTP Planned Disruptions (Victoria, Australia) - PENDING LIVE
+    VERIFICATION, see streetworks.au.vic. Requires a Transport Victoria
+    Open Data Hub subscription key (VIC_DISRUPTIONS_API_KEY, free). This
+    is the first real authenticated pull this SDK will have made against
+    this API - no real sample has ever been seen at all (not even the
+    OpenAPI spec's own Swagger UI can preview one). If you run this,
+    please report back the real coordinate order, the real
+    duration.start/end timestamp format, and whether the string-typed
+    'numeric' impact fields hold bare numbers or something else (see the
+    module docstring's "What's still open" list and its linked issue)."""
+    from streetworks.au import VicDisruptionsClient
+
+    with VicDisruptionsClient(api_key=os.environ["VIC_DISRUPTIONS_API_KEY"]) as vic:
+        features = vic.iter_planned_disruptions()
+    return (
+        f"{len(features):,} planned-disruption features - first real VIC "
+        "data seen, compare against module docstring's open questions"
     )
 
 
@@ -953,6 +992,11 @@ def main() -> int:
     )
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
+    )
+    reporter.check(
+        "DTP Planned Disruptions (VIC/Australia)",
+        ["VIC_DISRUPTIONS_API_KEY"],
+        check_vic_disruptions,
     )
     # Open Data parsing always runs - it needs no credentials
     reporter.check("Open Data (parsing)", [], check_opendata_parsing)

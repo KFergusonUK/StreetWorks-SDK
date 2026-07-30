@@ -28,6 +28,7 @@ from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
 from .from_vialietuva import from_vialietuva
+from .from_vic_disruptions import from_vic_disruptions
 from .from_wzdx import from_wzdx
 from .gazetteer import (
     Address,
@@ -91,4 +92,5 @@ __all__ = [
     "from_jersey",
     "from_tigerweb",
     "from_nsw_livetraffic",
+    "from_vic_disruptions",
 ]
