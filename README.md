@@ -85,12 +85,12 @@ client, documented in its own section, exactly as before.
 | `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
 | `streetworks.ban` | [BAN (Base Adresse Nationale)](https://adresse.data.gouv.fr/) — France's national address base, ~25M addresses, geocoding API + bulk per-département/national files (no credentials). **An address base, not a street register** — see below | read |
 | `streetworks.bag` | [BAG (Basisregistratie Adressen en Gebouwen)](https://www.kadaster.nl/zakelijk/producten/adressen-en-gebouwen/bag-geopackage) — Netherlands' national addresses/buildings register, PDOK Locatieserver + a ~7.8 GB national GeoPackage (no credentials). Street identity is real but not its own table — see below | read |
-| `streetworks.kartverket` | [Kartverket](https://www.geonorge.no/) — Norway's national address register + official (multilingual) place names, REST APIs + bulk CSV (no credentials). Not the same agency as the (credential-blocked) Vegvesen roadworks provider — see below | read |
+| `streetworks.kartverket` | [Kartverket](https://www.geonorge.no/) — Norway's national address register + official (multilingual) place names, REST APIs + bulk CSV (no credentials). Not the same agency as the Vegvesen roadworks provider — see below | read |
 | `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see below | read |
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
-| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); plus three **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Statens vegvesen (Norway), Trafikverket (Sweden, its own XML/JSON API, not DATEX), and Vejdirektoratet (Denmark, XML v3.2) | read |
-| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields, no real sample obtained) — both **[Credentials wanted](#credentials-wanted)** | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
+| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
@@ -132,8 +132,10 @@ gets you connected and typed; the linked docs tell you what to send.
 ## Status
 
 Early alpha. **Authentication and read/consume access are verified against
-the real systems for all providers except the three in [Credentials
-wanted](#credentials-wanted), below:** Street Manager (SANDBOX), Geoplace
+the real systems for all providers except the two in [Credentials
+wanted](#credentials-wanted), below** (Norway/NSW/Victoria joined the
+verified list on 2026-07-30 — see [Recently confirmed](#recently-confirmed)
+for what real data changed): Street Manager (SANDBOX), Geoplace
 DataVIA (live — including a real feature query), D-TRO (production token +
 events search), the Open Data SNS parsing/verification pipeline, SRWR
 Open Data (parsed against real published daily and monthly extracts),
@@ -172,43 +174,61 @@ your own rights before redistributing this data.
 
 ### Credentials wanted
 
-Five roadworks providers ship as **scaffolds, not verified builds**:
+Two roadworks providers ship as **scaffolds, not verified builds**:
 implemented to each service's own documented/confirmed API shape and
 covered by mocked tests, but never run against a real authenticated
 response — each is genuinely blocked on credentials this project doesn't
-have, not on unfinished code. Three are DATEX-family (Norway/Sweden/
-Denmark); NSW and Victoria (Australia) are not DATEX at all, and not even
-the same shape as each other — TfNSW's own GeoJSON hazards schema vs.
-DTP's own OpenAPI-documented disruptions schema. Each is honestly
-better-or-worse confirmed than the others in different ways (see each
-row) — none is a guess dressed up as a scaffold; Victoria is currently
-the weakest-confirmed of the five, since no real sample payload has ever
-been obtained for it anywhere. **If you have credentials for any of
-these, running the smoke test (`python scripts/smoke_test.py`) and
-reporting back — ideally with one real trimmed record — is a genuinely
-valuable contribution.** Every module also warns at import time
-(`UserWarning`) with the same pointer. Excluded from the
-verified-providers claim above until confirmed. Drafted issue text for
-all five lives in
+have, not on unfinished code. Both are DATEX-family. **If you have
+credentials for either, running the smoke test
+(`python scripts/smoke_test.py`) and reporting back — ideally with one
+real trimmed record — is a genuinely valuable contribution**, the same
+way a tester's real credentials confirmed Norway/NSW/Victoria on
+2026-07-30 (see [Recently confirmed](#recently-confirmed), below). Every
+module also warns at import time (`UserWarning`) with the same pointer.
+Excluded from the verified-providers claim above until confirmed.
+Drafted issue text lives in
 [docs/credentials-wanted-issues.md](docs/credentials-wanted-issues.md).
 
 | Provider | Confirmed | Pending | Credential | How to get it | Issue |
 |---|---|---|---|---|---|
-| Statens vegvesen (`streetworks.datex2.vegvesen`, Norway) | Endpoint + WSDL (DATEX II v3.1, live); a structurally-identical real snapshotPull response from Iceland's IRCA proves the parser-reuse hypothesis on *a* real document, just not Norway's own | Whether Norway's own feed matches Iceland's shape; which DATEX version your credentials actually serve — data.norge.no's catalogue still says v2.0 alongside the v3.1 endpoint this scaffold targets, see module docstring | Username + password (HTTP Basic), or a Bearer token — unconfirmed which Statens vegvesen actually issues | Free; [request access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/) to the "Road traffic information" publication | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | Trafikverket (`streetworks.datex2.trafikverket`, Sweden) | Endpoint, `Situation` object name, and schema version `1.5` — all live, via a deliberate invalid-key probe returning a real structured 401 | The authenticated data pull itself; the real `MessageType`/`MessageCode` value that means roadworks specifically (unconfirmed in every source checked — `iter_roadworks()` honestly returns nothing until this is confirmed, see module docstring) | API key (not Basic Auth) | Free, **self-service**: [data.trafikverket.se](https://data.trafikverket.se/) or via [Trafiklab](https://www.trafiklab.se/api/other-apis/trafikverket/) — form, accept licence, verify email, key issued immediately | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | Vejdirektoratet (`streetworks.datex2.vejdirektoratet`, Denmark) | Genuine DATEX II 3.2, with `ConstructionWorks`/`MaintenanceWorks` and their full `constructionWorkType`/`roadMaintenanceType` enumerations stated explicitly in Vejdirektoratet's own protocol spec; the open metadata catalogue re-confirmed live (196 datasets, the roadworks one CC BY 4.0-licensed, no auth) | The authenticated REST pull itself; whether the `trafikmeldinger` response really nests as a list of independent DATEX XML strings, per the protocol doc | HTTP Basic Auth username/password **and** the actual pull URL — both issued per-dataset at registration, no public data URL exists | Free; register via [Dataudveksleren](https://du-portal-ui.dataudveksler.app.vd.dk/) | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
-| TfNSW Live Traffic (`streetworks.au.nsw`, New South Wales/Australia) | Endpoint live (a real structured 401 from the API gateway); the test fixture is one **real** feature transcribed from TfNSW's own Developer Guide (not synthetic) | The authenticated data pull itself; the exact `Authorization` header format (the 42-page Developer Guide never states it — this scaffold defaults to `apikey <key>`, overridable via `header_format=`); whether the real endpoint filenames are `roadwork-open.json`-style (this scaffold's choice, per the guide's own table) or `roadwork/open`-style; whether the main layer includes council roads | API key (`Authorization` header) | Free, self-service via the [TfNSW API Gateway](https://opendata.transport.nsw.gov.au/) | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
-| DTP Planned Disruptions (`streetworks.au.vic`, Victoria/Australia) | Endpoint + full schema live, from the real machine-readable OpenAPI spec (fetched and parsed directly); a live probe **resolved all four docs-vs-docs conflicts** in the source investigation (auth header, rate limit, pagination model, cache time) — including catching the OpenAPI spec's own advertised auth scheme as wrong for the real gateway | The authenticated data pull itself — genuinely the weakest-confirmed of the five: no real sample exists anywhere (the spec's own Swagger UI can't preview one; the linked technical PDF returns `PublicAccessNotPermitted`), so real coordinate order, timestamp format, and whether `string`-typed "numeric" impact fields hold bare numbers are all unconfirmed | Subscription key (`KeyID` header — confirmed live, **not** the OpenAPI spec's own `Ocp-Apim-Subscription-Key`/`subscription-key`) | Free via the [Transport Victoria Open Data Hub](https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road) | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 
-**Before concluding the Norway adapter is broken, check the DATEX version
-your credentials actually serve.** This scaffold targets v3.1
-(`datex-server-get-v3-1.atlas.vegvesen.no`, confirmed live since
-2023-02-01), but data.norge.no's own service catalogue still describes
-Statens vegvesen's DATEX offering as v2.0, with older services running in
-parallel pending phase-out. If what you're issued turns out to serve v2 (or
-the v2 endpoint is what's actually reachable), that's a version/endpoint
-mismatch to fix, not evidence the parser-reuse hypothesis is wrong — see the
-module docstring's "What's still open" list.
+### Recently confirmed
+
+Three former Credentials-wanted providers were confirmed on **2026-07-30**
+by a tester running `scripts/smoke_test.py` with their own real
+credentials — exactly the contribution the section above asks for. Kept
+here as a record of what real data changed, not just moved silently into
+the verified-providers claim above:
+
+- **Statens vegvesen (Norway)** — 844 real roadworks situations, genuine
+  DATEX II v3, real Norwegian-language comments. Real coordinates are
+  genuinely mixed CRS within the same feed (~76% UTM zone 33N/`EPSG:25833`,
+  ~24% WGS84) — now resolved per-record via `streetworks.common.from_vegvesen`
+  and the new shared `streetworks.common._crs.resolve_coordinate_crs`
+  helper (declared/inferred/corrected by real value range, axis order by
+  magnitude, no silent reprojection); see the module docstring for the
+  full finding and fix. No IP allow-listing was needed, resolving an open
+  question.
+- **TfNSW Live Traffic (NSW)** — found and fixed one real bug: the
+  correct endpoint paths are `roadwork/open`-style, not
+  `roadwork-open.json`-style (Phase 1 had followed the Developer Guide's
+  own documented file-naming table over the source investigation's
+  paraphrase — the guide turned out to be wrong about its own gateway).
+  363 real roadwork + 19 real major-event features confirmed, including
+  a real ~1.7% local-road minority and a real ~1.4% ferry-hazard impurity
+  in the roadwork-only endpoint.
+- **DTP Planned Disruptions (Victoria)** — found and fixed one real
+  design mistake in this SDK's own converter: a GeometryCollection's
+  LineString can span an entire route (~150km in one real example, not
+  a worksite's own extent), so only the Point is used now. Confirmed
+  coordinate order, timestamp format (naive ISO-8601, no UTC offset —
+  genuinely unusual), and that `KeyID` really is the correct auth header,
+  not the OpenAPI spec's own advertised scheme.
+
+See each module's own docstring for the full detail behind every claim
+above.
 
 Not yet exercised against live systems — implemented to the published specs
 and covered by mocked tests: the **write/publish** paths (Street Manager work
@@ -262,11 +282,11 @@ never in code.
 | DataVIA | A [Geoplace DataVIA](https://datavia.geoplace.co.uk/) account (username/password) or issued OAuth2 client credentials | `DATAVIA_USER` + `DATAVIA_PASSWORD`, or `DATAVIA_CLIENT_ID` + `DATAVIA_CLIENT_SECRET` |
 | D-TRO | Register an application via the [D-TRO service](https://d-tro.dft.gov.uk/) for an app id and OAuth2 client credentials (integration first, then production) | `DTRO_CLIENT_ID`, `DTRO_CLIENT_SECRET`, `DTRO_APP_ID` |
 | National Highways | Free account at the [developer portal](https://developer.data.nationalhighways.co.uk/) — create a "Subscription" for an API key | `NH_SUBSCRIPTION_KEY` |
-| Statens vegvesen (Norway, DATEX II) — **[Credentials wanted](#credentials-wanted)** | Free; [request access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/) to the "Road traffic information" publication — registration issues a username/password, not an API key | `VEGVESEN_USERNAME` + `VEGVESEN_PASSWORD`, or `VEGVESEN_TOKEN` (Bearer) |
+| Statens vegvesen (Norway, DATEX II) — confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) | Free; [request access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/) to the "Road traffic information" publication — registration issues a username/password, not an API key | `VEGVESEN_USERNAME` + `VEGVESEN_PASSWORD`, or `VEGVESEN_TOKEN` (Bearer) |
 | Trafikverket (Sweden, DATEX-adjacent) — **[Credentials wanted](#credentials-wanted)** | Free, self-service: [data.trafikverket.se](https://data.trafikverket.se/) or [Trafiklab](https://www.trafiklab.se/api/other-apis/trafikverket/) | `TRAFIKVERKET_API_KEY` |
 | Vejdirektoratet (Denmark, DATEX II 3.2) — **[Credentials wanted](#credentials-wanted)** | Free; register via [Dataudveksleren](https://du-portal-ui.dataudveksler.app.vd.dk/) — issues Basic Auth + a per-dataset pull URL | `VEJDIREKTORATET_URL`, `VEJDIREKTORATET_USERNAME` + `VEJDIREKTORATET_PASSWORD` |
-| TfNSW Live Traffic (New South Wales, Australia) — **[Credentials wanted](#credentials-wanted)** | Free, self-service via the [TfNSW API Gateway](https://opendata.transport.nsw.gov.au/) | `NSW_LIVETRAFFIC_API_KEY` |
-| DTP Planned Disruptions (Victoria, Australia) — **[Credentials wanted](#credentials-wanted)** | Free via the [Transport Victoria Open Data Hub](https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road) | `VIC_DISRUPTIONS_API_KEY` |
+| TfNSW Live Traffic (New South Wales, Australia) — confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) | Free, self-service via the [TfNSW API Gateway](https://opendata.transport.nsw.gov.au/) | `NSW_LIVETRAFFIC_API_KEY` |
+| DTP Planned Disruptions (Victoria, Australia) — confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) | Free via the [Transport Victoria Open Data Hub](https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road) | `VIC_DISRUPTIONS_API_KEY` |
 
 Credentials are **per-environment** — sandbox/integration credentials do not
 work against production, and vice versa.
@@ -614,9 +634,10 @@ instrument).
 Norwegian national address register + official place names — no
 credentials, no registration. **Worth saying plainly: this is the
 opposite access story to Norway's *roadworks* provider** —
-`streetworks.datex2.vegvesen` is this SDK's one unverified provider,
-blocked on Statens vegvesen credentials, while Kartverket (a different
-agency) is wide open. `streetworks.kartverket.KartverketClient` wraps the
+`streetworks.datex2.vegvesen` needed real Statens vegvesen credentials to
+confirm (done 2026-07-30, see [Recently confirmed](#recently-confirmed)),
+while Kartverket (a different agency) is wide open and always was.
+`streetworks.kartverket.KartverketClient` wraps the
 address REST API, the SSR (Sentralt stedsnavnregister) place-names API,
 and bulk CSV downloads (discovered via an Atom feed, genuinely not
 GML-only — CSV, FGDB, GML, PostGIS and SOSI are all published side by
@@ -664,9 +685,9 @@ they matched).
 Norwegian national road network (Statens vegvesen) — no credentials.
 **Worth saying plainly: this is the opposite access story to Norway's
 own roadworks provider a second time** — `streetworks.datex2.vegvesen`
-(same agency, DATEX) is this SDK's one credential-blocked, unverified
-provider, while NVDB is wide open, confirmed both live and in the API's
-own documentation. The `streets` counterpart to `kartverket`'s
+(same agency, DATEX) needed real credentials to confirm (done
+2026-07-30), while NVDB is wide open, confirmed both live and in the
+API's own documentation. The `streets` counterpart to `kartverket`'s
 `addresses`:
 
 ```python
@@ -2612,14 +2633,14 @@ independently confirmed, as Lambert-93).
       corrected too: NLOD 1.0, confirmed from the NVDB API's own
       documentation, not Elveg's CC BY 4.0 — same network, different
       publisher, different licence
-- [ ] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
-      — **Phase 1 scaffold built, pending live verification.** Blocked on
-      credentials for the actual authenticated pull; not usable against
-      real Norwegian data yet — see the module docstring for what's confirmed
-      vs. still open. Free access request, credentials/env vars and the
-      known v2-vs-v3.1 version caveat are documented in the credentials
-      section above and `.env.example` — check the version actually served
-      before concluding the adapter itself is broken
+- [x] Norway (Statens vegvesen) DATEX adapter (`streetworks.datex2.vegvesen`)
+      — **Phase 2 confirmed (2026-07-30)**, see [Recently confirmed](#recently-confirmed).
+      Real coordinates are genuinely mixed CRS within the same feed
+      (~76% UTM zone 33N/`EPSG:25833`, ~24% WGS84) — resolved per-record via
+      the new `streetworks.common.from_vegvesen` converter and shared
+      `streetworks.common._crs.resolve_coordinate_crs` helper, not a single
+      `crs=` guess. Genuine DATEX II v3 (`modelBaseVersion="3"`), settling
+      the v2-vs-v3.1 version caveat in v3's favour
 - [ ] Sweden (Trafikverket) adapter (`streetworks.datex2.trafikverket`) —
       **Phase 1 scaffold built, pending live verification**, grouped with
       Norway under [Credentials wanted](#credentials-wanted). Confirmed

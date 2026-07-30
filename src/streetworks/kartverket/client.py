@@ -15,9 +15,9 @@ different product this module does not wrap. Out of scope, not built -
 same treatment as NVDB Vegnett (see the models module docstring).
 
 **The irony worth recording**: Norway's *roadworks* adapter
-(:mod:`streetworks.datex2.vegvesen`) is this SDK's one unverified
-provider, blocked on Statens vegvesen credentials. Norway's *gazetteer*
-(this module, a different agency - Kartverket) is wide open and needs no
+(:mod:`streetworks.datex2.vegvesen`) needed real Statens vegvesen
+credentials to confirm (done 2026-07-30). Norway's *gazetteer* (this
+module, a different agency - Kartverket) is wide open and needs no
 registration at all. Same country, opposite access story, two different
 public bodies.
 

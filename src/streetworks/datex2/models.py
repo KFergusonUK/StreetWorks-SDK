@@ -51,8 +51,33 @@ class Validity:
 class Location:
     """A record's location, normalised across referencing methods.
 
-    ``points`` holds (latitude, longitude) pairs: one for a point location,
-    the vertex list for a linear one (from ``gmlLineString``/``posList``).
+    ``points`` holds raw coordinate pairs, exactly as the source states
+    them: for a ``pointCoordinates``-sourced point, ``(latitude,
+    longitude)`` (the element's own explicit tag order); for a
+    ``gmlLineString``/``posList``-sourced line, whatever raw document
+    order the source emits (**not** guaranteed to be ``(lat, lon)`` -
+    confirmed live: Norway's real UTM ``posList`` states
+    easting-then-northing, the opposite axis order from the
+    ``pointCoordinates`` path). Resolving this into a consistent,
+    correctly-ordered value is :func:`streetworks.common.from_datex2`'s
+    job (via :func:`streetworks.common._crs.resolve_coordinate_crs` where
+    a caller opts in) - kept raw here since this type doesn't know what
+    CRS convention any of it is in either. ``pointCoordinates`` and
+    ``posList`` are mutually exclusive within one ``points`` tuple - a
+    location carrying both (a real, if rare, Norwegian shape: 8/842 real
+    roadworks records in one pull had both a precise line and a
+    redundant convenience point) resolves to the ``posList`` line, since
+    concatenating the two would silently mix two different coordinate
+    systems into one list.
+
+    ``srs_name`` is the raw declared CRS (e.g. ``"25833"``, ``"urn:ogc:
+    def:crs:EPSG::25833"``) from whichever element sourced ``points``, if
+    any - ``None`` when absent (DATEX ``pointCoordinates`` never states
+    one; it's WGS84 by spec) or when ``points`` came from more than one
+    element with different declarations (not observed live, but not
+    assumed impossible). Not itself a CRS - callers that care resolve it
+    via :func:`~streetworks.common._crs.resolve_coordinate_crs`.
+
     Alert-C and other non-coordinate references are preserved in
     ``alert_c_location`` / ``road_number`` where present rather than decoded.
     """
@@ -62,6 +87,7 @@ class Location:
     carriageway: str | None = None
     road_number: str | None = None
     alert_c_location: str | None = None
+    srs_name: str | None = None
 
     @property
     def point(self) -> tuple[float, float] | None:

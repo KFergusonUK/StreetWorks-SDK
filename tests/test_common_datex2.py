@@ -22,7 +22,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from streetworks.common import DateConfidence, SourceGrade, from_datex2
+from streetworks.common import DateConfidence, SourceGrade, from_datex2, from_vegvesen
 from streetworks.datex2 import iter_situations, iter_situations_full
 from streetworks.datex2.bisonfute import dir_regions as bisonfute_dir_regions
 from streetworks.datex2.dgt import provinces as dgt_provinces
@@ -228,13 +228,14 @@ def test_from_datex2_digitraffic_date_confidence_is_always_unknown():
     assert site.proposed_start is not None  # the date itself is still known, just unverified
 
 
-def test_from_datex2_vegvesen_norway_pending_live_verification():
-    """Norway (Vegvesen) - pending live verification, see
-    streetworks.datex2.vegvesen. The fixture is real DATEX snapshotPull data
-    from Iceland (IRCA), used only to confirm from_datex2 works unchanged
-    against whatever the shared XML parser produces from a real
-    SOAP-wrapped snapshotPull document - not a claim about Norway's own
-    feed shape."""
+def test_from_datex2_vegvesen_iceland_fixture_parses_unchanged():
+    """The Phase 1 parser-reuse check: from_datex2 works unchanged against
+    the shared parser's output for a real SOAP-wrapped snapshotPull
+    document - the fixture is real Iceland (IRCA) data, not Norway's own,
+    used only to prove the plumbing (see streetworks.datex2.vegvesen). No
+    srsName anywhere in this fixture, so crs stays the plain default -
+    the real mixed-CRS resolution is exercised against real Norwegian data
+    below instead."""
     fixture = Path(__file__).parent / "fixtures" / "vegvesen_getsituation_sample.xml"
     situation = next(iter_situations(fixture))
 
@@ -254,6 +255,40 @@ def test_from_datex2_vegvesen_norway_pending_live_verification():
         "Unnið við endurbyggingu vegarins, hann er grófur, ósléttur og "
         "seinfarinn, akið mjög varlega. Þetta er vinnusvæði!!"
     )
+
+
+def test_from_vegvesen_resolves_real_mixed_crs_per_record():
+    """The real fix this whole effort was built for: two real Norwegian
+    MaintenanceWorks records from the same feed (see
+    tests/fixtures/vegvesen_real_pull.xml, tests/test_vegvesen.py), one
+    genuine WGS84 (Oslo, pointCoordinates, no srsName), one genuine UTM
+    zone 33N (Kristiansund bridge, gmlLineString/posList,
+    srsName="25833") - from_vegvesen must resolve each to its own honest,
+    correct CRS and axis order, not one crs= guess for both."""
+    fixture = Path(__file__).parent / "fixtures" / "vegvesen_real_pull.xml"
+    situations = list(iter_situations(fixture))
+
+    oslo = from_vegvesen(situations[0])
+    assert oslo.coordinate.crs == "EPSG:4326"
+    assert oslo.coordinate.value == (59.946438, 10.712339)  # unchanged - already (lat, lon)
+
+    kristiansund = from_vegvesen(situations[1])
+    assert kristiansund.coordinate.crs == "EPSG:25833"
+    # Raw posList order is (easting, northing) - resolved to (northing,
+    # easting) by magnitude, matching the WGS84 (lat, lon)-style convention
+    # every other point in this SDK uses (northing/latitude first).
+    assert kristiansund.coordinate.value == (7018386.84, 133396.39)
+    assert kristiansund.coordinate.points is not None
+    assert kristiansund.coordinate.points[0] == (7018386.84, 133396.39)
+    # Every vertex in the line was resolved the same way, not just the first.
+    assert all(a > 1_000_000 for a, _ in kristiansund.coordinate.points)
+
+    # territory/administrative_area still behave like from_datex2's own
+    # documented defaults - from_vegvesen doesn't change that part. Real
+    # source/sourceName is "NPRA" here (unlike the Iceland fixture above,
+    # which has no <source> element at all).
+    assert oslo.territory == "Norway"
+    assert oslo.administrative_area == "NPRA"
 
 
 def test_from_datex2_bisonfute_france():

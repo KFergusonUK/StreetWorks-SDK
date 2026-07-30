@@ -13,9 +13,10 @@ request without it returns HTTP 400, ``"X-Client må være satt..."`` -
 string, not an API key - `X-Kontaktperson` (a contact email) is
 documented as recommended, not enforced. **This is the striking asymmetry
 the design brief asked about**: Statens vegvesen's own DATEX roadworks
-feed (:mod:`streetworks.datex2.vegvesen`) is this SDK's one
-credential-blocked, unverified provider; this, from the same agency, is
-wide open.
+feed (:mod:`streetworks.datex2.vegvesen`) needed real credentials to
+verify (confirmed 2026-07-30 - see that module's own docstring, including
+a real mixed-CRS geometry finding, since resolved); this, from the same
+agency, is wide open and needed none.
 
 **Licence: NLOD 1.0 (Norsk lisens for offentlige data), not Elveg's CC BY
 4.0** - confirmed from the NVDB API's own documentation

@@ -41,43 +41,61 @@ _ADMINISTRATIVE_AREA = "Department of Transport and Planning"
 
 
 def _coordinate(feature: JSON) -> Coordinate | None:
+    """**Prefers the Point, not the LineString** - the reverse of this
+    module's first-version design. That design assumed a GeometryCollection's
+    Point/LineString pair were coarse-vs-precise views of the *same* site,
+    the DATEX/WZDx shape. A real feature disproved this for Victoria: its
+    LineString spanned ~150km end to end (matching ``srns: "M31,B400"`` -
+    the whole Hume Freeway corridor), while its Point sat at the actual
+    disruption site within that span - a route-context line, not a
+    precise extent. Promoting it to ``Coordinate.points`` would silently
+    replace one worksite with an entire highway, so it isn't used at all
+    here - ``Coordinate.points`` stays ``None`` even when a LineString is
+    present. See module docstring."""
     geometry = feature.get("geometry") or {}
     # The confirmed real shape (format=GeoJson, the default): a
-    # GeometryCollection wrapping one or more Point/LineString entries -
-    # see module docstring. Handled defensively for a bare geometry too,
-    # in case a caller passed format=GeoJsonPoint/GeoJsonLine - unconfirmed
-    # shape, never verified.
+    # GeometryCollection wrapping a Point and/or LineString entry. Handled
+    # defensively for a bare geometry too, in case a caller passed
+    # format=GeoJsonPoint/GeoJsonLine - unconfirmed shape, never verified.
     candidates = geometry.get("geometries")
     if candidates is None:
         candidates = [geometry] if geometry.get("type") else []
 
-    line: JSON | None = None
     point: JSON | None = None
+    line: JSON | None = None
     for candidate in candidates:
         kind = (candidate.get("type") or "").upper()
-        if kind in ("LINESTRING", "MULTILINESTRING") and line is None:
-            line = candidate
-        elif kind == "POINT" and point is None:
+        if kind == "POINT" and point is None:
             point = candidate
+        elif kind in ("LINESTRING", "MULTILINESTRING") and line is None:
+            line = candidate
 
-    chosen = line or point
+    chosen = point or line
     if chosen is None:
         return None
     coords = chosen.get("coordinates")
     if not coords:
         return None
-    if line is not None:
-        points = tuple((float(vertex[0]), float(vertex[1])) for vertex in coords)
-        return Coordinate(value=points[0], crs=_CRS, points=points)
-    value = (float(coords[0]), float(coords[1]))
-    return Coordinate(value=value, crs=_CRS)
+    if point is not None:
+        value = (float(coords[0]), float(coords[1]))
+        return Coordinate(value=value, crs=_CRS)
+    # No Point at all (unconfirmed to happen live) - fall back to the
+    # line's first vertex rather than return nothing.
+    points = tuple((float(vertex[0]), float(vertex[1])) for vertex in coords)
+    return Coordinate(value=points[0], crs=_CRS, points=points)
 
 
 def _location_description(properties: JSON) -> str | None:
+    # endIntersection* confirmed live (2026-07-30): populated on 461/500
+    # real features in one pull (92%) - genuinely common, not a rare
+    # extra, so included alongside the fields the source investigation
+    # brief's own schema summary named.
     parts = [
         properties.get("closedRoadName"),
         properties.get("startIntersectionRoadName"),
         properties.get("startIntersectionLocality"),
+        properties.get("endIntersectionRoadName"),
+        properties.get("endIntersectionLocality"),
         properties.get("localGovernmentArea"),
     ]
     text = ", ".join(p for p in parts if p)

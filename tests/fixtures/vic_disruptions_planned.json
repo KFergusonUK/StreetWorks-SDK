@@ -1,5 +1,5 @@
 {
-  "_note": "SYNTHETIC fixture, not real data - see streetworks.au.vic module docstring. No real Planned Disruptions payload has ever been obtained: the OpenAPI spec's own Swagger UI cannot preview it (response too large, per the spec's own description), and the linked technical documentation PDF returns PublicAccessNotPermitted (confirmed live this session, not just 'not yet fetched'). This fixture is structurally correct per the real OpenAPI 3.0.1 schema (component PlannedDisruptionGeoJSON, fetched and parsed directly), with invented field values, including a guessed ISO-8601 timestamp format for duration.start/end that is explicitly NOT confirmed against any real response.",
+  "_note": "REAL data, trimmed from a real, credentialed pull against planned/v1/?format=GeoJson (2026-07-30, by a tester running scripts/smoke_test.py with their own Transport Victoria Open Data Hub subscription key). The LineString geometry is trimmed to its first 8 and last 8 real vertices (originally 200+) to keep this fixture a reasonable size - every kept vertex is a real, unedited coordinate, none invented. Confirms: coordinate order is genuinely [lon, lat] (presumed, not previously confirmed), duration.start/end is naive ISO-8601 with NO UTC offset (was genuinely unconfirmed before this), recurrences[].duration is an ISO-8601 duration string (e.g. PT6H, was assumed free text before this), impact fields are real free text/ranges (e.g. delay=\"0 to 5 min\"), not bare numbers, and id is a real structured string (Planned:OneView:IMP-...), not a bare UUID/number. Licensed CC BY 4.0 (confirmed via the Transport Victoria Open Data Hub catalogue) - reused here with attribution to the Department of Transport and Planning. Not synthetic, unlike this module's first-version fixture.",
   "type": "FeatureCollection",
   "features": [
     {
@@ -8,62 +8,152 @@
         "type": "GeometryCollection",
         "geometries": [
           {
-            "type": "LineString",
+            "type": "Point",
             "coordinates": [
-              [145.0123, -37.8123],
-              [145.0156, -37.8098]
+              145.653193,
+              -36.700197
             ]
           },
           {
-            "type": "Point",
-            "coordinates": [145.0123, -37.8123]
+            "type": "LineString",
+            "coordinates": [
+              [
+                144.973631,
+                -37.690559
+              ],
+              [
+                144.973958,
+                -37.690461
+              ],
+              [
+                144.977103,
+                -37.690132
+              ],
+              [
+                144.977618,
+                -37.690079
+              ],
+              [
+                144.978192,
+                -37.690008
+              ],
+              [
+                144.978734,
+                -37.689922
+              ],
+              [
+                144.9793,
+                -37.689834
+              ],
+              [
+                144.980403,
+                -37.689663
+              ],
+              [
+                146.906037,
+                -36.103658
+              ],
+              [
+                146.906539,
+                -36.102927
+              ],
+              [
+                146.906823,
+                -36.102579
+              ],
+              [
+                146.907285,
+                -36.102063
+              ],
+              [
+                146.907702,
+                -36.101657
+              ],
+              [
+                146.908407,
+                -36.101054
+              ],
+              [
+                146.908825,
+                -36.100738
+              ],
+              [
+                146.908978,
+                -36.100631
+              ]
+            ]
           }
         ]
       },
       "properties": {
-        "id": "VIC-PD-100234",
+        "id": "Planned:OneView:IMP-0119747",
         "source": {
-          "sourceName": "DTP Permits Team",
-          "sourceId": "PERMIT-559812"
+          "sourceName": "OneView",
+          "sourceId": "IMP-0119747"
         },
-        "status": "Active",
-        "closedRoadName": "Springvale Road",
-        "startIntersectionRoadName": "Burwood Highway",
-        "startIntersectionLocality": "Nunawading",
-        "localGovernmentArea": "Whitehorse",
-        "rmaClass": "Arterial",
+        "status": "Pending",
+        "closedRoadName": "METROPOLITAN RING OUT-HUME RAMP ",
+        "startIntersectionRoadName": "METROPOLITAN RING ROAD ",
+        "startIntersectionLocality": "THOMASTOWN",
+        "endIntersectionRoadName": "HARRIS ROAD ",
+        "endIntersectionLocality": "GATEWAY ISLAND",
+        "localGovernmentArea": "MITCHELL",
+        "srns": "M31,B400",
+        "sesRegion": "MELBOURNE METROPOLITAN (CENTRAL)",
+        "rmaClass": "FW",
         "eventType": "Roadworks",
-        "eventSubtype": "Resurfacing",
-        "eventDueTo": "Maintenance",
+        "eventSubtype": "Planned roadworks",
+        "eventDueTo": "Road Maintenance Works",
         "impact": {
-          "direction": "Both directions",
-          "impactType": "Lane closure",
-          "delay": "15",
+          "direction": "Both Directions",
+          "impactType": "Lanes blocked",
+          "delay": "0 to 5 min",
           "numberLanesImpacted": "1",
           "speedLimitOnSite": "40"
         },
         "duration": {
-          "start": "2026-08-03T07:00:00+10:00",
-          "end": "2026-08-28T17:00:00+10:00",
+          "start": "2024-02-01T00:00:00",
+          "end": "2025-06-30T00:00:00",
           "recurrences": [
             {
               "startDay": "Monday",
-              "daysDuration": 5,
-              "startTime": "07:00",
-              "duration": "10h",
+              "daysDuration": 1,
+              "startTime": "09:30",
+              "duration": "PT6H",
               "allDay": false
             },
             {
-              "startDay": "Saturday",
+              "startDay": "Tuesday",
               "daysDuration": 1,
-              "startTime": "00:00",
-              "duration": "24h",
-              "allDay": true
+              "startTime": "09:30",
+              "duration": "PT6H",
+              "allDay": false
+            },
+            {
+              "startDay": "Wednesday",
+              "daysDuration": 1,
+              "startTime": "09:30",
+              "duration": "PT6H",
+              "allDay": false
+            },
+            {
+              "startDay": "Thursday",
+              "daysDuration": 1,
+              "startTime": "09:30",
+              "duration": "PT6H",
+              "allDay": false
+            },
+            {
+              "startDay": "Friday",
+              "daysDuration": 1,
+              "startTime": "09:30",
+              "duration": "PT6H",
+              "allDay": false
             }
           ]
         },
-        "description": "Road resurfacing works, single lane closure with traffic control.",
-        "lastUpdated": "2026-07-29T09:15:00+10:00"
+        "description": "Road Maintenance Works activities occurring between 01/02/2024 and 30/06/2025 during the following times: Weekdays 9:30 AM to 3:30 PM. Impact to traffic will be lanes closed both directions. Altered speed limit during operation will be 40 and the traffic delay is expected to be 0 to 5 min.",
+        "lastUpdated": "2024-04-10T06:04:37"
       }
     }
   ],

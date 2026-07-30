@@ -162,6 +162,7 @@ def _parse_location(record: Element, *, provider: str | None = None) -> Location
     # one point. Tried second, after the v2/v3 spelling, so no other
     # adapter's real fixture is affected (confirmed: none use the
     # lower-case form).
+    srs_name: str | None = None
     tpeg_linear = _first_descendant(location, "tpegLinearLocation")
     if tpeg_linear is None:
         tpeg_linear = _first_descendant(location, "tpeglinearLocation")
@@ -178,21 +179,36 @@ def _parse_location(record: Element, *, provider: str | None = None) -> Location
             if lat and lon:
                 points.append((float(lat), float(lon)))
     else:
-        # Point locations: pointByCoordinates/pointCoordinates/latitude+longitude
-        coordinates = _first_descendant(location, "pointCoordinates")
-        if coordinates is not None:
-            lat = _deep_text(coordinates, "latitude")
-            lon = _deep_text(coordinates, "longitude")
-            if lat and lon:
-                points.append((float(lat), float(lon)))
-
-    # Linear locations: gmlLineString/posList ("lon lat lon lat ..." or
-    # "lat lon ..." depending on srsName; DATEX II uses lat/lon pairs).
-    pos_list = _first_descendant(location, "posList")
-    if pos_list is not None and pos_list.text:
-        values = pos_list.text.split()
-        pairs = [(float(values[i]), float(values[i + 1])) for i in range(0, len(values) - 1, 2)]
-        points.extend(pairs)
+        # gmlLineString/posList (a real line - e.g. Norway's own
+        # LinearLocation shape) and pointCoordinates (a real point) are
+        # deliberately **mutually exclusive** here, tried in that order.
+        # Confirmed live: a real, if rare, Norwegian shape has *both*
+        # present in the same location group (8/842 real roadworks
+        # records in one pull) - a precise gmlLineString plus a redundant
+        # convenience pointCoordinates restating the line's own display
+        # coordinate. Concatenating both into one `points` tuple (the
+        # previous behaviour) silently mixed two different coordinate
+        # systems into what looked like one line's vertices - a real bug,
+        # not a documented trade-off. The line wins when both exist: it's
+        # the more precise, more informative geometry.
+        gml_line = _first_descendant(location, "gmlLineString")
+        pos_list = _find(gml_line, "posList") if gml_line is not None else None
+        if pos_list is not None and pos_list.text:
+            srs_name = gml_line.get("srsName") if gml_line is not None else None
+            values = pos_list.text.split()
+            points.extend(
+                (float(values[i]), float(values[i + 1])) for i in range(0, len(values) - 1, 2)
+            )
+        else:
+            # Point locations: pointByCoordinates/pointCoordinates/latitude+longitude.
+            # No srsName - DATEX pointCoordinates is WGS84 by spec, never
+            # carries one (confirmed live: 0/503 real elements in one pull).
+            coordinates = _first_descendant(location, "pointCoordinates")
+            if coordinates is not None:
+                lat = _deep_text(coordinates, "latitude")
+                lon = _deep_text(coordinates, "longitude")
+                if lat and lon:
+                    points.append((float(lat), float(lon)))
 
     # carriageway nests (carriageway/carriageway); take the deepest one
     # that actually has text.
@@ -245,6 +261,7 @@ def _parse_location(record: Element, *, provider: str | None = None) -> Location
         carriageway=carriageway,
         road_number=road_number,
         alert_c_location=alert_c,
+        srs_name=srs_name,
     )
 
 

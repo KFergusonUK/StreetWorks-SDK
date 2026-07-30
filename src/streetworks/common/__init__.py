@@ -27,6 +27,7 @@ from .from_streetmanager import from_streetmanager
 from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
+from .from_vegvesen import from_vegvesen
 from .from_vialietuva import from_vialietuva
 from .from_vic_disruptions import from_vic_disruptions
 from .from_wzdx import from_wzdx
@@ -93,4 +94,5 @@ __all__ = [
     "from_tigerweb",
     "from_nsw_livetraffic",
     "from_vic_disruptions",
+    "from_vegvesen",
 ]

@@ -182,6 +182,56 @@ def test_parses_linear_geometry_poslist():
     measure = situations[0].measures[0]
     assert measure.location.kind == "LinearLocation"
     assert measure.location.points == ((50.85, 5.81), (50.86, 5.82), (50.87, 5.83))
+    # No srsName attribute in this fixture - absence must not be confused
+    # with an empty string.
+    assert measure.location.srs_name is None
+
+
+# Real Norwegian shape (vegvesen): a LinearLocation whose gmlLineString/
+# posList carries a declared srsName (UTM zone 33N) alongside a redundant
+# pointCoordinates convenience point restating the same location in WGS84 -
+# real, if rare (8/842 real roadworks records in one live pull had both).
+# gmlLineString/posList and pointCoordinates are mutually exclusive in
+# Location.points (see models.Location docstring) - concatenating them
+# would silently mix two coordinate systems into one points tuple.
+MIXED_CRS_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<mc:messageContainer xmlns:sit="http://datex2.eu/schema/3/situation"
+    xmlns:mc="http://datex2.eu/schema/3/messageContainer"
+    xmlns:loc="http://datex2.eu/schema/3/locationReferencing"
+    xmlns:com="http://datex2.eu/schema/3/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" modelBaseVersion="3">
+  <mc:payload xsi:type="sit:SituationPublication" lang="no">
+    <sit:situation id="NO_1">
+      <sit:situationRecord xsi:type="sit:MaintenanceWorks" id="NO_1_1" version="1">
+        <sit:locationReference xsi:type="loc:LinearLocation">
+          <loc:gmlLineString srsName="25833">
+            <loc:posList>7018386.84 133396.39 7018400.00 133400.00</loc:posList>
+          </loc:gmlLineString>
+          <loc:pointByCoordinates>
+            <loc:pointCoordinates>
+              <loc:latitude>63.111</loc:latitude>
+              <loc:longitude>7.727</loc:longitude>
+            </loc:pointCoordinates>
+          </loc:pointByCoordinates>
+        </sit:locationReference>
+      </sit:situationRecord>
+    </sit:situation>
+  </mc:payload>
+</mc:messageContainer>
+"""
+
+
+def _mixed_crs_stream() -> io.BytesIO:
+    return io.BytesIO(MIXED_CRS_FEED.encode())
+
+
+def test_gml_line_string_and_point_coordinates_are_mutually_exclusive():
+    situations = list(iter_situations(_mixed_crs_stream()))
+    location = situations[0].roadworks[0].location
+    # The line wins - the redundant pointCoordinates point is dropped, not
+    # concatenated onto it.
+    assert location.points == ((7018386.84, 133396.39), (7018400.00, 133400.00))
+    assert location.srs_name == "25833"
 
 
 # Real shape confirmed on France/Bison Fute (DATEX II v2): a TPEG linear

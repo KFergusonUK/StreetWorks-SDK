@@ -294,22 +294,19 @@ def get_entry(key: str):
 
 
 def test_credentials_wanted_is_the_only_unverified_tier():
-    """Norway, Sweden, Denmark, NSW, and Victoria (Australia) are the
-    "Credentials wanted" tier - built to a confirmed API/schema shape but
-    never run against real authenticated data. Every other provider is
-    verified against real data."""
+    """Sweden and Denmark are the "Credentials wanted" tier - built to a
+    confirmed API/schema shape but never run against real authenticated
+    data. Norway/NSW/Victoria graduated out on 2026-07-30 after a real
+    credentialed pull confirmed each (see their own module docstrings -
+    Norway's real geometry is mixed-CRS and still has an open caveat,
+    but the connectivity/schema itself is confirmed). Every other
+    provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
-    assert {e.key for e in unverified} == {
-        "vegvesen",
-        "trafikverket",
-        "vejdirektoratet",
-        "nsw",
-        "vic",
-    }
+    assert {e.key for e in unverified} == {"trafikverket", "vejdirektoratet"}
 
 
 def test_unverified_provider_flagged_in_rendered_output():
-    rendered = str(get_entry("vegvesen"))
+    rendered = str(get_entry("trafikverket"))
     assert "Not yet verified" in rendered
 
 

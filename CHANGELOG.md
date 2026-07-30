@@ -2,7 +2,187 @@
 
 ## [Unreleased]
 
-### Added — Credentials wanted (scaffolds, unverified)
+### Fixed / Confirmed — real credential verification (2026-07-30)
+
+A tester ran `scripts/smoke_test.py` against three Credentials-wanted
+scaffolds with their own real credentials - Statens vegvesen (Norway),
+TfNSW Live Traffic (NSW), and DTP Planned Disruptions (Victoria) - the
+exact contribution the Credentials-wanted section has been asking for.
+All three graduated to `verified=True` and out of the README's
+Credentials-wanted section (now just Sweden/Denmark). Real data found
+and fixed two real bugs, found one real unresolved limitation worth
+shipping with a loud caveat rather than silently guessing around, and
+confirmed most of what Phase 1 had only guessed at for all three.
+
+- **NSW: a real bug, found and fixed** - the correct endpoint paths are
+  `roadwork/open`-style, not `roadwork-open.json`-style. Phase 1 had
+  read TfNSW's own Developer Guide Table 1 literally and trusted it over
+  the source investigation brief's paraphrase, reasoning the primary
+  document was more authoritative - a live pull proved this backwards:
+  `roadwork-open.json` returns a genuine `404` even with a valid key,
+  while `roadwork/open` returns real data (363 roadwork + 19 majorevent
+  features in one pull). A humbling, generalisable lesson: reading a
+  primary source directly doesn't always beat a live probe. Also
+  confirmed: `apikey <key>` auth was correct on the first real attempt;
+  the main `roadwork` layer genuinely includes a small real local-road
+  minority (6/363, ~1.7%) and a small real ferry-hazard impurity (5/363,
+  `mainCategory: "FERRY OUT OF SERVICE"`) - both documented, neither
+  filtered out. `network_scope` promoted from `UNKNOWN` to `STRATEGIC`
+  (with the local-road minority noted). Real `id` values are sometimes
+  JSON floats (e.g. `281450.0`) - normalised to `int` before building
+  the composite `layerName:id` reference so it never renders a spurious
+  `.0`. Added `tests/fixtures/nsw_livetraffic_live_pull.json` (three real
+  trimmed features: state-road, local-road, and ferry) alongside the
+  existing Developer-Guide-sourced fixture.
+  **A second real bug, found the same day via a follow-up check prompted
+  by the Victoria lesson below**: the raw `layerName` a real response
+  states is not status-independent - `roadwork/open` returns
+  `layerName: "Roadwork-Open"`, `roadwork/closed` returns
+  `"Roadwork-Closed"`, and `roadwork/all` returns bare `"Roadwork"`
+  (`majorevent/*` mirrors this exactly) - three different strings for
+  the *same* layer, varying only by which status endpoint was queried.
+  Building `Works.reference` from the raw value meant the same real
+  hazard got a *different* reference depending on whether a caller used
+  `status="open"` or `status="all"` - silently breaking any
+  deduplication/tracking keyed on it. Fixed: `parse_features` now also
+  computes a normalised `layer` field (`_normalize_layer` strips a real,
+  confirmed `-Open`/`-Closed` suffix, case-insensitively), and
+  `from_nsw_livetraffic` builds the composite reference from `layer`,
+  not `layerName` - the raw value stays available verbatim alongside it.
+  Also extended the `encodedPolylines` documentation with the same
+  caution Victoria's real LineString-spans-an-entire-route finding
+  raises: whether a real NSW polyline (never seen populated yet) is
+  worksite linework or a broader affected-corridor/diversion extent is
+  unconfirmed, and should not be assumed precise without checking.
+
+- **Victoria: a real design mistake in this SDK's own converter, found
+  and fixed** - `from_vic_disruptions._coordinate` preferred a
+  GeometryCollection's LineString over its Point, assuming they were
+  coarse-vs-precise views of the same site (the DATEX/WZDx shape). A
+  real feature disproved this: its LineString spanned ~150km end to end
+  (matching `srns: "M31,B400"` - the entire Hume Freeway corridor), while
+  its Point sat at the actual disruption site within that span. Promoting
+  the LineString to `Coordinate.points` would have silently replaced one
+  worksite with an entire highway - now the Point is always preferred and
+  the LineString is never used. Also confirmed: coordinate order is
+  genuinely `[lon, lat]`; `duration.start`/`end` are naive ISO-8601 with
+  **no UTC offset at all** (genuinely ambiguous local-vs-UTC, carried
+  through as a timezone-naive `datetime` rather than guessed);
+  `recurrences[].duration` is a real ISO-8601 duration string (e.g.
+  `"PT6H"`); `impact.delay` holds real free-text ranges (e.g. `"0 to 5
+  min"`), confirming Phase 1's choice never to coerce impact fields to a
+  number; `endIntersectionRoadName`/`endIntersectionLocality` (not in the
+  OpenAPI spec's own schema, only found in a real response) are genuinely
+  common (92% populated) and now included in `location_description`; and
+  the `KeyID` auth header finding from Phase 1's gateway probe was
+  independently reconfirmed by a real key succeeding via that exact
+  header. Replaced the synthetic fixture with one real trimmed feature
+  (its LineString trimmed to 16 of 2,115 real vertices to keep the file a
+  reasonable size).
+
+- **Norway: real coordinates are mixed CRS within the same feed** -
+  roughly 76% UTM zone 33N (`EPSG:25833`, confirmed via a real
+  `srsName="25833"` attribute) and roughly 24% genuine WGS84, checked
+  directly across 844 real roadworks records - not the Belgium/Lithuania
+  shape (one CRS override for the whole feed via `from_datex2(crs=...)`),
+  since no single `crs=` value is correct here. Initially shipped as a
+  loudly-documented open limitation; **now resolved** - see "Norway
+  mixed-CRS resolution + shared CRS helper" below. Everything else
+  confirmed cleanly: genuine DATEX II **v3** (`modelBaseVersion="3"`,
+  resolving the v3.1-vs-v2.0 catalogue discrepancy), a **bare**
+  `<messageContainer>` response (not the SOAP envelope Iceland's
+  precedent fixture arrives in), real Norwegian-language comments, real
+  road numbers, HTTP Basic auth, no IP allow-listing needed, and a
+  ~24 MB real response size (confirming the streaming-parser trade-off is
+  genuinely warranted, not overcautious). A previously-undocumented real
+  location wrapper, `LocationGroupByList`, and real NVDB
+  `externalReferencing` values (confirmed present, still not resolved
+  into geometry) were also found. Added `tests/fixtures/vegvesen_real_pull.xml`
+  (two real trimmed Norwegian situations - one WGS84, one UTM33N - kept
+  as a pair specifically to regression-test the mixed-CRS finding)
+  alongside the existing Iceland precedent fixture.
+
+- All three modules' import-time `UserWarning` removed (no longer
+  Credentials-wanted). `docs/credentials-wanted-issues.md` trimmed to
+  the two providers still genuinely blocked (Sweden, Denmark) - the
+  three resolved drafts removed rather than left stale.
+
+### Fixed — Norway mixed-CRS resolution + shared CRS helper (2026-07-30)
+
+Norway's mixed-CRS finding (above) is now fixed, not just documented. A
+diagnostic pass (a raw regex scan of a real pull, independent of this
+SDK's own parser) pinned the mechanism precisely before writing any
+resolution code: of 2,636 real coordinate elements, all 2,133
+`gmlLineString`-sourced ones carry `srsName="25833"` with zero exceptions,
+and all 503 `pointCoordinates`-sourced ones sit in genuine WGS84 range
+with zero `srsName` ever present - two clean, non-overlapping encodings,
+not a mislabelling problem to arbitrate around.
+
+- **New shared helper**: `streetworks.common._crs.resolve_coordinate_crs`
+  resolves one point's real CRS and axis order from a declared `srsName`
+  (if any) plus the point's own coordinate value range against a list of
+  candidate `CrsProfile`s - declared-and-consistent stays declared;
+  declared-but-contradicted is corrected by value range and logged loudly
+  (never silently trusted); undeclared-but-fits-the-default is inferred;
+  undeclared-and-fits-a-different-candidate is corrected (the Belgium
+  shape); nothing fitting is `unresolved`, falling back to the caller's
+  stated default rather than a silent guess. Axis order is decided by
+  magnitude (`CrsProfile.order`), never by declared/positional order -
+  confirmed necessary live, since Norway's own `posList` states raw
+  easting-then-northing, the opposite convention from `pointCoordinates`'
+  explicit lat-then-lon. Resolution status
+  (declared/inferred/corrected/unresolved) is deliberately **not** added
+  to the `Coordinate` model - real, useful information, but kept as
+  telemetry only (logs, `scope_note`, `smoke_test.py` output), never
+  persisted on canon; a downstream consumer can't later query which
+  points were corrected, an accepted trade-off, not an oversight. Ships
+  with `WGS84`, `WGS84_NORWAY`, `UTM33N_NORWAY`, and `LAMBERT72_BELGIUM`
+  candidate profiles (Belgium's is a profile only - migrating Belgium's
+  own converter onto this helper is noted as a follow-up, not done here)
+  and 11 unit tests in `tests/test_crs.py`.
+- **A second, independent bug found and fixed while building this**:
+  8/842 real Norwegian roadworks records in one pull had *both* a precise
+  `gmlLineString` line and a redundant `pointCoordinates` convenience
+  point in the same location group - the parser concatenated them into
+  one `Location.points` tuple, silently mixing UTM and WGS84 values as if
+  they were adjacent line vertices. `streetworks.datex2.parser` now
+  treats the two as mutually exclusive, the line winning when both are
+  present. `Location` gained a `srs_name` field capturing the raw
+  declared CRS from whichever element sourced `points` (`None` when
+  absent, which is the DATEX-spec-correct case for `pointCoordinates`).
+- **`from_datex2` gained an opt-in `crs_candidates` parameter**
+  (default `None` - zero behaviour change for every adapter that doesn't
+  pass it, including Belgium's own `crs="EPSG:31370"` call site). When
+  supplied, each record's own `srs_name` plus its first point's values
+  are resolved via the shared helper and the winning CRS/axis order is
+  applied to every vertex in that record.
+- **New `streetworks.common.from_vegvesen`** wraps `from_datex2` with
+  Norway's real candidate list (`WGS84_NORWAY`, `UTM33N_NORWAY`)
+  pre-supplied, `territory="Norway"` always passed - so a caller doesn't
+  have to remember `crs_candidates=` themselves. `VegvesenClient`'s own
+  usage example now uses it in place of calling `from_datex2` directly.
+- `streetworks.datex2.vegvesen`'s module docstring and the `vegvesen`
+  registry `scope_note` both updated from "serious, unresolved finding"
+  to "resolved" - the registry note points to `scripts/smoke_test.py` for
+  this run's real declared/inferred/corrected split rather than
+  hardcoding a percentage that could go stale.
+- `scripts/smoke_test.py`'s `check_vegvesen` now classifies every real
+  roadworks record's resolution status for the run and reports the actual
+  split (e.g. "1 declared, 1 inferred, 0 corrected, 0 unresolved") -
+  derived from live classification each run, not a canned string - and
+  fails loudly if any record needed `corrected` beyond the expected
+  near-zero threshold (0, since the diagnostic pass above found zero
+  contradictions ever), since that would mean the feed's `srsName`
+  declaration stopped being trustworthy.
+- No reprojection anywhere, still - resolving CRS/axis order is not the
+  same as converting between them; that stays an explicit consumer step,
+  per this SDK's standing CRS policy.
+
+### Added — Credentials wanted (scaffolds, as originally shipped)
+
+*(Norway/NSW/Victoria were confirmed against real data on 2026-07-30 -
+see "Fixed / Confirmed" above for what changed. Entries below describe
+each scaffold as originally built, kept for history rather than rewritten.)*
 
 - **Australia: New South Wales (TfNSW Live Traffic Hazards) roadworks and
   major-events scaffold** (`streetworks.au.nsw`,

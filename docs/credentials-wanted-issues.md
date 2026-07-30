@@ -1,58 +1,16 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for five `help wanted` issues, one per provider in the
+Draft text for two `help wanted` issues, one per provider in the
 [README's Credentials wanted section](../README.md#credentials-wanted).
+Norway/NSW/Victoria were confirmed on 2026-07-30 by a real credentialed
+pull and no longer need this - their drafted issue text has been removed.
 None of these have been opened yet — this file is the text to paste in when
-opening them (or to point someone at ahead of time). All five modules'
+opening them (or to point someone at ahead of time). Both modules'
 import-time `UserWarning` and the README table link to
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
-Suggested labels for all five: `help wanted`, `credentials-wanted`.
-
----
-
-## Issue: Statens vegvesen (Norway) — confirm the DATEX adapter against real data
-
-**Title:** `Credentials wanted: verify streetworks.datex2.vegvesen against real Norwegian data`
-
-**Body:**
-
-`streetworks.datex2.vegvesen` is a Phase 1 scaffold: built against Statens
-vegvesen's own WSDL/service catalogue (confirmed live, credential-free) and
-validated on a structurally-identical real DATEX II v3 snapshotPull
-response from Iceland's IRCA service — but no real Norwegian
-`GetSituation` response has ever been seen.
-
-**Confirmed:**
-- Endpoint (`datex-server-get-v3-1.atlas.vegvesen.no`), the `GetSituation`
-  operation, both SOAP and REST-style paths.
-- Auth challenge shape (`401` with both Basic and Bearer `WWW-Authenticate`
-  headers).
-- The parser-reuse hypothesis works on a real, structurally-identical
-  document (Iceland's).
-
-**Pending:**
-1. Which DATEX version your credentials actually serve — the WSDL says
-   v3.1, but data.norge.no's own catalogue still lists Statens vegvesen's
-   DATEX offering as v2.0 with legacy services in parallel.
-2. Whether the shared parser handles a real Norwegian response unchanged.
-3. What location-referencing method real Norwegian records use
-   (`pointCoordinates`, NVDB linear refs, Alert-C, or a mix).
-
-**Credential needed:** username + password (HTTP Basic) or a Bearer token —
-unconfirmed which Statens vegvesen actually issues. Free; [request
-access](https://www.vegvesen.no/en/fag/technology/open-data/a-selection-of-open-data/what-is-datex/get-access/)
-to the "Road traffic information" publication.
-
-**What to report back:** run `python scripts/smoke_test.py` with
-`VEGVESEN_USERNAME`/`VEGVESEN_PASSWORD` (or `VEGVESEN_TOKEN`) set, paste the
-result line, and — ideally — one real trimmed `situation`/`situationRecord`
-(with anything sensitive stripped) so the fixture can be swapped for real
-data and the three open questions above closed out.
-
-See `src/streetworks/datex2/vegvesen.py`'s module docstring for the full
-detail behind each claim above.
+Suggested labels for both: `help wanted`, `credentials-wanted`.
 
 ---
 
@@ -144,121 +102,3 @@ can be swapped for real data and the open questions above closed out.
 
 See `src/streetworks/datex2/vejdirektoratet.py`'s module docstring for the
 full detail behind each claim above.
-
----
-
-## Issue: TfNSW Live Traffic (New South Wales) — confirm the adapter against real data
-
-**Title:** `Credentials wanted: verify streetworks.au.nsw against real NSW data`
-
-**Body:**
-
-`streetworks.au.nsw` is a Phase 1 scaffold: built directly from Transport
-for NSW's own "Live Traffic NSW Developer Guide" (read in full, not
-summarised) plus a live, credential-free probe of the real endpoint — but
-no authenticated response has ever been seen. This SDK's first Australian
-provider — there is no national statutory works register in Australia
-(unlike the UK's Street Manager), so this is a state traffic-disruption
-feed, roadworks alongside incidents/fires/floods/other hazards.
-
-**Confirmed:**
-- The endpoint, live: a bare request returns a genuine structured `401`
-  from a real API gateway (`Layer7-API-Gateway`), not a generic error page.
-- The full GeoJSON schema, directly from the guide's own tables (not
-  inferred): `FeatureCollection` → `Feature` → `properties`, the semantic
-  0/-1 "no data" sentinel on `expectedDelay`, and the guide's own
-  "disregard empty/null properties" rule.
-- The test fixture is **one real feature**, transcribed verbatim from the
-  guide itself (id `82681`, "Nelligen Bridge replacement project") — not
-  synthetic.
-
-**Pending:**
-1. **The exact `Authorization` header format** — the 42-page guide never
-   states it anywhere (searched the full text directly). This scaffold
-   defaults to `apikey <key>` (the convention used by other TfNSW Open
-   Data APIs, not confirmed for this one) — override via
-   `NswLiveTrafficClient(header_format="Bearer {key}")` if that's wrong.
-2. Whether the real endpoint filenames are `roadwork-open.json`-style
-   (this scaffold's choice, per the guide's own Table 1) or
-   `roadwork/open`-style (an earlier investigation's paraphrase) — a 404
-   vs real data will settle it immediately.
-3. Whether the main `roadwork` layer includes council/local-road works,
-   or whether those are siloed in the separate `regional-lga-*` layers
-   this scaffold doesn't fetch.
-4. Real coverage of `encodedPolylines` (the one real sample has none) —
-   the polyline decoder is written to the standard published algorithm
-   but has never decoded a real TfNSW value.
-
-**Credential needed:** an API key from free self-service registration on
-the [TfNSW API Gateway](https://opendata.transport.nsw.gov.au/).
-
-**What to report back:** run `python scripts/smoke_test.py` with
-`NSW_LIVETRAFFIC_API_KEY` set, paste the result line, confirm which
-`Authorization` header format actually worked, and — ideally — one real
-trimmed feature (anything sensitive stripped) so the open questions above
-can be closed out.
-
-See `src/streetworks/au/nsw.py`'s module docstring for the full detail
-behind each claim above.
-
----
-
-## Issue: DTP Planned Disruptions (Victoria) — confirm the adapter against real data
-
-**Title:** `Credentials wanted: verify streetworks.au.vic against real Victorian data`
-
-**Body:**
-
-`streetworks.au.vic` is a Phase 1 scaffold, and the **weakest-confirmed**
-of this SDK's five Credentials-wanted providers: built from the real,
-machine-readable OpenAPI 3.0.1 spec (fetched and parsed directly, not
-summarised) plus a live gateway probe — but no real Planned Disruptions
-payload has ever been obtained anywhere. The spec's own Swagger UI can't
-preview a response (its own description says so, due to size), and the
-linked "Planned Disruptions – Road Documentation v1.2.pdf" is not
-publicly fetchable (confirmed this session: the blob storage account
-returns `PublicAccessNotPermitted`, not a broken link).
-
-**Confirmed, live, directly from the real OpenAPI spec and a gateway
-probe:**
-- Endpoint, path, required `format` query parameter, full response
-  schema (field-by-field, from the spec's own `components.schemas`).
-- Rate limit (10/min) and cache time (10 min) — from the operation's own
-  description text.
-- Token-based pagination (`NextPageToken` header,
-  `nextPageDetails.nextPageToken`/`hasMoreRecords` in the response).
-- **A decisive, live-verified correction to the source investigation's
-  own bet**: the OpenAPI spec's own advertised auth scheme
-  (`Ocp-Apim-Subscription-Key` header / `subscription-key` query) is
-  **wrong** for the real gateway. A live probe shows the gateway's own
-  `WWW-Authenticate` error message changes depending on which header is
-  sent — sending `KeyID: <anything>` gets "API Key not authorized:
-  `<anything>`" (found and rejected the value); every other header name
-  tried gets "Failed to find key field: KeyId" (never found a key at
-  all). This module sends `KeyID`.
-
-**Pending — genuinely more open than any other Credentials-wanted
-provider:**
-1. Real coordinate order/values (presumed GeoJSON `[lon, lat]`,
-   unconfirmed).
-2. The real `duration.start`/`end` timestamp format — tried as ISO-8601
-   here, falls back to `None` rather than guess epoch-millis.
-3. Whether the `string`-typed "numeric" impact fields (`delay`/
-   `numberLanesImpacted`/`speedLimitOnSite`) hold bare numbers, units
-   attached, or free text.
-4. Whether `localGovernmentArea` is a controlled code or free text.
-5. The `GeoJsonPoint`/`GeoJsonLine` response shapes (only the default
-   `GeoJson` GeometryCollection shape is parsed here).
-
-**Credential needed:** a free subscription key from the [Transport
-Victoria Open Data
-Hub](https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road).
-
-**What to report back:** run `python scripts/smoke_test.py` with
-`VIC_DISRUPTIONS_API_KEY` set, paste the result line, and — ideally —
-one real trimmed feature (anything sensitive stripped) so the synthetic
-fixture can finally be replaced with real data and the open questions
-above closed out.
-
-See `src/streetworks/au/vic.py`'s module docstring for the full detail
-behind each claim above.

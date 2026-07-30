@@ -1,8 +1,7 @@
 """Victoria: DTP Planned Disruptions - Road, the second member of the
 :mod:`streetworks.au` cluster. Permit-Team-validated, richer-structured
-than New South Wales' feed, but with **no real sample seen anywhere** -
-weaker fixture provenance than NSW despite the schema itself being
-better-typed.
+than New South Wales' feed, and - since Phase 2 - confirmed against real
+data too.
 
 **Architecture: a separate module from NSW, deliberately not one adapter
 per country.** Victoria publishes *two independent APIs* on different
@@ -18,21 +17,17 @@ belongs in its own module (``streetworks.au.vic_unplanned`` or similar),
 not merged into this one.
 
 .. attention::
-   **PENDING LIVE VERIFICATION - more speculative than NSW.** Built from
-   the real, machine-readable OpenAPI 3.0.1 spec (fetched and parsed
-   directly, not just summarised - see "What's confirmed" below) plus a
-   live, credential-free probe of the real endpoint. Unlike NSW, **no
-   real payload has ever been seen anywhere** - the spec's own Swagger UI
-   cannot render a preview (its own description says so, due to response
-   size), and the linked technical documentation PDF is not publicly
-   fetchable (confirmed this session - the blob storage account returns
-   ``PublicAccessNotPermitted``, not a broken link). So while the schema
-   itself is better-typed than NSW's, the actual data shapes - coordinate
-   order, timestamp format, and whether the ``string``-typed "numeric"
-   impact fields (``delay``/``numberLanesImpacted``/``speedLimitOnSite``)
-   contain bare numbers or free text - are all genuinely unconfirmed. The
-   test fixture is therefore **synthetic** (structurally correct per the
-   real schema, invented values), unlike NSW's real transcribed sample.
+   **PHASE 2 CONFIRMED (2026-07-30)** - verified against a real
+   authenticated pull, by a tester running ``scripts/smoke_test.py`` with
+   their own Transport Victoria Open Data Hub subscription key. 500 real
+   planned-disruption features returned on the first page alone. This
+   confirmed every genuinely-open item from Phase 1 (coordinate order,
+   timestamp format, impact-field shapes) and found **one real design
+   mistake in this module's own converter** (see "A real design mistake
+   this confirmed" below) - not a mistake in the source investigation or
+   the OpenAPI spec this time, but in this module's own reasoning about
+   what a GeometryCollection's Point/LineString pair represents. No
+   longer grouped under the README's Credentials wanted section.
 
 **What's confirmed, live, from the real OpenAPI spec (fetched and parsed
 directly this session, 2026-07)**:
@@ -64,6 +59,24 @@ directly this session, 2026-07)**:
   (a real ``integer``)/``startTime``/``duration``/``allDay`` (a real
   ``boolean``)), ``description``, ``lastUpdated``. No example values are
   embedded anywhere in the spec.
+
+**A real design mistake this confirmed, in this module's own reasoning,
+not the source material**: Phase 1's ``_coordinate`` preferred a
+GeometryCollection's LineString over its Point, on the assumption they
+were coarse-vs-precise views of the *same* site - the DATEX/WZDx shape.
+A real feature disproved this: its LineString spanned **~150km end to
+end** (``[144.97, -37.69]`` to ``[146.91, -36.10]``), matching
+``srns: "M31,B400"`` - the entire Hume Freeway corridor the disruption
+sits on, not a precise extent of it. Its Point, by contrast, sat exactly
+at the real disruption site (``closedRoadName: "METROPOLITAN RING
+OUT-HUME RAMP"``) within that span. Promoting the LineString to
+``Coordinate.points`` would have silently replaced one worksite's
+location with an entire highway - :func:`streetworks.common.from_vic_disruptions._coordinate`
+now prefers the Point and never reads the LineString at all (see that
+module's own docstring). A genuinely useful lesson for reading any future
+DTP-style GeometryCollection: don't assume every multi-geometry pairing
+means the same thing NSW's/DATEX's coarse-point-plus-precise-line one
+does - check what the line actually spans before trusting it.
 
 **A decisive, live-verified correction to the source investigation
 brief's own bet - the auth header.** The brief flagged a genuine
@@ -117,29 +130,31 @@ upstream source behind "DTP," the same do-not-deduplicate signal this
 SDK already treats DGT/Consell de Mallorca's republication and multiple
 providers covering one physical location the same way.
 
-**Dates are genuinely unresolved** - ``duration.start``/``end`` are typed
-``string`` with no confirmed format anywhere (ISO-8601 vs epoch millis
-vs something else). NSW's feed happened to use epoch millis; nothing
-here confirms Victoria does too, and guessing wrong would silently
-produce wrong dates rather than an honest gap. This module tries
-:func:`streetworks._dt.parse_iso8601` (the SDK's existing tolerant
-ISO-8601 parser) and falls back to ``None``, never epoch-millis division,
-if that fails - the safer wrong-format failure mode, since a genuine
-ISO string run through an epoch-millis parser would produce a wildly
-implausible date that's easy to notice, while the reverse could produce
-a plausible-looking wrong date.
+**Dates - confirmed live, and genuinely unusual**: ``duration.start``/
+``end`` are real ISO-8601 timestamps with **no UTC offset at all**
+(e.g. ``"2024-02-01T00:00:00"``, confirmed from a real feature) - not
+epoch millis (NSW's own format, which this module's design deliberately
+didn't assume Victoria shared), and not offset-aware either.
+:func:`streetworks._dt.parse_iso8601` parses these successfully (Python's
+``fromisoformat`` accepts naive timestamps), but the resulting
+``datetime`` is **timezone-naive** - genuinely ambiguous whether it means
+Victorian local time (AEST/AEDT) or UTC, since the source states neither.
+Carried through as a naive ``datetime`` rather than guessing a tzinfo to
+attach, the same "don't invent what the source doesn't state" discipline
+this SDK applies everywhere. ``recurrences[].duration`` is confirmed to
+be a real **ISO-8601 duration string** (e.g. ``"PT6H"`` = 6 hours, not
+free text as Phase 1 guessed) - not specially parsed/formatted here yet,
+still carried through as-is inside ``operating_window``'s joined text.
 
-**Geometry**: only the default ``format=GeoJson`` (``GeometryCollection``)
-shape is parsed here, since it's the only one the schema documents in
-detail; ``GeoJsonPoint``/``GeoJsonLine`` are accepted by
+**Geometry - confirmed live**: real coordinates are GeoJSON-native
+``[lon, lat]`` (e.g. ``[145.653193, -36.700197]``, genuine Victorian
+territory), exactly as Phase 1 presumed. The default ``format=GeoJson``
+``GeometryCollection`` shape is confirmed correct and is the only one
+this module parses; ``GeoJsonPoint``/``GeoJsonLine`` remain accepted by
 :meth:`VicDisruptionsClient.get_planned_disruptions`'s ``format``
-parameter but their exact response shape (a bare geometry object,
-presumably, but unconfirmed) isn't specially handled - the parser reads
-defensively and won't crash on either shape, but only the collection
-form has been checked against the real spec. Coordinate order is
-presumed GeoJSON-native ``[lon, lat]`` (Victoria sits ~145°E/37°S, so a
-real value should read like ``[145.x, -37.x]``) - **not independently
-confirmed**, since no real coordinate has been seen.
+parameter but their response shape is still unconfirmed - see "A real
+design mistake this confirmed" above for what the GeometryCollection's
+Point/LineString pairing actually turned out to mean.
 
 **Licence**: **Creative Commons Attribution 4.0**, confirmed live via
 the dataset resource page - stated directly, satisfying the Open
@@ -150,32 +165,48 @@ document footer, since the one PDF that might carry one isn't fetchable
 a genuine requirement wherever this data is displayed or redistributed.
 
 **Credentials**: a subscription key from the `Transport Victoria Open
-Data Hub <https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road>`_
-(per the source investigation brief - not independently re-registered
-this session). Env var: ``VIC_DISRUPTIONS_API_KEY`` (see
-``.env.example``, ``scripts/smoke_test.py``).
+Data Hub <https://opendata.transport.vic.gov.au/dataset/planned-disruptions-road>`_.
+Env var: ``VIC_DISRUPTIONS_API_KEY`` (see ``.env.example``,
+``scripts/smoke_test.py``).
 
-**What's still open until Phase 2** (a real credentialed pull):
+**Real field values confirmed, not previously known**: ``impact.delay``
+holds real free-text ranges (e.g. ``"0 to 5 min"``), not bare numbers -
+confirms Phase 1's choice to never coerce impact fields to a number was
+correct, not overcautious. ``rmaClass`` is a real, small coded set
+(observed live: ``FW``, ``AO``, ``MU``, ``AH``, ``PR``, and a real
+``None`` for ~7% of features) - genuinely a code, not free text, though
+this module doesn't have authoritative definitions for what each code
+means beyond ``FW`` (Freeway, inferred from context, not stated). ``id``
+is a real structured string (e.g. ``"Planned:OneView:IMP-0119747"``), not
+a bare UUID - the ``"Planned:"`` prefix suggests the source already
+guards against collision with a future "unplanned" adapter's own ids,
+though this is inferred from the string shape, not confirmed from
+documentation. ``endIntersectionRoadName``/``endIntersectionLocality``
+(not named in the OpenAPI spec's own schema, only discovered in a real
+response) are genuinely common (92% populated in one real pull) and are
+now included in ``WorksSite.location_description`` alongside the fields
+Phase 1 already used - see
+:mod:`streetworks.common.from_vic_disruptions`.
 
-1. Real coordinate order/values (presumed ``[lon, lat]``, unconfirmed).
-2. The real ``duration.start``/``end`` timestamp format.
-3. Whether the ``string``-typed impact fields (``delay``/
-   ``numberLanesImpacted``/``speedLimitOnSite``) hold bare numbers, units
-   attached ("15 min"), or free text - carried through as plain strings
-   here, never coerced to a number that might silently misparse a shape
-   never seen.
-4. Whether ``localGovernmentArea`` is a controlled code/enum (as the
-   source investigation brief assumed) or free text (as the schema alone
-   states - just ``"string"``, no enum given).
-5. The ``GeoJsonPoint``/``GeoJsonLine`` response shapes.
-6. Whether real ``id`` values could ever collide with a future
-   "unplanned" adapter's own ids, the way NSW's do across layers -
-   unknown, since unplanned isn't built here to compare against.
+**What's still open** (not blocking - this module is Phase 2 confirmed,
+but these details remain genuinely unverified):
+
+1. The real relationship between a GeometryCollection's Point and
+   LineString beyond "don't trust the line" (see above) - is the line
+   always the containing route, or does that vary by ``eventType``?
+   Only one real feature has been inspected closely enough to say.
+2. Full ``rmaClass`` code definitions (``AO``/``MU``/``AH``/``PR`` beyond
+   ``FW``) - observed live, not documented anywhere found.
+3. The ``GeoJsonPoint``/``GeoJsonLine`` response shapes (this module
+   always requests the default ``GeoJson`` collection shape).
+4. Whether ``eventType`` ever has real values beyond "Roadworks"/"Special
+   event" (2/500 real features in one pull) - a small real minority
+   worth knowing about, not filtered out here, the same treatment NSW's
+   real ferry-hazard minority gets.
 """
 
 from __future__ import annotations
 
-import warnings
 from typing import Any, Literal
 
 import httpx
@@ -183,20 +214,6 @@ import httpx
 from .._transport import RetryConfig, SyncTransport
 
 __all__ = ["BASE_URL", "VicDisruptionsClient", "parse_features"]
-
-warnings.warn(
-    "streetworks.au.vic is a Credentials-wanted scaffold: built to DTP's "
-    "documented API shape (see module docstring), not yet verified against "
-    "a real authenticated response - and unlike NSW, no real sample has "
-    "ever been seen for this one, so the schema types are more speculative "
-    "too. Have a Transport Victoria Open Data Hub key? Running the smoke "
-    "test and reporting back one real trimmed record would confirm this "
-    "adapter - see the 'help wanted' issues at "
-    "https://github.com/KFergusonUK/StreetWorks-SDK/issues for exactly "
-    "what's needed.",
-    UserWarning,
-    stacklevel=2,
-)
 
 JSON = dict[str, Any]
 Format = Literal["GeoJson", "GeoJsonPoint", "GeoJsonLine"]
@@ -213,19 +230,17 @@ _MAX_PAGES = 1000
 
 def parse_features(payload: JSON) -> list[JSON]:
     """Parse a real ``FeatureCollection`` response into a list of feature
-    dicts, unchanged from the source shape - see module docstring for why
-    nothing is coerced/cleaned here the way NSW's ``_clean_properties``
-    is: no real response has been seen to confirm what cleaning, if any,
-    is warranted."""
+    dicts, unchanged from the source shape - unlike NSW's
+    ``_clean_properties``, real Victorian features checked so far don't
+    show the same empty-string/null-placeholder pollution, so nothing is
+    coerced/cleaned here."""
     features = payload.get("features") or []
     return [f for f in features if isinstance(f, dict)]
 
 
 class VicDisruptionsClient:
     """Fetch Victorian planned road disruptions from DTP's Planned
-    Disruptions - Road API. **Pending live verification - see module
-    docstring**, more speculative than NSW's adapter (no real sample seen
-    anywhere for this one).
+    Disruptions - Road API. **Phase 2 confirmed - see module docstring.**
 
     Requires a Transport Victoria Open Data Hub subscription key (see
     module docstring).

@@ -36,7 +36,7 @@ skipped if its variables are absent.
     # National Highways (DATEX II closures) - a single live environment
     export NH_SUBSCRIPTION_KEY="..."
 
-    # Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
+    # Statens vegvesen (Norway, DATEX II) - PHASE 2 CONFIRMED, see
     # streetworks.datex2.vegvesen. Provide either Basic or Bearer, not both.
     export VEGVESEN_USERNAME="..."
     export VEGVESEN_PASSWORD="..."
@@ -437,14 +437,34 @@ def check_bulgaria() -> str:
     return f"{len(situations):,} roadworks situations ({works:,} works records)"
 
 
+#: Real diagnostic pass (2026-07-30, see streetworks.datex2.vegvesen module
+#: docstring) found zero contradictions across 2,636 real coordinate
+#: elements - srsName is a clean, trustworthy declaration for this feed,
+#: never a mislabelling. A "corrected" result means resolve_coordinate_crs
+#: had to override a declared srsName using value-range arbitration - real,
+#: useful information if it ever fires, but never expected to; a run that
+#: sees more than this many is worth investigating, not silently trusting.
+_VEGVESEN_CORRECTED_THRESHOLD = 0
+
+
 def check_vegvesen() -> str:
-    """Statens vegvesen (Norway, DATEX II) - PENDING LIVE VERIFICATION, see
-    streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
-    VEGVESEN_USERNAME/VEGVESEN_PASSWORD, or Bearer via VEGVESEN_TOKEN) and
-    an IP allow-listed by Statens vegvesen - it's expected to fail/skip
-    everywhere else, which is why this check is gated behind those env
-    vars rather than run unconditionally like the credential-free DATEX
-    adapters (NDW, Digitraffic)."""
+    """Statens vegvesen (Norway, DATEX II) - PHASE 2 CONFIRMED (2026-07-30),
+    see streetworks.datex2.vegvesen. Requires credentials (HTTP Basic via
+    VEGVESEN_USERNAME/VEGVESEN_PASSWORD - confirmed correct; or Bearer via
+    VEGVESEN_TOKEN, untested). No IP allow-listing needed, confirmed live.
+
+    **Real coordinates are genuinely mixed CRS within this feed** (~76%
+    UTM zone 33N/EPSG:25833, ~24% WGS84) - resolved per-record via
+    streetworks.common.from_vegvesen /
+    streetworks.common._crs.resolve_coordinate_crs, not guessed at. This
+    check classifies every roadworks record's real resolution status
+    (declared/inferred/corrected/unresolved) and reports the actual split
+    for this run - it's derived from live classification each time, never
+    hardcoded - then fails loudly if any record needed "corrected"
+    (declared srsName contradicted by its own values) beyond the expected
+    near-zero threshold, since that would mean this feed's srsName
+    declaration stopped being trustworthy."""
+    from streetworks.common._crs import UTM33N_NORWAY, WGS84_NORWAY, resolve_coordinate_crs
     from streetworks.datex2 import VegvesenClient
 
     token = os.environ.get("VEGVESEN_TOKEN")
@@ -460,11 +480,35 @@ def check_vegvesen() -> str:
 
     with client as vegvesen:
         situations = list(vegvesen.iter_roadworks())
-    works = sum(len(s.roadworks) for s in situations)
+    records = [record for situation in situations for record in situation.roadworks]
+
+    counts = {"declared": 0, "inferred": 0, "corrected": 0, "unresolved": 0}
+    for record in records:
+        if not record.location.points:
+            continue
+        raw_a, raw_b = record.location.points[0]
+        resolution = resolve_coordinate_crs(
+            srs_name=record.location.srs_name,
+            raw_a=raw_a,
+            raw_b=raw_b,
+            encoding_default="EPSG:4326",
+            candidates=(WGS84_NORWAY, UTM33N_NORWAY),
+        )
+        counts[resolution.status] += 1
+
+    if counts["corrected"] > _VEGVESEN_CORRECTED_THRESHOLD:
+        raise RuntimeError(
+            f"{counts['corrected']} record(s) needed CRS correction (declared "
+            f"srsName contradicted by real coordinate values) - more than the "
+            f"expected {_VEGVESEN_CORRECTED_THRESHOLD}, worth investigating "
+            f"before trusting this run's geometry. Full split: {counts}"
+        )
+
     return (
         f"{method} auth, {len(situations):,} roadworks situations "
-        f"({works:,} works records) - first real Norwegian data seen, "
-        "compare against module docstring's open questions"
+        f"({len(records):,} works records) - CRS resolution: "
+        f"{counts['declared']:,} declared, {counts['inferred']:,} inferred, "
+        f"{counts['corrected']:,} corrected, {counts['unresolved']:,} unresolved"
     )
 
 
@@ -514,54 +558,37 @@ def check_vejdirektoratet() -> str:
 
 
 def check_nsw_livetraffic() -> str:
-    """TfNSW Live Traffic (New South Wales, Australia) - PENDING LIVE
-    VERIFICATION, see streetworks.au.nsw. Requires an API Gateway key
-    (NSW_LIVETRAFFIC_API_KEY, free self-service registration). This is
-    the first real authenticated pull this SDK will have made against
-    TfNSW - if you run this, please also confirm which Authorization
-    header format actually worked (the module defaults to
-    'apikey <key>', unconfirmed - see module docstring), and report back
-    whether majorevent-open.json returns real data too (no real sample
-    has ever been seen for that layer - see the module docstring's
-    "What's still open" item 5 and its linked issue)."""
+    """TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED
+    (2026-07-30), see streetworks.au.nsw. Requires an API Gateway key
+    (NSW_LIVETRAFFIC_API_KEY, free self-service registration). Auth
+    (`apikey <key>`) and endpoint paths (`roadwork/open`-style, a real
+    bug fix from a Phase 1 guess) are both confirmed correct."""
     from streetworks.au import NswLiveTrafficClient
 
     with NswLiveTrafficClient(api_key=os.environ["NSW_LIVETRAFFIC_API_KEY"]) as nsw:
         roadworks = nsw.iter_roadworks()
-        # majorevent is more speculative than roadwork (no real sample has
-        # ever been seen for it - module docstring item 5) - a failure
-        # here is itself useful information, but shouldn't fail the whole
-        # check when the better-confirmed roadwork layer just succeeded.
+        # majorevent has a smaller real sample behind it than roadwork - a
+        # failure here is itself useful information, but shouldn't fail
+        # the whole check when the better-confirmed roadwork layer just
+        # succeeded.
         try:
             major_events_count = f"{len(nsw.iter_major_events()):,}"
         except StreetworksError as exc:
             major_events_count = f"FAILED ({type(exc).__name__})"
-    return (
-        f"{len(roadworks):,} roadwork + {major_events_count} major-event "
-        "features - first real NSW data seen, compare against module "
-        "docstring's open questions"
-    )
+    return f"{len(roadworks):,} roadwork + {major_events_count} major-event features"
 
 
 def check_vic_disruptions() -> str:
-    """DTP Planned Disruptions (Victoria, Australia) - PENDING LIVE
-    VERIFICATION, see streetworks.au.vic. Requires a Transport Victoria
-    Open Data Hub subscription key (VIC_DISRUPTIONS_API_KEY, free). This
-    is the first real authenticated pull this SDK will have made against
-    this API - no real sample has ever been seen at all (not even the
-    OpenAPI spec's own Swagger UI can preview one). If you run this,
-    please report back the real coordinate order, the real
-    duration.start/end timestamp format, and whether the string-typed
-    'numeric' impact fields hold bare numbers or something else (see the
-    module docstring's "What's still open" list and its linked issue)."""
+    """DTP Planned Disruptions (Victoria, Australia) - PHASE 2 CONFIRMED
+    (2026-07-30), see streetworks.au.vic. Requires a Transport Victoria
+    Open Data Hub subscription key (VIC_DISRUPTIONS_API_KEY, free) sent
+    as a `KeyID` header (confirmed correct - not the OpenAPI spec's own
+    advertised scheme)."""
     from streetworks.au import VicDisruptionsClient
 
     with VicDisruptionsClient(api_key=os.environ["VIC_DISRUPTIONS_API_KEY"]) as vic:
         features = vic.iter_planned_disruptions()
-    return (
-        f"{len(features):,} planned-disruption features - first real VIC "
-        "data seen, compare against module docstring's open questions"
-    )
+    return f"{len(features):,} planned-disruption features"
 
 
 def check_opendata_parsing() -> str:

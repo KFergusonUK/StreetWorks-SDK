@@ -97,6 +97,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from ..datex2.models import Situation, SituationRecord
+from ._crs import CrsProfile, resolve_coordinate_crs
 from .models import Coordinate, DateConfidence, SourceGrade, Works, WorksSite
 
 __all__ = ["from_datex2"]
@@ -125,7 +126,11 @@ def _location_description(record: SituationRecord) -> str | None:
 
 
 def _coordinate(
-    location_points: tuple[tuple[float, float], ...], *, crs: str = "EPSG:4326"
+    location_points: tuple[tuple[float, float], ...],
+    *,
+    crs: str = "EPSG:4326",
+    srs_name: str | None = None,
+    crs_candidates: tuple[CrsProfile, ...] | None = None,
 ) -> Coordinate | None:
     """DATEX ``Location.points`` is already in whatever order/CRS the
     source states - no flip, no reprojection. 2+ points is real line
@@ -143,17 +148,48 @@ def _coordinate(
     ``<latitude>``/``<longitude>``, which is genuinely misleading if taken
     at face value. Per this SDK's standing CRS policy (never silently
     reproject), the caller states the real CRS explicitly rather than this
-    function assuming WGS84 for everyone."""
+    function assuming WGS84 for everyone.
+
+    ``crs_candidates`` is the opt-in escape hatch for feeds that mix more
+    than one real CRS *within the same feed* (confirmed live: Vegvesen/
+    Norway, ~76% UTM zone 33N, ~24% WGS84 - a single ``crs=`` override
+    can't express that; see :mod:`streetworks.common._crs`). ``None``
+    (the default) is zero behaviour change - every other adapter never
+    passes it. When given, this record's own ``srs_name`` plus its first
+    point's values are resolved via
+    :func:`~streetworks.common._crs.resolve_coordinate_crs` against
+    ``crs_candidates``; the winning CRS and axis order are then applied to
+    every vertex in this record (not re-resolved per vertex - a single
+    ``gmlLineString``/posList shares one CRS and axis convention for all
+    its points, confirmed live). Resolution status (declared/inferred/
+    corrected/unresolved) is deliberately not stored anywhere on
+    ``Coordinate`` - it's telemetry only (see ``_crs`` module docstring)."""
     if not location_points:
         return None
+    resolved_crs = crs
+    points = location_points
+    if crs_candidates is not None:
+        raw_a, raw_b = location_points[0]
+        resolution = resolve_coordinate_crs(
+            srs_name=srs_name,
+            raw_a=raw_a,
+            raw_b=raw_b,
+            encoding_default=crs,
+            candidates=crs_candidates,
+        )
+        resolved_crs = resolution.epsg
+        if resolution.ordered == (raw_b, raw_a):
+            points = tuple((b, a) for a, b in location_points)
     return Coordinate(
-        value=location_points[0],
-        crs=crs,
-        points=location_points if len(location_points) > 1 else None,
+        value=points[0],
+        crs=resolved_crs,
+        points=points if len(points) > 1 else None,
     )
 
 
-def _to_site(record: SituationRecord, *, crs: str) -> WorksSite:
+def _to_site(
+    record: SituationRecord, *, crs: str, crs_candidates: tuple[CrsProfile, ...] | None = None
+) -> WorksSite:
     status = record.validity.status
     confidence = _date_confidence(status)
     overall_start = record.validity.overall_start
@@ -176,7 +212,12 @@ def _to_site(record: SituationRecord, *, crs: str) -> WorksSite:
         works_type=works_type,
         status=status,
         location_description=_location_description(record),
-        coordinate=_coordinate(record.location.points, crs=crs),
+        coordinate=_coordinate(
+            record.location.points,
+            crs=crs,
+            srs_name=record.location.srs_name,
+            crs_candidates=crs_candidates,
+        ),
         proposed_start=overall_start,
         proposed_end=overall_end,
         actual_start=actual_start,
@@ -193,6 +234,7 @@ def from_datex2(
     territory: str | None = None,
     administrative_area: str | None = None,
     crs: str = "EPSG:4326",
+    crs_candidates: tuple[CrsProfile, ...] | None = None,
 ) -> Works:
     """Convert one DATEX II :class:`~streetworks.datex2.Situation` (from
     either the NDW or National Highways adapter) into a
@@ -203,13 +245,30 @@ def from_datex2(
     ``crs`` defaults to ``EPSG:4326`` (WGS84), true for every DATEX
     adapter except Belgium (Flanders) - pass ``crs="EPSG:31370"`` for that
     one; see :func:`_coordinate`'s own docstring for how that was
-    confirmed live, not assumed."""
+    confirmed live, not assumed.
+
+    ``crs_candidates`` is ``None`` by default - zero behaviour change for
+    every adapter that doesn't pass it. Vegvesen (Norway) is the one real
+    feed that needs it (genuinely mixed CRS within one feed, not just one
+    non-WGS84 override like Belgium); callers there should use
+    :func:`streetworks.common.from_vegvesen.from_vegvesen` rather than
+    passing candidates here directly. See :func:`_coordinate` and
+    :mod:`streetworks.common._crs` for the resolution rule."""
     roadworks = situation.roadworks
     first = roadworks[0] if roadworks else None
     return Works(
         reference=situation.id,
         promoter=first.source_name if first else None,
-        coordinate=_coordinate(first.location.points, crs=crs) if first is not None else None,
+        coordinate=(
+            _coordinate(
+                first.location.points,
+                crs=crs,
+                srs_name=first.location.srs_name,
+                crs_candidates=crs_candidates,
+            )
+            if first is not None
+            else None
+        ),
         territory=territory,
         administrative_area=(
             administrative_area
@@ -217,6 +276,8 @@ def from_datex2(
             else (first.source_name if first else None)
         ),
         source_grade=SourceGrade.OPERATOR,
-        sites=tuple(_to_site(record, crs=crs) for record in roadworks),
+        sites=tuple(
+            _to_site(record, crs=crs, crs_candidates=crs_candidates) for record in roadworks
+        ),
         raw=situation,
     )

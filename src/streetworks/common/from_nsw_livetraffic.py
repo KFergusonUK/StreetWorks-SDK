@@ -9,13 +9,21 @@ feed linking separate hazards into one project (unlike Jersey's
 the state road authority IS the data-owning operator, the same rule
 already applied to Autobahn GmbH/Via Lietuva/National Highways.
 
-**``Works.reference`` is the composite ``f"{layerName}:{id}"``, never the
-bare ``id``** - confirmed from the Developer Guide's own property table,
-``id`` is unique only *within* a layer, so a real roadwork ``82681`` and a
-real major-event ``82681`` are not guaranteed distinct once a caller
-fetches both :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_roadworks`
-and :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_major_events` and
-converts them together. ``layerName`` is attached to every feature by
+**``Works.reference`` is the composite ``f"{layer}:{id}"``, never the bare
+``id``** - confirmed from the Developer Guide's own property table, ``id``
+is unique only *within* a layer, so a real roadwork ``82681`` and a real
+major-event ``82681`` are not guaranteed distinct once a caller fetches
+both :meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_roadworks` and
+:meth:`~streetworks.au.nsw.NswLiveTrafficClient.iter_major_events` and
+converts them together. **Uses the normalised ``layer`` field, not the raw
+``layerName``** - confirmed live (2026-07-30) that ``layerName`` itself
+carries a real status suffix that varies by *which status endpoint was
+queried*, not by what the hazard is (``roadwork/open`` ->
+``"Roadwork-Open"``, ``roadwork/all`` -> bare ``"Roadwork"``, same real
+hazard). Using the raw value would give the same real-world hazard two
+different references depending on which ``status`` fetched it - see
+:func:`streetworks.au.nsw._normalize_layer`. Both ``layer`` and
+``layerName`` are attached to every feature by
 :func:`streetworks.au.nsw.parse_features` - never re-derived here.
 
 See :mod:`streetworks.au.nsw`'s own module docstring for the full set of
@@ -143,13 +151,21 @@ def _notices(properties: JSON) -> tuple[Notice, ...]:
 
 
 def _reference(feature: JSON) -> str | None:
-    """``f"{layerName}:{id}"`` - see module docstring for why the bare
-    ``id`` alone is not safe once more than one layer is in play."""
+    """``f"{layer}:{id}"`` - the *normalised* layer token (see module
+    docstring for why the raw ``layerName`` isn't safe - it varies by
+    status endpoint for the same real hazard). See module docstring for
+    why the bare ``id`` alone is not safe either, once more than one
+    layer is in play. Real ``id`` values are sometimes JSON floats
+    (confirmed live, e.g. ``281450.0`` - 43/363 in one real pull) despite
+    always being whole numbers - normalised to ``int`` first so the
+    reference never renders a spurious ``.0``."""
     id_ = feature.get("id")
     if id_ is None:
         return None
-    layer_name = feature.get("layerName")
-    return f"{layer_name}:{id_}" if layer_name else str(id_)
+    if isinstance(id_, float) and id_.is_integer():
+        id_ = int(id_)
+    layer = feature.get("layer")
+    return f"{layer}:{id_}" if layer else str(id_)
 
 
 def _to_site(feature: JSON) -> WorksSite:

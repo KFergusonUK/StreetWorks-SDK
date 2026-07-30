@@ -1015,12 +1015,25 @@ _REGISTRY: list[ProviderEntry] = [
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.UNKNOWN,
         territories=frozenset({"Norway"}),
-        scope_note="Phase 1 scaffold - never run against real Norwegian data, see below.",
-        credentials="Statens vegvesen API credentials (Basic or Bearer) + IP allow-listing",
-        licence=None,
-        licence_confirmed=False,  # blocked on credentials for Phase 2, see module docstring
+        scope_note=(
+            "Phase 2 confirmed (2026-07-30) against a real credentialed "
+            "pull (844 real roadworks situations, ~24 MB) - no IP "
+            "allow-listing needed, HTTP Basic confirmed correct. Real "
+            "coordinates are genuinely mixed CRS within the same feed "
+            "(UTM zone 33N/EPSG:25833 and WGS84) - now resolved "
+            "honestly, per record: use "
+            "streetworks.common.from_vegvesen (not from_datex2 "
+            "directly), which resolves each record's declared srsName "
+            "plus its own value range via "
+            "streetworks.common._crs.resolve_coordinate_crs (axis order "
+            "by magnitude, never declared/positional order; no silent "
+            "reprojection). The real declared/inferred/corrected split "
+            "isn't hardcoded here - run scripts/smoke_test.py for this "
+            "run's actual counts."
+        ),
+        credentials="Statens vegvesen API credentials (HTTP Basic, confirmed; Bearer untested)",
+        licence="NLOD 1.0 (Norwegian Licence for Open Government Data)",
         source_grade="operator",
-        verified=False,
         # No "norway" alias: Norway now has three providers (this one,
         # kartverket, and nvdb) - get_provider("norway") resolves through
         # the territory-ambiguity path instead, same as "france".
@@ -1076,21 +1089,22 @@ _REGISTRY: list[ProviderEntry] = [
         name="Transport for NSW - Live Traffic Hazards",
         description="New South Wales roadwork hazards feed (Australia).",
         kind=Kind.ROADWORKS,
-        network_scope=NetworkScope.UNKNOWN,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Australia"}),
         administrative_area="Transport for NSW",
         scope_note=(
-            "Phase 1 scaffold - endpoint confirmed live via a real 401 "
-            "probe, and the test fixture is one real feature transcribed "
-            "from TfNSW's own Developer Guide, but the authenticated data "
-            "pull itself never exercised, see below. Unconfirmed whether "
-            "the main roadwork layer includes council/local-road works or "
-            "only state roads."
+            "Phase 2 confirmed (2026-07-30) against a real credentialed "
+            "pull (363 real roadwork + 19 real majorevent features) - "
+            "found and fixed one real bug (endpoint paths are "
+            "roadwork/open-style, not roadwork-open.json-style, see "
+            "module docstring). Predominantly state roads, but a real "
+            "~1.7% minority (6/363 in that pull) are isLocalRoad='Local "
+            "road' - council works aren't fully siloed away, just rare "
+            "in this feed."
         ),
         credentials="TfNSW API Gateway key (free self-service registration)",
         licence="CC BY 4.0",
         source_grade="operator",
-        verified=False,
         _module="streetworks.au",
         _client_name="NswLiveTrafficClient",
         import_line="from streetworks.au import NswLiveTrafficClient",
@@ -1100,21 +1114,25 @@ _REGISTRY: list[ProviderEntry] = [
         name="Department of Transport and Planning - Planned Disruptions",
         description="Victoria planned road disruptions feed (Australia).",
         kind=Kind.ROADWORKS,
-        network_scope=NetworkScope.UNKNOWN,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Australia"}),
         administrative_area="Department of Transport and Planning",
         scope_note=(
-            "Phase 1 scaffold - more speculative than nsw: no real sample "
-            "has ever been obtained (the OpenAPI spec's own Swagger UI "
-            "can't preview it, and the linked technical PDF is not "
-            "publicly accessible). Endpoint and auth behaviour confirmed "
-            "live via a real gateway probe, which also caught the OpenAPI "
-            "spec's own advertised auth header being wrong, see below."
+            "Phase 2 confirmed (2026-07-30) against a real credentialed "
+            "pull (500 real features on one page). Found one real design "
+            "mistake in this module's own converter, since fixed: a "
+            "GeometryCollection's LineString can span an entire route "
+            "(~150km real example) rather than the disruption's precise "
+            "extent, so only the Point is used, see module docstring. "
+            "rmaClass is a real small coded set (FW/AO/MU/AH/PR observed "
+            "live) - DTP's own remit is stated as arterials/freeways "
+            "only, but 'MU' may mean municipal (62/500 real features, "
+            "~12%) - not confirmed, so this scope may be narrower than "
+            "STRATEGIC implies."
         ),
         credentials="Transport Victoria Open Data Hub subscription key (free)",
         licence="CC BY 4.0",
         source_grade="operator",
-        verified=False,
         _module="streetworks.au",
         _client_name="VicDisruptionsClient",
         import_line="from streetworks.au import VicDisruptionsClient",
