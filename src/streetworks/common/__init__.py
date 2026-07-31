@@ -7,6 +7,7 @@ works type design and the record-identity rules that decide what maps
 where, and :mod:`.gazetteer` for the `Street`/`Segment`/`Address` design.
 """
 
+from .from_au_wa_mainroads import from_au_wa_mainroads
 from .from_autobahn import from_autobahn
 from .from_bag import from_bag
 from .from_ban import from_ban
@@ -95,4 +96,5 @@ __all__ = [
     "from_nsw_livetraffic",
     "from_vic_disruptions",
     "from_vegvesen",
+    "from_au_wa_mainroads",
 ]

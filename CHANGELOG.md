@@ -2,6 +2,74 @@
 
 ## [Unreleased]
 
+### Added — Main Roads WA (Australia), a third `streetworks.au` shape (2026-07-31)
+
+`streetworks.au.wa` / `streetworks.common.from_au_wa_mainroads` - the third
+Australian provider, and the third genuinely distinct AU client shape (NSW:
+one feed, many layers, one schema; Victoria: two independent systems; WA: a
+single ArcGIS `FeatureServer` layer). **Credential-free, shipped
+live-verified with a real fixture from day one** - unlike NSW/Victoria,
+never a Credentials-wanted scaffold.
+
+- **A thin wrapper over the existing, generic `ArcGISFeatureClient`**
+  (`streetworks.arcgis.client`), not a new pagination implementation -
+  `WaMainRoadsClient` supplies this service's own `base_url`/`layer_id`,
+  the same shape `streetworks.arcgis.jersey` already established. The
+  real layer states genuine `supportsPagination: true` and its real total
+  (227 records, one live pull) sits well under its own `maxRecordCount`
+  (2000), so a single unpaged query already returns everything today -
+  but pagination is still wired through properly rather than assuming
+  that stays true as the dataset grows.
+- **Gating check 1, verified live: `outSR=4326` is honoured** by this
+  service (real WGS84-range coordinates confirmed) - but since GeoJSON
+  strips any per-feature CRS statement, a runtime coordinate guard is
+  built anyway: any point outside plausible WGS84 degree range is treated
+  as unreprojected Web Mercator metres and reprojected explicitly. **A
+  deliberate deviation from the source brief**: uses a small closed-form
+  spherical-Mercator inverse formula instead of `pyproj` (the brief's own
+  suggestion) - the exact algebraic inverse of EPSG:3857's own spherical
+  definition, not an approximation, chosen to avoid adding a heavy
+  geospatial dependency this SDK has explicitly avoided everywhere else
+  (see `ArcGISFeatureClient`'s own module docstring for the same
+  reasoning applied when it was first built).
+- **Gating check 2, pinned from real data, not guessed**: `DateStarte`/
+  `EstimatedC`/`EntryDate` are plain strings; a full live pull (227 real
+  records, 681 date values) confirms `DD/MM/YYYY HH:MM:SS` unambiguously
+  (397 real values have a day > 12, zero have a month > 12).
+- **Real findings from that same live pull, not in the source brief**:
+  `Road` states the literal sentinel `"LOCAL ROAD"` (not a real road name)
+  on 28/227 (~12.3%) records - `LocalRoadName` carries the real name in
+  exactly those, confirmed perfectly mutually exclusive across every real
+  record checked; resolved before it could leak into
+  `location_description`. `WorkStatus` is a real field, confirmed
+  **always empty** (0/227) - so every site this module builds grades
+  `DateConfidence.ESTIMATED`, never `VERIFIED`, there being no live signal
+  to justify promoting. `WorkType` carries a real fifth value, `"PTA
+  Works"`, beyond the four the source's own ArcGIS item catalogue
+  documents. `SeeMoreName` is confirmed always `null`; `SeeMoreUrl` is
+  real but not always a well-formed absolute URL (one real value has no
+  `https://` scheme at all) - carried through exactly as stated.
+- `network_scope` stays `NetworkScope.UNKNOWN`, not promoted - the real
+  local-road minority (~12.3%) is far larger than NSW's own (~1.7%, which
+  was judged small enough to promote to `STRATEGIC`), so honest-unknown
+  was chosen over a confident guess, per the source brief's own
+  instruction.
+- **Reference is keyed on `GlobalID`** (a genuine, confirmed-unique GUID),
+  **never `FID`** - this is a real `isView: true` ArcGIS view, so its own
+  object ids are reassignable view artefacts, not stable identity.
+- Licensed **CC BY 4.0**, confirmed live from the ArcGIS item's own
+  catalogue metadata (`licenseInfo`) - the layer's own `copyrightText` is
+  empty, so attribution genuinely doesn't ride on the layer itself, as
+  the brief expected. `administrative_area="Main Roads Western
+  Australia"`, the operator-as-authority rule already applied to Autobahn
+  GmbH/TfNSW/DTP.
+- Added `tests/fixtures/wa_mainroads_live_pull.json` (five real trimmed
+  features from a real, unauthenticated pull) and 16 new tests covering
+  the coordinate guard both ways, the DD/MM date lock, the `LOCAL ROAD`
+  sentinel resolution, and the full field mapping.
+- Registered in the registry (`wa`), `scripts/smoke_test.py`
+  (`check_wa_mainroads`, credential-free), and README.
+
 ### Fixed / Confirmed — real credential verification (2026-07-30)
 
 A tester ran `scripts/smoke_test.py` against three Credentials-wanted

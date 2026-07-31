@@ -862,6 +862,39 @@ def check_tigerweb() -> str:
     return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
 
 
+def check_wa_mainroads() -> str:
+    """Main Roads WA WebEOC Roadworks needs no credentials - see
+    streetworks.au.wa. Fetches the whole layer (a real total of 227
+    records, one live pull - small enough that a full pull is cheap here,
+    unlike Jersey's 22,105). Reports the real local-road-sentinel split
+    (Road=='LOCAL ROAD') and fails loudly if the runtime coordinate guard
+    ever actually fires - it shouldn't, since outSR=4326 is confirmed
+    honoured live, but a silent reprojection kicking in unexpectedly would
+    mean that's stopped being true."""
+    from streetworks.au.wa import WaMainRoadsClient
+
+    with WaMainRoadsClient() as wa:
+        features = list(wa.iter_roadworks())
+    if not features:
+        raise RuntimeError("query returned no roadworks - real data may have changed")
+
+    # "LOCAL ROAD" is the real, confirmed sentinel value - see
+    # streetworks.common.from_au_wa_mainroads._LOCAL_ROAD_SENTINEL.
+    local_road = sum(1 for f in features if f.get("properties", {}).get("Road") == "LOCAL ROAD")
+    guard_fired = 0
+    for feature in features:
+        coords = (feature.get("geometry") or {}).get("coordinates")
+        if coords and (abs(coords[0]) > 180 or abs(coords[1]) > 90):
+            guard_fired += 1
+    if guard_fired:
+        raise RuntimeError(
+            f"{guard_fired} feature(s) needed the runtime coordinate guard to fire "
+            "(outSR=4326 wasn't honoured for them) - real behaviour may have changed, "
+            "see streetworks.au.wa's module docstring"
+        )
+    return f"{len(features):,} roadwork(s), {local_road:,} local-road ('LOCAL ROAD' sentinel)"
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -1041,6 +1074,8 @@ def main() -> int:
     # Jersey RoadWorkx and TIGERweb (US) need no credentials
     reporter.check("Jersey RoadWorkx", [], check_jersey)
     reporter.check("TIGERweb (USA)", [], check_tigerweb)
+    # Main Roads WA WebEOC Roadworks needs no credentials
+    reporter.check("Main Roads WA (Australia)", [], check_wa_mainroads)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

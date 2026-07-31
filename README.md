@@ -90,7 +90,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
-| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) | read |
+| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
@@ -1741,6 +1741,56 @@ either (checked across all 35 real `TIGERweb/` services) — `Segment
 § 105, a work of the US federal government) — real fixtures are committed.
 Query with a real bounding box; layer 8 alone has 16,150,491 features
 nationally, the largest dataset this SDK queries through a REST API.
+
+## Main Roads WA (ArcGIS REST)
+
+The third `streetworks.au` member, and the third genuinely distinct AU
+shape (NSW: one feed, many layers, one schema; Victoria: two independent
+systems; WA: a single ArcGIS `FeatureServer` layer) — a thin wrapper over
+the same `ArcGISFeatureClient` Jersey/TIGERweb already use, not a new
+pagination implementation. **Credential-free, shipped live-verified with a
+real fixture from day one** — unlike NSW/Victoria, this one never went
+through a Credentials-wanted phase.
+
+```python
+from streetworks.au.wa import WaMainRoadsClient
+from streetworks.common import from_au_wa_mainroads
+
+with WaMainRoadsClient() as wa:
+    works_list = from_au_wa_mainroads(list(wa.iter_roadworks()))
+for works in works_list:
+    print(works.reference, works.coordinate.value, works.sites[0].works_type)
+```
+
+**Two gating checks, both verified live before writing any mapping code.**
+(1) *Is `outSR=4326` honoured?* Layer 2's native CRS is Web Mercator, and a
+sibling ArcGIS deployment in this SDK (Jersey's) is confirmed to silently
+ignore `outSR` entirely — so this couldn't be assumed. A live query
+confirms WA's service **does** honour it (real WGS84-range coordinates
+came back), but because GeoJSON strips any per-feature CRS statement, a
+runtime coordinate guard is built anyway: any point outside plausible
+degree range is treated as unreprojected Web Mercator metres and converted
+via a small closed-form spherical-Mercator inverse — **not** `pyproj`
+(the source brief's own suggestion), to avoid adding a heavy geospatial
+dependency this SDK has deliberately avoided everywhere else (see
+`streetworks/au/wa.py`'s own module docstring for the full reasoning). (2)
+*Date format* — `DateStarte`/`EstimatedC`/`EntryDate` are plain strings; a
+full live pull (227 real records) confirms `DD/MM/YYYY HH:MM:SS`
+unambiguously (397 real values have a day > 12; zero have a month > 12).
+
+**Real, undocumented findings from that same live pull**: `Road` states
+the literal sentinel `"LOCAL ROAD"` (not a real road name) on 28/227
+(~12.3%) records — `LocalRoadName` carries the real name in exactly those,
+confirmed perfectly mutually exclusive; `network_scope` stays `UNKNOWN`
+rather than promoted, since that minority is far larger than NSW's ~1.7%.
+`WorkStatus` is a real field, confirmed **always empty** (0/227) — no live
+signal exists to grade a site past `DateConfidence.ESTIMATED`. `WorkType`
+carries a real fifth value, `"PTA Works"`, beyond the four the source's own
+catalogue documents. Licensed **CC BY 4.0**, confirmed from the ArcGIS
+item's own catalogue metadata (the layer's own `copyrightText` is empty —
+attribution genuinely doesn't ride on the layer itself); `administrative_area`
+is `"Main Roads Western Australia"`, the operator-as-authority rule already
+applied to Autobahn GmbH/TfNSW/DTP.
 
 **Not built here, noted as the obvious follow-on**: USDOT's **National
 Address Database (NAD)** — a national address *point* file (last compiled

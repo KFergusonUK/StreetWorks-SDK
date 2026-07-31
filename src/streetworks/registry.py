@@ -1138,6 +1138,35 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.au import VicDisruptionsClient",
     ),
     ProviderEntry(
+        key="wa",
+        name="Main Roads WA - WebEOC Roadworks",
+        description="Western Australia roadworks feed (Australia), over an ArcGIS Feature Service.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area="Main Roads Western Australia",
+        scope_note=(
+            "Credential-free, shipped live-verified with a real fixture "
+            "from day one (227 real records, one live pull) - unlike "
+            "NSW/Victoria, never a Credentials-wanted scaffold. A real "
+            "~12.3% minority (28/227) states Road as the literal sentinel "
+            "'LOCAL ROAD', not a real road name - LocalRoadName carries "
+            "the real name in exactly those records; network_scope stays "
+            "UNKNOWN rather than promoted, since that minority is far "
+            "larger than NSW's ~1.7%. WorkStatus is a real field, "
+            "confirmed always empty (0/227) - no live signal to grade a "
+            "site past DateConfidence.ESTIMATED. Reuses the shared "
+            "streetworks.arcgis.client.ArcGISFeatureClient for pagination, "
+            "not a bespoke implementation - see module docstring."
+        ),
+        credentials=None,
+        licence="CC BY 4.0",
+        source_grade="operator",
+        _module="streetworks.au",
+        _client_name="WaMainRoadsClient",
+        import_line="from streetworks.au import WaMainRoadsClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",

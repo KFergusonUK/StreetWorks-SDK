@@ -1,0 +1,150 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 21647,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.410315549036,
+          -32.8307254877164
+        ]
+      },
+      "properties": {
+        "FID": 21647,
+        "Id": 69769,
+        "DateStarte": "01/04/2023 00:00:00",
+        "EstimatedC": "30/04/2038 00:00:00",
+        "WorkStatus": "",
+        "WorkType": "Maintenance",
+        "Road": "LOCAL ROAD",
+        "Suburb": "Boddington",
+        "Region": "South West",
+        "EntryDate": "03/04/2023 07:08:22",
+        "GlobalID": "ad4ef33e-90a6-4c11-bd8d-003cf1aec4b8",
+        "Descriptio": "Ashcroft Rd, 3 kms south of Morts Rd intersection, Boddington - Long term Temporary Closure - Mining",
+        "TrafficImp": "Long term Road Closure - April 2023 to April 2038",
+        "SeeMoreName": null,
+        "SeeMoreUrl": "",
+        "LocalRoadName": "Ashcroft Rd"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28964,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.753108494209,
+          -32.0381276965462
+        ]
+      },
+      "properties": {
+        "FID": 28964,
+        "Id": 79170,
+        "DateStarte": "04/06/2024 10:44:00",
+        "EstimatedC": "01/12/2026 11:00:00",
+        "WorkStatus": "",
+        "WorkType": "Upgrades",
+        "Road": "Queen Victoria St",
+        "Suburb": "",
+        "Region": "Metro",
+        "EntryDate": "15/10/2024 10:46:08",
+        "GlobalID": "e32798b8-9f42-4f51-86fd-d7347c53efb6",
+        "Descriptio": "Queen Victoria St PSP between Tydeman Road and Fremantle Traffic Bridge - Upgrades",
+        "TrafficImp": "Queen Victoria St PSP between Tydeman Road and Fremantle Traffic Bridge closed - click on 'find out more' for detour",
+        "SeeMoreName": null,
+        "SeeMoreUrl": "https://www.mainroads.wa.gov.au/4a8ff1/globalassets/projects-initiatives/projects/metro/swan-river-crossings/src-qv-from-tydeman-to-fremantle-traffic-bridge-psp-detour.jpg",
+        "LocalRoadName": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32755,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.002723192157,
+          -31.8912847328778
+        ]
+      },
+      "properties": {
+        "FID": 32755,
+        "Id": 86478,
+        "DateStarte": "01/01/2026 06:00:00",
+        "EstimatedC": "31/12/2026 06:00:00",
+        "WorkStatus": "",
+        "WorkType": "PTA Works",
+        "Road": "Great Eastern Hwy",
+        "Suburb": "Midland",
+        "Region": "Metro",
+        "EntryDate": "06/01/2026 11:07:18",
+        "GlobalID": "a3c48e65-48d7-4ab1-b8f5-6eecf15846a1",
+        "Descriptio": "Great Eastern Hwy at Helena St, Midland - PTA Works\r\n6am to 6am",
+        "TrafficImp": "Lane closures and speed reduction in place",
+        "SeeMoreName": null,
+        "SeeMoreUrl": "",
+        "LocalRoadName": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33113,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.945544767969,
+          -31.8618315647019
+        ]
+      },
+      "properties": {
+        "FID": 33113,
+        "Id": 87155,
+        "DateStarte": "20/02/2026 00:00:00",
+        "EstimatedC": "31/12/2027 23:59:00",
+        "WorkStatus": "",
+        "WorkType": "Upgrades",
+        "Road": "Reid Hwy",
+        "Suburb": "",
+        "Region": "Metro",
+        "EntryDate": "16/02/2026 09:33:11",
+        "GlobalID": "4439bc08-da5a-48aa-b585-e32bab8cbbbf",
+        "Descriptio": "Reid Hwy between Altone Rd and Arthur St - Upgrades\r\n24/7",
+        "TrafficImp": "Various closures, speed reductions and detours in place",
+        "SeeMoreName": null,
+        "SeeMoreUrl": "",
+        "LocalRoadName": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31312,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.451413134544,
+          -21.6738014867995
+        ]
+      },
+      "properties": {
+        "FID": 31312,
+        "Id": 83669,
+        "DateStarte": "14/07/2025 06:00:00",
+        "EstimatedC": "31/10/2026 18:00:00",
+        "WorkStatus": "",
+        "WorkType": "Upgrades",
+        "Road": "Manuwarra Red Dog Hwy",
+        "Suburb": "Fortescue",
+        "Region": "Pilbara",
+        "EntryDate": "09/06/2026 07:50:11",
+        "GlobalID": "ff0549df-87e0-45a5-9de0-23c8b0c73612",
+        "Descriptio": "Manuwarra Red Dog Hwy, Fortescue - Manuwarra Red Dog Highway Upgrades Stage 4A",
+        "TrafficImp": "Works are off Road. Advanced Warning Signage for Heavy Vehicle Movements and Speed Reduction in Place. ",
+        "SeeMoreName": null,
+        "SeeMoreUrl": "www.mainroads.wa.gov.au/projects-initiatives/all-projects/regional/karratha-tom-price/",
+        "LocalRoadName": ""
+      }
+    }
+  ]
+}
