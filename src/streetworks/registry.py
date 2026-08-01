@@ -1203,6 +1203,129 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.au import QldTrafficClient",
     ),
     ProviderEntry(
+        key="sa",
+        name="Traffic SA - DIT Roadworks",
+        description="South Australia roadworks feed (Australia), over an ArcGIS MapServer.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area="Department for Infrastructure and Transport",
+        scope_note=(
+            "Phase 1 scaffold, genuinely blocked on two access gates, not "
+            "just credentials: the query endpoint is token-gated "
+            "(location.sa.gov.au/arcgis/tokens/ - self-service vs gated by "
+            "DIT is unresolved), and maps.sa.gov.au CloudFront-blocks some "
+            "countries' network egress outright. No real feature has ever "
+            "been retrieved. The layer's real field list (a genuine live "
+            "?f=json pull, ground truth) includes ROAD_NO/GIS_LINK_ID - "
+            "candidate stated-identifier join keys to a road register, "
+            "which would be a first for this AU cluster if confirmed - but "
+            "population and join semantics are unverified, so they are not "
+            "wired into street_ref. See module docstring."
+        ),
+        credentials="ArcGIS token (location.sa.gov.au/arcgis/tokens/)",
+        licence="CC BY 4.0",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.au",
+        _client_name="TrafficSaClient",
+        import_line="from streetworks.au import TrafficSaClient",
+    ),
+    ProviderEntry(
+        key="act",
+        name="Temporary Traffic Management (TTM) - Roads ACT",
+        description="ACT road-closures feed (Australia), the only municipal-level AU coverage.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Australia"}),
+        administrative_area="Roads ACT",
+        scope_note=(
+            "Confirmed live (2026-08-01, 98 real records) - credential-"
+            "free, never a Credentials-wanted scaffold. The only AU "
+            "provider reaching genuine municipal/local streets - the ACT "
+            "has no separate local-government tier, so Roads ACT's own "
+            "feed IS the whole real network, unlike every other AU "
+            "provider (which only ever reach a state authority's own "
+            "roads, sometimes with a small confirmed local-road minority). "
+            "A real correction to the source investigation: this is "
+            "ArcGIS underneath (the dataACT Socrata catalogue entry is a "
+            "plain link/pointer), not a new Socrata client shape. "
+            "Licence is CC BY-SA 4.0 (Share-Alike), distinct from every "
+            "other AU provider's plain CC-BY. See module docstring."
+        ),
+        credentials=None,
+        licence="CC BY-SA 4.0",
+        source_grade="operator",
+        _module="streetworks.au",
+        _client_name="ActTtmClient",
+        import_line="from streetworks.au import ActTtmClient",
+    ),
+    ProviderEntry(
+        key="tas",
+        name="Roadworks - State Roads (Department of State Growth)",
+        description="Tasmania state-road roadworks feed (Australia), the only AU one with lines.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Australia"}),
+        administrative_area="Department of State Growth",
+        scope_note=(
+            "Confirmed live (2026-08-01, 10 real records - genuinely this "
+            "small) - credential-free, never a Credentials-wanted "
+            "scaffold, but licence is genuinely unconfirmed (the ArcGIS "
+            "item's own portal metadata states both licenseInfo and "
+            "accessInformation as null) - shipped anyway on the same "
+            "openly-queryable basis as streetworks.arcgis.jersey, not "
+            "blocked the way SA is. State roads only, confirmed live with "
+            "zero non-state contamination (EVENT_TYPE=='Roadworks' on "
+            "10/10 real records, no incident mix). Real line geometry, "
+            "not points - the only AU provider where this is true. Native "
+            "CRS is GDA94/MGA zone 55, not Web Mercator - deliberately "
+            "does not reuse WA/SA's closed-form reprojection guard, since "
+            "the wrong formula would silently produce wrong coordinates "
+            "rather than none at all. See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.au",
+        _client_name="TasRoadworksClient",
+        import_line="from streetworks.au import TasRoadworksClient",
+    ),
+    ProviderEntry(
+        key="nt",
+        name="Road Report NT",
+        description="NT road-conditions service (Australia) - no published API, documented only.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area="Department of Infrastructure, Planning and Logistics",
+        scope_note=(
+            "Investigated and registered honestly-unavailable, not "
+            "silently skipped - a different tier from Trafikverket/"
+            "Vejdirektoratet/SA, all of which are blocked on access to a "
+            "real, published interface. Road Report NT has no published "
+            "REST/GeoJSON API at all: its real backend is an undocumented "
+            "SignalR hub ('roadsReportingHub', confirmed live by "
+            "inspecting the site's own minified Angular bundle - not a "
+            "published spec). RoadReportNtClient() always raises "
+            "ProviderUnavailableError rather than encoding reverse-"
+            "engineered hub internals as a stable contract. Statewide "
+            "NT-Government roads (councils excluded); a road-condition "
+            "system (closures/flooding/weight restrictions) where "
+            "roadworks is a minor subset, the weakest real works-fit in "
+            "this SDK. See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.au",
+        _client_name="RoadReportNtClient",
+        import_line="from streetworks.au import RoadReportNtClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",

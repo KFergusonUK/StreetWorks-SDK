@@ -16,12 +16,11 @@ from datetime import datetime
 from pathlib import Path
 
 import httpx
-import pytest
 import respx
 
 from streetworks.au.wa import BASE_URL, ROADWORKS_LAYER, WaMainRoadsClient
 from streetworks.common import DateConfidence, from_au_wa_mainroads
-from streetworks.common.from_au_wa_mainroads import _coordinate, _web_mercator_to_wgs84
+from streetworks.common.from_au_wa_mainroads import _coordinate
 
 LIVE_PULL_PATH = Path(__file__).parent / "fixtures" / "wa_mainroads_live_pull.json"
 LIVE_PULL_JSON = json.loads(LIVE_PULL_PATH.read_text())
@@ -81,16 +80,10 @@ def test_iter_roadworks_requests_outsr_4326():
 
 
 # --------------------------------------------------------------------------- #
-# Gating check 1 - the runtime coordinate guard
+# Gating check 1 - the runtime coordinate guard. The underlying formula
+# (streetworks.common._web_mercator) has its own dedicated round-trip test
+# in tests/test_web_mercator.py - these only cover WA's own use of it.
 # --------------------------------------------------------------------------- #
-
-
-def test_web_mercator_to_wgs84_round_trips_a_known_point():
-    # Perth CBD (115.8605, -31.9505) forward-projected to EPSG:3857 via the
-    # standard spherical Mercator formula.
-    lon, lat = _web_mercator_to_wgs84(12897531.863054074, -3756814.7353761178)
-    assert lon == pytest.approx(115.8605, abs=1e-6)
-    assert lat == pytest.approx(-31.9505, abs=1e-6)
 
 
 def test_coordinate_guard_reprojects_web_mercator_metres():

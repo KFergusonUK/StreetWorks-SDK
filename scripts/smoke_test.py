@@ -70,6 +70,16 @@ skipped if its variables are absent.
     # module already defaults to.
     export QLD_QLDTRAFFIC_API_KEY="..."
 
+    # Traffic SA / DIT Roadworks (South Australia) - PENDING LIVE
+    # VERIFICATION, genuinely blocked on two access gates (a token-gated
+    # query endpoint, a geo-restricted host) - see streetworks.au.sa.
+    export SA_TRAFFICSA_TOKEN="..."
+
+    # ACT Temporary Traffic Management (Roads ACT) and Tasmania Roadworks
+    # - State Roads (Dept of State Growth) both need NO credentials at
+    # all - see streetworks.au.act / streetworks.au.tas. TAS ships with a
+    # genuinely unconfirmed licence (not blocked - see module docstring).
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -934,6 +944,82 @@ def check_qld_qldtraffic() -> str:
     )
 
 
+def check_sa_trafficsa() -> str:
+    """Traffic SA / DIT Roadworks (South Australia) - PENDING LIVE
+    VERIFICATION, genuinely blocked on two access gates, see
+    streetworks.au.sa. Requires an ArcGIS query token
+    (SA_TRAFFICSA_TOKEN, from location.sa.gov.au/arcgis/tokens/ - whether
+    that's self-service or gated is itself unresolved). If this succeeds,
+    it's the first real feature this module will ever have seen - please
+    also compare the real REC_TYPE value against the module docstring's
+    open question, and whether ROAD_NO/GIS_LINK_ID are genuinely populated
+    (see the module docstring's linked issue)."""
+    from streetworks.au.sa import TrafficSaClient
+
+    with TrafficSaClient(token=os.environ["SA_TRAFFICSA_TOKEN"]) as sa:
+        features = list(sa.iter_roadworks())
+    rec_types = sorted({f.get("properties", {}).get("REC_TYPE") for f in features})
+    road_no_populated = sum(1 for f in features if f.get("properties", {}).get("ROAD_NO"))
+    return (
+        f"{len(features):,} layer-0 record(s) (unfiltered - REC_TYPE "
+        f"values seen: {rec_types!r}), {road_no_populated:,} with a "
+        "populated ROAD_NO - first real South Australian data seen, "
+        "compare against module docstring's open questions"
+    )
+
+
+def check_act_ttm() -> str:
+    """ACT Temporary Traffic Management (Roads ACT) needs no credentials -
+    see streetworks.au.act. Confirmed live 2026-08-01 (98 real records,
+    the whole real dataset). Reports the real type-value split - flags if
+    a real value beyond the confirmed live enum ever shows up."""
+    from streetworks.au.act import ActTtmClient
+
+    with ActTtmClient() as act:
+        closures = list(act.iter_closures())
+    if not closures:
+        raise RuntimeError("query returned no closures - real data may have changed")
+
+    types: dict[str, int] = {}
+    for feature in closures:
+        kind = feature.get("properties", {}).get("type", "unknown")
+        types[kind] = types.get(kind, 0) + 1
+    roadworks = types.get("roadWorks", 0)
+    return f"{len(closures):,} closure(s), type split: {types} ({roadworks:,} roadWorks)"
+
+
+def check_tas_roadworks() -> str:
+    """Tasmania Roadworks - State Roads (Department of State Growth) needs
+    no credentials - see streetworks.au.tas. Licence is genuinely
+    unconfirmed (not blocked - see module docstring). Confirmed live
+    2026-08-01 (10 real records - genuinely this small). Fails loudly if
+    any coordinate ever looks implausible - this module deliberately has
+    no reprojection fallback (native CRS is GDA94/MGA zone 55, not Web
+    Mercator, so WA/SA's closed-form guard would silently apply the wrong
+    formula), so a real value out of range here means outSR=4326 stopped
+    being honoured and needs real investigation, not a guess."""
+    from streetworks.au.tas import TasRoadworksClient
+
+    with TasRoadworksClient() as tas:
+        features = list(tas.iter_roadworks())
+    if not features:
+        raise RuntimeError("query returned no roadworks - real data may have changed")
+
+    implausible = []
+    for feature in features:
+        for lon, lat in (feature.get("geometry") or {}).get("coordinates", []):
+            if not (-180 <= lon <= 180 and -90 <= lat <= 90):
+                implausible.append((feature["properties"].get("ID"), lon, lat))
+    if implausible:
+        raise RuntimeError(
+            f"{len(implausible)} coordinate(s) outside plausible WGS84 range "
+            f"(e.g. {implausible[0]}) - outSR=4326 may have stopped being "
+            "honoured; see streetworks.au.tas's module docstring before "
+            "adding a reprojection fallback"
+        )
+    return f"{len(features):,} roadworks (real line geometry, all coordinates plausible WGS84)"
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -1117,6 +1203,12 @@ def main() -> int:
     reporter.check("Main Roads WA (Australia)", [], check_wa_mainroads)
     # QLDTraffic Events needs no credentials (a real, shared public API key)
     reporter.check("QLDTraffic Events (Queensland, Australia)", [], check_qld_qldtraffic)
+    reporter.check(
+        "Traffic SA / DIT Roadworks (SA/Australia)", ["SA_TRAFFICSA_TOKEN"], check_sa_trafficsa
+    )
+    # ACT TTM and TAS Roadworks both need no credentials
+    reporter.check("ACT Temporary Traffic Management (Australia)", [], check_act_ttm)
+    reporter.check("TAS Roadworks - State Roads (Australia)", [], check_tas_roadworks)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

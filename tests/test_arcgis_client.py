@@ -133,6 +133,24 @@ def test_iter_features_short_first_page_needs_no_further_paging():
 
 
 @respx.mock
+def test_iter_features_passes_extra_params_through_to_every_query():
+    """The escape hatch a token-gated service needs (South Australia's
+    Traffic SA - see streetworks.au.sa): layer_info stays a plain metadata
+    call, but every /query request must carry the caller's extra_params."""
+    info = _layer_info(oid_field="FID", max_record_count=1000, supports_pagination=True)
+    layer_route = respx.get(f"{BASE}/0").mock(return_value=httpx.Response(200, json=info))
+    query_route = respx.get(f"{BASE}/0/query").mock(
+        return_value=httpx.Response(200, json=_feature_collection([1, 2]))
+    )
+    with ArcGISFeatureClient() as arcgis:
+        features = list(arcgis.iter_features(BASE, 0, extra_params={"token": "secret-token"}))
+    assert len(features) == 2
+    # layer_info (metadata) is never token-gated on any real service checked.
+    assert "token" not in layer_route.calls[0].request.url.params
+    assert query_route.calls[0].request.url.params.get("token") == "secret-token"
+
+
+@respx.mock
 def test_iter_features_raises_truncated_result_error_rather_than_silently_truncating():
     # The exact case the design brief calls out: a layer returning exactly
     # maxRecordCount rows, with no working pagination and no objectIdField

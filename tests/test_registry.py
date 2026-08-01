@@ -294,15 +294,28 @@ def get_entry(key: str):
 
 
 def test_credentials_wanted_is_the_only_unverified_tier():
-    """Sweden and Denmark are the "Credentials wanted" tier - built to a
-    confirmed API/schema shape but never run against real authenticated
-    data. Norway/NSW/Victoria graduated out on 2026-07-30 after a real
-    credentialed pull confirmed each (see their own module docstrings -
-    Norway's real geometry is mixed-CRS and still has an open caveat,
-    but the connectivity/schema itself is confirmed). Every other
-    provider is verified against real data."""
+    """Sweden, Denmark, and South Australia are the "Credentials wanted"
+    tier - built to a confirmed API/schema shape but never run against
+    real authenticated data. Norway/NSW/Victoria graduated out on
+    2026-07-30 after a real credentialed pull confirmed each (see their
+    own module docstrings - Norway's real geometry is mixed-CRS and still
+    has an open caveat, but the connectivity/schema itself is confirmed).
+    South Australia (`sa`) is the worst-off of the three - blocked on both
+    a token-gated query endpoint and a geo-restricted host, so unlike
+    Trafikverket/Vejdirektoratet, even the endpoint/auth shape has never
+    been exercised against a real response, only the layer *metadata* -
+    see streetworks.au.sa's own module docstring.
+
+    The Northern Territory (`nt`) is unverified for a genuinely different
+    reason, a distinct tier of its own: not blocked on access to a
+    published interface at all, but investigated and found to have no
+    published REST/GeoJSON API whatsoever (its real backend is an
+    undocumented SignalR hub) - see streetworks.au.nt's own module
+    docstring and streetworks.exceptions.ProviderUnavailableError.
+
+    Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
-    assert {e.key for e in unverified} == {"trafikverket", "vejdirektoratet"}
+    assert {e.key for e in unverified} == {"trafikverket", "vejdirektoratet", "sa", "nt"}
 
 
 def test_unverified_provider_flagged_in_rendered_output():

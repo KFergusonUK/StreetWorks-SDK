@@ -160,8 +160,13 @@ class LayerInfo:
 
 class ArcGISFeatureClient:
     """Fetch features from an ArcGIS REST ``MapServer``/``FeatureServer``
-    layer. No credentials - every source this client is built for is
-    publicly queryable without authentication.
+    layer. No credentials for most real services this client is built for
+    (Jersey, TIGERweb, WA) - publicly queryable without authentication. A
+    minority gate the query operation behind an ArcGIS token even though
+    the layer *definition* stays public (South Australia's Traffic SA -
+    see :mod:`streetworks.au.sa`); pass ``extra_params={"token": ...}`` to
+    :meth:`iter_features`/:meth:`query` for those, this client itself
+    stays credential-agnostic.
 
     >>> from streetworks.arcgis import ArcGISFeatureClient
     >>> BASE = "https://roadworks.gov.je/arcgis/rest/services/JSWFeatureService/FeatureServer"
@@ -287,6 +292,7 @@ class ArcGISFeatureClient:
         geometry_type: str = "esriGeometryEnvelope",
         in_sr: str | int | None = None,
         spatial_rel: str = "esriSpatialRelIntersects",
+        extra_params: dict[str, str] | None = None,
     ) -> Iterator[JSON]:
         """Yield every real GeoJSON feature matching ``where`` (default:
         everything), paging correctly regardless of whether the layer's
@@ -308,6 +314,15 @@ class ArcGISFeatureClient:
         Raises :class:`~streetworks.exceptions.TruncatedResultError` if
         offset-paging doesn't work *and* no ``objectIdField`` is stated to
         fall back on - never silently returns a partial result.
+
+        ``extra_params`` is passed through to every ``query`` call this
+        makes (never to :meth:`layer_info`, which every real service
+        checked so far serves as public metadata even when the query
+        operation itself is gated) - the escape hatch a token-gated service
+        needs, e.g. South Australia's Traffic SA layer, where the layer
+        *definition* is public but ``/query`` returns HTTP 400 without a
+        real ArcGIS token (``extra_params={"token": token}``); see
+        :mod:`streetworks.au.sa`.
         """
         info = LayerInfo.from_json(self.layer_info(base_url, layer_id))
         size = page_size or info.max_record_count or _DEFAULT_PAGE_SIZE
@@ -331,6 +346,7 @@ class ArcGISFeatureClient:
                 geometry_type=geometry_type,
                 in_sr=in_sr,
                 spatial_rel=spatial_rel,
+                extra_params=extra_params,
             )
 
         def _oid(feature: JSON) -> Any:

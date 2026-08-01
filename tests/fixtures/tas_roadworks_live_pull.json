@@ -1,0 +1,217 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 6177,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            146.15240038993386,
+            -41.16203027859827
+          ],
+          [
+            146.15241192059463,
+            -41.162038898391906
+          ],
+          [
+            146.15312708387424,
+            -41.1625308172129
+          ],
+          [
+            146.153909539347,
+            -41.16301476755361
+          ],
+          [
+            146.15397213803504,
+            -41.16304912122562
+          ]
+        ]
+      },
+      "properties": {
+        "ID": 6177,
+        "EVENT_TYPE": "Roadworks",
+        "END_TIME": 1789552800000,
+        "START_TIME": 1773140400000,
+        "LOCATION_DESC": "Leven River Bridge Devonport Bound",
+        "ROAD_NAME": "Bass Highway",
+        "TRAFFIC_MANAGEMENT": "Reduced Speed limit with frequent lane closures at all times",
+        "WEB_LINK": null,
+        "SITE_CONTACT": "BridgePro",
+        "SITE_CONTACT_PHONE": "0460 933 483"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6366,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            146.31534483092173,
+            -41.18266945550404
+          ],
+          [
+            146.31544762914922,
+            -41.18268782197659
+          ],
+          [
+            146.3156517041627,
+            -41.182725949031415
+          ],
+          [
+            146.31568946776605,
+            -41.18273256900615
+          ],
+          [
+            146.315820479867,
+            -41.182755551768714
+          ],
+          [
+            146.31601695386985,
+            -41.18279199358973
+          ],
+          [
+            146.31621721946502,
+            -41.18282845758731
+          ],
+          [
+            146.3164050316241,
+            -41.182863180863805
+          ],
+          [
+            146.31650667690909,
+            -41.18288251870306
+          ]
+        ]
+      },
+      "properties": {
+        "ID": 6366,
+        "EVENT_TYPE": "Roadworks",
+        "END_TIME": 1786096800000,
+        "START_TIME": 1785751200000,
+        "LOCATION_DESC": "Between Don River Bridge and Waverley Road, Don (both directions)",
+        "ROAD_NAME": "Bass Highway",
+        "TRAFFIC_MANAGEMENT": "Reduced Speed limit with frequent lane closures during working hours 9.30 am to 2.30 pm",
+        "WEB_LINK": null,
+        "SITE_CONTACT": "Pitt & Sherry",
+        "SITE_CONTACT_PHONE": "0447 336 003"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6367,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            146.31656305896067,
+            -41.182989592906054
+          ],
+          [
+            146.31637964857927,
+            -41.18295359527963
+          ],
+          [
+            146.316162107052,
+            -41.18291011995345
+          ],
+          [
+            146.31589258096054,
+            -41.18286084964764
+          ],
+          [
+            146.31564948762434,
+            -41.18281745577649
+          ],
+          [
+            146.3156112840616,
+            -41.18281071607194
+          ],
+          [
+            146.31541674330086,
+            -41.18277641991495
+          ],
+          [
+            146.31528268693216,
+            -41.182755417439566
+          ]
+        ]
+      },
+      "properties": {
+        "ID": 6367,
+        "EVENT_TYPE": "Roadworks",
+        "END_TIME": 1786096800000,
+        "START_TIME": 1785751200000,
+        "LOCATION_DESC": "Between Don River Bridge and Waverley Road, Don (both directions)",
+        "ROAD_NAME": "Bass Highway",
+        "TRAFFIC_MANAGEMENT": "Reduced Speed limit with frequent lane closures during working hours 9.30 am to 2.30 pm",
+        "WEB_LINK": null,
+        "SITE_CONTACT": "Pitt & Sherry",
+        "SITE_CONTACT_PHONE": "0447 336 003"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6112,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            145.61958738227358,
+            -41.448781000387605
+          ],
+          [
+            145.6197609285947,
+            -41.449011077107926
+          ],
+          [
+            145.61989758289678,
+            -41.449209371228996
+          ],
+          [
+            145.62008202235887,
+            -41.44950625490224
+          ],
+          [
+            145.62029092830983,
+            -41.44991293235572
+          ],
+          [
+            145.62042093703914,
+            -41.4502052353799
+          ],
+          [
+            145.62056781458816,
+            -41.45061566287691
+          ],
+          [
+            145.62090320044211,
+            -41.4514620114072
+          ],
+          [
+            145.62111123597768,
+            -41.452010414178886
+          ],
+          [
+            145.6211326892058,
+            -41.45206545227379
+          ]
+        ]
+      },
+      "properties": {
+        "ID": 6112,
+        "EVENT_TYPE": "Roadworks",
+        "END_TIME": 1798110000000,
+        "START_TIME": 1769079600000,
+        "LOCATION_DESC": "Fossey River Rest Area",
+        "ROAD_NAME": "Murchison Highway",
+        "TRAFFIC_MANAGEMENT": "Reduced Speed limit with frequent lane closures during working hours 7 am to 5 pm. Toilets closed and no parking",
+        "WEB_LINK": null,
+        "SITE_CONTACT": "Batchelor Construction",
+        "SITE_CONTACT_PHONE": "0419 008 124"
+      }
+    }
+  ]
+}

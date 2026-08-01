@@ -98,6 +98,25 @@ class AmbiguousProviderError(StreetworksError, LookupError):
     never by guessing. The message names every candidate key."""
 
 
+class ProviderUnavailableError(StreetworksError):
+    """Raised by a registered provider's own client when no usable
+    interface exists at all - distinct from every other error here, which
+    all assume *some* real endpoint was reachable to fail against.
+
+    Not a credentials/access gate (the Credentials-wanted tier - Sweden,
+    Denmark, South Australia - all have a real, documented interface,
+    just not one this project can currently authenticate to or reach):
+    this is for a provider investigated and found to have **no published,
+    documented API at all** - e.g. Road Report NT
+    (:mod:`streetworks.au.nt`), whose only real backend is an undocumented
+    SignalR hub reverse-engineered from a minified JS bundle, not a
+    published contract. Building a client against inferred hub method
+    names/message shapes would dress that inference up as a stable
+    contract - the thing this project avoids everywhere else - so the
+    registered client raises this immediately instead of pretending to
+    work. The message states what was found and why it isn't built."""
+
+
 _STATUS_MAP: dict[int, type[APIError]] = {
     400: RequestValidationError,
     401: AuthenticationError,

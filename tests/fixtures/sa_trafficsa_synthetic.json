@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [138.6007, -34.9285]
+      },
+      "properties": {
+        "ESRI_OID": 501,
+        "ROADWORKS_AND_INCIDENTS_ID": "SA-RWI-000501",
+        "REC_TYPE": "Roadworks",
+        "INCIDENT_ID": null,
+        "DESCRIPTION": "South Road resurfacing between Anzac Highway and Cross Road",
+        "START_DATE": 1751328000000,
+        "END_DATE": 1759190400000,
+        "START_DATE_STRING": "01/07/2025",
+        "END_DATE_STRING": "30/09/2025",
+        "ROAD_NO": 4331,
+        "GIS_LINK_ID": 88213,
+        "LOCAL_ROAD": null,
+        "SIDE_STREET": "Anzac Highway",
+        "SUBURB": "Adelaide",
+        "ACTIVE": "Y",
+        "TRAFFIC_DIR": "Both directions",
+        "NO_LANES_CLOSED": "1",
+        "SPEED_LIMIT": "40"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [138.5, -34.85]
+      },
+      "properties": {
+        "ESRI_OID": 502,
+        "ROADWORKS_AND_INCIDENTS_ID": "SA-RWI-000502",
+        "REC_TYPE": "Roadworks",
+        "INCIDENT_ID": null,
+        "DESCRIPTION": null,
+        "START_DATE": 1754006400000,
+        "END_DATE": null,
+        "START_DATE_STRING": "01/08/2025",
+        "END_DATE_STRING": null,
+        "ROAD_NO": null,
+        "GIS_LINK_ID": null,
+        "LOCAL_ROAD": "Smith Street",
+        "SIDE_STREET": null,
+        "SUBURB": "Prospect",
+        "ACTIVE": "Y",
+        "TRAFFIC_DIR": null,
+        "NO_LANES_CLOSED": null,
+        "SPEED_LIMIT": null
+      }
+    }
+  ]
+}

@@ -2,6 +2,136 @@
 
 ## [Unreleased]
 
+### Added — Road Report NT (Australia), a documented-unavailable scaffold (2026-08-01)
+
+`streetworks.au.nt` - the Northern Territory is now registered
+(`verified=False`) rather than left off the board entirely, formalising
+the finding from the AU-tail investigation: Road Report NT has **no
+published REST/GeoJSON API at all**, so `RoadReportNtClient()` always
+raises the new `streetworks.exceptions.ProviderUnavailableError`
+immediately, with no network call, no parser, and no synthetic fixture.
+
+- **A distinct tier from every other unverified provider.** Trafikverket/
+  Vejdirektoratet/Traffic SA are all blocked on *access* to a real,
+  published interface (a key, a token, a region) - they have a documented
+  or at least self-describing contract to build against, just can't
+  currently reach it. NT is different in kind: its only real backend is
+  an undocumented SignalR real-time hub (`roadsReportingHub`, invoking
+  hub methods like `GetAllMajorRoadObstructions`), reverse-engineered
+  from the site's own minified Angular bundle, not a published spec.
+  Building a client against that inference would present private-app
+  implementation detail as a stable contract - the opposite of how every
+  other provider here is built - so this ships as an honest, documented
+  refusal instead.
+- New `streetworks.exceptions.ProviderUnavailableError`, exported from
+  the package root - distinct from `ProviderNotFoundError` (a registry
+  lookup failure): NT is real and registered, its client class exists,
+  but every entry point raises this rather than pretending to work.
+- Registry entry (`nt`, `verified=False`, in the same honest-scaffold
+  spirit as `sa`/`trafikverket`/`vejdirektoratet` but with its own
+  distinct `scope_note` explaining the different blocker), import-time
+  `UserWarning`, a drafted GitHub issue in
+  `docs/credentials-wanted-issues.md` (labelled `help wanted` only, not
+  `credentials-wanted` - no credential would fix this), and 7 new tests
+  covering the informative raise and registry consistency.
+- `au/__init__.py`, README, and this file all now agree: NT is
+  investigated and honestly unavailable, not silently absent.
+
+### Added — ACT & Tasmania (Australia), closing out the AU tail (2026-08-01)
+
+`streetworks.au.act` / `streetworks.common.from_au_act_ttm` and
+`streetworks.au.tas` / `streetworks.common.from_au_tas_roadworks` - the
+sixth and seventh Australian providers, both confirmed live 2026-08-01
+against real, unauthenticated pulls, credential-free, shipped with real
+fixtures from day one.
+
+- **ACT (Temporary Traffic Management, Roads ACT)** - the only AU
+  provider with genuine municipal/local-street coverage (the ACT has no
+  separate local-government tier, so this feed IS the whole real
+  network). **A real correction to the source investigation**: this is
+  ArcGIS underneath, not a new Socrata client shape - dataACT's own
+  catalogue entry is a plain link/pointer (confirmed live:
+  `viewType`/`displayType` both `"href"`, its SODA endpoint 400s for
+  "non-tabular dataset") to a real ArcGIS Online FeatureServer. The "live
+  vs. historical" gating question is resolved live: despite the
+  underlying service being literally named
+  `Road_Closures_public_view_HISTORICAL`, a real pull returns genuinely
+  current 2026-dated closures. Real `type` values confirmed directly
+  (34/98 real records are `roadWorks`) - `iter_roadworks()` filters
+  server-side on evidenced criteria, unlike SA's still-unconfirmed
+  `REC_TYPE`. Licensed CC BY-SA 4.0 (Share-Alike) - the only such licence
+  in this AU cluster.
+- **Tasmania (Roadworks - State Roads, Dept of State Growth)** - the only
+  AU provider with real line geometry (every other member is points-only)
+  and the smallest by far (10 real total records, confirmed via
+  `returnCountOnly`). Native CRS is GDA94/MGA zone 55, genuinely different
+  from WA/SA's Web Mercator - `outSR=4326` is confirmed honoured live, but
+  this module deliberately does **not** reuse WA/SA's closed-form Web
+  Mercator reprojection guard (the wrong formula would silently produce
+  *wrong* coordinates, not just imprecise ones, if `outSR` ever stopped
+  being honoured) - `scripts/smoke_test.py` carries a plausible-range
+  check instead. **Licence genuinely unconfirmed**, checked directly (the
+  ArcGIS item's own `licenseInfo`/`accessInformation` are both `null`,
+  and this service isn't even hosted on the LIST portal the source brief
+  guessed the licence from) - shipped anyway on the same openly-queryable
+  basis as `streetworks.arcgis.jersey`, distinct from being blocked the
+  way SA is.
+- **The Northern Territory was investigated and found to have no
+  published REST/GeoJSON API at all** - its real backend is a SignalR
+  real-time hub (`roadsReportingHub`, confirmed live by reverse-
+  engineering the site's own minified Angular bundle), a materially
+  different, undocumented client protocol this SDK has never needed
+  elsewhere, on top of the source brief's own already-flagged concerns
+  (thin roadworks content, unspecified licence). Registered as a
+  documented scaffold rather than silently omitted - see "Road Report NT"
+  below for the follow-up that formalised this.
+- Added `tests/fixtures/act_ttm_live_pull.json` (five real trimmed
+  features) and `tests/fixtures/tas_roadworks_live_pull.json` (four real
+  trimmed features), 15 new tests, registry entries (`act`, `tas`),
+  credential-free `scripts/smoke_test.py` checks, and README/CHANGELOG
+  updates.
+
+### Added — Traffic SA / DIT Roadworks (Australia), a Phase 1 scaffold (2026-08-01)
+
+`streetworks.au.sa` / `streetworks.common.from_au_sa_trafficsa` - the
+fifth Australian provider, over an ArcGIS **MapServer** (not WA's
+FeatureServer), and the least verified provider in this SDK. Genuinely
+blocked on **two independent access gates**, not one: the query endpoint
+returns HTTP 400 without an ArcGIS token from
+`location.sa.gov.au/arcgis/tokens/` (whether that's self-service or
+gated by DIT is itself unresolved - the token host has never been
+reached), and `maps.sa.gov.au` separately CloudFront-blocks some
+countries' network egress outright. **No real feature has ever been
+retrieved** - the schema is ground truth from a real, successfully-pulled
+layer *metadata* request, but every field-population/join question stays
+open, the same "schema confirmed, data not" position
+`streetworks.datex2.trafikverket`/`streetworks.datex2.vejdirektoratet` are
+in.
+
+- `iter_roadworks()` deliberately returns the layer's full, unfiltered
+  `REC_TYPE` mix (roadworks + incidents together) rather than fabricate a
+  filter value with zero real evidence behind it - a caller who has
+  confirmed the real value can pass `where="REC_TYPE='...'"` themselves.
+- `ROAD_NO`/`GIS_LINK_ID` - candidate stated-identifier road-register join
+  keys, a potential first for this AU cluster (every other provider is
+  name-only) - deliberately do **not** populate `WorksSite.street_ref`,
+  since population and real join semantics are unconfirmed; both values
+  stay reachable on `.raw` only.
+- `streetworks.arcgis.client.ArcGISFeatureClient.iter_features()` gained
+  an `extra_params` parameter, threaded through every `/query` call but
+  never `layer_info` (which stays public even when the query operation is
+  gated) - the escape hatch this provider's ArcGIS token needs, reusable
+  by any future token-gated ArcGIS provider.
+- Extracted `streetworks.common._web_mercator` (the closed-form EPSG:3857
+  inverse first built for WA) as a shared helper, now used by both WA's
+  and SA's converters rather than duplicated - WA's own module and tests
+  updated to import from it.
+- Registered `verified=False` (joining Trafikverket/Vejdirektoratet in the
+  registry's "Credentials wanted" tier); `scripts/smoke_test.py` check
+  added; a synthetic fixture (built from the real, live-pulled layer
+  schema, not invented) since no real record has ever been retrieved;
+  README/`docs/credentials-wanted-issues.md`/`.env.example` updated.
+
 ### Added — QLDTraffic Events (Australia), a fourth `streetworks.au` shape (2026-08-01)
 
 `streetworks.au.qld` / `streetworks.common.from_au_qld_qldtraffic` - the

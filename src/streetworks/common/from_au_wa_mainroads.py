@@ -28,10 +28,10 @@ undocumented ``"PTA Works"`` work type) - not re-derived here.
 
 from __future__ import annotations
 
-import math
 from datetime import datetime
 from typing import Any
 
+from ._web_mercator import reproject_if_projected
 from .models import Coordinate, DateConfidence, Notice, SourceGrade, Works, WorksSite
 
 __all__ = ["from_au_wa_mainroads"]
@@ -47,12 +47,6 @@ _ADMINISTRATIVE_AREA = "Main Roads Western Australia"
 #: real date values) that pins this as DD/MM, not MM/DD.
 _DATE_FORMAT = "%d/%m/%Y %H:%M:%S"
 
-#: Half the Web Mercator (EPSG:3857) world circumference in metres - the
-#: standard constant for the spherical Mercator inverse. See
-#: _web_mercator_to_wgs84's own docstring for why this closed-form formula
-#: is used instead of a pyproj Transformer.
-_WEB_MERCATOR_ORIGIN_SHIFT = 20037508.342789244
-
 #: The literal sentinel string this feed uses in place of a real road name
 #: when a record is a local (not state) road - confirmed live, always
 #: paired with a populated LocalRoadName (see streetworks.au.wa's module
@@ -61,40 +55,24 @@ _WEB_MERCATOR_ORIGIN_SHIFT = 20037508.342789244
 _LOCAL_ROAD_SENTINEL = "LOCAL ROAD"
 
 
-def _web_mercator_to_wgs84(x: float, y: float) -> tuple[float, float]:
-    """The exact closed-form inverse of EPSG:3857 (spherical Web Mercator) -
-    not an approximation, since Web Mercator is itself defined as a
-    spherical (not ellipsoidal) projection, so there is nothing a fuller
-    geodetic library like pyproj would add in accuracy for this specific
-    pair. Used instead of ``pyproj.Transformer`` (the source brief's own
-    suggestion) to preserve this SDK's explicit, repeatedly-stated
-    standard-library-plus-httpx design constraint - see
-    :mod:`streetworks.au.wa`'s own module docstring for the full reasoning.
-    Returns ``(lon, lat)``, matching this module's GeoJSON axis order."""
-    lon = x / _WEB_MERCATOR_ORIGIN_SHIFT * 180.0
-    lat_rad = 2 * math.atan(math.exp(y / _WEB_MERCATOR_ORIGIN_SHIFT * math.pi)) - math.pi / 2
-    return lon, math.degrees(lat_rad)
-
-
 def _coordinate(feature: JSON) -> Coordinate | None:
     """**The runtime coordinate guard** (streetworks.au.wa's "gating check
     1"): GeoJSON strips any per-feature CRS statement, so this can't trust
     that a prior ``outSR=4326`` request was actually honoured (confirmed
     live that it is, for this service, today - but never assumed). Any
-    point outside plausible WGS84 degree range (``abs(lon) > 180`` or
-    ``abs(lat) > 90``) is treated as unreprojected Web Mercator metres and
-    converted explicitly via :func:`_web_mercator_to_wgs84`, never silently
-    passed through. Either way, the result is honestly labelled
-    ``EPSG:4326`` - this function never emits an unlabelled or
-    mislabelled CRS."""
+    point outside plausible WGS84 degree range is treated as unreprojected
+    Web Mercator metres and converted explicitly via
+    :func:`~streetworks.common._web_mercator.reproject_if_projected`, never
+    silently passed through. Either way, the result is honestly labelled
+    ``EPSG:4326`` - this function never emits an unlabelled or mislabelled
+    CRS. Shared with :mod:`streetworks.common.from_au_sa_trafficsa`, which
+    needs the identical formula for the same reason."""
     geometry = feature.get("geometry") or {}
     coords = geometry.get("coordinates")
     kind = (geometry.get("type") or "").upper()
     if kind != "POINT" or not coords:
         return None
-    x, y = float(coords[0]), float(coords[1])
-    if abs(x) > 180 or abs(y) > 90:
-        x, y = _web_mercator_to_wgs84(x, y)
+    x, y = reproject_if_projected(float(coords[0]), float(coords[1]))
     return Coordinate(value=(x, y), crs=_CRS)
 
 

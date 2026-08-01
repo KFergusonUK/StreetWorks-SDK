@@ -1,0 +1,140 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 29857,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.159294347216,
+          -35.2303907095075
+        ]
+      },
+      "properties": {
+        "objectid": 29857,
+        "globalid": "28de4e5d-3e23-4e68-83d8-5bca5a510f2f",
+        "projectTitle": "Watson Section 76 Block 2",
+        "type": "roadWorks",
+        "describeActivity": "",
+        "roadsClosed": "Mary Kitson Street (both directions): between Aspinall Street and Mabel Miller Lane.<br>\n\n",
+        "reasonRoadClosure": "Sewer works associated with the Watson Section 76 Block 2 redevelopment.",
+        "suburb1": "WATSON",
+        "startTimeClosure": 1763494200000,
+        "endTimeClosure": 1788166800000,
+        "tccsCommsClosure": "yes",
+        "roadsDelegateClosure": "yes",
+        "tccsCommsApprovalTimestamp": 1763425553769,
+        "roadsApprovalTimestamp": 1763509961529
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23801,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.011673037659,
+          -35.3013653980364
+        ]
+      },
+      "properties": {
+        "objectid": 23801,
+        "globalid": "c4de37ef-bbe3-44ad-a679-f3234ef47a96",
+        "projectTitle": "TTE25-HUO-8070 Huon, Stromlo Reach Estate Works, Uriarra Rd, Denman Prospect",
+        "type": "other",
+        "describeActivity": "Estate development - civil infrastructure. ",
+        "roadsClosed": "Unnamed roads off Uriarra Road located within Block 33, Section 1 in Molongolo.",
+        "reasonRoadClosure": "Stromlo Reach Estate Works construction site access. ",
+        "suburb1": "MOLONGLO",
+        "startTimeClosure": 1742155200000,
+        "endTimeClosure": 1797577200000,
+        "tccsCommsClosure": "yes",
+        "roadsDelegateClosure": "yes",
+        "tccsCommsApprovalTimestamp": 1741228503994,
+        "roadsApprovalTimestamp": 1741215987340
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24954,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.164110499805,
+          -35.2987139480195
+        ]
+      },
+      "properties": {
+        "objectid": 24954,
+        "globalid": "a53bf644-91b1-48bd-a4b5-4b9983bc4951",
+        "projectTitle": "Ext 6 TTE19-ADF-1340 to 1343 D.o.D, Base Closure Parade Events, RMC Duntroon ADFA",
+        "type": "specialEvent",
+        "describeActivity": "",
+        "roadsClosed": "4 Legge Road (both directions): from Fraser Road to Robert Campbell Road.<br>\nPlant Road (both directions): from Parnell Road to Harrison Road.<br>\nHarrison Road (both directions): from Fraser Road to Miles Road.<br>\nRobert Campbell Road (both directions): from Parnell Road to Harrison Road.<br>\nIan Campbell Road (both directions): from Harrison Road.<br> \nKapyong Road (both directions): from end of Kapyong Road near Ceremonial road to approximately 80 metres north.<br>\nCeremonial Road (both directions): from Main Parade Ground to approximately 140 metres east.<br>\nTobruk Road (northbound): from the ADFA roundabout to the end of Ian Campbell Road.<br>\nFinlay Road (both directions): from the Bruche Road car park to Harrison Road.",
+        "reasonRoadClosure": "Base Lockdown, Parade Events, ",
+        "suburb1": "CAMPBELL",
+        "startTimeClosure": 1754035200000,
+        "endTimeClosure": 1786089600000,
+        "tccsCommsClosure": "yes",
+        "roadsDelegateClosure": "yes",
+        "tccsCommsApprovalTimestamp": 1754007661678,
+        "roadsApprovalTimestamp": 1754261082339
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11942,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.046029480583,
+          -35.271815235327
+        ]
+      },
+      "properties": {
+        "objectid": 11942,
+        "globalid": "95ec2165-18d4-4c03-b83d-1656f9adce25",
+        "projectTitle": "TTE22-ACT-2184 - ACT Government - Suburban Land Agency - Whitlam Display Village",
+        "type": "buildingConstruction",
+        "describeActivity": "",
+        "roadsClosed": "Klaus Moje Street (both directions): between Sculthorpe Avenue and St Leon Street.",
+        "reasonRoadClosure": "Whitlam display village.",
+        "suburb1": "OTHER",
+        "startTimeClosure": 1659042000000,
+        "endTimeClosure": 1816930800000,
+        "tccsCommsClosure": "yes",
+        "roadsDelegateClosure": "yes",
+        "tccsCommsApprovalTimestamp": 1657842693340,
+        "roadsApprovalTimestamp": 1657839481535
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21475,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.126967004005,
+          -35.2881599601936
+        ]
+      },
+      "properties": {
+        "objectid": 21475,
+        "globalid": "5a4ed737-c89e-488b-a301-6799e3794ad8",
+        "projectTitle": "TTE24-CLREW-7405 - CMC - CLR2A - Compounds C1 & C2, Barrine Dr, Acton",
+        "type": "lightRail",
+        "describeActivity": "",
+        "roadsClosed": "Public car park located on the northern side of Corkhill Street (Block 24, Section 33 Canberra Central. Former Futsal Soccer Ground).<br>\n\nPublic car park located on the southern side of Corkhill Street. (Block 1, Section 95 Canberra Central).",
+        "reasonRoadClosure": "Light Rail Stage 2A site compound.",
+        "suburb1": "ACTON",
+        "startTimeClosure": 1728849600000,
+        "endTimeClosure": 1811487600000,
+        "tccsCommsClosure": "yes",
+        "roadsDelegateClosure": "yes",
+        "tccsCommsApprovalTimestamp": 1727995207266,
+        "roadsApprovalTimestamp": 1727940662353
+      }
+    }
+  ]
+}
