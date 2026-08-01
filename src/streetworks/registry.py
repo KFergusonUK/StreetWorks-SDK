@@ -1167,6 +1167,42 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.au import WaMainRoadsClient",
     ),
     ProviderEntry(
+        key="qld",
+        name="QLDTraffic Events (TMR)",
+        description="Queensland roadworks feed (Australia), one typed feed over every event_type.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Australia"}),
+        administrative_area=None,
+        scope_note=(
+            "Credential-free via a real, globally-shared public API key "
+            "published in TMR's own spec - never a Credentials-wanted "
+            "scaffold. Confirmed live (458 real events, 244 real "
+            "Roadworks, 2026-08-01): two of the spec's own claims are "
+            "wrong (geometry.type is NOT always GeometryCollection - only "
+            "2.2% of real features are; the source_name enum has two real "
+            "undocumented values, Asignit/MBRC). Real coordinates are "
+            "EPSG:7844 (GDA2020), not WGS84 - labelled honestly, not "
+            "relabelled. 88.5% of real Roadworks events have no Point at "
+            "all, only line geometry - carried through as the real "
+            "affected-road extent rather than dropped (a deliberate "
+            "departure from Victoria's own precedent), since dropping it "
+            "would leave most records with no geometry. administrative_area "
+            "is per-record from source.provided_by (17 distinct real "
+            "values: TMR, a private tollway operator, and over a dozen "
+            "Queensland councils) - richer than a hardcoded value, but "
+            "only a real minority of Queensland's local government areas "
+            "are represented, so network_scope stays UNKNOWN rather than "
+            "promoted. See module docstring."
+        ),
+        credentials=None,
+        licence="CC BY 4.0 AU",
+        source_grade="operator",
+        _module="streetworks.au",
+        _client_name="QldTrafficClient",
+        import_line="from streetworks.au import QldTrafficClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",

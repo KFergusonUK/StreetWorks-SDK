@@ -2,6 +2,63 @@
 
 ## [Unreleased]
 
+### Added — QLDTraffic Events (Australia), a fourth `streetworks.au` shape (2026-08-01)
+
+`streetworks.au.qld` / `streetworks.common.from_au_qld_qldtraffic` - the
+fourth Australian provider, and the first with **no credential wait at
+all**: a real, globally-shared public API key is published in plaintext by
+TMR's own API specification, intended for exactly this use (rate-limited
+100 req/min, shared across every anonymous consumer of the API worldwide -
+`QldTrafficClient` defaults to it). Confirmed live 2026-08-01 against a
+real pull (458 real events, 244 real `Roadworks`) - never a
+Credentials-wanted scaffold.
+
+- **One adapter, parameterised over `event_type`** - the NSW pattern, not
+  Victoria's - but with no server-side type filter at all (a single
+  endpoint returns every event type mixed); `iter_roadworks()` filters the
+  real feed client-side. No pagination - confirmed live, a single pull
+  returns the whole current feed.
+- **Two real doc-vs-reality mismatches, found by checking, not assumed**:
+  the source API specification claims `geometry.type` is always
+  `GeometryCollection` - real data says only 2.2% of features actually
+  are (the rest are a bare top-level `MultiLineString` or `MultiPoint`,
+  both now handled); the spec's own `source_name` enum lists exactly three
+  values - real data has five, including two genuinely undocumented ones
+  (`Asignit`, `MBRC`), both real Queensland local-government republishing
+  routes.
+- **Real coordinates are `EPSG:7844` (GDA2020), not WGS84** - confirmed
+  live on every single feature via its own embedded GeoJSON `crs` member,
+  never assumed or silently relabelled `EPSG:4326` the way the source
+  investigation brief's "WGS84" framing would have.
+- **A deliberate, evidence-based departure from Victoria's own "prefer the
+  Point, drop the LineString" precedent**: 88.5% of real Roadworks events
+  have no Point at all, only a LineString - dropping it the way Victoria's
+  converter does would leave most Queensland roadworks with no geometry
+  whatsoever, not a safe simplification. A real span check found the
+  truth is genuinely mixed (median ~1.07 km, worksite-scale; a real ~9%
+  tail runs 20-133 km, corridor-scale) - the LineString(s) are now carried
+  through honestly as the source's own stated "affected road extent" via
+  `Coordinate.points`/`parts`, rather than dropped or given a false
+  precision claim. The one real `area_alert=true` event confirms the
+  documented exclusion mechanism (the last geometry in the collection is
+  the alert polygon) works exactly as specified.
+- **`administrative_area` is per-record from `source.provided_by`, not a
+  hardcoded operator name** - a deliberate departure from every other AU
+  converter in this SDK. Confirmed live: 100% populated across 244 real
+  Roadworks records, 17 distinct real values (TMR the plurality, but also
+  a private tollway operator and 15 different Queensland local
+  government/disaster-management authorities) - richer and more accurate
+  than one fixed string. `promoter` carries `source.source_name` instead.
+  `Works.reference` is the bare `id`, confirmed globally unique across the
+  whole real feed (not just within Roadworks), so no composite key is
+  needed the way NSW's per-layer id required.
+- Added `tests/fixtures/qld_qldtraffic_live_pull.json` (seven real trimmed
+  events covering every real geometry shape found, a non-TMR/council-
+  sourced record, and the one real `area_alert=true` event) and 20 new
+  tests. Registered in the registry (`qld`), `scripts/smoke_test.py`
+  (`check_qld_qldtraffic`, credential-free by default), `.env.example`
+  (an entirely optional private-key override), and README.
+
 ### Added — Main Roads WA (Australia), a third `streetworks.au` shape (2026-07-31)
 
 `streetworks.au.wa` / `streetworks.common.from_au_wa_mainroads` - the third

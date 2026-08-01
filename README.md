@@ -90,7 +90,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see below | read |
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
-| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture) | read |
+| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture) and QLDTraffic Events (Queensland, TMR, no credentials via a real shared public API key, one typed feed over every `event_type`, confirmed live 2026-08-01) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
@@ -1742,6 +1742,15 @@ either (checked across all 35 real `TIGERweb/` services) — `Segment
 Query with a real bounding box; layer 8 alone has 16,150,491 features
 nationally, the largest dataset this SDK queries through a REST API.
 
+**Not built here, noted as the obvious follow-on**: USDOT's **National
+Address Database (NAD)** — a national address *point* file (last compiled
+2026-06-30), distributed as flat text, readable with the standard library
+and needing no new client shape — would give the US its first `Address`
+provider, the counterpart to TIGERweb's `Segment`. The **USGS National
+Transportation Dataset** is readable today (GeoPackage) but is TIGER
+supplemented with HERE commercial data — its licence needs care before
+building against it. Neither is built in this release.
+
 ## Main Roads WA (ArcGIS REST)
 
 The third `streetworks.au` member, and the third genuinely distinct AU
@@ -1792,14 +1801,64 @@ attribution genuinely doesn't ride on the layer itself); `administrative_area`
 is `"Main Roads Western Australia"`, the operator-as-authority rule already
 applied to Autobahn GmbH/TfNSW/DTP.
 
-**Not built here, noted as the obvious follow-on**: USDOT's **National
-Address Database (NAD)** — a national address *point* file (last compiled
-2026-06-30), distributed as flat text, readable with the standard library
-and needing no new client shape — would give the US its first `Address`
-provider, the counterpart to TIGERweb's `Segment`. The **USGS National
-Transportation Dataset** is readable today (GeoPackage) but is TIGER
-supplemented with HERE commercial data — its licence needs care before
-building against it. Neither is built in this release.
+## QLDTraffic Events (Queensland)
+
+The fourth `streetworks.au` member, and the first with **no credential
+wait at all** — TMR's own API specification publishes a real, globally-
+shared public API key directly in plaintext, intended for exactly this
+use (rate-limited 100 req/min, shared across every anonymous consumer of
+the API worldwide — `streetworks.au.qld.QldTrafficClient` defaults to it,
+so no registration is needed to try this one). **One adapter,
+parameterised over `event_type`** — the NSW pattern, not Victoria's — but
+with no server-side type filter at all, so `iter_roadworks()` filters the
+single mixed feed client-side.
+
+```python
+from streetworks.au.qld import QldTrafficClient
+from streetworks.common import from_au_qld_qldtraffic
+
+with QldTrafficClient() as qld:
+    works_list = from_au_qld_qldtraffic(qld.iter_roadworks())
+for works in works_list:
+    print(works.reference, works.administrative_area, works.coordinate.crs)
+```
+
+**Two real doc-vs-reality mismatches, confirmed live (2026-08-01, 458 real
+events, 244 real Roadworks) — not implemented mechanically from the
+spec's own text.** (1) The spec claims `geometry.type` is *always*
+`GeometryCollection` — real data says otherwise: only 2.2% of features
+actually are; the rest are a bare top-level `MultiLineString` or
+`MultiPoint`, all three handled. (2) The spec's own `source_name` enum
+lists exactly three values — real data has five, including two genuinely
+undocumented ones (`Asignit`, `MBRC`), both real Queensland local-
+government republishing routes, not interstate at all.
+
+**Real coordinates are `EPSG:7844` (GDA2020), not WGS84** — confirmed live
+on every single feature via its own embedded GeoJSON `crs` member, never
+assumed or silently relabelled `EPSG:4326`.
+
+**A deliberate, evidence-based departure from Victoria's own "prefer the
+Point, drop the LineString" precedent.** 88.5% of real Roadworks events
+have *no* Point at all — only a LineString. Dropping it the way Victoria's
+converter does would leave the large majority of Queensland roadworks
+with no geometry whatsoever, not the safe, lossless simplification it was
+for Victoria (which always had a real Point standing in). A real span
+check found the truth is genuinely mixed — median ~1.07 km (worksite-
+scale) but a real ~9% tail running 20–133 km (Victoria-style corridor
+extent) — so this module carries the LineString(s) through honestly as
+the source's own stated "affected road extent" via `Coordinate.points`/
+`parts`, rather than either fabricating false precision or discarding
+real, mostly-precise data. See `streetworks/au/qld.py`'s own module
+docstring for the full reasoning.
+
+**`administrative_area` is per-record from `source.provided_by`, not a
+single hardcoded operator** — a real, deliberate departure from every
+other AU converter in this SDK. Confirmed live: 100% populated across 244
+real Roadworks records, 17 distinct real values — the plurality is TMR,
+but real, named values also include a private tollway operator
+(Transurban) and 15 different Queensland local government/disaster-
+management authorities. Genuinely richer and more accurate than one fixed
+string, and exactly what `administrative_area` is documented to mean.
 
 ## WZDx (US Work Zone Data Exchange)
 

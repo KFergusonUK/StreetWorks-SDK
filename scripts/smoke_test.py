@@ -54,14 +54,21 @@ skipped if its variables are absent.
     export VEJDIREKTORATET_USERNAME="..."
     export VEJDIREKTORATET_PASSWORD="..."
 
-    # TfNSW Live Traffic (New South Wales, Australia) - PENDING LIVE
-    # VERIFICATION, see streetworks.au.nsw. Free self-service registration.
+    # TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED,
+    # see streetworks.au.nsw. Free self-service registration.
     export NSW_LIVETRAFFIC_API_KEY="..."
 
-    # DTP Planned Disruptions (Victoria, Australia) - PENDING LIVE
-    # VERIFICATION, see streetworks.au.vic. More speculative than NSW - no
-    # real sample seen anywhere. Free subscription key.
+    # DTP Planned Disruptions (Victoria, Australia) - PHASE 2 CONFIRMED, see
+    # streetworks.au.vic. Free subscription key.
     export VIC_DISRUPTIONS_API_KEY="..."
+
+    # Main Roads WA WebEOC Roadworks (Western Australia) and QLDTraffic
+    # Events (Queensland) both need NO credentials at all - see
+    # streetworks.au.wa / streetworks.au.qld. QLD_QLDTRAFFIC_API_KEY below
+    # is entirely optional - only set it if you've registered your own
+    # private key rather than using the real, shared public one this
+    # module already defaults to.
+    export QLD_QLDTRAFFIC_API_KEY="..."
 
     python scripts/smoke_test.py
 
@@ -895,6 +902,38 @@ def check_wa_mainroads() -> str:
     return f"{len(features):,} roadwork(s), {local_road:,} local-road ('LOCAL ROAD' sentinel)"
 
 
+def check_qld_qldtraffic() -> str:
+    """QLDTraffic Events (TMR, Queensland) needs no credentials - a real,
+    globally-shared public API key is used by default (see
+    streetworks.au.qld). Set QLD_QLDTRAFFIC_API_KEY to use a registered
+    private key instead, if the shared key's 100 req/min global quota
+    (contended by every anonymous consumer of the API, not just this
+    session) is being exhausted by other traffic. Reports the real
+    administrative_area diversity (source.provided_by) and the real
+    geometry-shape split (Point vs LineString-only vs GeometryCollection)
+    confirmed live 2026-08-01."""
+    from streetworks.au.qld import PUBLIC_API_KEY, QldTrafficClient
+
+    api_key = os.environ.get("QLD_QLDTRAFFIC_API_KEY", PUBLIC_API_KEY)
+    with QldTrafficClient(api_key=api_key) as qld:
+        roadworks = qld.iter_roadworks()
+    if not roadworks:
+        raise RuntimeError("query returned no roadworks - real data may have changed")
+
+    administrative_areas = {
+        f.get("properties", {}).get("source", {}).get("provided_by") for f in roadworks
+    }
+    geometry_kinds: dict[str, int] = {}
+    for feature in roadworks:
+        kind = (feature.get("geometry") or {}).get("type", "unknown")
+        geometry_kinds[kind] = geometry_kinds.get(kind, 0) + 1
+
+    return (
+        f"{len(roadworks):,} roadworks, {len(administrative_areas):,} distinct real "
+        f"administrative_area value(s), geometry shapes: {geometry_kinds}"
+    )
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -1076,6 +1115,8 @@ def main() -> int:
     reporter.check("TIGERweb (USA)", [], check_tigerweb)
     # Main Roads WA WebEOC Roadworks needs no credentials
     reporter.check("Main Roads WA (Australia)", [], check_wa_mainroads)
+    # QLDTraffic Events needs no credentials (a real, shared public API key)
+    reporter.check("QLDTraffic Events (Queensland, Australia)", [], check_qld_qldtraffic)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

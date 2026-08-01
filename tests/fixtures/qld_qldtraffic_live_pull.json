@@ -1,0 +1,1957 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "coordinates": [
+          [
+            [
+              152.4066739,
+              -28.0589968
+            ],
+            [
+              152.4066,
+              -28.05898
+            ],
+            [
+              152.40653,
+              -28.05897
+            ],
+            [
+              152.40646,
+              -28.05896
+            ],
+            [
+              152.40636,
+              -28.05896
+            ],
+            [
+              152.40627,
+              -28.05897
+            ],
+            [
+              152.40614,
+              -28.059
+            ],
+            [
+              152.40572,
+              -28.05916
+            ],
+            [
+              152.40569,
+              -28.05918
+            ],
+            [
+              152.40553,
+              -28.05928
+            ],
+            [
+              152.40544,
+              -28.05933
+            ],
+            [
+              152.40539,
+              -28.05936
+            ],
+            [
+              152.40522,
+              -28.05945
+            ],
+            [
+              152.40504,
+              -28.05956
+            ],
+            [
+              152.40492,
+              -28.05961
+            ],
+            [
+              152.40483,
+              -28.05964
+            ],
+            [
+              152.40478,
+              -28.05965
+            ],
+            [
+              152.40469,
+              -28.05967
+            ],
+            [
+              152.40467,
+              -28.05967
+            ],
+            [
+              152.40459,
+              -28.05968
+            ],
+            [
+              152.40451,
+              -28.05968
+            ],
+            [
+              152.40441,
+              -28.05967
+            ],
+            [
+              152.40434,
+              -28.05966
+            ],
+            [
+              152.40424,
+              -28.05964
+            ],
+            [
+              152.40412,
+              -28.0596
+            ],
+            [
+              152.40405,
+              -28.05957
+            ],
+            [
+              152.40399,
+              -28.05954
+            ],
+            [
+              152.40389,
+              -28.05948
+            ],
+            [
+              152.4038,
+              -28.05941
+            ],
+            [
+              152.40376,
+              -28.05937
+            ],
+            [
+              152.40366,
+              -28.05923
+            ],
+            [
+              152.40362,
+              -28.05918
+            ],
+            [
+              152.40359,
+              -28.05913
+            ],
+            [
+              152.40356,
+              -28.05906
+            ],
+            [
+              152.40354,
+              -28.05899
+            ],
+            [
+              152.4035,
+              -28.05888
+            ],
+            [
+              152.40342,
+              -28.05855
+            ],
+            [
+              152.40337,
+              -28.05833
+            ],
+            [
+              152.40331,
+              -28.05804
+            ],
+            [
+              152.40326,
+              -28.05772
+            ],
+            [
+              152.40322,
+              -28.05749
+            ],
+            [
+              152.40319,
+              -28.05735
+            ],
+            [
+              152.40317,
+              -28.05724
+            ],
+            [
+              152.40312,
+              -28.057
+            ],
+            [
+              152.403,
+              -28.05667
+            ],
+            [
+              152.40289,
+              -28.0564
+            ],
+            [
+              152.40282,
+              -28.05625
+            ],
+            [
+              152.40273,
+              -28.0561
+            ],
+            [
+              152.40262,
+              -28.05598
+            ],
+            [
+              152.40248,
+              -28.05586
+            ],
+            [
+              152.40236,
+              -28.05577
+            ],
+            [
+              152.40213,
+              -28.05565
+            ],
+            [
+              152.40175,
+              -28.05552
+            ],
+            [
+              152.40132,
+              -28.05541
+            ],
+            [
+              152.40069,
+              -28.0552
+            ],
+            [
+              152.40049,
+              -28.05514
+            ],
+            [
+              152.40031,
+              -28.05507
+            ],
+            [
+              152.39996,
+              -28.0549
+            ],
+            [
+              152.39954,
+              -28.05464
+            ],
+            [
+              152.39902,
+              -28.05427
+            ],
+            [
+              152.3989,
+              -28.0542
+            ],
+            [
+              152.39871,
+              -28.05409
+            ],
+            [
+              152.39837,
+              -28.0539
+            ],
+            [
+              152.39809,
+              -28.05378
+            ],
+            [
+              152.39728,
+              -28.05337
+            ],
+            [
+              152.39697,
+              -28.05324
+            ],
+            [
+              152.3965,
+              -28.05302
+            ],
+            [
+              152.39622,
+              -28.05289
+            ],
+            [
+              152.39609,
+              -28.0528
+            ],
+            [
+              152.39608,
+              -28.05279
+            ],
+            [
+              152.39599,
+              -28.05271
+            ],
+            [
+              152.3958,
+              -28.05245
+            ],
+            [
+              152.39563,
+              -28.0522
+            ],
+            [
+              152.39542,
+              -28.05178
+            ],
+            [
+              152.39516,
+              -28.05116
+            ],
+            [
+              152.39504,
+              -28.05075
+            ],
+            [
+              152.39503,
+              -28.05072
+            ],
+            [
+              152.39498,
+              -28.05051
+            ],
+            [
+              152.39492,
+              -28.05029
+            ],
+            [
+              152.39489,
+              -28.0502
+            ],
+            [
+              152.39485,
+              -28.05011
+            ],
+            [
+              152.39482,
+              -28.05006
+            ],
+            [
+              152.39481,
+              -28.05005
+            ],
+            [
+              152.39475,
+              -28.04999
+            ],
+            [
+              152.39468,
+              -28.04993
+            ],
+            [
+              152.39458,
+              -28.04987
+            ],
+            [
+              152.39447,
+              -28.04983
+            ],
+            [
+              152.39445,
+              -28.04983
+            ],
+            [
+              152.3943,
+              -28.04981
+            ],
+            [
+              152.39412,
+              -28.0498
+            ],
+            [
+              152.39385,
+              -28.0498
+            ],
+            [
+              152.39356,
+              -28.0498
+            ],
+            [
+              152.39324,
+              -28.04981
+            ],
+            [
+              152.39314,
+              -28.0498
+            ],
+            [
+              152.39297,
+              -28.04979
+            ],
+            [
+              152.39254,
+              -28.0497
+            ],
+            [
+              152.39239,
+              -28.04965
+            ],
+            [
+              152.39207,
+              -28.04955
+            ],
+            [
+              152.3914,
+              -28.04932
+            ],
+            [
+              152.391119,
+              -28.0492329
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 548467,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2023-04-11T06:00:00+10:00",
+        "source": {
+          "source_name": "EPS",
+          "source_id": null,
+          "account": null,
+          "provided_by": "Department of Transport and Main Roads",
+          "provided_by_url": "https://qldtraffic.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/548467",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Lanes affected",
+          "impact_subtype": "Lane or lanes reduced",
+          "delay": "Delays expected (during active hours)"
+        },
+        "duration": {
+          "start": "2023-04-11T06:00:00+10:00",
+          "end": "2026-10-30T17:00:00+10:00",
+          "active_days": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "recurrences": [
+            {
+              "event_id": 548467,
+              "description": "From Monday 6 AM to Friday 6 PM",
+              "impact": {
+                "direction": "Both directions",
+                "towards": null,
+                "impact_type": "Lanes affected",
+                "impact_subtype": "Lane or lanes reduced",
+                "delay": "Delays expected (during active hours)"
+              }
+            }
+          ]
+        },
+        "event_priority": "Medium",
+        "description": "Final 2km of works at Cunninghams Gap. Both lanes open.",
+        "advice": "Changed traffic conditions",
+        "information": "No right turns at Crest carpark.\n\nPermitted U-turn locations: Westbound: Drive through the West Gap Creek picnic area, (1.5km west of the crest) before continuing eastbound to the Crest Carpark. Eastbound: around 3km east from the Crest Carpark.\n\nPhone:1800 497 100 (9am-5pm, Monday to Friday)\nEmail: Cunninghams_gap@tmr.qld.gov.au",
+        "road_summary": {
+          "road_name": "Cunningham Highway",
+          "locality": "Tregony",
+          "postcode": "4370",
+          "local_government_area": "Scenic Rim Regional / Southern Downs Regional",
+          "district": "Darling Downs / South Coast"
+        },
+        "last_updated": "2026-08-01T03:51:17.466136+10:00",
+        "next_inspection": null,
+        "web_link": "https://www.tmr.qld.gov.au/projects/cunningham-highway-ipswich-warwick-2020-disaster-recovery-funding-arrangements-reconstruction-works",
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "coordinates": [
+          [
+            [
+              150.4777976,
+              -23.364429
+            ],
+            [
+              150.47775,
+              -23.36437
+            ],
+            [
+              150.4777,
+              -23.36431
+            ],
+            [
+              150.47764,
+              -23.36423
+            ],
+            [
+              150.47759,
+              -23.36415
+            ],
+            [
+              150.47751,
+              -23.36403
+            ],
+            [
+              150.47744,
+              -23.36392
+            ],
+            [
+              150.47719,
+              -23.36353
+            ],
+            [
+              150.47709,
+              -23.36337
+            ],
+            [
+              150.47704,
+              -23.36333
+            ],
+            [
+              150.47701,
+              -23.36331
+            ],
+            [
+              150.47699,
+              -23.3633
+            ],
+            [
+              150.47695,
+              -23.36327
+            ],
+            [
+              150.47691,
+              -23.36325
+            ],
+            [
+              150.47688,
+              -23.36324
+            ],
+            [
+              150.47685,
+              -23.36323
+            ],
+            [
+              150.47682,
+              -23.36322
+            ],
+            [
+              150.47679,
+              -23.36321
+            ],
+            [
+              150.47677,
+              -23.36321
+            ],
+            [
+              150.4766852,
+              -23.3631926
+            ]
+          ],
+          [
+            [
+              150.4733175,
+              -23.360496
+            ],
+            [
+              150.47332,
+              -23.36048
+            ],
+            [
+              150.47334,
+              -23.36042
+            ],
+            [
+              150.47343,
+              -23.35978
+            ],
+            [
+              150.47358,
+              -23.3589
+            ],
+            [
+              150.4736,
+              -23.35878
+            ],
+            [
+              150.47364,
+              -23.35868
+            ],
+            [
+              150.47366,
+              -23.35864
+            ],
+            [
+              150.47369,
+              -23.3586
+            ],
+            [
+              150.4737,
+              -23.35859
+            ],
+            [
+              150.4738,
+              -23.35848
+            ],
+            [
+              150.47389,
+              -23.35841
+            ],
+            [
+              150.4741133,
+              -23.3582944
+            ]
+          ],
+          [
+            [
+              150.4661509,
+              -23.354434
+            ],
+            [
+              150.46606,
+              -23.35453
+            ],
+            [
+              150.4659,
+              -23.35469
+            ],
+            [
+              150.46577,
+              -23.3548
+            ],
+            [
+              150.46568,
+              -23.35485
+            ],
+            [
+              150.46556,
+              -23.35491
+            ],
+            [
+              150.46537,
+              -23.35498
+            ],
+            [
+              150.46519,
+              -23.35503
+            ],
+            [
+              150.46417,
+              -23.35525
+            ],
+            [
+              150.46391,
+              -23.35532
+            ],
+            [
+              150.46366,
+              -23.35541
+            ],
+            [
+              150.46351,
+              -23.35548
+            ],
+            [
+              150.46336,
+              -23.35558
+            ],
+            [
+              150.46321,
+              -23.35569
+            ],
+            [
+              150.46301,
+              -23.35589
+            ],
+            [
+              150.4629,
+              -23.35605
+            ],
+            [
+              150.46287,
+              -23.3561
+            ],
+            [
+              150.46284,
+              -23.35615
+            ],
+            [
+              150.46279,
+              -23.35625
+            ],
+            [
+              150.46273,
+              -23.35641
+            ],
+            [
+              150.46268,
+              -23.35666
+            ],
+            [
+              150.46263,
+              -23.35697
+            ],
+            [
+              150.46253,
+              -23.35768
+            ],
+            [
+              150.46237,
+              -23.35869
+            ],
+            [
+              150.46198,
+              -23.36125
+            ],
+            [
+              150.46185,
+              -23.3621
+            ],
+            [
+              150.46158,
+              -23.36384
+            ],
+            [
+              150.46137,
+              -23.36518
+            ],
+            [
+              150.46116,
+              -23.36659
+            ],
+            [
+              150.46109,
+              -23.36705
+            ],
+            [
+              150.46105,
+              -23.36735
+            ],
+            [
+              150.46093,
+              -23.36791
+            ],
+            [
+              150.46084,
+              -23.36824
+            ],
+            [
+              150.46065,
+              -23.36887
+            ],
+            [
+              150.46035,
+              -23.36967
+            ],
+            [
+              150.45979,
+              -23.37098
+            ],
+            [
+              150.4592,
+              -23.37231
+            ],
+            [
+              150.45882,
+              -23.37315
+            ],
+            [
+              150.45843,
+              -23.37408
+            ],
+            [
+              150.4584,
+              -23.37415
+            ],
+            [
+              150.45836,
+              -23.37425
+            ],
+            [
+              150.45833,
+              -23.37432
+            ],
+            [
+              150.45815,
+              -23.37475
+            ],
+            [
+              150.45797,
+              -23.37521
+            ],
+            [
+              150.45796,
+              -23.37538
+            ],
+            [
+              150.45795,
+              -23.37548
+            ],
+            [
+              150.45796,
+              -23.3756
+            ],
+            [
+              150.45796,
+              -23.3757
+            ],
+            [
+              150.45799,
+              -23.37583
+            ],
+            [
+              150.45801,
+              -23.3759
+            ],
+            [
+              150.45805,
+              -23.37603
+            ],
+            [
+              150.45809,
+              -23.37614
+            ],
+            [
+              150.45818,
+              -23.37629
+            ],
+            [
+              150.4585,
+              -23.37686
+            ],
+            [
+              150.45873,
+              -23.37726
+            ],
+            [
+              150.45878,
+              -23.37734
+            ],
+            [
+              150.45912,
+              -23.37795
+            ],
+            [
+              150.45936,
+              -23.37835
+            ],
+            [
+              150.4596,
+              -23.37878
+            ],
+            [
+              150.45965,
+              -23.37888
+            ],
+            [
+              150.45991,
+              -23.37934
+            ],
+            [
+              150.45995,
+              -23.37943
+            ],
+            [
+              150.45998,
+              -23.37952
+            ],
+            [
+              150.46,
+              -23.37958
+            ],
+            [
+              150.46003,
+              -23.37968
+            ],
+            [
+              150.46008,
+              -23.3799
+            ],
+            [
+              150.46012,
+              -23.38012
+            ],
+            [
+              150.46016,
+              -23.38029
+            ],
+            [
+              150.46018,
+              -23.38046
+            ],
+            [
+              150.4602,
+              -23.38059
+            ],
+            [
+              150.46021,
+              -23.38067
+            ],
+            [
+              150.46022,
+              -23.38084
+            ],
+            [
+              150.46023,
+              -23.38093
+            ],
+            [
+              150.46022,
+              -23.38104
+            ],
+            [
+              150.46021,
+              -23.38114
+            ],
+            [
+              150.46019,
+              -23.38128
+            ],
+            [
+              150.46012,
+              -23.38176
+            ],
+            [
+              150.46007,
+              -23.38205
+            ],
+            [
+              150.46001,
+              -23.38239
+            ],
+            [
+              150.45998,
+              -23.38253
+            ],
+            [
+              150.45996,
+              -23.3826
+            ],
+            [
+              150.45994,
+              -23.38267
+            ],
+            [
+              150.45992,
+              -23.38275
+            ],
+            [
+              150.45989,
+              -23.38281
+            ],
+            [
+              150.45985,
+              -23.38292
+            ],
+            [
+              150.4598,
+              -23.38302
+            ],
+            [
+              150.45975,
+              -23.38311
+            ],
+            [
+              150.45969,
+              -23.38321
+            ],
+            [
+              150.45964,
+              -23.38328
+            ],
+            [
+              150.45956,
+              -23.38339
+            ],
+            [
+              150.4595,
+              -23.38346
+            ],
+            [
+              150.45945,
+              -23.38352
+            ],
+            [
+              150.4594,
+              -23.38357
+            ],
+            [
+              150.45936,
+              -23.3836
+            ],
+            [
+              150.4593,
+              -23.38367
+            ],
+            [
+              150.45922,
+              -23.38373
+            ],
+            [
+              150.45911,
+              -23.3838
+            ],
+            [
+              150.45901,
+              -23.38388
+            ],
+            [
+              150.45893,
+              -23.38393
+            ],
+            [
+              150.45883,
+              -23.38397
+            ],
+            [
+              150.45874,
+              -23.38401
+            ],
+            [
+              150.45866,
+              -23.38405
+            ],
+            [
+              150.45852,
+              -23.38411
+            ],
+            [
+              150.45842,
+              -23.38415
+            ],
+            [
+              150.4582,
+              -23.38421
+            ],
+            [
+              150.45799,
+              -23.38426
+            ],
+            [
+              150.45783,
+              -23.38432
+            ],
+            [
+              150.45775,
+              -23.38434
+            ],
+            [
+              150.45754,
+              -23.3844
+            ],
+            [
+              150.45701,
+              -23.38455
+            ],
+            [
+              150.45678,
+              -23.38463
+            ],
+            [
+              150.45516,
+              -23.38511
+            ],
+            [
+              150.45474,
+              -23.38523
+            ],
+            [
+              150.45428,
+              -23.38537
+            ],
+            [
+              150.45395,
+              -23.38547
+            ],
+            [
+              150.4533,
+              -23.38566
+            ],
+            [
+              150.45268,
+              -23.38585
+            ],
+            [
+              150.45234,
+              -23.38595
+            ],
+            [
+              150.45197,
+              -23.38606
+            ],
+            [
+              150.45179,
+              -23.38611
+            ],
+            [
+              150.4516,
+              -23.38616
+            ],
+            [
+              150.45147,
+              -23.38618
+            ],
+            [
+              150.4508495,
+              -23.3862688
+            ]
+          ],
+          [
+            [
+              150.4766852,
+              -23.3631926
+            ],
+            [
+              150.47668,
+              -23.36319
+            ],
+            [
+              150.47665,
+              -23.3632
+            ],
+            [
+              150.47662,
+              -23.36321
+            ],
+            [
+              150.47658,
+              -23.36321
+            ],
+            [
+              150.47657,
+              -23.36321
+            ],
+            [
+              150.47655,
+              -23.36321
+            ],
+            [
+              150.47652,
+              -23.36321
+            ],
+            [
+              150.47648,
+              -23.3632
+            ],
+            [
+              150.47645,
+              -23.36319
+            ],
+            [
+              150.47642,
+              -23.36318
+            ],
+            [
+              150.47641,
+              -23.36317
+            ],
+            [
+              150.47639,
+              -23.36316
+            ],
+            [
+              150.47636,
+              -23.36315
+            ],
+            [
+              150.47636,
+              -23.36314
+            ],
+            [
+              150.47634,
+              -23.36312
+            ],
+            [
+              150.47632,
+              -23.3631
+            ],
+            [
+              150.4763,
+              -23.36307
+            ],
+            [
+              150.47628,
+              -23.36305
+            ],
+            [
+              150.47627,
+              -23.36302
+            ],
+            [
+              150.47606,
+              -23.36284
+            ],
+            [
+              150.47594,
+              -23.36272
+            ],
+            [
+              150.47588,
+              -23.36269
+            ],
+            [
+              150.47583,
+              -23.36265
+            ],
+            [
+              150.47576,
+              -23.3626
+            ],
+            [
+              150.4757,
+              -23.36255
+            ],
+            [
+              150.47564,
+              -23.36251
+            ],
+            [
+              150.47514,
+              -23.3621
+            ],
+            [
+              150.47474,
+              -23.36176
+            ],
+            [
+              150.47462,
+              -23.36165
+            ],
+            [
+              150.47456,
+              -23.36161
+            ],
+            [
+              150.47451,
+              -23.36157
+            ],
+            [
+              150.47397,
+              -23.36111
+            ],
+            [
+              150.4733,
+              -23.36055
+            ],
+            [
+              150.47227,
+              -23.35971
+            ],
+            [
+              150.47192,
+              -23.35941
+            ],
+            [
+              150.47093,
+              -23.35858
+            ],
+            [
+              150.47075,
+              -23.35841
+            ],
+            [
+              150.47029,
+              -23.35799
+            ],
+            [
+              150.46984,
+              -23.35759
+            ],
+            [
+              150.46978,
+              -23.35754
+            ],
+            [
+              150.466172,
+              -23.354412
+            ]
+          ],
+          [
+            [
+              150.4741133,
+              -23.3582944
+            ],
+            [
+              150.47419,
+              -23.35824
+            ],
+            [
+              150.4743,
+              -23.35816
+            ],
+            [
+              150.47435,
+              -23.3581
+            ],
+            [
+              150.47439,
+              -23.35804
+            ],
+            [
+              150.4744,
+              -23.358
+            ],
+            [
+              150.47445,
+              -23.35781
+            ],
+            [
+              150.47449,
+              -23.35758
+            ],
+            [
+              150.47453,
+              -23.35731
+            ],
+            [
+              150.47467,
+              -23.35641
+            ],
+            [
+              150.47482,
+              -23.35536
+            ],
+            [
+              150.4748608,
+              -23.3550951
+            ]
+          ],
+          [
+            [
+              150.4709336,
+              -23.3585344
+            ],
+            [
+              150.47093,
+              -23.35845
+            ],
+            [
+              150.47093,
+              -23.35839
+            ],
+            [
+              150.47093,
+              -23.35837
+            ],
+            [
+              150.47093,
+              -23.3583
+            ],
+            [
+              150.47091,
+              -23.3582
+            ],
+            [
+              150.47081,
+              -23.35768
+            ],
+            [
+              150.47072,
+              -23.35728
+            ],
+            [
+              150.47038,
+              -23.35571
+            ],
+            [
+              150.47031,
+              -23.35541
+            ],
+            [
+              150.4703,
+              -23.35529
+            ],
+            [
+              150.47031,
+              -23.35522
+            ],
+            [
+              150.47034,
+              -23.35505
+            ],
+            [
+              150.47047,
+              -23.35416
+            ],
+            [
+              150.47052,
+              -23.35388
+            ],
+            [
+              150.4706757,
+              -23.3529334
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 754821,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2025-09-29T06:00:00+10:00",
+        "source": {
+          "source_name": "EPS",
+          "source_id": null,
+          "account": null,
+          "provided_by": "Department of Transport and Main Roads",
+          "provided_by_url": "https://qldtraffic.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/754821",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Lanes affected",
+          "impact_subtype": "All lanes affected",
+          "delay": "No delays expected"
+        },
+        "duration": {
+          "start": "2025-09-29T06:00:00+10:00",
+          "end": "2029-12-21T18:00:00+10:00",
+          "active_days": null,
+          "recurrences": null
+        },
+        "event_priority": "Medium",
+        "description": null,
+        "advice": "Reduced speed limit (60km/h)",
+        "information": "Changed traffic conditions in place throughout this area to support construction activities for the Rockhampton Ring Road.  Traffic changes include reduced speeds during working hours, lane closures as required and occasional after-hours work (night works and weekend works).  Motorists can expect an increase in construction vehicles.",
+        "road_summary": {
+          "road_name": "Kahl Road / Local Road / Milner Road / Nine Mile Road / Ridgelands Road / Six Mile Road",
+          "locality": "Fairy Bower / Pink Lily",
+          "postcode": "4700 / 4702",
+          "local_government_area": "Rockhampton Regional",
+          "district": "Fitzroy"
+        },
+        "last_updated": "2026-07-28T20:45:11.093365+10:00",
+        "next_inspection": null,
+        "web_link": null,
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPoint",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "coordinates": [
+          [
+            153.0183826,
+            -27.2739148
+          ]
+        ]
+      },
+      "properties": {
+        "id": 725992,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2025-05-19T00:00:00+10:00",
+        "source": {
+          "source_name": "EPS",
+          "source_id": null,
+          "account": null,
+          "provided_by": "Department of Transport and Main Roads",
+          "provided_by_url": "https://qldtraffic.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/725992",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Closures",
+          "impact_subtype": "Road closed to all traffic",
+          "delay": "Delays expected (during active hours)"
+        },
+        "duration": {
+          "start": "2025-05-19T00:00:00+10:00",
+          "end": "2030-01-01T15:00:00+10:00",
+          "active_days": null,
+          "recurrences": null
+        },
+        "event_priority": "Low",
+        "description": "Goodrich Road East, access from Dohles Rocks Road",
+        "advice": "Use alternative route",
+        "information": "\u2022\tAccess to Goodrich Road East from Dohles Rocks Road will be permanently closed to all traffic and the road shortened following the start of main construction. This will allow for the construction of the southbound exit ramp.\n\u2022\tAlternative access to Goodrich Road East will be available via Silvereye Drive intersection with Dohles Rocks Road.\n\u2022\tTraffic control measures, including traffic control, reduced speed limits and construction signage will be in place throughout the works. Motorists are advised to adhere to the directions of traffic control at all times.\n\u2022\tThe signalling system at the Dohles Rocks Road, Goodrich Road East intersection will be modified to support the closure of access to Goodrich Road East. \n",
+        "road_summary": {
+          "road_name": "Goodrich Road East",
+          "locality": "Griffin",
+          "postcode": "4503",
+          "local_government_area": "Moreton Bay Regional",
+          "district": "North Coast"
+        },
+        "last_updated": "2026-07-28T20:45:25.75428+10:00",
+        "next_inspection": null,
+        "web_link": "https://www.tmr.qld.gov.au/projects/bruce-highway-brisbane-gympie-dohles-rocks-road-to-anzac-avenue-upgrade",
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "GeometryCollection",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "geometries": [
+          {
+            "type": "Point",
+            "coordinates": [
+              153.109563,
+              -28.1018383
+            ]
+          },
+          {
+            "type": "Point",
+            "coordinates": [
+              153.1060465,
+              -28.1275121
+            ]
+          },
+          {
+            "type": "Point",
+            "coordinates": [
+              153.1122762,
+              -28.1361911
+            ]
+          },
+          {
+            "type": "LineString",
+            "coordinates": [
+              [
+                153.1054761,
+                -28.1052752
+              ],
+              [
+                153.10539,
+                -28.10535
+              ],
+              [
+                153.10525,
+                -28.10548
+              ],
+              [
+                153.1052235,
+                -28.1055082
+              ]
+            ]
+          }
+        ]
+      },
+      "properties": {
+        "id": 796576,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2026-04-26T06:00:00+10:00",
+        "source": {
+          "source_name": "EPS",
+          "source_id": null,
+          "account": null,
+          "provided_by": "Department of Transport and Main Roads",
+          "provided_by_url": "https://qldtraffic.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/796576",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Lanes affected",
+          "impact_subtype": "Lane or lanes reduced",
+          "delay": "Delays expected (during active hours)"
+        },
+        "duration": {
+          "start": "2026-05-05T06:00:00+10:00",
+          "end": "2026-09-30T18:00:00+10:00",
+          "active_days": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "recurrences": [
+            {
+              "event_id": 796576,
+              "description": "Sunday to Saturday, 12:01 AM to 11:59 PM",
+              "impact": {
+                "direction": "Both directions",
+                "towards": null,
+                "impact_type": "Lanes affected",
+                "impact_subtype": "Lane or lanes reduced",
+                "delay": "Delays expected (during active hours)"
+              }
+            }
+          ]
+        },
+        "event_priority": "Medium",
+        "description": "Restoration works at multiple locations ",
+        "advice": "Allow extra travel time",
+        "information": "Road restoration works on Lamington National Park Road at multiple locations.\nAt approximately 1.5 kilometres south of The Big Lamington, Cainbable, stop/slow traffic conditions with a reduced lane will be in place 24 hours a day, seven days a week until September 2026.\n \nWorks will be undertaken on weekdays, between 6.30am and 5.30pm, however the lane closure will be in place for the duration of the works.\n",
+        "road_summary": {
+          "road_name": "Lamington National Park Road",
+          "locality": "Cainbable / Sarabah",
+          "postcode": "4275 / 4285",
+          "local_government_area": "Scenic Rim Regional",
+          "district": "South Coast"
+        },
+        "last_updated": "2026-08-01T07:22:05.620889+10:00",
+        "next_inspection": null,
+        "web_link": null,
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "coordinates": [
+          [
+            [
+              152.62575426,
+              -27.468634201
+            ],
+            [
+              152.6259988,
+              -27.4689378
+            ],
+            [
+              152.6263226,
+              -27.4693476
+            ],
+            [
+              152.626679,
+              -27.4698201
+            ],
+            [
+              152.6269795,
+              -27.4701905
+            ],
+            [
+              152.6272342,
+              -27.4704507
+            ],
+            [
+              152.6273377,
+              -27.4705102
+            ],
+            [
+              152.6274587,
+              -27.4705697
+            ],
+            [
+              152.645338123,
+              -27.473220988
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 738661,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2025-07-17T06:00:00+10:00",
+        "source": {
+          "source_name": "Guardian",
+          "source_id": "0c8f0261-c972-427a-a049-ed28928deab1",
+          "account": "36580",
+          "provided_by": "Somerset Regional Council",
+          "provided_by_url": "http://www.somerset.qld.gov.au/"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/738661",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Closures",
+          "impact_subtype": "Road closed to all traffic",
+          "delay": ""
+        },
+        "duration": {
+          "start": "2025-07-17T06:00:00+10:00",
+          "end": "2026-11-30T23:00:00+10:00",
+          "active_days": null,
+          "recurrences": null
+        },
+        "event_priority": "Medium",
+        "description": null,
+        "advice": "Diversions are in place",
+        "information": null,
+        "road_summary": {
+          "road_name": "Muckerts Lane / Shadywood Drive",
+          "locality": "Fernvale / Vernor",
+          "postcode": "4306",
+          "local_government_area": "Somerset Regional",
+          "district": "North Coast"
+        },
+        "last_updated": "2026-03-26T14:04:02.729737+10:00",
+        "next_inspection": null,
+        "web_link": null,
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPoint",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "coordinates": [
+          [
+            152.813176379,
+            -27.582514691
+          ]
+        ]
+      },
+      "properties": {
+        "id": 791832,
+        "area_alert": false,
+        "status": "Published",
+        "published": "2026-03-30T12:41:17+10:00",
+        "source": {
+          "source_name": "Asignit",
+          "source_id": "6__84D5CB77-74D8-4E5C-A0AE-94BBE1E3031B",
+          "account": "43960",
+          "provided_by": "Ipswich City Council",
+          "provided_by_url": "https://www.ipswich.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/791832",
+        "image": null,
+        "event_type": "Roadworks",
+        "event_subtype": "Planned roadworks",
+        "event_due_to": null,
+        "impact": {
+          "direction": "Both directions",
+          "towards": null,
+          "impact_type": "Lanes affected",
+          "impact_subtype": "Lane or lanes reduced",
+          "delay": "Delays expected (during active hours)"
+        },
+        "duration": {
+          "start": "2026-03-30T12:41:17+10:00",
+          "end": "2026-12-31T12:41:00+10:00",
+          "active_days": null,
+          "recurrences": null
+        },
+        "event_priority": "Medium",
+        "description": "",
+        "advice": "Changed traffic conditions",
+        "information": null,
+        "road_summary": {
+          "road_name": "Queensborough Parade",
+          "locality": "Karalee",
+          "postcode": "4306",
+          "local_government_area": "Ipswich City",
+          "district": "Metropolitan"
+        },
+        "last_updated": "2026-07-15T20:15:09.837371+10:00",
+        "next_inspection": null,
+        "web_link": "",
+        "alert_message": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "GeometryCollection",
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:7844"
+          }
+        },
+        "geometries": [
+          {
+            "type": "Point",
+            "coordinates": [
+              153.1141787,
+              -26.6751286
+            ]
+          },
+          {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  153.093721927,
+                  -26.652424498
+                ],
+                [
+                  153.102307839,
+                  -26.653118893
+                ],
+                [
+                  153.108686113,
+                  -26.670143805
+                ],
+                [
+                  153.112895716,
+                  -26.672190702
+                ],
+                [
+                  153.124220891,
+                  -26.682465148
+                ],
+                [
+                  153.115375853,
+                  -26.698801591
+                ],
+                [
+                  153.103363456,
+                  -26.680037517
+                ],
+                [
+                  153.096952957,
+                  -26.678200375
+                ],
+                [
+                  153.060048605,
+                  -26.650276579
+                ],
+                [
+                  153.038416428,
+                  -26.6384583
+                ],
+                [
+                  153.035042228,
+                  -26.621582125
+                ],
+                [
+                  153.072117186,
+                  -26.608484269
+                ],
+                [
+                  153.098214192,
+                  -26.604649738
+                ],
+                [
+                  153.102853525,
+                  -26.616925377
+                ],
+                [
+                  153.100446367,
+                  -26.633398149
+                ],
+                [
+                  153.085227532,
+                  -26.638918619
+                ],
+                [
+                  153.093721927,
+                  -26.652424498
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      "properties": {
+        "id": 818007,
+        "area_alert": true,
+        "status": "Published",
+        "published": "2026-07-28T15:00:00+10:00",
+        "source": {
+          "source_name": "EPS",
+          "source_id": null,
+          "account": null,
+          "provided_by": "Department of Transport and Main Roads",
+          "provided_by_url": "https://qldtraffic.qld.gov.au"
+        },
+        "url": "https://api.qldtraffic.qld.gov.au/v2/events/818007",
+        "image": null,
+        "event_type": "Special event",
+        "event_subtype": "N/A",
+        "event_due_to": null,
+        "impact": {
+          "direction": "All directions",
+          "towards": null,
+          "impact_type": "Closures",
+          "impact_subtype": "Road closed to all traffic",
+          "delay": "Long delays expected (during active hours)"
+        },
+        "duration": {
+          "start": "2026-08-02T03:30:00+10:00",
+          "end": "2026-08-02T13:30:00+10:00",
+          "active_days": null,
+          "recurrences": null
+        },
+        "event_priority": "High",
+        "description": "Pacific Paradise to Maroochydore, Cotton Tree, Alexandra Headland, Mooloolaba. Congestion - Bli Bli ",
+        "advice": "Motorists are urged to show patience",
+        "information": "Running Event utilising Southbound Lanes of Sunshine Motorway from Pacific Paradise to Maroochydore Road. Sections of David Low Way. Bradman Avenue, Duporth Avenue, Aerodrome Road, Alexandra Parade.      \nResultant congestion expected in Bli Bli, Mudjimba, Maroochydore, Alexandra Headland and Mooloolaba areas.",
+        "road_summary": {
+          "road_name": "Alexandra Parade",
+          "locality": "Alexandra Headland",
+          "postcode": "4572",
+          "local_government_area": "Sunshine Coast Regional",
+          "district": "North Coast"
+        },
+        "last_updated": "2026-07-29T13:08:19.626091+10:00",
+        "next_inspection": null,
+        "web_link": null,
+        "alert_message": "Running Event utilising Southbound Lanes of Sunshine Motorway from Pacific Paradise to Maroochydore Road. Sections of David Low Way. Bradman Avenue, Duporth Avenue, Aerodrome Road, Alexandra Parade.   \nResultant congestion expected in Bli Bli, Mudjimba, Maroochydore, Alexandra Headland and Mooloolaba areas.  \n"
+      }
+    }
+  ],
+  "published": "2026-08-01T16:16:53.4320211+10:00",
+  "rights": {
+    "owner": "As per the respective provided_by details contained in the feed: Department of Transport and Main Roads, Transport for NSW, or the respective Local Government Authority.",
+    "disclaimer": "The State of Queensland makes no statements, representations or warranties about the accuracy, currency, reliability or completeness of the information contained in this feed.",
+    "copyright": "Copyright in material within this feed is owned by the State of Queensland or other entities which provide material for the website by arrangement. Please consult the respective provided_by_url for each data owner or the QLDTraffic website for further information https://qldtraffic.qld.gov.au/More/Data.html."
+  }
+}

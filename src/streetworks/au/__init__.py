@@ -12,17 +12,24 @@ Victoria publishes two genuinely different, independently-versioned APIs
 for planned vs. unplanned disruptions (see :mod:`streetworks.au.vic`,
 which covers planned only); Western Australia is a single ArcGIS REST
 ``FeatureServer`` layer, a third distinct client protocol, not just a
-third schema (see :mod:`streetworks.au.wa`). NSW and Victoria are
-**Phase 2 confirmed** (2026-07-30, against real credentialed pulls - see
-each module's own docstring); WA is **credential-free** and shipped
-live-verified with a real fixture from day one, never a Credentials-wanted
-scaffold.
+third schema (see :mod:`streetworks.au.wa`); Queensland is a single
+typed feed like NSW's, but with no server-side type filter and a genuinely
+richer, per-record authority split - see :mod:`streetworks.au.qld`. NSW
+and Victoria are **Phase 2 confirmed** (2026-07-30, against real
+credentialed pulls - see each module's own docstring); WA and QLD are
+**credential-free** (QLD via a real public API key, never a private one)
+and shipped live-verified with a real fixture from day one, never
+Credentials-wanted scaffolds.
 """
 
 from .nsw import BASE_URL as NSW_BASE_URL
 from .nsw import LAYERS as NSW_LAYERS
 from .nsw import NswLiveTrafficClient
 from .nsw import parse_features as parse_nsw_features
+from .qld import BASE_URL as QLD_BASE_URL
+from .qld import EVENT_TYPES as QLD_EVENT_TYPES
+from .qld import PUBLIC_API_KEY as QLD_PUBLIC_API_KEY
+from .qld import QldTrafficClient
 from .vic import BASE_URL as VIC_BASE_URL
 from .vic import VicDisruptionsClient
 from .vic import parse_features as parse_vic_features
@@ -41,4 +48,8 @@ __all__ = [
     "WaMainRoadsClient",
     "WA_BASE_URL",
     "WA_ROADWORKS_LAYER",
+    "QldTrafficClient",
+    "QLD_BASE_URL",
+    "QLD_EVENT_TYPES",
+    "QLD_PUBLIC_API_KEY",
 ]
