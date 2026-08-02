@@ -92,6 +92,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
 | `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture), QLDTraffic Events (Queensland, TMR, no credentials via a real shared public API key, one typed feed over every `event_type`, confirmed live 2026-08-01), ACT's Temporary Traffic Management (the only municipal/local-street AU coverage, no credentials, CC BY-SA 4.0) and Tasmania's Roadworks - State Roads (the only AU provider with real line geometry, no credentials, licence genuinely unconfirmed); Traffic SA / DIT Roadworks (South Australia, ArcGIS MapServer) is a **[Credentials wanted](#credentials-wanted)** scaffold, blocked on a token-gated query endpoint behind a geo-restricted host. Road Report NT (Northern Territory) is registered as a documented, honestly-unavailable scaffold — investigated and found to have no published REST/GeoJSON API at all (its real backend is an undocumented SignalR hub), so `RoadReportNtClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
 | `streetworks.nzta` | [NZTA (Waka Kotahi) Highway Information](https://opendata-nzta.opendata.arcgis.com/) — New Zealand's national state-highway roadworks, ArcGIS REST (no credentials, shipped live-verified with a real fixture, confirmed 2026-08-02). Not the same body as LINZ — see below | read |
+| `streetworks.gnaf` | [G-NAF](https://data.gov.au/data/dataset/geocoded-national-address-file-g-naf) + [National Roads](https://digital.atlas.gov.au/), over the Digital Atlas of Australia — Australia's national address register (15.9M addresses) and national road network (4.3M segments, genuinely comprehensive down to local roads/footpaths), both ArcGIS REST, no credentials, confirmed live 2026-08-02. A real correction to the source investigation: the commercial Geoscape Roads API isn't the only option — this whole-of-government platform re-publishes both under CC BY 4.0 | read |
 | `streetworks.linz` | [LINZ (Toitū Te Whenua)](https://data.linz.govt.nz/) — New Zealand's national address register, NZ Addresses over a public ArcGIS mirror (no credentials, confirmed live, CC BY 4.0). Also carries the `streets` counterpart — NZ Addresses: Roads/Road Sections — as a **[Credentials wanted](#credentials-wanted)** scaffold (schema + a real attribute sample confirmed, blocked on a real LINZ Data Service API key) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
@@ -2067,6 +2068,79 @@ single most interesting open question in this cluster: whether `road_id`
 genuinely cross-references between NZ Addresses and Roads/Road Sections
 (the field name is identical across all three layers' schemas; the real
 samples pulled so far just happen not to overlap).
+
+## G-NAF & National Roads (Australia)
+
+This SDK's first Australian gazetteer coverage — over the **Digital
+Atlas of Australia** (`digital.atlas.gov.au`), a whole-of-government
+ArcGIS Online platform, not Geoscape's own commercial G-NAF/Roads API.
+
+```python
+from streetworks.gnaf import GnafClient
+from streetworks.common import from_gnaf_address, from_gnaf_road
+
+with GnafClient() as gnaf:
+    addresses = [from_gnaf_address(a) for a in gnaf.iter_addresses(where="STATE='ACT'")]
+    roads = [from_gnaf_road(r) for r in gnaf.iter_roads(where="state='ACT'")]
+```
+
+**A real correction to the source investigation.** The brief that
+started this build concluded Australia has "no clean national *open*
+road-centreline register with identifiers" — true of Geoscape's own
+commercial **Roads** API, which is what the brief checked. It missed a
+separate, genuinely open publication route: the Digital Atlas
+re-publishes both a G-NAF-derived address layer and a Geoscape
+Roads-derived road network, both under **CC BY 4.0**, both live,
+neither documented on the platform's own JS-rendered dataset pages —
+found only by resolving each dataset's Digital Atlas item to its real
+underlying `services-ap1.arcgis.com` `FeatureServer` URL. This
+supersedes the brief's own fallback plan (SA's CRRS / Tasmania's State
+Roads as state-scoped consolation prizes) — Australia now has a genuine
+*national* road register, the same tier as New Zealand's LINZ.
+
+**National Address Points (G-NAF derivative), confirmed live 2026-08-02
+— 15,901,249 real addresses, credential-free.** Native SR EPSG:7844
+(GDA2020), `outSR=4326` confirmed honoured live. The real stated
+identifier is `ADDRESS_DETAIL_PID` (G-NAF's own PID) — but there's no
+separate street/locality PID on this derivative, only text
+(`STREET_NAME`/`STREET_TYPE`), the same "no street table of its own"
+shape this SDK's own BAG route already has. A real `unit`/flat concept
+(`FLAT_TYPE`+`FLAT_NUMBER`, e.g. `"SHOP"` + `83`) is present — confirmed
+as the *second* built source with this gap, after LINZ's own `unit`
+field; `Address`'s model docstring now documents both rather than the
+single-source "no built source has" claim it carried before. Licence CC
+BY 4.0, plus a genuine mandatory restriction: open G-NAF must not be
+used to generate an address or address list for sending mail unless
+each address is independently verified — irrelevant to gazetteer use,
+stated here for completeness.
+
+**National Roads (Geoscape Roads derivative), confirmed live 2026-08-02
+— 4,346,217 real segments, credential-free, genuinely comprehensive.**
+Real `hierarchy` values span the whole network, from `NATIONAL OR STATE
+HIGHWAY` down through `LOCAL ROAD` (the largest single value),
+`FOOTPATH` and `CYCLEPATH` — real local-road reach beyond even
+TIGERweb's own local-road layer. The real stated identifier `road_id`
+is segment-scoped, not an aggregated named-street id, and no separate
+named-street layer exists alongside it, so this converter emits
+`Segment` only, never `Street` — the same "no synthetic streets"
+discipline `from_nwb` already established for the Netherlands. Real
+per-segment attributes include `jurisdiction_control` (a genuine
+per-record authority, e.g. `"Transport for New South Wales (controlled
+roads)"`) and both `OPERATIONAL` and `PROPOSED` (not-yet-built) real
+`status` values — `iter_roads()` returns the raw network unfiltered by
+default, not a curated "built only" view. Licence CC BY 4.0, no extra
+restriction.
+
+**No stated join between addresses and roads — resolves the brief's
+join question, on better evidence than it had.** Neither layer states a
+reference to the other; the only possible link is a name match
+(`STREET_NAME` against `full_street_name`), forbidden by this SDK's
+stated-identifiers-only rule. So Australia's addresses and roads stand
+alone from each other, the same conclusion already reached about the AU
+roadworks cluster (no AU roadworks feed states a G-NAF/road identifier
+either) — now settled for the gazetteer side too, on the real open
+register rather than the commercial one the brief assumed was the only
+option.
 
 ## WZDx (US Work Zone Data Exchange)
 

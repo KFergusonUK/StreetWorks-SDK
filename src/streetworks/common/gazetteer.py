@@ -191,20 +191,28 @@ class Segment:
 
 @dataclass
 class Address:
-    """One address, from any of the three built address registers.
-    ``street_name`` is stated by all three (`ban`, `bag`, `kartverket`) and
-    is the direct answer to this model's third use case (pulling street
-    names from address gazetteers).
+    """One address, from any of the built address registers (`ban`, `bag`,
+    `kartverket`, `linz`, `gnaf`). ``street_name`` is stated by all of
+    them and is the direct answer to this model's third use case (pulling
+    street names from address gazetteers).
 
-    ``housenumber``/``suffix``, not ``number``/``unit`` - no built source
-    has a `unit`/flat concept. BAN states `numero`+`suffixe` (real example:
-    numero ``4``, suffixe ``"bis"``); Kartverket states `nummer`+`bokstav`;
-    BAG currently only models `huisnummer` (see :mod:`.from_bag`).
-    **Route-dependency**: BAN's geocoding API folds any suffix into
-    `housenumber` and never populates `suffix` separately - only its bulk
-    CSV routes decompose it. Converters never fabricate a split; where a
-    source doesn't decompose, `suffix` is `None` and the whole value sits in
-    `housenumber`, exactly as the source gave it."""
+    ``housenumber``/``suffix``, not ``number``/``unit``. BAN states
+    `numero`+`suffixe` (real example: numero ``4``, suffixe ``"bis"``);
+    Kartverket states `nummer`+`bokstav`; BAG currently only models
+    `huisnummer` (see :mod:`.from_bag`). **Route-dependency**: BAN's
+    geocoding API folds any suffix into `housenumber` and never populates
+    `suffix` separately - only its bulk CSV routes decompose it.
+    Converters never fabricate a split; where a source doesn't decompose,
+    `suffix` is `None` and the whole value sits in `housenumber`, exactly
+    as the source gave it.
+
+    **A real `unit`/flat concept exists on two built sources - LINZ
+    (`unit`, e.g. ``"2"`` in ``"2/49 Pigeon Mountain Road"``) and G-NAF
+    (`FLAT_TYPE`+`FLAT_NUMBER`, e.g. ``"SHOP"``+``83``)** - still no
+    canonical field for it (the two sources' shapes don't obviously
+    unify - LINZ states a bare number, G-NAF states a typed
+    type+number pair), so it stays on `.raw` only on both, per the module
+    docstring's evidence-discipline rule."""
 
     geometry: Coordinate
     identifiers: tuple[Identifier, ...] = ()

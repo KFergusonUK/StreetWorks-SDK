@@ -1,0 +1,501 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            149.019885435,
+            -35.194911002
+          ],
+          [
+            149.019923349,
+            -35.194877372
+          ],
+          [
+            149.019961161,
+            -35.194843665
+          ],
+          [
+            149.019998873,
+            -35.194809882
+          ],
+          [
+            149.020036483,
+            -35.194776023
+          ]
+        ]
+      },
+      "properties": {
+        "road_id": "rds0dd303a0d423",
+        "contributor_id": "69593",
+        "jurisdiction_control": null,
+        "operator": null,
+        "date_created": 1676851200000,
+        "date_modified": 1687737600000,
+        "national_route": null,
+        "state_route": null,
+        "full_street_name": "SHOOBRIDGE CIRCUIT",
+        "street_name": "SHOOBRIDGE",
+        "street_name_label": "Shoobridge",
+        "street_type": "CIRCUIT",
+        "street_type_label": "Circuit",
+        "street_suffix": null,
+        "street_suffix_label": null,
+        "street_alias_name": null,
+        "street_alias_type": null,
+        "street_alias_suffix": null,
+        "feature_type": null,
+        "hierarchy": "LOCAL ROAD",
+        "subtype": "ROAD",
+        "ground_relationship": "ON GROUND",
+        "lane_count": null,
+        "lane_description": "TWO OR MORE",
+        "one_way": null,
+        "status": "OPERATIONAL",
+        "surface": "SEALED",
+        "trafficability": "2WD",
+        "travel_direction": null,
+        "speed": null,
+        "state": "ACT",
+        "source": "ACT",
+        "horizontal_accuracy": null,
+        "OBJECTID": 16,
+        "GlobalID": "487bc02d-7aa4-4201-b6b4-82319b2a109a",
+        "Shape__Length": 0.0002025713154889293
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            153.194218824,
+            -30.132965751
+          ],
+          [
+            153.194220989,
+            -30.132982538
+          ],
+          [
+            153.194221814,
+            -30.132988848
+          ],
+          [
+            153.1942273,
+            -30.1330335339999
+          ],
+          [
+            153.194232499,
+            -30.1330782369999
+          ],
+          [
+            153.19423742,
+            -30.133122994
+          ],
+          [
+            153.19424209,
+            -30.1331677869999
+          ],
+          [
+            153.194246474,
+            -30.133212562
+          ],
+          [
+            153.194250579,
+            -30.133257354
+          ],
+          [
+            153.194254388,
+            -30.133302192
+          ],
+          [
+            153.194255573,
+            -30.133317242
+          ]
+        ]
+      },
+      "properties": {
+        "road_id": "rds6c1a711dfd1d",
+        "contributor_id": "517569409",
+        "jurisdiction_control": "Transport for New South Wales (controlled roads)",
+        "operator": null,
+        "date_created": 1742860800000,
+        "date_modified": null,
+        "national_route": "A1",
+        "state_route": null,
+        "full_street_name": "PACIFIC HIGHWAY",
+        "street_name": "PACIFIC",
+        "street_name_label": "Pacific",
+        "street_type": "HIGHWAY",
+        "street_type_label": "Highway",
+        "street_suffix": null,
+        "street_suffix_label": null,
+        "street_alias_name": null,
+        "street_alias_type": null,
+        "street_alias_suffix": null,
+        "feature_type": "DUAL CARRIAGEWAY",
+        "hierarchy": "NATIONAL OR STATE HIGHWAY",
+        "subtype": "ROAD",
+        "ground_relationship": "ON GROUND",
+        "lane_count": null,
+        "lane_description": "TWO OR MORE",
+        "one_way": null,
+        "status": "OPERATIONAL",
+        "surface": "SEALED",
+        "trafficability": "2WD",
+        "travel_direction": null,
+        "speed": 60,
+        "state": "NSW",
+        "source": "NSW",
+        "horizontal_accuracy": "5",
+        "OBJECTID": 4,
+        "GlobalID": "92adec02-f9b3-42c1-a0ac-144a7dd9eb23",
+        "Shape__Length": 0.00035344293589547585
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            149.175507738,
+            -35.385970487
+          ],
+          [
+            149.17551342,
+            -35.385969307
+          ],
+          [
+            149.175519045,
+            -35.3859679569999
+          ],
+          [
+            149.175524605,
+            -35.385966438
+          ],
+          [
+            149.175530094,
+            -35.3859647539999
+          ],
+          [
+            149.175535503,
+            -35.3859629049999
+          ],
+          [
+            149.175540826,
+            -35.385960895
+          ],
+          [
+            149.175546055,
+            -35.385958726
+          ],
+          [
+            149.175551183,
+            -35.3859564009999
+          ],
+          [
+            149.175556203,
+            -35.385953924
+          ],
+          [
+            149.175561109,
+            -35.385951297
+          ],
+          [
+            149.175565894,
+            -35.3859485249999
+          ],
+          [
+            149.175570552,
+            -35.385945611
+          ],
+          [
+            149.17579158,
+            -35.3857559849999
+          ],
+          [
+            149.175793919,
+            -35.385754424
+          ],
+          [
+            149.1757964,
+            -35.385753016
+          ],
+          [
+            149.175799005,
+            -35.38575177
+          ],
+          [
+            149.175801721,
+            -35.385750693
+          ],
+          [
+            149.175804531,
+            -35.385749792
+          ],
+          [
+            149.175807417,
+            -35.385749071
+          ],
+          [
+            149.175810363,
+            -35.3857485349999
+          ],
+          [
+            149.175813351,
+            -35.385748188
+          ],
+          [
+            149.175816363,
+            -35.385748032
+          ],
+          [
+            149.17581938,
+            -35.385748067
+          ],
+          [
+            149.175822385,
+            -35.3857482929999
+          ],
+          [
+            149.175825359,
+            -35.38574871
+          ],
+          [
+            149.175828286,
+            -35.385749313
+          ],
+          [
+            149.175831146,
+            -35.3857501009999
+          ],
+          [
+            149.175833923,
+            -35.3857510669999
+          ],
+          [
+            149.175836601,
+            -35.3857522069999
+          ],
+          [
+            149.175839163,
+            -35.3857535129999
+          ],
+          [
+            149.175841593,
+            -35.385754977
+          ],
+          [
+            149.17632803,
+            -35.386133158
+          ],
+          [
+            149.176330699,
+            -35.386135458
+          ],
+          [
+            149.176333189,
+            -35.3861378889999
+          ],
+          [
+            149.17633549,
+            -35.386140441
+          ],
+          [
+            149.176337593,
+            -35.386143105
+          ],
+          [
+            149.176339491,
+            -35.3861458709999
+          ],
+          [
+            149.176341176,
+            -35.386148728
+          ],
+          [
+            149.176342642,
+            -35.3861516649999
+          ],
+          [
+            149.176343882,
+            -35.3861546709999
+          ],
+          [
+            149.176344893,
+            -35.3861577329999
+          ],
+          [
+            149.176345671,
+            -35.386160842
+          ],
+          [
+            149.176346211,
+            -35.386163983
+          ],
+          [
+            149.176346513,
+            -35.3861671459999
+          ],
+          [
+            149.176346575,
+            -35.386170318
+          ],
+          [
+            149.176346397,
+            -35.3861734879999
+          ],
+          [
+            149.17634598,
+            -35.386176642
+          ],
+          [
+            149.176345325,
+            -35.386179769
+          ],
+          [
+            149.176344434,
+            -35.3861828569999
+          ],
+          [
+            149.176343312,
+            -35.3861858929999
+          ],
+          [
+            149.176341962,
+            -35.3861888669999
+          ],
+          [
+            149.17634039,
+            -35.386191767
+          ],
+          [
+            149.176338601,
+            -35.386194581
+          ],
+          [
+            149.176336603,
+            -35.3861972989999
+          ],
+          [
+            149.176334403,
+            -35.3861999109999
+          ],
+          [
+            149.17610874,
+            -35.38644033
+          ]
+        ]
+      },
+      "properties": {
+        "road_id": "rdsf4cae148834a",
+        "contributor_id": "89003",
+        "jurisdiction_control": null,
+        "operator": null,
+        "date_created": 1676851200000,
+        "date_modified": 1685059200000,
+        "national_route": null,
+        "state_route": null,
+        "full_street_name": null,
+        "street_name": null,
+        "street_name_label": null,
+        "street_type": null,
+        "street_type_label": null,
+        "street_suffix": null,
+        "street_suffix_label": null,
+        "street_alias_name": null,
+        "street_alias_type": null,
+        "street_alias_suffix": null,
+        "feature_type": null,
+        "hierarchy": "LOCAL ROAD",
+        "subtype": "ROAD",
+        "ground_relationship": null,
+        "lane_count": null,
+        "lane_description": null,
+        "one_way": null,
+        "status": "OPERATIONAL",
+        "surface": null,
+        "trafficability": null,
+        "travel_direction": null,
+        "speed": null,
+        "state": "ACT",
+        "source": "ACT",
+        "horizontal_accuracy": null,
+        "OBJECTID": 15,
+        "GlobalID": "e75fb234-59c6-4276-ae97-9d5338338e8e",
+        "Shape__Length": 0.0014337534719081869
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            149.188902422,
+            -35.3715605519999
+          ],
+          [
+            149.189083732,
+            -35.3712621879999
+          ],
+          [
+            149.189273135,
+            -35.370949212
+          ],
+          [
+            149.189421804,
+            -35.370687768
+          ],
+          [
+            149.189466985,
+            -35.370605353
+          ]
+        ]
+      },
+      "properties": {
+        "road_id": "rdsSLl_zCdZ6oRI",
+        "contributor_id": "79062",
+        "jurisdiction_control": null,
+        "operator": null,
+        "date_created": 1687737600000,
+        "date_modified": null,
+        "national_route": null,
+        "state_route": null,
+        "full_street_name": "WOODS LANE",
+        "street_name": "WOODS",
+        "street_name_label": "Woods",
+        "street_type": "LANE",
+        "street_type_label": "Lane",
+        "street_suffix": null,
+        "street_suffix_label": null,
+        "street_alias_name": null,
+        "street_alias_type": null,
+        "street_alias_suffix": null,
+        "feature_type": null,
+        "hierarchy": "COLLECTOR ROAD",
+        "subtype": "ROAD",
+        "ground_relationship": "ON GROUND",
+        "lane_count": null,
+        "lane_description": "ONE",
+        "one_way": null,
+        "status": "PROPOSED",
+        "surface": "UNSEALED",
+        "trafficability": "4WD",
+        "travel_direction": null,
+        "speed": null,
+        "state": "ACT",
+        "source": "ACT",
+        "horizontal_accuracy": null,
+        "OBJECTID": 233,
+        "GlobalID": "16f0dcbe-93b1-41f8-a1e2-65f1b4a52d2b",
+        "Shape__Length": 0.001109703246137446
+      }
+    }
+  ]
+}

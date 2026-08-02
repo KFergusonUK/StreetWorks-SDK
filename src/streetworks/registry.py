@@ -1573,6 +1573,70 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.nzta import NztaClient",
     ),
     ProviderEntry(
+        key="gnaf",
+        name="G-NAF National Address Points",
+        description="Australia's national address register, over the Digital Atlas of Australia.",
+        kind=Kind.ADDRESSES,
+        territories=frozenset({"Australia"}),
+        administrative_area="Geoscape Australia",
+        scope_note=(
+            "Confirmed live (2026-08-02, 15,901,249 real addresses per "
+            "the layer's own feature count) - a real, credential-free "
+            "ArcGIS Feature Service. No "
+            "separate street/locality PID on this derivative - street "
+            "identity is text only (STREET_NAME/STREET_TYPE), the same "
+            "'no street table of its own' shape as bag. A real 'unit'/"
+            "flat concept (FLAT_TYPE/FLAT_NUMBER) has no canonical field "
+            "- confirmed as the second built source with this gap, "
+            "after linz - see the gazetteer Address model's own "
+            "docstring. Licence CC BY 4.0 plus a genuine mandatory "
+            "restriction on generating mail-address lists without "
+            "independent verification - irrelevant to gazetteer use, "
+            "stated for completeness. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "Creative Commons Attribution 4.0 International (CC BY 4.0), "
+            "plus a mail-use restriction"
+        ),
+        source_grade="register",
+        _module="streetworks.gnaf",
+        _client_name="GnafClient",
+        import_line="from streetworks.gnaf import GnafClient",
+    ),
+    ProviderEntry(
+        key="gnaf_roads",
+        name="National Roads (Australia)",
+        description="Australia's national road network, over the Digital Atlas of Australia.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Australia"}),
+        administrative_area="Geoscape Australia",
+        scope_note=(
+            "Confirmed live (2026-08-02, 4,346,217 real segments per the "
+            "layer's own feature count) - genuinely comprehensive, not a "
+            "highways-only skim: real hierarchy values reach LOCAL ROAD "
+            "(the largest single value), FOOTPATH and CYCLEPATH, beyond "
+            "even TIGERweb's own local-road layer. road_id is real but "
+            "segment-scoped, not an aggregated named-street id, and no "
+            "separate named-street layer exists alongside it - emits "
+            "Segment only, never Street, the same discipline nwb already "
+            "established. Real status values include both OPERATIONAL "
+            "and PROPOSED (not-yet-built) roads - iter_roads() is the "
+            "raw network, unfiltered by default. No stated join to gnaf "
+            "(Australia's addresses) - resolves the source "
+            "investigation's own join question on better evidence than "
+            "it had (it assumed the only road-network option was "
+            "Geoscape's commercial, unavailable product). Licence CC BY "
+            "4.0, no extra restriction. See module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.gnaf",
+        _client_name="GnafClient",
+        import_line="from streetworks.gnaf import GnafClient",
+    ),
+    ProviderEntry(
         key="linz",
         name="LINZ NZ Addresses",
         description="New Zealand's national address register.",

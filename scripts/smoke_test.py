@@ -1061,6 +1061,43 @@ def check_linz_addresses() -> str:
     return f"{len(addresses):,} Auckland address(es), e.g. {sample.get('full_road_name')!r}"
 
 
+def check_gnaf_addresses() -> str:
+    """G-NAF National Address Points needs no credentials - a real ArcGIS
+    Feature Service over the Digital Atlas of Australia, see
+    streetworks.gnaf.client. Confirmed live 2026-08-02 (15,901,249 real
+    addresses total). Only fetches a small, filtered slice, not the full
+    layer."""
+    from streetworks.gnaf import GnafClient
+
+    with GnafClient() as gnaf:
+        addresses = list(gnaf.iter_addresses(where="STATE='ACT'"))
+    if not addresses:
+        raise RuntimeError("query returned no addresses for a known real state")
+    sample = addresses[0]["properties"]
+    return f"{len(addresses):,} ACT address(es), e.g. {sample.get('COMPLETE_ADDRESS')!r}"
+
+
+def check_gnaf_roads() -> str:
+    """National Roads (Australia) needs no credentials - the same Digital
+    Atlas of Australia platform as G-NAF addresses, see
+    streetworks.gnaf.client. Confirmed live 2026-08-02 (4,346,217 real
+    segments total). Reports the real hierarchy split for the fetched
+    slice - flags if a real value beyond the confirmed live enum ever
+    shows up."""
+    from streetworks.gnaf import GnafClient
+
+    with GnafClient() as gnaf:
+        roads = list(gnaf.iter_roads(where="state='ACT'"))
+    if not roads:
+        raise RuntimeError("query returned no roads for a known real state")
+
+    hierarchy: dict[str, int] = {}
+    for feature in roads:
+        value = feature.get("properties", {}).get("hierarchy", "unknown")
+        hierarchy[value] = hierarchy.get(value, 0) + 1
+    return f"{len(roads):,} ACT road segment(s), hierarchy split: {hierarchy}"
+
+
 def check_linz_roads() -> str:
     """LINZ NZ Addresses: Roads/Road Sections - PENDING LIVE VERIFICATION,
     see streetworks.linz.client. Requires a real LINZ Data Service API key
@@ -1278,6 +1315,9 @@ def main() -> int:
     reporter.check(
         "LINZ NZ Addresses: Roads/Road Sections (New Zealand)", ["LINZ_API_KEY"], check_linz_roads
     )
+    # G-NAF National Address Points and National Roads both need no credentials
+    reporter.check("G-NAF National Address Points (Australia)", [], check_gnaf_addresses)
+    reporter.check("National Roads (Australia)", [], check_gnaf_roads)
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

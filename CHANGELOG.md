@@ -2,6 +2,59 @@
 
 ## [Unreleased]
 
+### Added — G-NAF & National Roads (Australia), this SDK's first AU gazetteer coverage (2026-08-02)
+
+`streetworks.gnaf` / `streetworks.common.from_gnaf_address`/
+`from_gnaf_road` - both confirmed live, credential-free, over the
+**Digital Atlas of Australia** (`digital.atlas.gov.au`), a whole-of-
+government ArcGIS Online platform, not Geoscape's own commercial API.
+
+- **A real correction to the source investigation.** The brief concluded
+  Australia has no clean national *open* road-centreline register,
+  because Geoscape's own **Roads** product is commercial. True of
+  Geoscape's direct API - but the Digital Atlas re-publishes an open
+  derivative of both G-NAF and Geoscape Roads anyway, under CC BY 4.0,
+  found by resolving each dataset's Digital Atlas item to its real
+  underlying ArcGIS `FeatureServer` URL (not documented on the JS-
+  rendered dataset landing pages themselves). This supersedes the
+  brief's own fallback plan (SA's CRRS / Tasmania's State Roads as
+  state-scoped consolation prizes).
+- **National Address Points (G-NAF derivative)** - 15,901,249 real
+  addresses, native SR EPSG:7844 (GDA2020), `outSR=4326` confirmed
+  honoured live. Real stated identifier `ADDRESS_DETAIL_PID`; no
+  separate street/locality PID on this derivative (street identity is
+  text only, the same "no street table of its own" shape as `bag`). A
+  real `unit`/flat concept (`FLAT_TYPE`/`FLAT_NUMBER`) confirmed as the
+  *second* built source with this gap, after `linz` -
+  `gazetteer.Address`'s own docstring updated to reflect both. Licence
+  CC BY 4.0 plus a genuine mandatory restriction on generating
+  mail-address lists without independent verification.
+- **National Roads (Geoscape Roads derivative)** - 4,346,217 real
+  segments, genuinely comprehensive: real `hierarchy` values reach
+  `LOCAL ROAD` (the largest single value), `FOOTPATH` and `CYCLEPATH` -
+  beyond even TIGERweb's own local-road layer. `road_id` is real but
+  segment-scoped, not an aggregated named-street id, and no separate
+  named-street layer exists - emits `Segment` only, never `Street`, the
+  same discipline `from_nwb` already established. Real `status` values
+  include both `OPERATIONAL` and `PROPOSED` (not-yet-built) roads -
+  `iter_roads()` is the raw network, unfiltered by default. Licence CC
+  BY 4.0, no extra restriction.
+- **No stated join between addresses and roads** - resolves the source
+  investigation's own join question, on better evidence than it had:
+  neither layer states a reference to the other, and a name match
+  (`STREET_NAME` against `full_street_name`) is forbidden by this SDK's
+  stated-identifiers-only rule.
+- Registry entries `gnaf` (addresses, verified) and `gnaf_roads`
+  (streets, verified) - both fully live-verified from day one, no
+  Credentials-wanted scaffold needed. `scripts/smoke_test.py` checks for
+  both, README provider table row and a new `## G-NAF & National Roads
+  (Australia)` section.
+- 16 new tests (`test_gnaf.py`) covering client wiring and converter
+  behaviour against real ACT-scoped fixtures, including the real
+  unnamed-local-road gap, the `PROPOSED` status value, and a hand-built
+  `MultiLineString` case (no real sample pulled so far happens to be
+  multi-part).
+
 ### Added — NZTA & LINZ (New Zealand), this SDK's first NZ coverage (2026-08-02)
 
 `streetworks.nzta` / `streetworks.common.from_nzta` and
