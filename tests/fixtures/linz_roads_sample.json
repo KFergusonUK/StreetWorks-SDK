@@ -1,0 +1,50 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [172.6362, -43.5321],
+          [172.6371, -43.5325],
+          [172.6380, -43.5330]
+        ]
+      },
+      "properties": {
+        "road_id": 1771657,
+        "full_road_name": "Dunvegan Street",
+        "road_name_label": "Dunvegan St",
+        "road_name_body": "Dunvegan",
+        "road_name_type": "Street",
+        "road_name_suffix": null,
+        "is_land": "True",
+        "full_road_name_ascii": "Dunvegan Street",
+        "road_name_label_ascii": "Dunvegan St",
+        "road_name_body_ascii": "Dunvegan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [172.7012, -43.5980],
+          [172.7025, -43.5991]
+        ]
+      },
+      "properties": {
+        "road_id": 1795587,
+        "full_road_name": "Diversion Road",
+        "road_name_label": "Diversion Rd",
+        "road_name_body": "Diversion",
+        "road_name_type": "Road",
+        "road_name_suffix": null,
+        "is_land": "True",
+        "full_road_name_ascii": "Diversion Road",
+        "road_name_label_ascii": "Diversion Rd",
+        "road_name_body_ascii": "Diversion"
+      }
+    }
+  ]
+}

@@ -89,7 +89,7 @@ def test_providers_unknown_territory_warns_and_returns_empty():
 def test_providers_kind_filter_streets():
     streets = providers(kind="streets")
     assert {e.key for e in streets} == {
-        "datavia", "openusrn", "nwb", "bdtopo", "nvdb", "tigerweb",
+        "datavia", "openusrn", "nwb", "bdtopo", "nvdb", "tigerweb", "linz_roads",
     }
     assert all(e.kind is Kind.STREETS for e in streets)
     # Enum and string both accepted.
@@ -98,7 +98,7 @@ def test_providers_kind_filter_streets():
 
 def test_providers_kind_filter_addresses():
     addresses = providers(kind="addresses")
-    assert {e.key for e in addresses} == {"ban", "bag", "kartverket"}
+    assert {e.key for e in addresses} == {"ban", "bag", "kartverket", "linz"}
     assert all(e.kind is Kind.ADDRESSES for e in addresses)
     assert providers(kind=Kind.ADDRESSES) == addresses
 
@@ -313,9 +313,23 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     undocumented SignalR hub) - see streetworks.au.nt's own module
     docstring and streetworks.exceptions.ProviderUnavailableError.
 
+    LINZ Roads/Road Sections (`linz_roads`) is back in Trafikverket's own
+    tier: schema and a real attribute sample confirmed live from LINZ's
+    own public Koordinates metadata API, but never queried through the
+    real WFS - blocked on a genuine LINZ Data Service (LDS) API key this
+    build doesn't have. Its sibling `linz` (NZ Addresses) is verified -
+    same LinzClient, genuinely different verification tier per capability,
+    see streetworks.linz.client's own module docstring.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
-    assert {e.key for e in unverified} == {"trafikverket", "vejdirektoratet", "sa", "nt"}
+    assert {e.key for e in unverified} == {
+        "trafikverket",
+        "vejdirektoratet",
+        "sa",
+        "nt",
+        "linz_roads",
+    }
 
 
 def test_unverified_provider_flagged_in_rendered_output():

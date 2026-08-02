@@ -1543,4 +1543,90 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="ViaLietuvaClient",
         import_line="from streetworks.vialietuva import ViaLietuvaClient",
     ),
+    ProviderEntry(
+        key="nzta",
+        name="NZTA (Waka Kotahi) Highway Information - Road Events",
+        description="New Zealand's national state-highway roadworks feed, over ArcGIS.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"New Zealand"}),
+        administrative_area="Waka Kotahi NZ Transport Agency",
+        scope_note=(
+            "Confirmed live (2026-08-02, 104 real records) - credential-"
+            "free, never a Credentials-wanted scaffold. This SDK's first "
+            "New Zealand works coverage; see also 'linz' for the paired "
+            "gazetteer strand, not joined to this one (no structured road/"
+            "route identifier anywhere in the real schema - free text "
+            "only, see module docstring). A real correction to the source "
+            "investigation: this is the ArcGIS open-data portal service, "
+            "not the bespoke trafficnz.info REST/SOAP API. State highways "
+            "only, not local/municipal roads. The richest real "
+            "status->DateConfidence signal confirmed anywhere in this SDK "
+            "(status/planned correlate perfectly with eventType). See "
+            "module docstring."
+        ),
+        credentials=None,
+        licence="NZTA 4.0 BY CC (a CC BY 4.0 variant)",
+        source_grade="operator",
+        _module="streetworks.nzta",
+        _client_name="NztaClient",
+        import_line="from streetworks.nzta import NztaClient",
+    ),
+    ProviderEntry(
+        key="linz",
+        name="LINZ NZ Addresses",
+        description="New Zealand's national address register.",
+        kind=Kind.ADDRESSES,
+        territories=frozenset({"New Zealand"}),
+        administrative_area="Toitū Te Whenua Land Information New Zealand",
+        scope_note=(
+            "Confirmed live (2026-08-02, 2,421,642 real addresses per the "
+            "layer's own feature_count) - a public ArcGIS Online mirror, "
+            "no LINZ Data Service key needed. Covers the current NZ "
+            "Addresses family (layer 123113), not the retired NZ Roads "
+            "(Addressing) layer. A real, currently uncanonicalised 'unit'/"
+            "flat-number concept is present (see the gazetteer Address "
+            "model's own docstring) - stays on .raw only. See also "
+            "'linz_roads' for this cluster's street/segment coverage "
+            "(same client, a genuinely different verification tier), and "
+            "module docstring for the unconfirmed road_id cross-reference "
+            "between the two."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.linz",
+        _client_name="LinzClient",
+        import_line="from streetworks.linz import LinzClient",
+    ),
+    ProviderEntry(
+        key="linz_roads",
+        name="LINZ NZ Addresses: Roads / Road Sections",
+        description="New Zealand's national road network - aggregated centrelines and sections.",
+        kind=Kind.STREETS,
+        territories=frozenset({"New Zealand"}),
+        administrative_area="Toitū Te Whenua Land Information New Zealand",
+        scope_note=(
+            "Phase 1 scaffold - schema and a real attribute sample both "
+            "confirmed live from LINZ's own public Koordinates metadata "
+            "API (Roads layer 123110, Road Sections layer 123109; real "
+            "totals 82,221/250,409 per each layer's own feature_count), "
+            "but never queried through the real WFS - this needs a "
+            "genuine LINZ Data Service (LDS) API key this build doesn't "
+            "have (self-service registration needs a real account this "
+            "session can't create). The real WFS URL shape (API key in "
+            "the URL path, Koordinates' own convention) and startIndex/"
+            "count pagination are implemented to spec but unexercised "
+            "against a real response. Same LinzClient as 'linz' - a "
+            "genuinely different verification tier on the same client, "
+            "not a separate module. See module docstring."
+        ),
+        credentials="LINZ Data Service (LDS) API key (data.linz.govt.nz)",
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        verified=False,
+        _module="streetworks.linz",
+        _client_name="LinzClient",
+        import_line="from streetworks.linz import LinzClient",
+    ),
 ]

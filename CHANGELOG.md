@@ -2,6 +2,64 @@
 
 ## [Unreleased]
 
+### Added — NZTA & LINZ (New Zealand), this SDK's first NZ coverage (2026-08-02)
+
+`streetworks.nzta` / `streetworks.common.from_nzta` and
+`streetworks.linz` / `streetworks.common.from_linz_address`/
+`from_linz_road`/`from_linz_road_section` - two new top-level packages,
+not a combined `nz` package (same reasoning as Norway's
+`kartverket`/`nvdb`/`vegvesen` split: different agencies, different
+technologies, sharing a country only incidentally).
+
+- **NZTA (Waka Kotahi) Highway Information - Road Events** - confirmed
+  live 2026-08-02 (104 real records), credential-free, shipped
+  live-verified with a real fixture from day one. A real correction to
+  the source investigation: this is the ArcGIS open-data portal service,
+  not the bespoke `trafficnz.info` REST/SOAP API the brief also flagged -
+  reuses the existing `ArcGISFeatureClient`. Two real layers share an
+  identical field schema but never overlap on `eventId`: layer 0 ("Road
+  Events", point) is roadworks-relevant; layer 1 ("Road Area Events",
+  polyline) is always `eventType=="Area Warning"`, not roadworks at all -
+  confirmed live, ruling out a Victoria/QLD-style corridor trap. Real
+  `status`/`eventType` correlate perfectly, giving the richest real
+  VERIFIED/ESTIMATED `DateConfidence` signal confirmed anywhere in this
+  SDK so far. No structured road/route identifier anywhere in the real
+  schema (free text only) - settles the works-to-LINZ join question
+  directly: `from_nzta` never populates `WorksSite.street_ref`, the same
+  SA-`ROAD_NO` discipline. Licensed NZTA 4.0 BY CC (a CC BY 4.0 variant).
+- **LINZ (Toitū Te Whenua) NZ Addresses** - confirmed live 2026-08-02
+  (2,421,642 real addresses, per the layer's own `feature_count`), a
+  public ArcGIS Online mirror needing no LINZ Data Service key at all, CC
+  BY 4.0. A real, newly-discovered `unit`/flat-number concept (e.g. `"2"`
+  in `"2/49 Pigeon Mountain Road"`) that `Address`'s own docstring already
+  flagged as absent from every source built so far - no canonical field
+  yet, stays on `.raw` only, alongside `is_land` (a real boolean concept
+  the live layer states as `esriFieldTypeString` length 2, so real values
+  are the truncated `"tr"`/`"fa"`).
+- **LINZ NZ Addresses: Roads/Road Sections** - registered as a Phase 1
+  scaffold (`linz_roads`, `verified=False`), the same tier as
+  Trafikverket/Vejdirektoratet: schema and a real attribute sample (not
+  geometry) confirmed live from LINZ's own public, keyless Koordinates
+  metadata API, but the actual WFS pull has never been exercised - needs
+  a genuine LINZ Data Service (LDS) API key this build doesn't have. The
+  real WFS URL shape is documented and implemented (API key embedded in
+  the URL **path**, Koordinates' own convention, confirmed live from the
+  layer's own `/services/` listing). Open question, flagged not guessed:
+  whether `road_id` (the same field name across all three layers'
+  schemas) genuinely cross-references between Addresses and Roads/Road
+  Sections - the real samples pulled so far just happen not to overlap.
+- Registry entries `nzta` (roadworks, verified), `linz` (addresses,
+  verified), `linz_roads` (streets, `verified=False`) - `linz_roads`
+  joins the "Credentials wanted" unverified tier alongside
+  `trafikverket`/`vejdirektoratet`/`sa`/`nt`. `scripts/smoke_test.py`
+  checks for all three (`LINZ_API_KEY` gates the roads/sections check),
+  a drafted GitHub issue in `docs/credentials-wanted-issues.md`, and a
+  new README section (`## NZTA & LINZ (New Zealand)`).
+- 23 new tests (9 `test_nzta.py`, 14 `test_linz.py`) covering client
+  wiring (including the real `;key=` WFS URL shape and `startIndex`/
+  `count` pagination, unexercised against a real response) and converter
+  behaviour against real/real-attribute fixtures.
+
 ### Added — Road Report NT (Australia), a documented-unavailable scaffold (2026-08-01)
 
 `streetworks.au.nt` - the Northern Territory is now registered

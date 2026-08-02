@@ -1,0 +1,210 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 188707,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          174.773985779427,
+          -36.8728584510707
+        ]
+      },
+      "properties": {
+        "OBJECTID": 188707,
+        "status": "Scheduled",
+        "eventIsland": "North Island",
+        "directLineDistance1": "1.03 km southeast of Newmarket",
+        "directLineDistance2": "1.34 km southeast of Grafton",
+        "directLineDistance3": "1.67 km southeast of Eden Terrace",
+        "eventDescription": "Maintenance",
+        "eventType": "Scheduled Road Work",
+        "expectedResolution": "03/08/2026 05:00",
+        "impact": "Road Closed",
+        "planned": "True",
+        "restrictions": null,
+        "startDate": 1785661200000,
+        "endDate": 1785690000000,
+        "informationSource": "NZTA",
+        "supplier": "Official",
+        "eventCreated": 1785620280000,
+        "eventModified": 1785634320000,
+        "GDB_GEOMATTR_DATA": null,
+        "GlobalID": "4ca42684-9441-475f-aa9e-118a98905a2a",
+        "eventComments": "This closure is dependent on various factors, including weather, and may be postponed or cancelled at late notice. Road users should plan accordingly and allow extra time for the detour.\n",
+        "locationArea": "SH 1 Gillies Avenue southbound Off-Ramp",
+        "alternativeRoute": "Follow posted detour",
+        "eventId": 556827,
+        "CreationDate": 1785620721791,
+        "Creator": "ETL_Integration_NZTA",
+        "EditDate": 1785655814058,
+        "Editor": "ETL_Integration_NZTA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 170657,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170.129753492052,
+          -43.9774722272798
+        ]
+      },
+      "properties": {
+        "OBJECTID": 170657,
+        "status": "Active",
+        "eventIsland": "South Island",
+        "directLineDistance1": null,
+        "directLineDistance2": null,
+        "directLineDistance3": null,
+        "eventDescription": "Other",
+        "eventType": "Road Work",
+        "expectedResolution": "Until further notice",
+        "impact": "Caution",
+        "planned": "True",
+        "restrictions": null,
+        "startDate": 1759856400000,
+        "endDate": 1791392400000,
+        "informationSource": "NZTA",
+        "supplier": "Official",
+        "eventCreated": 1759879080000,
+        "eventModified": 1766658180000,
+        "GDB_GEOMATTR_DATA": null,
+        "GlobalID": "7ce7f489-8bba-45f3-81ce-59050ff7d736",
+        "eventComments": "Due to an uneven road surface, a temporary speed restriction of 70 km/hr is currently in place. Please take extra care when driving through this area. ",
+        "locationArea": "SH 80 Pukaki to Mt Cook (Aoraki Mt Cook Highway)",
+        "alternativeRoute": "Not Applicable",
+        "eventId": 526478,
+        "CreationDate": 1761619540749,
+        "Creator": "ETL_Integration_NZTA",
+        "EditDate": 1785655814058,
+        "Editor": "ETL_Integration_NZTA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 185560,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.894897501923,
+          -37.3414137158109
+        ]
+      },
+      "properties": {
+        "OBJECTID": 185560,
+        "status": "Resolved",
+        "eventIsland": "North Island",
+        "directLineDistance1": null,
+        "directLineDistance2": null,
+        "directLineDistance3": null,
+        "eventDescription": "Other",
+        "eventType": "Road Work",
+        "expectedResolution": "Until further notice",
+        "impact": "Delays",
+        "planned": "True",
+        "restrictions": null,
+        "startDate": 1782068400000,
+        "endDate": 1785646800000,
+        "informationSource": "NZTA",
+        "supplier": "Official",
+        "eventCreated": 1781746500000,
+        "eventModified": 1785646860000,
+        "GDB_GEOMATTR_DATA": null,
+        "GlobalID": "1b4e11b1-2d68-42c1-9b50-84c81d3769aa",
+        "eventComments": "Due to civil works, there is stop/go traffic management with a 30km/h temporary speed restriction in place. Stop on request, drive with caution and expect delays.",
+        "locationArea": "SH 25 Waihi, near intersection of Golden Valley Road",
+        "alternativeRoute": "Not Applicable",
+        "eventId": 552234,
+        "CreationDate": 1781835331007,
+        "Creator": "ETL_Integration_NZTA",
+        "EditDate": 1785655814058,
+        "Editor": "ETL_Integration_NZTA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 188666,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.838528622246,
+          -37.3918530998437
+        ]
+      },
+      "properties": {
+        "OBJECTID": 188666,
+        "status": "Scheduled",
+        "eventIsland": "North Island",
+        "directLineDistance1": null,
+        "directLineDistance2": null,
+        "directLineDistance3": null,
+        "eventDescription": "Resurfacing",
+        "eventType": "Scheduled Road Work",
+        "expectedResolution": "Until further notice",
+        "impact": "Caution",
+        "planned": "True",
+        "restrictions": null,
+        "startDate": 1786046400000,
+        "endDate": 1786071600000,
+        "informationSource": "NZTA",
+        "supplier": "Official",
+        "eventCreated": 1785451020000,
+        "eventModified": 1785466860000,
+        "GDB_GEOMATTR_DATA": null,
+        "GlobalID": "c2910413-d3a5-4ba7-b8d1-be4afd6e8e80",
+        "eventComments": "Due to mill and fill works, there is stop/go traffic management with a 30km/h temporary speed restriction in place. Stop on request and drive with caution.",
+        "locationArea": "SH 2 Waihi, near the Moresby Avenue intersection",
+        "alternativeRoute": "Not Applicable",
+        "eventId": 556634,
+        "CreationDate": 1785467712855,
+        "Creator": "ETL_Integration_NZTA",
+        "EditDate": 1785655814058,
+        "Editor": "ETL_Integration_NZTA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 188687,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.210864496995,
+          -37.7319367645502
+        ]
+      },
+      "properties": {
+        "OBJECTID": 188687,
+        "status": "Scheduled",
+        "eventIsland": "North Island",
+        "directLineDistance1": null,
+        "directLineDistance2": null,
+        "directLineDistance3": null,
+        "eventDescription": "Other",
+        "eventType": "Scheduled Road Work",
+        "expectedResolution": "04/08/2026 05:00",
+        "impact": "Road Closed",
+        "planned": "True",
+        "restrictions": null,
+        "startDate": 1785744000000,
+        "endDate": 1785776400000,
+        "informationSource": "NZTA",
+        "supplier": "Official",
+        "eventCreated": 1785461220000,
+        "eventModified": 1785468240000,
+        "GDB_GEOMATTR_DATA": null,
+        "GlobalID": "f789e238-f867-480c-9c32-37bdb8ab9483",
+        "eventComments": "Due to geotechnical testing works, the Southbound Koura Drive on ramp will be closed on 3 August 2026 to 4 August 2026 between 2000 and 0500.\n\nRoad users are advised to plan their journey accordingly allowing extra time for travel.\n\nPlease note that these works are weather dependent and may be postponed at short notice.",
+        "locationArea": "SH 1C Burbush, near the SH39 and Koura Drive intersection",
+        "alternativeRoute": "Westbound road users seeking access to the Koura Drive southbound on ramp should continue along SH39 to the Te Kowhai Roundabout, undertake a U-turn and return to Koura Drive, turn right onto Onion Road/Ruffell Road, turn left onto Arthur Porter Drive, continue along Te Kowhai East Road, turn right onto Arthur Porter Drive, then proceed to the Wairere Drive southbound on ramp to rejoin SH1C.\n\nEastbound road users seeking access to the Koura Drive southbound on ramp should turn right onto Onion R",
+        "eventId": 556683,
+        "CreationDate": 1785468623395,
+        "Creator": "ETL_Integration_NZTA",
+        "EditDate": 1785655814058,
+        "Editor": "ETL_Integration_NZTA"
+      }
+    }
+  ]
+}

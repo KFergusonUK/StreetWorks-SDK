@@ -80,6 +80,13 @@ skipped if its variables are absent.
     # all - see streetworks.au.act / streetworks.au.tas. TAS ships with a
     # genuinely unconfirmed licence (not blocked - see module docstring).
 
+    # NZTA Highway Information - Road Events and LINZ NZ Addresses both
+    # need NO credentials at all - see streetworks.nzta / streetworks.linz.
+    # LINZ NZ Addresses: Roads/Road Sections - PENDING LIVE VERIFICATION,
+    # genuinely blocked on a real LINZ Data Service API key, free self-
+    # service registration at data.linz.govt.nz.
+    export LINZ_API_KEY="..."
+
     python scripts/smoke_test.py
 
 Exit code is 0 only if every attempted check passed (skipped services don't
@@ -1020,6 +1027,62 @@ def check_tas_roadworks() -> str:
     return f"{len(features):,} roadworks (real line geometry, all coordinates plausible WGS84)"
 
 
+def check_nzta() -> str:
+    """NZTA (Waka Kotahi) Highway Information - Road Events needs no
+    credentials - see streetworks.nzta. Confirmed live 2026-08-02 (104
+    real records). Reports the real status/eventType split - flags if a
+    real value beyond the confirmed live enum ever shows up."""
+    from streetworks.nzta import NztaClient
+
+    with NztaClient() as nzta:
+        events = list(nzta.iter_roadworks())
+    if not events:
+        raise RuntimeError("query returned no roadworks - real data may have changed")
+
+    statuses: dict[str, int] = {}
+    for feature in events:
+        status = feature.get("properties", {}).get("status", "unknown")
+        statuses[status] = statuses.get(status, 0) + 1
+    return f"{len(events):,} roadworks event(s), status split: {statuses}"
+
+
+def check_linz_addresses() -> str:
+    """LINZ NZ Addresses needs no credentials - a public ArcGIS mirror,
+    see streetworks.linz.client. Confirmed live 2026-08-02 (2,421,642 real
+    addresses total). Only fetches a small, filtered slice, not the full
+    layer."""
+    from streetworks.linz import LinzClient
+
+    with LinzClient() as linz:
+        addresses = list(linz.iter_addresses(where="territorial_authority='Auckland'"))
+    if not addresses:
+        raise RuntimeError("query returned no addresses for a known real territorial authority")
+    sample = addresses[0]["properties"]
+    return f"{len(addresses):,} Auckland address(es), e.g. {sample.get('full_road_name')!r}"
+
+
+def check_linz_roads() -> str:
+    """LINZ NZ Addresses: Roads/Road Sections - PENDING LIVE VERIFICATION,
+    see streetworks.linz.client. Requires a real LINZ Data Service API key
+    (LINZ_API_KEY, free self-service registration at data.linz.govt.nz).
+    This is the first real WFS pull this SDK will have made against LDS -
+    if you run this, please also compare a real road_id value against a
+    real LINZ Addresses road_id to help settle the module docstring's own
+    open cross-reference question, and report back (see the module
+    docstring's linked issue)."""
+    from streetworks.linz import LinzClient
+
+    with LinzClient(api_key=os.environ["LINZ_API_KEY"]) as linz:
+        roads = list(linz.iter_roads())
+        sections = list(linz.iter_road_sections())
+    if not roads or not sections:
+        raise RuntimeError("query returned no roads/road sections - real data may have changed")
+    return (
+        f"{len(roads):,} road(s), {len(sections):,} road section(s) - "
+        "first real LDS pull seen, compare against module docstring's open questions"
+    )
+
+
 def check_datex2_ndw() -> str:
     """NDW Open Data (Netherlands) needs no credentials. Set NDW_FEED to a
     local planned-works file to parse it locally; otherwise the live feed is
@@ -1209,6 +1272,12 @@ def main() -> int:
     # ACT TTM and TAS Roadworks both need no credentials
     reporter.check("ACT Temporary Traffic Management (Australia)", [], check_act_ttm)
     reporter.check("TAS Roadworks - State Roads (Australia)", [], check_tas_roadworks)
+    # NZTA Highway Information and LINZ NZ Addresses both need no credentials
+    reporter.check("NZTA Highway Information (New Zealand)", [], check_nzta)
+    reporter.check("LINZ NZ Addresses (New Zealand)", [], check_linz_addresses)
+    reporter.check(
+        "LINZ NZ Addresses: Roads/Road Sections (New Zealand)", ["LINZ_API_KEY"], check_linz_roads
+    )
     # NDW DATEX II (Netherlands) needs no credentials
     reporter.check("DATEX II (NDW)", [], check_datex2_ndw)
     # Digitraffic (Finland) needs no credentials

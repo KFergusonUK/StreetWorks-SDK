@@ -91,6 +91,8 @@ client, documented in its own section, exactly as before.
 | `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see below | read |
 | `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
 | `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture), QLDTraffic Events (Queensland, TMR, no credentials via a real shared public API key, one typed feed over every `event_type`, confirmed live 2026-08-01), ACT's Temporary Traffic Management (the only municipal/local-street AU coverage, no credentials, CC BY-SA 4.0) and Tasmania's Roadworks - State Roads (the only AU provider with real line geometry, no credentials, licence genuinely unconfirmed); Traffic SA / DIT Roadworks (South Australia, ArcGIS MapServer) is a **[Credentials wanted](#credentials-wanted)** scaffold, blocked on a token-gated query endpoint behind a geo-restricted host. Road Report NT (Northern Territory) is registered as a documented, honestly-unavailable scaffold — investigated and found to have no published REST/GeoJSON API at all (its real backend is an undocumented SignalR hub), so `RoadReportNtClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
+| `streetworks.nzta` | [NZTA (Waka Kotahi) Highway Information](https://opendata-nzta.opendata.arcgis.com/) — New Zealand's national state-highway roadworks, ArcGIS REST (no credentials, shipped live-verified with a real fixture, confirmed 2026-08-02). Not the same body as LINZ — see below | read |
+| `streetworks.linz` | [LINZ (Toitū Te Whenua)](https://data.linz.govt.nz/) — New Zealand's national address register, NZ Addresses over a public ArcGIS mirror (no credentials, confirmed live, CC BY 4.0). Also carries the `streets` counterpart — NZ Addresses: Roads/Road Sections — as a **[Credentials wanted](#credentials-wanted)** scaffold (schema + a real attribute sample confirmed, blocked on a real LINZ Data Service API key) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see below) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
@@ -132,8 +134,9 @@ gets you connected and typed; the linked docs tell you what to send.
 ## Status
 
 Early alpha. **Authentication and read/consume access are verified against
-the real systems for all providers except the two in [Credentials
-wanted](#credentials-wanted), below** (Norway/NSW/Victoria joined the
+the real systems for all providers except those in [Credentials
+wanted](#credentials-wanted), below, plus Road Report NT (no published
+interface at all, not a credential gate — see below)** (Norway/NSW/Victoria joined the
 verified list on 2026-07-30 — see [Recently confirmed](#recently-confirmed)
 for what real data changed): Street Manager (SANDBOX), Geoplace
 DataVIA (live — including a real feature query), D-TRO (production token +
@@ -174,25 +177,29 @@ your own rights before redistributing this data.
 
 ### Credentials wanted
 
-Three roadworks providers ship as **scaffolds, not verified builds**:
-implemented to each service's own documented/confirmed API shape and
-covered by mocked tests, but never run against a real authenticated
-response — each is genuinely blocked on access this project doesn't have,
-not on unfinished code. **If you have access to any of these, running the
-smoke test (`python scripts/smoke_test.py`) and reporting back — ideally
-with one real trimmed record — is a genuinely valuable contribution**, the
-same way a tester's real credentials confirmed Norway/NSW/Victoria on
-2026-07-30 (see [Recently confirmed](#recently-confirmed), below). Every
-module also warns at import time (`UserWarning`) with the same pointer.
-Excluded from the verified-providers claim above until confirmed.
-Drafted issue text lives in
-[docs/credentials-wanted-issues.md](docs/credentials-wanted-issues.md).
+Four providers ship as **scaffolds, not verified builds** — three
+roadworks, one streets: implemented to each service's own documented/
+confirmed API shape and covered by mocked tests, but never run against a
+real authenticated response — each is genuinely blocked on access this
+project doesn't have, not on unfinished code. **If you have access to any
+of these, running the smoke test (`python scripts/smoke_test.py`) and
+reporting back — ideally with one real trimmed record — is a genuinely
+valuable contribution**, the same way a tester's real credentials
+confirmed Norway/NSW/Victoria on 2026-07-30 (see
+[Recently confirmed](#recently-confirmed), below). Every roadworks
+module also warns at import time (`UserWarning`) with the same pointer;
+LINZ's gate is per-method instead (`iter_roads()`/`iter_road_sections()`
+raise a clear `ValueError` without a key — the sibling `iter_addresses()`
+on the same client is already verified). Excluded from the
+verified-providers claim above until confirmed. Drafted issue text lives
+in [docs/credentials-wanted-issues.md](docs/credentials-wanted-issues.md).
 
 | Provider | Confirmed | Pending | Credential | How to get it | Issue |
 |---|---|---|---|---|---|
 | Trafikverket (`streetworks.datex2.trafikverket`, Sweden) | Endpoint, `Situation` object name, and schema version `1.5` — all live, via a deliberate invalid-key probe returning a real structured 401 | The authenticated data pull itself; the real `MessageType`/`MessageCode` value that means roadworks specifically (unconfirmed in every source checked — `iter_roadworks()` honestly returns nothing until this is confirmed, see module docstring) | API key (not Basic Auth) | Free, **self-service**: [data.trafikverket.se](https://data.trafikverket.se/) or via [Trafiklab](https://www.trafiklab.se/api/other-apis/trafikverket/) — form, accept licence, verify email, key issued immediately | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | Vejdirektoratet (`streetworks.datex2.vejdirektoratet`, Denmark) | Genuine DATEX II 3.2, with `ConstructionWorks`/`MaintenanceWorks` and their full `constructionWorkType`/`roadMaintenanceType` enumerations stated explicitly in Vejdirektoratet's own protocol spec; the open metadata catalogue re-confirmed live (196 datasets, the roadworks one CC BY 4.0-licensed, no auth) | The authenticated REST pull itself; whether the `trafikmeldinger` response really nests as a list of independent DATEX XML strings, per the protocol doc | HTTP Basic Auth username/password **and** the actual pull URL — both issued per-dataset at registration, no public data URL exists | Free; register via [Dataudveksleren](https://du-portal-ui.dataudveksler.app.vd.dk/) | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | Traffic SA (`streetworks.au.sa`, South Australia) — **blocked on two gates, not one** | The real field list, native SR, and pagination capabilities — all confirmed live from the layer's own public `?f=json` metadata; `iter_roadworks()` deliberately returns the full, unfiltered mix rather than guess a `REC_TYPE` filter with zero evidence | **No real feature has ever been retrieved**: the query endpoint 400s without an ArcGIS token, and whether that token is even self-service is itself unconfirmed (the token host returned a CloudFront 403 too); separately, `maps.sa.gov.au` geo-blocks some countries' network egress outright. Also open: whether `ROAD_NO`/`GIS_LINK_ID` are populated and genuinely join to a road register — a potential first for this AU cluster | ArcGIS token (self-service vs. gated: unresolved) | `location.sa.gov.au/arcgis/tokens/` — from a network egress the CloudFront restriction doesn't block | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| LINZ NZ Addresses: Roads/Road Sections (`streetworks.linz`, New Zealand) — **streets, not roadworks; the sibling `iter_addresses()` on the same client is already verified** | The real field lists and one real sample of attribute values for both layers, from LINZ's own public Koordinates metadata API (no key needed for this part); the real WFS URL shape (API key embedded in the URL path, confirmed from the layer's own `/services/` listing) | The authenticated WFS pull itself; whether `startIndex`/`count` pagination is genuinely honoured; **whether `road_id` genuinely cross-references to NZ Addresses' own `road_id`** — the single most interesting open question in this SDK's New Zealand cluster | LINZ Data Service (LDS) API key | Free, **self-service**: register at [data.linz.govt.nz](https://data.linz.govt.nz/) and create a "Data access only" key | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 
 **A fourth, genuinely different case: Road Report NT is not access-blocked
 at all — it has no published API to be blocked from.** Kept in a separate
@@ -1982,6 +1989,84 @@ always raises `streetworks.exceptions.ProviderUnavailableError`
 immediately, with no network call — see [Credentials
 wanted](#credentials-wanted) above for the fuller writeup, and revisit if
 a documented REST equivalent ever surfaces.
+
+## NZTA & LINZ (New Zealand)
+
+This SDK's first New Zealand coverage — two separate top-level packages,
+not one combined `nz` package, matching how `streetworks.kartverket`/
+`streetworks.nvdb` split Norway by publisher rather than lumping the
+country together: `streetworks.nzta` (works) and `streetworks.linz`
+(gazetteer) are different agencies, different technologies, and (as
+detailed below) do **not** join to each other.
+
+```python
+from streetworks.nzta import NztaClient
+from streetworks.common import from_nzta
+
+with NztaClient() as nzta:
+    works_list = from_nzta(list(nzta.iter_roadworks()))
+
+from streetworks.linz import LinzClient
+from streetworks.common import from_linz_address
+
+with LinzClient() as linz:
+    addresses = [from_linz_address(f) for f in linz.iter_addresses(where="1=1")]
+```
+
+**NZTA (Waka Kotahi) Highway Information — Road Events, confirmed live
+2026-08-02 (104 real records), credential-free.** A real correction to
+the source investigation: this is the ArcGIS open-data portal service
+(`opendata-nzta.opendata.arcgis.com`), not the bespoke `trafficnz.info`
+REST/SOAP API the brief also flagged — reuses the same
+`ArcGISFeatureClient` every AU ArcGIS provider does. Two real layers share
+an identical field schema but never overlap: layer 0 ("Road Events",
+point, 104 real records) is roadworks-relevant; layer 1 ("Road Area
+Events", polyline, 53 real records) is **always** `eventType=="Area
+Warning"` — a weather/hazard concept, not roadworks — so this client stays
+point-only, no Victoria/QLD-style corridor trap. **The richest real
+status→confidence signal confirmed anywhere in this SDK**: real `status`
+(`Scheduled`/`Active`/`Resolved`) correlates perfectly with `eventType` in
+a full live pull, giving a genuinely evidenced VERIFIED/ESTIMATED split —
+every AU provider built so far lacked a signal this clean. National state
+highways only, licensed **NZTA 4.0 BY CC** (a CC BY 4.0 variant).
+
+**No structured road/route identifier anywhere in NZTA's real schema —
+settles the works-to-LINZ join question directly.** The real fields
+(`locationArea`, `directLineDistance1`–`3`, `alternativeRoute`) are free
+text only (e.g. `"SH 80 Pukaki to Mt Cook (Aoraki Mt Cook Highway)"`), so
+`from_nzta` never populates `WorksSite.street_ref` — a name-match
+crosswalk would be inferred, not stated, the same SA-`ROAD_NO` discipline
+this SDK holds everywhere. LINZ stands on its own as this cluster's
+gazetteer.
+
+**LINZ (Toitū Te Whenua) NZ Addresses, confirmed live 2026-08-02
+(2,421,642 real addresses, per the layer's own `feature_count`),
+credential-free.** A public ArcGIS Online mirror of the current NZ
+Addresses family (layer 123113) needs no LINZ Data Service key at all —
+licensed **CC BY 4.0**, confirmed from both the Koordinates layer metadata
+and the ArcGIS item's own `licenseInfo` independently. A real,
+newly-discovered `unit`/flat-number concept is present (e.g. `"2"` in
+`"2/49 Pigeon Mountain Road"`) that this SDK's own `Address` model
+docstring already flagged as absent from every source built so far — no
+canonical field exists for it yet, so it stays on `.raw` only, alongside
+`is_land` (a real boolean concept the live layer definition states as
+`esriFieldTypeString` length 2, so real values are the truncated `"tr"`/
+`"fa"`, not `true`/`false`).
+
+**NZ Addresses: Roads/Road Sections (the `streets` counterpart) is a
+Phase 1 scaffold — the sibling `iter_addresses()` above is already
+verified, this is a narrower gap.** Schema and a real attribute sample
+(not geometry) are both confirmed live from LINZ's own public Koordinates
+metadata API, but the actual WFS pull has never been exercised: it needs a
+genuine LINZ Data Service (LDS) API key this build doesn't have. The real
+URL shape is documented and implemented — Koordinates embeds the key in
+the URL **path** (`services;key={api_key}/wfs/`), confirmed live from the
+layer's own `/services/` listing — see [Credentials
+wanted](#credentials-wanted) above for the fuller writeup, including the
+single most interesting open question in this cluster: whether `road_id`
+genuinely cross-references between NZ Addresses and Roads/Road Sections
+(the field name is identical across all three layers' schemas; the real
+samples pulled so far just happen not to overlap).
 
 ## WZDx (US Work Zone Data Exchange)
 

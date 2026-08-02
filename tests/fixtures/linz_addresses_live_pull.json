@@ -1,0 +1,195 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 247,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          174.899769829008,
+          -36.8868090715903
+        ]
+      },
+      "properties": {
+        "OBJECTID": 247,
+        "address_id": 2453674,
+        "road_id": 1828155,
+        "full_address_number": "2/49",
+        "full_road_name": "Pigeon Mountain Road",
+        "full_address": "2/49 Pigeon Mountain Road, Half Moon Bay, Auckland",
+        "territorial_authority": "Auckland",
+        "unit": "2",
+        "address_number": 49,
+        "address_number_suffix": null,
+        "address_number_high": null,
+        "road_name": "Pigeon Mountain",
+        "road_name_type": "Road",
+        "road_name_suffix": null,
+        "suburb_locality": "Half Moon Bay",
+        "town_city": "Auckland",
+        "is_land": "tr",
+        "address_lifecycle": "Current",
+        "full_road_name_ascii": "Pigeon Mountain Road",
+        "full_address_ascii": "2/49 Pigeon Mountain Road, Half Moon Bay, Auckland",
+        "territorial_authority_ascii": "Auckland",
+        "road_name_ascii": "Pigeon Mountain",
+        "suburb_locality_ascii": "Half Moon Bay",
+        "town_city_ascii": "Auckland",
+        "GlobalID": "25672ace-a9a0-444c-9da4-c607b67db98a"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          173.0487301667,
+          -40.9436214157621
+        ]
+      },
+      "properties": {
+        "OBJECTID": 14,
+        "address_id": 905505,
+        "road_id": 1837898,
+        "full_address_number": "2A",
+        "full_road_name": "Torrent Bay",
+        "full_address": "2A Torrent Bay, Torrent Bay, Tākaka",
+        "territorial_authority": "Tasman District",
+        "unit": null,
+        "address_number": 2,
+        "address_number_suffix": "A",
+        "address_number_high": null,
+        "road_name": "Torrent Bay",
+        "road_name_type": null,
+        "road_name_suffix": null,
+        "suburb_locality": "Torrent Bay",
+        "town_city": "Tākaka",
+        "is_land": "fa",
+        "address_lifecycle": "Current",
+        "full_road_name_ascii": "Torrent Bay",
+        "full_address_ascii": "2A Torrent Bay, Torrent Bay, Takaka",
+        "territorial_authority_ascii": "Tasman District",
+        "road_name_ascii": "Torrent Bay",
+        "suburb_locality_ascii": "Torrent Bay",
+        "town_city_ascii": "Takaka",
+        "GlobalID": "7302dbc5-35a2-48dd-be5e-360e432adca6"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          173.0352563333,
+          -40.8647934990625
+        ]
+      },
+      "properties": {
+        "OBJECTID": 1,
+        "address_id": 1103316,
+        "road_id": 3042339,
+        "full_address_number": "53",
+        "full_road_name": "Awaroa Inlet",
+        "full_address": "53 Awaroa Inlet, Awaroa Bay, Tākaka",
+        "territorial_authority": "Tasman District",
+        "unit": null,
+        "address_number": 53,
+        "address_number_suffix": null,
+        "address_number_high": null,
+        "road_name": "Awaroa Inlet",
+        "road_name_type": null,
+        "road_name_suffix": null,
+        "suburb_locality": "Awaroa Bay",
+        "town_city": "Tākaka",
+        "is_land": "fa",
+        "address_lifecycle": "Current",
+        "full_road_name_ascii": "Awaroa Inlet",
+        "full_address_ascii": "53 Awaroa Inlet, Awaroa Bay, Takaka",
+        "territorial_authority_ascii": "Tasman District",
+        "road_name_ascii": "Awaroa Inlet",
+        "suburb_locality_ascii": "Awaroa Bay",
+        "town_city_ascii": "Takaka",
+        "GlobalID": "289c4bcc-8fe7-4cea-a774-710782b8ea0f"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 224,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.171786960809,
+          -37.7694699322094
+        ]
+      },
+      "properties": {
+        "OBJECTID": 224,
+        "address_id": 2453651,
+        "road_id": 1808365,
+        "full_address_number": "78",
+        "full_road_name": "Neewood Road",
+        "full_address": "78 Neewood Road, Ohauiti, Tauranga",
+        "territorial_authority": "Western Bay of Plenty District",
+        "unit": null,
+        "address_number": 78,
+        "address_number_suffix": null,
+        "address_number_high": null,
+        "road_name": "Neewood",
+        "road_name_type": "Road",
+        "road_name_suffix": null,
+        "suburb_locality": "Ohauiti",
+        "town_city": "Tauranga",
+        "is_land": "tr",
+        "address_lifecycle": "Current",
+        "full_road_name_ascii": "Neewood Road",
+        "full_address_ascii": "78 Neewood Road, Ohauiti, Tauranga",
+        "territorial_authority_ascii": "Western Bay of Plenty District",
+        "road_name_ascii": "Neewood",
+        "suburb_locality_ascii": "Ohauiti",
+        "town_city_ascii": "Tauranga",
+        "GlobalID": "5802948a-2339-4bf2-bf81-796524d0255d"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 225,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          176.333622993641,
+          -37.7959788413733
+        ]
+      },
+      "properties": {
+        "OBJECTID": 225,
+        "address_id": 2453652,
+        "road_id": 1804456,
+        "full_address_number": "86",
+        "full_road_name": "No 1 Road",
+        "full_address": "86 No 1 Road, Te Puke",
+        "territorial_authority": "Western Bay of Plenty District",
+        "unit": null,
+        "address_number": 86,
+        "address_number_suffix": null,
+        "address_number_high": null,
+        "road_name": "No 1",
+        "road_name_type": "Road",
+        "road_name_suffix": null,
+        "suburb_locality": "Te Puke",
+        "town_city": "Te Puke",
+        "is_land": "tr",
+        "address_lifecycle": "Current",
+        "full_road_name_ascii": "No 1 Road",
+        "full_address_ascii": "86 No 1 Road, Te Puke",
+        "territorial_authority_ascii": "Western Bay of Plenty District",
+        "road_name_ascii": "No 1",
+        "suburb_locality_ascii": "Te Puke",
+        "town_city_ascii": "Te Puke",
+        "GlobalID": "156309e8-90ed-4759-a940-c91ebaceb9c2"
+      }
+    }
+  ]
+}

@@ -20,10 +20,12 @@ from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
+from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
 from .from_mallorca import from_mallorca
 from .from_nsw_livetraffic import from_nsw_livetraffic
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
+from .from_nzta import from_nzta
 from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
 from .from_sct import from_sct
@@ -105,4 +107,8 @@ __all__ = [
     "from_au_sa_trafficsa",
     "from_au_act_ttm",
     "from_au_tas_roadworks",
+    "from_nzta",
+    "from_linz_address",
+    "from_linz_road",
+    "from_linz_road_section",
 ]

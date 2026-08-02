@@ -1,20 +1,21 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for four `help wanted` issues: three in the
+Draft text for five `help wanted` issues: four in the
 [README's Credentials wanted section](../README.md#credentials-wanted)
-(Trafikverket, Vejdirektoratet, Traffic SA — all blocked on *access* to a
-real, published interface), plus a fourth, genuinely different case (Road
-Report NT — not access-blocked, but investigated and found to have no
-published interface at all). Norway/NSW/Victoria were confirmed on
-2026-07-30 by a real credentialed pull and no longer need this - their
-drafted issue text has been removed. None of these have been opened yet —
-this file is the text to paste in when opening them (or to point someone
-at ahead of time). Every module's import-time `UserWarning` and the
-README table link to
+(Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
+Sections — all blocked on *access* to a real, published interface), plus a
+fifth, genuinely different case (Road Report NT — not access-blocked, but
+investigated and found to have no published interface at all). Norway/NSW/
+Victoria were confirmed on 2026-07-30 by a real credentialed pull and no
+longer need this - their drafted issue text has been removed. None of
+these have been opened yet — this file is the text to paste in when
+opening them (or to point someone at ahead of time). Every module's
+import-time `UserWarning` (or, for LINZ's per-method gate, its own
+docstring/`ValueError`) and the README table link to
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
-Suggested labels for the first three: `help wanted`, `credentials-wanted`.
+Suggested labels for the first four: `help wanted`, `credentials-wanted`.
 For NT: `help wanted` only — `credentials-wanted` would misdescribe the
 blocker, since no credential would fix it.
 
@@ -180,6 +181,63 @@ answered.
 
 See `src/streetworks/au/sa.py`'s module docstring for the full detail
 behind each claim above.
+
+---
+
+## Issue: LINZ NZ Addresses: Roads/Road Sections (New Zealand) — confirm the adapter against real data
+
+**Title:** `Credentials wanted: verify streetworks.linz's Roads/Road Sections against a real LDS response`
+
+**Body:**
+
+`streetworks.linz.client`'s `iter_roads()`/`iter_road_sections()` are a
+Phase 1 scaffold — the sibling `iter_addresses()` in the same client is
+already confirmed live, no key needed at all, so this is a narrower gap
+than the other Credentials-wanted providers here: one client, one real
+capability blocked, not the whole module.
+
+**Confirmed, live, credential-free:** the real field lists and one real
+sample of attribute values (not geometry) for both layers, pulled from
+LINZ's own public Koordinates metadata API
+(`data.linz.govt.nz/services/api/v1.x/layers/{id}/versions/{v}/data/sample/`)
+— genuine `road_id`/name/territorial-authority values, not fabricated.
+Real totals (Roads 82,221, Road Sections 250,409) from each layer's own
+`feature_count`. The real WFS URL shape too — Koordinates embeds the API
+key in the URL **path** (`services;key={api_key}/wfs/`), confirmed from
+the layer's own `/services/` listing, not guessed.
+
+**Pending (everything below needs a real authenticated WFS response):**
+1. Whether `startIndex`/`count` pagination (implemented to the WFS 2.0
+   spec) is genuinely honoured by Koordinates' WFS the way the spec says.
+2. **Whether `road_id` genuinely cross-references between NZ Addresses
+   (already confirmed live) and Roads/Road Sections** — the field name is
+   identical across all three layers' schemas, but the real samples
+   pulled so far happen not to overlap, so value-level joining is
+   unconfirmed. This is the single most interesting open question in this
+   SDK's whole New Zealand cluster.
+3. Real geometry shape in practice — whether `MultiLineString` genuinely
+   appears on the aggregated Roads layer (documented as possible, never
+   seen in a real sample, since the sample endpoint carries attributes
+   only, no geometry).
+4. Whether absent/null fields in a real WFS `GetFeature` response are
+   genuine JSON `null` (assumed, matching every other GeoJSON provider in
+   this SDK) or something else — the Koordinates *sample* endpoint used
+   for fixtures renders them as the literal string `"None"`, which this
+   build could not resolve without a real key.
+
+**Credential needed:** a LINZ Data Service (LDS) API key. Free,
+self-service: register at [data.linz.govt.nz](https://data.linz.govt.nz/)
+and create a "Data access only" key.
+
+**What to report back:** run `python scripts/smoke_test.py` with
+`LINZ_API_KEY` set, paste the result line, and — most usefully — one real
+trimmed feature from each of `iter_roads()`/`iter_road_sections()`
+(anything sensitive stripped) showing a real `road_id` value, ideally one
+that also appears in a real NZ Addresses feature, so the cross-reference
+question above can finally be settled.
+
+See `src/streetworks/linz/client.py`'s module docstring for the full
+detail behind each claim above.
 
 ---
 

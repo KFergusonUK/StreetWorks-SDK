@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [169.9688, -46.1247],
+          [169.9701, -46.1255],
+          [169.9715, -46.1262]
+        ]
+      },
+      "properties": {
+        "road_section_id": 2907,
+        "road_id": 1773601,
+        "full_road_name": "North Branch Road",
+        "road_name_label": "North Branch Rd",
+        "road_name_body": "North Branch",
+        "road_name_type": "Road",
+        "road_name_suffix": null,
+        "secondary_road_name": null,
+        "tertiary_road_name": null,
+        "suburb_locality": "Milton",
+        "town_city": "Milton",
+        "territorial_authority": "Clutha District",
+        "is_land": "True"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [170.4938, -45.8788],
+          [170.4951, -45.8795]
+        ]
+      },
+      "properties": {
+        "road_section_id": 13856,
+        "road_id": 1772590,
+        "full_road_name": "Braemar Street",
+        "road_name_label": "Braemar St",
+        "road_name_body": "Braemar",
+        "road_name_type": "Street",
+        "road_name_suffix": null,
+        "secondary_road_name": null,
+        "tertiary_road_name": null,
+        "suburb_locality": "South Dunedin",
+        "town_city": "Dunedin",
+        "territorial_authority": "Dunedin City",
+        "is_land": "True"
+      }
+    }
+  ]
+}
