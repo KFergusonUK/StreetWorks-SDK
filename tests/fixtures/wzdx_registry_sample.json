@@ -98,5 +98,56 @@
     ":@computed_region_m2nu_4dib": "2959",
     ":@computed_region_28hd_vqqn": "50",
     ":@computed_region_8fe2_rd7y": "37"
+  },
+  {
+    "state": "colorado",
+    "issuingorganization": "Colorado DOT",
+    "feedname": "cdot",
+    "url": {
+      "url": "https://data.cotrip.org/api/v1/wzdx?apiKey="
+    },
+    "format": "geojson",
+    "active": true,
+    "datafeed_frequency_update": "5m",
+    "version": "4.2",
+    "sdate": "2022-05-03T00:00:00.000",
+    "needapikey": true,
+    "apikeyurl": {
+      "url": "https://maps.cotrip.org/help/section/for-developers.html",
+      "description": ""
+    },
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -104.99203,
+        39.74001
+      ]
+    }
+  },
+  {
+    "state": "colorado",
+    "issuingorganization": "Colorado DOT",
+    "feedname": "cdot_cwz",
+    "url": {
+      "url": "https://data.cotrip.org/api/v1/cwz?apiKey=[INSERT_API_KEY]",
+      "description": ""
+    },
+    "format": "geojson",
+    "active": true,
+    "datafeed_frequency_update": "5m",
+    "version": "CWZ 1.0",
+    "sdate": "2025-08-08T00:00:00.000",
+    "needapikey": true,
+    "apikeyurl": {
+      "url": "https://manage-api.cotrip.org/subscriber/subscription",
+      "description": ""
+    },
+    "geocoded_column": {
+      "type": "Point",
+      "coordinates": [
+        -104.99203,
+        39.74001
+      ]
+    }
   }
 ]

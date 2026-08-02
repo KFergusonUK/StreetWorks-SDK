@@ -2,6 +2,48 @@
 
 ## [Unreleased]
 
+### Added — WZDx feed-registry harvest: CWZ/version filtering, auth tiers, 511NY verified end-to-end (2026-08-02)
+
+`streetworks.wzdx.registry` extended, not rebuilt - the existing
+`WZDxClient.fetch()` (version-tolerant v3.1-v4.2 parser) and
+`list_feeds()` already matched the "registry-driven, not per-state
+adapter" shape this brief wanted; what was missing was CWZ/version
+awareness and auth-tier modelling on `RegistryEntry` itself.
+
+- **A real correction to the source brief's CWZ-filter assumption.**
+  Confirmed live (2026-08-02, 41 real registry rows): the `format`
+  column never distinguishes WZDx from CWZ (Connected Work Zone, a
+  different ITE schema) - it's always just `"geojson"`/`"json"`. The
+  real discriminator is `version == "CWZ 1.0"` (4/41 rows). `list_feeds()`
+  now defaults to `wzdx_only=True`, filtering on the real field via the
+  new `RegistryEntry.is_supported_wzdx` property - a documented skip
+  (also catching a real missing-version row and enforcing a 3.1 floor),
+  never a silent CWZ mis-parse.
+- `RegistryEntry` gained `needapikey`/`apikeyurl` fields - real shape
+  confirmed live: `needapikey` is `true` on 13/41 rows, explicit `false`
+  on 1, and simply **absent** (not `false`) on the other 27, now parsed
+  as "no key needed" rather than left unmodelled.
+- **511NY (NYSDOT) confirmed live end-to-end** - the first concrete
+  verified US feed via the actual registry pipeline: `list_feeds()` ->
+  real NY row -> real fetch (`https://511ny.org/api/wzdx`, no key) ->
+  real parse, 6,895+ real events. A real correction to the brief's own
+  geometry assumption: 100% `MultiPoint`, not `LineString` - both are
+  legitimate WZDx shapes, this just wasn't the one guessed.
+- **A real, live, active Quebec City (Canada) feed is registered too** -
+  `streetworks.common.from_wzdx`'s own docstring corrected from "USA
+  true for every feed observed" to reflect this; territory/
+  administrative_area were already per-feed parameters (not hardcoded),
+  now documented as load-bearing rather than incidental.
+- NYC DOT (local-street works, a separate Socrata feed, not in this
+  registry) recorded as the deliberate, not-yet-built follow-on.
+- `scripts/smoke_test.py` gained a dedicated registry-pipeline check
+  (list feeds -> find 511NY -> fetch -> parse, plus the real needs-key
+  count), the main registry's `wzdx` entry `scope_note` updated, README's
+  WZDx section rewritten to show the registry-driven pattern, 6 new
+  tests in `test_wzdx_registry.py` against an extended real fixture
+  (added a real Colorado `needapikey=true` WZDx row and its real CWZ
+  sibling).
+
 ### Added — G-NAF & National Roads (Australia), this SDK's first AU gazetteer coverage (2026-08-02)
 
 `streetworks.gnaf` / `streetworks.common.from_gnaf_address`/

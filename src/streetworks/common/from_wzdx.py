@@ -26,7 +26,13 @@ of DATEX measure records (traffic-management consequences, not works
 sites) and stay native/raw only, per the same design principle DATEX
 measures follow.
 
-``territory`` defaults to ``"USA"`` (true for every feed observed).
+``territory`` defaults to ``"USA"`` - true for every feed sampled while
+building the parser, but **not universally true of the registry**: a
+real, live, active Quebec City (Canada) feed is registered too (see
+:mod:`streetworks.wzdx.registry`'s own module docstring) - pass
+``territory`` explicitly for any feed whose
+:attr:`~streetworks.wzdx.RegistryEntry.state` isn't a real US
+state/territory, the same way ``administrative_area`` already has to be.
 ``administrative_area`` (the publishing state/agency) is NOT on the road
 event - it lives one level up, on the registry entry
 (:attr:`~streetworks.wzdx.RegistryEntry.state`) - so it can't be derived

@@ -1411,8 +1411,23 @@ _REGISTRY: list[ProviderEntry] = [
         territories=frozenset({"USA"}),
         scope_note=(
             "Not one provider's coverage - a schema ~40+ agencies publish "
-            "independently. Use streetworks.wzdx.list_feeds() to find a "
-            "specific agency's feed URL."
+            "independently. streetworks.wzdx.list_feeds() reads the real "
+            "USDOT feed registry (41 real rows, confirmed live 2026-08-02) "
+            "and defaults to wzdx_only=True - excluding real CWZ (a "
+            "different ITE schema, version=='CWZ 1.0') and sub-3.1/"
+            "unparseable-version entries, a documented skip rather than a "
+            "mis-parse. Two real auth tiers: ~27/41 need no key at all "
+            "(511NY/NYSDOT confirmed live end-to-end, the first concrete "
+            "verified feed - 6,895 real events, MultiPoint geometry); "
+            "~13/41 state needapikey=true with a real apikeyurl for "
+            "signup, the caller's own key to supply. Not US-only - a "
+            "real, active Quebec City (Canada) feed is registered too, so "
+            "territory/administrative_area are per-feed "
+            "(from_wzdx(..., territory=..., administrative_area=...)), "
+            "never hardcoded. NYC DOT's own local-street works (NYC Open "
+            "Data, Socrata) are a separate, not-yet-built follow-on - not "
+            "in this registry at all. See streetworks.wzdx.registry's own "
+            "module docstring."
         ),
         credentials=None,
         licence="Varies by publishing agency - not independently confirmed per-agency",

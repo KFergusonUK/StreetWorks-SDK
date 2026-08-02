@@ -1180,6 +1180,36 @@ def check_wzdx() -> str:
     )
 
 
+def check_wzdx_registry() -> str:
+    """The USDOT WZDx feed registry itself needs no credentials - see
+    streetworks.wzdx.registry. Confirmed live 2026-08-02 (41 real rows).
+    Exercises the full registry-to-feed pipeline against 511NY (NYSDOT),
+    the first concrete verified US feed - list_feeds() -> find the NY row
+    -> fetch its real URL, no key needed. Also reports the real CWZ/
+    needs-key split among the credential-free candidates, so a change in
+    those real proportions is visible here rather than silently."""
+    from streetworks.wzdx import WZDxClient
+    from streetworks.wzdx.registry import list_feeds
+
+    feeds = list_feeds()
+    if not feeds:
+        raise RuntimeError("registry returned no active, supported WZDx feeds")
+    needs_key = sum(1 for f in feeds if f.needapikey)
+
+    nysdot = next((f for f in feeds if f.feed_name == "nysdot"), None)
+    if nysdot is None:
+        raise RuntimeError("511NY (nysdot) is no longer in the registry - real coverage changed")
+    if nysdot.needapikey:
+        raise RuntimeError("511NY now states needapikey=true - it was confirmed key-free")
+
+    with WZDxClient() as wzdx:
+        feed = wzdx.fetch(nysdot.url)
+    return (
+        f"registry: {len(feeds)} active WZDx feed(s) ({needs_key} need a key) - "
+        f"511NY: {feed.publisher} (v{feed.version}), {len(feed.road_events)} road events"
+    )
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -1348,6 +1378,7 @@ def main() -> int:
     reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
+    reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

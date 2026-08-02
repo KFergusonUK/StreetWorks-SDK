@@ -2163,7 +2163,38 @@ with WZDxClient() as wzdx:
 
 Use `streetworks.wzdx.list_feeds()` to discover feed URLs from the [USDOT
 feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
-rather than hardcoding one.
+rather than hardcoding one — **confirmed live 2026-08-02, 41 real
+registered feeds.** `list_feeds()` defaults to `active_only=True,
+wzdx_only=True`: it drops feeds the registry itself flags inactive, and
+excludes CWZ (Connected Work Zone, a different ITE schema this SDK
+doesn't parse — the real discriminator is `version == "CWZ 1.0"`, *not*
+the `format` column, which is always just `"geojson"`/`"json"` and never
+states spec family) plus any sub-3.1/unparseable version, a documented
+skip rather than a mis-parse:
+
+```python
+from streetworks.wzdx import WZDxClient
+from streetworks.wzdx.registry import list_feeds
+
+for entry in list_feeds():
+    if entry.needapikey:
+        continue  # ~13/41 real feeds need a caller-supplied key - entry.apikeyurl points at signup
+    with WZDxClient() as wzdx:
+        feed = wzdx.fetch(entry.url)
+        print(entry.state, entry.organization, len(feed.road_events))
+```
+
+**511NY (NYSDOT) is the first concrete verified feed** — confirmed live
+end-to-end (registry lookup → real fetch → real parse): no key needed,
+WZDx v4.1, 6,895+ real road events, 100% `MultiPoint` geometry (not
+`LineString` — a real correction to an earlier assumption; WZDx's spec
+allows either). NYC's own local-street works are **not in this
+registry** — they're NYC DOT's separate Socrata feed, a deliberate,
+not-yet-built follow-on, kept apart from New York *State* coverage.
+**Not US-only** — a real, active Quebec City (Canada) feed is registered
+too, so `streetworks.common.from_wzdx()` takes `territory`/
+`administrative_area` per feed (sourced from `entry.state`/
+`entry.organization`) rather than assuming `"USA"`.
 
 Verified against **12 live agency feeds spanning WZDx v3.1–v4.2** (not one
 sample — cross-agency variation a single feed hides is exactly what broke
