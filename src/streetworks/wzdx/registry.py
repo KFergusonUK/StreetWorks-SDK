@@ -47,7 +47,8 @@ from typing import Any
 
 import httpx
 
-from .._transport import RetryConfig, SyncTransport
+from .._transport import RetryConfig
+from ..socrata import SodaClient
 
 __all__ = ["RegistryEntry", "list_feeds", "REGISTRY_URL"]
 
@@ -157,14 +158,11 @@ def list_feeds(
     CWZ feed through the WZDx parser. Check ``entry.needapikey`` before
     calling :meth:`~streetworks.wzdx.WZDxClient.fetch` on a returned
     entry's ``url`` - about a third of real feeds need a key the caller
-    must supply themselves (``entry.apikeyurl`` points at signup)."""
-    owned_client = client or httpx.Client(timeout=timeout, follow_redirects=True)
-    transport = SyncTransport(retry=retry or RetryConfig(), timeout=timeout, client=owned_client)
-    try:
-        response = transport.request("GET", registry_url, params={"$limit": 1000})
-        entries = [_parse_entry(row) for row in response.json()]
-    finally:
-        transport.close()
+    must supply themselves (``entry.apikeyurl`` points at signup). Reads
+    via :class:`~streetworks.socrata.SodaClient`, the shared Socrata
+    transport this SDK's Socrata providers build on."""
+    with SodaClient(retry=retry, timeout=timeout, client=client) as soda:
+        entries = [_parse_entry(row) for row in soda.iter_records(registry_url)]
     if active_only:
         entries = [e for e in entries if e.active]
     if wzdx_only:

@@ -2,6 +2,82 @@
 
 ## [Unreleased]
 
+### Added — MapRoad Roadworks Licensing (Ireland), a documented-unavailable scaffold (2026-08-03)
+
+`streetworks.maproad` - Ireland is now registered (`verified=False`)
+rather than left off the board, following an investigation that first
+ruled out TII's own DATEX II feed and then settled the real MapRoad
+Roadworks Licensing system's read-vs-write question.
+
+- **TII's DATEX II feed (`data.tii.ie`) ruled out first, not assumed.**
+  Its real dataset catalogue (verified against its data.gov.ie mirror -
+  all 20 real dataset titles enumerated) carries travel times, weather,
+  VMS/VDS, collision rates, and traffic counts - no roadworks/Situation
+  publication at all.
+- **MapRoad Roadworks Licensing is the real roadworks source - a
+  genuine national permit register covering both national and local
+  roads** - but Ireland's own PSB Data Catalogue metadata (`API
+  Available: Yes`, `Open Data: No`, `Data Sharing: Yes`, `Personal Data:
+  Yes`, read together) describes a formal, GDPR-gated data-sharing
+  arrangement, not a self-service developer key. Registration for
+  MapRoad itself is a real, formal applicant process (a registration
+  pack emailed to `contact@rmo.ie`), aimed at licence submitters, not
+  read-only consumers. No endpoint/schema/auth mechanism for a read path
+  was found published anywhere.
+- **A distinct tier from every other unverified provider** - not blocked
+  on a key (Trafikverket/Vejdirektoratet/SA/LINZ Roads), and not "no
+  interface at all" the way Road Report NT is - a real, catalogued API
+  exists, just for a different consumer class. `MapRoadClient()` always
+  raises the existing `ProviderUnavailableError` immediately, no network
+  call, mirroring NT's own documented-scaffold shape exactly.
+- Registry entry (`maproad`, `verified=False`, `source_grade=register` -
+  the real classification if it were reachable), import-time
+  `UserWarning`, a drafted GitHub issue in
+  `docs/credentials-wanted-issues.md` (`help wanted` only, not
+  `credentials-wanted`), a new README section, and 7 new tests covering
+  the informative raise and registry consistency.
+
+### Added — NYC DOT Street Construction Permits, a genuine US permit register (2026-08-02)
+
+`streetworks.nycdot` / `streetworks.common.from_nycdot` - the local
+follow-on the WZDx feed-registry harvest deliberately scoped out. 511NY
+covers New York *State* highways over WZDx; NYC's five boroughs are a
+separate authority (NYC DOT) publishing an entirely separate shape -
+NYC Open Data (Socrata), not WZDx at all.
+
+- **A genuine permit register - this SDK's second `source_grade=register`
+  source (after England's Street Manager) and the first in the US.**
+  Confirmed live 2026-08-02, credential-free, 3,798,494 real rows total.
+  A real Works-umbrella grouping matches Street Manager's own shape:
+  `applicationtrackingid` genuinely groups multiple real permits (one
+  real application had 226 permits under it) - `from_nycdot` groups by
+  it the same way `from_wzdx` groups by `works_ref`.
+- **No stated join to a street register** - the real 39-column schema
+  has no LION `segmentid` or any other street identifier, only free-text
+  cross-streets - `WorksSite.street_ref` is never populated, settling
+  the source brief's own hoped-for question honestly. Real geometry
+  exists anyway: a real `wkt` column populated on 80.5% of all rows
+  (`LINESTRING`/`POINT`/a real, confirmed-live `MULTIPOINT` shape - added
+  support for the latter to the shared `_wkt` helper, previously
+  unhandled), native CRS EPSG:2263 (NAD83/New York Long Island),
+  inferred from coordinate-value evidence, never reprojected.
+- **Permit-type filtering needed real evidence** - `iter_roadworks()`
+  filters to two confirmed roadworks series (`STREET OPENING PERMIT`,
+  `DOT IN-HOUSE PAVING AND MILLING`); `BUILDING OPERATION PERMIT` is
+  genuinely mixed at the finer `permittypedesc` level and deliberately
+  excluded rather than guessed at, the SA-`REC_TYPE` discipline.
+- **New `streetworks.socrata`** - a generic Socrata (SODA) client,
+  factored out of `streetworks.wzdx.registry` (refactored to use it,
+  behaviour unchanged, 7 existing tests still pass unmodified) when
+  this provider needed the identical shape - real `$limit`/`$offset`
+  pagination, optional app token.
+- Registry entry (`nycdot`, `source_grade=register`, `network_scope=
+  COMPREHENSIVE`, licence unconfirmed - NYC Open Data states no formal
+  reuse licence), `scripts/smoke_test.py` check, README section, 20 new
+  tests (5 `test_socrata.py`, 15 `test_nycdot.py`) against a real
+  6-permit fixture covering the multi-permit grouping, all three real
+  WKT geometry shapes, and a real no-geometry permit.
+
 ### Added — WZDx feed-registry harvest: CWZ/version filtering, auth tiers, 511NY verified end-to-end (2026-08-02)
 
 `streetworks.wzdx.registry` extended, not rebuilt - the existing

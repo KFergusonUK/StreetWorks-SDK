@@ -20,7 +20,7 @@ PACKAGE_ROOT = Path(inspect.getfile(inspect.getmodule(providers))).parent
 
 # Top-level packages/modules that are infrastructure, not providers, and are
 # deliberately not in the registry.
-_NON_PROVIDER_MODULES = {"common", "registry", "exceptions", "ogc"}
+_NON_PROVIDER_MODULES = {"common", "registry", "exceptions", "ogc", "socrata"}
 
 
 def test_every_import_line_actually_works():
@@ -321,6 +321,14 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     same LinzClient, genuinely different verification tier per capability,
     see streetworks.linz.client's own module docstring.
 
+    MapRoad (`maproad`, Ireland) joins NT's tier, not Trafikverket's -
+    it has a real, government-catalogued API, but the catalogue's own
+    metadata (API Available: Yes, Open Data: No, Data Sharing: Yes,
+    Personal Data: Yes) describes a formal, GDPR-gated data-sharing
+    arrangement, not a self-service key, and no technical shape for a
+    read path is published anywhere - see streetworks.maproad.client's
+    own module docstring and streetworks.exceptions.ProviderUnavailableError.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
     assert {e.key for e in unverified} == {
@@ -329,6 +337,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "sa",
         "nt",
         "linz_roads",
+        "maproad",
     }
 
 

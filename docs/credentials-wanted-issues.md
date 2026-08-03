@@ -1,13 +1,15 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for five `help wanted` issues: four in the
+Draft text for six `help wanted` issues: four in the
 [README's Credentials wanted section](../README.md#credentials-wanted)
 (Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
-Sections — all blocked on *access* to a real, published interface), plus a
-fifth, genuinely different case (Road Report NT — not access-blocked, but
-investigated and found to have no published interface at all). Norway/NSW/
-Victoria were confirmed on 2026-07-30 by a real credentialed pull and no
-longer need this - their drafted issue text has been removed. None of
+Sections — all blocked on *access* to a real, published interface), plus
+two genuinely different cases (Road Report NT and MapRoad Roadworks
+Licensing — neither access-blocked in the usual sense; NT has no
+published interface at all, MapRoad has a real API but no published
+read path for a data consumer, only a formal data-sharing gate). Norway/
+NSW/Victoria were confirmed on 2026-07-30 by a real credentialed pull and
+no longer need this - their drafted issue text has been removed. None of
 these have been opened yet — this file is the text to paste in when
 opening them (or to point someone at ahead of time). Every module's
 import-time `UserWarning` (or, for LINZ's per-method gate, its own
@@ -16,8 +18,8 @@ docstring/`ValueError`) and the README table link to
 which will surface these once opened with the `help wanted` label.
 
 Suggested labels for the first four: `help wanted`, `credentials-wanted`.
-For NT: `help wanted` only — `credentials-wanted` would misdescribe the
-blocker, since no credential would fix it.
+For NT and MapRoad: `help wanted` only — `credentials-wanted` would
+misdescribe the blocker, since no credential fixes either.
 
 ---
 
@@ -299,3 +301,56 @@ adapter.
 
 See `src/streetworks/au/nt.py`'s module docstring for the full detail
 behind each claim above.
+
+---
+
+## Issue: MapRoad Roadworks Licensing (Ireland) — is there a public read API?
+
+**Title:** `Help wanted: can MapRoad Roadworks Licensing data be read, not just written to?`
+
+**Body:**
+
+`streetworks.maproad` is a **documented, honestly-unavailable scaffold**,
+not a Credentials-wanted one — the difference matters, the same way it
+does for Road Report NT (Australia). Trafikverket/Vejdirektoratet/
+Traffic SA all have a real, published interface merely blocked from
+reaching (a key, a token, a region). MapRoad is different: it has a
+real, government-catalogued API, but nothing published describes how a
+data *consumer* (as opposed to a licence applicant) would reach it.
+
+**What was found, and how:** Ireland's own PSB Data Catalogue entry for
+[MapRoad Roadworks Licensing System](https://datacatalogue.gov.ie/dataset/maproad-roadworks-licensing-system)
+states, together: `API Available: Yes`, `Open Data: No`, `Data Sharing:
+Yes`, `Personal Data: Yes`. Read as a whole, this describes a formal,
+GDPR-gated data-sharing arrangement — not a self-service developer key.
+Registration for MapRoad itself (`rmo.ie`) is a real, formal process
+(download a registration pack, complete it, email it to
+`contact@rmo.ie`) aimed at applicants (utilities/contractors)
+*submitting* licence applications, not at read-only consumers. TII's own
+DATEX II feed (`data.tii.ie`) was checked first and ruled out — its real
+dataset catalogue (verified directly, every real title enumerated)
+carries no roadworks/Situation publication at all.
+
+**Why this isn't built as a client, even though a real API is known to
+exist:** no endpoint, schema, or authentication mechanism for a read
+path has been published anywhere found. Building a client against an
+unpublished, GDPR-relevant private contract would mean guessing at
+something with real personal-data implications — the same "don't encode
+a private implementation detail as a stable public contract" discipline
+Road Report NT already established, just for a different underlying
+reason (a data-sharing gate, not a total absence of any interface).
+
+**What would change this:** confirmation from the RMO that a read-only
+data-sharing route exists for a party without a genuine licensing-system
+role (a research/open-data use case, not a road authority or applicant),
+plus the real technical shape of that route if so.
+
+**What to report back:** if you have (or can get) a formal MapRoad
+data-sharing agreement, or know of any published technical documentation
+for a read path (endpoint, schema, auth), please share it — either would
+let this scaffold graduate into a real adapter, and would make MapRoad
+this SDK's first Irish roadworks source, richer than most (national
+*and* local road coverage in one register).
+
+See `src/streetworks/maproad/client.py`'s module docstring for the full
+detail behind each claim above.

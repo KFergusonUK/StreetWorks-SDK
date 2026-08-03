@@ -1090,7 +1090,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="New South Wales roadwork hazards feed (Australia).",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.STRATEGIC,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "New South Wales"}),
         administrative_area="Transport for NSW",
         scope_note=(
             "Phase 2 confirmed (2026-07-30) against a real credentialed "
@@ -1115,7 +1115,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="Victoria planned road disruptions feed (Australia).",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.STRATEGIC,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Victoria"}),
         administrative_area="Department of Transport and Planning",
         scope_note=(
             "Phase 2 confirmed (2026-07-30) against a real credentialed "
@@ -1143,7 +1143,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="Western Australia roadworks feed (Australia), over an ArcGIS Feature Service.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.UNKNOWN,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Western Australia"}),
         administrative_area="Main Roads Western Australia",
         scope_note=(
             "Credential-free, shipped live-verified with a real fixture "
@@ -1172,7 +1172,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="Queensland roadworks feed (Australia), one typed feed over every event_type.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.UNKNOWN,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Queensland"}),
         administrative_area=None,
         scope_note=(
             "Credential-free via a real, globally-shared public API key "
@@ -1208,7 +1208,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="South Australia roadworks feed (Australia), over an ArcGIS MapServer.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.UNKNOWN,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "South Australia"}),
         administrative_area="Department for Infrastructure and Transport",
         scope_note=(
             "Phase 1 scaffold, genuinely blocked on two access gates, not "
@@ -1237,7 +1237,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="ACT road-closures feed (Australia), the only municipal-level AU coverage.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.COMPREHENSIVE,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Australian Capital Territory"}),
         administrative_area="Roads ACT",
         scope_note=(
             "Confirmed live (2026-08-01, 98 real records) - credential-"
@@ -1266,7 +1266,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="Tasmania state-road roadworks feed (Australia), the only AU one with lines.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.STRATEGIC,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Tasmania"}),
         administrative_area="Department of State Growth",
         scope_note=(
             "Confirmed live (2026-08-01, 10 real records - genuinely this "
@@ -1298,7 +1298,7 @@ _REGISTRY: list[ProviderEntry] = [
         description="NT road-conditions service (Australia) - no published API, documented only.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.UNKNOWN,
-        territories=frozenset({"Australia"}),
+        territories=frozenset({"Australia", "Northern Territory"}),
         administrative_area="Department of Infrastructure, Planning and Logistics",
         scope_note=(
             "Investigated and registered honestly-unavailable, not "
@@ -1324,6 +1324,46 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.au",
         _client_name="RoadReportNtClient",
         import_line="from streetworks.au import RoadReportNtClient",
+    ),
+    ProviderEntry(
+        key="maproad",
+        name="MapRoad Roadworks Licensing",
+        description="Ireland's national roadworks licence register - a real API, gated, not open.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Ireland"}),
+        administrative_area="Road Management Office (RMO) / LGMA",
+        scope_note=(
+            "Investigated and registered honestly-unavailable, not "
+            "silently skipped - a different tier from Trafikverket/"
+            "Vejdirektoratet/SA (blocked on access to a real, published "
+            "interface) and a different reason from NT (which has no "
+            "published API at all). MapRoad has a real, government-"
+            "catalogued API (datacatalogue.gov.ie: 'API Available: Yes') "
+            "but the same listing states 'Open Data: No', 'Data Sharing: "
+            "Yes', 'Personal Data: Yes' together - a formal, GDPR-gated "
+            "data-sharing arrangement, not a self-service developer key. "
+            "No published endpoint/schema/auth mechanism for a read path "
+            "was found anywhere. TII's own DATEX II feed (data.tii.ie) "
+            "was checked and ruled out first - its real dataset catalogue "
+            "carries no roadworks/Situation publication at all, only "
+            "travel times/weather/VMS/VDS/collision/traffic-count data. "
+            "MapRoadClient() always raises ProviderUnavailableError "
+            "rather than guessing an unpublished private contract. Real "
+            "coverage would be national AND local roads (TII's own "
+            "national-road consents route through it; local authorities' "
+            "regional/local consents also do) - the richest real scope of "
+            "any Irish roadworks source found, if it were reachable. See "
+            "module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        verified=False,
+        _module="streetworks.maproad",
+        _client_name="MapRoadClient",
+        import_line="from streetworks.maproad import MapRoadClient",
     ),
     ProviderEntry(
         key="autobahn",
@@ -1436,6 +1476,49 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.wzdx",
         _client_name="WZDxClient",
         import_line="from streetworks.wzdx import WZDxClient",
+    ),
+    ProviderEntry(
+        key="nycdot",
+        name="NYC DOT Street Construction Permits",
+        description="New York City's street-opening permit register, over NYC Open Data.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        # Both "USA" (country-level, matching wzdx's own convention - this
+        # is still a real US provider) and "New York City" (this provider's
+        # actual real reach is city-scoped, not state or national - unlike
+        # wzdx's federated multi-state coverage) - see providers(territory=
+        # "New York City") and examples/roadworks_world_map.py's own city
+        # centroid.
+        territories=frozenset({"USA", "New York City"}),
+        administrative_area="New York City Department of Transportation (DOT)",
+        scope_note=(
+            "Confirmed live (2026-08-02, 3,798,494 real rows total) - "
+            "credential-free, never a Credentials-wanted scaffold. The "
+            "local follow-on WZDx's own registry harvest deliberately "
+            "scoped out - New York State (511NY, see wzdx) covers state "
+            "highways, NYC DOT is a separate authority publishing a "
+            "separate shape entirely, not WZDx. A genuine permit "
+            "register - source_grade=register, this SDK's second after "
+            "England's Street Manager and the first in the US. No LION "
+            "segmentid or any street-register identifier anywhere in "
+            "the real 39-column schema - street_ref is never populated, "
+            "confirmed by direct schema inspection, not a guess. Real "
+            "geometry exists anyway (wkt, 80.5% of rows, native SR "
+            "EPSG:2263/NAD83 New York Long Island, inferred not stated, "
+            "never reprojected). iter_roadworks() filters to two "
+            "evidenced series (STREET OPENING PERMIT, DOT IN-HOUSE "
+            "PAVING AND MILLING); BUILDING OPERATION PERMIT is "
+            "genuinely mixed at a finer level and deliberately excluded "
+            "rather than guessed at. Licence unconfirmed - NYC Open "
+            "Data states no formal reuse licence. See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.nycdot",
+        _client_name="NycDotClient",
+        import_line="from streetworks.nycdot import NycDotClient",
     ),
     ProviderEntry(
         key="trafficwatchni",

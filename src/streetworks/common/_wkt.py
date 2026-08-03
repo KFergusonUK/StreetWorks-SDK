@@ -2,12 +2,19 @@
 converters whose native models carry geometry as a WKT string
 (`bdtopo`, `nwb`, `nvdb`, `openusrn`) rather than GeoJSON coordinates
 (`datavia`) or plain lon/lat floats (`ban`, `bag`, `kartverket` - those
-build :class:`.Coordinate` directly, no parsing needed).
+build :class:`.Coordinate` directly, no parsing needed). Also used by
+`nycdot`'s works converter - a real (not hypothetical) works-side WKT
+source, not just gazetteer ones.
 
 Handles exactly the shapes this SDK's own native readers produce:
 ``POINT``, ``LINESTRING``/``LINESTRING Z``, ``MULTILINESTRING``/
-``MULTILINESTRING Z``. Not a general WKT parser - extend it if a future
-source needs POLYGON or a geometry collection.
+``MULTILINESTRING Z``, ``MULTIPOINT`` (added for `nycdot` - a real,
+confirmed-live shape, ``MULTIPOINT ((x1 y1), (x2 y2))``, each point
+individually parenthesized - a genuinely different micro-format from
+``LINESTRING``'s flat ``x1 y1, x2 y2``, mapped onto ``Coordinate.points``
+since real samples are two endpoint markers of one work extent on one
+street, not disjoint parts). Not a general WKT parser - extend it if a
+future source needs POLYGON or a geometry collection.
 """
 
 from __future__ import annotations
@@ -50,6 +57,13 @@ def _line(text: str) -> tuple[Point2D | Point3D, ...]:
     return tuple(_point(p) for p in text.split(","))
 
 
+def _multipoint(text: str) -> tuple[Point2D | Point3D, ...]:
+    """Real ``MULTIPOINT`` bodies wrap each point in its own parens
+    (``(x1 y1), (x2 y2)``) - a different shape from ``_line``'s flat,
+    unparenthesized points."""
+    return tuple(_point(p.strip("()")) for p in _split_top_level(text, "(", ")"))
+
+
 def coordinate_from_wkt(wkt: str | None, crs: str) -> Coordinate | None:
     """Parse a real WKT ``POINT``/``LINESTRING``/``MULTILINESTRING``
     (optionally ``Z``) string into a :class:`.Coordinate`. ``None`` in,
@@ -76,4 +90,9 @@ def coordinate_from_wkt(wkt: str | None, crs: str) -> Coordinate | None:
         if not parts:
             return None
         return Coordinate(value=parts[0][0], crs=crs, parts=parts)
+    if kind == "MULTIPOINT":
+        points = _multipoint(body)
+        if not points:
+            return None
+        return Coordinate(value=points[0], crs=crs, points=points if len(points) > 1 else None)
     return None

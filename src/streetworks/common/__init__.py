@@ -26,6 +26,7 @@ from .from_mallorca import from_mallorca
 from .from_nsw_livetraffic import from_nsw_livetraffic
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
+from .from_nycdot import from_nycdot
 from .from_nzta import from_nzta
 from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
@@ -114,4 +115,5 @@ __all__ = [
     "from_linz_road_section",
     "from_gnaf_address",
     "from_gnaf_road",
+    "from_nycdot",
 ]

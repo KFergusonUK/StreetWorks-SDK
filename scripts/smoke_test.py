@@ -1210,6 +1210,24 @@ def check_wzdx_registry() -> str:
     )
 
 
+def check_nycdot() -> str:
+    """NYC DOT Street Construction Permits needs no credentials - see
+    streetworks.nycdot. Confirmed live 2026-08-02 (3,798,494 real rows
+    total, the roadworks-filtered slice alone still 1.8M+) - only takes
+    the first real page via iter_roadworks()'s own $where filter, never
+    the whole register."""
+    import itertools
+
+    from streetworks.nycdot import NycDotClient
+
+    with NycDotClient() as nycdot:
+        permits = list(itertools.islice(nycdot.iter_roadworks(), 50))
+    if not permits:
+        raise RuntimeError("query returned no permits - real data may have changed")
+    with_geometry = sum(1 for p in permits if p.get("wkt"))
+    return f"{len(permits)} roadworks permit(s) sampled, {with_geometry} with real wkt geometry"
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -1379,6 +1397,7 @@ def main() -> int:
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
+    reporter.check("NYC DOT Street Construction Permits", [], check_nycdot)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

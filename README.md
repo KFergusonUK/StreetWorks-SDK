@@ -100,6 +100,8 @@ client, documented in its own section, exactly as before.
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
+| `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |
+| `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
@@ -136,8 +138,9 @@ gets you connected and typed; the linked docs tell you what to send.
 
 Early alpha. **Authentication and read/consume access are verified against
 the real systems for all providers except those in [Credentials
-wanted](#credentials-wanted), below, plus Road Report NT (no published
-interface at all, not a credential gate — see below)** (Norway/NSW/Victoria joined the
+wanted](#credentials-wanted), below, plus Road Report NT and MapRoad
+Roadworks Licensing (neither has a usable interface a credential would
+unlock — see below)** (Norway/NSW/Victoria joined the
 verified list on 2026-07-30 — see [Recently confirmed](#recently-confirmed)
 for what real data changed): Street Manager (SANDBOX), Geoplace
 DataVIA (live — including a real feature query), D-TRO (production token +
@@ -202,14 +205,16 @@ in [docs/credentials-wanted-issues.md](docs/credentials-wanted-issues.md).
 | Traffic SA (`streetworks.au.sa`, South Australia) — **blocked on two gates, not one** | The real field list, native SR, and pagination capabilities — all confirmed live from the layer's own public `?f=json` metadata; `iter_roadworks()` deliberately returns the full, unfiltered mix rather than guess a `REC_TYPE` filter with zero evidence | **No real feature has ever been retrieved**: the query endpoint 400s without an ArcGIS token, and whether that token is even self-service is itself unconfirmed (the token host returned a CloudFront 403 too); separately, `maps.sa.gov.au` geo-blocks some countries' network egress outright. Also open: whether `ROAD_NO`/`GIS_LINK_ID` are populated and genuinely join to a road register — a potential first for this AU cluster | ArcGIS token (self-service vs. gated: unresolved) | `location.sa.gov.au/arcgis/tokens/` — from a network egress the CloudFront restriction doesn't block | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | LINZ NZ Addresses: Roads/Road Sections (`streetworks.linz`, New Zealand) — **streets, not roadworks; the sibling `iter_addresses()` on the same client is already verified** | The real field lists and one real sample of attribute values for both layers, from LINZ's own public Koordinates metadata API (no key needed for this part); the real WFS URL shape (API key embedded in the URL path, confirmed from the layer's own `/services/` listing) | The authenticated WFS pull itself; whether `startIndex`/`count` pagination is genuinely honoured; **whether `road_id` genuinely cross-references to NZ Addresses' own `road_id`** — the single most interesting open question in this SDK's New Zealand cluster | LINZ Data Service (LDS) API key | Free, **self-service**: register at [data.linz.govt.nz](https://data.linz.govt.nz/) and create a "Data access only" key | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 
-**A fourth, genuinely different case: Road Report NT is not access-blocked
-at all — it has no published API to be blocked from.** Kept in a separate
-row rather than folded into the table above, since "Credential"/"How to
-get it" don't apply the way they do for the other three:
+**Two further, genuinely different cases: Road Report NT and MapRoad
+Roadworks Licensing aren't access-blocked in the usual sense.** Kept in
+a separate table rather than folded into the one above, since
+"Credential"/"How to get it" don't quite apply the way they do for the
+other four:
 
 | Provider | Confirmed | Pending | Credential | How to get it | Issue |
 |---|---|---|---|---|---|
 | Road Report NT (`streetworks.au.nt`, Northern Territory) — **no published interface, not a credential gate** | The real frontend's backend is a SignalR real-time hub (`"roadsReportingHub"`, a real hub method `"GetAllMajorRoadObstructions"`) — confirmed live by reading the site's own minified Angular bundle directly | Whether **any** documented REST/GeoJSON API exists for this data at all — `RoadReportNtClient()` always raises `ProviderUnavailableError` rather than build a client against reverse-engineered hub internals; see module docstring for why | N/A — no credential would fix this | N/A — the National Freight Data Hub's aggregate feed is a possible alternative route, unverified whether it carries real NT records | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| MapRoad Roadworks Licensing (`streetworks.maproad`, Ireland) — **a real API exists, but not for data consumers** | Ireland's own catalogue confirms a real, government-run API (`API Available: Yes`) covering both national and local roadworks licences — TII's own DATEX II feed was checked first and confirmed to carry no roadworks data at all | Whether a read-only path exists for a party who isn't a licence applicant or road authority — the same catalogue states `Open Data: No`, `Data Sharing: Yes`, `Personal Data: Yes` together, describing a formal GDPR-gated arrangement, not a self-service key; `MapRoadClient()` always raises `ProviderUnavailableError` rather than guess at an unpublished contract | N/A — no credential would fix this | Formal data-sharing agreement via `contact@rmo.ie`, not self-service | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 
 ### Recently confirmed
 
@@ -2211,6 +2216,117 @@ each other and don't always exist together. Real placeholder/garbage dates
 are confirmed at scale, not assumed — one live feed's "current" records
 spanned years 2019–2040. Every field is read defensively; nothing raises
 on a malformed record.
+
+## NYC DOT Street Construction Permits (New York City)
+
+The local follow-on the WZDx feed-registry harvest deliberately scoped
+out — 511NY (above) covers New York *State* highways; New York *City*'s
+five boroughs are a separate authority (NYC DOT) publishing a separate
+shape entirely, not WZDx at all.
+
+```python
+from streetworks.nycdot import NycDotClient
+from streetworks.common import from_nycdot
+
+with NycDotClient() as nycdot:
+    works_list = from_nycdot(list(nycdot.iter_roadworks()))
+```
+
+**A genuine permit register — the US cousin of Street Manager.** [Street
+Construction Permits (2022-Present)](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8)
+(NYC Open Data/Socrata, real total **3,798,494** rows, confirmed live
+2026-08-02, no credentials) records DOT's own issued permits, not
+observed conditions — `source_grade=register`, this SDK's second source
+at that tier after England's Street Manager, and the first in the US. A
+real Works-umbrella grouping matches Street Manager's own shape exactly:
+`applicationtrackingid` genuinely groups multiple permits (one real
+application had 226 real permits under it, a large paving job spanning
+many street segments) — `from_nycdot` groups by it the same way
+`from_wzdx` groups by `works_ref`, one `Works` per application, one
+`WorksSite` per permit.
+
+**No stated join to a street register — settles the source brief's own
+hoped-for question, honestly, not the way it hoped.** The full real
+39-column schema was checked directly: there is no LION `segmentid` (or
+any other street-register identifier) anywhere on this dataset — only
+free-text cross-street names, so `WorksSite.street_ref` is never
+populated, the same SA-`ROAD_NO`/NZTA discipline this SDK holds
+everywhere. A genuine NYC LION gazetteer strand remains a real,
+separate, not-yet-built follow-on, but it would join to nothing here
+even once built.
+
+**Real geometry exists anyway.** A real `wkt` column is populated on
+**80.5%** of all rows (`LINESTRING`/`POINT`/a real, confirmed-live
+`MULTIPOINT` shape — support for the latter added to this SDK's shared
+`_wkt` helper, previously unhandled). **Coordinates are NAD83 / New York
+Long Island, EPSG:2263** — inferred from real coordinate-value-range
+evidence and the near-universal NYC city-agency GIS convention, not an
+explicitly stated dataset SRID, and never silently reprojected to
+WGS84, the same "label honestly" discipline Tasmania's own real
+GDA94/MGA zone 55 geometry established for this SDK.
+
+**Permit-type filtering needed real evidence, not the coarser series
+field alone.** `iter_roadworks()` filters to two confirmed roadworks
+series (`STREET OPENING PERMIT`, 1,717,842 real rows; `DOT IN-HOUSE
+PAVING AND MILLING`, 118,656). `BUILDING OPERATION PERMIT` (1,206,251,
+the second-largest series) is genuinely mixed at the finer
+`permittypedesc` level — real street-occupying sub-types
+(`OCCUPANCY OF ROADWAY AS STIPULATED`, `PLACE MATERIAL ON STREET`)
+sit alongside clearly non-roadway ones (`OCCUPANCY OF SIDEWALK AS
+STIPULATED`, bike-share placement) — no confident allowlist could be
+built from the series field alone, so it's excluded from the default
+filter rather than guessed at, the same SA-`REC_TYPE` discipline;
+`iter_permits()` (unfiltered) is always available for a caller who wants
+to build their own finer filter.
+
+**`streetworks.socrata`** is a new shared Socrata (SODA) client,
+factored out of `streetworks.wzdx.registry` when this provider needed
+the identical GET-with-query-params-and-paginate shape — the same role
+`streetworks.arcgis`/`streetworks.ogc` play for their own technologies.
+Real `$limit`/`$offset` pagination, an optional app token.
+
+**Licence unconfirmed** — NYC Open Data states no formal reuse licence
+on this dataset (`license: None` in its own metadata), only NYC.gov's
+general Terms of Use and a no-warranty disclaimer, plus a stated
+attribution: "Department of Transportation (DOT)".
+
+## Ireland — MapRoad Roadworks Licensing (documented, unavailable)
+
+Investigated and registered honestly-unavailable, the same treatment
+Road Report NT (Australia) already established — not silently skipped,
+but not a working client either.
+
+**TII's own DATEX II feed (`data.tii.ie`) was checked first and ruled
+out as the roadworks source.** Its real, published dataset catalogue
+(verified directly against its data.gov.ie mirror — all 20 real dataset
+titles enumerated) carries travel times, weather, VMS/VDS, collision
+rates, WIM sensor data, and traffic counts — no roadworks or Situation
+publication at all.
+
+**MapRoad Roadworks Licensing is the real roadworks source — a genuine
+national permit register covering both national and local roads** (TII's
+own national-road consents route through it; local authorities' regional/
+local consents also do), run by the Road Management Office under the
+Local Government Management Agency. If it were reachable, this would be
+this SDK's third `source_grade=register` source, and the first genuinely
+combined national+local one.
+
+**Why it's a documented scaffold, not a working client.** Ireland's own
+[PSB Data Catalogue entry](https://datacatalogue.gov.ie/dataset/maproad-roadworks-licensing-system)
+states, together: `API Available: Yes`, `Open Data: No`, `Data Sharing:
+Yes`, `Personal Data: Yes`. Read as a whole, this describes a real API
+gated behind a formal, GDPR-relevant data-sharing arrangement — not a
+self-service developer key the way Trafikverket/LINZ's are. Registration
+for MapRoad itself (`rmo.ie`) is a real, formal process (download a
+registration pack, complete it, email it to `contact@rmo.ie`) aimed at
+licence *applicants*, not read-only consumers. No endpoint, schema, or
+authentication mechanism for a read path was found published anywhere.
+`MapRoadClient()` always raises `ProviderUnavailableError` immediately,
+with no network call, rather than guessing at an unpublished private
+contract with real personal-data implications — see [Credentials
+wanted](#credentials-wanted) above for the fuller writeup, and revisit if
+a documented read API, or a confirmed data-sharing route for non-
+applicants, ever surfaces.
 
 ## Northern Ireland & Wales (traveller-information RSS)
 
