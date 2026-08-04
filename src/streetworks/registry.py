@@ -1366,6 +1366,47 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.maproad import MapRoadClient",
     ),
     ProviderEntry(
+        key="greece",
+        name="Greece",
+        description="No roadworks source exists - Greece's NAP carries only POI/sensor data.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Greece"}),
+        scope_note=(
+            "Investigated and registered honestly-unavailable, not "
+            "silently skipped - the same tier as Road Report NT (no "
+            "roadworks source at all, as opposed to Trafikverket/"
+            "Vejdirektoratet/SA/MapRoad, all of which have a real "
+            "interface merely blocked). Greece's real NAP (nap.gov.gr, "
+            "confirmed as the official MMTIS/RTTI/SRTI/SSTP NAP per the "
+            "European Commission's own October 2025 NAP list) is a "
+            "decentralised metadata catalogue of POI/sensor data (truck "
+            "parking, refuelling points, KTEL bus/ferry timetables, "
+            "Thessaloniki floating car data, toll-operator VDS/VMS/"
+            "weather from Attiki Odos/Egnatia Odos/the Hellastron "
+            "network) - confirmed via its own real dataset titles to "
+            "carry no roadworks or DATEX II Situation dataset at all. A "
+            "second, independent reason: the portal itself is currently "
+            "unreachable, confirmed live (2026-08-03, a real 502 Bad "
+            "Gateway on its own CKAN backend, both on the dataset list "
+            "and its /api/3/action/package_list endpoint; its imet.gr "
+            "mirror hangs at the TLS handshake stage). "
+            "GreeceClient() always raises ProviderUnavailableError "
+            "rather than guessing. Even a best-case future toll-operator "
+            "feed would only ever be motorway-concession-only, "
+            "fragmented per operator - not a genuine national source. "
+            "See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.greece",
+        _client_name="GreeceClient",
+        import_line="from streetworks.greece import GreeceClient",
+    ),
+    ProviderEntry(
         key="autobahn",
         name="Autobahn GmbH",
         description="Germany's national motorway roadworks feed.",
@@ -1464,10 +1505,15 @@ _REGISTRY: list[ProviderEntry] = [
             "real, active Quebec City (Canada) feed is registered too, so "
             "territory/administrative_area are per-feed "
             "(from_wzdx(..., territory=..., administrative_area=...)), "
-            "never hardcoded. NYC DOT's own local-street works (NYC Open "
-            "Data, Socrata) are a separate, not-yet-built follow-on - not "
-            "in this registry at all. See streetworks.wzdx.registry's own "
-            "module docstring."
+            "never hardcoded. Confirmed live 2026-08-03: fldot (Florida, "
+            "keyless, 17,932 real events) and austin (Texas, keyless, "
+            "CC0, 100% work-zone - the cleanest feed found in this SDK). "
+            "No statewide California feed exists at all (only mtc/Bay "
+            "Area MTC, keyed); Texas's own statewide feed also needs a "
+            "key. NYC DOT's own local-street works (see 'nycdot') and "
+            "Chicago's (see 'chicagodot') are separate Socrata providers, "
+            "not in this registry at all. See streetworks.wzdx.registry's "
+            "own module docstring."
         ),
         credentials=None,
         licence="Varies by publishing agency - not independently confirmed per-agency",
@@ -1521,6 +1567,48 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.nycdot import NycDotClient",
     ),
     ProviderEntry(
+        key="chicagodot",
+        name="Chicago CDOT Street Closures",
+        description="Chicago's street-closure permit register, over Chicago's Open Data portal.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        # Both "USA" and "Chicago" (this provider's real reach is
+        # city-scoped) - see providers(territory="Chicago") and
+        # examples/roadworks_world_map.py's own city centroid, the same
+        # pattern nycdot already established.
+        territories=frozenset({"USA", "Chicago"}),
+        administrative_area="City of Chicago Department of Transportation (CDOT)",
+        scope_note=(
+            "Confirmed live (2026-08-03, 466,829 real rows in the "
+            "Street Closures view) - credential-free, never a "
+            "Credentials-wanted scaffold. This SDK's second US city "
+            "permit register after nycdot, source_grade=register. The "
+            "source brief's own primary dataset id (6fd2-pzze) is dead - "
+            "a genuinely empty schema despite 2.3M historical rows - the "
+            "real, current dataset is jdis-5sry (Transportation "
+            "Department Permits - Street Closures), a Chicago-maintained "
+            "view already filtered to 3 of 11 real applicationtype "
+            "values. That pre-filter alone isn't sufficient though - a "
+            "finer worktype field still mixes in real non-roadworks "
+            "activity (BlockParty, Festival, Filming, Parade, ...), so "
+            "iter_roadworks() filters on 7 confirmed roadworks worktypes "
+            "instead. No segment/street identifier anywhere in the real "
+            "46-column schema - street_ref is never populated. Cleaner "
+            "than nycdot in two real ways: native WGS84 GeoJSON Point "
+            "geometry (no WKT/State-Plane CRS question) and dates, both "
+            "populated on 99.94% of real rows. Licence unconfirmed - the "
+            "dataset states only 'See Terms of Use'. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.chicagodot",
+        _client_name="ChicagoDotClient",
+        import_line="from streetworks.chicagodot import ChicagoDotClient",
+    ),
+    ProviderEntry(
         key="trafficwatchni",
         name="TrafficWatchNI",
         description=(
@@ -1561,6 +1649,41 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.trafficwales",
         _client_name="TrafficWalesClient",
         import_line="from streetworks.trafficwales import TrafficWalesClient",
+    ),
+    ProviderEntry(
+        key="cciss",
+        name="CCISS (Centro di Coordinamento Informazioni sulla Sicurezza Stradale)",
+        description="Italy's real-time traffic bulletin RSS, from Italy's own confirmed RTTI NAP.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Italy"}),
+        scope_note=(
+            "Confirmed live (2026-08-03, 100 real items, 78 real "
+            "roadworks after classification) - credential-free, never "
+            "a Credentials-wanted scaffold. cciss.it is Italy's own "
+            "confirmed official RTTI/SRTI National Access Point (per "
+            "the European Commission's own October 2025 NAP list), "
+            "reached here via its real, public, keyless RSS route "
+            "rather than the registration-gated DATEX II one - a "
+            "second, later option, not pursued here. Same shape as "
+            "trafficwatchni/trafficwales: a traveller-information feed "
+            "mixing roadworks with weather, breakdowns, accidents and "
+            "demonstrations in one stream (unlike NI/Wales, which "
+            "already serve a roadworks-only feed) - iter_roadworks-"
+            "equivalent filtering happens via item.is_roadworks, a real "
+            "evidenced classification (lavori/personale su strada/ "
+            "pulizia del manto stradale), not a guess. No geometry - "
+            "confirmed live, correcting an earlier wrong AI-summarised "
+            "claim that the feed carried coordinates. Licence "
+            "unconfirmed. See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="traveller_info",
+        _module="streetworks.cciss",
+        _client_name="CcissClient",
+        import_line="from streetworks.cciss import CcissClient",
     ),
     ProviderEntry(
         key="police",

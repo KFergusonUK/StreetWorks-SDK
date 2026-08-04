@@ -66,9 +66,10 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     "France": (2.4, 46.6), "Spain": (-3.7, 40.2), "Germany": (10.4, 51.2),
     "Finland": (25.7, 62.5), "Iceland": (-18.6, 64.9), "Bulgaria": (25.3, 42.7),
     "Lithuania": (23.9, 55.2), "Norway": (9.0, 61.0), "Sweden": (15.6, 62.2),
-    "Denmark": (9.5, 56.1), "Ireland": (-8.0, 53.2),
+    "Denmark": (9.5, 56.1), "Ireland": (-8.0, 53.2), "Italy": (12.6, 42.5),
+    "Greece": (23.7, 39.1),
     # USA (federated WZDx — one national marker; per-state on live pull)
-    "USA": (-98.5, 39.8), "New York City": (-74.0, 40.7),
+    "USA": (-98.5, 39.8), "New York City": (-74.0, 40.7), "Chicago": (-87.6, 41.9),
     # Australia (per-state) + New Zealand
     "New South Wales": (147.0, -32.0), "Victoria": (144.5, -37.0),
     "Queensland": (146.0, -22.5), "Western Australia": (122.0, -25.0),

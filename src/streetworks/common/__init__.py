@@ -16,6 +16,8 @@ from .from_autobahn import from_autobahn
 from .from_bag import from_bag
 from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
+from .from_cciss import from_cciss
+from .from_chicagodot import from_chicagodot
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_gnaf import from_gnaf_address, from_gnaf_road
@@ -116,4 +118,6 @@ __all__ = [
     "from_gnaf_address",
     "from_gnaf_road",
     "from_nycdot",
+    "from_chicagodot",
+    "from_cciss",
 ]

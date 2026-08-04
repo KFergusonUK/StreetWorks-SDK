@@ -1,25 +1,27 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for six `help wanted` issues: four in the
+Draft text for seven `help wanted` issues: four in the
 [README's Credentials wanted section](../README.md#credentials-wanted)
 (Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
 Sections — all blocked on *access* to a real, published interface), plus
-two genuinely different cases (Road Report NT and MapRoad Roadworks
-Licensing — neither access-blocked in the usual sense; NT has no
-published interface at all, MapRoad has a real API but no published
-read path for a data consumer, only a formal data-sharing gate). Norway/
-NSW/Victoria were confirmed on 2026-07-30 by a real credentialed pull and
-no longer need this - their drafted issue text has been removed. None of
-these have been opened yet — this file is the text to paste in when
-opening them (or to point someone at ahead of time). Every module's
-import-time `UserWarning` (or, for LINZ's per-method gate, its own
-docstring/`ValueError`) and the README table link to
+three genuinely different cases (Road Report NT, MapRoad Roadworks
+Licensing, and Greece — none access-blocked in the usual sense; NT and
+Greece have no roadworks interface at all (Greece's own NAP carries
+POI/sensor data only, and is currently unreachable besides), MapRoad has
+a real API but no published read path for a data consumer, only a
+formal data-sharing gate). Norway/NSW/Victoria were confirmed on
+2026-07-30 by a real credentialed pull and no longer need this - their
+drafted issue text has been removed. None of these have been opened yet
+— this file is the text to paste in when opening them (or to point
+someone at ahead of time). Every module's import-time `UserWarning` (or,
+for LINZ's per-method gate, its own docstring/`ValueError`) and the
+README table link to
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
 Suggested labels for the first four: `help wanted`, `credentials-wanted`.
-For NT and MapRoad: `help wanted` only — `credentials-wanted` would
-misdescribe the blocker, since no credential fixes either.
+For NT, MapRoad, and Greece: `help wanted` only — `credentials-wanted`
+would misdescribe the blocker, since no credential fixes any of them.
 
 ---
 
@@ -353,4 +355,58 @@ this SDK's first Irish roadworks source, richer than most (national
 *and* local road coverage in one register).
 
 See `src/streetworks/maproad/client.py`'s module docstring for the full
+detail behind each claim above.
+
+---
+
+## Issue: Greece — is there a documented roadworks source anywhere?
+
+**Title:** `Help wanted: does any Greek source (national or toll-operator) publish roadworks data?`
+
+**Body:**
+
+`streetworks.greece` is a **documented, honestly-unavailable scaffold**,
+the same tier as Road Report NT (Australia) — not a real interface
+merely blocked, but investigated and found to have no roadworks source
+at all.
+
+**What was found, and how:** Greece's real National Access Point
+([nap.gov.gr](https://data.nap.gov.gr/), confirmed as the official
+MMTIS/RTTI/SRTI/SSTP NAP for Greece per the European Commission's own
+October 2025 [National Access Points list](https://transport.ec.europa.eu/document/download/963c997d-efd9-40ae-a38b-5d4b935bdfcf_en?filename=its-national-access-points.pdf))
+is a decentralised metadata catalogue (CKAN, run by CERTH/HIT), not a
+centralised DATEX II feed. Its own real dataset titles were checked
+directly (not assumed): truck parking, refuelling points, KTEL bus/
+ferry timetables, Thessaloniki floating car data, and toll-operator
+sensor feeds — real Vehicle Detection Sensor data from Attiki Odos, Road
+Weather Information System locations for Egnatia Odos, and real-time
+Variable Message Sign data from the Hellastron network. **No roadworks
+or DATEX II Situation Publication dataset anywhere.**
+
+**A second, independent reason nothing can be built right now: the
+portal itself is genuinely down.** Confirmed live (2026-08-03) via
+direct probing: `data.nap.gov.gr` returns a real `502 Bad Gateway` from
+its own CKAN backend (reproduced on both the dataset-list page and the
+`/api/3/action/package_list` endpoint); its mirror, `data.nap.imet.gr`,
+hangs at the TLS handshake stage and never completes a connection.
+
+**Why this isn't built as a client:** there is nothing published to
+build against — no roadworks dataset exists in the one place Greece's
+own EU-recognised data offering would carry it. Even a best-case future
+(a toll operator publishing its own roadworks feed) would only ever be
+motorway-concession-only, fragmented per operator — not a genuine
+national source.
+
+**What would change this:** a genuinely documented roadworks or DATEX II
+Situation dataset appearing on the Greek NAP once it's reachable again,
+or a toll operator (Attiki Odos, Egnatia Odos, or the wider Hellastron
+network) publishing its own roadworks/closures feed independently of the
+NAP.
+
+**What to report back:** if you know of a documented roadworks source
+for Greece (national or toll-operator, current or once the NAP is back
+up), please share it — that would let this scaffold graduate into a
+real adapter, and would make Greece this SDK's first Greek coverage.
+
+See `src/streetworks/greece/client.py`'s module docstring for the full
 detail behind each claim above.

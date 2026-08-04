@@ -1228,6 +1228,23 @@ def check_nycdot() -> str:
     return f"{len(permits)} roadworks permit(s) sampled, {with_geometry} with real wkt geometry"
 
 
+def check_chicagodot() -> str:
+    """Chicago CDOT Street Closures needs no credentials - see
+    streetworks.chicagodot. Confirmed live 2026-08-03 (466,829 real rows
+    in the Street Closures view) - only takes the first real page via
+    iter_roadworks()'s own $where filter, never the whole view."""
+    import itertools
+
+    from streetworks.chicagodot import ChicagoDotClient
+
+    with ChicagoDotClient() as chicago:
+        permits = list(itertools.islice(chicago.iter_roadworks(), 50))
+    if not permits:
+        raise RuntimeError("query returned no permits - real data may have changed")
+    with_geometry = sum(1 for p in permits if p.get("location"))
+    return f"{len(permits)} roadworks permit(s) sampled, {with_geometry} with real Point geometry"
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -1246,6 +1263,22 @@ def check_trafficwales() -> str:
         items = tw.fetch(Feed.ROADWORKS)
     with_roads = sum(1 for i in items if i.roads)
     return f"{len(items)} roadworks items ({with_roads} with road numbers)"
+
+
+def check_cciss() -> str:
+    """CCISS RSS (Italy) needs no credentials - see streetworks.cciss.
+    Confirmed live 2026-08-03 (100 real items, 78 real roadworks after
+    classification). Unlike TrafficWatchNI/Traffic Wales, this one feed
+    mixes roadworks with weather/breakdowns/accidents/demonstrations -
+    reports the real is_roadworks split rather than assuming it."""
+    from streetworks.cciss import CcissClient
+
+    with CcissClient() as cciss:
+        items = cciss.fetch()
+    if not items:
+        raise RuntimeError("feed returned no items - real data may have changed")
+    roadworks = sum(1 for i in items if i.is_roadworks)
+    return f"{len(items)} real item(s), {roadworks} classified as roadworks"
 
 
 def check_police() -> str:
@@ -1398,9 +1431,11 @@ def main() -> int:
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
     reporter.check("NYC DOT Street Construction Permits", [], check_nycdot)
+    reporter.check("Chicago CDOT Street Closures", [], check_chicagodot)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)
+    reporter.check("CCISS (Italy)", [], check_cciss)
     # UK Police (data.police.uk) needs no credentials
     reporter.check("UK Police (crime safety signal)", [], check_police)
 

@@ -329,6 +329,12 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     read path is published anywhere - see streetworks.maproad.client's
     own module docstring and streetworks.exceptions.ProviderUnavailableError.
 
+    Greece (`greece`) is squarely NT's own tier - not a real interface
+    blocked, but investigated and found to have no roadworks source at
+    all: its real NAP (nap.gov.gr) carries only POI/sensor data, and the
+    portal itself is currently unreachable besides (a real live 502) -
+    see streetworks.greece.client's own module docstring.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
     assert {e.key for e in unverified} == {
@@ -338,6 +344,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "nt",
         "linz_roads",
         "maproad",
+        "greece",
     }
 
 

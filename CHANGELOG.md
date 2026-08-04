@@ -2,6 +2,124 @@
 
 ## [Unreleased]
 
+### Added — Greece, a documented-unavailable scaffold (2026-08-03)
+
+`streetworks.greece` - Greece is now registered (`verified=False`)
+rather than left off the board, the same honest treatment Road Report
+NT and MapRoad Roadworks Licensing already established.
+
+- **Greece's real NAP (`nap.gov.gr`, confirmed as the official
+  MMTIS/RTTI/SRTI/SSTP access point per the European Commission's own
+  October 2025 NAP list) carries no roadworks source at all** - a
+  decentralised metadata catalogue (CKAN), not a centralised DATEX II
+  feed. Its own real dataset titles were checked directly: truck
+  parking, KTEL timetables, Thessaloniki floating car data, and real
+  toll-operator sensor feeds (Attiki Odos VDS, Egnatia Odos RWIS,
+  Hellastron VMS) - POI/sensor data, no roadworks or Situation
+  publication anywhere.
+- **A second, independent reason: the portal is genuinely down right
+  now** - confirmed live (2026-08-03), a real 502 Bad Gateway on its own
+  CKAN backend (both the dataset list and its own
+  `/api/3/action/package_list` endpoint), and a TLS handshake hang on
+  its `imet.gr` mirror.
+- `GreeceClient()` always raises the existing `ProviderUnavailableError`
+  immediately, no network call, mirroring NT/MapRoad's own
+  documented-scaffold shape exactly.
+- Registry entry (`greece`, `verified=False`), import-time
+  `UserWarning`, a drafted GitHub issue in
+  `docs/credentials-wanted-issues.md` (`help wanted` only), a new
+  README section, and 7 new tests covering the informative raise and
+  registry consistency.
+- `examples/roadworks_world_map.py` gained real Italy and Greece
+  centroids, so both now plot correctly alongside every other
+  registered territory.
+
+### Added — CCISS (Italy), this SDK's first Italian coverage, a keyless RSS win (2026-08-03)
+
+`streetworks.cciss` / `streetworks.common.from_cciss` - Italy's own
+confirmed official RTTI/SRTI National Access Point (per the European
+Commission's own October 2025 NAP list, `cciss.it` is listed for both
+delegated regulations), reached via its real, public, keyless RSS feed
+rather than the registration-gated DATEX II route the source
+investigation only considered.
+
+- **A real, immediately-buildable win the source investigation didn't
+  find** - confirmed live: 100 real items, 78 real roadworks after
+  classification, no credentials, no registration. The registration-
+  gated DATEX II route (same domain, richer structured data) remains a
+  real, separate, later option.
+- **Same shape as TrafficWatchNI/Traffic Wales, genuinely different
+  content mix** - reuses the established traveller-info RSS pattern
+  directly, but unlike those two (already roadworks-only feeds), CCISS
+  publishes one real stream mixing roadworks with weather, breakdowns,
+  accidents, demonstrations and debris/spill incidents -
+  `item.is_roadworks` is a real, evidenced classification (contains
+  `lavori`/`personale su strada`/`pulizia del manto stradale`), not a
+  closed enum, given the genuine variety of real Italian event-type
+  text observed live.
+- **No geometry** - confirmed directly against the real live XML,
+  correcting an earlier AI-summarised claim (from reading the CCISS
+  homepage, not the actual feed) that items were georeferenced.
+- **A real multi-day date-range parser** for Italian temporal clauses
+  (e.g. `"dalle 21:35 del 3 alle 05:00 del 4 agosto 2026"` - day 3 to
+  day 4, month/year stated once) - verified against real live examples,
+  not synthetic.
+- **A false lead caught and ruled out before it shipped**: an early
+  regex-based check suggested each item's embedded road name was offset
+  by one from its own title - re-checked via proper XML parsing and
+  found to be a self-inflicted extraction bug, not a real feed defect,
+  flagged in the module docstring so it isn't rediscovered.
+- Registry entry (`cciss`, `source_grade=traveller_info`,
+  `network_scope=STRATEGIC`, licence unconfirmed), `scripts/smoke_test.py`
+  check, README section, and 14 new tests against a real 8-item fixture
+  covering every real temporal/spatial clause shape found live.
+
+### Added — Chicago CDOT Street Closures, this SDK's second US city permit register (2026-08-03)
+
+`streetworks.chicagodot` / `streetworks.common.from_chicagodot` -
+reuses `streetworks.socrata` and the NYC permit-register pattern
+directly, confirming the multi-city Socrata shape works a second time.
+
+- **The source brief's own primary dataset id is dead - found live, not
+  guessed.** `6fd2-pzze` ("CDOT Permits") returns a genuinely empty
+  schema (`X-SODA2-Fields: []`) despite 2.3M historical rows. The real,
+  current dataset is `jdis-5sry` ("...- Street Closures", 46 columns,
+  466,829 real rows, confirmed updated the same day as this build) - a
+  Chicago-maintained view already filtered to 3 of 11 real
+  `applicationtype` values.
+- **Genuinely cleaner than NYC in two real ways** - native WGS84 GeoJSON
+  Point geometry (no WKT/State-Plane CRS question), and both geometry
+  and dates populated on 99.94% of real rows (vs. NYC's own 80.5%
+  geometry rate).
+- **The view's own pre-filter alone isn't sufficient** - a finer real
+  field, `worktype`, still mixes in confirmed non-roadworks activity
+  even within the pre-filtered applicationtypes (`BlockParty`, 53,679
+  real rows; `Festival`; `Filming`; `Parade`; ...) - `iter_roadworks()`
+  filters on 7 real, evidenced roadworks worktypes instead.
+- **A real Works-umbrella grouping, the same shape as NYC's** -
+  `applicationnumber` genuinely groups multiple real rows (one real
+  application had 64 real rows across 64 genuinely different street
+  locations).
+- No stated join to a street register (confirmed by direct schema
+  inspection); licence unconfirmed, the same honest-gap tier as NYC.
+- Registry entry (`chicagodot`, territories `USA` + `Chicago`, matching
+  nycdot's own city-territory pattern - a real Chicago map centroid
+  added to `examples/roadworks_world_map.py`), `scripts/smoke_test.py`
+  check, README section, and 14 new tests against a real 6-row fixture
+  covering the multi-row grouping, native Point geometry, a missing-
+  geometry row, and a real `BlockParty` (non-roadworks) row.
+
+### Confirmed — Florida DOT and Austin, TX join the WZDx keyless population (2026-08-03)
+
+No code changes needed - the registry-driven WZDx design already covers
+any registered feed. Live-confirmed and documented: `fldot` (17,932 real
+events, 3,386 work-zones) and `austin` (2,791 real events, 100%
+work-zone, CC0-licensed - the cleanest feed found anywhere in this SDK).
+Also corrects a population-target assumption: no statewide California
+WZDx feed is registered at all (only the keyed Bay Area `mtc`), and
+Texas's own statewide feed (`txdot_v4_2`) needs a key too - Austin is
+the real keyless Texas win.
+
 ### Added — MapRoad Roadworks Licensing (Ireland), a documented-unavailable scaffold (2026-08-03)
 
 `streetworks.maproad` - Ireland is now registered (`verified=False`)
