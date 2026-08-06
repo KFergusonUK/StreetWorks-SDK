@@ -3,9 +3,11 @@ logic (not pydeck's own rendering, which this doesn't attempt to verify -
 see the module docstring's honest note on OrbitView zoom not being
 independently re-verified against a real browser render)."""
 
+
 from __future__ import annotations
 
 import pytest
+pytest.importorskip("pydeck")
 
 from examples.nsg_terrain_drape.drape import DrapedLine
 from examples.nsg_terrain_drape.render import (
