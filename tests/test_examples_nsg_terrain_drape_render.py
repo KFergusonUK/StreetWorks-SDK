@@ -7,6 +7,7 @@ independently re-verified against a real browser render)."""
 from __future__ import annotations
 
 import pytest
+
 pytest.importorskip("pydeck")
 
 from examples.nsg_terrain_drape.drape import DrapedLine
