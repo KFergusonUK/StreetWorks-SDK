@@ -257,9 +257,22 @@ See each module's own docstring for the full detail behind every claim
 above.
 
 Not yet exercised against live systems — implemented to the published specs
-and covered by mocked tests: the **write/publish** paths (Street Manager work
-submission and assessment; D-TRO create/update and provisions). These are
-publisher-scoped and deliberately excluded from the read-only smoke test.
+and covered by mocked tests: **most write/publish paths** (general Street
+Manager work submission and assessment; D-TRO create/update and
+provisions). These are publisher-scoped and deliberately excluded from the
+read-only smoke test.
+
+**Exception, sandbox-verified 2026-08-06, production unexercised:** the
+Section 50 apply/start/stop path
+([`examples/streetmanager_section_50.py`](examples/streetmanager_section_50.py))
+has been run end-to-end against the Street Manager sandbox - `create_work`,
+`start_work`, and `stop_work` all succeeded against a real sandbox record.
+Note this needed a Promoter-role sandbox account specifically; an HA-role
+login (which the read-only Street Manager examples use) got 400s and would
+likely 403 on `create_work` regardless of payload correctness - see that
+script's own docstring. Sandbox success says nothing about production,
+which remains untouched and shouldn't be exercised casually here given the
+promoter-account/council-policy considerations noted in that module's brief.
 
 Known reconciliation items: D-TRO `v4.0.0` is the production schema (live
 since 2026-06-01, confirmed directly from DfT's own repo and separately at
@@ -411,6 +424,20 @@ See [`examples/collaboration_finder.py`](examples/collaboration_finder.py)
 for a worked example of finding same-street, close-in-time works worth
 coordinating (the reusable matching logic is commented separately from the
 fetch/print code, since that's the bit worth lifting into your own script).
+
+See [`examples/streetmanager_section_50.py`](examples/streetmanager_section_50.py)
+for applying for, starting, and stopping a Section 50 licence works record
+under a highway authority's own promoter account - transport and identity
+injection only (reprojects the applicant's WGS84 extent to BNG, stamps the
+SWA codes and `activity_type`/`work_type`, passes everything else through
+unchanged). The reusable request-assembly logic lives in
+`streetworks.streetmanager.utils.section_50_utils`; the WGS84↔BNG transform
+it depends on (no `pyproj` - a pure-Python implementation of Ordnance
+Survey's own published Helmert + Transverse Mercator formulas) lives in
+`streetworks.common._bng`. **Needs Promoter-role sandbox credentials, not
+Highway Authority** - a Street Manager login can't hold both, and this is a
+different account from the HA-role one the other Street Manager examples on
+this page use for reads (live-confirmed - see the script's own docstring).
 
 ## Street Manager Open Data (SNS push)
 
