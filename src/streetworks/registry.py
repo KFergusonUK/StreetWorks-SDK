@@ -1609,6 +1609,55 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.chicagodot import ChicagoDotClient",
     ),
     ProviderEntry(
+        key="paris",
+        name="Paris Chantiers (Ville de Paris)",
+        description="Paris's own occupation-permit register for street/public-space worksites.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        # Both "France" (country-level, matching bisonfute's own
+        # convention - a real, distinct, municipal-not-national
+        # provider, never deduplicated against it) and "Paris"
+        # (city-scoped real reach) - see providers(territory="Paris")
+        # and examples/roadworks_world_map.py's own city centroid, the
+        # same pattern nycdot/chicagodot already established.
+        territories=frozenset({"France", "Paris"}),
+        administrative_area="Ville de Paris - Direction de la Voirie et des Déplacements",
+        scope_note=(
+            "Confirmed live (2026-08-06, 4,707 real records) - "
+            "credential-free, never a Credentials-wanted scaffold. This "
+            "SDK's third municipal permit register after nycdot/"
+            "chicagodot, source_grade=register - and the first on "
+            "OpenDataSoft (the French/EU Socrata-equivalent), built "
+            "bespoke rather than via a shared client, the same sequence "
+            "that produced streetworks.socrata's SodaClient (bespoke "
+            "first, extracted only when a second same-platform provider "
+            "needs the identical shape). The real chantier_categorie "
+            "field has exactly 3 values live: city works and network-"
+            "operator works are genuine roadworks; 'Tiers (travaux sur "
+            "batiment)' (private building works/scaffolding, 2,918 of "
+            "4,707 real rows) is excluded by iter_roadworks(). Geometry "
+            "is already WGS84 (geo_shape/geo_point_2d) despite the "
+            "underlying Paris data being surveyed in Lambert 93 - "
+            "OpenDataSoft reprojects on the way out, so no CRS transform "
+            "is needed here. No street/segment identifier field - "
+            "street_ref is never populated, the same nycdot/chicagodot/"
+            "Roads-ACT discipline. Licence is ODbL 1.0 (Open Database "
+            "License, share-alike), confirmed from the dataset's own "
+            "metadata - a stronger documentation case than nycdot/"
+            "chicagodot's own unconfirmed-licence tier, and the same "
+            "share-alike nuance streetworks.au.act's CC BY-SA licence "
+            "carries relative to its plain-CC-BY siblings. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="ODbL 1.0",
+        licence_confirmed=True,
+        source_grade="register",
+        _module="streetworks.paris",
+        _client_name="ParisClient",
+        import_line="from streetworks.paris import ParisClient",
+    ),
+    ProviderEntry(
         key="trafficwatchni",
         name="TrafficWatchNI",
         description=(

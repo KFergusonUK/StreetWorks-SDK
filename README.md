@@ -102,6 +102,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |
 | `streetworks.chicagodot` | [CDOT Street Closures](https://data.cityofchicago.org/Transportation/Transportation-Department-Permits-Street-Closures/jdis-5sry) — Chicago's own street-closure permit register (no credentials, confirmed live 2026-08-03), this SDK's second US city permit register after NYC. Native WGS84 GeoJSON Point geometry (no WKT/CRS question, unlike NYC) — `iter_roadworks()` filters on real `worktype` values since the dataset's own pre-filter alone still mixes in block parties, festivals and filming | read |
+| `streetworks.paris` | [Chantiers à Paris](https://opendata.paris.fr/explore/dataset/chantiers-a-paris/) — the City of Paris's own occupation-permit register for street/public-space worksites (no credentials, confirmed live 2026-08-06), this SDK's third municipal permit register and the first on OpenDataSoft (the French/EU Socrata-equivalent), built bespoke. Geometry already WGS84 despite the underlying Lambert 93 survey CRS — OpenDataSoft reprojects on the way out. Licence ODbL 1.0 (share-alike), confirmed | read |
 | `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
 | `streetworks.greece` | Greece — registered as a documented, honestly-unavailable scaffold, the same tier as Road Report NT. Its real NAP ([nap.gov.gr](https://data.nap.gov.gr/)) carries only POI/sensor data (truck parking, VMS/VDS, weather, floating car data) — no roadworks or DATEX II Situation dataset at all, confirmed via its own real dataset titles. The portal is also currently unreachable (a real live 502). `GreeceClient()` always raises `ProviderUnavailableError` rather than guessing | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
@@ -2400,6 +2401,66 @@ no segment/street identifier, only free-text `streetname`/`direction`/
 `suffix`/`streetnumberfrom`/`streetnumberto`. **Licence unconfirmed** —
 the dataset states only `"See Terms of Use"`, the same honest-gap tier
 as NYC.
+
+## Paris Chantiers (Ville de Paris)
+
+This SDK's third municipal permit register, and the French analogue of
+`nycdot`/`chicagodot` — same `source_grade=register` tier, same
+"one application groups several sites" shape — but the first provider on
+**OpenDataSoft**, not Socrata. No shared `streetworks.opendatasoft`
+client was extracted for it: built bespoke inside `streetworks.paris`,
+the same sequence that produced `streetworks.socrata`'s `SodaClient`
+(bespoke first, shared only once a *second* same-platform provider needs
+the identical shape).
+
+```python
+from streetworks.paris import ParisClient
+from streetworks.common import from_paris
+
+with ParisClient() as paris:
+    works_list = from_paris(list(paris.iter_roadworks()))
+```
+
+**Municipal, not national — deliberately not deduplicated against
+`bisonfute`.** France is already covered nationally (Bison Futé/the
+DIRs, interurban), but that coverage doesn't reach Paris city streets.
+Paris's own register is a genuinely separate authority publishing a
+genuinely separate shape, at a different scope — the same non-dedup
+principle `nycdot` already establishes relative to WZDx's state-level
+511NY coverage.
+
+**Roadworks-vs-private filter, evidenced not guessed.** The real
+`chantier_categorie` field has exactly three live values: `"Ville de
+Paris (Tvx sur espace ou édifice public)"` (598 rows) and `"Opérateurs
+de réseau (gaz-électricité-RATP-etc)"` (1,191 rows) are genuine
+street/public-space works; `"Tiers (travaux sur bâtiment)"` (2,918 rows
+— private building works/scaffolding) is not roadworks and is the only
+category `iter_roadworks()` excludes.
+
+**Geometry is already WGS84, despite the underlying survey CRS being
+Lambert 93.** Both `geo_shape` (a GeoJSON `Polygon` — the worksite
+footprint) and `geo_point_2d` (a representative point) are served in
+WGS84 degrees — OpenDataSoft reprojects on the way out, so no CRS
+transform was needed here, unlike this SDK's British National Grid
+providers. The full polygon is preserved in `WorksSite.raw`;
+`Coordinate.value` uses the representative point, since
+`Coordinate.points`/`.parts` are documented for line-geometry vertices,
+not polygon rings.
+
+**A real Works-umbrella grouping, the same shape as NYC's own** —
+`chantier_cite_id` genuinely groups multiple real emprise rows under one
+parent chantier (a real example, `329467`, a 3-emprise green-space
+maintenance job spanning 3 genuinely different real polygons).
+
+**No stated join to a street register** — only `cp_arrondissement`
+(postcode) and the geometry itself; `street_ref` is never populated, the
+same nycdot/chicagodot/Roads-ACT discipline. **Licence: ODbL 1.0 (Open
+Database License), confirmed** from the dataset's own metadata — a
+share-alike licence, a stronger documentation case than nycdot/
+chicagodot's own unconfirmed tier. Share-alike means an adapted/derived
+database must itself be released under ODbL (or a compatible licence) —
+the same nuance `streetworks.au.act`'s CC BY-SA carries relative to its
+plain-CC-BY siblings. Attribution: "Ville de Paris".
 
 ## Ireland — MapRoad Roadworks Licensing (documented, unavailable)
 

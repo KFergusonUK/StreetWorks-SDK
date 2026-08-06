@@ -1245,6 +1245,23 @@ def check_chicagodot() -> str:
     return f"{len(permits)} roadworks permit(s) sampled, {with_geometry} with real Point geometry"
 
 
+def check_paris() -> str:
+    """Paris Chantiers needs no credentials - see streetworks.paris.
+    Confirmed live 2026-08-06 (4,707 real records total) - only takes
+    the first real page via iter_roadworks()'s own where filter, never
+    the whole register."""
+    import itertools
+
+    from streetworks.paris import ParisClient
+
+    with ParisClient() as paris:
+        records = list(itertools.islice(paris.iter_roadworks(), 50))
+    if not records:
+        raise RuntimeError("query returned no records - real data may have changed")
+    with_geometry = sum(1 for r in records if r.get("geo_point_2d"))
+    return f"{len(records)} roadworks record(s) sampled, {with_geometry} with real geometry"
+
+
 def check_trafficwatchni() -> str:
     """TrafficWatchNI RSS (Northern Ireland) needs no credentials."""
     from streetworks.trafficwatchni import Feed, TrafficWatchNIClient
@@ -1432,6 +1449,7 @@ def main() -> int:
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
     reporter.check("NYC DOT Street Construction Permits", [], check_nycdot)
     reporter.check("Chicago CDOT Street Closures", [], check_chicagodot)
+    reporter.check("Paris Chantiers", [], check_paris)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

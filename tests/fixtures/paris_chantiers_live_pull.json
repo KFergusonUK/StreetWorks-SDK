@@ -1,0 +1,117 @@
+[
+  {
+    "num_emprise": "EC506528",
+    "cp_arrondissement": "75016",
+    "date_debut": "2026-07-20",
+    "date_fin": "2026-08-31",
+    "chantier_categorie": "Ville de Paris (Tvx sur espace ou édifice public)",
+    "moa_principal": "Direction des Espaces Verts et de l'Environnement",
+    "surface": 955.0,
+    "chantier_synthese": "Espaces verts – Entretien des plantations",
+    "localisation_detail": ["EMPRISE_CHAUSSEE", "EMPRISE_TROTTOIR"],
+    "localisation_stationnement": ["STATIONNEMENT_PAYANT"],
+    "demande_cite_id": "956124",
+    "chantier_cite_id": "329467",
+    "geo_shape": {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [[[2.2714218751956206, 48.8452106875886], [2.270200042948848, 48.844023816785004], [2.2701306410706468, 48.844052993431575], [2.271349086166618, 48.845235289886915], [2.2714218751956206, 48.8452106875886]]],
+        "type": "Polygon"
+      },
+      "properties": {}
+    },
+    "geo_point_2d": {"lon": 2.2707740692298866, "lat": 48.8446293654848}
+  },
+  {
+    "num_emprise": "EC506524",
+    "cp_arrondissement": "75016",
+    "date_debut": "2026-07-20",
+    "date_fin": "2026-08-31",
+    "chantier_categorie": "Ville de Paris (Tvx sur espace ou édifice public)",
+    "moa_principal": "Direction des Espaces Verts et de l'Environnement",
+    "surface": 197.28,
+    "chantier_synthese": "Espaces verts – Entretien des plantations",
+    "localisation_detail": ["EMPRISE_CHAUSSEE", "EMPRISE_TROTTOIR"],
+    "localisation_stationnement": null,
+    "demande_cite_id": "956124",
+    "chantier_cite_id": "329467",
+    "geo_shape": {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [[[2.275338865323697, 48.84906873175884], [2.2750730831188206, 48.84883032784922], [2.275000197108939, 48.84886176149992], [2.275266105772738, 48.84909106026262], [2.275338865323697, 48.84906873175884]]],
+        "type": "Polygon"
+      },
+      "properties": {}
+    },
+    "geo_point_2d": {"lon": 2.275167483218212, "lat": 48.84896093422667}
+  },
+  {
+    "num_emprise": "EC506527",
+    "cp_arrondissement": "75016",
+    "date_debut": "2026-07-20",
+    "date_fin": "2026-08-31",
+    "chantier_categorie": "Ville de Paris (Tvx sur espace ou édifice public)",
+    "moa_principal": "Direction des Espaces Verts et de l'Environnement",
+    "surface": 490.4,
+    "chantier_synthese": "Espaces verts – Entretien des plantations",
+    "localisation_detail": ["EMPRISE_CHAUSSEE", "EMPRISE_TROTTOIR"],
+    "localisation_stationnement": ["STATIONNEMENT_PAYANT"],
+    "demande_cite_id": "956124",
+    "chantier_cite_id": "329467",
+    "geo_shape": {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [[[2.272313356744641, 48.8460949874965], [2.2716766692364314, 48.84549229510997], [2.2716072980544486, 48.84551919556839], [2.2722371182786993, 48.846119569339265], [2.272313356744641, 48.8460949874965]]],
+        "type": "Polygon"
+      },
+      "properties": {}
+    },
+    "geo_point_2d": {"lon": 2.2719609835887273, "lat": 48.84580872054398}
+  },
+  {
+    "num_emprise": "EC459894",
+    "cp_arrondissement": "75017",
+    "date_debut": "2025-10-20",
+    "date_fin": "2026-08-28",
+    "chantier_categorie": "Opérateurs de réseau (gaz-électricité-RATP-etc)",
+    "moa_principal": "CPCU",
+    "surface": 148.11,
+    "chantier_synthese": "Travaux sur réseau de chauffage urbain",
+    "localisation_detail": ["EMPRISE_CHAUSSEE", "EMPRISE_TROTTOIR"],
+    "localisation_stationnement": null,
+    "demande_cite_id": "918415",
+    "chantier_cite_id": "299168",
+    "geo_shape": {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [[[2.3118453852326026, 48.88160729010962], [2.3119557758922924, 48.881515144710946], [2.3119331594231642, 48.881495947034786], [2.312028669446601, 48.881419654050525], [2.3120106738592408, 48.881409873795505], [2.3119402712437753, 48.881414876899825], [2.311798070764452, 48.881530460469676], [2.31181711426671, 48.88159147378585], [2.3118453852326026, 48.88160729010962]]],
+        "type": "Polygon"
+      },
+      "properties": {}
+    },
+    "geo_point_2d": {"lon": 2.3118971470647867, "lat": 48.881503502089494}
+  },
+  {
+    "num_emprise": "EC500567",
+    "cp_arrondissement": "75008",
+    "date_debut": "2026-05-15",
+    "date_fin": "2026-10-31",
+    "chantier_categorie": "Tiers (travaux sur bâtiment)",
+    "moa_principal": "Propriétés - Co-propriétés publiques et privées",
+    "surface": 93.13,
+    "chantier_synthese": "Construction ou réhabilitation d'immeuble",
+    "localisation_detail": ["EMPRISE_CHAUSSEE", "EMPRISE_TROTTOIR"],
+    "localisation_stationnement": null,
+    "demande_cite_id": "951158",
+    "chantier_cite_id": "325565",
+    "geo_shape": {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [[[2.308756775937259, 48.86805324268366], [2.3087055031236723, 48.86809392885581], [2.3088756972931717, 48.86818131729914], [2.3089249311805244, 48.86813822792405], [2.308756775937259, 48.86805324268366]]],
+        "type": "Polygon"
+      },
+      "properties": {}
+    },
+    "geo_point_2d": {"lon": 2.308815936284173, "lat": 48.868116887429984}
+  }
+]
