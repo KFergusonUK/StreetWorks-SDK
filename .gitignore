@@ -29,3 +29,12 @@ examples/crime_context/*.html
 # same reasoning, for the LSOA-level successor example.
 examples/crime_context_lsoa/cache/
 examples/crime_context_lsoa/*.html
+
+# examples/nsg_terrain_drape/'s disk cache (OS Open USRN + OS Terrain 50
+# bulk downloads, ~460MB combined) and generated drape HTML/STL output -
+# regenerated on demand, not meant to be committed. The STL in particular
+# can run to hundreds of MB for a real AOI - well past GitHub's 100MB
+# per-file push limit, so this isn't just tidiness.
+examples/nsg_terrain_drape/cache/
+examples/nsg_terrain_drape/*.html
+examples/nsg_terrain_drape/*.stl
