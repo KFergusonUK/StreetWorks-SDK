@@ -2834,14 +2834,13 @@ actually is.
 
 See [`examples/compare_active_works.py`](examples/compare_active_works.py)
 for this normalisation in practice — active works in a Street Manager
-area, a DGT/Spain (national) area, and a Consell de Mallorca (insular)
-area, side by side, printed with one shared bit of code working
-unmodified across all three (default areas: Newton Aycliffe vs. a shared
-radius around Alcúdia, Mallorca; parameterisable). DGT and Consell de
-Mallorca share the same centre/radius on purpose — same geographic area,
-overlapping but not identical road-network coverage (see below), so the
-comparison usually shows DGT thinner and Consell de Mallorca richer for
-the same real area, not a clean present/absent split.
+area (default: Durham City) and across Paris's own Chantiers register,
+side by side, printed with one shared bit of code working unmodified
+across both, despite Street Manager stating an explicit lifecycle status
+field and Paris stating none at all (its own "active" is inferred from
+the date_debut/date_fin window instead). Honestly not a fair work-count
+comparison — a small English city against a major world capital — the
+point is the shared canonical shape, not the numbers.
 
 ### Never deduplicate across providers
 
