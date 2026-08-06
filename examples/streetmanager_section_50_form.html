@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Section 50 licence works — application (demo)</title>
+<meta name="description" content="A static, non-functional mockup of the applicant-facing S50 form described in the StreetWorks SDK's Street Manager connector example." />
+<style>
+  :root {
+    --paper: #eef1e6;
+    --paper-raised: #f8f9f3;
+    --ink: #1e2a20;
+    --ink-soft: #52604f;
+    --line: #c9d0bc;
+    --accent: #2f5233;
+    --accent-strong: #1f3a24;
+    --accent-wash: #dfe8dc;
+    --stamp: #a73b2a;
+    --stamp-soft: #f4e2db;
+    --stamp-line: #cf9587;
+    --shadow: rgba(30, 42, 32, 0.14);
+    --focus: #1f6fb2;
+
+    --font-display: Cambria, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --font-body: "Avenir Next", "Century Gothic", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "SF Mono", Consolas, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131d16;
+      --paper-raised: #1a2a1d;
+      --ink: #e7efe3;
+      --ink-soft: #9db299;
+      --line: #2d3f2c;
+      --accent: #82c28e;
+      --accent-strong: #a7dcae;
+      --accent-wash: #21362a;
+      --stamp: #e2836c;
+      --stamp-soft: #3a271f;
+      --stamp-line: #6b4236;
+      --shadow: rgba(0, 0, 0, 0.4);
+      --focus: #6fb4ea;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131d16;
+    --paper-raised: #1a2a1d;
+    --ink: #e7efe3;
+    --ink-soft: #9db299;
+    --line: #2d3f2c;
+    --accent: #82c28e;
+    --accent-strong: #a7dcae;
+    --accent-wash: #21362a;
+    --stamp: #e2836c;
+    --stamp-soft: #3a271f;
+    --stamp-line: #6b4236;
+    --shadow: rgba(0, 0, 0, 0.4);
+    --focus: #6fb4ea;
+  }
+  :root[data-theme="light"] {
+    --paper: #eef1e6;
+    --paper-raised: #f8f9f3;
+    --ink: #1e2a20;
+    --ink-soft: #52604f;
+    --line: #c9d0bc;
+    --accent: #2f5233;
+    --accent-strong: #1f3a24;
+    --accent-wash: #dfe8dc;
+    --stamp: #a73b2a;
+    --stamp-soft: #f4e2db;
+    --stamp-line: #cf9587;
+    --shadow: rgba(30, 42, 32, 0.14);
+    --focus: #1f6fb2;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  a { color: var(--accent-strong); }
+  button { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .page { max-width: 1080px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  /* ---------------- Masthead ---------------- */
+  .masthead {
+    display: flex; align-items: center; gap: 18px;
+    padding-bottom: 20px; margin-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .mark {
+    flex: none;
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    background: var(--accent); color: var(--paper-raised);
+    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+    border-radius: 3px;
+  }
+  .titles { flex: 1 1 auto; min-width: 0; }
+  .titles h1 { font-size: 1.7rem; }
+  .titles .sub { margin: 3px 0 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 62ch; }
+  .demo-badge {
+    flex: none;
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--stamp);
+    border: 1px solid var(--stamp-line);
+    background: var(--stamp-soft);
+    padding: 6px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* ---------------- Tabs ---------------- */
+  .tabs { display: flex; gap: 4px; margin-bottom: -1px; position: relative; z-index: 1; }
+  .tabs button {
+    appearance: none; border: 1px solid var(--line); border-bottom: none;
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-family: var(--font-display); font-size: 0.98rem;
+    padding: 10px 22px 12px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+  }
+  .tabs button[aria-selected="true"] {
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-weight: 600;
+    border-color: var(--line);
+  }
+  .tabs button:not([aria-selected="true"]):hover { color: var(--ink); }
+
+  .dossier {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 0 8px 8px 8px;
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+
+  .panel { display: grid; grid-template-columns: 1fr 300px; gap: 0; }
+  .panel[hidden] { display: none; }
+  .form-col { padding: 30px 34px; min-width: 0; }
+  .form-col > section + section { margin-top: 30px; padding-top: 30px; border-top: 1px dashed var(--line); }
+
+  .step-label {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong);
+    margin: 0 0 6px;
+  }
+  .step-title { font-size: 1.15rem; margin: 0 0 4px; }
+  .step-help { color: var(--ink-soft); font-size: 0.88rem; margin: 0 0 16px; max-width: 58ch; }
+
+  /* ---------------- Form fields ---------------- */
+  .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field.wide { grid-column: 1 / -1; }
+  .field label {
+    font-size: 0.82rem; color: var(--ink-soft);
+    display: flex; justify-content: space-between; gap: 8px;
+  }
+  .field label .req { color: var(--stamp); font-size: 0.75rem; }
+  input[type="text"], input[type="date"], input[type="datetime-local"], select, textarea {
+    font: inherit; font-size: 0.95rem;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 9px 10px;
+    width: 100%;
+  }
+  textarea { resize: vertical; min-height: 64px; font-family: var(--font-body); }
+  input::placeholder { color: var(--ink-soft); opacity: 0.7; }
+
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+  .check-grid { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .check-grid label { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--ink); }
+
+  .toggle-group { display: flex; gap: 8px; }
+  .toggle-group button {
+    appearance: none; cursor: pointer;
+    border: 1px solid var(--line); background: var(--paper);
+    color: var(--ink-soft);
+    padding: 7px 16px; border-radius: 999px; font-size: 0.86rem;
+  }
+  .toggle-group button[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent); color: var(--paper-raised); font-weight: 600;
+  }
+
+  .finding {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    font-size: 0.76rem; color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .finding::before { content: "⌁"; color: var(--stamp); }
+
+  /* ---------------- BNG grid widget ---------------- */
+  .grid-widget {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--paper);
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 14.28% 14.28%;
+    aspect-ratio: 7 / 4;
+    position: relative;
+    cursor: crosshair;
+    overflow: hidden;
+  }
+  .grid-widget .road {
+    position: absolute; left: 8%; right: 12%; top: 46%;
+    height: 3px; background: var(--ink-soft); opacity: 0.5; border-radius: 2px;
+  }
+  .grid-widget .road::after {
+    content: "Ferguson Court"; position: absolute; left: 0; top: 8px;
+    font-size: 0.68rem; color: var(--ink-soft); font-family: var(--font-mono);
+  }
+  .grid-pin {
+    position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px;
+    background: var(--stamp); border: 2px solid var(--paper-raised);
+    border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    box-shadow: 0 2px 6px var(--shadow);
+    pointer-events: none;
+  }
+  .coord-readout {
+    display: grid; grid-template-columns: auto 1fr; gap: 4px 10px;
+    font-family: var(--font-mono); font-size: 0.8rem; margin-top: 10px;
+  }
+  .coord-readout dt { color: var(--ink-soft); }
+  .coord-readout dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+  /* ---------------- Stamp rail ---------------- */
+  .stamp-rail {
+    background: var(--stamp-soft);
+    border-left: 1px solid var(--stamp-line);
+    padding: 30px 24px;
+  }
+  .stamp-rail h2 {
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--stamp); font-family: var(--font-mono); font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .stamp-rail .stamp-help { font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 18px; }
+  .stamp-block { border: 1px solid var(--stamp-line); border-radius: 6px; padding: 14px; background: var(--paper-raised); }
+  .stamp-item + .stamp-item { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--stamp-line); }
+  .stamp-item dt { font-size: 0.72rem; color: var(--ink-soft); margin-bottom: 2px; }
+  .stamp-item dd { margin: 0; font-family: var(--font-mono); font-size: 0.88rem; }
+  .stamp-item .locked { display: inline-flex; align-items: center; gap: 5px; }
+  .stamp-item .locked::before { content: "🔒"; font-size: 0.7rem; }
+
+  .bng-panel { margin-top: 26px; }
+
+  /* ---------------- Submit / results ---------------- */
+  .actions { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .btn-primary {
+    appearance: none; cursor: pointer; border: none;
+    background: var(--accent); color: var(--paper-raised);
+    font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+    padding: 12px 22px; border-radius: 5px;
+  }
+  .btn-primary:hover { background: var(--accent-strong); }
+  .actions .hint { font-size: 0.78rem; color: var(--ink-soft); }
+
+  .result-card {
+    margin-top: 20px; padding: 16px 18px;
+    background: var(--accent-wash);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    display: none;
+  }
+  .result-card.show { display: block; }
+  .result-card .result-label {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent-strong); margin-bottom: 8px;
+  }
+  .result-card dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 0.88rem; }
+  .result-card dt { color: var(--ink-soft); }
+  .result-card dd { margin: 0; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .result-card .note { margin: 10px 0 0; font-size: 0.8rem; color: var(--ink-soft); }
+  .result-card pre {
+    margin: 0; padding: 12px 14px;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 4px;
+    font-size: 0.8rem; line-height: 1.5; overflow-x: auto; white-space: pre;
+  }
+  .result-card .warn { color: var(--stamp); }
+
+  footer.credit {
+    max-width: 1080px; margin: 28px auto 0; padding: 0 24px;
+    font-size: 0.78rem; color: var(--ink-soft);
+  }
+  footer.credit code { font-family: var(--font-mono); background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (max-width: 780px) {
+    .panel { grid-template-columns: 1fr; }
+    .stamp-rail { border-left: none; border-top: 1px solid var(--stamp-line); }
+    .field-grid { grid-template-columns: 1fr; }
+    .masthead { flex-wrap: wrap; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header class="masthead">
+    <div class="mark">§50</div>
+    <div class="titles">
+      <h1>Section 50 licence works</h1>
+      <p class="sub">StreetWorks SDK example — submits under the highway authority's own Street Manager promoter account, on the applicant's behalf.</p>
+    </div>
+    <div class="demo-badge">Demo — not connected to Street Manager</div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="S50 licence actions">
+    <button role="tab" aria-selected="true" aria-controls="tab-apply" data-tab="apply">Apply</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-start" data-tab="start">Start</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-stop" data-tab="stop">Stop</button>
+  </nav>
+
+  <main class="dossier">
+
+    <!-- ============================= APPLY ============================= -->
+    <section class="panel" id="tab-apply" role="tabpanel">
+      <div class="form-col">
+
+        <section>
+          <p class="step-label">Step 1 · Street</p>
+          <h3 class="step-title">Which street</h3>
+          <p class="step-help">Stated by the applicant, never inferred from the drawn extent — this is the load-bearing join, resolved by a human pick against Street Manager's own Lookup API.</p>
+          <div class="field wide">
+            <label for="street-search">Search street name or USRN <span class="req">required</span></label>
+            <input type="text" id="street-search" value="Ferguson Court" />
+          </div>
+          <div class="field wide" style="margin-top: 10px;">
+            <label>Selected street</label>
+            <div class="check-row mono" style="font-size: 0.88rem; border: 1px solid var(--line); border-radius: 4px; padding: 9px 10px; background: var(--paper);">
+              Ferguson Court, Bishop Auckland — USRN 42820309
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <p class="step-label">Step 2 · Extent</p>
+          <h3 class="step-title">Draw the works extent</h3>
+          <p class="step-help">Click inside the grid to place the extent. The applicant draws in WGS84; the connector reprojects to British National Grid before it reaches Street Manager — Street Manager's own coordinate convention, not WGS84.</p>
+          <div class="grid-widget" id="bng-grid" role="img" aria-label="Click to place the works extent">
+            <div class="road"></div>
+            <div class="grid-pin" id="grid-pin" style="left: 50%; top: 50%;"></div>
+          </div>
+          <dl class="coord-readout">
+            <dt>Drawn (WGS84)</dt><dd id="wgs84-out">53.611990° N, 1.664442° W</dd>
+            <dt>Reprojected (BNG)</dt><dd id="bng-out">412878.741 N, 422297.792 E</dd>
+          </dl>
+        </section>
+
+        <section>
+          <p class="step-label">Step 3 · Works detail</p>
+          <h3 class="step-title">Tell us about the works</h3>
+          <p class="step-help">Everything here is passed through unchanged — the connector is transport and identity injection only, never a rules engine.</p>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="start-date">Proposed start <span class="req">required</span></label>
+              <input type="datetime-local" id="start-date" value="2026-09-01T09:00" />
+            </div>
+            <div class="field">
+              <label for="end-date">Proposed end <span class="req">required</span></label>
+              <input type="datetime-local" id="end-date" value="2026-09-08T17:00" />
+            </div>
+
+            <div class="field wide">
+              <label for="desc">Description of work <span class="req">required, ≤500 chars</span></label>
+              <textarea id="desc">New private access - Section 50 licensed works</textarea>
+            </div>
+            <div class="field wide">
+              <label for="loc-desc">Works location description <span class="req">required, ≤500 chars</span></label>
+              <textarea id="loc-desc">Verge and footway outside Ferguson Court</textarea>
+            </div>
+
+            <div class="field">
+              <label>Excavation required</label>
+              <div class="toggle-group" data-toggle="excavation">
+                <button type="button" aria-pressed="true" data-value="yes">Yes</button>
+                <button type="button" aria-pressed="false" data-value="no">No</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="tm-type">Traffic management</label>
+              <select id="tm-type">
+                <option value="no_carriageway_incursion">No carriageway incursion</option>
+                <option value="some_carriageway_incursion">Some carriageway incursion</option>
+                <option value="give_and_take">Give and take</option>
+                <option value="stop_go_boards">Stop/go boards</option>
+                <option value="two_way_signals">Two-way signals</option>
+                <option value="road_closure">Road closure</option>
+              </select>
+            </div>
+
+            <div class="field wide">
+              <label>Location type <span class="req">select all that apply</span></label>
+              <div class="check-grid">
+                <label><input type="checkbox" data-value="verge" checked /> Verge</label>
+                <label><input type="checkbox" data-value="footway" checked /> Footway</label>
+                <label><input type="checkbox" data-value="carriageway" /> Carriageway</label>
+                <label><input type="checkbox" data-value="cycleway" /> Cycleway</label>
+                <label><input type="checkbox" data-value="footpath" /> Footpath</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="close-footway">Close footway</label>
+              <select id="close-footway">
+                <option value="no">No</option>
+                <option value="yes_provide_pedestrian_walkway">Yes — provide pedestrian walkway</option>
+                <option value="yes_provide_alternative_route">Yes — provide alternative route</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="close-footpath">Close footpath</label>
+              <select id="close-footpath">
+                <option value="no">No</option>
+                <option value="yes_discussed_with_ha">Yes — discussed with HA</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>TTRO required <span class="req">required for planned works</span></label>
+              <div class="toggle-group" data-toggle="ttro">
+                <button type="button" aria-pressed="false" data-value="yes">Yes</button>
+                <button type="button" aria-pressed="true" data-value="no">No</button>
+              </div>
+              <span class="finding">confirmed required via live sandbox testing</span>
+            </div>
+            <div class="field">
+              <label>Collaborative working</label>
+              <div class="toggle-group" data-toggle="collab">
+                <button type="button" aria-pressed="false" data-value="yes">Yes</button>
+                <button type="button" aria-pressed="true" data-value="no">No</button>
+              </div>
+            </div>
+
+            <div class="field wide" id="collab-follow-up">
+              <label>Can others collaborate on this work? <span class="req">required when collaborative working is No</span></label>
+              <div class="toggle-group" data-toggle="others-collab">
+                <button type="button" aria-pressed="false" data-value="yes">Yes</button>
+                <button type="button" aria-pressed="true" data-value="no">No</button>
+              </div>
+              <span class="finding">also confirmed required via live sandbox testing</span>
+              <textarea id="non-collab-reason" style="margin-top: 8px;">Single licensed S50 works; no collaboration opportunity identified.</textarea>
+            </div>
+
+            <div class="field">
+              <label for="contact-name">Secondary contact <span class="req">required</span></label>
+              <input type="text" id="contact-name" value="J. Smith (licensee contact)" />
+            </div>
+            <div class="field">
+              <label for="contact-number">Contact number <span class="req">required</span></label>
+              <input type="text" id="contact-number" value="01234 567890" />
+            </div>
+          </div>
+          <p class="step-help" style="margin-top: 14px;">An S50 has no separate licensee field — the licensee's identity rides here, in the contact details, not in a promoter field of its own.</p>
+        </section>
+
+        <section>
+          <div class="actions">
+            <button class="btn-primary" id="apply-submit">Build request</button>
+            <span class="hint">Assembles the real request body — nothing is sent anywhere.</span>
+          </div>
+          <div class="result-card" id="apply-result">
+            <p class="result-label">POST /works — not sent</p>
+            <pre class="mono" id="apply-payload"></pre>
+            <p class="note" id="apply-note">This is the exact <code class="mono">WorkCreateRequest</code> body <code class="mono">section_50_utils.build_work_create_request</code> would assemble from the form above — reprojected with the real BNG transform, not an approximation. Only the network call is missing.</p>
+          </div>
+        </section>
+
+      </div>
+
+      <aside class="stamp-rail">
+        <h2>Connector-stamped</h2>
+        <p class="stamp-help">Owned by the connector, not the applicant — supplying any of these yourself is rejected, not overwritten.</p>
+        <div class="stamp-block">
+          <div class="stamp-item">
+            <dt class="locked">Promoter SWA code</dt>
+            <dd>1355 — Durham County Council</dd>
+          </div>
+          <div class="stamp-item">
+            <dt class="locked">Highway authority SWA code</dt>
+            <dd>1355 — Durham County Council</dd>
+          </div>
+          <div class="stamp-item">
+            <dt class="locked">Activity type</dt>
+            <dd>section_50</dd>
+          </div>
+          <div class="stamp-item">
+            <dt class="locked">Work type</dt>
+            <dd>planned</dd>
+          </div>
+          <div class="stamp-item">
+            <dt class="locked">Application type</dt>
+            <dd>permit <span style="color: var(--ink-soft); font-family: var(--font-body); font-size: 0.72rem;">(unconfirmed literal — implied by deem behaviour)</span></dd>
+          </div>
+        </div>
+        <p class="stamp-help" style="margin-top: 12px;">Same SWA code, both slots — an S50 has no statutory undertaker, so the highway authority is the right promoter identity for a licensed third party's works.</p>
+
+        <div class="bng-panel">
+          <h2>Coordinate seam</h2>
+          <p class="stamp-help">Reprojection is a single, visible step — never silent.</p>
+          <dl class="coord-readout" id="rail-coords">
+            <dt>WGS84</dt><dd>53.611990, -1.664442</dd>
+            <dt>BNG</dt><dd>422297.79 E, 412878.74 N</dd>
+          </dl>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ============================= START ============================= -->
+    <section class="panel" id="tab-start" role="tabpanel" hidden>
+      <div class="form-col" style="grid-column: 1 / -1;">
+        <section>
+          <p class="step-label">Start</p>
+          <h3 class="step-title">Record the actual start date</h3>
+          <p class="step-help">Keyed on <code class="mono">work_reference_number</code> only — the permit reference isn't used past apply.</p>
+          <div class="field-grid">
+            <div class="field wide">
+              <label for="start-ref">Work reference number <span class="req">required</span></label>
+              <input type="text" class="mono" id="start-ref" placeholder="UG05027486061" />
+            </div>
+            <div class="field">
+              <label for="actual-start">Actual start date <span class="req">must be now or in the past</span></label>
+              <input type="datetime-local" id="actual-start" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" id="start-submit">Build request</button>
+            <span class="hint">Assembles the real request body — nothing is sent anywhere.</span>
+          </div>
+          <div class="result-card" id="start-result">
+            <p class="result-label" id="start-label">PUT /works/&hellip;/start — not sent</p>
+            <pre class="mono" id="start-payload"></pre>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============================= STOP ============================= -->
+    <section class="panel" id="tab-stop" role="tabpanel" hidden>
+      <div class="form-col" style="grid-column: 1 / -1;">
+        <section>
+          <p class="step-label">Stop</p>
+          <h3 class="step-title">Record the actual stop date</h3>
+          <p class="step-help">Must be after the actual start date; Street Manager enforces the ordering server-side.</p>
+          <div class="field-grid">
+            <div class="field wide">
+              <label for="stop-ref">Work reference number <span class="req">required</span></label>
+              <input type="text" class="mono" id="stop-ref" placeholder="UG05027486061" />
+            </div>
+            <div class="field">
+              <label for="actual-stop">Actual stop date <span class="req">must be after start</span></label>
+              <input type="datetime-local" id="actual-stop" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" id="stop-submit">Build request</button>
+            <span class="hint">Assembles the real request body — nothing is sent anywhere.</span>
+          </div>
+          <div class="result-card" id="stop-result">
+            <p class="result-label" id="stop-label">PUT /works/&hellip;/stop — not sent</p>
+            <pre class="mono" id="stop-payload"></pre>
+          </div>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="credit">
+    Static mockup of the applicant-facing flow in <code>examples/streetmanager_section_50.py</code> — nothing on this page calls Street Manager. The real connector logic lives in <code>streetworks.streetmanager.utils.section_50_utils</code>.
+  </footer>
+</div>
+
+<script>
+  // ---- Tabs ----
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const panels = { apply: document.getElementById('tab-apply'), start: document.getElementById('tab-start'), stop: document.getElementById('tab-stop') };
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+      Object.entries(panels).forEach(([key, panel]) => { panel.hidden = key !== tab.dataset.tab; });
+    });
+  });
+
+  // ---- Toggle groups ----
+  document.querySelectorAll('.toggle-group').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      [...group.children].forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      if (group.dataset.toggle === 'collab') updateCollabFollowUp();
+    });
+  });
+  function updateCollabFollowUp() {
+    const collabNo = document.querySelector('[data-toggle="collab"] [data-value="no"]').getAttribute('aria-pressed') === 'true';
+    document.getElementById('collab-follow-up').style.display = collabNo ? '' : 'none';
+  }
+  updateCollabFollowUp();
+
+  // ---------------------------------------------------------------------
+  // Real WGS84 -> BNG (EPSG:27700) transform - a faithful port of
+  // streetworks/common/_bng.py's own Helmert + Transverse Mercator
+  // formulas (Ordnance Survey's published algorithm), not an
+  // approximation. Same constants, same structure, so it produces the
+  // same numbers the Python connector would. See that module's docstring
+  // for the full derivation and accuracy caveat (~3.5m without OSTN15).
+  // ---------------------------------------------------------------------
+  const WGS84_A = 6378137.000, WGS84_B = 6356752.3141;
+  const AIRY1830_A = 6377563.396, AIRY1830_B = 6356256.909;
+  const TX = -446.448, TY = 125.157, TZ = -542.060;
+  const HELMERT_S = 20.4894e-6;
+  const ARCSEC_TO_RAD = Math.PI / (180 * 3600);
+  const RX = -0.1502 * ARCSEC_TO_RAD, RY = -0.2470 * ARCSEC_TO_RAD, RZ = -0.8421 * ARCSEC_TO_RAD;
+  const GRID_F0 = 0.9996012717;
+  const GRID_PHI0 = 49 * Math.PI / 180, GRID_LAMBDA0 = -2 * Math.PI / 180;
+  const GRID_E0 = 400000.0, GRID_N0 = -100000.0;
+
+  function latLonToCartesian(lat, lon, height, a, b) {
+    const e2 = 1 - (b * b) / (a * a);
+    const nu = a / Math.sqrt(1 - e2 * Math.sin(lat) ** 2);
+    return [
+      (nu + height) * Math.cos(lat) * Math.cos(lon),
+      (nu + height) * Math.cos(lat) * Math.sin(lon),
+      ((1 - e2) * nu + height) * Math.sin(lat),
+    ];
+  }
+
+  function helmertWgs84ToOsgb36(x, y, z) {
+    const scale = 1 + HELMERT_S;
+    return [
+      TX + scale * (x - RZ * y + RY * z),
+      TY + scale * (RZ * x + y - RX * z),
+      TZ + scale * (-RY * x + RX * y + z),
+    ];
+  }
+
+  function cartesianToLatLon(x, y, z, a, b) {
+    const e2 = 1 - (b * b) / (a * a);
+    const p = Math.hypot(x, y);
+    let lat = Math.atan2(z, p * (1 - e2));
+    for (let i = 0; i < 10; i++) {
+      const nu = a / Math.sqrt(1 - e2 * Math.sin(lat) ** 2);
+      const latNew = Math.atan2(z + e2 * nu * Math.sin(lat), p);
+      if (Math.abs(latNew - lat) < 1e-14) { lat = latNew; break; }
+      lat = latNew;
+    }
+    return [lat, Math.atan2(y, x)];
+  }
+
+  function meridionalArc(lat, n, n2, n3, b) {
+    const dphi = lat - GRID_PHI0, sphi = lat + GRID_PHI0;
+    const ma = (1 + n + 1.25 * n2 + 1.25 * n3) * dphi;
+    const mb = (3 * n + 3 * n2 + 2.625 * n3) * Math.sin(dphi) * Math.cos(sphi);
+    const mc = (1.875 * n2 + 1.875 * n3) * Math.sin(2 * dphi) * Math.cos(2 * sphi);
+    const md = (35 / 24 * n3) * Math.sin(3 * dphi) * Math.cos(3 * sphi);
+    return b * GRID_F0 * (ma - mb + mc - md);
+  }
+
+  function latLonToNationalGrid(lat, lon) {
+    const a = AIRY1830_A, b = AIRY1830_B;
+    const e2 = 1 - (b * b) / (a * a);
+    const n = (a - b) / (a + b), n2 = n * n, n3 = n * n * n;
+    const cosLat = Math.cos(lat), sinLat = Math.sin(lat), tanLat = Math.tan(lat);
+    const nu = a * GRID_F0 / Math.sqrt(1 - e2 * sinLat ** 2);
+    const rho = (a * GRID_F0 * (1 - e2)) / Math.pow(1 - e2 * sinLat ** 2, 1.5);
+    const eta2 = nu / rho - 1;
+    const m = meridionalArc(lat, n, n2, n3, b);
+    const gridI = m + GRID_N0;
+    const gridII = (nu / 2) * sinLat * cosLat;
+    const gridIII = (nu / 24) * sinLat * cosLat ** 3 * (5 - tanLat ** 2 + 9 * eta2);
+    const gridIIIA = (nu / 720) * sinLat * cosLat ** 5 * (61 - 58 * tanLat ** 2 + tanLat ** 4);
+    const gridIV = nu * cosLat;
+    const gridV = (nu / 6) * cosLat ** 3 * (nu / rho - tanLat ** 2);
+    const gridVI = (nu / 120) * cosLat ** 5 *
+      (5 - 18 * tanLat ** 2 + tanLat ** 4 + 14 * eta2 - 58 * tanLat ** 2 * eta2);
+    const dlon = lon - GRID_LAMBDA0;
+    return [
+      GRID_E0 + gridIV * dlon + gridV * dlon ** 3 + gridVI * dlon ** 5,
+      gridI + gridII * dlon ** 2 + gridIII * dlon ** 4 + gridIIIA * dlon ** 6,
+    ];
+  }
+
+  function wgs84ToBng(lon, lat, height = 0.0) {
+    const latR = lat * Math.PI / 180, lonR = lon * Math.PI / 180;
+    const [x, y, z] = latLonToCartesian(latR, lonR, height, WGS84_A, WGS84_B);
+    const [x2, y2, z2] = helmertWgs84ToOsgb36(x, y, z);
+    const [latOsgb, lonOsgb] = cartesianToLatLon(x2, y2, z2, AIRY1830_A, AIRY1830_B);
+    return latLonToNationalGrid(latOsgb, lonOsgb); // [easting, northing]
+  }
+
+  // ---- BNG grid widget ----
+  // The pixel -> WGS84 mapping is a local linear stand-in for a real
+  // basemap (there isn't one here) - but the WGS84 -> BNG step that
+  // follows is the real transform above, not an approximation. Anchored
+  // on the same real point examples/streetmanager_section_50.py's demo
+  // geometry uses (the Annex D worked example).
+  const ANCHOR = { lat: 53.611990, lon: -1.664442 };
+  const DEGREES_PER_AXIS = 0.0025; // full width/height of the grid, in WGS84 degrees
+  const grid = document.getElementById('bng-grid');
+  const pin = document.getElementById('grid-pin');
+  const wgs84Out = document.getElementById('wgs84-out');
+  const bngOut = document.getElementById('bng-out');
+  const railCoords = document.getElementById('rail-coords');
+  let currentLon = ANCHOR.lon, currentLat = ANCHOR.lat;
+  let currentEasting, currentNorthing;
+
+  function placePin(clientX, clientY) {
+    const rect = grid.getBoundingClientRect();
+    const fx = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const fy = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
+    pin.style.left = (fx * 100) + '%';
+    pin.style.top = (fy * 100) + '%';
+
+    currentLon = ANCHOR.lon + (fx - 0.5) * DEGREES_PER_AXIS;
+    currentLat = ANCHOR.lat + (0.5 - fy) * DEGREES_PER_AXIS;
+    [currentEasting, currentNorthing] = wgs84ToBng(currentLon, currentLat);
+
+    wgs84Out.textContent = `${currentLat.toFixed(6)}° N, ${Math.abs(currentLon).toFixed(6)}° W`;
+    bngOut.textContent = `${currentNorthing.toFixed(3)} N, ${currentEasting.toFixed(3)} E`;
+    railCoords.querySelectorAll('dd')[0].textContent = `${currentLat.toFixed(6)}, ${currentLon.toFixed(6)}`;
+    railCoords.querySelectorAll('dd')[1].textContent = `${currentEasting.toFixed(2)} E, ${currentNorthing.toFixed(2)} N`;
+  }
+  grid.addEventListener('click', e => placePin(e.clientX, e.clientY));
+  grid.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const rect = grid.getBoundingClientRect();
+      placePin(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
+  });
+  grid.tabIndex = 0;
+  placePin(
+    grid.getBoundingClientRect().left + grid.getBoundingClientRect().width / 2,
+    grid.getBoundingClientRect().top + grid.getBoundingClientRect().height / 2
+  );
+
+  // ---------------------------------------------------------------------
+  // Real request assembly - mirrors
+  // streetworks.streetmanager.utils.section_50_utils.build_work_create_request:
+  // applicant-stated fields pass through, connector-owned fields are
+  // stamped, is_ttro_required/others_can_collaborate_on_work follow the
+  // same live-confirmed conditional rules. No network call - this only
+  // builds and displays the object.
+  // ---------------------------------------------------------------------
+  function toggleValue(name) {
+    return document.querySelector(`[data-toggle="${name}"] [aria-pressed="true"]`).dataset.value;
+  }
+  function toIso(localDatetimeValue) {
+    // datetime-local has no timezone; treated as UTC for this demo, same
+    // simplification section_50_utils._iso leaves to the caller to supply
+    // correctly - a real front end would use the applicant's local offset.
+    return localDatetimeValue ? `${localDatetimeValue}:00Z` : null;
+  }
+
+  function buildWorkCreateRequest() {
+    const payload = {
+      // --- applicant-stated, passed straight through ---
+      secondary_contact: document.getElementById('contact-name').value,
+      secondary_contact_number: document.getElementById('contact-number').value,
+      proposed_start_date: toIso(document.getElementById('start-date').value),
+      proposed_end_date: toIso(document.getElementById('end-date').value),
+      description_of_work: document.getElementById('desc').value,
+      works_location_description: document.getElementById('loc-desc').value,
+      excavation: toggleValue('excavation') === 'yes',
+      traffic_management_plan: false, // not exposed as a control in this basic form
+      lane_rental_applicable: false,  // - fixed, matching the Python demo script's own defaults
+      collaborative_working: toggleValue('collab') === 'yes',
+      traffic_management_type: document.getElementById('tm-type').value,
+      location_types: [...document.querySelectorAll('.check-grid input:checked')]
+        .map(cb => cb.dataset.value),
+      close_footway: document.getElementById('close-footway').value,
+      close_footpath: document.getElementById('close-footpath').value,
+      is_ttro_required: toggleValue('ttro') === 'yes',
+    };
+
+    let extraNote = '';
+    if (!payload.collaborative_working) {
+      payload.others_can_collaborate_on_work = toggleValue('others-collab') === 'yes';
+      const reasonText = document.getElementById('non-collab-reason').value;
+      if (payload.others_can_collaborate_on_work) {
+        payload.can_collaborate_on_work_additional_details = reasonText;
+      } else {
+        payload.reason_for_non_collaboration = reasonText;
+      }
+    } else {
+      extraNote = ' collaborative_working=true also requires collaboration_types and a ' +
+        'collaboration contact (see section_50_utils.py\'s own docstring) - omitted here, ' +
+        'this basic demo only builds the non-collaborative branch.';
+    }
+
+    // --- connector-stamped identity - build_work_create_request's job ---
+    payload.promoter_swa_code = '1355';
+    payload.highway_authority_swa_code = '1355';
+    payload.activity_type = 'section_50';
+    payload.work_type = 'planned';
+    payload.application_type = 'permit';
+    payload.usrn = 42820309;
+    payload.workstream_prefix = '050';
+    payload.works_coordinates = {
+      type: 'Point',
+      coordinates: [Number(currentEasting.toFixed(3)), Number(currentNorthing.toFixed(3))],
+    };
+
+    return { payload, extraNote };
+  }
+
+  document.getElementById('apply-submit').addEventListener('click', () => {
+    const { payload, extraNote } = buildWorkCreateRequest();
+    document.getElementById('apply-payload').textContent = JSON.stringify(payload, null, 2);
+    const note = document.getElementById('apply-note');
+    note.innerHTML = 'This is the exact <code class="mono">WorkCreateRequest</code> body ' +
+      '<code class="mono">section_50_utils.build_work_create_request</code> would assemble from ' +
+      'the form above &mdash; reprojected with the real BNG transform, not an approximation. ' +
+      'Only the network call is missing.' + (extraNote ? `<br><span class="warn">Note:${extraNote}</span>` : '');
+    document.getElementById('apply-result').classList.add('show');
+  });
+
+  document.getElementById('start-submit').addEventListener('click', () => {
+    const ref = document.getElementById('start-ref').value.trim();
+    const label = document.getElementById('start-label');
+    const out = document.getElementById('start-payload');
+    if (!ref) {
+      label.textContent = 'Work reference number required';
+      out.textContent = '';
+    } else {
+      label.textContent = `PUT /works/${ref}/start — not sent`;
+      out.textContent = JSON.stringify(
+        { actual_start_date: toIso(document.getElementById('actual-start').value) }, null, 2
+      );
+    }
+    document.getElementById('start-result').classList.add('show');
+  });
+
+  document.getElementById('stop-submit').addEventListener('click', () => {
+    const ref = document.getElementById('stop-ref').value.trim();
+    const label = document.getElementById('stop-label');
+    const out = document.getElementById('stop-payload');
+    if (!ref) {
+      label.textContent = 'Work reference number required';
+      out.textContent = '';
+    } else {
+      label.textContent = `PUT /works/${ref}/stop — not sent`;
+      out.textContent = JSON.stringify(
+        { actual_stop_date: toIso(document.getElementById('actual-stop').value) }, null, 2
+      );
+    }
+    document.getElementById('stop-result').classList.add('show');
+  });
+</script>
+</body>
+</html>

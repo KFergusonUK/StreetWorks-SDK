@@ -439,6 +439,15 @@ Highway Authority** - a Street Manager login can't hold both, and this is a
 different account from the HA-role one the other Street Manager examples on
 this page use for reads (live-confirmed - see the script's own docstring).
 
+Open [`examples/streetmanager_section_50_form.html`](examples/streetmanager_section_50_form.html)
+directly in a browser for a visual mockup of the applicant-facing flow -
+static and disconnected (no server, nothing calls Street Manager), but its
+"Build request" buttons run a real, faithful port of both
+`streetworks.common._bng`'s reprojection and
+`section_50_utils.build_work_create_request`'s assembly logic in-page, so
+the JSON shown is genuinely what the Python connector would send, not a
+mockup of it.
+
 ## Street Manager Open Data (SNS push)
 
 Open Data is a *push* model: Street Manager POSTs event notifications to an
