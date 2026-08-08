@@ -1,6 +1,8 @@
 # streetworks documentation
 
-**Coverage** — ✓ live · ~ in progress · ✗ ruled out
+**Coverage** — ✓ live · ~ in progress · ✗ ruled out (quoted from
+[`docs/providers/index.md`](providers/index.md#coverage), the canonical
+roster — update there first, not here)
 
 **Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
 **Americas**  ✓ Canada · United States
@@ -8,7 +10,7 @@
 **Asia**  ~ Singapore
 **Ruled out**  ✗ China · Russia
 
-*Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md).*
+*Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md) for both.*
 
 > Migrated verbatim from README.md's opening (title/intro paragraph and
 > the "We do this..." quote), plus a map to the rest of this docs tree

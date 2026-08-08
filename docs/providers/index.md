@@ -5,6 +5,25 @@
 > confirmed` subsections (phase one, lossless restructure — see
 > `docs/migration-mapping.md`).
 
+## Coverage
+
+✓ live · ~ in progress · ✗ ruled out
+
+**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
+**Americas**  ✓ Canada · United States
+**Oceania**  ✓ Australia · New Zealand
+**Asia**  ~ Singapore
+**Ruled out**  ✗ China · Russia
+
+*Several territories carry multiple data-owning authorities (Catalonia,
+Basque Country, Mallorca; the four UK nations) — see the
+[module table](#module-table) below for the per-provider breakdown. "In
+progress" also collapses two genuinely different states
+(credentials-wanted vs. documented-but-unavailable) for scannability —
+the matrix below distinguishes these. This is the canonical coverage
+roster; `docs/index.md`'s copy quotes it rather than restating it
+independently.*
+
 Everything in [`docs/providers/`](.) is organised by *technology* — you need to already
 know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
 find the right import. `streetworks.providers()`/`get_provider()` answer the

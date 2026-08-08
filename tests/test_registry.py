@@ -220,26 +220,32 @@ def test_network_scope_values_are_real_enum_members():
             assert isinstance(entry.network_scope, NetworkScope)
 
 
-def test_registry_top_level_modules_match_readme_provider_table():
-    """Registry vs. README duplication is *accepted* (see registry.py's
+def test_registry_top_level_modules_match_docs_provider_table():
+    """Registry vs. docs duplication is *accepted* (see registry.py's
     module docstring for why), not eliminated - so drift is caught here
     instead: every top-level module the registry references must appear as
-    its own row in the README's provider table, and vice versa (except
-    `streetworks.common`, which is infrastructure, not a provider)."""
-    readme = (Path(__file__).parent.parent / "README.md").read_text(encoding="utf-8")
-    table_start = readme.index("| Module | Service | Direction |")
-    table_end = readme.index("\n\n", table_start)
-    table = readme[table_start:table_end]
-    readme_modules = set(re.findall(r"\| `streetworks\.(\w+)`", table))
+    its own row in docs/providers/index.md's module table, and vice versa
+    (except `streetworks.common`, which is infrastructure, not a provider).
+
+    This table used to live in README.md; the phase-two docs migration
+    moved it verbatim to docs/providers/index.md and slimmed the README to
+    a front door with a link instead - see docs/phase-two-removal-map.md."""
+    docs_page = (
+        Path(__file__).parent.parent / "docs" / "providers" / "index.md"
+    ).read_text(encoding="utf-8")
+    table_start = docs_page.index("| Module | Service | Direction |")
+    table_end = docs_page.index("\n\n", table_start)
+    table = docs_page[table_start:table_end]
+    docs_modules = set(re.findall(r"\| `streetworks\.(\w+)`", table))
 
     registry_modules = {entry._module.split(".")[1] for entry in _REGISTRY}
 
-    assert registry_modules <= readme_modules, (
-        f"registered but missing from the README table: {registry_modules - readme_modules}"
+    assert registry_modules <= docs_modules, (
+        f"registered but missing from the docs table: {registry_modules - docs_modules}"
     )
-    assert readme_modules - {"common"} <= registry_modules, (
-        f"in the README table but not registered: "
-        f"{readme_modules - {'common'} - registry_modules}"
+    assert docs_modules - {"common"} <= registry_modules, (
+        f"in the docs table but not registered: "
+        f"{docs_modules - {'common'} - registry_modules}"
     )
 
 
