@@ -6,8 +6,9 @@
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 An open Python SDK for street works and roadworks data — the UK's
-registers, Europe's national roadworks feeds, and the US WZDx standard,
-behind one consistent, typed, well-tested client.
+registers, Europe's national feeds, the US WZDx standard, and providers
+across Australia and New Zealand, behind one consistent, typed,
+verification-first client.
 
 > We do this not because it is easy, but because it is hard.
 
