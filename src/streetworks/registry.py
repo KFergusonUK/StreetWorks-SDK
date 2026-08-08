@@ -944,6 +944,60 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2.euskadi import EuskadiClient",
     ),
     ProviderEntry(
+        key="madrid",
+        name="Ayuntamiento de Madrid (INFORMO)",
+        description="Madrid's municipal traffic-incidents feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Spain"}),
+        administrative_area="Ayuntamiento de Madrid",
+        scope_note=(
+            "Confirmed live (2026-08-08, 217 real incidents) - "
+            "credential-free, never a Credentials-wanted scaffold. The "
+            "capital and largest Spanish city, absent from dgt's own "
+            "national/interurban coverage (dgt explicitly never reaches "
+            "municipal streets, though it does carry some M-prefixed "
+            "interurban roads in the wider Madrid region - see dgt's own "
+            "scope_note; no confirmed overlap checked, never dedupe "
+            "matches regardless, per the standing note on this). "
+            "Comprehensive city-wide streets, not interurban-only like "
+            "dgt or state-network-only like the German OGC cluster - real "
+            "records span everything from named residential streets "
+            "(e.g. 'Antonio Leyva') to motorway sections (A-3/A-5), "
+            "spread across the whole municipality, not one road tier. "
+            "The source brief's stated URL "
+            "(informo.munimadrid.es) is dead - Madrid relaunched its "
+            "whole open-data portal in February 2026; this client targets "
+            "the real current host (informo.madrid.es) confirmed via the "
+            "new CKAN portal's own redirect. Roadworks filter uses the "
+            "source's own es_obras flag, not a free-text type guess - "
+            "settles two real findings live data revealed: lane closures "
+            "and asphalt-resurfacing operations are both real and common "
+            "but neither is flagged es_obras, so both are excluded. "
+            "source_grade=operator (road-authority-published, DATEX-"
+            "coded types per the source's own field dictionary), not the "
+            "traveller_info the source brief guessed - matches dgt/sct/"
+            "mallorca's own classification, not Berlin's VIZ (an "
+            "editorial relay, not the road authority itself). Coordinates "
+            "are native ETRS89 (EPSG:4258/EPSG:25830, confirmed from the "
+            "source's own field dictionary), labelled as such, not "
+            "silently WGS84. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "CC BY - confirmed live at nap.dgt.es/dataset/trafico-"
+            "incidencias-en-via-publica (organization: ayuntamiento-de-"
+            "madrid, license field: cc-by, 'Creative Commons Attribution' "
+            "stated on the page itself); the exact attribution string on "
+            "datos.madrid.es's own new CKAN portal wasn't separately "
+            "re-verified"
+        ),
+        source_grade="operator",
+        _module="streetworks.madrid",
+        _client_name="MadridClient",
+        import_line="from streetworks.madrid import MadridClient",
+    ),
+    ProviderEntry(
         key="belgium",
         name="Verkeerscentrum Vlaanderen",
         description="Flanders' (not all-Belgium's) roadworks feed.",

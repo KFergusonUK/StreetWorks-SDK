@@ -10,7 +10,7 @@ roster — update there first, not here)
 **Asia**  ~ Singapore
 **Ruled out**  ✗ China · Russia
 
-*Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md) for both.*
+*Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca, Madrid; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md) for both.*
 
 > Migrated verbatim from README.md's opening (title/intro paragraph and
 > the "We do this..." quote), plus a map to the rest of this docs tree

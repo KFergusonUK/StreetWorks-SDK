@@ -890,6 +890,88 @@ session, so the test fixture is real, trimmed from a live pull, not
 synthetic. See `streetworks/sct/models.py`'s module docstring for the
 full field-by-field mapping.
 
+## Ayuntamiento de Madrid (INFORMO)
+
+Madrid's own municipal traffic-incidents feed — the capital and largest
+Spanish city (~3.3M), and the gap DGT's national coverage explicitly
+doesn't reach (DGT never touches municipal streets, even where its own
+`M-`-prefixed interurban roads run through the wider Madrid region — see
+DGT's own section above):
+
+```python
+from streetworks.madrid import MadridClient
+from streetworks.common import from_madrid
+
+with MadridClient() as madrid:
+    incidents = list(madrid.iter_roadworks())  # es_obras == "S" only
+works = from_madrid(incidents)
+```
+
+**The investigation brief's stated URL is dead — checked live before
+writing any code, not assumed working.** `informo.munimadrid.es` (the
+brief's URL, and the host still named in the open-data portal's own
+October-2023 PDF schema document) returns `NXDOMAIN` on two independent
+resolvers, including a public DNS-over-HTTPS lookup used specifically to
+rule out a local network quirk rather than a genuinely dead host. Madrid
+relaunched its entire open-data portal on a new CKAN platform in February
+2026 (confirmed via the portal's own news coverage); the new
+`datos.madrid.es` dataset page's own "download" link now redirects to the
+real current host, **`informo.madrid.es`** (`munimadrid.es` →
+`madrid.es`, not just a path change). `MadridClient` targets that
+confirmed-live URL directly, not the CKAN redirect hop.
+
+**The live wire date format also doesn't match the portal's own
+documentation.** The PDF states `yyyy-mm-ddTHH:mm:ss+dd:00` (a UTC
+offset); every one of 217 real records checked live instead uses no
+offset and **seven** fractional-second digits — one more than Python's
+`%f` accepts. `streetworks.common.from_madrid` truncates rather than
+failing.
+
+**Roadworks filter: the source's own `es_obras` flag, not a free-text
+type guess** — settling two questions the brief left open, with real
+evidence: `cortes de carriles` (lane closures, 7/217 live) and
+`operación asfalto` (asphalt resurfacing, 2/217) are both real and
+common, but neither is flagged `es_obras` by Madrid's own system —
+excluded. The asphalt-operations exclusion is a genuine surprise (it
+reads like roadworks to a human) but the source's own classification is
+trusted over what the label sounds like, the same discipline Chicago's
+`worktype` filter and Berlin's `subtype` filter already apply.
+
+**`source_grade="operator"`, not the `traveller_info` the brief
+guessed** — Madrid's own field dictionary states its incident-type codes
+follow "la normativa DATEX 2," and the feed is published directly by the
+city's own traffic-circulation management directorate, not a separate
+information-relay body (unlike Berlin's VIZ, genuinely an editorial
+centre — see Berlin's own section above). Matches DGT/SCT/Mallorca's own
+classification.
+
+**Coordinates: geographic pair given directly, labelled `EPSG:4258`
+(ETRS89), never silently WGS84** — the source states its UTM pair
+(`utm_x`/`utm_y`) is `EPSG:25830` (ETRS89 / UTM Zone 30N) explicitly; the
+`longitud`/`latitud` pair comes from the same reference frame, so it's
+used directly rather than reprojected, and labelled honestly rather than
+assumed `EPSG:4326` — the same standing policy already applied to
+Consell de Mallorca and Jersey RoadWorkx.
+
+**`id_incidencia` is the reliable reference, not `codigo`** (the
+documented "año/número" field) — `codigo` is unique on 212/217 real
+records checked live, but 6 genuinely share the literal placeholder
+`"2025/0"`, a real data-quality gap in the source. `id_incidencia` is
+unique on all 217.
+
+**Network scope: `comprehensive`** — real records span everything from
+named residential streets (`Antonio Leyva`) to motorway sections
+(`A-3`/`A-5`), spread across the whole municipality, not one road tier —
+the same reasoning behind Berlin's own `comprehensive` classification for
+a city traffic-management feed, not DGT's `multi_authority_interurban`.
+
+**Licence: CC BY, confirmed live** at `nap.dgt.es/dataset/trafico-
+incidencias-en-via-publica` (organization `ayuntamiento-de-madrid`,
+license field `cc-by`, "Creative Commons Attribution" stated on the page
+itself) — not just carried over from the investigation brief. The exact
+attribution string on `datos.madrid.es`'s own new portal wasn't
+separately re-verified.
+
 ## Base Adresse Nationale (BAN)
 
 French national address base — ~25M addresses, no credentials. **This is

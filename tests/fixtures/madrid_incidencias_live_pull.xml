@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Incidencias>
+  <Incidencia>
+    <id_incidencia>39788</id_incidencia>
+    <codigo>2025/0</codigo>
+    <cod_tipo_incidencia>RWL</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Obras de larga duración en la vía</nom_tipo_incidencia>
+    <fh_inicio>2025-02-18T07:27:07.0000000</fh_inicio>
+    <fh_final>2025-02-18T07:27:07.0000000</fh_final>
+    <incid_prevista>N</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>CORTE DE LOS CARRILES EN SUPERFICIE ENTRE LA PLAZA DEL CONDE DE CASAL Y LA A-3 EN AMBOS SENTIDOS. MOTIVO: OBRAS DE METRO E INTERCAMBIADOR.</descripcion>
+    <utm_x>443178.563617602</utm_x>
+    <utm_y>4473121.42761662</utm_y>
+    <longitud>-3.66965853620442</longitud>
+    <latitud>40.4067689090185</latitud>
+    <tipoincid>1</tipoincid>
+    <es_obras>S</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>39349</id_incidencia>
+    <codigo>2025/0</codigo>
+    <cod_tipo_incidencia>RWL</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Obras de larga duración en la vía</nom_tipo_incidencia>
+    <fh_inicio>2025-01-20T08:00:00.0000000</fh_inicio>
+    <fh_final>2026-10-26T18:15:00.0000000</fh_final>
+    <incid_prevista>S</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>Calle Sanchorreja: ocupación de la vía pública por obras. Construcción del paseo verde del suroeste (soterramiento de la A-5).</descripcion>
+    <utm_x>435876.236093641</utm_x>
+    <utm_y>4472594.03896137</utm_y>
+    <longitud>-3.75565894166436</longitud>
+    <latitud>40.4014875635853</latitud>
+    <tipoincid>1</tipoincid>
+    <es_obras>S</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>39350</id_incidencia>
+    <codigo>2025/0</codigo>
+    <cod_tipo_incidencia>RWK</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Obras en la vía</nom_tipo_incidencia>
+    <fh_inicio>2025-01-17T16:21:09.0000000</fh_inicio>
+    <fh_final>2025-01-17T16:21:09.0000000</fh_final>
+    <incid_prevista>N</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>ANTONIO LEYVA, ENTRE MIGUEL SORIANO Y JOSEFA FDEZ. BUTERGA. ZONA VALLADA DE UNOS 4 METROS CUADRADOS. MOTIVO: OBRAS CANAL ISABEL II.</descripcion>
+    <utm_x>439280.544997357</utm_x>
+    <utm_y>4471460.13921536</utm_y>
+    <longitud>-3.71543618376858</longitud>
+    <latitud>40.3915280574102</latitud>
+    <tipoincid>1</tipoincid>
+    <es_obras>S</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>44730</id_incidencia>
+    <codigo>2026/894</codigo>
+    <cod_tipo_incidencia>RMK</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Obras de mantenimiento en la vía</nom_tipo_incidencia>
+    <fh_inicio>2026-03-14T01:16:57.0000000</fh_inicio>
+    <fh_final>2026-03-14T01:16:57.0000000</fh_final>
+    <incid_prevista>N</incid_prevista>
+    <incid_planificada>S</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>Túnel de Pío XII. Previsión de corte de carriles alternos en horario diurno de 10:00 a 15:00 horas por trabajos de mantenimiento.</descripcion>
+    <utm_x>442620.026674513</utm_x>
+    <utm_y>4480485.32234655</utm_y>
+    <longitud>-3.67690569016166</longitud>
+    <latitud>40.4730681466582</latitud>
+    <tipoincid>1</tipoincid>
+    <es_obras>S</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>44793</id_incidencia>
+    <codigo>2026/957</codigo>
+    <cod_tipo_incidencia>LCS</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Carriles cortados</nom_tipo_incidencia>
+    <fh_inicio>2026-03-23T23:30:00.0000000</fh_inicio>
+    <fh_final>2026-12-31T06:00:00.0000000</fh_final>
+    <incid_prevista>S</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>A-5, entre el P.K. 6,100 y P.K. 6,200. Corte de carriles alternos. Motivo: Preparación Fase 2B y cambio desvío Fase 2B zona de Campamento.</descripcion>
+    <utm_x>434578.524136306</utm_x>
+    <utm_y>4471822.03148617</utm_y>
+    <longitud>-3.7708710501829</longitud>
+    <latitud>40.3944320917748</latitud>
+    <tipoincid>3</tipoincid>
+    <es_obras>N</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>45463</id_incidencia>
+    <codigo>2026/1627</codigo>
+    <cod_tipo_incidencia>TLO</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Semáforos apagados</nom_tipo_incidencia>
+    <fh_inicio>2026-08-03T08:00:00.0000000</fh_inicio>
+    <fh_final>2026-08-03T09:30:00.0000000</fh_final>
+    <incid_prevista>S</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>4</incid_estado>
+    <descripcion>Diego de León - Núñez de Balboa. Trabajos de mantenimiento en semáforos.</descripcion>
+    <utm_x>442153.959037191</utm_x>
+    <utm_y>4476253.97397148</utm_y>
+    <longitud>-3.6820179541734</longitud>
+    <latitud>40.4349179105771</latitud>
+    <tipoincid>5</tipoincid>
+    <es_obras>N</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+  <Incidencia>
+    <id_incidencia>45505</id_incidencia>
+    <codigo>2026/1669</codigo>
+    <cod_tipo_incidencia>RWR</cod_tipo_incidencia>
+    <nom_tipo_incidencia>Operación asfalto</nom_tipo_incidencia>
+    <fh_inicio>2026-08-04T14:40:42.0000000</fh_inicio>
+    <fh_final>2026-08-04T14:40:42.0000000</fh_final>
+    <incid_prevista>N</incid_prevista>
+    <incid_planificada>N</incid_planificada>
+    <incid_estado>1</incid_estado>
+    <descripcion>ASFALTADO DE LA CALLE FUENTE CARRANTONA, EN EL TRAMO COMPRENDIDO ENTRE LA CALLE LUIS HOYOS SAINZ Y LA CALLE HACIENDA DE PAVONES, EN SENTIDO A-3.</descripcion>
+    <utm_x>446168.339728409</utm_x>
+    <utm_y>4472759.15119862</utm_y>
+    <longitud>-3.63439454584618</longitud>
+    <latitud>40.4037039930477</latitud>
+    <tipoincid>3</tipoincid>
+    <es_obras>N</es_obras>
+    <es_accidente>N</es_accidente>
+    <es_contaminacion>N</es_contaminacion>
+    <escenario_contaminacion />
+    <fecha_escenario_contaminacion />
+    <descripcion_escenario />
+    <medidas_escenario />
+    <excepciones_escenario />
+  </Incidencia>
+</Incidencias>

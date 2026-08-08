@@ -42,6 +42,7 @@ Confirmed and named explicitly:
 | Berlin (VIZ) | Datenlizenz Deutschland — Namensnennung — Version 2.0 (dl-de/by-2-0) | [`docs/providers/europe.md`](../providers/europe.md#berlin-viz) |
 | Consell de Mallorca | **Unconfirmed** | [`docs/providers/europe.md`](../providers/europe.md#consell-de-mallorca-island-roadworks) |
 | Servei Català de Trànsit (Catalonia) | Catalonia's own "Llicència oberta d'ús d'informació" — confirmed genuinely open | [`docs/providers/europe.md`](../providers/europe.md#servei-català-de-trànsit-catalonia) |
+| Ayuntamiento de Madrid (INFORMO) | CC BY — confirmed live at nap.dgt.es, not just carried over from the investigation brief | [`docs/providers/europe.md`](../providers/europe.md#ayuntamiento-de-madrid-informo) |
 | CCISS (Italy) | **Unconfirmed** | [`docs/providers/italy.md`](../providers/italy.md) |
 | TrafficWatchNI (Northern Ireland) | Attribution required (credit DfI TICC, preserve item URLs) | [`docs/providers/uk.md`](../providers/uk.md#northern-ireland--wales-traveller-information-rss) |
 | Traffic Wales | Attribution required (credit Traffic Wales) | [`docs/providers/uk.md`](../providers/uk.md#northern-ireland--wales-traveller-information-rss) |

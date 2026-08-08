@@ -427,6 +427,29 @@ def check_sct() -> str:
     return f"{len(works):,} roadworks incidents ({with_coord}/{len(works)} with coordinates)"
 
 
+def check_madrid() -> str:
+    """Ayuntamiento de Madrid (INFORMO) needs no credentials - confirmed
+    live (see streetworks.madrid). Filters to es_obras='S' and reports
+    the excluded-category breakdown (lane closures, asphalt ops, etc.)
+    for visibility that the filter is still doing something real."""
+    from collections import Counter
+
+    from streetworks.common import from_madrid
+    from streetworks.madrid import MadridClient
+
+    with MadridClient() as madrid:
+        all_records = list(madrid.iter_incidencias())
+        roadworks = list(madrid.iter_roadworks())
+    works = from_madrid(roadworks)
+    excluded_types = Counter(
+        r["nom_tipo_incidencia"] for r in all_records if r["es_obras"] != "S"
+    )
+    return (
+        f"{len(works):,} roadworks incidents (of {len(all_records):,} total), "
+        f"excluded types: {dict(excluded_types)}"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1448,6 +1471,8 @@ def main() -> int:
     reporter.check("Consell de Mallorca (IDEmallorca)", [], check_mallorca)
     # Servei Català de Trànsit (Catalonia) needs no credentials
     reporter.check("Servei Català de Trànsit (Catalonia)", [], check_sct)
+    # Ayuntamiento de Madrid (INFORMO) needs no credentials
+    reporter.check("Ayuntamiento de Madrid (INFORMO)", [], check_madrid)
     # Verkeerscentrum Vlaanderen (Belgium/Flanders) needs no credentials
     reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
     # Ponts et Chaussées/CITA (Luxembourg) needs no credentials

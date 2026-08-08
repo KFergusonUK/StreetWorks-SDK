@@ -16,7 +16,7 @@
 **Ruled out**  ✗ China · Russia
 
 *Several territories carry multiple data-owning authorities (Catalonia,
-Basque Country, Mallorca; the four UK nations) — see the
+Basque Country, Mallorca, Madrid; the four UK nations) — see the
 [module table](#module-table) below for the per-provider breakdown.
 Jersey is listed separately from UK: a Crown Dependency with its own
 provider ([`streetworks.arcgis.jersey`](uk.md#jersey-roadworkx-and-tigerweb-arcgis-rest)),
@@ -112,6 +112,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.berlin` | Berlin's VIZ traffic-information-centre feeds — Landesmeldestelle + Verkehrsredaktion (no credentials, confirmed live 2026-08-08), the largest remaining German gap, merged via a verified id join key since neither feed alone is complete (a source-brief assumption corrected by live data). Comprehensive city-wide streets, not state-network-only like Hamburg/Brandenburg | read |
+| `streetworks.madrid` | Ayuntamiento de Madrid's INFORMO municipal traffic-incidents feed (no credentials, confirmed live 2026-08-08, 217 real incidents), the gap DGT's national coverage never reaches (municipal streets). The investigation brief's URL was dead — Madrid relaunched its open-data portal in February 2026; this client targets the real current host. Filters on the source's own `es_obras` flag, not a free-text guess — real evidence excludes both lane closures and, surprisingly, asphalt-resurfacing operations | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |

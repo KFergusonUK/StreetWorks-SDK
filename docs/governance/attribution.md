@@ -1,14 +1,5 @@
 # Attribution and capacity
 
-> New content, not a migration — none of this was in README.md at the
-> time of the phase-one docs migration (see `docs/migration-reconciliation.md`,
-> Case 3: "Personal-capacity framing", "Strategic Data Roadmap / OCDO /
-> GDS submission", and "Chris Carlon attribution" — all explicitly listed
-> there as not present in the source). Added directly at the project
-> owner's request, on their own authority as the person best placed to
-> state it, rather than reconstructed or inferred from any file in this
-> repository.
-
 ## Capacity
 
 This SDK is developed and published independently, in a personal
