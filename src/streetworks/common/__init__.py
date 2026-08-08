@@ -21,6 +21,7 @@ from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
+from .from_drivebc import from_drivebc
 from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
@@ -126,4 +127,5 @@ __all__ = [
     "from_paris",
     "from_berlin",
     "from_madrid",
+    "from_drivebc",
 ]

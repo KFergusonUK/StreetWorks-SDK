@@ -20,9 +20,13 @@ Credentials-wanted, or Documented-unavailable; see
 - **Portugal** — no roadworks or gazetteer source investigated yet
   beyond the future-gazetteer mention above.
 - **Singapore** — no source investigated at all.
-- **Canada** — beyond the one Quebec City WZDx feed already registered
-  (see [`docs/providers/us.md`](us.md#wzdx)), no national or
-  provincial roadworks register has been investigated.
+- **Canada — partially built, no longer fully pending.** British
+  Columbia (DriveBC, Open511) is now a real, confirmed provider, and
+  Quebec City's WZDx feed was already covered — see
+  [`docs/providers/canada.md`](canada.md). Ontario 511 was checked live
+  (confirmed not to publish WZDx) but not built; other provinces and
+  municipal portals (Toronto, Montreal, Vancouver) remain genuinely
+  unchecked.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and

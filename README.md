@@ -76,8 +76,9 @@ what to expect from a real run are in
 UK statutory registers and gazetteers (Street Manager, DataVIA, D-TRO, SRWR,
 OS Open USRN), national and regional roadworks feeds and address/street
 registers across Europe, the US WZDx standard plus NYC/Chicago/Paris
-municipal permit registers, Australia (national + state), and New Zealand
-— and growing. Every provider carries an explicit `network_scope` and a
+municipal permit registers, DriveBC (British Columbia, Canada), Australia
+(national + state), and New Zealand — and growing. Every provider carries
+an explicit `network_scope` and a
 confirmed (or honestly flagged unconfirmed) licence; nothing is silently
 assumed open.
 
@@ -101,7 +102,7 @@ index.
 
 - **Getting started** — [installation](docs/getting-started/installation.md), [quickstart](docs/getting-started/quickstart.md), [development](docs/getting-started/development.md)
 - **Concepts** — [architecture](docs/concepts/architecture.md), [data model](docs/concepts/data-model.md), [data integrity discipline](docs/concepts/data-integrity.md), [CRS & datums](docs/concepts/crs-and-datums.md), [write path (Section 50)](docs/concepts/write-path.md)
-- **Providers** — [index / coverage matrix / credentials wanted](docs/providers/index.md), [UK & Crown Dependencies](docs/providers/uk.md), [Europe](docs/providers/europe.md), [Italy](docs/providers/italy.md), [United States](docs/providers/us.md), [Australia](docs/providers/australia.md), [New Zealand](docs/providers/new-zealand.md), [pending candidates](docs/providers/pending.md)
+- **Providers** — [index / coverage matrix / credentials wanted](docs/providers/index.md), [UK & Crown Dependencies](docs/providers/uk.md), [Europe](docs/providers/europe.md), [Italy](docs/providers/italy.md), [United States](docs/providers/us.md), [Canada](docs/providers/canada.md), [Australia](docs/providers/australia.md), [New Zealand](docs/providers/new-zealand.md), [pending candidates](docs/providers/pending.md)
 - **Domain notes** — [provider quirks](docs/domain-notes/provider-quirks.md), [UK permits](docs/domain-notes/uk-permits.md), [excluded territories](docs/domain-notes/excluded-territories.md)
 - **Roadmap** — [`docs/roadmap.md`](docs/roadmap.md) (chronological build log)
 - **Contributing** — [scaffold states](docs/contributing/scaffolds.md), [agent boundaries](docs/contributing/agent-boundaries.md), and see [CONTRIBUTING.md](CONTRIBUTING.md) for the full ground rules

@@ -2052,4 +2052,58 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="LinzClient",
         import_line="from streetworks.linz import LinzClient",
     ),
+    ProviderEntry(
+        key="drivebc",
+        name="DriveBC (British Columbia, Open511)",
+        description="British Columbia's provincial road-events feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Canada"}),
+        administrative_area="Province of British Columbia (DriveBC)",
+        scope_note=(
+            "Confirmed live (2026-08-08, 246 real events) - "
+            "credential-free, never a Credentials-wanted scaffold. This "
+            "SDK's first Canadian roadworks provider (Quebec City is "
+            "already covered separately, via the existing wzdx feed "
+            "registry - a real, active feed, not a new build). BC's own "
+            "implementation of Open511, a Canadian-origin multi-"
+            "jurisdiction standard - built bespoke as streetworks.drivebc "
+            "rather than a general streetworks.open511 parser, against "
+            "the source brief's own recommendation: checked live before "
+            "committing, and DriveBC is the only real, confirmed "
+            "roadworks-events Open511 implementation found (San "
+            "Francisco Bay Area 511's Open511 use is transit data, a "
+            "different resource) - the same 'extract shared code only on "
+            "the second real consumer' pattern already applied to Paris "
+            "Chantiers over a premature streetworks.opendatasoft. "
+            "event_type == 'CONSTRUCTION' is the roadworks filter "
+            "(194/246 real events); INCIDENT/ROAD_CONDITION/"
+            "WEATHER_CONDITION excluded. Two real, mutually-exclusive "
+            "schedule shapes exist (intervals vs. recurring_schedules, "
+            "222/24 real events) - a genuine finding beyond the brief's "
+            "own plan, see module docstring. network_scope=strategic: "
+            "every real event's areas[] names one of BC MoTI's own "
+            "internal Districts, never a municipality, though roads[] "
+            "includes real unnumbered local-sounding names on 'Other "
+            "Roads' events (67/246) - not confirmed to ever cross into "
+            "municipal territory, but flagged rather than silently "
+            "assumed comprehensive."
+        ),
+        credentials=None,
+        licence=(
+            "Open Government Licence - British Columbia (OGL-BC), "
+            "confirmed live from the API's own /help page ('Use of the "
+            "Information provided by this API is governed by the "
+            "OGL-BC') - worldwide, royalty-free, commercial use "
+            "permitted, attribution required. The jurisdiction "
+            "resource's own license_url field (a data.gov.bc.ca PDF "
+            "path) is dead - confirmed 404-redirects to a generic "
+            "catalogue page - so this cites the real, live OGL-BC text "
+            "instead, not that stale pointer"
+        ),
+        source_grade="operator",
+        _module="streetworks.drivebc",
+        _client_name="DriveBCClient",
+        import_line="from streetworks.drivebc import DriveBCClient",
+    ),
 ]

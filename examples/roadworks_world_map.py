@@ -71,6 +71,9 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     "Paris": (2.35, 48.86),
     # USA (federated WZDx — one national marker; per-state on live pull)
     "USA": (-98.5, 39.8), "New York City": (-74.0, 40.7), "Chicago": (-87.6, 41.9),
+    # Canada (DriveBC/British Columbia; territory-scoped like Spain/Germany,
+    # not province-scoped — see docs/providers/canada.md)
+    "Canada": (-123.1, 49.25),
     # Australia (per-state) + New Zealand
     "New South Wales": (147.0, -32.0), "Victoria": (144.5, -37.0),
     "Queensland": (146.0, -22.5), "Western Australia": (122.0, -25.0),

@@ -61,7 +61,9 @@ deliberate, follow-on build, kept apart from New York *State* coverage.
 **Not US-only** — a real, active Quebec City (Canada) feed is registered
 too, so `streetworks.common.from_wzdx()` takes `territory`/
 `administrative_area` per feed (sourced from `entry.state`/
-`entry.organization`) rather than assuming `"USA"`.
+`entry.organization`) rather than assuming `"USA"`. See
+[`docs/providers/canada.md`](canada.md) for the rest of this SDK's
+Canadian coverage (DriveBC/British Columbia).
 
 **Two more concrete population wins, confirmed live 2026-08-03** — both
 keyless, both zero code changes needed (the registry-driven design

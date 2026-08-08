@@ -450,6 +450,31 @@ def check_madrid() -> str:
     )
 
 
+def check_drivebc() -> str:
+    """DriveBC (British Columbia, Open511) needs no credentials -
+    confirmed live (see streetworks.drivebc). Filters to
+    event_type='CONSTRUCTION' and reports the schedule-shape split
+    (intervals vs. recurring_schedules) for visibility that both real
+    shapes are still being handled."""
+    from collections import Counter
+
+    from streetworks.common import from_drivebc
+    from streetworks.drivebc import DriveBCClient
+
+    with DriveBCClient() as drivebc:
+        all_records = list(drivebc.iter_events())
+        roadworks = list(drivebc.iter_roadworks())
+    works = from_drivebc(roadworks)
+    schedule_shapes = Counter(
+        "recurring_schedules" if "recurring_schedules" in r.get("schedule", {}) else "intervals"
+        for r in roadworks
+    )
+    return (
+        f"{len(works):,} roadworks events (of {len(all_records):,} total), "
+        f"schedule shapes: {dict(schedule_shapes)}"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1492,6 +1517,8 @@ def main() -> int:
     reporter.check("NYC DOT Street Construction Permits", [], check_nycdot)
     reporter.check("Chicago CDOT Street Closures", [], check_chicagodot)
     reporter.check("Paris Chantiers", [], check_paris)
+    # DriveBC (British Columbia, Open511) needs no credentials
+    reporter.check("DriveBC (British Columbia, Open511)", [], check_drivebc)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)
