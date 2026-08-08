@@ -4,8 +4,8 @@
 [`docs/providers/index.md`](providers/index.md#coverage), the canonical
 roster — update there first, not here)
 
-**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
-**Americas**  ✓ Canada · United States
+**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
+**Americas**  ✓ United States   ~ Canada
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
 **Ruled out**  ✗ China · Russia

@@ -9,20 +9,27 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
-**Americas**  ✓ Canada · United States
+**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
+**Americas**  ✓ United States   ~ Canada
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
 **Ruled out**  ✗ China · Russia
 
 *Several territories carry multiple data-owning authorities (Catalonia,
 Basque Country, Mallorca; the four UK nations) — see the
-[module table](#module-table) below for the per-provider breakdown. "In
-progress" also collapses two genuinely different states
-(credentials-wanted vs. documented-but-unavailable) for scannability —
-the matrix below distinguishes these. This is the canonical coverage
-roster; `docs/index.md`'s copy quotes it rather than restating it
-independently.*
+[module table](#module-table) below for the per-provider breakdown.
+Jersey is listed separately from UK: a Crown Dependency with its own
+provider ([`streetworks.arcgis.jersey`](uk.md#jersey-roadworkx-and-tigerweb-arcgis-rest)),
+not one of the four UK nations. "In progress" also collapses two
+genuinely different states (credentials-wanted vs.
+documented-but-unavailable) for scannability — the matrix below
+distinguishes these; for Canada specifically it also papers over real
+unevenness — one confirmed municipal feed (Quebec City, via
+`streetworks.wzdx`) exists today, but no national or provincial
+register has been investigated, categorically thinner than every other
+✓ entry above (see [`docs/providers/pending.md`](pending.md)). This is
+the canonical coverage roster; `docs/index.md`'s copy quotes it rather
+than restating it independently.*
 
 Everything in [`docs/providers/`](.) is organised by *technology* — you need to already
 know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
