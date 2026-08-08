@@ -1,10 +1,4 @@
-# Examples
-
-> New content, not a migration — the phase-one docs tree didn't include
-> an examples index (`examples/` wasn't part of the README's own section
-> structure, so nothing there was a migration source). Every line below
-> was written from the example's own docstring/code/README, read
-> directly for this page, not from a pre-supplied list.
+# Examples 
 
 Run any of these from the repository root. Most need credentials for
 the provider they exercise (see
