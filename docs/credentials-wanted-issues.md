@@ -1,7 +1,7 @@
 # "Credentials wanted" GitHub issues — drafted text
 
 Draft text for seven `help wanted` issues: four in the
-[README's Credentials wanted section](../README.md#credentials-wanted)
+[Credentials wanted section](providers/index.md#credentials-wanted)
 (Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
 Sections — all blocked on *access* to a real, published interface), plus
 three genuinely different cases (Road Report NT, MapRoad Roadworks

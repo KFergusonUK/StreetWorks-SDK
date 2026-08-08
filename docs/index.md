@@ -39,10 +39,13 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 
 ## Status of this migration
 
-**Phase one only — extract and relocate, not editorial.** The README
-itself is untouched and remains the reference copy for this phase; see
-`docs/migration-mapping.md` for the full checklist-to-file mapping and
-`docs/migration-reconciliation.md` for what changed between the seed
-checklist and the real README once it was read in full. Phase two
-(slimming the README to a front door + links into this tree) is a
-separate, not-yet-started task.
+**Phases one and two both complete.** Phase one (extract and relocate,
+not editorial) produced this tree — see `docs/migration-mapping.md` for
+the full checklist-to-file mapping and `docs/migration-reconciliation.md`
+for what changed between the seed checklist and the real README once it
+was read in full. Phase two slimmed the README itself down to a front
+door (badges, install, a working quickstart, and links into this tree)
+now that every removed block had a confirmed docs home — see
+`docs/phase-two-removal-map.md` for the section-by-section removal
+mapping. The pre-slim README is preserved in git history, not archived
+separately.
