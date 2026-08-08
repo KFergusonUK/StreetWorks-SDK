@@ -1,0 +1,219 @@
+# Finding a provider
+
+> Migrated verbatim from README.md's `## Finding a provider` and `## Status`
+> sections, including the `### Credentials wanted` and `### Recently
+> confirmed` subsections (phase one, lossless restructure — see
+> `docs/migration-mapping.md`).
+
+Everything in [`docs/providers/`](.) is organised by *technology* — you need to already
+know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
+find the right import. `streetworks.providers()`/`get_provider()` answer the
+question the other way round — "what covers X" and "give me Y's client" —
+without needing that specialist knowledge first:
+
+```python
+>>> from streetworks import providers, get_provider
+>>> providers(territory="England")
+Street Manager
+  England's statutory street works register - permits, works, inspections.
+  Network scope: comprehensive
+  Scope: Not Scotland (see the srwr provider), Wales (see trafficwales), or Northern Ireland (see trafficwatchni).
+  Credentials: Street Manager API account (email + password)
+  from streetworks.streetmanager import StreetManagerClient
+
+... (5 more — OS Open USRN, DataVIA, D-TRO, Street Manager Open Data, UK Police)
+
+>>> DGTClient = get_provider("dgt")   # the class, not an instance - constructors vary
+>>> with DGTClient() as dgt:
+...     situations = list(dgt.iter_roadworks())
+```
+
+`providers()` filters by `territory` (case-insensitive; `"UK"` expands to
+the four nations — a query-time convenience only, never stored data),
+`kind` (`"roadworks"` / `"addresses"` / `"streets"` / `"context"` — split
+from one `"gazetteer"` value, see
+[`docs/providers/europe.md`](europe.md#international-gazetteers--separate-strand)
+for why lumping them together was a real mistake), and `credentials`
+(`False` for the credential-free ones). `get_provider()` resolves a single
+provider or a curated alias (`"finland"`, `"iceland"`, `"scotland"`, ...);
+an ambiguous name (`"germany"` → four providers, `"france"`/`"netherlands"`/
+`"norway"` → two each, a roadworks feed and an address register, `"spain"`
+→ four roadworks feeds (DGT `multi_authority_interurban` national ex-
+Catalonia/Basque, Consell de Mallorca `regional` insular — overlapping
+with DGT, not disjoint, see
+[Never deduplicate across providers](../concepts/data-model.md#never-deduplicate-across-providers)
+— SCT `multi_authority_interurban` for Catalonia, and Euskadi
+`multi_authority_interurban` for the Basque Country — DGT's two
+exclusions, both now filled), `"england"` → several) raises naming every
+real candidate rather than guessing which one you meant.
+
+Every roadworks entry also carries a `network_scope` (`comprehensive` /
+`multi_authority_interurban` / `strategic` / `motorway` / `regional` /
+`varies_by_feed` / `not_applicable` / `unknown`) — what tier of the road
+network its real data actually reaches, checked live rather than assumed
+from a provider's stated remit (`docs/network-scope-audit.md`). This is
+the field that stops "DGT covers Spain" from being misread as "DGT covers
+every street in Valencia" — shown in `providers()`'s own rendering (see
+`Network scope:` above), not just stored.
+
+This is a discovery layer over the native interfaces below, not a
+replacement for them — every provider still has its own full-fidelity
+client, documented in its own section in [`docs/providers/`](.).
+
+## Module table
+
+| Module | Service | Direction |
+|---|---|---|
+| `streetworks.streetmanager` | [DfT Street Manager](https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/) — all nine APIs (Work, Reporting, Street Lookup, GeoJSON, Party, Data Export, Event, Sampling, Worklist), V6 & V7, sandbox & production | read + write |
+| `streetworks.opendata` | [Street Manager Open Data](https://department-for-transport-streetmanager.github.io/street-manager-docs/open-data/) — AWS SNS push notifications | receive |
+| `streetworks.datavia` | [Geoplace DataVIA](https://datavia.geoplace.co.uk/documentation) — full NSG layer catalogue over OGC WFS and WMS (rendered maps + feature info), Basic + OAuth2 | read |
+| `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
+| `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |
+| `streetworks.openusrn` | [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN) — every GB USRN with geometry, via the OS Downloads API (no credentials) | read |
+| `streetworks.ban` | [BAN (Base Adresse Nationale)](https://adresse.data.gouv.fr/) — France's national address base, ~25M addresses, geocoding API + bulk per-département/national files (no credentials). **An address base, not a street register** — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.bag` | [BAG (Basisregistratie Adressen en Gebouwen)](https://www.kadaster.nl/zakelijk/producten/adressen-en-gebouwen/bag-geopackage) — Netherlands' national addresses/buildings register, PDOK Locatieserver + a ~7.8 GB national GeoPackage (no credentials). Street identity is real but not its own table — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.kartverket` | [Kartverket](https://www.geonorge.no/) — Norway's national address register + official (multilingual) place names, REST APIs + bulk CSV (no credentials). Not the same agency as the Vegvesen roadworks provider — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.nvdb` | [NVDB](https://api.vegdata.no/) — Norway's national road network (Statens vegvesen), link topology + address placements via REST (no credentials). The `streets` counterpart to `kartverket`'s addresses — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.nwb` | [NWB (Nationaal Wegenbestand)](https://www.rijkswaterstaat.nl/) — Netherlands' national road network, every named/numbered road with real line geometry, WFS + bulk GeoPackage (no credentials). The `streets` counterpart to `bag`'s addresses — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.bdtopo` | [BD TOPO](https://geoservices.ign.fr/bdtopo) — France's national road network (IGN), segments + named streets via WFS (no credentials). The `streets` counterpart to `ban`'s addresses — see [`docs/providers/europe.md`](europe.md) | read |
+| `streetworks.datex2` | [DATEX II](https://datex2.eu/) — European roadworks parser (v3/v2/v1), with adapters for NDW (Netherlands, XML), National Highways (England SRN, JSON), Digitraffic (Finland, its own JSON schema; no credentials), IRCA/Vegagerðin (Iceland, XML over SOAP; no credentials), Bison Futé (France, XML v2; no credentials), DGT (Spain, excl. Catalonia & the Basque Country, XML v3; no credentials), Verkeerscentrum Vlaanderen (Belgium/Flanders only, XML v3, real EPSG:31370 coordinates; no credentials), Ponts et Chaussées (Luxembourg, XML v2.3; no credentials), the Road Infrastructure Agency/LIMA (Bulgaria, XML v2.3, licence unconfirmed; no credentials), and the Basque Country (Euskadi, XML **v1.0** — the oldest schema version here, licence explicitly absent; no credentials); Statens vegvesen (Norway, confirmed 2026-07-30 — real coordinates are mixed CRS within the feed, see [Recently confirmed](#recently-confirmed)); plus two **[Credentials wanted](#credentials-wanted)** scaffolds pending a tester — Trafikverket (Sweden, its own XML/JSON API, not DATEX) and Vejdirektoratet (Denmark, XML v3.2) | read |
+| `streetworks.au` | Australia — a per-state cluster (no national statutory register exists, unlike Street Manager). Transport for NSW's Live Traffic Hazards API (New South Wales roadwork + major-event hazards, GeoJSON) and DTP's Planned Disruptions (Victoria, permit-derived, richer structured impact/recurrence fields) — both confirmed 2026-07-30, see [Recently confirmed](#recently-confirmed) — plus Main Roads WA's WebEOC Roadworks (Western Australia, ArcGIS REST, no credentials, shipped live-verified with a real fixture), QLDTraffic Events (Queensland, TMR, no credentials via a real shared public API key, one typed feed over every `event_type`, confirmed live 2026-08-01), ACT's Temporary Traffic Management (the only municipal/local-street AU coverage, no credentials, CC BY-SA 4.0) and Tasmania's Roadworks - State Roads (the only AU provider with real line geometry, no credentials, licence genuinely unconfirmed); Traffic SA / DIT Roadworks (South Australia, ArcGIS MapServer) is a **[Credentials wanted](#credentials-wanted)** scaffold, blocked on a token-gated query endpoint behind a geo-restricted host. Road Report NT (Northern Territory) is registered as a documented, honestly-unavailable scaffold — investigated and found to have no published REST/GeoJSON API at all (its real backend is an undocumented SignalR hub), so `RoadReportNtClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
+| `streetworks.nzta` | [NZTA (Waka Kotahi) Highway Information](https://opendata-nzta.opendata.arcgis.com/) — New Zealand's national state-highway roadworks, ArcGIS REST (no credentials, shipped live-verified with a real fixture, confirmed 2026-08-02). Not the same body as LINZ — see [`docs/providers/new-zealand.md`](new-zealand.md) | read |
+| `streetworks.gnaf` | [G-NAF](https://data.gov.au/data/dataset/geocoded-national-address-file-g-naf) + [National Roads](https://digital.atlas.gov.au/), over the Digital Atlas of Australia — Australia's national address register (15.9M addresses) and national road network (4.3M segments, genuinely comprehensive down to local roads/footpaths), both ArcGIS REST, no credentials, confirmed live 2026-08-02. A real correction to the source investigation: the commercial Geoscape Roads API isn't the only option — this whole-of-government platform re-publishes both under CC BY 4.0 | read |
+| `streetworks.linz` | [LINZ (Toitū Te Whenua)](https://data.linz.govt.nz/) — New Zealand's national address register, NZ Addresses over a public ArcGIS mirror (no credentials, confirmed live, CC BY 4.0). Also carries the `streets` counterpart — NZ Addresses: Roads/Road Sections — as a **[Credentials wanted](#credentials-wanted)** scaffold (schema + a real attribute sample confirmed, blocked on a real LINZ Data Service API key) | read |
+| `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see [`docs/providers/europe.md`](europe.md)) | read |
+| `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
+| `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
+| `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
+| `streetworks.berlin` | Berlin's VIZ traffic-information-centre feeds — Landesmeldestelle + Verkehrsredaktion (no credentials, confirmed live 2026-08-08), the largest remaining German gap, merged via a verified id join key since neither feed alone is complete (a source-brief assumption corrected by live data). Comprehensive city-wide streets, not state-network-only like Hamburg/Brandenburg | read |
+| `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
+| `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
+| `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |
+| `streetworks.chicagodot` | [CDOT Street Closures](https://data.cityofchicago.org/Transportation/Transportation-Department-Permits-Street-Closures/jdis-5sry) — Chicago's own street-closure permit register (no credentials, confirmed live 2026-08-03), this SDK's second US city permit register after NYC. Native WGS84 GeoJSON Point geometry (no WKT/CRS question, unlike NYC) — `iter_roadworks()` filters on real `worktype` values since the dataset's own pre-filter alone still mixes in block parties, festivals and filming | read |
+| `streetworks.paris` | [Chantiers à Paris](https://opendata.paris.fr/explore/dataset/chantiers-a-paris/) — the City of Paris's own occupation-permit register for street/public-space worksites (no credentials, confirmed live 2026-08-06), this SDK's third municipal permit register and the first on OpenDataSoft (the French/EU Socrata-equivalent), built bespoke. Geometry already WGS84 despite the underlying Lambert 93 survey CRS — OpenDataSoft reprojects on the way out. Licence ODbL 1.0 (share-alike), confirmed | read |
+| `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
+| `streetworks.greece` | Greece — registered as a documented, honestly-unavailable scaffold, the same tier as Road Report NT. Its real NAP ([nap.gov.gr](https://data.nap.gov.gr/)) carries only POI/sensor data (truck parking, VMS/VDS, weather, floating car data) — no roadworks or DATEX II Situation dataset at all, confirmed via its own real dataset titles. The portal is also currently unreachable (a real live 502). `GreeceClient()` always raises `ProviderUnavailableError` rather than guessing | read |
+| `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
+| `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
+| `streetworks.cciss` | [CCISS](https://www.cciss.it/) — Italy's real-time traffic bulletin RSS (no credentials, confirmed live 2026-08-03), reached via the keyless RSS route rather than the registration-gated DATEX II one. Confirmed as Italy's own official RTTI/SRTI National Access Point per the European Commission's own October 2025 NAP list | read |
+| `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
+| `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
+
+## Status
+
+Early alpha. **Authentication and read/consume access are verified against
+the real systems for all providers except those in [Credentials
+wanted](#credentials-wanted), below, plus Road Report NT, MapRoad
+Roadworks Licensing, and Greece (none has a usable interface a credential
+would unlock — see below)** (Norway/NSW/Victoria joined the
+verified list on 2026-07-30 — see [Recently confirmed](#recently-confirmed)
+for what real data changed): Street Manager (SANDBOX), Geoplace
+DataVIA (live — including a real feature query), D-TRO (production token +
+events search), the Open Data SNS parsing/verification pipeline, SRWR
+Open Data (parsed against real published daily and monthly extracts),
+OS Open USRN (Downloads API + GeoPackage reader), UK Police (live
+`safety_signal()` and category queries against `data.police.uk`), WZDx
+(parsed against 12 live agency feeds spanning v3.1–v4.2), Digitraffic/
+Finland, IRCA/Iceland, Bison Futé/France, DGT/Spain, Belgium/Flanders,
+Luxembourg, Bulgaria, Euskadi/Basque Country, Autobahn GmbH/Germany,
+Via Lietuva/Lithuania, Consell de Mallorca, Servei Català de Trànsit,
+the German states Hamburg, Brandenburg and Saxony (all parsed against
+real live feeds), BAN/France (search, reverse and bulk-file parsing
+all verified against `data.geopf.fr`/`adresse.data.gouv.fr`), and
+BAG/Netherlands (Locatieserver search/suggest/reverse/lookup and the full
+7.8 GB national GeoPackage, downloaded and read in full, not sampled), and
+Kartverket/Norway (address API, SSR place-names API and bulk CSV verified
+against `ws.geonorge.no`/`nedlasting.geonorge.no`, including a full-scale
+`adressekode` over-merge check across two whole municipalities), and
+NWB/Netherlands (WFS queries, counts and the two-hop Atom feed verified
+against `geo.rijkswaterstaat.nl`/`service.pdok.nl`, including a real
+municipality-scale `bag_orl` over-merge check and the live discovery that
+PDOK's WFS silently ignores `CQL_FILTER`), BD TOPO/France (WFS queries
+and counts verified against `data.geopf.fr`, including a real commune-scale
+`identifiant_voie_ban` over-merge check on two whole communes, mainland
+and overseas - the bulk GeoPackage route was investigated but not found
+to be automatable), and NVDB/Norway (`/vegnett` and
+`/vegobjekter` verified against `nvdbapiles.atlas.vegvesen.no`, including
+the live confirmation - both by direct testing and in the API's own
+documentation - that no credentials are required for reads, unlike
+Statens vegvesen's own DATEX roadworks feed).
+
+**Autobahn GmbH's licence is unconfirmed** - checked four independent
+sources (see [`docs/providers/europe.md`](europe.md#autobahn-gmbh-germany-national-motorways)
+for what was checked) and none state reuse/redistribution terms. Shipped
+anyway, flagged deliberately rather than silently assumed open - confirm
+your own rights before redistributing this data.
+
+### Credentials wanted
+
+Four providers ship as **scaffolds, not verified builds** — three
+roadworks, one streets: implemented to each service's own documented/
+confirmed API shape and covered by mocked tests, but never run against a
+real authenticated response — each is genuinely blocked on access this
+project doesn't have, not on unfinished code. **If you have access to any
+of these, running the smoke test (`python scripts/smoke_test.py`) and
+reporting back — ideally with one real trimmed record — is a genuinely
+valuable contribution**, the same way a tester's real credentials
+confirmed Norway/NSW/Victoria on 2026-07-30 (see
+[Recently confirmed](#recently-confirmed), below). Every roadworks
+module also warns at import time (`UserWarning`) with the same pointer;
+LINZ's gate is per-method instead (`iter_roads()`/`iter_road_sections()`
+raise a clear `ValueError` without a key — the sibling `iter_addresses()`
+on the same client is already verified). Excluded from the
+verified-providers claim above until confirmed. Drafted issue text lives
+in [docs/credentials-wanted-issues.md](../credentials-wanted-issues.md).
+
+| Provider | Confirmed | Pending | Credential | How to get it | Issue |
+|---|---|---|---|---|---|
+| Trafikverket (`streetworks.datex2.trafikverket`, Sweden) | Endpoint, `Situation` object name, and schema version `1.5` — all live, via a deliberate invalid-key probe returning a real structured 401 | The authenticated data pull itself; the real `MessageType`/`MessageCode` value that means roadworks specifically (unconfirmed in every source checked — `iter_roadworks()` honestly returns nothing until this is confirmed, see module docstring) | API key (not Basic Auth) | Free, **self-service**: [data.trafikverket.se](https://data.trafikverket.se/) or via [Trafiklab](https://www.trafiklab.se/api/other-apis/trafikverket/) — form, accept licence, verify email, key issued immediately | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| Vejdirektoratet (`streetworks.datex2.vejdirektoratet`, Denmark) | Genuine DATEX II 3.2, with `ConstructionWorks`/`MaintenanceWorks` and their full `constructionWorkType`/`roadMaintenanceType` enumerations stated explicitly in Vejdirektoratet's own protocol spec; the open metadata catalogue re-confirmed live (196 datasets, the roadworks one CC BY 4.0-licensed, no auth) | The authenticated REST pull itself; whether the `trafikmeldinger` response really nests as a list of independent DATEX XML strings, per the protocol doc | HTTP Basic Auth username/password **and** the actual pull URL — both issued per-dataset at registration, no public data URL exists | Free; register via [Dataudveksleren](https://du-portal-ui.dataudveksler.app.vd.dk/) | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| Traffic SA (`streetworks.au.sa`, South Australia) — **blocked on two gates, not one** | The real field list, native SR, and pagination capabilities — all confirmed live from the layer's own public `?f=json` metadata; `iter_roadworks()` deliberately returns the full, unfiltered mix rather than guess a `REC_TYPE` filter with zero evidence | **No real feature has ever been retrieved**: the query endpoint 400s without an ArcGIS token, and whether that token is even self-service is itself unconfirmed (the token host returned a CloudFront 403 too); separately, `maps.sa.gov.au` geo-blocks some countries' network egress outright. Also open: whether `ROAD_NO`/`GIS_LINK_ID` are populated and genuinely join to a road register — a potential first for this AU cluster | ArcGIS token (self-service vs. gated: unresolved) | `location.sa.gov.au/arcgis/tokens/` — from a network egress the CloudFront restriction doesn't block | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| LINZ NZ Addresses: Roads/Road Sections (`streetworks.linz`, New Zealand) — **streets, not roadworks; the sibling `iter_addresses()` on the same client is already verified** | The real field lists and one real sample of attribute values for both layers, from LINZ's own public Koordinates metadata API (no key needed for this part); the real WFS URL shape (API key embedded in the URL path, confirmed from the layer's own `/services/` listing) | The authenticated WFS pull itself; whether `startIndex`/`count` pagination is genuinely honoured; **whether `road_id` genuinely cross-references to NZ Addresses' own `road_id`** — the single most interesting open question in this SDK's New Zealand cluster | LINZ Data Service (LDS) API key | Free, **self-service**: register at [data.linz.govt.nz](https://data.linz.govt.nz/) and create a "Data access only" key | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+
+**Three further, genuinely different cases: Road Report NT, MapRoad
+Roadworks Licensing, and Greece aren't access-blocked in the usual
+sense.** Kept in a separate table rather than folded into the one
+above, since "Credential"/"How to get it" don't quite apply the way
+they do for the other four:
+
+| Provider | Confirmed | Pending | Credential | How to get it | Issue |
+|---|---|---|---|---|---|
+| Road Report NT (`streetworks.au.nt`, Northern Territory) — **no published interface, not a credential gate** | The real frontend's backend is a SignalR real-time hub (`"roadsReportingHub"`, a real hub method `"GetAllMajorRoadObstructions"`) — confirmed live by reading the site's own minified Angular bundle directly | Whether **any** documented REST/GeoJSON API exists for this data at all — `RoadReportNtClient()` always raises `ProviderUnavailableError` rather than build a client against reverse-engineered hub internals; see module docstring for why | N/A — no credential would fix this | N/A — the National Freight Data Hub's aggregate feed is a possible alternative route, unverified whether it carries real NT records | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| MapRoad Roadworks Licensing (`streetworks.maproad`, Ireland) — **a real API exists, but not for data consumers** | Ireland's own catalogue confirms a real, government-run API (`API Available: Yes`) covering both national and local roadworks licences — TII's own DATEX II feed was checked first and confirmed to carry no roadworks data at all | Whether a read-only path exists for a party who isn't a licence applicant or road authority — the same catalogue states `Open Data: No`, `Data Sharing: Yes`, `Personal Data: Yes` together, describing a formal GDPR-gated arrangement, not a self-service key; `MapRoadClient()` always raises `ProviderUnavailableError` rather than guess at an unpublished contract | N/A — no credential would fix this | Formal data-sharing agreement via `contact@rmo.ie`, not self-service | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+| Greece (`streetworks.greece`) — **no roadworks source exists at all, and the NAP is currently down** | Greece's real NAP (`nap.gov.gr`) is confirmed as the official MMTIS/RTTI/SRTI/SSTP access point, and its own real dataset titles (checked directly) are all POI/sensor data — truck parking, KTEL timetables, floating car data, toll-operator VMS/VDS/weather | Whether any Greek source (national or toll-operator) ever publishes a roadworks/Situation dataset — `GreeceClient()` always raises `ProviderUnavailableError` rather than guess; the portal itself also returns a real live 502 right now, independent of the "no roadworks dataset" finding | N/A — no credential would fix this | N/A — no known route; a toll-operator feed, if one ever appears, would only be motorway-concession-only | [help wanted](https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
+
+### Recently confirmed
+
+Three former Credentials-wanted providers were confirmed on **2026-07-30**
+by a tester running `scripts/smoke_test.py` with their own real
+credentials — exactly the contribution the section above asks for. Kept
+here as a record of what real data changed, not just moved silently into
+the verified-providers claim above:
+
+- **Statens vegvesen (Norway)** — 844 real roadworks situations, genuine
+  DATEX II v3, real Norwegian-language comments. Real coordinates are
+  genuinely mixed CRS within the same feed (~76% UTM zone 33N/`EPSG:25833`,
+  ~24% WGS84) — now resolved per-record via `streetworks.common.from_vegvesen`
+  and the new shared `streetworks.common._crs.resolve_coordinate_crs`
+  helper (declared/inferred/corrected by real value range, axis order by
+  magnitude, no silent reprojection); see the module docstring for the
+  full finding and fix. No IP allow-listing was needed, resolving an open
+  question.
+- **TfNSW Live Traffic (NSW)** — found and fixed one real bug: the
+  correct endpoint paths are `roadwork/open`-style, not
+  `roadwork-open.json`-style (Phase 1 had followed the Developer Guide's
+  own documented file-naming table over the source investigation's
+  paraphrase — the guide turned out to be wrong about its own gateway).
+  363 real roadwork + 19 real major-event features confirmed, including
+  a real ~1.7% local-road minority and a real ~1.4% ferry-hazard impurity
+  in the roadwork-only endpoint.
+- **DTP Planned Disruptions (Victoria)** — found and fixed one real
+  design mistake in this SDK's own converter: a GeometryCollection's
+  LineString can span an entire route (~150km in one real example, not
+  a worksite's own extent), so only the Point is used now. Confirmed
+  coordinate order, timestamp format (naive ISO-8601, no UTC offset —
+  genuinely unusual), and that `KeyID` really is the correct auth header,
+  not the OpenAPI spec's own advertised scheme.
+
+See each module's own docstring for the full detail behind every claim
+above.
