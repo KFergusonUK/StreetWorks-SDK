@@ -1484,6 +1484,41 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.ogc.germany import GermanRoadworksClient # .fetch("Sachsen")',
     ),
     ProviderEntry(
+        key="berlin",
+        name="Berlin (VIZ)",
+        description="Berlin's city-wide traffic-information-centre Baustellen/Sperrungen feeds.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Germany"}),
+        administrative_area="Land Berlin - VIZ",
+        scope_note=(
+            "Confirmed live (2026-08-08, 373 + 240 real records across "
+            "two feeds) - credential-free, never a Credentials-wanted "
+            "scaffold. The largest remaining German gap this cluster had "
+            "- Berlin is a city-state Land entirely surrounded by the "
+            "already-covered brandenburg. Two public GeoJSON feeds "
+            "(Landesmeldestelle/tic3, Verkehrsredaktion/daten), not one "
+            "- the source brief assumed Verkehrsredaktion is a detail-"
+            "enriched subset of Landesmeldestelle, but live data via the "
+            "real lms_id<->id join key shows only 104 of ~215-313 real "
+            "roadworks records overlap; each feed has genuine unique "
+            "content the other lacks. iter_roadworks() merges both via "
+            "that verified key rather than picking one as primary. "
+            "source_grade=traveller_info (VIZ is a traffic-information/"
+            "editorial source, not a statutory register, unlike "
+            "streetmanager/nycdot/chicagodot/paris). Comprehensive "
+            "city-wide streets, not state-network-only like hamburg/"
+            "brandenburg. See module docstring."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Namensnennung - Version 2.0 (dl-de/by-2-0)",
+        licence_confirmed=True,
+        source_grade="traveller_info",
+        _module="streetworks.berlin",
+        _client_name="BerlinClient",
+        import_line="from streetworks.berlin import BerlinClient",
+    ),
+    ProviderEntry(
         key="wzdx",
         name="WZDx (Work Zone Data Exchange)",
         description="The US standard for work-zone data, published independently by ~40+ agencies.",

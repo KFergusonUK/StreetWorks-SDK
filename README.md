@@ -98,6 +98,7 @@ client, documented in its own section, exactly as before.
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
+| `streetworks.berlin` | Berlin's VIZ traffic-information-centre feeds — Landesmeldestelle + Verkehrsredaktion (no credentials, confirmed live 2026-08-08), the largest remaining German gap, merged via a verified id join key since neither feed alone is complete (a source-brief assumption corrected by live data). Comprehensive city-wide streets, not state-network-only like Hamburg/Brandenburg | read |
 | `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks, licence unconfirmed) and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for either) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |
@@ -1490,6 +1491,79 @@ no single clean status field either — six independent boolean flags
 all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
 field-by-field mapping and every state's exact attribution text.
+
+## Berlin (VIZ)
+
+The largest remaining German gap this cluster had — Berlin is a
+city-state Land in its own right, entirely surrounded by the
+already-covered Brandenburg. A genuinely different platform from the
+Hamburg/Brandenburg/Saxony WFS/GeoJSON-download cluster above: two
+public, keyless GeoJSON feeds published hourly by VIZ
+(Verkehrsinformationszentrale), each its own plain static file, no
+query language at all — the simplest client shape in this SDK. Its own
+top-level module, `streetworks.berlin`, not a `streetworks.ogc.germany`
+field-map entry.
+
+```python
+from streetworks.berlin import BerlinClient
+from streetworks.common import from_berlin
+
+with BerlinClient() as berlin:
+    works_list = from_berlin(list(berlin.iter_roadworks()))
+```
+
+**Two feeds, and the source brief's assumption about them turned out
+wrong once checked live.** The dataset's own official description says
+Verkehrsredaktion (`daten/baustellen_sperrungen_viz.json`) is "a subset
+of Landesmeldestelle (`tic3/baustellen_sperrungen_tic.json`) with extra
+detail." Live data disagrees: using the real, verified join key (every
+Verkehrsredaktion record's `lms_id` matches a Landesmeldestelle record's
+own `id` when present — 199/205 confirmed live) and restricting both to
+real roadworks `subtype` values (`Baustelle`/`Sperrung`/`Bauarbeiten`),
+Landesmeldestelle has 215 such records, Verkehrsredaktion has 202, and
+only **104 overlap**. Landesmeldestelle carries 111 real roadworks
+records Verkehrsredaktion lacks entirely; Verkehrsredaktion carries 98
+Landesmeldestelle lacks (35 of those with no `lms_id` at all — genuine
+Verkehrsredaktion-only editorial entries, not just richer detail on
+shared records). Neither feed alone is complete, so
+`iter_roadworks()` **merges both via the verified join key** rather than
+picking one as primary or duplicating the confirmed overlaps — for a
+matched pair it prefers Verkehrsredaktion's richer fields (`severity`,
+`direction`, lane counts, ISO dates) while keeping Landesmeldestelle's
+own `id` as the canonical reference. Every merged record carries an
+explicit `sources` list — never silently blended without provenance.
+
+**Roadworks filter, evidenced not the source brief's assumed upstream
+values.** The brief named `TrafficMessage_RoadWorks`/
+`TrafficMessage_Incidents` as the upstream OCIT object types, but those
+don't survive the OCIT→GeoJSON conversion — the real field on the
+published output is `subtype`, with exactly three roadworks-relevant
+values plus `Gefahr` (hazard/danger warning, excluded — a warning
+notice, not a worksite, even though some `Gefahr` records' free text
+happens to mention nearby construction).
+
+**Two date formats depending on feed** — Verkehrsredaktion's are
+near-ISO; Landesmeldestelle's are German `DD.MM.YYYY HH:MM` (sometimes
+blank for the start date — a real, common case, not an edge case
+invented for testing). Geometry is `Point`, or a real `GeometryCollection`
+pairing a `Point` with one or more `LineString` entries — the first
+`LineString`'s vertices map to `Coordinate.points`, the same contract
+line-geometry sources elsewhere in this SDK already use, unlike Paris's
+polygon-ring case which didn't fit it.
+
+**No grouping** — unlike NYC/Chicago/Paris, no umbrella-application field
+exists in either real feed, so `from_berlin` ships one `Works` with
+exactly one `WorksSite` per record, the same 1:1 shape this SDK's own
+Brandenburg entry uses for the same reason (a real but uncorroborated
+grouping signal, not acted on without stronger evidence). `street_ref`
+is never populated — no segment identifier field exists on either feed.
+`source_grade="traveller_info"` — VIZ is a traffic-information/editorial
+source, not a statutory register, distinct from this cluster's
+`streetmanager`/`nycdot`/`chicagodot`/`paris` register-grade tier.
+Licence: **Datenlizenz Deutschland — Namensnennung — Version 2.0**
+(dl-de/by-2-0), the same licence Hamburg/Brandenburg already publish
+under, confirmed from the real dataset page. Attribution: "Digitale
+Plattform Stadtverkehr Berlin / [dataset title]".
 
 ## Consell de Mallorca (island roadworks)
 

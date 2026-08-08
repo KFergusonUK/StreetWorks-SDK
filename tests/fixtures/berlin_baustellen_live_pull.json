@@ -1,0 +1,265 @@
+[
+  {
+    "type": "Feature",
+    "properties": {
+      "id": "LMS-BR/r_LMS-BR/416895_LMS-BR/72",
+      "tstore": "2026-07-24T05:00:00.083Z",
+      "objectState": "modified",
+      "subtype": "Sperrung",
+      "icon": "sperrung",
+      "severity": null,
+      "validity": {
+        "from": "24.07.2026 07:00",
+        "to": "10.09.2026 23:59"
+      },
+      "street": "Berlin, Hufelandstraße zwischen B2, Greifswalder Straße und Am Friedrichshain",
+      "section": "Berlin, Hufelandstraße zwischen B2, Greifswalder Straße und Am Friedrichshain",
+      "content": "Straße wird mehrfach gesperrt, Bauarbeiten"
+    },
+    "geometry": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            13.42956,
+            52.533
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.42956,
+              52.533
+            ],
+            [
+              13.43007,
+              52.53276
+            ],
+            [
+              13.4308,
+              52.53243
+            ],
+            [
+              13.43154,
+              52.53209
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "id": "731/2026",
+      "lms_id": "LMS-BR/r_LMS-BR/416895_LMS-BR/72",
+      "tstore": "2026-07-24T08:43:17.320649Z",
+      "objectState": "modified",
+      "subtype": "Sperrung",
+      "icon": "sperrung",
+      "severity": "Vollsperrung",
+      "direction": "Beidseitig",
+      "street": "Hufelandstraße (Prenzlauer Berg)",
+      "section": "in beiden Richtungen zwischen Greifswalder Straße und Am Friedrichshain",
+      "total_lanes": 2,
+      "closed_lanes": 2,
+      "content": "Errichten von eine Fahrradstraße, Umsetzung von restlichen Schleifarbeiten, abschnittsweise Vollsperrung für Kfz- und Radverkehr",
+      "validity": {
+        "from": "2026-07-24T07:00",
+        "to": "2026-09-10T17:00"
+      }
+    },
+    "geometry": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            13.432534933090212,
+            52.53166876943238
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.429627418518066,
+              52.53295775320848
+            ],
+            [
+              13.437137603759767,
+              52.52966832222156
+            ]
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.436665534973146,
+              52.52957041871409
+            ],
+            [
+              13.436729907989504,
+              52.529831494248995
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "id": "LMS-BR/r_LMS-BR/330651_LMS-BR/72",
+      "tstore": "2024-04-16T10:43:42.450Z",
+      "objectState": "modified",
+      "subtype": "Baustelle",
+      "icon": "baustelle",
+      "severity": null,
+      "validity": {
+        "from": "",
+        "to": "31.12.2026 23:59"
+      },
+      "street": "Berlin, Badstraße in Höhe Pankstraße/ Prinzenallee im Kreuzungsbereich Fahrstreifenreduzierungen, Fahrbahnverschwenkungen",
+      "section": "Berlin, Badstraße in Höhe Pankstraße/ Prinzenallee im Kreuzungsbereich Fahrstreifenreduzierungen, Fahrbahnverschwenkungen",
+      "content": "Bauarbeiten"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        13.3814,
+        52.55223
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "id": "44/2025",
+      "lms_id": null,
+      "tstore": "2026-06-09T14:24:41.596338Z",
+      "objectState": "modified",
+      "subtype": "Sperrung",
+      "icon": "sperrung",
+      "severity": "Fahrtrichtungssperrung",
+      "direction": "Einseitig",
+      "street": "A117",
+      "section": "stadtauswärts zwsichen AD Treptow und AS Waltersdorf",
+      "total_lanes": null,
+      "closed_lanes": null,
+      "content": "Bau der AS Hubertus, Fahrtrichtung gesperrt",
+      "validity": {
+        "from": "2025-07-24T08:00",
+        "to": "2026-08-21T17:00"
+      }
+    },
+    "geometry": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            13.554468154907228,
+            52.40220940824191
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.556421692095283,
+              52.405721137256606
+            ],
+            [
+              13.555220504481786,
+              52.40535468144709
+            ],
+            [
+              13.55449121200214,
+              52.405407032463394
+            ],
+            [
+              13.55359032129199,
+              52.40551173430963
+            ]
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.550726943693682,
+              52.40200130181311
+            ],
+            [
+              13.551928131307218,
+              52.40252484897381
+            ],
+            [
+              13.552786122459743,
+              52.40257720334819
+            ],
+            [
+              13.553772812285107,
+              52.402393962766084
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "id": "LMS-BR/r_LMS-BR/380591_LMS-BR/72",
+      "tstore": "2025-08-20T08:00:00.173Z",
+      "objectState": "modified",
+      "subtype": "Gefahr",
+      "icon": "warnung",
+      "severity": null,
+      "validity": {
+        "from": "",
+        "to": "27.08.2026 23:59"
+      },
+      "street": "Berlin, Blaschkoallee zwischen Fritz-Reuter-Allee und Buschkrugallee",
+      "section": "Berlin, Blaschkoallee zwischen Fritz-Reuter-Allee und Buschkrugallee",
+      "content": "Fahrbahn auf einen Fahrstreifen verengt, Bauarbeiten"
+    },
+    "geometry": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            13.44924,
+            52.4524
+          ]
+        },
+        {
+          "type": "LineString",
+          "coordinates": [
+            [
+              13.44924,
+              52.4524
+            ],
+            [
+              13.4501,
+              52.45239
+            ],
+            [
+              13.45059,
+              52.45241
+            ],
+            [
+              13.45072,
+              52.45241
+            ]
+          ]
+        }
+      ]
+    }
+  }
+]

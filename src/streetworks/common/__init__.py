@@ -16,6 +16,7 @@ from .from_autobahn import from_autobahn
 from .from_bag import from_bag
 from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
+from .from_berlin import from_berlin
 from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
 from .from_datavia import from_datavia
@@ -122,4 +123,5 @@ __all__ = [
     "from_chicagodot",
     "from_cciss",
     "from_paris",
+    "from_berlin",
 ]

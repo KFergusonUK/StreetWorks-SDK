@@ -345,6 +345,22 @@ def check_german_regional() -> str:
     return ", ".join(f"{state}: {n} ({c} with coordinates)" for state, (n, c) in counts.items())
 
 
+def check_berlin() -> str:
+    """Berlin VIZ needs no credentials - see streetworks.berlin. Confirmed
+    live 2026-08-08 (373 + 240 real records across two feeds) -
+    iter_roadworks() merges both via the verified lms_id/id join key."""
+    from collections import Counter
+
+    from streetworks.berlin import BerlinClient
+
+    with BerlinClient() as berlin:
+        records = list(berlin.iter_roadworks())
+    if not records:
+        raise RuntimeError("query returned no records - real data may have changed")
+    sources = Counter(tuple(sorted(r["properties"]["sources"])) for r in records)
+    return f"{len(records)} merged roadworks record(s), source breakdown: {dict(sources)}"
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -1444,6 +1460,7 @@ def main() -> int:
     reporter.check("Via Lietuva (Lithuania)", [], check_vialietuva)
     # German state roadworks (Hamburg, Brandenburg) need no credentials
     reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
+    reporter.check("Berlin VIZ Baustellen/Sperrungen", [], check_berlin)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
