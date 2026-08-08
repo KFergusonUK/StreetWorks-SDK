@@ -17,6 +17,24 @@ on behalf of, or endorsed by, any employer.** See
 [`docs/governance/attribution.md`](docs/governance/attribution.md) for
 the full statement and contributor credits.
 
+## Why?
+
+Roadworks data is published through wildly different systems —
+statutory registers, DATEX II, WZDx, ArcGIS, WFS, bespoke REST APIs and
+regional platforms. Almost every provider also has its own
+authentication, pagination, geometry, date formats and quirks.
+
+`streetworks` solves that integration problem so you can get on with
+building applications instead of learning how every individual road
+authority happens to publish its data.
+
+It provides one common model without pretending those sources are
+equivalent — preserving the differences, limitations and provenance
+that matter.
+
+And, honestly, part of the fun is discovering how different
+organisations have chosen to put their data together.
+
 ## Install
 
 ```bash
