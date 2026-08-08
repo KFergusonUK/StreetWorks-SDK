@@ -48,6 +48,16 @@ missing.
 - **[`crime_context/`](../examples/crime_context/)** — a neighbourhood-level recorded-crime context map for one police force, built on `streetworks.police`. Background context for lone-worker/night-shift planning around street works — explicitly not a risk score or risk assessment. See its own [README](../examples/crime_context/README.md).
 - **[`crime_context_lsoa/`](../examples/crime_context_lsoa/)** — successor to `crime_context/`: LSOA-level geography, a real population denominator, and reframed around a single worksite ("what's the context for the crew going here") rather than a force-wide ranking. See its own [README](../examples/crime_context_lsoa/README.md).
 
+  <img src="../examples/crime_context_lsoa/WorksiteRisk.png" width="600" alt="LSOA-level crime-context choropleth around a Newton Aycliffe worksite, with a tooltip showing population, crime rate and band for one selected area">
+
+  Real output from this example — the tooltip's population, crime-rate and banding figures are genuine, not illustrative.
+
 ## Terrain visualisation
 
 - **[`nsg_terrain_drape/`](../examples/nsg_terrain_drape/)** — drapes OS Open USRN street centrelines over real terrain (OS Terrain 50) for Durham, as a rendered showcase with a genuine teaching point riding along: the drape is derived from two independently-sourced datasets, not stated by either, and it breaks in predictable, visible ways where they disagree. Produces a self-contained HTML view and an STL export for 3D printing. First run downloads and caches OS Open USRN (~300MB) and OS Terrain 50 (~160MB). See its own [README](../examples/nsg_terrain_drape/README.md).
+
+  <img src="../examples/nsg_terrain_drape/Screenshot_2026-08-06_08-52-56.png" width="600" alt="OS Open USRN street centrelines draped over a 3D terrain mesh of Durham, viewed at an angle">
+
+  Real output from an early build — kept because it documents a real rendering artifact (a road briefly dipping under a neighbouring terrain block where two independent samplings of the same terrain disagreed), since fixed; see `render.py`'s own docstring.
+
+  The generated HTML view itself (`durham_3D_showcase.html`) isn't linked here: GitHub serves `.html` files in this repo as raw source, not a rendered page, and this repo has no GitHub Pages site to render it live. Generate and open it locally instead (see the README linked above).
