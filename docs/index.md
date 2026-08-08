@@ -1,5 +1,15 @@
 # streetworks documentation
 
+**Coverage** — ✓ live · ~ in progress · ✗ ruled out
+
+**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
+**Americas**  ✓ Canada · United States
+**Oceania**  ✓ Australia · New Zealand
+**Asia**  ~ Singapore
+**Ruled out**  ✗ China · Russia
+
+*Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md).*
+
 > Migrated verbatim from README.md's opening (title/intro paragraph and
 > the "We do this..." quote), plus a map to the rest of this docs tree
 > (phase one, lossless restructure — see `docs/migration-mapping.md` for
@@ -31,6 +41,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 - **Getting started** — [installation](getting-started/installation.md), [quickstart](getting-started/quickstart.md), [development](getting-started/development.md)
 - **Concepts** — [architecture](concepts/architecture.md), [data model](concepts/data-model.md), [data integrity discipline](concepts/data-integrity.md), [CRS & datums](concepts/crs-and-datums.md), [write path (Section 50)](concepts/write-path.md)
 - **Providers** — [index / coverage matrix / credentials wanted](providers/index.md), [UK & Crown Dependencies](providers/uk.md), [Europe](providers/europe.md), [Italy](providers/italy.md), [United States](providers/us.md), [Australia](providers/australia.md), [New Zealand](providers/new-zealand.md), [pending candidates](providers/pending.md)
+- **Examples** — [`examples.md`](examples.md) (curated, one line per example in `examples/`)
 - **Roadmap** — [`roadmap.md`](roadmap.md) (chronological build log)
 - **Domain notes** — [provider quirks (index)](domain-notes/provider-quirks.md), [UK permits](domain-notes/uk-permits.md), [excluded territories](domain-notes/excluded-territories.md)
 - **Contributing** — [scaffold states](contributing/scaffolds.md), [agent boundaries](contributing/agent-boundaries.md), and see [CONTRIBUTING.md](../CONTRIBUTING.md) for the full ground rules

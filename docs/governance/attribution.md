@@ -12,7 +12,7 @@
 ## Capacity
 
 This SDK is developed and published independently, in a personal
-capacity, by its author — a Durham County Council employee. **It is not
+capacity, by its author — Kevin Ferguson. **It is not
 developed on behalf of, endorsed by, or representative of Durham County
 Council or any other employer.** Any views, design decisions, or errors
 in this project are the author's own.
@@ -28,7 +28,7 @@ explicit and easy to find, rather than left implicit.
 
 ## Contributors
 
-**Chris Carlon** contributed the original concept for, and did minor
+**Chris Carlon** contributed the original concept for, and performed 
 testing of, the Section 58 support and Street Manager v6 model work,
 via a merged pull request. Recorded here because a contribution like
 that deserves a named credit somewhere in the repository, not because

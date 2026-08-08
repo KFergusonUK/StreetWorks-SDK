@@ -67,6 +67,17 @@ it covers rather than needing to already know the module name — see
 [`docs/providers/index.md`](docs/providers/index.md) for the full coverage
 matrix, per-provider modules, and current Credentials-wanted scaffolds.
 
+## Examples
+
+18 runnable examples in [`examples/`](examples/) — single-provider reads,
+a Street Manager Open Data receiver, a Section 50 write-path connector
+(sandbox-verified, not production), two cross-provider comparisons/maps,
+and two visual showcases (a lone-worker crime-context map, an OS Open
+USRN terrain drape with a 3D-print export). Each one's docstring states
+exactly what it needs and what state it's really in — see
+[`docs/examples.md`](docs/examples.md) for the curated, one-line-per-example
+index.
+
 ## Documentation
 
 - **Getting started** — [installation](docs/getting-started/installation.md), [quickstart](docs/getting-started/quickstart.md), [development](docs/getting-started/development.md)

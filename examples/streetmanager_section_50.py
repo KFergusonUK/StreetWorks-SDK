@@ -12,9 +12,14 @@ assembly, identity stamping - see
 ``streetworks.streetmanager.utils.section_50_utils``) was designed against
 live-sandbox findings from a real S50 record (``UG05016064998-01``,
 Ferguson Court, Bishop Auckland, USRN 42820309) - see that module's own
-docstring. This *script* hasn't itself been run against sandbox yet; the
-demo geometry below is illustrative (an approximate point near Bishop
-Auckland), not the real drawn extent from that record.
+docstring. **This *script* is verified against the Street Manager sandbox,
+2026-08-06** - apply/start/stop all succeeded end-to-end against a real
+sandbox record, per ``docs/concepts/write-path.md``'s own verification
+record (the source of truth for this claim - check it before restating
+this docstring, rather than assuming the date still holds). Production
+remains unexercised. The demo geometry below remains illustrative (an
+approximate point near Bishop Auckland), not the real drawn extent from
+the record referenced above.
 
 Run:
     python examples/streetmanager_section_50.py apply
