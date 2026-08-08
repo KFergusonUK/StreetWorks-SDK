@@ -147,6 +147,33 @@ content. These are left on the README itself; they'll stay there in
 phase two as well, since a front-door README keeps its build/version
 badges regardless of how much prose moves to `docs/`.
 
+## Post-migration addendum (2026-08-08)
+
+Several Case 3 items above are no longer purely "out of scope, noted for
+later" — the project owner asked for six of them to be written up
+directly, as new content rather than a migration:
+
+- Personal-capacity framing and the Strategic Data Roadmap/OCDO/GDS
+  submission → [`docs/governance/attribution.md`](governance/attribution.md).
+- Chris Carlon attribution → same file.
+- UK per-USRN/terraces claim and the S50 fee-suppression detail →
+  [`docs/domain-notes/uk-permits.md`](domain-notes/uk-permits.md).
+- China/Russia exclusions → [`docs/domain-notes/excluded-territories.md`](domain-notes/excluded-territories.md).
+- Agent boundaries → [`docs/contributing/agent-boundaries.md`](contributing/agent-boundaries.md).
+- Portugal/Singapore/Canada as pending candidates → [`docs/providers/pending.md`](providers/pending.md).
+
+Each of those new pages states its own grounding honestly rather than
+adopting this project's usual "confirmed live" register across the
+board: the S50 fee-suppression detail and Chris Carlon's credit are
+sourced to specific documents/PRs; the UK per-USRN/terraces claim,
+China/Russia exclusions, and agent-boundaries rules are recorded on the
+project owner's own stated authority, not independently re-verified
+against this codebase the way provider findings elsewhere are. The
+still-unaddressed Case 3 items are "scaffold-prove-promote" as a named
+principle, and the `_web_mercator`/`extra_params` architectural-
+precedent framing — neither was requested and both remain genuinely out
+of scope.
+
 ## What this means for the exit gate
 
 `docs-migration-brief.md`'s exit condition is that every checklist item

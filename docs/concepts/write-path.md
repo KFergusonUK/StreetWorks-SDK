@@ -49,3 +49,7 @@ static and disconnected (no server, nothing calls Street Manager), but its
 `section_50_utils.build_work_create_request`'s assembly logic in-page, so
 the JSON shown is genuinely what the Python connector would send, not a
 mockup of it.
+
+See [`docs/domain-notes/uk-permits.md`](../domain-notes/uk-permits.md#s50-fee-suppression)
+for the fee-suppression behaviour this connector's own docstring can't
+show — Street Manager, not the connector, decides not to bill an S50.

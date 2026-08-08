@@ -143,6 +143,12 @@ POST `GetFeature` bodies match the shapes in the DataVIA documentation
 available via `get_features_kvp()`. Output formats: GeoJSON (default),
 OGRGML, SHAPEZIP, CSV, SPATIALITEZIP.
 
+See [`docs/domain-notes/uk-permits.md`](../domain-notes/uk-permits.md#permits-are-issued-per-usrn-terraces-share-a-parent-usrn)
+for why a named street sub-part like "Anchorage Terrace" isn't
+separately recoverable from this layer — `ESUStreets` carries no name
+field, and USRN is the unit both this gazetteer and Street Manager
+permits key off.
+
 ### WMS (rendered map images)
 
 The same endpoints also serve OGC WMS, so you can pull rendered map images of

@@ -13,6 +13,11 @@ behind one consistent, typed, well-tested client.
 
 > We do this not because it is easy, but because it is hard.
 
+Developed and published independently, in a personal capacity — not on
+behalf of, or endorsed by, any employer. See
+[`docs/governance/attribution.md`](governance/attribution.md) for the
+full statement and contributor credits.
+
 ```python
 from streetworks.streetmanager import StreetManagerClient, Environment
 
@@ -25,11 +30,11 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 
 - **Getting started** — [installation](getting-started/installation.md), [quickstart](getting-started/quickstart.md), [development](getting-started/development.md)
 - **Concepts** — [architecture](concepts/architecture.md), [data model](concepts/data-model.md), [data integrity discipline](concepts/data-integrity.md), [CRS & datums](concepts/crs-and-datums.md), [write path (Section 50)](concepts/write-path.md)
-- **Providers** — [index / coverage matrix / credentials wanted](providers/index.md), [UK & Crown Dependencies](providers/uk.md), [Europe](providers/europe.md), [Italy](providers/italy.md), [United States](providers/us.md), [Australia](providers/australia.md), [New Zealand](providers/new-zealand.md)
+- **Providers** — [index / coverage matrix / credentials wanted](providers/index.md), [UK & Crown Dependencies](providers/uk.md), [Europe](providers/europe.md), [Italy](providers/italy.md), [United States](providers/us.md), [Australia](providers/australia.md), [New Zealand](providers/new-zealand.md), [pending candidates](providers/pending.md)
 - **Roadmap** — [`roadmap.md`](roadmap.md) (chronological build log)
-- **Domain notes** — [provider quirks (index)](domain-notes/provider-quirks.md)
-- **Contributing** — [scaffold states](contributing/scaffolds.md), and see [CONTRIBUTING.md](../CONTRIBUTING.md) for the full ground rules
-- **Governance** — [licensing](governance/licensing.md)
+- **Domain notes** — [provider quirks (index)](domain-notes/provider-quirks.md), [UK permits](domain-notes/uk-permits.md), [excluded territories](domain-notes/excluded-territories.md)
+- **Contributing** — [scaffold states](contributing/scaffolds.md), [agent boundaries](contributing/agent-boundaries.md), and see [CONTRIBUTING.md](../CONTRIBUTING.md) for the full ground rules
+- **Governance** — [licensing](governance/licensing.md), [attribution and capacity](governance/attribution.md)
 - Existing investigation/reference docs (untouched by this migration): [INTEGRATION.md](INTEGRATION.md), [DTRO_SCHEMAS.md](DTRO_SCHEMAS.md), [network-scope-audit.md](network-scope-audit.md), [credentials-wanted-issues.md](credentials-wanted-issues.md), [idemallorca-investigation.md](idemallorca-investigation.md), [catalonia-sct-investigation.md](catalonia-sct-investigation.md), [inspire-gml-investigation.md](inspire-gml-investigation.md), [gazetteer-field-dump.md](gazetteer-field-dump.md), [nap-survey.md](nap-survey.md), [RELEASING.md](RELEASING.md)
 
 ## Status of this migration
