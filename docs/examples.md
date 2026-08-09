@@ -37,6 +37,13 @@ missing.
 - **[`compare_active_works.py`](../examples/compare_active_works.py)** — prints active works side by side from Street Manager (Durham City) and Paris Chantiers (Paris), using one shared filter over both providers' `streetworks.common.Works`/`WorksSite` output despite their genuinely different shapes — British National Grid + an explicit status field vs. WGS84 + date-window inference. Not a fair like-for-like count (a small English city vs. a world capital); the point is the shared shape, not the comparison itself. Needs Street Manager credentials for that side; Paris is credential-free and still runs without them.
 - **[`roadworks_world_map.py`](../examples/roadworks_world_map.py)** — plots SDK coverage on a world map, registry-driven so new providers appear automatically. Default mode is offline (coverage only, coloured by access tier); `--live` also pulls current roadworks from keyless providers and from credential-gated ones with a key in the environment. Marker size is provider count, not live roadworks count — a reach demonstration, not an operational feed.
 
+  <img src="../examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 09 Aug 2026.">
+
+  Real output from this example — coverage map only, not actual works sites — 09 Aug 2026. The
+  generated HTML view (`roadworks_world_map/map.html`) isn't linked here: GitHub serves `.html`
+  files in this repo as raw source, not a rendered page (the same reason the terrain-drape
+  example's own HTML output isn't linked below). Generate it locally instead.
+
 ## Worker-safety context
 
 - **[`crime_context/`](../examples/crime_context/)** — a neighbourhood-level recorded-crime context map for one police force, built on `streetworks.police`. Background context for lone-worker/night-shift planning around street works — explicitly not a risk score or risk assessment. See its own [README](../examples/crime_context/README.md).

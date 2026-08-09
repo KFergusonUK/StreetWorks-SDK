@@ -32,6 +32,11 @@ literally comprehensive; see [`docs/providers/canada.md`](canada.md) and
 and what isn't. This is the canonical coverage roster; `docs/index.md`'s
 copy quotes it rather than restating it independently.*
 
+See this coverage plotted on a world map:
+[`examples/roadworks_world_map.py`](../../examples/roadworks_world_map.py)
+(registry-driven, so it stays current automatically — see
+[`docs/examples.md`](../examples.md) for a real generated screenshot).
+
 Everything in [`docs/providers/`](.) is organised by *technology* — you need to already
 know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
 find the right import. `streetworks.providers()`/`get_provider()` answer the
