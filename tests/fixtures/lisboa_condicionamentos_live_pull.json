@@ -1,0 +1,317 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.092573239,
+              38.767224652
+            ],
+            [
+              -9.092451198,
+              38.767214195
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 129153,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-05-07",
+            "date_max": "2026-10-19",
+            "hour_min": "08:00:00",
+            "hour_max": "20:00:00",
+            "is_interrupted": false
+          }
+        ],
+        "morada": "Rossio dos Olivais",
+        "pedido": "COND-2026-19464",
+        "freguesias": "Parque das Nações",
+        "restricao_circulacao": "Passeio",
+        "impacto": "Relevante",
+        "motivo": "CARGAS E DESCARGAS",
+        "panfleto": null
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.148934969,
+              38.711040581
+            ],
+            [
+              -9.149085173,
+              38.710535131
+            ],
+            [
+              -9.149216601,
+              38.710145838
+            ],
+            [
+              -9.149254152,
+              38.709915609
+            ],
+            [
+              -9.149230012,
+              38.709652939
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 131139,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-07-21",
+            "date_max": "2026-08-21",
+            "hour_min": "10:00:00",
+            "hour_max": "19:00:00",
+            "is_interrupted": false
+          }
+        ],
+        "morada": "Travessa do Alcaide",
+        "pedido": "COND-2025-6320-P11",
+        "freguesias": "Misericórdia",
+        "restricao_circulacao": "Corte total",
+        "impacto": "Relevante",
+        "motivo": "OBRA - FAIXA DE RODAGEM",
+        "panfleto": null
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.149585348,
+              38.724658538
+            ],
+            [
+              -9.14814232,
+              38.723105845
+            ],
+            [
+              -9.142311174,
+              38.716404817
+            ],
+            [
+              -9.139376687,
+              38.714513441
+            ],
+            [
+              -9.139234529,
+              38.71486504
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 131921,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-09-12",
+            "date_max": "2026-09-12",
+            "hour_min": "15:00:00",
+            "hour_max": "23:59:00",
+            "is_interrupted": false
+          }
+        ],
+        "morada": "Praça Marquês de Pombal - Largo de São Domingos",
+        "pedido": "COND-2026-3172",
+        "freguesias": "Arroios, Avenidas Novas, Misericórdia, Santo António, Santa Maria Maior",
+        "restricao_circulacao": "Cortes temporários",
+        "impacto": "Relevante",
+        "motivo": "MANIFESTAÇÃO",
+        "panfleto": null
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.136915374,
+              38.713036853
+            ],
+            [
+              -9.136900622,
+              38.713004413
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 132192,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-08-12",
+            "date_max": "2026-08-25",
+            "hour_min": "06:00:00",
+            "hour_max": "08:00:00",
+            "is_interrupted": true
+          },
+          {
+            "date_min": "2026-08-12",
+            "date_max": "2026-08-25",
+            "hour_min": "20:00:00",
+            "hour_max": "23:00:00",
+            "is_interrupted": true
+          }
+        ],
+        "morada": "Rua dos Fanqueiros, 257",
+        "pedido": "COND-2026-1433-PA9",
+        "freguesias": "Santa Maria Maior",
+        "restricao_circulacao": "Estacionamento",
+        "impacto": "Relevante",
+        "motivo": "CARGAS E DESCARGAS/OBRAS",
+        "panfleto": null
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.146893864,
+              38.716303706
+            ],
+            [
+              -9.146967625,
+              38.716322803
+            ]
+          ],
+          [
+            [
+              -9.147423858,
+              38.716472546
+            ],
+            [
+              -9.147319252,
+              38.716463128
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 130497,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-08-03",
+            "date_max": "2026-08-14",
+            "hour_min": "10:00:00",
+            "hour_max": "16:30:00",
+            "is_interrupted": true
+          }
+        ],
+        "morada": "Alto do Penalva 18",
+        "pedido": "COND-2026-2570",
+        "freguesias": "Misericórdia, Santo António",
+        "restricao_circulacao": "Estreitamento de via",
+        "impacto": "Relevante",
+        "motivo": "CARGAS E DESCARGAS/OBRAS",
+        "panfleto": null
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.170715726,
+              38.753169803
+            ],
+            [
+              -9.170242316,
+              38.752566339
+            ],
+            [
+              -9.17194686,
+              38.752552743
+            ],
+            [
+              -9.1722875,
+              38.753144702
+            ],
+            [
+              -9.170710361,
+              38.753186537
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 131914,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-08-07",
+            "date_max": "2026-08-20",
+            "hour_min": "10:00:00",
+            "hour_max": "16:30:00",
+            "is_interrupted": true
+          }
+        ],
+        "morada": "R. São Tomás de Aquino (frente ao nº18-L)",
+        "pedido": "COND-2025-5373-PA19",
+        "freguesias": "Alvalade, São Domingos de Benfica",
+        "restricao_circulacao": "Estacionamento",
+        "impacto": "Relevante",
+        "motivo": "ACESSO DE VEÍCULOS À OBRA",
+        "panfleto": "//lisboa.city-platform.com/media/layerfeatures/20260527154348_traffic_closures_Loja-Lisboa-Online-–-Pedido-submetido-com-nº-CML-1026387-J0S4.pdf;//lisboa.city-platform.com/media/layerfeatures/20260527154348_traffic_closures_PROR.DATAS-CML-1026387-J0S4-COND-2025-5373-PA-V14.pdf"
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.151179687,
+              38.721972418
+            ],
+            [
+              -9.151166947,
+              38.721958292
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "id": 124680,
+        "periodos_condicionamentos": [
+          {
+            "date_min": "2026-01-01",
+            "date_max": "2026-12-31",
+            "hour_min": "08:00:00",
+            "hour_max": "20:00:00",
+            "is_interrupted": true
+          }
+        ],
+        "morada": "Cidade de Lisboa",
+        "pedido": "COND-2025-571-P2",
+        "freguesias": "TODAS",
+        "restricao_circulacao": "Estreitamento de via",
+        "impacto": "Relevante",
+        "motivo": "OBRA - FAIXA DE RODAGEM",
+        "panfleto": null
+      }
+    }
+  ]
+}

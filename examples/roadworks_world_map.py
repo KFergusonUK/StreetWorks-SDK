@@ -64,6 +64,7 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     # Europe
     "Netherlands": (5.3, 52.2), "Belgium": (4.5, 50.6), "Luxembourg": (6.1, 49.8),
     "France": (2.4, 46.6), "Spain": (-3.7, 40.2), "Germany": (10.4, 51.2),
+    "Portugal": (-9.14, 38.72),
     "Finland": (25.7, 62.5), "Iceland": (-18.6, 64.9), "Bulgaria": (25.3, 42.7),
     "Lithuania": (23.9, 55.2), "Norway": (9.0, 61.0), "Sweden": (15.6, 62.2),
     "Denmark": (9.5, 56.1), "Ireland": (-8.0, 53.2), "Italy": (12.6, 42.5),

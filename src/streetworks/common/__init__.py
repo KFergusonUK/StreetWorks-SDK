@@ -26,6 +26,7 @@ from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
 from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
+from .from_lisboa import from_lisboa
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
 from .from_nsw_livetraffic import from_nsw_livetraffic
@@ -128,4 +129,5 @@ __all__ = [
     "from_berlin",
     "from_madrid",
     "from_drivebc",
+    "from_lisboa",
 ]

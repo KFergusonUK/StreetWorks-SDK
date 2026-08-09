@@ -9,7 +9,7 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Spain · UK   ~ Denmark · Greece · Ireland · Portugal · Sweden
+**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · UK   ~ Denmark · Greece · Ireland · Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
@@ -23,14 +23,14 @@ provider ([`streetworks.arcgis.jersey`](uk.md#jersey-roadworkx-and-tigerweb-arcg
 not one of the four UK nations. "In progress" also collapses two
 genuinely different states (credentials-wanted vs.
 documented-but-unavailable) for scannability — the matrix below
-distinguishes these. **Canada moved from in-progress to live** once
-DriveBC (British Columbia) shipped alongside the already-covered Quebec
-City WZDx feed — real coverage is still partial (one province plus one
-city, not national), same as every other ✓ entry that isn't literally
-comprehensive; see [`docs/providers/canada.md`](canada.md) for exactly
-what's covered and what isn't. This is the canonical coverage roster;
-`docs/index.md`'s copy quotes it rather than restating it
-independently.*
+distinguishes these. **Canada and Portugal both moved from in-progress
+to live** once DriveBC (British Columbia) and Lisboa (Condicionamentos
+de Trânsito) shipped — both real coverage is still partial (one
+province/city, not national), same as every other ✓ entry that isn't
+literally comprehensive; see [`docs/providers/canada.md`](canada.md) and
+[`docs/providers/portugal.md`](portugal.md) for exactly what's covered
+and what isn't. This is the canonical coverage roster; `docs/index.md`'s
+copy quotes it rather than restating it independently.*
 
 Everything in [`docs/providers/`](.) is organised by *technology* — you need to already
 know that Spain publishes DATEX II, or that Saxony is `streetworks.ogc`, to
@@ -120,6 +120,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.chicagodot` | [CDOT Street Closures](https://data.cityofchicago.org/Transportation/Transportation-Department-Permits-Street-Closures/jdis-5sry) — Chicago's own street-closure permit register (no credentials, confirmed live 2026-08-03), this SDK's second US city permit register after NYC. Native WGS84 GeoJSON Point geometry (no WKT/CRS question, unlike NYC) — `iter_roadworks()` filters on real `worktype` values since the dataset's own pre-filter alone still mixes in block parties, festivals and filming | read |
 | `streetworks.paris` | [Chantiers à Paris](https://opendata.paris.fr/explore/dataset/chantiers-a-paris/) — the City of Paris's own occupation-permit register for street/public-space worksites (no credentials, confirmed live 2026-08-06), this SDK's third municipal permit register and the first on OpenDataSoft (the French/EU Socrata-equivalent), built bespoke. Geometry already WGS84 despite the underlying Lambert 93 survey CRS — OpenDataSoft reprojects on the way out. Licence ODbL 1.0 (share-alike), confirmed | read |
 | `streetworks.drivebc` | [DriveBC](https://api.open511.gov.bc.ca/) — British Columbia's own Open511 road-events feed (no credentials, confirmed live 2026-08-08, 246 real events), this SDK's first Canadian roadworks provider. Built bespoke, not a general Open511 parser — only one real roadworks-events Open511 jurisdiction was found live. Two real, mutually-exclusive schedule shapes (`intervals`/`recurring_schedules`) both handled. Licence OGL-BC, confirmed live | read |
+| `streetworks.lisboa` | Câmara Municipal de Lisboa's Condicionamentos de Trânsito feed (no credentials, confirmed live 2026-08-09, 694 real features), this SDK's first Portugal provider at any level — sidesteps the still-credential-parked national IMT NAP entirely. Real endpoint found by reading the platform's own Angular app bundle, not documented anywhere public; the catalogue's stale 2023 metadata doesn't reflect the genuinely current live data (453/694 real features carry a 2026 case id). Evidence-based `motivo` filter (68% classify as roadworks). Licence CC BY 4.0, confirmed live | read |
 | `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
 | `streetworks.greece` | Greece — registered as a documented, honestly-unavailable scaffold, the same tier as Road Report NT. Its real NAP ([nap.gov.gr](https://data.nap.gov.gr/)) carries only POI/sensor data (truck parking, VMS/VDS, weather, floating car data) — no roadworks or DATEX II Situation dataset at all, confirmed via its own real dataset titles. The portal is also currently unreachable (a real live 502). `GreeceClient()` always raises `ProviderUnavailableError` rather than guessing | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |

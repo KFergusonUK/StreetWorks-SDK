@@ -53,6 +53,7 @@ Confirmed and named explicitly:
 | Chicago CDOT | **Unconfirmed** — "See Terms of Use" only | [`docs/providers/us.md`](../providers/us.md#chicago-cdot-street-closures) |
 | Paris Chantiers | ODbL 1.0 (Open Database License, share-alike) | [`docs/providers/europe.md`](../providers/europe.md#european--crown-dependency-roadworks--separate-strand) — see also the Chicago/Paris entries in the module table, [`docs/providers/index.md`](../providers/index.md) |
 | DriveBC (British Columbia) | Open Government Licence — British Columbia (OGL-BC), confirmed live from the API's own `/help` page — the jurisdiction resource's own `license_url` field is a dead link | [`docs/providers/canada.md`](../providers/canada.md) |
+| Lisboa (Condicionamentos de Trânsito) | CC BY 4.0, confirmed live at dados.gov.pt's catalogue page — the same page whose stale "última atualização" date doesn't reflect the genuinely current live data | [`docs/providers/portugal.md`](../providers/portugal.md) |
 | Main Roads WA | CC BY 4.0 | [`docs/providers/australia.md`](../providers/australia.md#main-roads-wa-arcgis-rest) |
 | ACT (Temporary Traffic Management) | CC BY-SA 4.0 — the only Share-Alike licence in the AU roadworks cluster | [`docs/providers/australia.md`](../providers/australia.md#act--tasmania--the-au-tail-plus-a-documented-northern-territory) |
 | Tasmania (Roadworks - State Roads) | **Unconfirmed** | [`docs/providers/australia.md`](../providers/australia.md#act--tasmania--the-au-tail-plus-a-documented-northern-territory) |

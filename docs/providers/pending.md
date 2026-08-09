@@ -17,8 +17,12 @@ its API shape has been confirmed one way or another (live-verified,
 Credentials-wanted, or Documented-unavailable; see
 [`docs/contributing/scaffolds.md`](../contributing/scaffolds.md)).
 
-- **Portugal** — no roadworks or gazetteer source investigated yet
-  beyond the future-gazetteer mention above.
+- **Portugal — partially built, no longer fully pending.** Lisboa
+  (Condicionamentos de Trânsito) is now a real, confirmed provider,
+  sidestepping the still-credential-parked national IMT National Access
+  Point entirely — see [`docs/providers/portugal.md`](portugal.md). Porto
+  and other municipalities, and the national NAP itself, remain
+  genuinely unchecked/unbuilt.
 - **Singapore** — no source investigated at all.
 - **Canada — partially built, no longer fully pending.** British
   Columbia (DriveBC, Open511) is now a real, confirmed provider, and

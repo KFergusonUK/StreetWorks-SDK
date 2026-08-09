@@ -475,6 +475,28 @@ def check_drivebc() -> str:
     )
 
 
+def check_lisboa() -> str:
+    """Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no
+    credentials - confirmed live (see streetworks.lisboa). Filters on
+    the evidence-based motivo classification and reports how many real
+    features carry a current-year (2026) pedido id, as a freshness
+    signal the catalogue's own stale metadata can't be trusted for."""
+    from streetworks.common import from_lisboa
+    from streetworks.lisboa import LisboaClient
+
+    with LisboaClient() as lisboa:
+        all_records = list(lisboa.iter_condicionamentos())
+        roadworks = list(lisboa.iter_roadworks())
+    works = from_lisboa(roadworks)
+    current_year = sum(
+        1 for r in all_records if str(r["properties"].get("pedido", "")).startswith("COND-2026")
+    )
+    return (
+        f"{len(works):,} roadworks features (of {len(all_records):,} total), "
+        f"{current_year} with a 2026 pedido id"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1519,6 +1541,8 @@ def main() -> int:
     reporter.check("Paris Chantiers", [], check_paris)
     # DriveBC (British Columbia, Open511) needs no credentials
     reporter.check("DriveBC (British Columbia, Open511)", [], check_drivebc)
+    # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
+    reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

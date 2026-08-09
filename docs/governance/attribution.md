@@ -19,7 +19,7 @@ explicit and easy to find, rather than left implicit.
 
 ## Contributors
 
-**Chris Carlon** contributed the original concept for, and performed 
+**Chris Carlon** contributed on the original idea for the SDK, and the concept for, and performed 
 testing of, the Section 58 support and Street Manager v6 model work,
 via a merged pull request. Recorded here because a contribution like
 that deserves a named credit somewhere in the repository, not because

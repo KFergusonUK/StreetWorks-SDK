@@ -2106,4 +2106,56 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="DriveBCClient",
         import_line="from streetworks.drivebc import DriveBCClient",
     ),
+    ProviderEntry(
+        key="lisboa",
+        name="Câmara Municipal de Lisboa (Condicionamentos de Trânsito)",
+        description="Lisbon's municipal traffic-conditioning feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Portugal"}),
+        administrative_area="Câmara Municipal de Lisboa",
+        scope_note=(
+            "Confirmed live (2026-08-09, 694 real features) - "
+            "credential-free, never a Credentials-wanted scaffold. This "
+            "SDK's first Portugal provider at any level - sidesteps the "
+            "national IMT NAP entirely (still credential-parked) via a "
+            "separate keyless municipal feed. The catalogue record "
+            "(dados.gov.pt) states 'última atualização: 22 de maio de "
+            "2023', which alone would suggest a dead dataset (the "
+            "Chicago/Madrid stale-portal lesson); checked live before "
+            "trusting that - the real platform's own backend, found by "
+            "reading its Angular app's bundled JS (the same technique "
+            "that found Road Report NT's real backend), returns genuinely "
+            "current data (453/694 real features carry a 2026 pedido "
+            "id). The endpoint itself "
+            "(lisboa.city-platform.com/percursos/ws/app/public/traffic/"
+            "closures/) is not documented anywhere public - found only "
+            "by reading the app's own client-side code. Roadworks filter "
+            "is evidence-based free-text (motivo, 27 real distinct "
+            "values, no clean boolean like Madrid's es_obras) - 473/694 "
+            "(68%) classified as roadworks; genuinely ambiguous values "
+            "(LIGAÇÃO DE RAMAL, AUTOGRUA) are excluded rather than "
+            "guessed either way. Comprehensive city-wide coverage - 27 "
+            "distinct freguesias (parishes) confirmed live, matching "
+            "Lisbon's real administrative divisions, not a subset. "
+            "Real MultiLineString geometry (not Point/LineString like "
+            "this SDK's other municipal sources) - only the first "
+            "sub-line is used, same simplification as Berlin's multi-"
+            "LineString GeometryCollection case. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "CC BY 4.0 - confirmed live at dados.gov.pt's catalogue page "
+            "for this exact dataset ('Licença: Creative Commons "
+            "Attribution 4.0 - CC BY 4.0', publisher Município de "
+            "Lisboa). The catalogue's stale 'última atualização' date is "
+            "a metadata-freshness issue, not a licence-currency one - "
+            "the licence statement isn't dated the same way and governs "
+            "the same official CML dataset the live platform serves"
+        ),
+        source_grade="operator",
+        _module="streetworks.lisboa",
+        _client_name="LisboaClient",
+        import_line="from streetworks.lisboa import LisboaClient",
+    ),
 ]
