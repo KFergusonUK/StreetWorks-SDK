@@ -94,7 +94,7 @@ def test_from_au_act_ttm_maps_the_real_watson_roadworks_feature():
     watson = next(w for w in works if w.reference == "28de4e5d-3e23-4e68-83d8-5bca5a510f2f")
     assert watson.territory == "Australia"
     assert watson.administrative_area == "Roads ACT"
-    assert watson.coordinate.value == (149.159294347216, -35.2303907095075)
+    assert watson.coordinate.value == (-35.2303907095075, 149.159294347216)
     assert watson.coordinate.crs == "EPSG:4326"
 
     site = watson.sites[0]

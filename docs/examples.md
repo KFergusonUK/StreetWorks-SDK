@@ -44,6 +44,20 @@ missing.
   files in this repo as raw source, not a rendered page (the same reason the terrain-drape
   example's own HTML output isn't linked below). Generate it locally instead.
 
+  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 2337 points across 26 providers, as of 10 Aug 2026.">
+
+  `--live` output from the same example — 2337 real roadworks, 10 Aug 2026. A partial run, not
+  full coverage: each provider is capped (`_LIMIT = 50` raw records; WZDx sweeps up to 25 of its
+  ~26 keyless US/regional feeds, each still capped) so the map stays a representative sample
+  rather than a full pull of registers running past a million rows. A few providers didn't appear
+  in this particular run for real, one-off reasons — a rate-limited shared API key (Queensland)
+  and an expired credential (Victoria) — not anything wrong with the SDK. Scotland (SRWR) is
+  absent from the live points on principle, not omission: its real Open Data extract carries no
+  coordinates at all, only a USRN per record, and resolving that to a real point would mean
+  joining against [OS Open USRN](providers/uk.md#os-open-usrn)'s own ~300MB national geometry
+  download — disproportionate just to plot a few dots, so it isn't done here. (Scotland still
+  shows on the coverage layer above, correctly, as keyless-covered.)
+
 ## Worker-safety context
 
 - **[`crime_context/`](../examples/crime_context/)** — a neighbourhood-level recorded-crime context map for one police force, built on `streetworks.police`. Background context for lone-worker/night-shift planning around street works — explicitly not a risk score or risk assessment. See its own [README](../examples/crime_context/README.md).

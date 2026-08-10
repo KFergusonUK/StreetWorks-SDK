@@ -71,14 +71,22 @@ def _coordinate(feature: JSON) -> Coordinate | None:
     introduced (:mod:`streetworks.common._web_mercator`) rather than the
     feed's own ``LATITUDE``/``LONGITUDE`` attributes, since whether those
     are genuinely WGS84 and agree with the reprojected ``SHAPE`` is
-    unconfirmed - see module docstring."""
+    unconfirmed - see module docstring.
+
+    ``value`` is ``(lat, lon)`` - this SDK's stated convention for every
+    EPSG:4326 ``Coordinate`` (see ``from_sct``/``from_wzdx``/
+    ``from_autobahn``'s own docstrings) - flipped from the raw GeoJSON
+    ``(lon, lat)`` order, the same fix :mod:`streetworks.common.from_au_wa_mainroads`
+    needed once a live pull showed real WA points plotting near Antarctica.
+    Untested against a real response either way (see module docstring),
+    but fixed alongside WA rather than left to repeat the same mistake."""
     geometry = feature.get("geometry") or {}
     coords = geometry.get("coordinates")
     kind = (geometry.get("type") or "").upper()
     if kind != "POINT" or not coords:
         return None
     x, y = reproject_if_projected(float(coords[0]), float(coords[1]))
-    return Coordinate(value=(x, y), crs=_CRS)
+    return Coordinate(value=(y, x), crs=_CRS)
 
 
 def _location_description(properties: JSON) -> str | None:

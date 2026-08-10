@@ -96,19 +96,20 @@ def test_coordinate_guard_reprojects_web_mercator_metres():
     coordinate = _coordinate(feature)
     assert coordinate is not None
     assert coordinate.crs == "EPSG:4326"
-    lon, lat = coordinate.value
+    lat, lon = coordinate.value
     assert 115 < lon < 117  # plausible WA longitude, not a raw Web Mercator metre value
     assert -33 < lat < -31
 
 
 def test_coordinate_guard_passes_through_genuine_wgs84():
     """A point already in plausible WGS84 degree range (outSR genuinely
-    honoured, the confirmed-live case) must not be altered."""
+    honoured, the confirmed-live case) must not be altered - only the
+    axis order is flipped, to this SDK's (lat, lon) convention."""
     feature = {"geometry": {"type": "Point", "coordinates": [115.8605, -31.9505]}}
     coordinate = _coordinate(feature)
     assert coordinate is not None
     assert coordinate.crs == "EPSG:4326"
-    assert coordinate.value == (115.8605, -31.9505)
+    assert coordinate.value == (-31.9505, 115.8605)
 
 
 def test_coordinate_guard_handles_missing_or_non_point_geometry():
@@ -225,7 +226,7 @@ def test_from_au_wa_mainroads_maps_the_real_boddington_feature():
     work = next(w for w in works if w.reference == "ad4ef33e-90a6-4c11-bd8d-003cf1aec4b8")
     assert work.territory == "Australia"
     assert work.administrative_area == "Main Roads Western Australia"
-    assert work.coordinate.value == (116.410315549036, -32.8307254877164)
+    assert work.coordinate.value == (-32.8307254877164, 116.410315549036)
     assert work.coordinate.crs == "EPSG:4326"
     assert work.coordinate.points is None
 

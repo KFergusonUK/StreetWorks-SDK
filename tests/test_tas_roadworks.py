@@ -87,7 +87,7 @@ def test_from_au_tas_roadworks_maps_a_real_line_feature():
     assert leven.coordinate.points is not None
     assert len(leven.coordinate.points) == 5
     assert leven.coordinate.value == leven.coordinate.points[0]
-    assert leven.coordinate.value == (146.15240038993386, -41.16203027859827)
+    assert leven.coordinate.value == (-41.16203027859827, 146.15240038993386)
 
     site = leven.sites[0]
     assert site.works_type == "Roadworks"

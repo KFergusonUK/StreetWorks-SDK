@@ -66,14 +66,22 @@ def _coordinate(feature: JSON) -> Coordinate | None:
     silently passed through. Either way, the result is honestly labelled
     ``EPSG:4326`` - this function never emits an unlabelled or mislabelled
     CRS. Shared with :mod:`streetworks.common.from_au_sa_trafficsa`, which
-    needs the identical formula for the same reason."""
+    needs the identical formula for the same reason.
+
+    ``value`` is ``(lat, lon)`` - this SDK's stated convention for every
+    EPSG:4326 ``Coordinate`` (see ``from_sct``/``from_wzdx``/
+    ``from_autobahn``'s own docstrings), not the raw GeoJSON ``(lon, lat)``
+    order the source states. Real-world discovery, not a design read-through:
+    a live pull placed every WA point near Antarctica on a plotted map before
+    this flip was added - GeoJSON's native order was passed straight through
+    unswapped."""
     geometry = feature.get("geometry") or {}
     coords = geometry.get("coordinates")
     kind = (geometry.get("type") or "").upper()
     if kind != "POINT" or not coords:
         return None
     x, y = reproject_if_projected(float(coords[0]), float(coords[1]))
-    return Coordinate(value=(x, y), crs=_CRS)
+    return Coordinate(value=(y, x), crs=_CRS)
 
 
 def _parse_date(value: str | None) -> datetime | None:

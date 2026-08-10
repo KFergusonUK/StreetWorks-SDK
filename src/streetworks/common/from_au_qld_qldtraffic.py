@@ -62,7 +62,13 @@ def _geometries(feature: JSON) -> tuple[list[Point], list[list[Point]]]:
     top-level shapes confirmed live - ``GeometryCollection`` (2.2% of a
     real pull), bare ``MultiPoint`` (29.5%), bare ``MultiLineString``
     (68.3%) - not just the spec's own (wrong) always-``GeometryCollection``
-    claim; see streetworks.au.qld's module docstring."""
+    claim; see streetworks.au.qld's module docstring.
+
+    Every point returned here is ``(lat, lon)`` - this SDK's stated
+    convention for every EPSG:4326 ``Coordinate`` (see ``from_sct``/
+    ``from_wzdx``/``from_autobahn``'s own docstrings), flipped from the raw
+    GeoJSON ``(lon, lat)`` order - the same fix ``from_au_wa_mainroads``
+    needed once a live pull showed real points plotting near Antarctica."""
     geometry = feature.get("geometry") or {}
     kind = geometry.get("type")
     properties = feature.get("properties") or {}
@@ -75,12 +81,12 @@ def _geometries(feature: JSON) -> tuple[list[Point], list[list[Point]]]:
         if properties.get("area_alert") and geoms:
             geoms = geoms[:-1]
         points = [
-            (float(g["coordinates"][0]), float(g["coordinates"][1]))
+            (float(g["coordinates"][1]), float(g["coordinates"][0]))
             for g in geoms
             if g.get("type") == "Point" and g.get("coordinates")
         ]
         lines = [
-            [(float(v[0]), float(v[1])) for v in g["coordinates"]]
+            [(float(v[1]), float(v[0])) for v in g["coordinates"]]
             for g in geoms
             if g.get("type") == "LineString" and g.get("coordinates")
         ]
@@ -88,11 +94,11 @@ def _geometries(feature: JSON) -> tuple[list[Point], list[list[Point]]]:
 
     if kind == "MultiPoint":
         coords = geometry.get("coordinates") or []
-        return [(float(c[0]), float(c[1])) for c in coords], []
+        return [(float(c[1]), float(c[0])) for c in coords], []
 
     if kind == "MultiLineString":
         coords = geometry.get("coordinates") or []
-        lines = [[(float(v[0]), float(v[1])) for v in line] for line in coords if line]
+        lines = [[(float(v[1]), float(v[0])) for v in line] for line in coords if line]
         return [], lines
 
     return [], []

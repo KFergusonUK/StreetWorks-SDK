@@ -28,13 +28,13 @@ Live (``--live``, networked)
     Also pulls *current* roadworks from keyless providers exposing a uniform
     ``iter_roadworks()``, and from credential-gated providers **if** their key is
     in the environment (National Highways is the worked example — set
-    ``NATIONAL_HIGHWAYS_KEY``). WGS84 only: other CRS are reported and skipped,
+    ``NH_SUBSCRIPTION_KEY``). WGS84 only: other CRS are reported and skipped,
     never silently reprojected (the SDK's ``Coordinate`` contract).
 
 Usage
 -----
     python roadworks_world_map.py                              # coverage map
-    NATIONAL_HIGHWAYS_KEY=... python roadworks_world_map.py --live
+    NH_SUBSCRIPTION_KEY=... python roadworks_world_map.py --live
     python roadworks_world_map.py --inline -o map.html         # self-contained
 
 Output: one self-contained HTML file (Plotly Scattergeo — offline coastlines,
@@ -88,11 +88,57 @@ WGS84 = {"EPSG:4326", "CRS:84", "urn:ogc:def:crs:EPSG::4326",
 
 # Worked example of pulling a credential-gated provider when its key is present.
 # Extend as you wire more logins; each entry returns constructor kwargs or None.
+# streetmanager/dtro/opendata aren't here deliberately - see _fetch_works's own
+# docstring for why their real interfaces don't fit "plot a point" at all.
 CRED_ENV = {
     "nationalhighways": lambda: (
-        {"subscription_key": os.environ["NATIONAL_HIGHWAYS_KEY"]}
-        if os.environ.get("NATIONAL_HIGHWAYS_KEY") else None),
+        {"subscription_key": os.environ["NH_SUBSCRIPTION_KEY"]}
+        if os.environ.get("NH_SUBSCRIPTION_KEY") else None),
+    "vegvesen": lambda: (
+        {"username": os.environ["VEGVESEN_USERNAME"], "password": os.environ["VEGVESEN_PASSWORD"]}
+        if os.environ.get("VEGVESEN_USERNAME") and os.environ.get("VEGVESEN_PASSWORD") else None),
+    "nsw": lambda: (
+        {"api_key": os.environ["NSW_LIVETRAFFIC_API_KEY"]}
+        if os.environ.get("NSW_LIVETRAFFIC_API_KEY") else None),
+    "vic": lambda: (
+        {"api_key": os.environ["VIC_DISRUPTIONS_API_KEY"]}
+        if os.environ.get("VIC_DISRUPTIONS_API_KEY") else None),
 }
+
+#: Cap on raw records pulled per provider before conversion - a coverage map
+#: needs a representative sample, not the full register. Real registers here
+#: range up to 1.8M+ rows (NYC DOT) even after each client's own server-side
+#: roadworks filter - always capped, matching scripts/smoke_test.py's own
+#: precedent for the same three large US/UK registers.
+_LIMIT = 50
+
+#: wzdx is registry-driven across dozens of independent state/city feeds
+#: (36 real rows at last count, 26 keyless) - almost all of the keyless
+#: ones are pulled for a real US-wide spread on the map, each still capped
+#: at _LIMIT records, so one bad/slow feed can't repeat today's original
+#: NYC DOT stall across a whole sweep of feeds.
+_WZDX_FEED_LIMIT = 25
+
+#: DATEX II providers share one converter (from_datex2), called once per
+#: Situation with kwargs that vary by source - collected here from the real,
+#: tested invocations in tests/test_*.py (test_belgium.py, test_bulgaria.py,
+#: test_common_datex2.py, ...), not re-derived from scratch.
+_DATEX_TERRITORY: dict[str, dict[str, str]] = {
+    "ndw": {"territory": "Netherlands"},
+    "nationalhighways": {"territory": "England", "administrative_area": "National Highways"},
+    "digitraffic": {"territory": "Finland"},
+    "irca": {"territory": "Iceland"},
+    "bisonfute": {"territory": "France"},
+    "dgt": {"territory": "Spain"},
+    "euskadi": {"territory": "Spain", "administrative_area": "Euskadi"},
+    "belgium": {"territory": "Belgium", "crs": "EPSG:31370"},  # Lambert 72, confirmed live
+    "luxembourg": {"territory": "Luxembourg"},
+    "bulgaria": {"territory": "Bulgaria"},
+}
+
+#: streetworks.ogc.germany.GermanRoadworksClient is shared by all three states
+#: - .fetch(state) takes the real FIELD_MAPS key (German name for Saxony).
+_GERMAN_STATES = {"hamburg": "Hamburg", "brandenburg": "Brandenburg", "saxony": "Sachsen"}
 
 TIERS = {
     "keyless": dict(name="Live-capable (keyless)", color="#1b9e77", symbol="circle"),
@@ -117,13 +163,174 @@ def _coord_lonlat(obj):
         return None
     if c.crs not in WGS84:
         return "skip"                     # needs explicit reprojection
-    return float(c.value[0]), float(c.value[1])
+    # Every EPSG:4326 Coordinate.value in this SDK is (lat, lon) - this SDK's
+    # own stated convention, confirmed in three independent converters' own
+    # docstrings (from_sct/from_wzdx/from_autobahn) and now enforced at the
+    # source in every converter that used to store raw, unswapped GeoJSON
+    # (lon, lat) instead (the ArcGIS-based Australian cluster plus NZTA -
+    # confirmed live via a real Berlin point, (52.45, 13.32), and the
+    # "Australia plotting in Antarctica" bug this fixed). Jersey/NYC DOT/Via
+    # Lietuva's genuinely projected, non-4326 coordinates never reach this
+    # line at all - the crs guard above already routes them to "skip".
+    return float(c.value[1]), float(c.value[0])
+
+
+def _fetch_works(key, client):
+    """Fetch and convert one provider's current roadworks into real
+    ``Works`` objects - the only shape ``_coord_lonlat`` can read a
+    coordinate from.
+
+    **A real fix, not the original design**: every provider's own
+    ``iter_roadworks()``/``get_roadworks()`` returns its own raw/native
+    type (a plain dict, or a provider-specific dataclass like SCT's
+    ``Incident`` or DATEX's ``Situation``) - confirmed empirically against
+    four different providers (Madrid, Paris, SCT, CCISS all checked live),
+    none of which carry a ``.coordinate`` attribute directly. Getting from
+    that native type to something ``_coord_lonlat`` can read is a separate
+    ``from_<provider>()`` conversion step this function now does
+    explicitly, which the script's original ``it()``-then-``_coord_lonlat``
+    loop never did - so ``--live`` mode had never actually plotted a real
+    point for any provider before this.
+
+    Every raw pull is capped at :data:`_LIMIT` records (a coverage map
+    needs a representative sample, not the full register - real registers
+    here run past a million rows even after each client's own server-side
+    roadworks filter).
+
+    ``wzdx`` is registry-driven across dozens of independent feeds, so it's
+    handled separately from every single-client provider below: a handful
+    of real, confirmed keyless feeds are pulled (capped both in feed count
+    and per-feed records), not the whole registry.
+
+    Returns ``None`` for providers with no converter wired below - not an
+    error, just not yet covered. Not attempted at all: ``streetmanager``
+    (a namespaced reporting API, not "plot a point" shaped), ``dtro`` (a
+    legal-orders register, not a works-progress feed), ``opendata`` (a
+    push-only SNS receiver, nothing to poll), ``srwr`` (needs a downloaded-
+    and-extracted archive first, a genuinely different resource lifecycle
+    from every HTTP-GET-shaped client here).
+    """
+    import itertools
+
+    from streetworks.common import (
+        from_au_act_ttm,
+        from_au_qld_qldtraffic,
+        from_au_tas_roadworks,
+        from_au_wa_mainroads,
+        from_autobahn,
+        from_berlin,
+        from_cciss,
+        from_chicagodot,
+        from_datex2,
+        from_drivebc,
+        from_jersey,
+        from_lisboa,
+        from_madrid,
+        from_mallorca,
+        from_nsw_livetraffic,
+        from_nycdot,
+        from_nzta,
+        from_ogc_features,
+        from_paris,
+        from_roma,
+        from_sct,
+        from_trafficwales,
+        from_trafficwatchni,
+        from_vegvesen,
+        from_vialietuva,
+        from_vic_disruptions,
+        from_wzdx,
+    )
+
+    if key in _DATEX_TERRITORY:
+        situations = itertools.islice(client.iter_roadworks(), _LIMIT)
+        return [from_datex2(s, **_DATEX_TERRITORY[key]) for s in situations]
+    if key == "vegvesen":
+        situations = itertools.islice(client.iter_roadworks(), _LIMIT)
+        return [from_vegvesen(s) for s in situations]
+    if key == "mallorca":
+        return from_mallorca(client.fetch_roadworks_icons(), client.fetch_trams())
+    if key in _GERMAN_STATES:
+        from streetworks.ogc.germany import FIELD_MAPS
+
+        state = _GERMAN_STATES[key]
+        return from_ogc_features(client.fetch(state), FIELD_MAPS[state])
+    if key == "vic":
+        return from_vic_disruptions(client.iter_planned_disruptions())
+    if key == "wzdx":
+        from streetworks.wzdx.registry import list_feeds
+
+        works: list = []
+        feeds = [f for f in list_feeds() if not f.needapikey]
+        for feed_entry in itertools.islice(feeds, _WZDX_FEED_LIMIT):
+            try:
+                feed = client.fetch(feed_entry.url)
+            except Exception:
+                continue                  # one bad feed shouldn't drop the rest
+            road_events = list(itertools.islice(feed.road_events, _LIMIT))
+            works.extend(
+                from_wzdx(
+                    road_events,
+                    territory=feed_entry.state or "USA",
+                    administrative_area=feed_entry.organization,
+                )
+            )
+        return works
+    if key == "cciss":
+        return [from_cciss(i) for i in client.fetch() if i.is_roadworks]
+    if key == "trafficwatchni":
+        from streetworks.trafficwatchni import Feed
+
+        return [from_trafficwatchni(i) for i in client.fetch(Feed.ROADWORKS)]
+    if key == "trafficwales":
+        from streetworks.trafficwales import Feed
+
+        return [from_trafficwales(i) for i in client.fetch(Feed.ROADWORKS)]
+    if key == "vialietuva":
+        # Not iter_roadworks() - Via Lietuva's real method is road_repairs(),
+        # already the one real table this SDK models (see module docstring
+        # for why Kliutis/Renginys aren't). Returns a plain list (~9,700
+        # real rows), not an iterator - capped the same way, just sliced.
+        return from_vialietuva(client.road_repairs()[:_LIMIT])
+    if key == "autobahn":
+        # roadworks(road) needs an explicit road - one representative road
+        # (A1), not all ~113, matching scripts/smoke_test.py's own restraint
+        # here (a full sweep is a one-off verification step, not a repeat).
+        return from_autobahn(client.roadworks("A1"))
+
+    if key == "nycdot":
+        # Real finding: only ~87% of NYC DOT's own roadworks rows carry a
+        # parseable wkt geometry at all (confirmed live against a 2000-row
+        # sample) - and that's not evenly distributed, so the plain first
+        # _LIMIT rows can come back with zero plottable points (a real,
+        # observed run: 50/50 with no wkt). Pulling a larger raw sample and
+        # keeping only the works that actually converted to a coordinate
+        # (still capped at _LIMIT) gives the map a reliable NYC showing
+        # without changing the SDK's own iter_roadworks() default at all.
+        records = list(itertools.islice(client.iter_roadworks(), _LIMIT * 10))
+        works = from_nycdot(records)
+        return [w for w in works if w.coordinate is not None][:_LIMIT]
+
+    simple = {
+        "madrid": from_madrid, "drivebc": from_drivebc, "lisboa": from_lisboa,
+        "roma": from_roma, "berlin": from_berlin, "sct": from_sct,
+        "jersey": from_jersey, "nzta": from_nzta,
+        "wa": from_au_wa_mainroads,
+        "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,
+        "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
+        "paris": from_paris, "chicagodot": from_chicagodot,
+    }
+    if key in simple:
+        records = list(itertools.islice(client.iter_roadworks(), _LIMIT))
+        return simple[key](records)
+
+    return None
 
 
 def live_points():
     """Current roadworks from keyless uniform providers, plus credential-gated
     ones whose key is in the environment. WGS84 only; others reported + skipped."""
-    pts, skipped = [], 0
+    pts, skipped, unconverted = [], 0, 0
     for e in sw.providers():
         if e.kind.value != "roadworks" or e.verified is False:
             continue
@@ -137,20 +344,23 @@ def live_points():
             client = sw.get_provider(e.key)(**kwargs)
         except Exception:
             continue
-        it = getattr(client, "iter_roadworks", None) or getattr(client, "get_roadworks", None)
-        if it is None:
-            continue                      # non-uniform provider (its own converter)
         try:
-            for w in it():
-                ll = _coord_lonlat(w)
-                if ll == "skip":
-                    skipped += 1
-                elif ll:
-                    pts.append((ll[0], ll[1], e.key))
+            works = _fetch_works(e.key, client)
         except Exception:
             continue                      # network/creds/shape -> degrade gracefully
+        if works is None:
+            unconverted += 1
+            continue                      # no converter wired for this provider yet
+        for w in works:
+            ll = _coord_lonlat(w)
+            if ll == "skip":
+                skipped += 1
+            elif ll:
+                pts.append((ll[0], ll[1], e.key))
     if skipped:
         print(f"  (skipped {skipped} non-WGS84 points — reproject explicitly to include)")
+    if unconverted:
+        print(f"  ({unconverted} provider(s) attempted but not yet wired to a converter here)")
     return pts
 
 

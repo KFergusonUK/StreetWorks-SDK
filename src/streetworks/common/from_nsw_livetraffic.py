@@ -28,9 +28,20 @@ different references depending on which ``status`` fetched it - see
 
 See :mod:`streetworks.au.nsw`'s own module docstring for the full set of
 real findings this mapping is built from (the sentinel-value convention,
-the ``"null"``-string footgun, the missing gazetteer join key, why dates
-land on ``proposed_*``/``ESTIMATED`` rather than ``actual_*``, and the
-``[lon, lat]`` axis order) - not re-derived here.
+the ``"null"``-string footgun, the missing gazetteer join key, and why
+dates land on ``proposed_*``/``ESTIMATED`` rather than ``actual_*``) - not
+re-derived here.
+
+**``Coordinate.value`` is ``(lat, lon)``** - this SDK's stated convention
+for every EPSG:4326 ``Coordinate`` (see ``from_sct``/``from_wzdx``/
+``from_autobahn``'s own docstrings), flipped from the raw GeoJSON
+``(lon, lat)`` order the source states - the same fix
+``from_au_wa_mainroads`` needed once a live pull showed real points
+plotting near Antarctica. This used to leave ``value`` and ``points`` on
+the same ``Coordinate`` in two genuinely different axis orders (``points``,
+decoded from Google's Encoded Polyline format, was already ``(lat, lon)``
+per that algorithm's own convention) - fixing ``value`` removes that
+internal mismatch too, not just the external one.
 """
 
 from __future__ import annotations
@@ -58,10 +69,8 @@ def _decode_polyline(encoded: str, *, precision: int = 5) -> tuple[tuple[float, 
     algorithm, not reverse-engineered from a real TfNSW sample (the one
     real fixture record has no ``encodedPolylines`` - see
     :mod:`streetworks.au.nsw`'s module docstring). Returns ``(lat, lon)``
-    pairs, per the algorithm's own convention (distinct from this
-    module's GeoJSON ``(lon, lat)`` geometry axis order - flagged, not
-    silently reconciled, since callers reading ``Coordinate.points`` need
-    to know which convention they're getting)."""
+    pairs, per the algorithm's own convention - matching this SDK's own
+    ``Coordinate`` convention, see module docstring."""
     factor = 10**precision
     coordinates: list[tuple[float, float]] = []
     index = lat = lon = 0
@@ -91,13 +100,11 @@ def _coordinate(feature: JSON) -> Coordinate | None:
     kind = (geometry.get("type") or "").upper()
     if kind != "POINT" or not coords:
         return None
-    value = (float(coords[0]), float(coords[1]))
+    value = (float(coords[1]), float(coords[0]))
     points: tuple[tuple[float, float], ...] | None = None
     encoded_polylines = (feature.get("properties") or {}).get("encodedPolylines") or []
     if encoded_polylines:
-        # Decoded as (lat, lon) per the polyline algorithm's own convention -
-        # distinct from this Coordinate's (lon, lat) value/geometry axis
-        # order, see streetworks.au.nsw._decode_polyline's own docstring.
+        # Both value and points are (lat, lon) here - see module docstring.
         first = encoded_polylines[0]
         polyline_text = first.get("points") if isinstance(first, dict) else first
         if isinstance(polyline_text, str):

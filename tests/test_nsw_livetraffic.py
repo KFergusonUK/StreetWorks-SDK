@@ -99,7 +99,7 @@ def test_from_nsw_livetraffic_maps_the_real_nelligen_bridge_feature():
     assert item.reference == "RoadWork:82681"
     assert item.territory == "Australia"
     assert item.administrative_area == "Transport for NSW"
-    assert item.coordinate.value == (150.1431796, -35.6474524)
+    assert item.coordinate.value == (-35.6474524, 150.1431796)
     assert item.coordinate.crs == "EPSG:4326"
     assert item.coordinate.points is None  # real encodedPolylines was empty
 

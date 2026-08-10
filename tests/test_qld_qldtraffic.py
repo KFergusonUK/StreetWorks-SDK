@@ -92,7 +92,7 @@ def test_geometries_handles_bare_multilinestring():
     points, lines = _geometries(_feature(548467))
     assert points == []
     assert len(lines) == 1
-    assert lines[0][0] == (152.4066739, -28.0589968)
+    assert lines[0][0] == (-28.0589968, 152.4066739)
     assert len(lines[0]) == 100
 
 
@@ -102,8 +102,8 @@ def test_geometries_handles_bare_multilinestring_with_several_segments():
     points, lines = _geometries(_feature(754821))
     assert points == []
     assert len(lines) == 6
-    assert lines[0][0] == (150.4777976, -23.364429)
-    assert lines[3][0] == (150.4766852, -23.3631926)
+    assert lines[0][0] == (-23.364429, 150.4777976)
+    assert lines[3][0] == (-23.3631926, 150.4766852)
 
 
 def test_geometries_handles_bare_multipoint():
@@ -117,9 +117,9 @@ def test_geometries_handles_genuine_geometrycollection():
     alongside a LineString in one collection."""
     points, lines = _geometries(_feature(796576))
     assert len(points) == 3
-    assert points[0] == (153.109563, -28.1018383)
+    assert points[0] == (-28.1018383, 153.109563)
     assert len(lines) == 1
-    assert lines[0][0] == (153.1054761, -28.1052752)
+    assert lines[0][0] == (-28.1052752, 153.1054761)
 
 
 # --------------------------------------------------------------------------- #
@@ -135,7 +135,7 @@ def test_area_alert_polygon_is_excluded_from_real_geometry():
     feature = _feature(818007)
     assert feature["properties"]["area_alert"] is True
     points, lines = _geometries(feature)
-    assert points == [(153.1141787, -26.6751286)]
+    assert points == [(-26.6751286, 153.1141787)]
     assert lines == []
 
 
@@ -156,7 +156,7 @@ def test_area_alert_exclusion_matters_even_when_the_last_entry_would_otherwise_p
     }
     points, lines = _geometries(feature)
     assert points == []  # the bogus alert point must not leak through
-    assert lines == [[(153.0, -27.0), (153.1, -27.1)]]
+    assert lines == [[(-27.0, 153.0), (-27.1, 153.1)]]
 
 
 # --------------------------------------------------------------------------- #
@@ -170,7 +170,7 @@ def test_coordinate_uses_the_line_when_no_point_exists():
     coordinate = _coordinate(_feature(548467))
     assert coordinate is not None
     assert coordinate.crs == "EPSG:7844"
-    assert coordinate.value == (152.4066739, -28.0589968)
+    assert coordinate.value == (-28.0589968, 152.4066739)
     assert coordinate.points is not None
     assert coordinate.points[0] == coordinate.value
     assert coordinate.parts is None
@@ -186,7 +186,7 @@ def test_coordinate_uses_parts_for_several_real_non_contiguous_segments():
 
 def test_coordinate_prefers_the_point_when_one_exists():
     coordinate = _coordinate(_feature(725992))
-    assert coordinate.value == (153.0183826, -27.2739148)
+    assert coordinate.value == (-27.2739148, 153.0183826)
     assert coordinate.points is None
     assert coordinate.parts is None
 
@@ -197,7 +197,7 @@ def test_coordinate_uses_the_first_point_when_several_and_a_line_coexist():
     for why guessing which point/line relationship applies from one
     2-record sample would be worse than leaving it on .raw."""
     coordinate = _coordinate(_feature(796576))
-    assert coordinate.value == (153.109563, -28.1018383)
+    assert coordinate.value == (-28.1018383, 153.109563)
     assert coordinate.points is None
     assert coordinate.parts is None
 

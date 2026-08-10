@@ -20,9 +20,16 @@ the same do-not-deduplicate signal already applied to DGT/Consell de
 Mallorca's real republication case.
 
 See :mod:`streetworks.au.vic`'s own module docstring for the full set of
-open questions this mapping is built under (unconfirmed coordinate order,
-unconfirmed timestamp format, ``string``-typed "numeric" impact fields) -
-not re-derived here.
+open questions this mapping is built under (unconfirmed timestamp format,
+``string``-typed "numeric" impact fields) - not re-derived here.
+
+**``Coordinate.value``/``points`` are ``(lat, lon)``** - this SDK's stated
+convention for every EPSG:4326 ``Coordinate`` (see ``from_sct``/
+``from_wzdx``/``from_autobahn``'s own docstrings), flipped from the
+confirmed-live raw GeoJSON ``[lon, lat]`` order (see
+:mod:`streetworks.au.vic`'s own module docstring) - the same fix
+``from_au_wa_mainroads`` needed once a live pull showed real points
+plotting near Antarctica.
 """
 
 from __future__ import annotations
@@ -77,11 +84,11 @@ def _coordinate(feature: JSON) -> Coordinate | None:
     if not coords:
         return None
     if point is not None:
-        value = (float(coords[0]), float(coords[1]))
+        value = (float(coords[1]), float(coords[0]))
         return Coordinate(value=value, crs=_CRS)
     # No Point at all (unconfirmed to happen live) - fall back to the
     # line's first vertex rather than return nothing.
-    points = tuple((float(vertex[0]), float(vertex[1])) for vertex in coords)
+    points = tuple((float(vertex[1]), float(vertex[0])) for vertex in coords)
     return Coordinate(value=points[0], crs=_CRS, points=points)
 
 

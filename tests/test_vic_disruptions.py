@@ -43,7 +43,7 @@ def test_from_vic_disruptions_prefers_point_over_linestring():
 
     item = works[0]
     assert item.reference == "Planned:OneView:IMP-0119747"
-    assert item.coordinate.value == (145.653193, -36.700197)
+    assert item.coordinate.value == (-36.700197, 145.653193)
     assert item.coordinate.crs == "EPSG:4326"
     assert item.coordinate.points is None  # LineString deliberately not used
 

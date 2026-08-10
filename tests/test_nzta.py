@@ -97,7 +97,7 @@ def test_from_nzta_maps_the_real_scheduled_gillies_avenue_feature():
     gillies = next(w for w in works if w.reference == "556827")
     assert gillies.territory == "New Zealand"
     assert gillies.administrative_area == "Waka Kotahi NZ Transport Agency"
-    assert gillies.coordinate.value == (174.773985779427, -36.8728584510707)
+    assert gillies.coordinate.value == (-36.8728584510707, 174.773985779427)
     assert gillies.coordinate.crs == "EPSG:4326"
 
     site = gillies.sites[0]

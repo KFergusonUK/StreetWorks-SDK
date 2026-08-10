@@ -81,13 +81,19 @@ def _date_confidence(status: str | None) -> DateConfidence:
 def _coordinate(feature: JSON) -> Coordinate | None:
     """Point only (confirmed ``esriGeometryPoint`` live). ``outSR=4326``
     is confirmed honoured live, so no reprojection guard is built here -
-    see :mod:`streetworks.nzta.client`'s module docstring."""
+    see :mod:`streetworks.nzta.client`'s module docstring.
+
+    ``value`` is ``(lat, lon)`` - this SDK's stated convention for every
+    EPSG:4326 ``Coordinate`` (see ``from_sct``/``from_wzdx``/
+    ``from_autobahn``'s own docstrings), flipped from the raw GeoJSON
+    ``(lon, lat)`` order - the same fix ``from_au_wa_mainroads`` needed
+    once a live pull showed real points plotting near Antarctica."""
     geometry = feature.get("geometry") or {}
     coords = geometry.get("coordinates")
     kind = (geometry.get("type") or "").upper()
     if kind != "POINT" or not coords:
         return None
-    return Coordinate(value=(float(coords[0]), float(coords[1])), crs=_CRS)
+    return Coordinate(value=(float(coords[1]), float(coords[0])), crs=_CRS)
 
 
 def _traffic_management(properties: JSON) -> str | None:

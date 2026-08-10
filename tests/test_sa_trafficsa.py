@@ -129,7 +129,7 @@ def test_from_au_sa_trafficsa_maps_a_synthetic_roadworks_feature():
     assert item.reference == "SA-RWI-000501"
     assert item.territory == "Australia"
     assert item.administrative_area == "Department for Infrastructure and Transport"
-    assert item.coordinate.value == (138.6007, -34.9285)
+    assert item.coordinate.value == (-34.9285, 138.6007)
     assert item.coordinate.crs == "EPSG:4326"
 
     site = item.sites[0]
@@ -175,7 +175,7 @@ def test_coordinate_guard_reprojects_web_mercator_metres():
         "properties": {"ROADWORKS_AND_INCIDENTS_ID": "SA-RWI-999"},
     }
     works = from_au_sa_trafficsa([feature])
-    lon, lat = works[0].coordinate.value
+    lat, lon = works[0].coordinate.value
     assert 135 < lon < 145  # plausible South Australia longitude
     assert -37 < lat < -30
     assert works[0].coordinate.crs == "EPSG:4326"

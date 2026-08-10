@@ -64,13 +64,19 @@ def _coordinate(feature: JSON) -> Coordinate | None:
     live these are genuine short worksite segments, not a Victoria/QLD-style
     corridor extent, see module docstring. No reprojection fallback (see
     module docstring for why WA/SA's Web Mercator guard doesn't apply
-    here) - the confirmed-live ``outSR=4326`` request is trusted as-is."""
+    here) - the confirmed-live ``outSR=4326`` request is trusted as-is.
+
+    ``value``/``points`` are ``(lat, lon)`` - this SDK's stated convention
+    for every EPSG:4326 ``Coordinate`` (see ``from_sct``/``from_wzdx``/
+    ``from_autobahn``'s own docstrings), flipped from the raw GeoJSON
+    ``(lon, lat)`` order - the same fix ``from_au_wa_mainroads`` needed
+    once a live pull showed real points plotting near Antarctica."""
     geometry = feature.get("geometry") or {}
     coords = geometry.get("coordinates")
     kind = (geometry.get("type") or "").upper()
     if kind != "LINESTRING" or not coords:
         return None
-    points = tuple((float(x), float(y)) for x, y in coords)
+    points = tuple((float(y), float(x)) for x, y in coords)
     return Coordinate(value=points[0], crs=_CRS, points=points)
 
 
