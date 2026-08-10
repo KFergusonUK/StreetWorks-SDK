@@ -518,6 +518,26 @@ def check_roma() -> str:
     )
 
 
+def check_copenhagen() -> str:
+    """Copenhagen (Gravetilladelser) needs no credentials - confirmed
+    live (see streetworks.copenhagen). Reports the raw row count
+    alongside the deduped real-permit count, as a visibility check that
+    the sagsnr dedupe/geometry-priority logic is still collapsing
+    multi-row permits correctly against live data, not just the frozen
+    fixture."""
+    from streetworks.common import from_copenhagen
+    from streetworks.copenhagen import CopenhagenClient
+
+    with CopenhagenClient() as copenhagen:
+        raw = list(copenhagen.iter_roadworks())
+    works = from_copenhagen(raw)
+    with_coord = sum(1 for w in works if w.coordinate is not None)
+    return (
+        f"{len(raw):,} raw rows -> {len(works):,} deduped real permits, "
+        f"{with_coord}/{len(works)} with coordinates"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1570,6 +1590,8 @@ def main() -> int:
     reporter.check("CCISS (Italy)", [], check_cciss)
     # Roma Capitale (Roma si trasforma) needs no credentials
     reporter.check("Roma (Roma si trasforma)", [], check_roma)
+    # Copenhagen (Gravetilladelser) needs no credentials
+    reporter.check("Copenhagen (Gravetilladelser)", [], check_copenhagen)
     # UK Police (data.police.uk) needs no credentials
     reporter.check("UK Police (crime safety signal)", [], check_police)
 

@@ -19,6 +19,7 @@ from .from_bdtopo import from_bdtopo
 from .from_berlin import from_berlin
 from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
+from .from_copenhagen import from_copenhagen
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_drivebc import from_drivebc
@@ -132,4 +133,5 @@ __all__ = [
     "from_drivebc",
     "from_lisboa",
     "from_roma",
+    "from_copenhagen",
 ]

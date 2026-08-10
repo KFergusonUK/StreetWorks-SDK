@@ -1,0 +1,231 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-2679",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.57793567,
+          55.63970883
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 80,
+        "lokation": "Martha Christensens Vej 5",
+        "projekt_start": "30-11-25",
+        "projekt_slut": "31-07-27",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "07:00",
+        "tidspunkt_til": "18:00",
+        "kategori": "Brolægningsarbejder",
+        "sagsnr": 792947,
+        "gravetype": "Cykelsti",
+        "bygherre": "BellaKvarter P/S",
+        "entreprenoer": "Brdr. Christensen"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-23d8",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              12.5809624,
+              55.6389188
+            ],
+            [
+              12.58104086,
+              55.63894488
+            ],
+            [
+              12.58092821,
+              55.63898197
+            ],
+            [
+              12.58054733,
+              55.63908188
+            ],
+            [
+              12.57993713,
+              55.63916741
+            ],
+            [
+              12.57864967,
+              55.63933696
+            ],
+            [
+              12.57863358,
+              55.63928549
+            ],
+            [
+              12.57927462,
+              55.63920299
+            ],
+            [
+              12.58035153,
+              55.63906262
+            ],
+            [
+              12.5804387,
+              55.63904862
+            ],
+            [
+              12.58060165,
+              55.63901985
+            ],
+            [
+              12.58077197,
+              55.63897633
+            ],
+            [
+              12.5809624,
+              55.6389188
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 92003,
+        "lokation": "Martha Christensens Vej 5",
+        "projekt_start": "30-11-25",
+        "projekt_slut": "31-07-27",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "07:00",
+        "tidspunkt_til": "18:00",
+        "kategori": "Brolægningsarbejder",
+        "sagsnr": 792947,
+        "gravetype": "Cykelsti",
+        "bygherre": "BellaKvarter P/S",
+        "entreprenoer": "Brdr. Christensen"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-2672",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            12.57536938,
+            55.68894485
+          ],
+          [
+            12.57516432,
+            55.68903953
+          ]
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 49755,
+        "lokation": "Sølvgade 81 - 83",
+        "projekt_start": "01-01-25",
+        "projekt_slut": "31-10-26",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "07:00",
+        "tidspunkt_til": "17:00",
+        "kategori": "Vand",
+        "sagsnr": 672255,
+        "gravetype": "Grønt areal",
+        "bygherre": "KU-CAS - Københavns Universitet Campus Service",
+        "entreprenoer": "Niras A/S"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-25b7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6104,
+          55.65444431
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 75428,
+        "lokation": "Amagerbrogade 160",
+        "projekt_start": "09-12-25",
+        "projekt_slut": "30-09-26",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "07:00",
+        "tidspunkt_til": "23:30",
+        "kategori": "Asfaltarbejder",
+        "sagsnr": 745466,
+        "gravetype": "Fortov",
+        "bygherre": "Cosmo 19 ApS",
+        "entreprenoer": "ALEKTO A/S"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-2676",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.538524,
+          55.71644232
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 40390,
+        "lokation": "Tuborgvej 237",
+        "projekt_start": "21-04-25",
+        "projekt_slut": "31-10-26",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "00:00",
+        "tidspunkt_til": "23:30",
+        "kategori": "Midlertidig Overkørsel",
+        "sagsnr": 645629,
+        "gravetype": "Cykelsti, Fortov",
+        "bygherre": "Nyt Hospital Bispebjerg",
+        "entreprenoer": "Center for ejendomme"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gravetilladelser_aktiv_aabne.fid-5ddd2a0_19fed0ffe78_-2675",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            12.53686488,
+            55.71522842
+          ],
+          [
+            12.53694534,
+            55.71529792
+          ]
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 40391,
+        "lokation": "Tuborgvej 237",
+        "projekt_start": "21-04-25",
+        "projekt_slut": "31-10-26",
+        "sagstype": "Gravetilladelser",
+        "tidspunkt_fra": "00:00",
+        "tidspunkt_til": "23:30",
+        "kategori": "Midlertidig Overkørsel",
+        "sagsnr": 645629,
+        "gravetype": "Cykelsti, Fortov",
+        "bygherre": "Nyt Hospital Bispebjerg",
+        "entreprenoer": "Center for ejendomme"
+      }
+    }
+  ]
+}

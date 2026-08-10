@@ -221,6 +221,7 @@ def _fetch_works(key, client):
         from_berlin,
         from_cciss,
         from_chicagodot,
+        from_copenhagen,
         from_datex2,
         from_drivebc,
         from_jersey,
@@ -319,6 +320,7 @@ def _fetch_works(key, client):
         "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
+        "copenhagen": from_copenhagen,
     }
     if key in simple:
         records = list(itertools.islice(client.iter_roadworks(), _LIMIT))

@@ -9,7 +9,7 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Belgium · Bulgaria · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · UK   ~ Denmark · Greece · Ireland · Sweden
+**Europe**  ✓ Belgium · Bulgaria · Denmark · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · UK   ~ Greece · Ireland · Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
@@ -132,6 +132,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
 | `streetworks.cciss` | [CCISS](https://www.cciss.it/) — Italy's real-time traffic bulletin RSS (no credentials, confirmed live 2026-08-03), reached via the keyless RSS route rather than the registration-gated DATEX II one. Confirmed as Italy's own official RTTI/SRTI National Access Point per the European Commission's own October 2025 NAP list | read |
 | `streetworks.roma` | Roma Capitale's "Roma si trasforma" civic-interventions tracker (no credentials, confirmed live 2026-08-09, 1215 real records), filtered to real in-progress street/infrastructure work — a thin 5.7% slice of a general capital-projects feed, not a dedicated roadworks register. The investigation brief's proposed ArcGIS source doesn't exist; the real portal was found by reading its own JS bundle. Corrects a real coordinate-field bug in the source (`lon`/`lat` swapped). No dates in the schema — `date_confidence` always unknown. Licence unconfirmed | read |
+| `streetworks.copenhagen` | Københavns Kommune's "Gravetilladelser" excavation-permit register (no credentials, confirmed live 2026-08-10, 2240 real feature rows), this SDK's first Nordic coverage. The investigation brief's guessed dataset name and ArcGIS/OGC Features backend don't match reality — the real source is a WFS 1.0.0 GetFeature endpoint. Real geometry mixes Point/LineString/Polygon, with the same permit recorded once per shape; deduped by case number (`sagsnr`), preferring LineString over Point, Polygon never used. Licence: CC-BY-4.0, confirmed live | read |
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
 | `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 

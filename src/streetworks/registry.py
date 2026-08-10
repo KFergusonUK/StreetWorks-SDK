@@ -2213,4 +2213,47 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="RomaClient",
         import_line="from streetworks.roma import RomaClient",
     ),
+    ProviderEntry(
+        key="copenhagen",
+        name="Copenhagen (Gravetilladelser)",
+        description=(
+            "Københavns Kommune's excavation-permit register, this SDK's first Nordic coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Denmark", "Copenhagen"}),
+        administrative_area="Københavns Kommune",
+        scope_note=(
+            "Confirmed live (2026-08-10, 2240 real feature rows) - "
+            "credential-free. This SDK's first Nordic roadworks coverage, "
+            "alongside the separate, already credential-scaffolded "
+            "national Vejdirektoratet feed (do-not-dedupe, same as NYC "
+            "vs WZDx). Neither the dataset name nor the backend the "
+            "investigation brief guessed hold up: the brief named "
+            "'vejarbejde' over an assumed ArcGIS/OGC Features service; "
+            "the real, live dataset is 'Gravetilladelser' (excavation "
+            "permits) on opendata.dk, served from a classic WFS 1.0.0 "
+            "GetFeature endpoint. A real, load-bearing geometry finding "
+            "the brief never anticipated: the layer mixes Point/"
+            "LineString/Polygon rows, and a repeated case number "
+            "(sagsnr) means the same real permit recorded once per "
+            "geometry shape (confirmed: all 832 real multi-row permits "
+            "have identical non-geometry properties across their rows), "
+            "not several distinct worksites - so the converter dedupes "
+            "by sagsnr and prefers LineString over Point; zero of the "
+            "1241 real permits are Polygon-only, so no polygon-ring "
+            "handling was needed. See module docstring for the full "
+            "investigation, including a secondary pre-converted-to-point "
+            "layer checked and rejected (covers only 56% of real cases)."
+        ),
+        credentials=None,
+        licence=(
+            "Creative Commons Attribution 4.0 (CC-BY-4.0) - confirmed live via the "
+            "dataset's own CKAN metadata"
+        ),
+        source_grade="register",
+        _module="streetworks.copenhagen",
+        _client_name="CopenhagenClient",
+        import_line="from streetworks.copenhagen import CopenhagenClient",
+    ),
 ]
