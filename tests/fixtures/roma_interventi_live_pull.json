@@ -1,0 +1,131 @@
+[
+  {
+    "nid": "1703",
+    "title": "Manutenzione straordinaria di Via Portuense",
+    "href": "/intervento/sostenibilita/manutenzione-straordinaria-di-portuense",
+    "field_posizione": {
+      "lon": 41.877282,
+      "lat": 12.468022
+    },
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Strade e infrastrutture"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Cantiere",
+    "field_municipio": "XII",
+    "field_fonte_finanziamento": [
+      "Bilancio di Roma Capitale"
+    ],
+    "field_indirizzo": "Via Portuense, 119, Roma",
+    "field_cap": "00148",
+    "field_tag_ricerca": null
+  },
+  {
+    "nid": "1704",
+    "title": "Manutenzione straordinaria di Via Carlo Porta",
+    "href": "/intervento/sostenibilita/manutenzione-straordinaria-di-carlo-porta",
+    "field_posizione": {
+      "lon": 41.875686,
+      "lat": 12.465975
+    },
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Strade e infrastrutture"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Cantiere",
+    "field_municipio": "XII",
+    "field_fonte_finanziamento": [
+      "Bilancio di Roma Capitale"
+    ],
+    "field_indirizzo": "Via Carlo Porta, 00153, Roma",
+    "field_cap": "00153",
+    "field_tag_ricerca": null
+  },
+  {
+    "nid": "1688",
+    "title": "Completamento di strade e altre opere di urbanizzazione in Massimina: Via Pio Spezi",
+    "href": "/intervento/sostenibilita/completamento-di-strade-e-altre-opere-di-urbanizzazione-massimina-pio",
+    "field_posizione": {
+      "lon": 41.885958,
+      "lat": 12.369502
+    },
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Strade e infrastrutture"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Cantiere",
+    "field_municipio": "XII",
+    "field_fonte_finanziamento": [
+      "Bilancio di Roma Capitale"
+    ],
+    "field_indirizzo": "Via Pio Spezi, Roma",
+    "field_cap": "00166",
+    "field_tag_ricerca": null
+  },
+  {
+    "nid": "1374",
+    "title": "Manutenzione straordinaria della viabilità municipale - Municipio III",
+    "href": "/intervento/sostenibilita/manutenzione-straordinaria-della-viabilita-municipale-municipio-iii",
+    "field_posizione": null,
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Strade e infrastrutture"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Cantiere",
+    "field_municipio": "III",
+    "field_fonte_finanziamento": [
+      "Giubileo"
+    ],
+    "field_indirizzo": null,
+    "field_cap": null,
+    "field_tag_ricerca": null
+  },
+  {
+    "nid": "1433",
+    "title": "Ripristino della funzionalità della rete fognaria in Via Danilo Stiepovich",
+    "href": "/intervento/sostenibilita/ripristino-della-funzionalita-della-rete-fognaria-danilo-stiepovich",
+    "field_posizione": {
+      "lon": 41.740315,
+      "lat": 12.27288
+    },
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Strade e infrastrutture"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Fine lavori",
+    "field_municipio": "X",
+    "field_fonte_finanziamento": [
+      "Acea Ato 2"
+    ],
+    "field_indirizzo": "Via Danilo Stiepovich, Ostia",
+    "field_cap": null,
+    "field_tag_ricerca": null
+  },
+  {
+    "nid": "1237",
+    "title": "Intervento di riqualificazione con efficientamento energetico sugli edifici di edilizia residenziale pubblica",
+    "href": "/intervento/sostenibilita/intervento-di-riqualificazione-con-efficientamento-energetico-sugli",
+    "field_posizione": {
+      "lon": 41.9041247,
+      "lat": 12.5510191
+    },
+    "field_tema": "Sostenibilità",
+    "field_tag_temi": [
+      "Rigenerazione urbana"
+    ],
+    "field_tag_trasporti": [],
+    "field_stato_lavori": "Cantiere",
+    "field_municipio": "IV",
+    "field_fonte_finanziamento": [
+      "PNRR"
+    ],
+    "field_indirizzo": "Via Sebastiano Satta, Casal Bruciato, Municipio Roma IV, Roma, Lazio, 00157, Italia",
+    "field_cap": "00157",
+    "field_tag_ricerca": null
+  }
+]

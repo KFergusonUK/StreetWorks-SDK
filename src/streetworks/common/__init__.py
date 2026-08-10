@@ -37,6 +37,7 @@ from .from_nzta import from_nzta
 from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
 from .from_paris import from_paris
+from .from_roma import from_roma
 from .from_sct import from_sct
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
@@ -130,4 +131,5 @@ __all__ = [
     "from_madrid",
     "from_drivebc",
     "from_lisboa",
+    "from_roma",
 ]

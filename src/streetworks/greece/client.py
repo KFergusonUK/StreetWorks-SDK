@@ -49,6 +49,19 @@ operator** - not a genuine national source, unlike MapRoad's real
 national+local Irish coverage (see :mod:`streetworks.maproad`) or
 CCISS's real Italy-wide one (see :mod:`streetworks.cciss`).
 
+**The national finding repeats at municipal level - checked directly for
+the City of Athens, not assumed to transfer.** Investigated alongside
+Rome (see :mod:`streetworks.roma`) as a second Mediterranean-capital
+municipal candidate. A genuinely promising lead the source brief hadn't
+found was checked: Athens runs a real, live OGC API Features server
+(``api.gis.cityofathens.gr``, ``pygeoapi``) - but its real collection
+list is exactly three layers (``lakes``, ``geitonies`` - neighbourhood
+boundaries, ``athens_ot`` - building blocks), none of them roadworks.
+``data.nap.gov.gr`` was independently re-checked the same day and still
+returns a live 502 from its own CKAN backend. No separate module was
+built for this - it confirms and extends the finding above rather than
+surfacing a new technical shape.
+
 **Licence**: not applicable - there is no dataset to license.
 
 **Credentials**: none apply - there is no API to authenticate to.

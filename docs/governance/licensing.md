@@ -44,6 +44,7 @@ Confirmed and named explicitly:
 | Servei Català de Trànsit (Catalonia) | Catalonia's own "Llicència oberta d'ús d'informació" — confirmed genuinely open | [`docs/providers/europe.md`](../providers/europe.md#servei-català-de-trànsit-catalonia) |
 | Ayuntamiento de Madrid (INFORMO) | CC BY — confirmed live at nap.dgt.es, not just carried over from the investigation brief | [`docs/providers/europe.md`](../providers/europe.md#ayuntamiento-de-madrid-informo) |
 | CCISS (Italy) | **Unconfirmed** | [`docs/providers/italy.md`](../providers/italy.md) |
+| Roma (Roma si trasforma) | **Unconfirmed** — checked the live site's page text, footer, and common Italian open-data terms; none found | [`docs/providers/italy.md`](../providers/italy.md#roma-roma-si-trasforma) |
 | TrafficWatchNI (Northern Ireland) | Attribution required (credit DfI TICC, preserve item URLs) | [`docs/providers/uk.md`](../providers/uk.md#northern-ireland--wales-traveller-information-rss) |
 | Traffic Wales | Attribution required (credit Traffic Wales) | [`docs/providers/uk.md`](../providers/uk.md#northern-ireland--wales-traveller-information-rss) |
 | Jersey RoadWorkx | No explicit licence document found; openly queryable by design | [`docs/providers/uk.md`](../providers/uk.md#jersey-roadworkx-and-tigerweb-arcgis-rest) |
@@ -63,8 +64,8 @@ Confirmed and named explicitly:
 
 **European-feed licensing uncertainty is a real, recurring pattern, not a
 one-off**: of the licences listed above, Bulgaria, Autobahn GmbH,
-Consell de Mallorca, Tasmania, NYC DOT, Chicago CDOT, and CCISS are all
-genuinely **unconfirmed** (not silently assumed open), and Belgium and
+Consell de Mallorca, Tasmania, NYC DOT, Chicago CDOT, CCISS, and Roma
+are all genuinely **unconfirmed** (not silently assumed open), and Belgium and
 the Basque Country are confirmed **more restrictive** than an
 unconfirmed licence (an explicit commercial-redistribution prohibition,
 and an explicit "no licence granted" statement, respectively). Where a

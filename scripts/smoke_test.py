@@ -497,6 +497,27 @@ def check_lisboa() -> str:
     )
 
 
+def check_roma() -> str:
+    """Roma Capitale (Roma si trasforma) needs no credentials - confirmed
+    live (see streetworks.roma). Filters to Strade e infrastrutture +
+    Cantiere status and reports how many of those have a coordinate, as
+    a visibility check that this thin (5.7% of the feed) slice is still
+    producing something real."""
+    from streetworks.common import from_roma
+    from streetworks.roma import RomaClient
+
+    with RomaClient() as roma:
+        all_records = list(roma.iter_interventi())
+        roadworks = list(roma.iter_roadworks())
+    works = from_roma(roadworks)
+    with_coord = sum(1 for w in works if w.sites[0].coordinate is not None)
+    return (
+        f"{len(works):,} in-progress street/infrastructure works (of "
+        f"{len(all_records):,} total interventions), {with_coord}/{len(works)} "
+        f"with coordinates"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1547,6 +1568,8 @@ def main() -> int:
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)
     reporter.check("CCISS (Italy)", [], check_cciss)
+    # Roma Capitale (Roma si trasforma) needs no credentials
+    reporter.check("Roma (Roma si trasforma)", [], check_roma)
     # UK Police (data.police.uk) needs no credentials
     reporter.check("UK Police (crime safety signal)", [], check_police)
 

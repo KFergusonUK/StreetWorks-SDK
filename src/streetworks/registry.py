@@ -1449,6 +1449,11 @@ _REGISTRY: list[ProviderEntry] = [
             "rather than guessing. Even a best-case future toll-operator "
             "feed would only ever be motorway-concession-only, "
             "fragmented per operator - not a genuine national source. "
+            "Repeats at municipal level too: the City of Athens' own "
+            "real OGC API Features server (api.gis.cityofathens.gr, "
+            "pygeoapi - a lead the original investigation missed) was "
+            "checked directly (2026-08-09) - 3 real collections (lakes, "
+            "neighbourhood boundaries, building blocks), none roadworks. "
             "See module docstring."
         ),
         credentials=None,
@@ -2157,5 +2162,55 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.lisboa",
         _client_name="LisboaClient",
         import_line="from streetworks.lisboa import LisboaClient",
+    ),
+    ProviderEntry(
+        key="roma",
+        name="Roma Capitale (Roma si trasforma)",
+        description="Rome's civic-interventions tracker, filtered to street/infrastructure works.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Italy"}),
+        administrative_area="Roma Capitale",
+        scope_note=(
+            "Confirmed live (2026-08-09, 1215 real records) - "
+            "credential-free, never a Credentials-wanted scaffold. This "
+            "SDK's second Italy provider (after cciss, national) and "
+            "first Rome-municipal source. The investigation brief's "
+            "proposed source (RSM's ArcGIS Hub) doesn't hold: checked "
+            "live, its real 81-dataset DCAT feed has zero cantieri/"
+            "roadworks datasets. Roma Capitale's own CKAN portal was "
+            "checked next (the brief's own fallback) - zero real "
+            "results for 'cantieri'/'lavori'/'viabilità'/'opere' via its "
+            "real search API. The real source is a third site the brief "
+            "never named - romasitrasforma.it ('Roma si trasforma') - "
+            "found by reading its own Drupal module's bundled JS, the "
+            "same technique that found Road Report NT's and Lisboa's "
+            "real backends. network_scope=unknown, deliberately, not "
+            "comprehensive/strategic/regional: this is a general "
+            "capital-projects tracker (schools, libraries, parks, "
+            "digital infrastructure - 4 macro-themes), not a roadworks "
+            "register - real, currently in-progress street/"
+            "infrastructure work is 69/1215 (5.7%) of the feed, the "
+            "thinnest roadworks signal of any municipal provider in "
+            "this SDK, and real geographic reach across Rome's own "
+            "network was never audited (only ~half of even that thin "
+            "subset carries a coordinate). A real bug found and "
+            "corrected, not reproduced: the source's own field_posizione "
+            "'lon'/'lat' keys are swapped relative to true geography, "
+            "confirmed against every real coordinate in this pull. No "
+            "date field exists anywhere in the schema - date_confidence "
+            "is always unknown. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "Unconfirmed - checked the live site's page text, footer, "
+            "and common Italian open-data terms (licenza, IODL, "
+            "riutilizzo, copyright, note legali); none found stated "
+            "anywhere"
+        ),
+        source_grade="operator",
+        _module="streetworks.roma",
+        _client_name="RomaClient",
+        import_line="from streetworks.roma import RomaClient",
     ),
 ]

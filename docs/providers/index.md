@@ -13,7 +13,7 @@
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
-**Ruled out**  ✗ China · Russia
+**No known coverage**  ✗ China · Russia
 
 *Several territories carry multiple data-owning authorities (Catalonia,
 Basque Country, Mallorca, Madrid; the four UK nations) — see the
@@ -131,6 +131,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |
 | `streetworks.cciss` | [CCISS](https://www.cciss.it/) — Italy's real-time traffic bulletin RSS (no credentials, confirmed live 2026-08-03), reached via the keyless RSS route rather than the registration-gated DATEX II one. Confirmed as Italy's own official RTTI/SRTI National Access Point per the European Commission's own October 2025 NAP list | read |
+| `streetworks.roma` | Roma Capitale's "Roma si trasforma" civic-interventions tracker (no credentials, confirmed live 2026-08-09, 1215 real records), filtered to real in-progress street/infrastructure work — a thin 5.7% slice of a general capital-projects feed, not a dedicated roadworks register. The investigation brief's proposed ArcGIS source doesn't exist; the real portal was found by reading its own JS bundle. Corrects a real coordinate-field bug in the source (`lon`/`lat` swapped). No dates in the schema — `date_confidence` always unknown. Licence unconfirmed | read |
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
 | `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 
