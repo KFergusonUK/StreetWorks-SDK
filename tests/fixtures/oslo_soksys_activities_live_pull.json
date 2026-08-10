@@ -1,0 +1,782 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596928.9814087113,
+              6643410.501211233
+            ],
+            [
+              596927.2703381177,
+              6643407.934605343
+            ],
+            [
+              596930.9776664401,
+              6643405.938360669
+            ],
+            [
+              596933.5442723305,
+              6643409.360501857
+            ],
+            [
+              596928.9814087113,
+              6643410.501211233
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "6b774671-0dff-4460-851f-4726c796f5fc",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "3ac981ed-988a-479a-9b8d-c9c0f2eb7043",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Endring av arbeidsperiode",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-25T13:05:28.599247",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 15.73681640625,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596928.9814087113,
+              6643410.501211233
+            ],
+            [
+              596927.2703381177,
+              6643407.934605343
+            ],
+            [
+              596930.9776664401,
+              6643405.938360669
+            ],
+            [
+              596933.5442723305,
+              6643409.360501857
+            ],
+            [
+              596928.9814087113,
+              6643410.501211233
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "9832923c-3282-4894-9beb-07a2bce375ea",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "3ac981ed-988a-479a-9b8d-c9c0f2eb7043",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-17T11:17:01.87455",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 15.73681640625,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596825.4616508548,
+              6643526.283663436
+            ],
+            [
+              596824.3209414773,
+              6643524.572592842
+            ],
+            [
+              596824.3209414773,
+              6643524.287405707
+            ],
+            [
+              596825.4616508548,
+              6643526.283663436
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "6b774671-0dff-4460-851f-4726c796f5fc",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "4c9bab11-ef1d-47f1-8b9c-810cc44a26e8",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Endring av arbeidsperiode",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-25T13:05:28.599247",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 0.16259765625,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596825.4616508548,
+              6643526.283663436
+            ],
+            [
+              596824.3209414773,
+              6643524.572592842
+            ],
+            [
+              596824.3209414773,
+              6643524.287405707
+            ],
+            [
+              596825.4616508548,
+              6643526.283663436
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "9832923c-3282-4894-9beb-07a2bce375ea",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "4c9bab11-ef1d-47f1-8b9c-810cc44a26e8",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-17T11:17:01.87455",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 0.16259765625,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596824.0357543421,
+              6643526.854011597
+            ],
+            [
+              596820.0432649934,
+              6643526.854011597
+            ],
+            [
+              596821.4691484517,
+              6643521.1504386
+            ],
+            [
+              596826.0320120709,
+              6643522.005973897
+            ],
+            [
+              596824.0357543421,
+              6643526.854011597
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "6b774671-0dff-4460-851f-4726c796f5fc",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "68265163-77d6-44c5-b3c2-58e93d7dee4c",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Endring av arbeidsperiode",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-25T13:05:28.599247",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 23.300048828125,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596824.0357543421,
+              6643526.854011597
+            ],
+            [
+              596820.0432649934,
+              6643526.854011597
+            ],
+            [
+              596821.4691484517,
+              6643521.1504386
+            ],
+            [
+              596826.0320120709,
+              6643522.005973897
+            ],
+            [
+              596824.0357543421,
+              6643526.854011597
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "9832923c-3282-4894-9beb-07a2bce375ea",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "68265163-77d6-44c5-b3c2-58e93d7dee4c",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-17T11:17:01.87455",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 23.300048828125,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596824.3209414773,
+              6643524.002231626
+            ],
+            [
+              596823.4654061805,
+              6643524.287405707
+            ],
+            [
+              596823.4654061805,
+              6643524.002231626
+            ],
+            [
+              596824.3209414773,
+              6643524.002231626
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "6b774671-0dff-4460-851f-4726c796f5fc",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "b8d6c8f7-8def-4643-b15a-d526a6da526b",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Endring av arbeidsperiode",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-25T13:05:28.599247",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 0.1220703125,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596824.3209414773,
+              6643524.002231626
+            ],
+            [
+              596823.4654061805,
+              6643524.287405707
+            ],
+            [
+              596823.4654061805,
+              6643524.002231626
+            ],
+            [
+              596824.3209414773,
+              6643524.002231626
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "3cc7a5e7-4698-45c5-815d-123f982e72dc",
+        "form_id": "9832923c-3282-4894-9beb-07a2bce375ea",
+        "file_id": "06b7b261-1a6a-40a5-8575-5af058272e59",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/89422",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "b8d6c8f7-8def-4643-b15a-d526a6da526b",
+        "start_date": "2024-06-17T07:00:15",
+        "end_date": "2027-12-31T19:00:00",
+        "plan_id": "abf03707-225e-49de-8e41-b076f24293e2",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-17T11:17:01.87455",
+        "addresses": [
+          "Wergelandsveien 2-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 0.1220703125,
+        "editable": true,
+        "fileNumber": "2024/89422",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596814.4337307205,
+              6642918.874455638
+            ],
+            [
+              596791.291569791,
+              6642888.71951867
+            ],
+            [
+              597036.6626753324,
+              6642780.9339978155
+            ],
+            [
+              597042.2728961637,
+              6642791.453161875
+            ],
+            [
+              596820.3185345221,
+              6642892.086498038
+            ],
+            [
+              596828.7338657691,
+              6642908.566521729
+            ],
+            [
+              596814.4337307205,
+              6642918.874455638
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "86a29225-958b-460f-aad0-b245005bbe2b",
+        "form_id": "20b03245-c2f3-42b7-a0de-9ed713e4fb92",
+        "file_id": "fa038e37-c4b0-40c8-889f-212454e83617",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/88483",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "fc79e44d-7da6-4ec0-8c20-7157ea7bbd38",
+        "start_date": "2024-06-17T00:01:35",
+        "end_date": "2027-12-31T23:59:35",
+        "plan_id": "8a2b0c20-c264-48ec-afc9-c85401a9fe8a",
+        "title": "Endring av arbeidsperiode",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-25T13:07:46.798719",
+        "addresses": [
+          "Rådhusplassen 1"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 3986.99658203125,
+        "visible": true,
+        "editable": true,
+        "fileNumber": "2024/88483",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              596814.4337307205,
+              6642918.874455638
+            ],
+            [
+              596791.291569791,
+              6642888.71951867
+            ],
+            [
+              597036.6626753324,
+              6642780.9339978155
+            ],
+            [
+              597042.2728961637,
+              6642791.453161875
+            ],
+            [
+              596820.3185345221,
+              6642892.086498038
+            ],
+            [
+              596828.7338657691,
+              6642908.566521729
+            ],
+            [
+              596814.4337307205,
+              6642918.874455638
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "86a29225-958b-460f-aad0-b245005bbe2b",
+        "form_id": "31f5aaa7-b148-44f9-8633-ca4f5b7bf044",
+        "file_id": "fa038e37-c4b0-40c8-889f-212454e83617",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2024/88483",
+        "sender": "VEISERVICE AS",
+        "case_handler": "Thomas Eilertsen Larsen",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "SENTRUM",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "fc79e44d-7da6-4ec0-8c20-7157ea7bbd38",
+        "start_date": "2024-06-17T00:01:35",
+        "end_date": "2027-12-31T23:59:35",
+        "plan_id": "8a2b0c20-c264-48ec-afc9-c85401a9fe8a",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2024-06-12T15:22:22.935112",
+        "addresses": [
+          "Rådhusplassen 1"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 3986.99658203125,
+        "visible": true,
+        "editable": true,
+        "fileNumber": "2024/88483",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              597087.7900738408,
+              6644144.649772163
+            ],
+            [
+              597088.458892175,
+              6644146.128942174
+            ],
+            [
+              597087.5671329116,
+              6644146.635507292
+            ],
+            [
+              597086.7159093748,
+              6644145.156337281
+            ],
+            [
+              597087.7900738408,
+              6644144.649772163
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "00af5f6c-297e-4e67-9abb-3fa69b5a854e",
+        "form_id": "92212580-6c46-45df-a3ca-a71fad3da208",
+        "file_id": "f921cb82-6180-4425-80b6-507dc7158795",
+        "type": "polygon",
+        "activity_type": "Gravearbeid",
+        "activity_type_icon_path": null,
+        "file_number": "2026/47943",
+        "sender": "SKYTTERMOEN ANLEGG AS",
+        "case_handler": "Süleyman Yildiz",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "ST.HANSHAUGEN",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "c7f81753-4cca-42c3-ba77-66f19a042cd2",
+        "start_date": "2026-08-03T08:00:00",
+        "end_date": "2026-08-17T12:00:00",
+        "plan_id": "778a1319-6819-4295-9c28-c685013debe0",
+        "title": "Gravetillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2026-07-08T11:28:53.216002",
+        "addresses": [
+          "Frydenlundgata 1"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 1.8389678075985174,
+        "editable": true,
+        "fileNumber": "2026/47943",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              599481.1644815522,
+              6643194.638817151
+            ],
+            [
+              599478.6776689716,
+              6643194.371679082
+            ],
+            [
+              599481.0174516499,
+              6643176.824255323
+            ],
+            [
+              599483.42205555,
+              6643177.091393393
+            ],
+            [
+              599481.1644815522,
+              6643194.638817151
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "activity_id": "00a51865-95e4-4dbc-a689-c1035cbf179d",
+        "form_id": "121aa970-12e8-4107-aff1-ffe9849f2004",
+        "file_id": "a4028730-e2f7-46e9-b7ca-fc2292e9cbc0",
+        "type": "polygon",
+        "activity_type": "Arbeidstillatelse",
+        "activity_type_icon_path": null,
+        "file_number": "2026/52252",
+        "sender": "VEISKILTING AS",
+        "case_handler": "Süleyman Yildiz",
+        "user_group": "Arbeidstillatelser og kontroll",
+        "city_district": "GAMLE OSLO",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "55154f79-91f4-4c64-b572-0c31d1489c5a",
+        "start_date": "2026-08-10T07:00:00",
+        "end_date": "2026-10-09T17:00:00",
+        "plan_id": "7de03ebc-a35b-4263-a73b-23b47d4811c2",
+        "title": "Arbeidstillatelse",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2026-07-28T07:56:00.700547",
+        "addresses": [
+          "Norderhovgata 32-36"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "area": 43.529943377305244,
+        "editable": true,
+        "fileNumber": "2026/52252",
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          596409.444466231,
+          6644243.778872648
+        ]
+      },
+      "properties": {
+        "activity_id": "32162db1-dd5a-46a9-9deb-bd4e71b422f7",
+        "form_id": "1d3f5abc-7667-4bee-ad58-2e62b823d375",
+        "file_id": "1412d064-6e41-494a-bfe3-76227dd0872d",
+        "type": "point",
+        "activity_type": "Containerutsett",
+        "activity_type_icon_path": null,
+        "file_number": "2026/53947",
+        "sender": "OSLO KOMMUNE BYMILJØETATEN",
+        "case_handler": "Morten Dahl",
+        "user_group": "Patruljestøtte",
+        "city_district": "FROGNER",
+        "map_layer_ident": "Soksys:activity_geometry_view",
+        "id": "52e7b4da-4e30-4cc3-95e9-c23ccae17125",
+        "start_date": "2026-08-03T07:00:00",
+        "end_date": "2026-08-31T17:00:00",
+        "plan_id": "eadcb8d2-dd36-49c7-9f46-8232e039a95e",
+        "title": "Containerutsett",
+        "status": "Innvilget",
+        "status_color": "rgba(94,255,113,1)",
+        "registered_date": "2026-08-04T11:35:31.166424",
+        "addresses": [
+          "Bogstadveien 4-6"
+        ],
+        "is_representation_point": false,
+        "replaced_by_activity": false,
+        "editable": true,
+        "fileNumber": "2026/53947",
+        "objectType": "Container",
+        "mapObjectId": "485dcca6-5431-4d19-9118-4e3202c27f73",
+        "editableAttributes": null,
+        "boundary": "{\"type\":\"Feature\",\"geometry\":null,\"properties\":{}}"
+      }
+    }
+  ]
+}

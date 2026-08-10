@@ -1162,6 +1162,100 @@ the same underlying network. Elveg / NVDB Vegnett Pluss (Kartverket's own
 SOSI/GML-only distribution) is noted, not built, the same treatment as BD
 TOPO's unreachable bulk route.
 
+## Oslo (SøkSys)
+
+Oslo kommune's real digging/work-permit case system — this SDK's second
+Nordic *roadworks* coverage (after Copenhagen), alongside the separate,
+already-verified national Statens vegvesen DATEX II feed above:
+
+```python
+from streetworks.oslo import OsloClient
+from streetworks.common import from_oslo
+
+with OsloClient() as oslo:
+    features = list(oslo.iter_roadworks())  # Containerutsett excluded
+works = from_oslo(features)  # id-deduped, activity_id-grouped
+```
+
+**Built from `nordic-capitals-investigation.md`'s recommendation to build
+Oslo second. Live verification found a different real source than either
+brief guess** (an Origo/Bymiljøetaten GeoServer layer, or the national
+NVDB above). A web search for Oslo kommune's own page on this system
+found **"SøkSys"** — a 2024-introduced permit/case-management system
+(replacing older "Kgrav"/"ISYcase") covering crossing/proximity permits
+for cable and pipe work, excavation and work permits, and traffic
+warning — run on Oslo's behalf by **Geomatikk**, a real Norwegian
+utility-location company. The real public map is `pub.soksys.no`
+(confirmed Oslo-scoped: 19 distinct real `city_district` values, every
+one a genuine Oslo bydel). Its own `map.js` bundle — read directly, the
+same technique that found Roma's/Lisboa's/Road Report NT's real
+backends — reveals the real internal API:
+`https://pub.soksys.no/api/map/soksys-activities`, with `extent`
+(a real bounding box) and `filter` (`atimequick=4`, the live site's own
+default) query parameters. Keyless — every claim here came from a fully
+unauthenticated pull (1354 real features at investigation time).
+
+**The response body double-encodes its own JSON** — the raw HTTP body is
+a JSON string literal containing escaped GeoJSON, so it needs
+`json.loads` twice to reach the real `FeatureCollection`. Handled inside
+`OsloClient.iter_roadworks` so callers never see the intermediate
+string.
+
+**CRS confirmed live: `EPSG:25832`** (ETRS89/UTM zone 32N) — a genuinely
+projected CRS, not WGS84. Per this SDK's own convention (matching British
+National Grid/Jersey/NYC DOT/Via Lietuva), `Coordinate.value` stays
+plain `(x, y)` = `(easting, northing)`, never swapped to `(lat, lon)` —
+unlike Copenhagen's genuine WGS84 source, built earlier the same
+session.
+
+**Real roadworks filter, evidenced not guessed**: `activity_type` has
+exactly 3 real values — `Arbeidstillatelse` (work permit, 934/1354),
+`Gravearbeid` (excavation work, 412/1354), `Containerutsett` (container
+placement, 8/1354). Sampled real `sender` values confirm the split:
+`Arbeidstillatelse`/`Gravearbeid` senders are genuine traffic/road-work
+companies (VEISKILTING AS — "road signage", TRAFIKKJENTENE AS, SAFEROAD
+TRAFFIC AS); `Containerutsett` senders are the city agency itself or
+property managers placing skips, not construction work.
+
+**A real, load-bearing geometry/grouping finding, genuinely different
+from Copenhagen's own dedupe pattern.** Under the default filter, 1354
+raw rows collapse to 631 distinct `activity_id`s (261 multi-row).
+Checked every one: 256 multi-row groups are **pure duplicate artifacts**
+— identical `id` and identical geometry, appearing twice, a real
+tiling/extent artifact of querying a wide bbox (confirmed: only 1338 of
+1354 `id` values are distinct). But a real handful of permits genuinely
+span several distinct sub-areas — different `id`, different real
+coordinates/areas, same `file_number`/`sender`/dates — a real
+Jersey/NYC-DOT-style "one project, several real sites" shape, not
+Copenhagen's "one site, several geometry representations" shape. So
+`from_oslo` dedupes by exact `id` first (drops the tiling artifact), then
+groups the survivors by `activity_id` into one `Works` per activity with
+one `WorksSite` per distinct surviving geometry row.
+
+**Polygon geometry** (the majority real shape here, unlike Copenhagen
+where it was always droppable) uses its own first ring's first vertex as
+`Coordinate.value` only — `Coordinate.points`/`.parts` are documented
+for line-geometry vertices, not polygon rings, the same discipline
+`from_paris`'s own polygon case already established above.
+
+**A separate `/plans` endpoint exists** (`soksys-plans`,
+`filter=ptimequick=4`) — confirmed live, 1339 real features, but a
+genuinely different schema (`status: "Koordinert"` = Coordinated, no
+`activity_type`/`sender`/`case_handler`/`city_district` at all). This is
+the earlier, pre-permit planning stage — not built here.
+
+**Licence: genuinely unconfirmed.** Checked both the live
+`pub.soksys.no` page and Oslo kommune's own SøkSys explainer page — no
+licence/terms statement found on either.
+
+**A real, evidenced "shared platform" lead, not chased this pass**: the
+map bundle's own `typenamePrefix` logic switches on
+`configSettings['countryCode'] === 'SE'`, meaning SøkSys is
+white-labelled per municipality/country — other Norwegian *and Swedish*
+municipalities may run their own instance. Left for a future
+investigation, the same "verify before building" discipline this whole
+Nordic strand is under.
+
 ## NWB (Netherlands)
 
 Dutch national road network — no credentials. **The `streets` counterpart

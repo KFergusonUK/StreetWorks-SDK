@@ -232,6 +232,7 @@ def _fetch_works(key, client):
         from_nycdot,
         from_nzta,
         from_ogc_features,
+        from_oslo,
         from_paris,
         from_roma,
         from_sct,
@@ -321,6 +322,11 @@ def _fetch_works(key, client):
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
         "copenhagen": from_copenhagen,
+        # oslo's coordinates are projected (EPSG:25832), so _coord_lonlat's
+        # WGS84-only guard skips them on the live-points layer today - still
+        # wired in so real Works are fetched/counted honestly rather than
+        # silently omitted; reprojecting for display is a separate decision.
+        "oslo": from_oslo,
     }
     if key in simple:
         records = list(itertools.islice(client.iter_roadworks(), _LIMIT))

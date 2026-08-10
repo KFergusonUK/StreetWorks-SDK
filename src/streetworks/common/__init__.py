@@ -37,6 +37,7 @@ from .from_nycdot import from_nycdot
 from .from_nzta import from_nzta
 from .from_ogc_features import from_ogc_features
 from .from_openusrn import from_openusrn
+from .from_oslo import from_oslo
 from .from_paris import from_paris
 from .from_roma import from_roma
 from .from_sct import from_sct
@@ -134,4 +135,5 @@ __all__ = [
     "from_lisboa",
     "from_roma",
     "from_copenhagen",
+    "from_oslo",
 ]

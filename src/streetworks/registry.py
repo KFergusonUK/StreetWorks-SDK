@@ -2256,4 +2256,48 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="CopenhagenClient",
         import_line="from streetworks.copenhagen import CopenhagenClient",
     ),
+    ProviderEntry(
+        key="oslo",
+        name="Oslo (SøkSys)",
+        description=(
+            "Oslo kommune's real digging/work-permit case system, "
+            "this SDK's second Nordic coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Norway", "Oslo"}),
+        administrative_area="Oslo kommune",
+        scope_note=(
+            "Confirmed live (2026-08-10, 1354 real feature rows) - "
+            "credential-free. This SDK's second Nordic roadworks "
+            "coverage, alongside the separate, already-verified national "
+            "Statens vegvesen DATEX II feed (do-not-dedupe, same as NYC "
+            "vs WZDx). Neither backend the investigation brief guessed "
+            "(an Origo/Bymiljøetaten GeoServer layer, or the national "
+            "NVDB) holds up: the real source is 'SøkSys', a 2024 permit/"
+            "case system run on Oslo's behalf by Geomatikk, found via "
+            "pub.soksys.no's own map.js bundle. Real geometry mixes "
+            "Point/LineString/Polygon; a repeated case id here is a "
+            "genuinely different shape from Copenhagen's - 256 of 261 "
+            "real multi-row permits are pure tiling-query duplicate "
+            "artifacts (identical id, identical geometry), but a real "
+            "handful genuinely span several distinct real sub-areas "
+            "under one activity_id, a Jersey/NYC-DOT-style multi-site "
+            "grouping, not Copenhagen's single-geometry-pick pattern. "
+            "CRS is EPSG:25832 (projected UTM32N, not WGS84) - "
+            "Coordinate.value stays unswapped (easting, northing). "
+            "Licence genuinely unconfirmed - checked both the public map "
+            "page and Oslo kommune's own SøkSys explainer page, nothing "
+            "stated on either. See module docstring for the full "
+            "investigation, including a separate pre-permit /plans "
+            "endpoint checked and left for a future pass."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.oslo",
+        _client_name="OsloClient",
+        import_line="from streetworks.oslo import OsloClient",
+    ),
 ]

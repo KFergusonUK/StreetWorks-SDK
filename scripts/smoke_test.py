@@ -538,6 +538,26 @@ def check_copenhagen() -> str:
     )
 
 
+def check_oslo() -> str:
+    """Oslo (SøkSys) needs no credentials - confirmed live (see
+    streetworks.oslo). Reports raw row count, the count after the
+    exact-id dedupe (drops real tiling-query duplicate rows), and the
+    real Works count after activity_id grouping - a visibility check
+    that both dedupe steps are still behaving against live data, not
+    just the frozen fixture."""
+    from streetworks.common import from_oslo
+    from streetworks.oslo import OsloClient
+
+    with OsloClient() as oslo:
+        raw = list(oslo.iter_roadworks())
+    deduped_ids = {f["properties"].get("id") for f in raw}
+    works = from_oslo(raw)
+    return (
+        f"{len(raw):,} raw rows -> {len(deduped_ids):,} distinct ids -> "
+        f"{len(works):,} real Works"
+    )
+
+
 def check_belgium() -> str:
     """Verkeerscentrum Vlaanderen (Belgium/Flanders, DATEX II v3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -1592,6 +1612,8 @@ def main() -> int:
     reporter.check("Roma (Roma si trasforma)", [], check_roma)
     # Copenhagen (Gravetilladelser) needs no credentials
     reporter.check("Copenhagen (Gravetilladelser)", [], check_copenhagen)
+    # Oslo (SøkSys) needs no credentials
+    reporter.check("Oslo (SøkSys)", [], check_oslo)
     # UK Police (data.police.uk) needs no credentials
     reporter.check("UK Police (crime safety signal)", [], check_police)
 
