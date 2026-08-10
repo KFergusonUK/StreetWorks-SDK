@@ -272,7 +272,11 @@ class VegvesenClient:
                 "(Bearer), not both/neither"
             )
         self.base_url = base_url.rstrip("/")
-        auth = httpx.BasicAuth(username, password) if basic else None
+        auth = (
+            httpx.BasicAuth(username, password)
+            if username is not None and password is not None
+            else None
+        )
         headers = {"Authorization": f"Bearer {token}"} if bearer else None
         client = client or httpx.Client(
             timeout=timeout, follow_redirects=True, auth=auth, headers=headers

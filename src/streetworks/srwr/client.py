@@ -16,6 +16,7 @@ the shared transport's retry/backoff handles that here.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from pathlib import Path
 
 import httpx
@@ -88,15 +89,15 @@ class SRWRClient:
     # --- reading (thin wrappers over streetworks.srwr.reader) -------------- #
 
     @staticmethod
-    def iter_records(source, **kwargs) -> iter[Record]:  # noqa: F821
+    def iter_records(source, **kwargs) -> Iterator[Record]:
         return iter_records(source, **kwargs)
 
     @staticmethod
-    def iter_activities(source) -> iter[Activity]:  # noqa: F821
+    def iter_activities(source) -> Iterator[Activity]:
         return iter_activities(source)
 
     @staticmethod
-    def latest_activities(source) -> iter[Activity]:  # noqa: F821
+    def latest_activities(source) -> Iterator[Activity]:
         return latest_activities(source)
 
     def close(self) -> None:

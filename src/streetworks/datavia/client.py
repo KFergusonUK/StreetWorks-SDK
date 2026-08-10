@@ -195,7 +195,7 @@ class DataViaClient(_DataViaBase):
                 "client_id+client_secret (OAuth2), not both/neither"
             )
         self._oauth: SyncClientCredentials | None = None
-        if basic:
+        if username is not None and password is not None:
             self.service_url = service_url or BASIC_SERVICE_URL
             self._transport = SyncTransport(
                 timeout=timeout, retry=retry, auth=httpx.BasicAuth(username, password)
@@ -494,7 +494,7 @@ class AsyncDataViaClient(_DataViaBase):
                 "client_id+client_secret (OAuth2), not both/neither"
             )
         self._oauth: AsyncClientCredentials | None = None
-        if basic:
+        if username is not None and password is not None:
             self.service_url = service_url or BASIC_SERVICE_URL
             self._transport = AsyncTransport(
                 timeout=timeout, retry=retry, auth=httpx.BasicAuth(username, password)
