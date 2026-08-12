@@ -349,6 +349,16 @@
   }
   footer.credit code { font-family: var(--font-mono); background: var(--bg-panel); padding: 1px 5px; }
 
+  /* ---------------- Scope note ---------------- */
+  .scope-note {
+    margin: 0 0 20px; padding: 12px 16px;
+    background: var(--required-wash);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--required);
+    font-size: 0.85rem; line-height: 1.5;
+  }
+  .scope-note strong { color: var(--required); }
+
   @media (max-width: 780px) {
     .panel { grid-template-columns: 1fr; }
     .stamp-rail { border-left: none; border-top: 1px solid var(--border); }
@@ -380,6 +390,8 @@
     </div>
     <div class="demo-badge">Demo — not connected to Street Manager</div>
   </header>
+
+  <p class="scope-note"><strong>This front-end is not a substitute for the Section 50 licence application.</strong> It files a works record into Street Manager once (or as) a licence exists, and can <em>attach</em> supporting evidence (insurance, accreditation, plans) to that record — see the real Python connector, <code class="mono">streetmanager_section_50.py</code>, for a genuine sandbox-verified upload. But attaching evidence is not the same as it being assessed: this front-end does not capture the licensee declarations, contractor identity, land title or adoption logic, and filing a document is not acceptance of it — so it cannot, and does not, grant the licence. The licence decision remains with the Highway Authority.</p>
 
   <nav class="tabs" role="tablist" aria-label="S50 licence actions">
     <button role="tab" aria-selected="true" aria-controls="tab-apply" data-tab="apply">Apply</button>

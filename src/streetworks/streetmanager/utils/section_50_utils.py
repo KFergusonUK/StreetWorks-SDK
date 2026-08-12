@@ -10,7 +10,14 @@ reproject the applicant-drawn geometry, stamp the two SWA codes and the
 ``section_50``/``planned`` pinning, pass everything else the applicant
 stated straight through. **Transport plus identity injection only** - this
 is deliberately not an S50 rules engine; it trusts the applicant's stated
-inputs and Street Manager's own server-side validation.
+inputs and Street Manager's own server-side validation. That pass-through
+already covers ``file_ids`` (real evidence-attachment ids from
+``WorkAPI.upload_file``, e.g. insurance/accreditation copies) with no
+change needed here - it's just another key in ``applicant_fields``, not a
+connector-owned one, so this module never has to learn what a file is any
+more than it learns what a bond is; see
+``examples/streetmanager_section_50.py``'s own docstring for the real,
+sandbox-verified upload-then-attach sequence this enables.
 
 Scope is the three verbs a Section 50 licence needs: apply, start, stop.
 Reinstatement (Cat C inspection, bond release, guarantee period) is
