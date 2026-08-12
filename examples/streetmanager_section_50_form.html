@@ -210,7 +210,7 @@
     display: flex; justify-content: space-between; gap: 8px;
   }
   .field label .req { color: var(--required); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; }
-  input[type="text"], input[type="date"], input[type="datetime-local"], select, textarea {
+  input[type="text"], input[type="email"], input[type="date"], input[type="datetime-local"], select, textarea {
     font: inherit; font-size: 1rem;
     background: var(--bg);
     color: var(--text);
@@ -304,6 +304,56 @@
     border: 1px solid var(--border); padding: 1px 5px;
   }
 
+  /* ---------------- Evidence / attachments ---------------- */
+  .evidence-list { display: flex; flex-direction: column; gap: 8px; }
+  .evidence-row {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--border); border-radius: 5px;
+    padding: 11px 13px; background: var(--bg-panel-raised); cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .evidence-row:hover { border-color: var(--brand); }
+  .evidence-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--cta); flex: none; }
+  .evidence-row .ev-icon { font-size: 1.25rem; flex: none; line-height: 1; }
+  .ev-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .ev-name { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text); font-weight: 600; }
+  .ev-meta { font-size: 0.78rem; color: var(--text-secondary); }
+  .ev-status { color: var(--cta); font-weight: 600; }
+  .evidence-row:has(input:not(:checked)) { opacity: 0.5; }
+  .evidence-row:has(input:not(:checked)) .ev-status { color: var(--text-secondary); font-weight: 400; }
+
+  /* ---------------- Bond calculator ---------------- */
+  .bond-widget {
+    border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden; background: var(--bg-panel-raised);
+  }
+  .bond-head, .bond-row {
+    display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 8px; align-items: center; padding: 8px 13px;
+  }
+  .bond-head {
+    background: var(--brand-wash); font-size: 0.74rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; color: var(--brand);
+    border-bottom: 1px solid var(--border);
+  }
+  .bond-head span:not(:first-child), .bond-row .bond-sub { text-align: right; }
+  .bond-row { border-bottom: 1px solid var(--border); }
+  .bond-surface { font-weight: 600; font-size: 0.9rem; }
+  .bond-row input {
+    width: 100%; text-align: right; padding: 5px 8px; font-family: var(--font-mono);
+    font-size: 0.85rem; border: 1px solid var(--border); border-radius: 4px;
+    background: var(--bg); color: var(--text);
+  }
+  .bond-sub { font-size: 0.9rem; font-weight: 600; }
+  .bond-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 13px; background: var(--brand); color: #ffffff;
+  }
+  .bond-total > span:first-child { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.9; }
+  .bond-grand { font-size: 1.35rem; font-weight: 700; }
+  .bond-reconcile { margin: 0; padding: 8px 13px; font-size: 0.78rem; color: var(--text-secondary); background: var(--bg-panel); }
+  .bond-reconcile.warn { color: var(--required); background: var(--required-wash); }
+
   .bng-panel { margin-top: 26px; }
 
   /* ---------------- Submit / results ---------------- */
@@ -375,8 +425,8 @@
 
 <div class="org-bar">
   <div class="org-bar-inner">
-    <div class="crest">DC</div>
-    <div class="org-name">Durham County Council</div>
+    <div class="crest">EC</div>
+    <div class="org-name">Example County Council</div>
   </div>
 </div>
 <div class="service-strip"></div>
@@ -386,12 +436,12 @@
     <div class="titles">
       <p class="eyebrow">Highways &amp; roads &middot; Licensed works (Section 50)</p>
       <h1>Section 50 licence works</h1>
-      <p class="sub">StreetWorks SDK example — submits under the highway authority's own Street Manager promoter account, on the applicant's behalf.</p>
+      <p class="sub">StreetWorks SDK example — the applicant submits an S50 application to Street Manager under the highway authority's own promoter account; the authority grants or refuses it there, with evidence attached and reinstatement bond estimated.</p>
     </div>
     <div class="demo-badge">Demo — not connected to Street Manager</div>
   </header>
 
-  <p class="scope-note"><strong>This front-end is not a substitute for the Section 50 licence application.</strong> It files a works record into Street Manager once (or as) a licence exists, and can <em>attach</em> supporting evidence (insurance, accreditation, plans) to that record — see the real Python connector, <code class="mono">streetmanager_section_50.py</code>, for a genuine sandbox-verified upload. But attaching evidence is not the same as it being assessed: this front-end does not capture the licensee declarations, contractor identity, land title or adoption logic, and filing a document is not acceptance of it — so it cannot, and does not, grant the licence. The licence decision remains with the Highway Authority.</p>
+  <p class="scope-note"><strong>Submit a Section 50 application to Street Manager — where the authority manages, grants or refuses it.</strong> The applicant fills this in; it lands on Street Manager as a submitted S50 application under the authority's own promoter account, with supporting evidence <em>attached to the record</em> (insurance, accreditation, plans, via <code class="mono">file_ids</code>) and a surface-area bond estimate folded in. The highway authority then works it <em>in Street Manager</em> — reviews the application, grants or refuses — and confirms the outcome to the applicant directly by email or phone. Street Manager is the intake and case-management platform; the binding Section 50 <em>licence</em> itself, with its conditions, bond and signed undertakings, is the separate legal instrument the authority issues alongside. So this puts an S50 onto Street Manager and drives its workflow — it does not replace the licensing judgement, and an attached certificate is evidence <em>lodged</em>, not <em>assessed</em>. Every "Build request" button runs the SDK's real BNG reprojection and request-assembly in-page — the JSON shown is genuinely what <code class="mono">streetmanager_section_50.py</code> sends to the sandbox.</p>
 
   <nav class="tabs" role="tablist" aria-label="S50 licence actions">
     <button role="tab" aria-selected="true" aria-controls="tab-apply" data-tab="apply">Apply</button>
@@ -539,8 +589,77 @@
               <label for="contact-number">Contact number <span class="req">required</span></label>
               <input type="text" id="contact-number" value="01234 567890" />
             </div>
+            <div class="field wide">
+              <label for="contact-email">Contact email <span class="req">required</span></label>
+              <input type="email" id="contact-email" value="j.smith@example.com" />
+              <span class="finding">how the authority returns the grant/refuse decision — load-bearing here, so required even though Street Manager itself allows it empty</span>
+            </div>
           </div>
           <p class="step-help" style="margin-top: 14px;">An S50 has no separate licensee field — the licensee's identity rides here, in the contact details, not in a promoter field of its own.</p>
+        </section>
+
+        <section>
+          <p class="step-label">Step 4 · Evidence</p>
+          <h3 class="step-title">Attach supporting evidence</h3>
+          <p class="step-help">The real Section 50 form demands <em>"copies must be attached"</em> — insurance, street works accreditation, site and land-registry plans. Street Manager accepts attachments, so these ride <strong>on the works record itself</strong> via <code class="mono">file_ids</code>. The connector uploads each file, collects the id Street Manager returns, and references it on the request — a genuine sandbox-verified two-step, not a mockup.</p>
+          <div class="evidence-list" id="evidence-list">
+            <label class="evidence-row" data-kind="insurance">
+              <input type="checkbox" checked />
+              <span class="ev-icon">🛡️</span>
+              <span class="ev-body"><span class="ev-name">insurance.pdf</span><span class="ev-meta">Public liability certificate · £5m min · <span class="ev-status">will upload → file_id</span></span></span>
+            </label>
+            <label class="evidence-row" data-kind="accreditation">
+              <input type="checkbox" checked />
+              <span class="ev-icon">📇</span>
+              <span class="ev-body"><span class="ev-name">accreditation.pdf</span><span class="ev-meta">NRSWA supervisor + operative cards · <span class="ev-status">will upload → file_id</span></span></span>
+            </label>
+            <label class="evidence-row" data-kind="site-plan">
+              <input type="checkbox" />
+              <span class="ev-icon">🗺️</span>
+              <span class="ev-body"><span class="ev-name">site-plan.pdf</span><span class="ev-meta">Approved site layout · <span class="ev-status">will upload → file_id</span></span></span>
+            </label>
+            <label class="evidence-row" data-kind="land-registry">
+              <input type="checkbox" />
+              <span class="ev-icon">📜</span>
+              <span class="ev-body"><span class="ev-name">land-registry.pdf</span><span class="ev-meta">Title plan / land served · <span class="ev-status">will upload → file_id</span></span></span>
+            </label>
+          </div>
+          <p class="step-help" style="margin-top: 12px;"><span class="finding">attached ≠ assessed</span> — filing a certificate is evidence <em>lodged</em>, not evidence <em>accepted</em>. The grant decision still sits with the highway authority. Demo files are synthetic placeholders, never real documents.</p>
+        </section>
+
+        <section>
+          <p class="step-label">Step 5 · Bond</p>
+          <h3 class="step-title">Estimate the reinstatement bond</h3>
+          <p class="step-help">S50 bonds are priced by <strong>surface area</strong> — carriageway reinstatement costs multiples of footway or verge, so a flat rate misprices badly. Area comes metres-accurate from the drawn extent (already in British National Grid), split by surface as the applicant apportions it. The figure is a <strong>note</strong> folded into <code class="mono">additional_info</code> — never a structured Street Manager field, because bonds sit outside the permit schema entirely.</p>
+          <div class="bond-widget">
+            <div class="bond-head">
+              <span>Surface</span><span>Area (m²)</span><span>Rate (£/m²)</span><span>Subtotal</span>
+            </div>
+            <div class="bond-row" data-surface="carriageway">
+              <span class="bond-surface">Carriageway</span>
+              <input type="number" class="bond-area" value="0" min="0" step="0.5" />
+              <input type="number" class="bond-rate" value="65" min="0" step="1" />
+              <span class="bond-sub mono">£0.00</span>
+            </div>
+            <div class="bond-row" data-surface="footway">
+              <span class="bond-surface">Footway</span>
+              <input type="number" class="bond-area" value="20" min="0" step="0.5" />
+              <input type="number" class="bond-rate" value="15" min="0" step="1" />
+              <span class="bond-sub mono">£0.00</span>
+            </div>
+            <div class="bond-row" data-surface="verge">
+              <span class="bond-surface">Verge</span>
+              <input type="number" class="bond-area" value="12" min="0" step="0.5" />
+              <input type="number" class="bond-rate" value="10" min="0" step="1" />
+              <span class="bond-sub mono">£0.00</span>
+            </div>
+            <div class="bond-total">
+              <span>Estimated bond</span>
+              <span class="bond-grand mono" id="bond-grand">£0.00</span>
+            </div>
+            <p class="bond-reconcile" id="bond-reconcile"></p>
+          </div>
+          <p class="step-help" style="margin-top: 10px;">Rates are <strong>illustrative</strong> — bond rates are council policy, vary by authority, change yearly. They're injected, never baked into the SDK, exactly like the SWA code above.</p>
         </section>
 
         <section>
@@ -591,6 +710,16 @@
             <dt>WGS84</dt><dd>53.611990, -1.664442</dd>
             <dt>BNG</dt><dd>422297.79 E, 412878.74 N</dd>
           </dl>
+        </div>
+
+        <div class="bng-panel">
+          <h2>Rides on the record</h2>
+          <p class="stamp-help">What the real S50 form attaches, carried into Street Manager rather than lost to council-side paper.</p>
+          <dl class="coord-readout" id="rail-evidence">
+            <dt>Evidence</dt><dd id="rail-ev-count">2 files → file_ids</dd>
+            <dt>Bond note</dt><dd id="rail-bond">£480.00 → additional_info</dd>
+          </dl>
+          <p class="stamp-help" style="margin-top: 10px;">Both are <em>demonstrated</em>, not just described — the connector uploads and stamps them for real; only the rates and placeholder files are illustrative.</p>
         </div>
       </aside>
     </section>
@@ -845,6 +974,7 @@
       // --- applicant-stated, passed straight through ---
       secondary_contact: document.getElementById('contact-name').value,
       secondary_contact_number: document.getElementById('contact-number').value,
+      secondary_contact_email: document.getElementById('contact-email').value,
       proposed_start_date: toIso(document.getElementById('start-date').value),
       proposed_end_date: toIso(document.getElementById('end-date').value),
       description_of_work: document.getElementById('desc').value,
@@ -876,6 +1006,26 @@
         'this basic demo only builds the non-collaborative branch.';
     }
 
+    // --- evidence attachments: file_ids the connector collects from the
+    //     upload-then-reference step (real ids in the Python script; here we
+    //     show the shape the sandbox would return) ---
+    const checkedEvidence = [...document.querySelectorAll('.evidence-row input:checked')]
+      .map(cb => cb.closest('.evidence-row').dataset.kind);
+    if (checkedEvidence.length) {
+      // WorkAPI.upload_file(name, bytes) -> {file_id} per file; ids referenced here.
+      payload.file_ids = checkedEvidence.map((kind, i) =>
+        `sandbox-file-${String(i + 1).padStart(4, '0')}-${kind}`);
+    }
+
+    // --- bond estimate: example-layer only, never the connector's concern.
+    //     Folded into additional_info as a labelled note (bonds sit outside
+    //     the permit schema, so there's no structured field for them). ---
+    const bond = computeBond();
+    const bondNote = `Illustrative bond estimate (demo only, not enforced by Street Manager): ` +
+      `£${bond.total.toFixed(2)} — ` +
+      bond.lines.map(l => `${l.surface} ${l.area}m² @ £${l.rate}/m² = £${l.sub.toFixed(2)}`).join('; ') + '.';
+    payload.additional_info = bondNote;
+
     // --- connector-stamped identity - build_work_create_request's job ---
     payload.promoter_swa_code = '1355';
     payload.highway_authority_swa_code = '1355';
@@ -891,6 +1041,66 @@
 
     return { payload, extraNote };
   }
+
+  // ---- Bond calculator (pure example-layer arithmetic) ----
+  function computeBond() {
+    const lines = [];
+    let total = 0;
+    document.querySelectorAll('.bond-row').forEach(row => {
+      const area = parseFloat(row.querySelector('.bond-area').value) || 0;
+      const rate = parseFloat(row.querySelector('.bond-rate').value) || 0;
+      const sub = area * rate;
+      total += sub;
+      row.querySelector('.bond-sub').textContent = `£${sub.toFixed(2)}`;
+      if (area > 0) lines.push({ surface: row.dataset.surface, area, rate, sub });
+    });
+    return { total, lines };
+  }
+
+  function refreshBond() {
+    const bond = computeBond();
+    document.getElementById('bond-grand').textContent = `£${bond.total.toFixed(2)}`;
+    document.getElementById('rail-bond').textContent = `£${bond.total.toFixed(2)} → additional_info`;
+
+    // Non-gating reconciliation nudge: apportioned surface areas vs the drawn
+    // footprint's own true BNG area. Warn on a mismatch, never block - same
+    // discipline as the extent/USRN nudge in the connector.
+    const surfaceTotal = bond.lines.reduce((s, l) => s + l.area, 0);
+    const drawn = drawnFootprintArea();
+    const rec = document.getElementById('bond-reconcile');
+    if (drawn > 0) {
+      const diff = Math.abs(surfaceTotal - drawn);
+      if (diff / drawn > 0.15) {
+        rec.textContent = `Apportioned ${surfaceTotal.toFixed(1)}m² vs drawn footprint ≈${drawn.toFixed(1)}m² — ` +
+          `a real front end would flag this to the applicant, not silently bond the mismatch.`;
+        rec.classList.add('warn');
+      } else {
+        rec.textContent = `Apportioned ${surfaceTotal.toFixed(1)}m² ≈ drawn footprint ${drawn.toFixed(1)}m² ✓`;
+        rec.classList.remove('warn');
+      }
+    } else {
+      rec.textContent = `Apportioned total: ${surfaceTotal.toFixed(1)}m² (draw a footprint to reconcile against real ground area).`;
+      rec.classList.remove('warn');
+    }
+  }
+
+  // Illustrative drawn-footprint area. The single-point demo grid has no real
+  // polygon, so this stands in with the demo record's ~32m² footprint; the
+  // Python script computes a true shoelace area over the BNG polygon.
+  function drawnFootprintArea() { return 32.0; }
+
+  function refreshEvidence() {
+    const n = document.querySelectorAll('.evidence-row input:checked').length;
+    document.getElementById('rail-ev-count').textContent =
+      n ? `${n} file${n === 1 ? '' : 's'} → file_ids` : 'none attached';
+  }
+
+  document.querySelectorAll('.bond-area, .bond-rate').forEach(el =>
+    el.addEventListener('input', refreshBond));
+  document.querySelectorAll('.evidence-row input').forEach(el =>
+    el.addEventListener('change', refreshEvidence));
+  refreshBond();
+  refreshEvidence();
 
   document.getElementById('apply-submit').addEventListener('click', () => {
     const { payload, extraNote } = buildWorkCreateRequest();

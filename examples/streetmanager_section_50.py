@@ -1,25 +1,33 @@
-"""Apply for, start, and stop a Section 50 (S50) licence works record in
-Street Manager, submitted under the highway authority's own promoter
-account - the applicant never touches Street Manager directly.
+"""Apply for, start, and stop a Section 50 (S50) application in Street
+Manager, submitted under the highway authority's own promoter account -
+the applicant never touches Street Manager directly.
 
 **Scope: apply / start / stop only.** Reinstatement (Cat C inspection, bond
 release, guarantee period) is deliberately out of scope and stays
 council-side - this is not the full S50 lifecycle, just the three verbs a
 licence needs to get onto and off Street Manager's register.
 
-**This front-end is not a substitute for the Section 50 licence
-application.** It files a works record into Street Manager once (or as) a
-licence exists, and can *attach* supporting evidence (insurance,
-accreditation, plans) to that record - see ``apply()`` below, a real,
-sandbox-callable upload via ``WorkAPI.upload_file``, not a mockup. But
-attaching evidence is not the same as it being assessed: this script does
-not, at present, capture the licensee declarations, contractor identity,
-land title or adoption logic, but could be amended to do so (see
-``s50-streetmanager-form-mapping-addendum.md``'s own field-disposition
-table for mapping vs the real Durham S50/01 form's full field-by-field
-breakdown), and filing a document is not acceptance of it - so it cannot,
-and does not, grant the licence. The licence decision remains with the
-Highway Authority. Remember this is just an example of what you COULD do.
+**This submits a Section 50 application to Street Manager - where the
+authority manages, grants or refuses it.** The applicant fills it in; it
+lands as a submitted S50 under the authority's own promoter account, and
+the highway authority then works it *in Street Manager* - reviews, grants
+or refuses - and confirms the outcome to the applicant directly, by the
+email/phone contact captured below (so ``secondary_contact_email`` is
+load-bearing here, and required in the front-end, even though Street
+Manager itself allows it empty). Supporting evidence (insurance,
+accreditation, plans) is *attached to the record* - see ``apply()`` below,
+a real, sandbox-callable upload via ``WorkAPI.upload_file``, not a mockup.
+What it is *not* is the binding licence itself: the Section 50 licence,
+with its conditions, bond and signed undertakings, is the separate legal
+instrument the authority issues alongside, and this script does not
+capture the licensee declarations, contractor identity, land title or
+adoption logic (see ``s50-streetmanager-form-mapping-addendum.md``'s own
+field-disposition table for the mapping vs the real Durham S50/01 form's
+full field-by-field breakdown). Attaching evidence is not the same as it
+being assessed - filing a document is not acceptance of it - so this
+drives the workflow but does not grant the licence. The licence decision
+remains with the Highway Authority. Remember this is just an example of
+what you COULD do.
 
 **Two real, evidenced additions layered onto that unchanged scope**:
 ``apply()`` uploads illustrative placeholder evidence files and includes
@@ -139,6 +147,15 @@ DEMO_BOND_RATES = {"footway": 15.0, "verge": 10.0}
 DEMO_APPLICANT_FIELDS = {
     "secondary_contact": "J. Smith (licensee contact)",
     "secondary_contact_number": "01234 567890",
+    # How the authority returns the grant/refuse decision. Street Manager
+    # allows this empty, but the S50 workflow is: applicant submits, the HA
+    # works it in Street Manager, then confirms the outcome to the applicant
+    # here - so it's load-bearing, and required in the front-end. A genuine
+    # (nullable) WorkCreateRequest field, confirmed against swagger V6.17.3,
+    # so it passes straight through assembly like every other applicant-stated
+    # field - no connector change. additional_contact_email is also available
+    # if you ever need a correspondence address distinct from the licensee.
+    "secondary_contact_email": "j.smith@example.com",
     "proposed_start_date": "2026-09-01T00:00:00Z",
     "proposed_end_date": "2026-09-08T00:00:00Z",
     "description_of_work": "New private access - Section 50 licensed works",
