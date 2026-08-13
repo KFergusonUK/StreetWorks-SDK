@@ -198,6 +198,13 @@ def _permit_lonlat(permit: JSON) -> tuple[float, float] | None:
     return bng_to_wgs84(easting, northing)
 
 
+def _hover_text(permit: JSON, street: str) -> str:
+    ref = permit.get("permit_reference_number", "?")
+    promoter = permit.get("promoter_organisation", "?")
+    work_type = permit.get("traffic_management_type_string", "?")
+    return f"<b>{ref}</b><br>{street}<br>{promoter}<br>{work_type}"
+
+
 def build_collaboration_map(
     candidates: list[tuple[JSON, JSON, int]],
     doh: tuple[JSON, JSON, int] | None,
@@ -219,10 +226,7 @@ def build_collaboration_map(
                 mode="lines+markers",
                 line=dict(width=4 if is_doh else 2, color="#d4351c" if is_doh else "#1b70b8"),
                 marker=dict(size=12 if is_doh else 8, color="#d4351c" if is_doh else "#1b70b8"),
-                text=[
-                    f"<b>{a.get('permit_reference_number', '?')}</b><br>{street}",
-                    f"<b>{b.get('permit_reference_number', '?')}</b><br>{street}",
-                ],
+                text=[_hover_text(a, street), _hover_text(b, street)],
                 hoverinfo="text",
                 name=("🤦 " if is_doh else "") + f"{street} ({gap}d apart)",
                 showlegend=False,
