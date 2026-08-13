@@ -1256,6 +1256,89 @@ municipalities may run their own instance. Left for a future
 investigation, the same "verify before building" discipline this whole
 Nordic strand is under.
 
+## Helsinki (Kaivuilmoitus)
+
+City of Helsinki's real excavation-notification register — this SDK's
+third Nordic *roadworks* coverage (after Copenhagen and Oslo), alongside
+the separate, already keyless-built national Digitraffic DATEX II feed
+above:
+
+```python
+from streetworks.helsinki import HelsinkiClient
+from streetworks.common import from_helsinki
+
+with HelsinkiClient() as helsinki:
+    features = list(helsinki.iter_roadworks())  # raw, ungrouped
+works = from_helsinki(features)  # grouped by hakemustunnus
+```
+
+**Resolves the investigation brief's own open question, not assumed.**
+`nordic-capitals-investigation.md` flagged Helsinki "least urgent" and
+left its own core claim unconfirmed: *"a roadworks
+(`katutyöt`/excavation-permits) dataset is not confirmed"* on Helsinki
+Region Infoshare. Checked live via HRI's own CKAN `package_search` API:
+every excavation/permit-shaped search term (`kaivulupa`, `kaivuilmoitus`,
+`työmaa`, `excavation`, `katutyöt`) surfaces one real dataset — **"Land
+usage permission system for public areas in the City of Helsinki"** —
+backed by a live GeoServer WFS, layer `avoindata:Kaivuilmoitus_alue`
+("excavation notification, area"). Keyless — every claim here came from
+a fully unauthenticated pull (3,431 real features at investigation time).
+
+**No pagination needed** — a `GetFeature` request with no `count`
+parameter returns every real row in one response
+(`numberReturned == totalFeatures`), the same single-call shape as this
+SDK's Hamburg/Brandenburg sources.
+
+**CRS confirmed live: `EPSG:3879`** (ETRS-GK25FIN) — a genuinely projected
+CRS, not WGS84. The WFS *can* reproject to WGS84 on request (tested live,
+genuinely correct) — not used here, per this SDK's standing CRS policy of
+carrying a source's native CRS through explicitly rather than asking a
+server to reproject, the same call Mallorca's own docstring documents
+making even though its WFS offers the same capability.
+`Coordinate.value` stays plain `(x, y)` = `(easting, northing)`, never
+swapped to `(lat, lon)`.
+
+**A real, load-bearing grouping finding, Oslo-shaped not Copenhagen-
+shaped.** `id` is genuinely unique across every real row (no tiling-
+duplicate problem to dedupe first, unlike Oslo) — but `hakemustunnus`
+(application reference) repeats heavily: 803 distinct references across
+3,431 rows, up to **164 real rows under one reference**
+(`KP2601938`). Checked: this is one excavation notification genuinely
+spanning many real geometry sub-areas (segmented dig zones), the same
+"one project, several real sites" shape as Oslo's `activity_id`/Jersey/
+NYC DOT. `from_helsinki` groups by `hakemustunnus` into one `Works` with
+one `WorksSite` per surviving geometry row.
+
+**Two other real layers on this WFS, checked live and deliberately not
+used**:
+- `Kaivuilmoitus_piste` (point version, 16 real rows) — confirmed to be a
+  **redundant subset**, not disjoint data: all 4 of its distinct
+  `hakemustunnus` values already appear in the area layer, with identical
+  dates/status/address row-for-row — just an alternate point
+  representation for a handful of applications, not additional coverage.
+- `Tilapainen_liikennejarjestely_alue` ("temporary traffic arrangement",
+  342 real rows) — a genuinely different application type and schema.
+  Related but structurally distinct — the same "found, not built this
+  pass" treatment Oslo gave its own separate `/plans` endpoint.
+
+**`status` is a genuinely informative two-value field, unlike Oslo's
+always-"granted" `status`.** `"Käynnissä"` (in progress, 3,223/3,431) and
+`"Tuleva"` (upcoming, 208/3,431) — cross-checked live against a
+date-based future/past split on `tyo_alkaa` and it matches exactly
+(208 = 208). A real "genuinely happening now" vs "not yet" signal, so
+`"Käynnissä"` populates `actual_start`/`actual_end` and grades
+`DateConfidence.VERIFIED` (the same `actual_start`-present rule
+`from_streetmanager` already uses), not always `ESTIMATED` like Oslo.
+
+**`promoter` is never populated — a real, confirmed absence.** `hakija`
+(applicant) and `tyon_suorittaja` (contractor) are empty on all 3,431
+real rows checked, matching the dataset's own published description
+("licensee only to a limited extent").
+
+**Licence: CC-BY-4.0, confirmed live** via the dataset's own CKAN
+`package_show` metadata (`license_id: "CC-BY-4.0"`) — clean, no hedging
+needed, the same confidence level as Copenhagen's.
+
 ## NWB (Netherlands)
 
 Dutch national road network — no credentials. **The `streets` counterpart

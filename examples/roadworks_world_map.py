@@ -224,6 +224,7 @@ def _fetch_works(key, client):
         from_copenhagen,
         from_datex2,
         from_drivebc,
+        from_helsinki,
         from_jersey,
         from_lisboa,
         from_madrid,
@@ -322,11 +323,13 @@ def _fetch_works(key, client):
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
         "copenhagen": from_copenhagen,
-        # oslo's coordinates are projected (EPSG:25832), so _coord_lonlat's
-        # WGS84-only guard skips them on the live-points layer today - still
-        # wired in so real Works are fetched/counted honestly rather than
-        # silently omitted; reprojecting for display is a separate decision.
+        # oslo's and helsinki's coordinates are projected (EPSG:25832 and
+        # EPSG:3879 respectively), so _coord_lonlat's WGS84-only guard skips
+        # them on the live-points layer today - still wired in so real Works
+        # are fetched/counted honestly rather than silently omitted;
+        # reprojecting for display is a separate decision.
         "oslo": from_oslo,
+        "helsinki": from_helsinki,
     }
     if key in simple:
         records = list(itertools.islice(client.iter_roadworks(), _LIMIT))

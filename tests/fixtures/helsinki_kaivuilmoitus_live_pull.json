@@ -1,0 +1,805 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.1",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25495009.57094038,
+                6671309.33497967
+              ],
+              [
+                25495023.75665498,
+                6671367.36295345
+              ],
+              [
+                25495056.84628692,
+                6671358.9620902
+              ],
+              [
+                25495099.59429062,
+                6671346.42625514
+              ],
+              [
+                25495145.21113759,
+                6671445.07934548
+              ],
+              [
+                25495175.35231819,
+                6671475.45589428
+              ],
+              [
+                25495239.19836615,
+                6671416.21108724
+              ],
+              [
+                25495198.74709874,
+                6671358.66222315
+              ],
+              [
+                25495175.07552482,
+                6671307.21952856
+              ],
+              [
+                25495171.12500894,
+                6671259.53909051
+              ],
+              [
+                25495173.30058558,
+                6671224.55190819
+              ],
+              [
+                25495187.24068699,
+                6671181.75022622
+              ],
+              [
+                25495217.49343137,
+                6671125.89174416
+              ],
+              [
+                25495158.98130257,
+                6671063.91032122
+              ],
+              [
+                25495126.550951,
+                6671110.85897243
+              ],
+              [
+                25495093.76422528,
+                6671181.42837627
+              ],
+              [
+                25495092.97619578,
+                6671298.19238592
+              ],
+              [
+                25495009.57094038,
+                6671309.33497967
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 1,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP1900206-23",
+        "tyo_alkaa": "2019-02-25",
+        "tyo_paattyy": "2027-05-14",
+        "toiminnallinen_kunto": "2026-12-31",
+        "tyon_tarkoitus": "Puiston rakentaminen\nLISÄYS 14.12.2020: Lisäaika\nLISÄYS 1.3.2021: Lisäaika 31.12.2021\nLISÄYS 16.12.2021: Lisäaikaa 31.12.2022 saakka\nLISÄYS 25.7.2022: Suunnitelma ja aluerajaus päivitetty.\nLISÄYS 22.12.2022: lisäaikaa 1.1. - 31.12.2023\nLISÄYS 4.5.2023: liikennejärjestelysuunnitelma päivitetty\nLISÄYS 25.8.2023: liikennejärjestelysuunnitelma päivitetty\nLISÄYS 30.8.2023: liikennejärjestelysuunnitelma päivitetty\nLISÄYS 4.1.2024: Lisätty toiminnallinen 18.12.2023 ja lisäaikaa 14.5.2024 asti.\nLISÄYS 28.3.2024: Työalue laajentunut. \nLISÄYS 10.1.2025: Lisäaikaa 30.6.2025 saakka.\nLISÄYS 26.6.2025: lisäaikaa 1.7. - 11.7.2025.\nLISÄYS 22.7.2025: lisäaikaa 12.7. - 31.12.2025.\nLISÄYS 21.10.2025: liikennejärjestelysuunnitelman päivitys.\nLISÄYS 10.12.2025: lisäaikaa 1.1. - 31.12.2026.\nLISÄYS 2.1.2026: liikennejärjestelysuunnitelman päivitys. Työn suorittajan päivitys ja työn suorittajan yhteyshenkilön muutos.\nLISÄYS 22.5.2026: liikennejärjestelysuunnitelman päivitys.",
+        "osoite": "Hyväntoivonpuisto ",
+        "kaupunginosa": "20 LÄNSISATAMA",
+        "status": "Käynnissä",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "25.02.2019",
+        "tyo_paattyy_txt": "14.05.2027",
+        "toiminnallinen_kunto_txt": "31.12.2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.3",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25497207.50944985,
+                6674403.12034167
+              ],
+              [
+                25497178.54360107,
+                6674404.70234443
+              ],
+              [
+                25497172.87314704,
+                6674391.44827888
+              ],
+              [
+                25497190.84139353,
+                6674376.61620983
+              ],
+              [
+                25497183.62081763,
+                6674368.15417983
+              ],
+              [
+                25497191.16307832,
+                6674361.90912766
+              ],
+              [
+                25497172.27695576,
+                6674337.96933673
+              ],
+              [
+                25497193.69784219,
+                6674338.50994791
+              ],
+              [
+                25497197.75238711,
+                6674270.54344451
+              ],
+              [
+                25497189.59880556,
+                6674275.89762764
+              ],
+              [
+                25497166.60803301,
+                6674255.08064958
+              ],
+              [
+                25497201.22233038,
+                6674236.22484869
+              ],
+              [
+                25497204.37661918,
+                6674224.52382421
+              ],
+              [
+                25497221.08572432,
+                6674231.19604024
+              ],
+              [
+                25497228.01754754,
+                6674224.50586676
+              ],
+              [
+                25497238.73759482,
+                6674237.08771421
+              ],
+              [
+                25497222.04273688,
+                6674249.13319421
+              ],
+              [
+                25497243.76297606,
+                6674278.08479948
+              ],
+              [
+                25497230.22951807,
+                6674287.56531236
+              ],
+              [
+                25497215.39792596,
+                6674268.30168645
+              ],
+              [
+                25497210.36630509,
+                6674365.34833746
+              ],
+              [
+                25497220.12732687,
+                6674357.76467166
+              ],
+              [
+                25497229.90455889,
+                6674371.57278012
+              ],
+              [
+                25497209.10744523,
+                6674388.30087284
+              ],
+              [
+                25497207.50944985,
+                6674403.12034167
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 3,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP2100964-112",
+        "tyo_alkaa": "2021-05-17",
+        "tyo_paattyy": "2027-05-14",
+        "toiminnallinen_kunto": "2026-12-31",
+        "tyon_tarkoitus": "Päätöksen saaja varaa tilaa kaivutyölle.\n\nMUUTOS 29.11.2021: päättymispäivä 30.11.2021 -> 31.12.2026, uusi johtoselvitys, hakijan yhteyshenkilö muutettu.\nLISÄYS 7.1.2022: liikennejärjestelysuunnitelma (pohjoinen) päivitetty.\nMUUTOS 13.1.2022: Rakennuttajan yht. hlö muutettu.\nLISÄYS 2.3.2022: Näkinsillalle kameravalvonta.\nMUUTOS 9.5.2022: hakijan yhteyshenkilö muutettu; työn suorittajan yhteyshenkilö muutettu. \nLISÄYS 11.10.2022: \nHakaniemensillalla väliaikainen liikennejärjestely 11.10.2022 klo 9-15. \nHakaniemenkadulla väliaikainen liikennejärjestely 13.10. tai 14.10.2022 klo 12-15. \nLISÄYS 18.10.2022:\nNäkinkujalla väliaikainen liikennejärjestely arviolta välillä 17.10. - 6.11.2022. \nSörnäisten rantatiellä väliaikainen liikennejärjestely 19.10. klo 20 jälkeen.\nLISÄYS 24.10.2022: liikennejärjestely päivitys, Sörnäisten rantatiellä hulevesilinjan rakennustyöt yötyönä  24. - 28.10.2022 klo 20.00-06.00, kaistansulku laivan purkuliikenteen jälkeen. \nLISÄYS 31.10.2022: uusi liikennejärjestelysuunnitelma käyttöön 31.10.2022 alkaen.\nLISÄYS 2.11.2022: kaksi täsmennystä voimassa olevaan liikennejärjestelysuunnitelmaan TLJ100 PV1.6 pohj. vaihe 3c.\nLISÄYS 7.11.2022: uusi liikennejärjestelysuunnitelma Hakaniemensilta 10.11.2022.\nLISÄYS 18.11.2022: 21.11.2022 liikenteenjakajan purku Hakaniemenranta liikenteenohjaussuunnitelma on TLJ100PV 1.6 pohj. vaihe 3 c\nLISÄYS 23.11.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 4, Hakaniementori alueen kivetyksen poisto.)\nLISÄYS 22.12.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 5)\nLISÄYS 19.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 27.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 1.2.2023:  Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 3.2.2023: Liikennejärjestelysuunnitelmat päivitetty. TLJ100_PV1.7pohj. vaihe1 John Stenbergin ranta ja TLJ002_Detaljikuva_1.7pohj. vaihe1_louhinta louhintatyöt Sörnäisten rantatiellä, saarekkeen reunakivi\nLISÄYS 13.2.2023: Liikennejärjestelysuunnitelma päivitetty Hakaniemenrannan ja Siltasaarenkadun risteyksessä vaihe-3.\nLISÄYS 16.2.2023: Liikennejärjestelysuunnitelma päivitetty. Siltasaarenkadun liikenteensiirto TLJ200.\nLISÄYS 20.2.2023: Liikennejärjestelysuunnitelma päivitetty TLJ100 PV1.7 pohj. vaihe 1 rev_A alkaen 24.2.2023.\nLISÄYS 28.2.2028: Liikennejärjestelysuunnitelmat päivitetty Siltasaarenkatu / John Stenbergin ranta. Uusi alue lisätty John Stenbergin ranta.\nLISÄYS 8.3.2023: Liikennejärjestelysuunnitelmat päivitetty, Näkinsilta kaiteet.\nKaukolämpökaivon tyhjennys.\nLISÄYS 13.3.2023: Lisätty JS2300568 ja puhelinnumero  työnsuorittajan yhteyshenkilölle.\nLISÄYS 17.3.2023:  Liikennejärjestelysuunnitelmat päivitetty mm.Hakaniemenkadulla.\nLISÄYS 21.3.2023: Pyöräilynviitoitussuunnitelma.TLJ100 PV1.7vaihe 1 Rev-C\nLISÄYS 31.3.2023:  Liikennejärjestelysuunnitelmat päivitetty Sörnäisten rantatiellä,  Hakaniemenkadun ja Hakaniemenkuja risteyksessä.\nLISÄYS 31.3.2023: Liikennejärjestelysuunnitelmat päivitetty Hakaniemenkadulla.\nLISÄYS 12.4.2023: liikennejärjestelysuunnitelmia päivitetty.\nLISÄYS 24.4.2023: liikennejärjestelysuunnitelmia päivitetty Näkinsillalla.\nLISÄYS 11.5.2023: Pysäköintialueenmuutos Miina Sillanpään kadulla. \nLISÄYS 16.5.2023: liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 5.6.2023: liikennejärjestelysuunnitelmia päivitetty 22.5.2023 alkaen louhintatyö.\nLISÄYS 20.6.2023: Liikennejärjestelysuunnitelmat päivitetty Näkinsillalla.\nLISÄYS 27.6.2023: Liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 12.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu ja Sörnäisten rantatie.\nLISÄYS 24.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu.\nLISÄYS 26.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Sörnäisten rantatie.\nLISÄYS 2.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta.\nLISÄYS 11.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta, Näkinkujan ja Miina Sillanpään kadun risteys.\nLISÄYS 22.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Louhintoja Hakaniemenkadulla\nLISÄYS 6.9.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta\nLISÄYS 19.9.2023: Liikennejärjestelysuunnitelma päivitetty liikenteen siirto Sörnäisten rantatiellä.\nLISÄYS 2.10.2023: Liikennejärjestelysuunnitelma päivitetty, louhintatöitä.\nLISÄYS 14.10.2023: Kaivualue päivitetty (Pitkäsilta), liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ja John Stenbergin rannan kaapelityö, Liikenteensiirto Sörnäisten rantatiellä), johtoselvitys JS2300568 päivitetty, liikennejärjestelysuunnitelma PV1.8 pohj. vaihe 1 SSK 0.3, ilta-yötyönä liikenteenohjaajin.\nLISÄYS 1.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun työmaasähköt+Liva muutos Hakaniemenrannassa)\nLISÄYS 16.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Yötyö Sörnäisten rantatie 16.-17.11., Liikenteensiirto Sörnäisten rantatiellä vk 47, Liikenteensiirto Haapaniemenkadulla)\nLISÄYS 23.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Näkinkulun jalankulun ja pyöräilyn väylä 22.11.->, Yötyö Sörnäisten rantatiellä 30.11., Miina Sillanpään katu 22.11.-> )\nLISÄYS 28.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Pitkäsillan/Siltasaarenkadun/John Stenbergin rannan liikennejärjestelyt jatkuu + Liikenteen siirto Sörnäisten rantatiellä)\nLISÄYS 4.12.2023: Työalue laajentunut Viherniemenkadulle (koppien liitokset), liikennejärjestelysuunnitelmia päivitetty (uv-pylvään asennus Sörnäisten rantatiellä, Siltasaarenkadun liitosmonttu)\nLISÄYS 14.12.2023: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenkatu auki ajoneuvoliikenteelle)\nLISÄYS 18.12.2023: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun sulku ja Hakaniemen liikenteenjärjestelyt vk 1)\nLISÄYS 4.1.2024: poistettu päätöksen liitteistä vanhat suunnitelmat\nLISÄYS 9.1.2024: Liikennejärjestelysuunnitelma päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä)\nLISÄYS 17.1.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaalin asennus Sörnäisten rantatiellä, Liikenteensiirto Sörnäisten rantatiellä, kaistansulku Unioninkatu)\nLISÄYS 23.1.2024: Suunnitelmien päivitys (mahdollisia louhintoja Siltasaarenkadulla)\nLISÄYS 2.2.2024: liikennejärjestelysuunnitelma päivitetty Siltasaarenkatu\nLISÄYS 9.2.2024: Kaivualue päivitetty (Hakaniemenpuisto ja Vetehisenkuja pohjavesiputket)\nLISÄYS 14.2.2024: Liikennejärjestelysuunnitelmia päivitetty. \nLISÄYS 21.2.2024: Liikennejärjestelysuunnitelmia päivitetty (kyltin asennustöitä Unioninkadulla ja Siltavuorenrannassa)\nLISÄYS 4.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta väliaikainen kävelyliuska).\nLISÄYS 13.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Liikennevalo muutos LIVA R413)\nMUUTOS 4.4.2024: rakennuttaja ja työnsuorittaja YIT Housing Oy -> YIT Infra Oy, rakennuttajan yhteyshenkilö muutettu.\nLISÄYS 10.4.2024: Liikennejärjestelysuunnitelmia päivitetty. Fleminginkadun bussipysäkin siirto, Kivitöitä ja asfaltointeja Hakaniemessä.\nLISÄYS 19.4.2024: Liikennejärjestelysuunnitelmia päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä risteys 413, opasteiden asennus Sörnäisten rantatiellä).\nLISÄYS 23.4.2024: Pohjavesiputkien poraus\nLISÄYS 3.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Valojen säätöä yötyönä, Hakaniemenrannan kivityöt vaihe 2, ajoratamaalauksia Sörnäisten rantatiellä)\nLISÄYS 17.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Uusi Hakaniemensilta liikenteelle 20.5.)\nLISÄYS 22.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannassa meren louheen täyttö 27.5. - 31.7.2024)\nLISÄYS 24.5.2024: Kaivulupa-alueen laajennus Sörnäisten rantatiellä Pannukakunpuistikon kohdalla.\nLISÄYS 31.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaaliasennukset, painauman korjaus Sörnäisten rantatiellä, Kaistansulku Merihaankadulla)\nLISÄYS 13.6.2024: Liikennejärjestelypäivitys (Siltasaarenkadun VHT-työt, Nostotyö Merihaankadulla)\nLISÄYS 27.6.2024: Liikennejärjestelysuunnitelma päivitetty (Liikennevaloportaalin asennus, Kaistansulkuja Merihaankadulla ja Sörnäistenrantatiellä)\nLISÄYS 4.7.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadulla louhintaa 5.-15.7.2024 sekä Sörnäisten rantatien ja Hakaniemenkadun risteyksessä liikennevalokatko 9.7.).\nLISÄYS 15.7.2024: Liikennejärjestelysuunnitelmia päivitetty 18.7. alkaen (Siltasaarenkatu, Hakaniemenranta, Pitkäsilta, John Stenbergin ranta).\nLISÄYS 23.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla yhden kaistan sulku etelän suuntaan 30.7.2024)\nLISÄYS 25.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla liikennevalot vilkulla/sammutettuina 31.7.2024).\nLISÄYS 31.7.2024: Liikennejärjestelysuunnitelma päivitetty (Kaapelointityö Siltasaarenkadun jkpp-väylällä)\nLISÄYS 1.8.2024: Liikennejärjestelysuunnitelma päivitetty (Jalankulun ja pyöräilyn viitoitussuunnitelma)\nLISÄYS 5.8.2024: Liikennejärjestelysuunnitelma päivitetty (jyrsintää ja asfaltointia Sörnäisten rantatiellä sekä Haapaniemenkadulla)\nLISÄYS 8.8.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat)\nLISÄYS 15.8.2024: Liikennejärjestelysuunnitelma päivitetty (kaistansulku Merihaankadulla)\nLISÄYS 2.9.2024: Kaivualuerajaus päivitetty (lisätty Siltasaarenkatu 14-18, Hämeentie 2-4), liikennejärjestelysuunnitelma päivitetty (Kaistansulku Merihaankadulla 5.9.)\nLISÄYS 4.9.2024: Liikennejärjestelysuunnitelma päivitetty (Vesijohdontulppaus Näkinkujalla 9.9., poikkeusreitti 5.9->)\nLISÄYS 9.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat, Ajolinjan muutos sekä yötyö Hakaniemenrannassa)\nLISÄYS 23.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Jkpp reittimuutos Hakaniemenrannassa, Hakaniemen torikadun risteyksen asfaltointi)\nLISÄYS 26.9.2024:  Liikennejärjestelysuunnitelmia päivitetty (Liikennejärjestelymuutoksia Hakaniemenrannassa)\nLISÄYS 10.10.2024: Liikennejärjestelysuunnitelmia päivitetty (Merihaankadun asfaltointi)\nLISÄYS 16.10.2024: Liikennejärjestelysuunnitelma päivitetty (liikennejärjestelyn muutoksia Hakaniemenkadulla ja Näkinkujalla, Hakaniemenrannassa kivitöitä)\nLISÄYS 30.10.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Merihaankatu, ajoratamerkintöjä Hakaniemessä sekä Siltasaarenkatu suljettava suojatie)\nLISÄYS 5.11.2024: Liikennejärjestelysuunnitelmia päivitetty (John Stenbergin rannan suojatien siirto)\nLISÄYS 19.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulkuja Hakaniemessä, Hakaniemenrannan työmaaliittymä)\nLISÄYS 28.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Hakaniemensilta, Siltasaarenkatu liikenteensiirto, Haapaniemenkadun siirtokehotukset välillä Sörnäisten rantatie-Hakaniemenranta)\nLISÄYS 18.12.2024: Kaivutyöalue päivitetty (lisätty Siltasaarenkatu, KP2402630 alue), liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta itä suunnitelman päivitys)\nLISÄYS 8.1.2025: Liikennejärjestelysuunnitelmia päivitetty (Kalaturojen asennus ja Hakaniemenrannan valaisin)\nLISÄYS 27.1.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistan sulku) 28.1.2025 keskisaarekkeen kiveyksen purku ja tasaus, 3.3.2025 alkaen otetaan käyttöön taksien ajolinja Ympyrätalon edustalle\nLISÄYS 3.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaapelivedon Porthaninkadun eteläpäähän). kaivualue päivitetty (+JS2403353 mukainen alue)\nLISÄYS 11.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pp ja jk yhdistäminen)\nLISÄYS 17.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-22)\nLISÄYS 21.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko ensimmäinen vaihe, Porthaninkadun kaapelikaivuu)\nLISÄYS 24.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Siltasaarenkadulla)\nLISÄYS 28.2.2025: Työstä vastaavan yhteyshenkilö päivitetty. Kaivualue päivitetty, lisätty Siltasaarenkatu välillä Hämeentie-Toinen linja. \nLISÄYS 10.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Porthaninkadun kulkureitit, hidaste Siltasaarenkadulle, Liikennejärjestelyiden muutoksia Pitkänsillanrannassa). \nLISÄYS 17.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Louhintoja Siltasaarenkadulla)\nLISÄYS 25.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko toinen vaihe, Kaistansulku Hakaniemensillalla)\nLISÄYS 7.4.2025: liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pintatyöt, kaistansulku kolmas linja)\nLISÄYS 5.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Kannatinvaijerien asennus Hakaniemenrannassa)\nLISÄYS 23.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Liikenteensiirto Siltasaarenkadulla)\nLISÄYS 13.6.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-24 /Lyyra, Merihaansillan avaaminen liikenteelle, sähkökeskuksen asennusta Hakaniemensillan pohjoispäädyssä).\nLISÄYS 22.7.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansilta, Kolmas Linja asfaltointeja, Hakaniemen torikadun suojatien kivetyksen korjaus, Siltasaarenkadun asfaltointi).\nLISÄYS 7.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Haapaniemenkadulla Merihaan tunnelin päädyssä asfaltointeja, Merihaansillalla kaideasennuksia).\nLISÄYS 21.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla hulevesikaivojen ympärillä asfaltin korjausta, Pitkänsillan ja John Stenbergin risteyksen alueella jyrsintä- ja asfaltointitöitä, Siltavuorenrannalla uusi suojatie, Hakaniemenrannan ja Hakaniemen torikadulla kiveystöitä). Henkilötietoja poistettu.\nLISÄYS 5.9.2025: Liikennejärjestelysuunnitelma päivitetty. Työstä vastaavan ja rakennuttajan yhteyshenkilön muutos.\nLISÄYS 2.10.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla, Siltasaarenkadulla, Hakaniemenrannalla).\nLISÄYS 22.10.2025: Liikennejärjestelysuunnitelmia päivitetty. Työn suorittajan yhteyshenkilön muutos.\nLISÄYS 3.11.2025: Liikennejärjestelysuunnitelmia päivitetty (Eläintarhantiellä, Siltasaarenkadulla, Viherniemenkadulla, Viherniemenpuistossa ja Merihaansillalla).\nLISÄYS 10.12.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun asfaltointi 10.-12.12.2025).",
+        "osoite": "Hakaniemi, Merihaka, Siltasaarenkatu",
+        "kaupunginosa": "11 KALLIO",
+        "status": "Käynnissä",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "17.05.2021",
+        "tyo_paattyy_txt": "14.05.2027",
+        "toiminnallinen_kunto_txt": "31.12.2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.4",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25497204.48726951,
+                6674224.07807821
+              ],
+              [
+                25497216.75541926,
+                6674228.97101831
+              ],
+              [
+                25497219.52624533,
+                6674150.64389375
+              ],
+              [
+                25497209.03668943,
+                6674149.64912832
+              ],
+              [
+                25497204.48726951,
+                6674224.07807821
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 4,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP2100964-112",
+        "tyo_alkaa": "2021-05-17",
+        "tyo_paattyy": "2027-05-14",
+        "toiminnallinen_kunto": "2026-12-31",
+        "tyon_tarkoitus": "Päätöksen saaja varaa tilaa kaivutyölle.\n\nMUUTOS 29.11.2021: päättymispäivä 30.11.2021 -> 31.12.2026, uusi johtoselvitys, hakijan yhteyshenkilö muutettu.\nLISÄYS 7.1.2022: liikennejärjestelysuunnitelma (pohjoinen) päivitetty.\nMUUTOS 13.1.2022: Rakennuttajan yht. hlö muutettu.\nLISÄYS 2.3.2022: Näkinsillalle kameravalvonta.\nMUUTOS 9.5.2022: hakijan yhteyshenkilö muutettu; työn suorittajan yhteyshenkilö muutettu. \nLISÄYS 11.10.2022: \nHakaniemensillalla väliaikainen liikennejärjestely 11.10.2022 klo 9-15. \nHakaniemenkadulla väliaikainen liikennejärjestely 13.10. tai 14.10.2022 klo 12-15. \nLISÄYS 18.10.2022:\nNäkinkujalla väliaikainen liikennejärjestely arviolta välillä 17.10. - 6.11.2022. \nSörnäisten rantatiellä väliaikainen liikennejärjestely 19.10. klo 20 jälkeen.\nLISÄYS 24.10.2022: liikennejärjestely päivitys, Sörnäisten rantatiellä hulevesilinjan rakennustyöt yötyönä  24. - 28.10.2022 klo 20.00-06.00, kaistansulku laivan purkuliikenteen jälkeen. \nLISÄYS 31.10.2022: uusi liikennejärjestelysuunnitelma käyttöön 31.10.2022 alkaen.\nLISÄYS 2.11.2022: kaksi täsmennystä voimassa olevaan liikennejärjestelysuunnitelmaan TLJ100 PV1.6 pohj. vaihe 3c.\nLISÄYS 7.11.2022: uusi liikennejärjestelysuunnitelma Hakaniemensilta 10.11.2022.\nLISÄYS 18.11.2022: 21.11.2022 liikenteenjakajan purku Hakaniemenranta liikenteenohjaussuunnitelma on TLJ100PV 1.6 pohj. vaihe 3 c\nLISÄYS 23.11.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 4, Hakaniementori alueen kivetyksen poisto.)\nLISÄYS 22.12.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 5)\nLISÄYS 19.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 27.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 1.2.2023:  Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 3.2.2023: Liikennejärjestelysuunnitelmat päivitetty. TLJ100_PV1.7pohj. vaihe1 John Stenbergin ranta ja TLJ002_Detaljikuva_1.7pohj. vaihe1_louhinta louhintatyöt Sörnäisten rantatiellä, saarekkeen reunakivi\nLISÄYS 13.2.2023: Liikennejärjestelysuunnitelma päivitetty Hakaniemenrannan ja Siltasaarenkadun risteyksessä vaihe-3.\nLISÄYS 16.2.2023: Liikennejärjestelysuunnitelma päivitetty. Siltasaarenkadun liikenteensiirto TLJ200.\nLISÄYS 20.2.2023: Liikennejärjestelysuunnitelma päivitetty TLJ100 PV1.7 pohj. vaihe 1 rev_A alkaen 24.2.2023.\nLISÄYS 28.2.2028: Liikennejärjestelysuunnitelmat päivitetty Siltasaarenkatu / John Stenbergin ranta. Uusi alue lisätty John Stenbergin ranta.\nLISÄYS 8.3.2023: Liikennejärjestelysuunnitelmat päivitetty, Näkinsilta kaiteet.\nKaukolämpökaivon tyhjennys.\nLISÄYS 13.3.2023: Lisätty JS2300568 ja puhelinnumero  työnsuorittajan yhteyshenkilölle.\nLISÄYS 17.3.2023:  Liikennejärjestelysuunnitelmat päivitetty mm.Hakaniemenkadulla.\nLISÄYS 21.3.2023: Pyöräilynviitoitussuunnitelma.TLJ100 PV1.7vaihe 1 Rev-C\nLISÄYS 31.3.2023:  Liikennejärjestelysuunnitelmat päivitetty Sörnäisten rantatiellä,  Hakaniemenkadun ja Hakaniemenkuja risteyksessä.\nLISÄYS 31.3.2023: Liikennejärjestelysuunnitelmat päivitetty Hakaniemenkadulla.\nLISÄYS 12.4.2023: liikennejärjestelysuunnitelmia päivitetty.\nLISÄYS 24.4.2023: liikennejärjestelysuunnitelmia päivitetty Näkinsillalla.\nLISÄYS 11.5.2023: Pysäköintialueenmuutos Miina Sillanpään kadulla. \nLISÄYS 16.5.2023: liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 5.6.2023: liikennejärjestelysuunnitelmia päivitetty 22.5.2023 alkaen louhintatyö.\nLISÄYS 20.6.2023: Liikennejärjestelysuunnitelmat päivitetty Näkinsillalla.\nLISÄYS 27.6.2023: Liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 12.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu ja Sörnäisten rantatie.\nLISÄYS 24.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu.\nLISÄYS 26.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Sörnäisten rantatie.\nLISÄYS 2.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta.\nLISÄYS 11.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta, Näkinkujan ja Miina Sillanpään kadun risteys.\nLISÄYS 22.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Louhintoja Hakaniemenkadulla\nLISÄYS 6.9.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta\nLISÄYS 19.9.2023: Liikennejärjestelysuunnitelma päivitetty liikenteen siirto Sörnäisten rantatiellä.\nLISÄYS 2.10.2023: Liikennejärjestelysuunnitelma päivitetty, louhintatöitä.\nLISÄYS 14.10.2023: Kaivualue päivitetty (Pitkäsilta), liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ja John Stenbergin rannan kaapelityö, Liikenteensiirto Sörnäisten rantatiellä), johtoselvitys JS2300568 päivitetty, liikennejärjestelysuunnitelma PV1.8 pohj. vaihe 1 SSK 0.3, ilta-yötyönä liikenteenohjaajin.\nLISÄYS 1.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun työmaasähköt+Liva muutos Hakaniemenrannassa)\nLISÄYS 16.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Yötyö Sörnäisten rantatie 16.-17.11., Liikenteensiirto Sörnäisten rantatiellä vk 47, Liikenteensiirto Haapaniemenkadulla)\nLISÄYS 23.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Näkinkulun jalankulun ja pyöräilyn väylä 22.11.->, Yötyö Sörnäisten rantatiellä 30.11., Miina Sillanpään katu 22.11.-> )\nLISÄYS 28.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Pitkäsillan/Siltasaarenkadun/John Stenbergin rannan liikennejärjestelyt jatkuu + Liikenteen siirto Sörnäisten rantatiellä)\nLISÄYS 4.12.2023: Työalue laajentunut Viherniemenkadulle (koppien liitokset), liikennejärjestelysuunnitelmia päivitetty (uv-pylvään asennus Sörnäisten rantatiellä, Siltasaarenkadun liitosmonttu)\nLISÄYS 14.12.2023: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenkatu auki ajoneuvoliikenteelle)\nLISÄYS 18.12.2023: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun sulku ja Hakaniemen liikenteenjärjestelyt vk 1)\nLISÄYS 4.1.2024: poistettu päätöksen liitteistä vanhat suunnitelmat\nLISÄYS 9.1.2024: Liikennejärjestelysuunnitelma päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä)\nLISÄYS 17.1.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaalin asennus Sörnäisten rantatiellä, Liikenteensiirto Sörnäisten rantatiellä, kaistansulku Unioninkatu)\nLISÄYS 23.1.2024: Suunnitelmien päivitys (mahdollisia louhintoja Siltasaarenkadulla)\nLISÄYS 2.2.2024: liikennejärjestelysuunnitelma päivitetty Siltasaarenkatu\nLISÄYS 9.2.2024: Kaivualue päivitetty (Hakaniemenpuisto ja Vetehisenkuja pohjavesiputket)\nLISÄYS 14.2.2024: Liikennejärjestelysuunnitelmia päivitetty. \nLISÄYS 21.2.2024: Liikennejärjestelysuunnitelmia päivitetty (kyltin asennustöitä Unioninkadulla ja Siltavuorenrannassa)\nLISÄYS 4.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta väliaikainen kävelyliuska).\nLISÄYS 13.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Liikennevalo muutos LIVA R413)\nMUUTOS 4.4.2024: rakennuttaja ja työnsuorittaja YIT Housing Oy -> YIT Infra Oy, rakennuttajan yhteyshenkilö muutettu.\nLISÄYS 10.4.2024: Liikennejärjestelysuunnitelmia päivitetty. Fleminginkadun bussipysäkin siirto, Kivitöitä ja asfaltointeja Hakaniemessä.\nLISÄYS 19.4.2024: Liikennejärjestelysuunnitelmia päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä risteys 413, opasteiden asennus Sörnäisten rantatiellä).\nLISÄYS 23.4.2024: Pohjavesiputkien poraus\nLISÄYS 3.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Valojen säätöä yötyönä, Hakaniemenrannan kivityöt vaihe 2, ajoratamaalauksia Sörnäisten rantatiellä)\nLISÄYS 17.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Uusi Hakaniemensilta liikenteelle 20.5.)\nLISÄYS 22.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannassa meren louheen täyttö 27.5. - 31.7.2024)\nLISÄYS 24.5.2024: Kaivulupa-alueen laajennus Sörnäisten rantatiellä Pannukakunpuistikon kohdalla.\nLISÄYS 31.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaaliasennukset, painauman korjaus Sörnäisten rantatiellä, Kaistansulku Merihaankadulla)\nLISÄYS 13.6.2024: Liikennejärjestelypäivitys (Siltasaarenkadun VHT-työt, Nostotyö Merihaankadulla)\nLISÄYS 27.6.2024: Liikennejärjestelysuunnitelma päivitetty (Liikennevaloportaalin asennus, Kaistansulkuja Merihaankadulla ja Sörnäistenrantatiellä)\nLISÄYS 4.7.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadulla louhintaa 5.-15.7.2024 sekä Sörnäisten rantatien ja Hakaniemenkadun risteyksessä liikennevalokatko 9.7.).\nLISÄYS 15.7.2024: Liikennejärjestelysuunnitelmia päivitetty 18.7. alkaen (Siltasaarenkatu, Hakaniemenranta, Pitkäsilta, John Stenbergin ranta).\nLISÄYS 23.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla yhden kaistan sulku etelän suuntaan 30.7.2024)\nLISÄYS 25.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla liikennevalot vilkulla/sammutettuina 31.7.2024).\nLISÄYS 31.7.2024: Liikennejärjestelysuunnitelma päivitetty (Kaapelointityö Siltasaarenkadun jkpp-väylällä)\nLISÄYS 1.8.2024: Liikennejärjestelysuunnitelma päivitetty (Jalankulun ja pyöräilyn viitoitussuunnitelma)\nLISÄYS 5.8.2024: Liikennejärjestelysuunnitelma päivitetty (jyrsintää ja asfaltointia Sörnäisten rantatiellä sekä Haapaniemenkadulla)\nLISÄYS 8.8.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat)\nLISÄYS 15.8.2024: Liikennejärjestelysuunnitelma päivitetty (kaistansulku Merihaankadulla)\nLISÄYS 2.9.2024: Kaivualuerajaus päivitetty (lisätty Siltasaarenkatu 14-18, Hämeentie 2-4), liikennejärjestelysuunnitelma päivitetty (Kaistansulku Merihaankadulla 5.9.)\nLISÄYS 4.9.2024: Liikennejärjestelysuunnitelma päivitetty (Vesijohdontulppaus Näkinkujalla 9.9., poikkeusreitti 5.9->)\nLISÄYS 9.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat, Ajolinjan muutos sekä yötyö Hakaniemenrannassa)\nLISÄYS 23.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Jkpp reittimuutos Hakaniemenrannassa, Hakaniemen torikadun risteyksen asfaltointi)\nLISÄYS 26.9.2024:  Liikennejärjestelysuunnitelmia päivitetty (Liikennejärjestelymuutoksia Hakaniemenrannassa)\nLISÄYS 10.10.2024: Liikennejärjestelysuunnitelmia päivitetty (Merihaankadun asfaltointi)\nLISÄYS 16.10.2024: Liikennejärjestelysuunnitelma päivitetty (liikennejärjestelyn muutoksia Hakaniemenkadulla ja Näkinkujalla, Hakaniemenrannassa kivitöitä)\nLISÄYS 30.10.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Merihaankatu, ajoratamerkintöjä Hakaniemessä sekä Siltasaarenkatu suljettava suojatie)\nLISÄYS 5.11.2024: Liikennejärjestelysuunnitelmia päivitetty (John Stenbergin rannan suojatien siirto)\nLISÄYS 19.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulkuja Hakaniemessä, Hakaniemenrannan työmaaliittymä)\nLISÄYS 28.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Hakaniemensilta, Siltasaarenkatu liikenteensiirto, Haapaniemenkadun siirtokehotukset välillä Sörnäisten rantatie-Hakaniemenranta)\nLISÄYS 18.12.2024: Kaivutyöalue päivitetty (lisätty Siltasaarenkatu, KP2402630 alue), liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta itä suunnitelman päivitys)\nLISÄYS 8.1.2025: Liikennejärjestelysuunnitelmia päivitetty (Kalaturojen asennus ja Hakaniemenrannan valaisin)\nLISÄYS 27.1.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistan sulku) 28.1.2025 keskisaarekkeen kiveyksen purku ja tasaus, 3.3.2025 alkaen otetaan käyttöön taksien ajolinja Ympyrätalon edustalle\nLISÄYS 3.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaapelivedon Porthaninkadun eteläpäähän). kaivualue päivitetty (+JS2403353 mukainen alue)\nLISÄYS 11.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pp ja jk yhdistäminen)\nLISÄYS 17.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-22)\nLISÄYS 21.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko ensimmäinen vaihe, Porthaninkadun kaapelikaivuu)\nLISÄYS 24.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Siltasaarenkadulla)\nLISÄYS 28.2.2025: Työstä vastaavan yhteyshenkilö päivitetty. Kaivualue päivitetty, lisätty Siltasaarenkatu välillä Hämeentie-Toinen linja. \nLISÄYS 10.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Porthaninkadun kulkureitit, hidaste Siltasaarenkadulle, Liikennejärjestelyiden muutoksia Pitkänsillanrannassa). \nLISÄYS 17.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Louhintoja Siltasaarenkadulla)\nLISÄYS 25.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko toinen vaihe, Kaistansulku Hakaniemensillalla)\nLISÄYS 7.4.2025: liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pintatyöt, kaistansulku kolmas linja)\nLISÄYS 5.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Kannatinvaijerien asennus Hakaniemenrannassa)\nLISÄYS 23.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Liikenteensiirto Siltasaarenkadulla)\nLISÄYS 13.6.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-24 /Lyyra, Merihaansillan avaaminen liikenteelle, sähkökeskuksen asennusta Hakaniemensillan pohjoispäädyssä).\nLISÄYS 22.7.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansilta, Kolmas Linja asfaltointeja, Hakaniemen torikadun suojatien kivetyksen korjaus, Siltasaarenkadun asfaltointi).\nLISÄYS 7.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Haapaniemenkadulla Merihaan tunnelin päädyssä asfaltointeja, Merihaansillalla kaideasennuksia).\nLISÄYS 21.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla hulevesikaivojen ympärillä asfaltin korjausta, Pitkänsillan ja John Stenbergin risteyksen alueella jyrsintä- ja asfaltointitöitä, Siltavuorenrannalla uusi suojatie, Hakaniemenrannan ja Hakaniemen torikadulla kiveystöitä). Henkilötietoja poistettu.\nLISÄYS 5.9.2025: Liikennejärjestelysuunnitelma päivitetty. Työstä vastaavan ja rakennuttajan yhteyshenkilön muutos.\nLISÄYS 2.10.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla, Siltasaarenkadulla, Hakaniemenrannalla).\nLISÄYS 22.10.2025: Liikennejärjestelysuunnitelmia päivitetty. Työn suorittajan yhteyshenkilön muutos.\nLISÄYS 3.11.2025: Liikennejärjestelysuunnitelmia päivitetty (Eläintarhantiellä, Siltasaarenkadulla, Viherniemenkadulla, Viherniemenpuistossa ja Merihaansillalla).\nLISÄYS 10.12.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun asfaltointi 10.-12.12.2025).",
+        "osoite": "Hakaniemi, Merihaka, Siltasaarenkatu",
+        "kaupunginosa": "11 KALLIO",
+        "status": "Käynnissä",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "17.05.2021",
+        "tyo_paattyy_txt": "14.05.2027",
+        "toiminnallinen_kunto_txt": "31.12.2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.5",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25497719.77300551,
+                6674245.11300415
+              ],
+              [
+                25497731.75285374,
+                6674233.74120058
+              ],
+              [
+                25497764.62641458,
+                6674267.36844892
+              ],
+              [
+                25497801.34618521,
+                6674238.04398872
+              ],
+              [
+                25497823.56063281,
+                6674265.77316005
+              ],
+              [
+                25497830.99425955,
+                6674261.31213744
+              ],
+              [
+                25497807.7799316,
+                6674231.91228845
+              ],
+              [
+                25497810.66440819,
+                6674229.79367189
+              ],
+              [
+                25497813.13456106,
+                6674184.33472225
+              ],
+              [
+                25497780.70500929,
+                6674151.26385034
+              ],
+              [
+                25497741.91203629,
+                6674149.50490051
+              ],
+              [
+                25497668.26734579,
+                6674060.53013627
+              ],
+              [
+                25497672.13033339,
+                6673938.75070152
+              ],
+              [
+                25497808.27331424,
+                6673943.34620718
+              ],
+              [
+                25497800.40637664,
+                6674151.58621937
+              ],
+              [
+                25497781.92585924,
+                6674151.15169589
+              ],
+              [
+                25497813.1340292,
+                6674183.44339956
+              ],
+              [
+                25497820.98241019,
+                6673942.89296812
+              ],
+              [
+                25497958.40184083,
+                6673948.050368
+              ],
+              [
+                25497958.29648998,
+                6673958.1892224
+              ],
+              [
+                25497972.39346341,
+                6673958.51564283
+              ],
+              [
+                25497973.81162039,
+                6673913.61447874
+              ],
+              [
+                25497961.7679068,
+                6673913.17549504
+              ],
+              [
+                25497962.31671127,
+                6673902.03365684
+              ],
+              [
+                25497974.02739975,
+                6673902.3614111
+              ],
+              [
+                25497974.13569022,
+                6673897.45907677
+              ],
+              [
+                25497942.61114061,
+                6673896.58531377
+              ],
+              [
+                25497673.24751601,
+                6673862.65331739
+              ],
+              [
+                25497680.82903534,
+                6673827.77551491
+              ],
+              [
+                25497668.12005332,
+                6673829.00914676
+              ],
+              [
+                25497645.97395991,
+                6673827.24065753
+              ],
+              [
+                25497639.44570431,
+                6673859.6667166
+              ],
+              [
+                25497548.4154562,
+                6673846.02238625
+              ],
+              [
+                25497544.17160023,
+                6673890.36853048
+              ],
+              [
+                25497504.37742909,
+                6673889.61550198
+              ],
+              [
+                25497481.61315802,
+                6673876.26123166
+              ],
+              [
+                25497417.09028589,
+                6673910.51064221
+              ],
+              [
+                25497397.10834713,
+                6673907.73939423
+              ],
+              [
+                25497391.00620954,
+                6673911.75468516
+              ],
+              [
+                25497357.09402024,
+                6673909.32784353
+              ],
+              [
+                25497314.35794743,
+                6673907.79909326
+              ],
+              [
+                25497239.81876978,
+                6673904.17776126
+              ],
+              [
+                25497245.17001272,
+                6673787.41045905
+              ],
+              [
+                25497247.32239536,
+                6673697.27384474
+              ],
+              [
+                25497275.40755405,
+                6673698.03276886
+              ],
+              [
+                25497276.10839641,
+                6673670.17841937
+              ],
+              [
+                25497224.8207725,
+                6673667.09726096
+              ],
+              [
+                25497220.23831788,
+                6673772.38821203
+              ],
+              [
+                25497199.42507423,
+                6673772.40405515
+              ],
+              [
+                25497198.76867197,
+                6673784.99448916
+              ],
+              [
+                25497216.86344065,
+                6673786.54051998
+              ],
+              [
+                25497214.34236612,
+                6673828.65743175
+              ],
+              [
+                25497210.29718606,
+                6673909.99370985
+              ],
+              [
+                25497202.65798652,
+                6674081.35636206
+              ],
+              [
+                25497206.56046108,
+                6674104.52778437
+              ],
+              [
+                25497204.91246151,
+                6674126.70070189
+              ],
+              [
+                25497210.19303643,
+                6674137.72680157
+              ],
+              [
+                25497209.64706357,
+                6674149.53724817
+              ],
+              [
+                25497219.4149147,
+                6674150.19831667
+              ],
+              [
+                25497220.07216534,
+                6674138.7220333
+              ],
+              [
+                25497225.00822685,
+                6674134.59592333
+              ],
+              [
+                25497309.2418149,
+                6674196.36865238
+              ],
+              [
+                25497329.26191055,
+                6674177.4133922
+              ],
+              [
+                25497259.52121733,
+                6674126.77087708
+              ],
+              [
+                25497260.42027093,
+                6674067.3858086
+              ],
+              [
+                25497265.01891581,
+                6674057.13215983
+              ],
+              [
+                25497267.1651369,
+                6673958.30513107
+              ],
+              [
+                25497357.35457876,
+                6673962.80702385
+              ],
+              [
+                25497357.19466904,
+                6673971.94319827
+              ],
+              [
+                25497381.83692405,
+                6673972.92825094
+              ],
+              [
+                25497387.16482286,
+                6673972.92444893
+              ],
+              [
+                25497387.2209572,
+                6673973.81573176
+              ],
+              [
+                25497392.88684117,
+                6673980.83086455
+              ],
+              [
+                25497392.01661837,
+                6674005.78852387
+              ],
+              [
+                25497403.89368093,
+                6674006.33716866
+              ],
+              [
+                25497405.47190369,
+                6673962.21557001
+              ],
+              [
+                25497435.4977008,
+                6673963.3085919
+              ],
+              [
+                25497538.44936275,
+                6674047.1337668
+              ],
+              [
+                25497513.55389458,
+                6674081.13225807
+              ],
+              [
+                25497509.61358578,
+                6674081.13493338
+              ],
+              [
+                25497510.08087759,
+                6674115.45055007
+              ],
+              [
+                25497579.34234036,
+                6674117.63245742
+              ],
+              [
+                25497579.18122234,
+                6674125.76588603
+              ],
+              [
+                25497584.12049595,
+                6674125.87404223
+              ],
+              [
+                25497584.28177179,
+                6674117.96344449
+              ],
+              [
+                25497630.06745451,
+                6674119.2705362
+              ],
+              [
+                25497695.21122197,
+                6674192.54030722
+              ],
+              [
+                25497705.20106136,
+                6674193.53677684
+              ],
+              [
+                25497718.9742343,
+                6674210.01765498
+              ],
+              [
+                25497702.83451392,
+                6674225.0688127
+              ],
+              [
+                25497719.77300551,
+                6674245.11300415
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 5,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP2100964-112",
+        "tyo_alkaa": "2021-05-17",
+        "tyo_paattyy": "2027-05-14",
+        "toiminnallinen_kunto": "2026-12-31",
+        "tyon_tarkoitus": "Päätöksen saaja varaa tilaa kaivutyölle.\n\nMUUTOS 29.11.2021: päättymispäivä 30.11.2021 -> 31.12.2026, uusi johtoselvitys, hakijan yhteyshenkilö muutettu.\nLISÄYS 7.1.2022: liikennejärjestelysuunnitelma (pohjoinen) päivitetty.\nMUUTOS 13.1.2022: Rakennuttajan yht. hlö muutettu.\nLISÄYS 2.3.2022: Näkinsillalle kameravalvonta.\nMUUTOS 9.5.2022: hakijan yhteyshenkilö muutettu; työn suorittajan yhteyshenkilö muutettu. \nLISÄYS 11.10.2022: \nHakaniemensillalla väliaikainen liikennejärjestely 11.10.2022 klo 9-15. \nHakaniemenkadulla väliaikainen liikennejärjestely 13.10. tai 14.10.2022 klo 12-15. \nLISÄYS 18.10.2022:\nNäkinkujalla väliaikainen liikennejärjestely arviolta välillä 17.10. - 6.11.2022. \nSörnäisten rantatiellä väliaikainen liikennejärjestely 19.10. klo 20 jälkeen.\nLISÄYS 24.10.2022: liikennejärjestely päivitys, Sörnäisten rantatiellä hulevesilinjan rakennustyöt yötyönä  24. - 28.10.2022 klo 20.00-06.00, kaistansulku laivan purkuliikenteen jälkeen. \nLISÄYS 31.10.2022: uusi liikennejärjestelysuunnitelma käyttöön 31.10.2022 alkaen.\nLISÄYS 2.11.2022: kaksi täsmennystä voimassa olevaan liikennejärjestelysuunnitelmaan TLJ100 PV1.6 pohj. vaihe 3c.\nLISÄYS 7.11.2022: uusi liikennejärjestelysuunnitelma Hakaniemensilta 10.11.2022.\nLISÄYS 18.11.2022: 21.11.2022 liikenteenjakajan purku Hakaniemenranta liikenteenohjaussuunnitelma on TLJ100PV 1.6 pohj. vaihe 3 c\nLISÄYS 23.11.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 4, Hakaniementori alueen kivetyksen poisto.)\nLISÄYS 22.12.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 5)\nLISÄYS 19.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 27.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 1.2.2023:  Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 3.2.2023: Liikennejärjestelysuunnitelmat päivitetty. TLJ100_PV1.7pohj. vaihe1 John Stenbergin ranta ja TLJ002_Detaljikuva_1.7pohj. vaihe1_louhinta louhintatyöt Sörnäisten rantatiellä, saarekkeen reunakivi\nLISÄYS 13.2.2023: Liikennejärjestelysuunnitelma päivitetty Hakaniemenrannan ja Siltasaarenkadun risteyksessä vaihe-3.\nLISÄYS 16.2.2023: Liikennejärjestelysuunnitelma päivitetty. Siltasaarenkadun liikenteensiirto TLJ200.\nLISÄYS 20.2.2023: Liikennejärjestelysuunnitelma päivitetty TLJ100 PV1.7 pohj. vaihe 1 rev_A alkaen 24.2.2023.\nLISÄYS 28.2.2028: Liikennejärjestelysuunnitelmat päivitetty Siltasaarenkatu / John Stenbergin ranta. Uusi alue lisätty John Stenbergin ranta.\nLISÄYS 8.3.2023: Liikennejärjestelysuunnitelmat päivitetty, Näkinsilta kaiteet.\nKaukolämpökaivon tyhjennys.\nLISÄYS 13.3.2023: Lisätty JS2300568 ja puhelinnumero  työnsuorittajan yhteyshenkilölle.\nLISÄYS 17.3.2023:  Liikennejärjestelysuunnitelmat päivitetty mm.Hakaniemenkadulla.\nLISÄYS 21.3.2023: Pyöräilynviitoitussuunnitelma.TLJ100 PV1.7vaihe 1 Rev-C\nLISÄYS 31.3.2023:  Liikennejärjestelysuunnitelmat päivitetty Sörnäisten rantatiellä,  Hakaniemenkadun ja Hakaniemenkuja risteyksessä.\nLISÄYS 31.3.2023: Liikennejärjestelysuunnitelmat päivitetty Hakaniemenkadulla.\nLISÄYS 12.4.2023: liikennejärjestelysuunnitelmia päivitetty.\nLISÄYS 24.4.2023: liikennejärjestelysuunnitelmia päivitetty Näkinsillalla.\nLISÄYS 11.5.2023: Pysäköintialueenmuutos Miina Sillanpään kadulla. \nLISÄYS 16.5.2023: liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 5.6.2023: liikennejärjestelysuunnitelmia päivitetty 22.5.2023 alkaen louhintatyö.\nLISÄYS 20.6.2023: Liikennejärjestelysuunnitelmat päivitetty Näkinsillalla.\nLISÄYS 27.6.2023: Liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 12.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu ja Sörnäisten rantatie.\nLISÄYS 24.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu.\nLISÄYS 26.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Sörnäisten rantatie.\nLISÄYS 2.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta.\nLISÄYS 11.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta, Näkinkujan ja Miina Sillanpään kadun risteys.\nLISÄYS 22.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Louhintoja Hakaniemenkadulla\nLISÄYS 6.9.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta\nLISÄYS 19.9.2023: Liikennejärjestelysuunnitelma päivitetty liikenteen siirto Sörnäisten rantatiellä.\nLISÄYS 2.10.2023: Liikennejärjestelysuunnitelma päivitetty, louhintatöitä.\nLISÄYS 14.10.2023: Kaivualue päivitetty (Pitkäsilta), liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ja John Stenbergin rannan kaapelityö, Liikenteensiirto Sörnäisten rantatiellä), johtoselvitys JS2300568 päivitetty, liikennejärjestelysuunnitelma PV1.8 pohj. vaihe 1 SSK 0.3, ilta-yötyönä liikenteenohjaajin.\nLISÄYS 1.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun työmaasähköt+Liva muutos Hakaniemenrannassa)\nLISÄYS 16.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Yötyö Sörnäisten rantatie 16.-17.11., Liikenteensiirto Sörnäisten rantatiellä vk 47, Liikenteensiirto Haapaniemenkadulla)\nLISÄYS 23.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Näkinkulun jalankulun ja pyöräilyn väylä 22.11.->, Yötyö Sörnäisten rantatiellä 30.11., Miina Sillanpään katu 22.11.-> )\nLISÄYS 28.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Pitkäsillan/Siltasaarenkadun/John Stenbergin rannan liikennejärjestelyt jatkuu + Liikenteen siirto Sörnäisten rantatiellä)\nLISÄYS 4.12.2023: Työalue laajentunut Viherniemenkadulle (koppien liitokset), liikennejärjestelysuunnitelmia päivitetty (uv-pylvään asennus Sörnäisten rantatiellä, Siltasaarenkadun liitosmonttu)\nLISÄYS 14.12.2023: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenkatu auki ajoneuvoliikenteelle)\nLISÄYS 18.12.2023: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun sulku ja Hakaniemen liikenteenjärjestelyt vk 1)\nLISÄYS 4.1.2024: poistettu päätöksen liitteistä vanhat suunnitelmat\nLISÄYS 9.1.2024: Liikennejärjestelysuunnitelma päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä)\nLISÄYS 17.1.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaalin asennus Sörnäisten rantatiellä, Liikenteensiirto Sörnäisten rantatiellä, kaistansulku Unioninkatu)\nLISÄYS 23.1.2024: Suunnitelmien päivitys (mahdollisia louhintoja Siltasaarenkadulla)\nLISÄYS 2.2.2024: liikennejärjestelysuunnitelma päivitetty Siltasaarenkatu\nLISÄYS 9.2.2024: Kaivualue päivitetty (Hakaniemenpuisto ja Vetehisenkuja pohjavesiputket)\nLISÄYS 14.2.2024: Liikennejärjestelysuunnitelmia päivitetty. \nLISÄYS 21.2.2024: Liikennejärjestelysuunnitelmia päivitetty (kyltin asennustöitä Unioninkadulla ja Siltavuorenrannassa)\nLISÄYS 4.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta väliaikainen kävelyliuska).\nLISÄYS 13.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Liikennevalo muutos LIVA R413)\nMUUTOS 4.4.2024: rakennuttaja ja työnsuorittaja YIT Housing Oy -> YIT Infra Oy, rakennuttajan yhteyshenkilö muutettu.\nLISÄYS 10.4.2024: Liikennejärjestelysuunnitelmia päivitetty. Fleminginkadun bussipysäkin siirto, Kivitöitä ja asfaltointeja Hakaniemessä.\nLISÄYS 19.4.2024: Liikennejärjestelysuunnitelmia päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä risteys 413, opasteiden asennus Sörnäisten rantatiellä).\nLISÄYS 23.4.2024: Pohjavesiputkien poraus\nLISÄYS 3.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Valojen säätöä yötyönä, Hakaniemenrannan kivityöt vaihe 2, ajoratamaalauksia Sörnäisten rantatiellä)\nLISÄYS 17.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Uusi Hakaniemensilta liikenteelle 20.5.)\nLISÄYS 22.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannassa meren louheen täyttö 27.5. - 31.7.2024)\nLISÄYS 24.5.2024: Kaivulupa-alueen laajennus Sörnäisten rantatiellä Pannukakunpuistikon kohdalla.\nLISÄYS 31.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaaliasennukset, painauman korjaus Sörnäisten rantatiellä, Kaistansulku Merihaankadulla)\nLISÄYS 13.6.2024: Liikennejärjestelypäivitys (Siltasaarenkadun VHT-työt, Nostotyö Merihaankadulla)\nLISÄYS 27.6.2024: Liikennejärjestelysuunnitelma päivitetty (Liikennevaloportaalin asennus, Kaistansulkuja Merihaankadulla ja Sörnäistenrantatiellä)\nLISÄYS 4.7.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadulla louhintaa 5.-15.7.2024 sekä Sörnäisten rantatien ja Hakaniemenkadun risteyksessä liikennevalokatko 9.7.).\nLISÄYS 15.7.2024: Liikennejärjestelysuunnitelmia päivitetty 18.7. alkaen (Siltasaarenkatu, Hakaniemenranta, Pitkäsilta, John Stenbergin ranta).\nLISÄYS 23.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla yhden kaistan sulku etelän suuntaan 30.7.2024)\nLISÄYS 25.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla liikennevalot vilkulla/sammutettuina 31.7.2024).\nLISÄYS 31.7.2024: Liikennejärjestelysuunnitelma päivitetty (Kaapelointityö Siltasaarenkadun jkpp-väylällä)\nLISÄYS 1.8.2024: Liikennejärjestelysuunnitelma päivitetty (Jalankulun ja pyöräilyn viitoitussuunnitelma)\nLISÄYS 5.8.2024: Liikennejärjestelysuunnitelma päivitetty (jyrsintää ja asfaltointia Sörnäisten rantatiellä sekä Haapaniemenkadulla)\nLISÄYS 8.8.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat)\nLISÄYS 15.8.2024: Liikennejärjestelysuunnitelma päivitetty (kaistansulku Merihaankadulla)\nLISÄYS 2.9.2024: Kaivualuerajaus päivitetty (lisätty Siltasaarenkatu 14-18, Hämeentie 2-4), liikennejärjestelysuunnitelma päivitetty (Kaistansulku Merihaankadulla 5.9.)\nLISÄYS 4.9.2024: Liikennejärjestelysuunnitelma päivitetty (Vesijohdontulppaus Näkinkujalla 9.9., poikkeusreitti 5.9->)\nLISÄYS 9.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat, Ajolinjan muutos sekä yötyö Hakaniemenrannassa)\nLISÄYS 23.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Jkpp reittimuutos Hakaniemenrannassa, Hakaniemen torikadun risteyksen asfaltointi)\nLISÄYS 26.9.2024:  Liikennejärjestelysuunnitelmia päivitetty (Liikennejärjestelymuutoksia Hakaniemenrannassa)\nLISÄYS 10.10.2024: Liikennejärjestelysuunnitelmia päivitetty (Merihaankadun asfaltointi)\nLISÄYS 16.10.2024: Liikennejärjestelysuunnitelma päivitetty (liikennejärjestelyn muutoksia Hakaniemenkadulla ja Näkinkujalla, Hakaniemenrannassa kivitöitä)\nLISÄYS 30.10.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Merihaankatu, ajoratamerkintöjä Hakaniemessä sekä Siltasaarenkatu suljettava suojatie)\nLISÄYS 5.11.2024: Liikennejärjestelysuunnitelmia päivitetty (John Stenbergin rannan suojatien siirto)\nLISÄYS 19.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulkuja Hakaniemessä, Hakaniemenrannan työmaaliittymä)\nLISÄYS 28.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Hakaniemensilta, Siltasaarenkatu liikenteensiirto, Haapaniemenkadun siirtokehotukset välillä Sörnäisten rantatie-Hakaniemenranta)\nLISÄYS 18.12.2024: Kaivutyöalue päivitetty (lisätty Siltasaarenkatu, KP2402630 alue), liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta itä suunnitelman päivitys)\nLISÄYS 8.1.2025: Liikennejärjestelysuunnitelmia päivitetty (Kalaturojen asennus ja Hakaniemenrannan valaisin)\nLISÄYS 27.1.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistan sulku) 28.1.2025 keskisaarekkeen kiveyksen purku ja tasaus, 3.3.2025 alkaen otetaan käyttöön taksien ajolinja Ympyrätalon edustalle\nLISÄYS 3.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaapelivedon Porthaninkadun eteläpäähän). kaivualue päivitetty (+JS2403353 mukainen alue)\nLISÄYS 11.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pp ja jk yhdistäminen)\nLISÄYS 17.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-22)\nLISÄYS 21.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko ensimmäinen vaihe, Porthaninkadun kaapelikaivuu)\nLISÄYS 24.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Siltasaarenkadulla)\nLISÄYS 28.2.2025: Työstä vastaavan yhteyshenkilö päivitetty. Kaivualue päivitetty, lisätty Siltasaarenkatu välillä Hämeentie-Toinen linja. \nLISÄYS 10.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Porthaninkadun kulkureitit, hidaste Siltasaarenkadulle, Liikennejärjestelyiden muutoksia Pitkänsillanrannassa). \nLISÄYS 17.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Louhintoja Siltasaarenkadulla)\nLISÄYS 25.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko toinen vaihe, Kaistansulku Hakaniemensillalla)\nLISÄYS 7.4.2025: liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pintatyöt, kaistansulku kolmas linja)\nLISÄYS 5.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Kannatinvaijerien asennus Hakaniemenrannassa)\nLISÄYS 23.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Liikenteensiirto Siltasaarenkadulla)\nLISÄYS 13.6.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-24 /Lyyra, Merihaansillan avaaminen liikenteelle, sähkökeskuksen asennusta Hakaniemensillan pohjoispäädyssä).\nLISÄYS 22.7.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansilta, Kolmas Linja asfaltointeja, Hakaniemen torikadun suojatien kivetyksen korjaus, Siltasaarenkadun asfaltointi).\nLISÄYS 7.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Haapaniemenkadulla Merihaan tunnelin päädyssä asfaltointeja, Merihaansillalla kaideasennuksia).\nLISÄYS 21.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla hulevesikaivojen ympärillä asfaltin korjausta, Pitkänsillan ja John Stenbergin risteyksen alueella jyrsintä- ja asfaltointitöitä, Siltavuorenrannalla uusi suojatie, Hakaniemenrannan ja Hakaniemen torikadulla kiveystöitä). Henkilötietoja poistettu.\nLISÄYS 5.9.2025: Liikennejärjestelysuunnitelma päivitetty. Työstä vastaavan ja rakennuttajan yhteyshenkilön muutos.\nLISÄYS 2.10.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla, Siltasaarenkadulla, Hakaniemenrannalla).\nLISÄYS 22.10.2025: Liikennejärjestelysuunnitelmia päivitetty. Työn suorittajan yhteyshenkilön muutos.\nLISÄYS 3.11.2025: Liikennejärjestelysuunnitelmia päivitetty (Eläintarhantiellä, Siltasaarenkadulla, Viherniemenkadulla, Viherniemenpuistossa ja Merihaansillalla).\nLISÄYS 10.12.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun asfaltointi 10.-12.12.2025).",
+        "osoite": "Hakaniemi, Merihaka, Siltasaarenkatu",
+        "kaupunginosa": "11 KALLIO",
+        "status": "Käynnissä",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "17.05.2021",
+        "tyo_paattyy_txt": "14.05.2027",
+        "toiminnallinen_kunto_txt": "31.12.2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.6",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25497316.0218032,
+                6673906.23805963
+              ],
+              [
+                25497322.48753967,
+                6673792.25543968
+              ],
+              [
+                25497245.55877618,
+                6673787.74441288
+              ],
+              [
+                25497245.71280729,
+                6673771.14341298
+              ],
+              [
+                25497315.48298555,
+                6673776.77383235
+              ],
+              [
+                25497350.0185488,
+                6673795.24364625
+              ],
+              [
+                25497341.99578268,
+                6673906.21913172
+              ],
+              [
+                25497316.0218032,
+                6673906.23805963
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 6,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP2100964-112",
+        "tyo_alkaa": "2021-05-17",
+        "tyo_paattyy": "2027-05-14",
+        "toiminnallinen_kunto": "2026-12-31",
+        "tyon_tarkoitus": "Päätöksen saaja varaa tilaa kaivutyölle.\n\nMUUTOS 29.11.2021: päättymispäivä 30.11.2021 -> 31.12.2026, uusi johtoselvitys, hakijan yhteyshenkilö muutettu.\nLISÄYS 7.1.2022: liikennejärjestelysuunnitelma (pohjoinen) päivitetty.\nMUUTOS 13.1.2022: Rakennuttajan yht. hlö muutettu.\nLISÄYS 2.3.2022: Näkinsillalle kameravalvonta.\nMUUTOS 9.5.2022: hakijan yhteyshenkilö muutettu; työn suorittajan yhteyshenkilö muutettu. \nLISÄYS 11.10.2022: \nHakaniemensillalla väliaikainen liikennejärjestely 11.10.2022 klo 9-15. \nHakaniemenkadulla väliaikainen liikennejärjestely 13.10. tai 14.10.2022 klo 12-15. \nLISÄYS 18.10.2022:\nNäkinkujalla väliaikainen liikennejärjestely arviolta välillä 17.10. - 6.11.2022. \nSörnäisten rantatiellä väliaikainen liikennejärjestely 19.10. klo 20 jälkeen.\nLISÄYS 24.10.2022: liikennejärjestely päivitys, Sörnäisten rantatiellä hulevesilinjan rakennustyöt yötyönä  24. - 28.10.2022 klo 20.00-06.00, kaistansulku laivan purkuliikenteen jälkeen. \nLISÄYS 31.10.2022: uusi liikennejärjestelysuunnitelma käyttöön 31.10.2022 alkaen.\nLISÄYS 2.11.2022: kaksi täsmennystä voimassa olevaan liikennejärjestelysuunnitelmaan TLJ100 PV1.6 pohj. vaihe 3c.\nLISÄYS 7.11.2022: uusi liikennejärjestelysuunnitelma Hakaniemensilta 10.11.2022.\nLISÄYS 18.11.2022: 21.11.2022 liikenteenjakajan purku Hakaniemenranta liikenteenohjaussuunnitelma on TLJ100PV 1.6 pohj. vaihe 3 c\nLISÄYS 23.11.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 4, Hakaniementori alueen kivetyksen poisto.)\nLISÄYS 22.12.2022: liikennejärjestelysuunnitelmat päivitetty ( TLJ100PV 1.6 pohj. vaihe 5)\nLISÄYS 19.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 27.1.2023: Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 1.2.2023:  Liikennejärjestelysuunnitelmat päivitetty.\nLISÄYS 3.2.2023: Liikennejärjestelysuunnitelmat päivitetty. TLJ100_PV1.7pohj. vaihe1 John Stenbergin ranta ja TLJ002_Detaljikuva_1.7pohj. vaihe1_louhinta louhintatyöt Sörnäisten rantatiellä, saarekkeen reunakivi\nLISÄYS 13.2.2023: Liikennejärjestelysuunnitelma päivitetty Hakaniemenrannan ja Siltasaarenkadun risteyksessä vaihe-3.\nLISÄYS 16.2.2023: Liikennejärjestelysuunnitelma päivitetty. Siltasaarenkadun liikenteensiirto TLJ200.\nLISÄYS 20.2.2023: Liikennejärjestelysuunnitelma päivitetty TLJ100 PV1.7 pohj. vaihe 1 rev_A alkaen 24.2.2023.\nLISÄYS 28.2.2028: Liikennejärjestelysuunnitelmat päivitetty Siltasaarenkatu / John Stenbergin ranta. Uusi alue lisätty John Stenbergin ranta.\nLISÄYS 8.3.2023: Liikennejärjestelysuunnitelmat päivitetty, Näkinsilta kaiteet.\nKaukolämpökaivon tyhjennys.\nLISÄYS 13.3.2023: Lisätty JS2300568 ja puhelinnumero  työnsuorittajan yhteyshenkilölle.\nLISÄYS 17.3.2023:  Liikennejärjestelysuunnitelmat päivitetty mm.Hakaniemenkadulla.\nLISÄYS 21.3.2023: Pyöräilynviitoitussuunnitelma.TLJ100 PV1.7vaihe 1 Rev-C\nLISÄYS 31.3.2023:  Liikennejärjestelysuunnitelmat päivitetty Sörnäisten rantatiellä,  Hakaniemenkadun ja Hakaniemenkuja risteyksessä.\nLISÄYS 31.3.2023: Liikennejärjestelysuunnitelmat päivitetty Hakaniemenkadulla.\nLISÄYS 12.4.2023: liikennejärjestelysuunnitelmia päivitetty.\nLISÄYS 24.4.2023: liikennejärjestelysuunnitelmia päivitetty Näkinsillalla.\nLISÄYS 11.5.2023: Pysäköintialueenmuutos Miina Sillanpään kadulla. \nLISÄYS 16.5.2023: liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 5.6.2023: liikennejärjestelysuunnitelmia päivitetty 22.5.2023 alkaen louhintatyö.\nLISÄYS 20.6.2023: Liikennejärjestelysuunnitelmat päivitetty Näkinsillalla.\nLISÄYS 27.6.2023: Liikennejärjestelysuunnitelmia päivitetty\nLISÄYS 12.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu ja Sörnäisten rantatie.\nLISÄYS 24.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Siltasaarenkatu.\nLISÄYS 26.7.2023: Liikennejärjestelysuunnitelmia päivitetty; Sörnäisten rantatie.\nLISÄYS 2.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta.\nLISÄYS 11.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta, Näkinkujan ja Miina Sillanpään kadun risteys.\nLISÄYS 22.8.2023: Liikennejärjestelysuunnitelmia päivitetty; Louhintoja Hakaniemenkadulla\nLISÄYS 6.9.2023: Liikennejärjestelysuunnitelmia päivitetty; Hakaniemenranta\nLISÄYS 19.9.2023: Liikennejärjestelysuunnitelma päivitetty liikenteen siirto Sörnäisten rantatiellä.\nLISÄYS 2.10.2023: Liikennejärjestelysuunnitelma päivitetty, louhintatöitä.\nLISÄYS 14.10.2023: Kaivualue päivitetty (Pitkäsilta), liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ja John Stenbergin rannan kaapelityö, Liikenteensiirto Sörnäisten rantatiellä), johtoselvitys JS2300568 päivitetty, liikennejärjestelysuunnitelma PV1.8 pohj. vaihe 1 SSK 0.3, ilta-yötyönä liikenteenohjaajin.\nLISÄYS 1.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun työmaasähköt+Liva muutos Hakaniemenrannassa)\nLISÄYS 16.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Yötyö Sörnäisten rantatie 16.-17.11., Liikenteensiirto Sörnäisten rantatiellä vk 47, Liikenteensiirto Haapaniemenkadulla)\nLISÄYS 23.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Näkinkulun jalankulun ja pyöräilyn väylä 22.11.->, Yötyö Sörnäisten rantatiellä 30.11., Miina Sillanpään katu 22.11.-> )\nLISÄYS 28.11.2023: Liikennejärjestelysuunnitelmia päivitetty (Pitkäsillan/Siltasaarenkadun/John Stenbergin rannan liikennejärjestelyt jatkuu + Liikenteen siirto Sörnäisten rantatiellä)\nLISÄYS 4.12.2023: Työalue laajentunut Viherniemenkadulle (koppien liitokset), liikennejärjestelysuunnitelmia päivitetty (uv-pylvään asennus Sörnäisten rantatiellä, Siltasaarenkadun liitosmonttu)\nLISÄYS 14.12.2023: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenkatu auki ajoneuvoliikenteelle)\nLISÄYS 18.12.2023: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun sulku ja Hakaniemen liikenteenjärjestelyt vk 1)\nLISÄYS 4.1.2024: poistettu päätöksen liitteistä vanhat suunnitelmat\nLISÄYS 9.1.2024: Liikennejärjestelysuunnitelma päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä)\nLISÄYS 17.1.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaalin asennus Sörnäisten rantatiellä, Liikenteensiirto Sörnäisten rantatiellä, kaistansulku Unioninkatu)\nLISÄYS 23.1.2024: Suunnitelmien päivitys (mahdollisia louhintoja Siltasaarenkadulla)\nLISÄYS 2.2.2024: liikennejärjestelysuunnitelma päivitetty Siltasaarenkatu\nLISÄYS 9.2.2024: Kaivualue päivitetty (Hakaniemenpuisto ja Vetehisenkuja pohjavesiputket)\nLISÄYS 14.2.2024: Liikennejärjestelysuunnitelmia päivitetty. \nLISÄYS 21.2.2024: Liikennejärjestelysuunnitelmia päivitetty (kyltin asennustöitä Unioninkadulla ja Siltavuorenrannassa)\nLISÄYS 4.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta väliaikainen kävelyliuska).\nLISÄYS 13.3.2024: Liikennejärjestelysuunnitelmia päivitetty (Liikennevalo muutos LIVA R413)\nMUUTOS 4.4.2024: rakennuttaja ja työnsuorittaja YIT Housing Oy -> YIT Infra Oy, rakennuttajan yhteyshenkilö muutettu.\nLISÄYS 10.4.2024: Liikennejärjestelysuunnitelmia päivitetty. Fleminginkadun bussipysäkin siirto, Kivitöitä ja asfaltointeja Hakaniemessä.\nLISÄYS 19.4.2024: Liikennejärjestelysuunnitelmia päivitetty (Valaisinpylväiden asennusta Sörnäisten rantatiellä risteys 413, opasteiden asennus Sörnäisten rantatiellä).\nLISÄYS 23.4.2024: Pohjavesiputkien poraus\nLISÄYS 3.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Valojen säätöä yötyönä, Hakaniemenrannan kivityöt vaihe 2, ajoratamaalauksia Sörnäisten rantatiellä)\nLISÄYS 17.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Uusi Hakaniemensilta liikenteelle 20.5.)\nLISÄYS 22.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannassa meren louheen täyttö 27.5. - 31.7.2024)\nLISÄYS 24.5.2024: Kaivulupa-alueen laajennus Sörnäisten rantatiellä Pannukakunpuistikon kohdalla.\nLISÄYS 31.5.2024: Liikennejärjestelysuunnitelmia päivitetty (Portaaliasennukset, painauman korjaus Sörnäisten rantatiellä, Kaistansulku Merihaankadulla)\nLISÄYS 13.6.2024: Liikennejärjestelypäivitys (Siltasaarenkadun VHT-työt, Nostotyö Merihaankadulla)\nLISÄYS 27.6.2024: Liikennejärjestelysuunnitelma päivitetty (Liikennevaloportaalin asennus, Kaistansulkuja Merihaankadulla ja Sörnäistenrantatiellä)\nLISÄYS 4.7.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadulla louhintaa 5.-15.7.2024 sekä Sörnäisten rantatien ja Hakaniemenkadun risteyksessä liikennevalokatko 9.7.).\nLISÄYS 15.7.2024: Liikennejärjestelysuunnitelmia päivitetty 18.7. alkaen (Siltasaarenkatu, Hakaniemenranta, Pitkäsilta, John Stenbergin ranta).\nLISÄYS 23.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla yhden kaistan sulku etelän suuntaan 30.7.2024)\nLISÄYS 25.7.2024: Liikennejärjestelysuunnitelma päivitetty (Merihaankadulla liikennevalot vilkulla/sammutettuina 31.7.2024).\nLISÄYS 31.7.2024: Liikennejärjestelysuunnitelma päivitetty (Kaapelointityö Siltasaarenkadun jkpp-väylällä)\nLISÄYS 1.8.2024: Liikennejärjestelysuunnitelma päivitetty (Jalankulun ja pyöräilyn viitoitussuunnitelma)\nLISÄYS 5.8.2024: Liikennejärjestelysuunnitelma päivitetty (jyrsintää ja asfaltointia Sörnäisten rantatiellä sekä Haapaniemenkadulla)\nLISÄYS 8.8.2024: Liikennejärjestelysuunnitelma päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat)\nLISÄYS 15.8.2024: Liikennejärjestelysuunnitelma päivitetty (kaistansulku Merihaankadulla)\nLISÄYS 2.9.2024: Kaivualuerajaus päivitetty (lisätty Siltasaarenkatu 14-18, Hämeentie 2-4), liikennejärjestelysuunnitelma päivitetty (Kaistansulku Merihaankadulla 5.9.)\nLISÄYS 4.9.2024: Liikennejärjestelysuunnitelma päivitetty (Vesijohdontulppaus Näkinkujalla 9.9., poikkeusreitti 5.9->)\nLISÄYS 9.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun läntinen ajoväylä suljetaan sekä työalueen louhinnat, Ajolinjan muutos sekä yötyö Hakaniemenrannassa)\nLISÄYS 23.9.2024: Liikennejärjestelysuunnitelmia päivitetty (Jkpp reittimuutos Hakaniemenrannassa, Hakaniemen torikadun risteyksen asfaltointi)\nLISÄYS 26.9.2024:  Liikennejärjestelysuunnitelmia päivitetty (Liikennejärjestelymuutoksia Hakaniemenrannassa)\nLISÄYS 10.10.2024: Liikennejärjestelysuunnitelmia päivitetty (Merihaankadun asfaltointi)\nLISÄYS 16.10.2024: Liikennejärjestelysuunnitelma päivitetty (liikennejärjestelyn muutoksia Hakaniemenkadulla ja Näkinkujalla, Hakaniemenrannassa kivitöitä)\nLISÄYS 30.10.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Merihaankatu, ajoratamerkintöjä Hakaniemessä sekä Siltasaarenkatu suljettava suojatie)\nLISÄYS 5.11.2024: Liikennejärjestelysuunnitelmia päivitetty (John Stenbergin rannan suojatien siirto)\nLISÄYS 19.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulkuja Hakaniemessä, Hakaniemenrannan työmaaliittymä)\nLISÄYS 28.11.2024: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Hakaniemensilta, Siltasaarenkatu liikenteensiirto, Haapaniemenkadun siirtokehotukset välillä Sörnäisten rantatie-Hakaniemenranta)\nLISÄYS 18.12.2024: Kaivutyöalue päivitetty (lisätty Siltasaarenkatu, KP2402630 alue), liikennejärjestelysuunnitelmia päivitetty (Hakaniemenranta itä suunnitelman päivitys)\nLISÄYS 8.1.2025: Liikennejärjestelysuunnitelmia päivitetty (Kalaturojen asennus ja Hakaniemenrannan valaisin)\nLISÄYS 27.1.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistan sulku) 28.1.2025 keskisaarekkeen kiveyksen purku ja tasaus, 3.3.2025 alkaen otetaan käyttöön taksien ajolinja Ympyrätalon edustalle\nLISÄYS 3.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaapelivedon Porthaninkadun eteläpäähän). kaivualue päivitetty (+JS2403353 mukainen alue)\nLISÄYS 11.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pp ja jk yhdistäminen)\nLISÄYS 17.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-22)\nLISÄYS 21.2.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko ensimmäinen vaihe, Porthaninkadun kaapelikaivuu)\nLISÄYS 24.2.2025: Liikennejärjestelysuunnitelmia päivitetty (kaistansulku Siltasaarenkadulla)\nLISÄYS 28.2.2025: Työstä vastaavan yhteyshenkilö päivitetty. Kaivualue päivitetty, lisätty Siltasaarenkatu välillä Hämeentie-Toinen linja. \nLISÄYS 10.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Porthaninkadun kulkureitit, hidaste Siltasaarenkadulle, Liikennejärjestelyiden muutoksia Pitkänsillanrannassa). \nLISÄYS 17.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Louhintoja Siltasaarenkadulla)\nLISÄYS 25.3.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun ratikkakatko toinen vaihe, Kaistansulku Hakaniemensillalla)\nLISÄYS 7.4.2025: liikennejärjestelysuunnitelmia päivitetty (Hakaniemenrannan pintatyöt, kaistansulku kolmas linja)\nLISÄYS 5.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Kannatinvaijerien asennus Hakaniemenrannassa)\nLISÄYS 23.5.2025: Liikennejärjestelysuunnitelmia päivitetty (Liikenteensiirto Siltasaarenkadulla)\nLISÄYS 13.6.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkatu 13-24 /Lyyra, Merihaansillan avaaminen liikenteelle, sähkökeskuksen asennusta Hakaniemensillan pohjoispäädyssä).\nLISÄYS 22.7.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansilta, Kolmas Linja asfaltointeja, Hakaniemen torikadun suojatien kivetyksen korjaus, Siltasaarenkadun asfaltointi).\nLISÄYS 7.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Haapaniemenkadulla Merihaan tunnelin päädyssä asfaltointeja, Merihaansillalla kaideasennuksia).\nLISÄYS 21.8.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla hulevesikaivojen ympärillä asfaltin korjausta, Pitkänsillan ja John Stenbergin risteyksen alueella jyrsintä- ja asfaltointitöitä, Siltavuorenrannalla uusi suojatie, Hakaniemenrannan ja Hakaniemen torikadulla kiveystöitä). Henkilötietoja poistettu.\nLISÄYS 5.9.2025: Liikennejärjestelysuunnitelma päivitetty. Työstä vastaavan ja rakennuttajan yhteyshenkilön muutos.\nLISÄYS 2.10.2025: Liikennejärjestelysuunnitelmia päivitetty (Merihaansillalla, Siltasaarenkadulla, Hakaniemenrannalla).\nLISÄYS 22.10.2025: Liikennejärjestelysuunnitelmia päivitetty. Työn suorittajan yhteyshenkilön muutos.\nLISÄYS 3.11.2025: Liikennejärjestelysuunnitelmia päivitetty (Eläintarhantiellä, Siltasaarenkadulla, Viherniemenkadulla, Viherniemenpuistossa ja Merihaansillalla).\nLISÄYS 10.12.2025: Liikennejärjestelysuunnitelmia päivitetty (Siltasaarenkadun asfaltointi 10.-12.12.2025).",
+        "osoite": "Hakaniemi, Merihaka, Siltasaarenkatu",
+        "kaupunginosa": "11 KALLIO",
+        "status": "Käynnissä",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "17.05.2021",
+        "tyo_paattyy_txt": "14.05.2027",
+        "toiminnallinen_kunto_txt": "31.12.2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Kaivuilmoitus_alue.1024",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                25496930.81641133,
+                6672884.56851328
+              ],
+              [
+                25496930.97656754,
+                6672882.22085704
+              ],
+              [
+                25496940.66797382,
+                6672882.33804453
+              ],
+              [
+                25496940.90625502,
+                6672884.37320078
+              ],
+              [
+                25496930.81641133,
+                6672884.56851328
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "singlegeom",
+      "properties": {
+        "id": 1024,
+        "hakemus": "Kaivuilmoitus",
+        "hakemustunnus": "KP2600373-3",
+        "tyo_alkaa": "2026-10-05",
+        "tyo_paattyy": "2026-10-30",
+        "toiminnallinen_kunto": null,
+        "tyon_tarkoitus": "Työstä vastaava varaa tilaa kaivutyölle; sähkö\n\nLISÄYS 28.5.2026: voimassaolo muutos 6.4. - 29.5.2026 -> 22.6. - 30.7.2026\nLISÄYS 7.7.2026: voimassaolo muutos 22.6. - 30.7.2026 -> 5. - 30.10.2026",
+        "osoite": "Aleksanterinkatu 46",
+        "kaupunginosa": "2 KLUUVI",
+        "status": "Tuleva",
+        "hakija": "",
+        "tyon_suorittaja": "",
+        "geometrytype": "ST_Polygon",
+        "tyo_alkaa_txt": "05.10.2026",
+        "tyo_paattyy_txt": "30.10.2026",
+        "toiminnallinen_kunto_txt": null
+      }
+    }
+  ]
+}

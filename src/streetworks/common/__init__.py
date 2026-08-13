@@ -24,6 +24,7 @@ from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_drivebc import from_drivebc
 from .from_gnaf import from_gnaf_address, from_gnaf_road
+from .from_helsinki import from_helsinki
 from .from_jersey import from_jersey
 from .from_kartverket import from_kartverket
 from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
@@ -136,4 +137,5 @@ __all__ = [
     "from_roma",
     "from_copenhagen",
     "from_oslo",
+    "from_helsinki",
 ]

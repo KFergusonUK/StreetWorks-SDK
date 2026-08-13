@@ -112,14 +112,17 @@ unauthenticated GetFeature request.
 
 ## The rest of the Danish landscape
 
-Not built this pass: **Oslo** (Norway), **Stockholm** (Sweden — flagged
-"Rome-risk" in the brief, its city open-data portal may publish road
-network/rules rather than actual works, and is key-gated) and
-**Helsinki** (Finland — lowest urgency, since Finland already has
-keyless national roadworks coverage via Digitraffic) all remain
-investigated-but-unbuilt findings in `nordic-capitals-investigation.md`,
-per that brief's own "not all equal" prioritisation. A future pass
-should live-verify Oslo's actual data source first (Origo layer vs
-NVDB is still unconfirmed) before writing any client code — given how
-much the Copenhagen brief itself needed correcting once actually
-checked, the same discipline should apply there too.
+**Oslo** (Norway, `streetworks.oslo`) and **Helsinki** (Finland,
+`streetworks.helsinki` — see
+[`docs/providers/europe.md`](europe.md#helsinki-kaivuilmoitus)) are now
+both built, resolving two more of `nordic-capitals-investigation.md`'s
+findings; both needed real live-verification before building, since
+neither matched the brief's own guess (Oslo's guessed Origo/NVDB
+backend, Helsinki's own unconfirmed "does a dataset even exist"
+question). **Stockholm** (Sweden) remains unbuilt — flagged "Rome-risk"
+in the brief (its city open-data portal may publish road network/rules
+rather than actual works) and key-gated, per that brief's own "not all
+equal" prioritisation. A future pass should verify a real `vägarbete`
+dataset actually exists on the city portal before writing any client
+code — the same discipline that corrected the Copenhagen and Helsinki
+briefs once actually checked.

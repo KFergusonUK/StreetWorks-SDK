@@ -2300,4 +2300,56 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="OsloClient",
         import_line="from streetworks.oslo import OsloClient",
     ),
+    ProviderEntry(
+        key="helsinki",
+        name="Helsinki (Kaivuilmoitus)",
+        description=(
+            "City of Helsinki's excavation-notification register, "
+            "this SDK's third Nordic coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Finland", "Helsinki"}),
+        administrative_area="Helsingin kaupunki",
+        scope_note=(
+            "Confirmed live (2026-08-13, 3431 real feature rows) - "
+            "credential-free. This SDK's third Nordic roadworks coverage, "
+            "alongside the separate, already keyless-built national "
+            "Digitraffic DATEX II feed (do-not-dedupe, same as NYC vs "
+            "WZDx). Resolves 'nordic-capitals-investigation.md's own "
+            "unconfirmed claim that a Helsinki roadworks dataset might "
+            "not exist: HRI's (Helsinki Region Infoshare) CKAN catalogue "
+            "surfaces 'Land usage permission system for public areas in "
+            "the City of Helsinki', backed by a live GeoServer WFS layer "
+            "literally named Kaivuilmoitus_alue ('excavation notification, "
+            "area'). Real geometry is MultiPolygon throughout; a repeated "
+            "hakemustunnus (application reference) means one excavation "
+            "notification genuinely spans several distinct real "
+            "sub-areas - an Oslo-shaped grouping (up to 164 real rows "
+            "under one reference), not Copenhagen's single-geometry-pick "
+            "pattern. CRS is EPSG:3879 (projected ETRS-GK25FIN, not "
+            "WGS84) - Coordinate.value stays unswapped (easting, "
+            "northing), even though the WFS can reproject to WGS84 on "
+            "request (confirmed live, not used, per this SDK's standing "
+            "CRS policy). status is a genuinely informative two-value "
+            "field (Käynnissä=active now, Tuleva=upcoming, cross-checked "
+            "against real dates) - unlike Oslo's always-'granted' status, "
+            "this drives real VERIFIED/ESTIMATED date-confidence grading. "
+            "Two related layers checked live and deliberately not used: "
+            "a point-geometry layer confirmed to be a redundant subset "
+            "(not disjoint data), and a structurally distinct temporary-"
+            "traffic-arrangement layer left for a future pass, the same "
+            "'found, not built' treatment Oslo gave its own /plans "
+            "endpoint. See module docstring for the full investigation."
+        ),
+        credentials=None,
+        licence=(
+            "Creative Commons Attribution 4.0 (CC-BY-4.0) - confirmed live via the "
+            "dataset's own CKAN metadata"
+        ),
+        source_grade="register",
+        _module="streetworks.helsinki",
+        _client_name="HelsinkiClient",
+        import_line="from streetworks.helsinki import HelsinkiClient",
+    ),
 ]
