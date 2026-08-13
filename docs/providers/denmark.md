@@ -119,10 +119,12 @@ both built, resolving two more of `nordic-capitals-investigation.md`'s
 findings; both needed real live-verification before building, since
 neither matched the brief's own guess (Oslo's guessed Origo/NVDB
 backend, Helsinki's own unconfirmed "does a dataset even exist"
-question). **Stockholm** (Sweden) remains unbuilt — flagged "Rome-risk"
-in the brief (its city open-data portal may publish road network/rules
-rather than actual works) and key-gated, per that brief's own "not all
-equal" prioritisation. A future pass should verify a real `vägarbete`
-dataset actually exists on the city portal before writing any client
-code — the same discipline that corrected the Copenhagen and Helsinki
-briefs once actually checked.
+question). **Stockholm** (Sweden, `streetworks.stockholm`) resolves the
+brief's own "Rome-risk" flag by confirming it, not disproving it — every
+real surface tested (WFS/WMS `GetCapabilities`) requires an API key
+before revealing even a layer name, let alone whether a `vägarbete`
+dataset exists at all, so it ships as a Phase 0 Credentials-wanted
+scaffold (see [Credentials wanted](index.md#credentials-wanted)) rather
+than a live-verified build — the same discipline that corrected the
+Copenhagen and Helsinki briefs once actually checked, applied here to an
+outcome that stayed genuinely blocked instead of resolving cleanly.

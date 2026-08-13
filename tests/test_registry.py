@@ -341,6 +341,14 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     portal itself is currently unreachable besides (a real live 502) -
     see streetworks.greece.client's own module docstring.
 
+    Stockholm (`stockholm`) is worse-off than every other Credentials
+    wanted provider, not on the same footing as Trafikverket/SA: every
+    real surface tested (WFS/WMS GetCapabilities) 401s before any
+    dataset name, layer, or field is ever revealed - no schema of any
+    kind has been confirmed, unlike Trafikverket (object type/fields
+    confirmed via public docs) or SA (public layer metadata) - see
+    streetworks.stockholm.client's own module docstring.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
     assert {e.key for e in unverified} == {
@@ -351,6 +359,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "linz_roads",
         "maproad",
         "greece",
+        "stockholm",
     }
 
 

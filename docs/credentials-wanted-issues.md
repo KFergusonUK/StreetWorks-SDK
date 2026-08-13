@@ -1,25 +1,25 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for seven `help wanted` issues: four in the
+Draft text for eight `help wanted` issues: five in the
 [Credentials wanted section](providers/index.md#credentials-wanted)
 (Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
-Sections — all blocked on *access* to a real, published interface), plus
-three genuinely different cases (Road Report NT, MapRoad Roadworks
-Licensing, and Greece — none access-blocked in the usual sense; NT and
-Greece have no roadworks interface at all (Greece's own NAP carries
-POI/sensor data only, and is currently unreachable besides), MapRoad has
-a real API but no published read path for a data consumer, only a
-formal data-sharing gate). Norway/NSW/Victoria were confirmed on
-2026-07-30 by a real credentialed pull and no longer need this - their
-drafted issue text has been removed. None of these have been opened yet
-— this file is the text to paste in when opening them (or to point
-someone at ahead of time). Every module's import-time `UserWarning` (or,
-for LINZ's per-method gate, its own docstring/`ValueError`) and the
-README table link to
+Sections, Stockholm — all blocked on *access* to a real, published
+interface), plus three genuinely different cases (Road Report NT,
+MapRoad Roadworks Licensing, and Greece — none access-blocked in the
+usual sense; NT and Greece have no roadworks interface at all (Greece's
+own NAP carries POI/sensor data only, and is currently unreachable
+besides), MapRoad has a real API but no published read path for a data
+consumer, only a formal data-sharing gate). Norway/NSW/Victoria were
+confirmed on 2026-07-30 by a real credentialed pull and no longer need
+this - their drafted issue text has been removed. None of these have
+been opened yet — this file is the text to paste in when opening them
+(or to point someone at ahead of time). Every module's import-time
+`UserWarning` (or, for LINZ's per-method gate, its own docstring/
+`ValueError`) and the README table link to
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
-Suggested labels for the first four: `help wanted`, `credentials-wanted`.
+Suggested labels for the first five: `help wanted`, `credentials-wanted`.
 For NT, MapRoad, and Greece: `help wanted` only — `credentials-wanted`
 would misdescribe the blocker, since no credential fixes any of them.
 
@@ -241,6 +241,61 @@ that also appears in a real NZ Addresses feature, so the cross-reference
 question above can finally be settled.
 
 See `src/streetworks/linz/client.py`'s module docstring for the full
+detail behind each claim above.
+
+---
+
+## Issue: Stockholm (Trafikkontoret) — confirm any real dataset exists
+
+**Title:** `Credentials wanted: does streetworks.stockholm have a real roadworks dataset at all?`
+
+**Body:**
+
+`streetworks.stockholm` is a Phase 0 scaffold — one phase earlier than
+every other Credentials-wanted provider here. It resolves
+`nordic-capitals-investigation.md`'s "Rome-risk" flag on Stockholm by
+**confirming it, not disproving it**.
+
+**Confirmed, live, credential-free:**
+1. `dataportalen.stockholm.se` (Stockholm's open-data catalogue) has a
+   non-functional full-text search — a nonsense search term returns the
+   identical 311 records as no filter at all, so no dataset could be
+   located by keyword.
+2. Trafikkontoret's real geodata service
+   (`openstreetgs.stockholm.se/geoservice/api/wfs`) requires an API key
+   for `GetCapabilities` itself — a genuine `HTTP 401`
+   (`"You must provide a valid key to consume this API."`), confirmed on
+   both WFS and WMS. **No layer name, field, or schema of any kind has
+   ever been seen.**
+3. A "regional roadworks coordination map" lead traces back to the
+   already credential-parked *national* Trafikverket system, not a
+   separate Stockholm dataset.
+4. The one real documented example query on Trafikkontoret's own guide is
+   for motorcycle parking places, not roadworks.
+
+**Pending — everything:**
+1. **Whether a roadworks (`vägarbete`) dataset exists on this platform at
+   all.** Not confirmed present, not confirmed absent.
+2. The real API-key parameter name/placement for the WFS/OGC endpoints —
+   `apiKey=` (the one real example, documented for the Parking API) is
+   used in this scaffold but unconfirmed for WFS specifically.
+3. Every real layer/collection name — `StockholmClient.get_wfs_capabilities()`
+   is the one call this scaffold can make without guessing; it hasn't
+   been run with a real key.
+
+**Credential needed:** a Trafikkontoret API key. **Registration path
+unconfirmed** — the one guessed URL 404'd; try
+`api.it.tk@stockholm.se` (the technical/access contact stated on the
+platform's own getting-started guide) or navigate the portal's own menu
+from [openstreetgs.stockholm.se/home/](https://openstreetgs.stockholm.se/home/).
+
+**What to report back:** whether you can even get a key at all (and how),
+then the output of `StockholmClient.get_wfs_capabilities()` — specifically,
+does the real layer list include anything roadworks/excavation-shaped
+(`vägarbete`, `grävning`, or similar)? If a 401 persists with a real key,
+that confirms the parameter name/placement is wrong, not the key.
+
+See `src/streetworks/stockholm/client.py`'s module docstring for the full
 detail behind each claim above.
 
 ---

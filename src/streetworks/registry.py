@@ -2352,4 +2352,36 @@ _REGISTRY: list[ProviderEntry] = [
         _client_name="HelsinkiClient",
         import_line="from streetworks.helsinki import HelsinkiClient",
     ),
+    ProviderEntry(
+        key="stockholm",
+        name="Stockholm (Trafikkontoret)",
+        description="Stockholm city geodata WFS - blocked before any schema was ever seen.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Sweden", "Stockholm"}),
+        scope_note=(
+            "Phase 0 scaffold - one phase earlier than "
+            "streetworks.datex2.trafikverket. Resolves "
+            "nordic-capitals-investigation.md's 'Rome-risk' flag by "
+            "confirming it, not disproving it: every real surface tested "
+            "(WFS/WMS GetCapabilities) returns a genuine HTTP 401 before "
+            "any dataset name, layer, or field is ever revealed - no "
+            "schema of any kind has been seen, unlike Trafikverket (whose "
+            "object type/fields are confirmed via public docs) or South "
+            "Australia (whose layer definition is public). A promising "
+            "'regional roadworks coordination map' lead traces back to "
+            "the already credential-parked national Trafikverket system, "
+            "not a separate Stockholm dataset. Whether a real roadworks "
+            "layer exists on this platform at all is genuinely "
+            "unresolved - see module docstring."
+        ),
+        credentials="Trafikkontoret API key (registration path unconfirmed)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        verified=False,
+        _module="streetworks.stockholm",
+        _client_name="StockholmClient",
+        import_line="from streetworks.stockholm import StockholmClient",
+    ),
 ]
