@@ -87,7 +87,8 @@ it covers rather than needing to already know the module name — see
 [`docs/providers/index.md`](docs/providers/index.md) for the full coverage
 matrix, per-provider modules, and current Credentials-wanted scaffolds.
 
-<img src="/examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 09 Aug 2026.">Map showing areas included in the SDK (Green - Open / Orange - Registration) as of 09 Aug 2026.
+<img src="/examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 09 Aug 2026.">
+Map showing areas included in the SDK (Green - Open / Orange - Registration) as of 09 Aug 2026.
 
 ## Examples
 
