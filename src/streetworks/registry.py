@@ -2353,6 +2353,55 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.helsinki import HelsinkiClient",
     ),
     ProviderEntry(
+        key="milano",
+        name="Milano (Avvisi di manomissione)",
+        description=(
+            "Comune di Milano's excavation-notice register, this SDK's "
+            "second Italy municipal coverage after Roma."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Italy", "Milan"}),
+        administrative_area="Comune di Milano",
+        scope_note=(
+            "Confirmed live (2026-08-14, 139 real feature rows) - "
+            "credential-free. Resolves the 'populous cities' pivot's own "
+            "open question left after Rome fell off-board as capital-"
+            "projects-only: the investigation brief confirmed the "
+            "Lombardy Socrata ecosystem carries real 'Cantieri stradali' "
+            "for Cremona/Pavia/Rho, but not a Milan-specific dataset - "
+            "checked live, none exists there. Milan's own CKAN portal "
+            "has none named 'cantieri' either, but 'scavo' (excavation) "
+            "surfaces 'Avvisi di manomissione' - the real Italian legal "
+            "term, not the term the brief guessed - maintained by the "
+            "city's own Direzione Mobilità e Trasporti, updated daily, "
+            "with a direct GeoJSON download (no API/WFS/key needed). A "
+            "real, confirmed quirk: the download URL embeds a daily "
+            "generation timestamp in its filename, but CKAN resolves "
+            "purely by resource UUID - a substituted filename returned "
+            "identical live content, so a stable, non-timestamped URL "
+            "can be hardcoded safely. Real geometry is Point, genuine "
+            "native WGS84 (not the brief's guessed Monte Mario/ETRF2000 "
+            "projected CRS) - flipped to (lat, lon) like Lisboa/Paris, "
+            "unlike Oslo/Helsinki's unswapped projected sources. Every "
+            "protocol number is unique - one Works per feature, no "
+            "grouping. This is a utility-operator excavation register "
+            "(water/electricity/gas/sewage/district-heating companies), "
+            "the Milan equivalent of Paris's 'Opérateurs de réseau' "
+            "category - not the city's own separate road-maintenance "
+            "programme, stated honestly rather than implied broader."
+        ),
+        credentials=None,
+        licence=(
+            "Creative Commons Attribution (CC-BY) - confirmed live via the "
+            "dataset's own CKAN metadata"
+        ),
+        source_grade="register",
+        _module="streetworks.milano",
+        _client_name="MilanoClient",
+        import_line="from streetworks.milano import MilanoClient",
+    ),
+    ProviderEntry(
         key="stockholm",
         name="Stockholm (Trafikkontoret)",
         description="Stockholm city geodata WFS - blocked before any schema was ever seen.",

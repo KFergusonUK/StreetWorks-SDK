@@ -31,6 +31,7 @@ from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
 from .from_lisboa import from_lisboa
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
+from .from_milano import from_milano
 from .from_nsw_livetraffic import from_nsw_livetraffic
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
@@ -138,4 +139,5 @@ __all__ = [
     "from_copenhagen",
     "from_oslo",
     "from_helsinki",
+    "from_milano",
 ]

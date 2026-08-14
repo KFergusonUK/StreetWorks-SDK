@@ -142,7 +142,7 @@ _GERMAN_STATES = {"hamburg": "Hamburg", "brandenburg": "Brandenburg", "saxony": 
 
 TIERS = {
     "keyless": dict(name="Live-capable (keyless)", color="#1b9e77", symbol="circle"),
-    "login":   dict(name="Login required",         color="#e6a817", symbol="circle-open"),
+    "login":   dict(name="Login required",         color="#e6a817", symbol="circle"),
 }
 
 
@@ -229,6 +229,7 @@ def _fetch_works(key, client):
         from_lisboa,
         from_madrid,
         from_mallorca,
+        from_milano,
         from_nsw_livetraffic,
         from_nycdot,
         from_nzta,
@@ -316,7 +317,7 @@ def _fetch_works(key, client):
 
     simple = {
         "madrid": from_madrid, "drivebc": from_drivebc, "lisboa": from_lisboa,
-        "roma": from_roma, "berlin": from_berlin, "sct": from_sct,
+        "roma": from_roma, "berlin": from_berlin, "sct": from_sct, "milano": from_milano,
         "jersey": from_jersey, "nzta": from_nzta,
         "wa": from_au_wa_mainroads,
         "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,

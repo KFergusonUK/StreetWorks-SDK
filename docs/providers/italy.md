@@ -118,6 +118,80 @@ coordinate; the other 34 have only a district-level `field_municipio`
 footer, and common Italian open-data terms (licenza, IODL, riutilizzo,
 copyright, note legali); none found stated anywhere.
 
+## Milano (Avvisi di manomissione)
+
+Comune di Milano's own road-excavation-notice register — this SDK's
+second Italy municipal provider, after Roma:
+
+```python
+from streetworks.milano import MilanoClient
+from streetworks.common import from_milano
+
+with MilanoClient() as milano:
+    notices = list(milano.iter_roadworks())  # raw, unfiltered
+works = from_milano(notices)
+```
+
+**Resolves the "populous cities" pivot's own open question — the exact
+dataset, not just the ecosystem.** Rome fell off-board (capital-projects
+tracker only, no roadworks — see above), so `milan-cantieri-
+investigation.md` asked whether Milan redeems Italy municipally. It
+confirmed the *ecosystem* — the Lombardy regional Socrata portal
+(`dati.lombardia.it`) hosts real "Cantieri stradali attivi" for
+Cremona/Pavia/Rho/Concesio — but not a Milan-specific dataset. Checked
+live: **no Milan or Città Metropolitana di Milano dataset exists on the
+Lombardy portal at all** (searched "cantieri", "cantieri stradali",
+"milano cantieri" — nothing). Milan's *own* CKAN portal
+(`dati.comune.milano.it`) has none named "cantieri" either — but
+searching "scavo" (excavation) surfaces **`ds925_avvisi-di-
+manomissione`**, the real Italian legal term for a road-excavation
+notice, not the term the brief guessed. Maintained by **Comune di
+Milano — Direzione Mobilità e Trasporti**, updated **daily**, CC-BY,
+with a direct GeoJSON download — no API, no WFS, no key.
+
+**A real, confirmed quirk: the download URL is filename-agnostic.** The
+CKAN resource's own stated `url` embeds a generation timestamp in the
+filename (the file is regenerated daily), but CKAN resolves purely by
+the resource UUID in the path — a request substituting an arbitrary
+filename returned identical live content (139 features, same data) as
+the real timestamped URL. `MANOMISSIONE_URL` uses a stable,
+non-timestamped filename deliberately, so it keeps serving each day's
+fresh file without ever going stale.
+
+**Geometry: real `Point`, native WGS84 — not the brief's guessed Monte
+Mario/ETRF2000 projected CRS.** Every feature states
+`"crs": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}` and separately
+carries explicit `LONG_X_4326`/`LAT_Y_4326` properties confirming it —
+flipped to this SDK's `(lat, lon)` convention, the same handling
+Lisboa/Paris apply to their own genuine WGS84 sources (unlike
+Oslo/Helsinki's real projected CRSes, kept unswapped).
+
+**Single-purpose dataset — every real row is an excavation notice**, so
+`iter_roadworks` returns everything unfiltered, unlike Lisboa's
+free-text `motivo` mix or Paris's three categories. Every row carries a
+unique protocol number (139 rows, 139 distinct values, confirmed live) —
+one `Works` per feature, no grouping, the same shape as Lisboa.
+
+**This is a utility-operator excavation register — the Milan equivalent
+of Paris's "Opérateurs de réseau" category, not the city's own separate
+road-maintenance programme.** Real `Tipo di utility/attività` values
+seen live: `Acqua Potabile`/`Acqua potabile` (water — the source's own
+capitalisation is inconsistent, preserved verbatim not normalised),
+`Elettricità`, `Gas`, `Fognatura` (sewage), `Teleriscaldamento` (district
+heating). Real promoters (`Impresa proprietaria area concessione/
+autorizzazione`): `MM Spa` (Milan's water utility), `Unareti S.p.A`
+(gas/electricity), `A2A Calore & Servizi` (district heating).
+
+**138 of 139 real rows have a planned end date current or in the
+future** — this "final" download is already close to active-scoped, not
+a full historical archive (the one real outlier, a 2021 record, is kept
+as-is rather than silently dropped). No explicit status field exists —
+only planned start/end dates — so `date_confidence` is uniformly
+`ESTIMATED`, the same call already made for Lisboa/Paris/Madrid/DriveBC.
+
+**Licence: Creative Commons Attribution (CC-BY), confirmed live** via
+the dataset's own CKAN metadata (`license_id: "cc-by"`).
+
 ## Athens — checked, off the board
 
 Investigated alongside Rome (same brief) as a second Mediterranean-

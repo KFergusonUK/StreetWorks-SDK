@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Feature_ID": "fid-fd4f0cc_19ffb6e5fd0_6d4f",
+        "Numero di protocollo ingresso": "300240/2021",
+        "Data protocollo ingresso": "2021-06-03 12:22:39+00:00",
+        "Data prevista inizio lavori": "2021-06-09 22:00:00+00:00",
+        "Data prevista fine lavori": "2021-06-17 22:00:00+00:00",
+        "Totale giorni previsti di lavori": "9",
+        "Superficie occupata in mq": "9",
+        "Pavimentazione area occupata": "Conglomerato Bituminoso",
+        "Tipologia area coinvolta": null,
+        "Impresa proprietaria area concessione/autorizzazione": "MM Spa",
+        "Tipo di utility/attività": "Acqua potabile",
+        "Nome via": "Via RIGOLA RINALDO",
+        "Civico o descrizione di Punto Inizio intervento": "5",
+        "Civico o descrizione di Punto Fine Intervento": "5",
+        "Coefficiente microzona": "1,52778",
+        "Municipio": "9",
+        "CAP": "20159",
+        "ID_NIL": "11",
+        "NIL": "ISOLA",
+        "LONG_X_4326": 9.18677509,
+        "LAT_Y_4326": 45.49229667,
+        "Location": "(45.49229667, 9.18677509)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.18677509,
+          45.49229667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Feature_ID": "fid-fd4f0cc_19ffb6e5fd0_6d50",
+        "Numero di protocollo ingresso": "449600/2026",
+        "Data protocollo ingresso": "2026-08-03 04:13:26.276000+00:00",
+        "Data prevista inizio lavori": "2026-08-09 22:00:00+00:00",
+        "Data prevista fine lavori": "2026-08-18 22:00:00+00:00",
+        "Totale giorni previsti di lavori": "10",
+        "Superficie occupata in mq": "10",
+        "Pavimentazione area occupata": "Asfalto Colato",
+        "Tipologia area coinvolta": null,
+        "Impresa proprietaria area concessione/autorizzazione": "Unareti S.p.A",
+        "Tipo di utility/attività": "Elettricità",
+        "Nome via": "Via NOVARA",
+        "Civico o descrizione di Punto Inizio intervento": "235",
+        "Civico o descrizione di Punto Fine Intervento": "235",
+        "Coefficiente microzona": "1,35511",
+        "Municipio": "7",
+        "CAP": "20153",
+        "ID_NIL": "61",
+        "NIL": "QUARTO CAGNINO",
+        "LONG_X_4326": 9.1057831,
+        "LAT_Y_4326": 45.47827005,
+        "Location": "(45.47827005, 9.1057831)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.1057831,
+          45.47827005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Feature_ID": "fid-fd4f0cc_19ffb6e5fd0_6d5d",
+        "Numero di protocollo ingresso": "430103/2026",
+        "Data protocollo ingresso": "2026-07-23 08:37:23.100000+00:00",
+        "Data prevista inizio lavori": "2026-07-22 22:00:00+00:00",
+        "Data prevista fine lavori": "2026-08-20 22:00:00+00:00",
+        "Totale giorni previsti di lavori": "30",
+        "Superficie occupata in mq": "20",
+        "Pavimentazione area occupata": "Asfalto Colato",
+        "Tipologia area coinvolta": "Carreggiata",
+        "Impresa proprietaria area concessione/autorizzazione": "Unareti S.p.A",
+        "Tipo di utility/attività": "Gas",
+        "Nome via": "Via LAMBRUSCHINI RAFFAELE",
+        "Civico o descrizione di Punto Inizio intervento": "ANGOLO VIA GIAMPIETRINO - altezza Palo Luce 1",
+        "Civico o descrizione di Punto Fine Intervento": "ANGOLO VIA GIAMPIETRINO - altezza Palo Luce 1",
+        "Coefficiente microzona": "1,41019",
+        "Municipio": "9",
+        "CAP": "20158",
+        "ID_NIL": "77",
+        "NIL": "BOVISA",
+        "LONG_X_4326": 9.15400264,
+        "LAT_Y_4326": 45.50256568,
+        "Location": "(45.50256568, 9.15400264)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.15400264,
+          45.50256568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Feature_ID": "fid-fd4f0cc_19ffb6e5fd0_6d54",
+        "Numero di protocollo ingresso": "423173/2026",
+        "Data protocollo ingresso": "2026-07-20 14:34:53.313000+00:00",
+        "Data prevista inizio lavori": "2026-07-19 22:00:00+00:00",
+        "Data prevista fine lavori": "2026-08-17 22:00:00+00:00",
+        "Totale giorni previsti di lavori": "30",
+        "Superficie occupata in mq": "18",
+        "Pavimentazione area occupata": "Conglomerato Bituminoso",
+        "Tipologia area coinvolta": "Carreggiata",
+        "Impresa proprietaria area concessione/autorizzazione": "MM Spa",
+        "Tipo di utility/attività": "Fognatura",
+        "Nome via": "Via SCRIVIA",
+        "Civico o descrizione di Punto Inizio intervento": "1",
+        "Civico o descrizione di Punto Fine Intervento": "1",
+        "Coefficiente microzona": "1,69985",
+        "Municipio": "4",
+        "CAP": "20139",
+        "ID_NIL": "35",
+        "NIL": "LODI - CORVETTO",
+        "LONG_X_4326": 9.21450082,
+        "LAT_Y_4326": 45.4443666,
+        "Location": "(45.4443666, 9.21450082)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.21450082,
+          45.4443666
+        ]
+      }
+    }
+  ]
+}
