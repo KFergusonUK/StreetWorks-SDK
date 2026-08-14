@@ -54,6 +54,13 @@ skipped if its variables are absent.
     export VEJDIREKTORATET_USERNAME="..."
     export VEJDIREKTORATET_PASSWORD="..."
 
+    # ASFINAG (Austria) - PENDING LIVE VERIFICATION, even earlier stage than
+    # Vejdirektoratet - see streetworks.datex2.austria. The pull URL is
+    # issued at registration; the auth mechanism itself is unconfirmed, so
+    # wire it into ASFINAG_BASE_URL only if a plain GET (no extra auth) is
+    # what your registration actually requires.
+    export ASFINAG_BASE_URL="..."
+
     # TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED,
     # see streetworks.au.nsw. Free self-service registration.
     export NSW_LIVETRAFFIC_API_KEY="..."
@@ -169,6 +176,8 @@ def target_environments() -> dict[str, str]:
         envs["Trafikverket (Sweden)"] = "live"  # single environment, no sandbox
     if os.environ.get("VEJDIREKTORATET_URL"):
         envs["Vejdirektoratet (Denmark)"] = "live"  # single environment, no sandbox
+    if os.environ.get("ASFINAG_BASE_URL"):
+        envs["ASFINAG (Austria)"] = "live"  # single environment, no sandbox
     if os.environ.get("NSW_LIVETRAFFIC_API_KEY"):
         envs["TfNSW Live Traffic (NSW, Australia)"] = "live"  # single environment, no sandbox
     if os.environ.get("VIC_DISRUPTIONS_API_KEY"):
@@ -724,6 +733,27 @@ def check_vejdirektoratet() -> str:
     return (
         f"{len(situations):,} roadworks situations ({works:,} works "
         "records) - first real Danish data seen, compare against module "
+        "docstring's open questions"
+    )
+
+
+def check_asfinag() -> str:
+    """ASFINAG (Austria) - PENDING LIVE VERIFICATION, an earlier stage than
+    Vejdirektoratet - see streetworks.datex2.austria. Requires
+    ASFINAG_BASE_URL (the real pull address issued at registration - there
+    is no public default). The real auth mechanism is unconfirmed - this
+    assumes a plain GET with no extra auth; if your registration issues an
+    API key or Basic Auth, wire it in via a pre-configured httpx.Client and
+    please report back what actually worked (see the module docstring's
+    linked issue) - this would be the first real Austrian data seen."""
+    from streetworks.datex2 import AsfinagClient
+
+    with AsfinagClient(base_url=os.environ["ASFINAG_BASE_URL"]) as asfinag:
+        situations = list(asfinag.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return (
+        f"{len(situations):,} roadworks situations ({works:,} works "
+        "records) - first real Austrian data seen, compare against module "
         "docstring's open questions"
     )
 
@@ -1520,6 +1550,7 @@ def main() -> int:
         ["VEJDIREKTORATET_URL", "VEJDIREKTORATET_USERNAME", "VEJDIREKTORATET_PASSWORD"],
         check_vejdirektoratet,
     )
+    reporter.check("DATEX II (ASFINAG/Austria)", ["ASFINAG_BASE_URL"], check_asfinag)
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
     )

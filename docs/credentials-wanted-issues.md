@@ -1,11 +1,11 @@
 # "Credentials wanted" GitHub issues — drafted text
 
-Draft text for eight `help wanted` issues: five in the
+Draft text for nine `help wanted` issues: six in the
 [Credentials wanted section](providers/index.md#credentials-wanted)
 (Trafikverket, Vejdirektoratet, Traffic SA, LINZ NZ Addresses: Roads/Road
-Sections, Stockholm — all blocked on *access* to a real, published
-interface), plus three genuinely different cases (Road Report NT,
-MapRoad Roadworks Licensing, and Greece — none access-blocked in the
+Sections, Stockholm, ASFINAG — all blocked on *access* to a real,
+published interface), plus three genuinely different cases (Road Report
+NT, MapRoad Roadworks Licensing, and Greece — none access-blocked in the
 usual sense; NT and Greece have no roadworks interface at all (Greece's
 own NAP carries POI/sensor data only, and is currently unreachable
 besides), MapRoad has a real API but no published read path for a data
@@ -19,7 +19,7 @@ been opened yet — this file is the text to paste in when opening them
 `https://github.com/KFergusonUK/StreetWorks-SDK/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22`,
 which will surface these once opened with the `help wanted` label.
 
-Suggested labels for the first five: `help wanted`, `credentials-wanted`.
+Suggested labels for the first six: `help wanted`, `credentials-wanted`.
 For NT, MapRoad, and Greece: `help wanted` only — `credentials-wanted`
 would misdescribe the blocker, since no credential fixes any of them.
 
@@ -113,6 +113,61 @@ can be swapped for real data and the open questions above closed out.
 
 See `src/streetworks/datex2/vejdirektoratet.py`'s module docstring for the
 full detail behind each claim above.
+
+---
+
+## Issue: ASFINAG (Austria) — confirm the pull URL, auth mechanism, and real data
+
+**Title:** `Credentials wanted: verify streetworks.datex2.austria against real Austrian data`
+
+**Body:**
+
+`streetworks.datex2.austria` is a Phase 0 scaffold — one phase earlier
+than Vejdirektoratet: built against ASFINAG's own confirmed dataset
+description, but neither the real pull URL nor the auth mechanism
+(not just the credential value) is known.
+
+**Confirmed, live, credential-free:** ASFINAG's own official dataset
+page (`mobilitaetsdaten.gv.at/daten/verkehrsmeldungen-zu-geplanten-ereignissen-asfinag`)
+states the dataset covers real event types `Baustellen`
+(roadworks)/`Instandhaltungsarbeiten` (maintenance)/`Sanierungen`
+(renovations)/pre-planned events, genuinely **DATEX II Situations with
+SituationRecords**, XML format, HTTP/HTTPS pull, 1-minute update rate.
+The investigation brief's own "check the open RSS first" question is
+resolved, negatively: the real public RSS/ATOM feed on the same NAP is
+confirmed live to cover only "unplanned and safety-related traffic
+events" — not roadworks, filed under a different category entirely. The
+licence page confirms genuine CC-BY-4.0 plus real supplementary
+conditions (must disclose your own downstream services to ASFINAG; they
+may publicly reference you as a licensee).
+
+**Pending — more than Vejdirektoratet had left:**
+1. **The real pull URL** — no public data endpoint exists to probe; an
+   older, separately-documented API host (`services2.asfinag.at`) is
+   unreachable from this build environment.
+2. **The auth mechanism itself** — API key? Basic Auth? Bearer token? —
+   checked the dataset page, the licence page, and the registration
+   portal's (`contentportal.asfinag.at`) own JS bundle; nothing found.
+3. Whether the response body is a bare DATEX XML document (assumed here,
+   the simplest shape) or wrapped in some envelope.
+4. Whether real Austrian data uses the standard DATEX
+   `ConstructionWorks`/`MaintenanceWorks` vocabulary this SDK's shared
+   `ROADWORKS_TYPES` already recognises, or needs its own discriminator.
+5. Real coordinate/location-referencing coverage and CRS.
+
+**Credential needed:** unknown mechanism, issued at registration via the
+[ASFINAG Content Portal](https://contentportal.asfinag.at/) (`Anmelden`/
+`Registrieren` — reachable, registration flow not walked through; the
+dataset page states "Lizenz mit kostenloser Nutzung," consistent with
+self-service, but this is unconfirmed).
+
+**What to report back:** whether registration is genuinely self-service,
+the real pull URL, the real auth mechanism, and — ideally — one real
+trimmed `SituationRecord` (anything sensitive stripped) so the synthetic
+fixture can be swapped for real data.
+
+See `src/streetworks/datex2/austria.py`'s module docstring for the full
+detail behind each claim above.
 
 ---
 

@@ -1139,6 +1139,45 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2 import VejdirektoratetClient",
     ),
     ProviderEntry(
+        key="austria",
+        name="ASFINAG",
+        description="Austria's national motorway/expressway roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Austria"}),
+        administrative_area="ASFINAG",
+        scope_note=(
+            "Phase 0 scaffold - even less confirmed than Vejdirektoratet "
+            "at the same stage. ASFINAG's own official dataset page "
+            "confirms a real DATEX II Situations/SituationRecords "
+            "roadworks dataset ('Verkehrsmeldungen zu geplanten "
+            "Ereignissen'), but neither the real pull URL nor the auth "
+            "mechanism (not just the credential value) is stated "
+            "anywhere public - checked the dataset page, its licence "
+            "page, and the registration portal's own JS bundle. The "
+            "investigation brief's own 'check the open RSS first' "
+            "question is resolved, negatively: the real keyless RSS/ATOM "
+            "feed on the same NAP is confirmed live to cover only "
+            "'unplanned and safety-related traffic events', not "
+            "roadworks - no keyless shortcut exists. An older documented "
+            "API host (services2.asfinag.at) is unreachable from this "
+            "build environment. Licence is CC-BY-4.0 with real "
+            "supplementary conditions beyond plain CC-BY (must disclose "
+            "downstream services to ASFINAG; they may publicly reference "
+            "the licensee) - confirmed live, not glossed over."
+        ),
+        credentials=(
+            "ASFINAG Content Portal registration - issues the real pull URL; "
+            "the auth mechanism itself is unconfirmed"
+        ),
+        licence="CC-BY-4.0 plus supplementary conditions - confirmed live",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.datex2",
+        _client_name="AsfinagClient",
+        import_line="from streetworks.datex2 import AsfinagClient",
+    ),
+    ProviderEntry(
         key="nsw",
         name="Transport for NSW - Live Traffic Hazards",
         description="New South Wales roadwork hazards feed (Australia).",

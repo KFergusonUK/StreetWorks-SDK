@@ -24,16 +24,23 @@ NAP-listed host, the date-stamped catalogue-then-file fetch, and a real
 mislabelled-encoding finding), the Basque Government's DATEX II **v1.0**
 feed for the Basque Country (credential-free, licence explicitly absent -
 see :mod:`streetworks.datex2.euskadi` for the oldest schema version in
-this SDK and a real, additive parser fix it needed), and three
-**Credentials wanted** scaffolds - built to a confirmed API/schema shape
-but not yet verified against real authenticated data, pending a tester
-with credentials: Statens vegvesen for Norway (see
-:mod:`streetworks.datex2.vegvesen`), Trafikverket for Sweden (its own
-bespoke XML-request/JSON-response API, not DATEX - see
-:mod:`streetworks.datex2.trafikverket`), and Vejdirektoratet for Denmark
-(genuine DATEX II 3.2 - see :mod:`streetworks.datex2.vejdirektoratet`).
+this SDK and a real, additive parser fix it needed). Statens vegvesen for
+Norway (see :mod:`streetworks.datex2.vegvesen`) graduated to verified on
+2026-07-30 after a real credentialed pull.
+
+Three further **Credentials wanted** scaffolds remain - built to a
+confirmed API/schema shape but not yet verified against real
+authenticated data, pending a tester with credentials: Trafikverket for
+Sweden (its own bespoke XML-request/JSON-response API, not DATEX - see
+:mod:`streetworks.datex2.trafikverket`), Vejdirektoratet for Denmark
+(genuine DATEX II 3.2 - see :mod:`streetworks.datex2.vejdirektoratet`),
+and ASFINAG for Austria (genuine DATEX II, and even less confirmed than
+Vejdirektoratet - the real pull URL *and* auth mechanism are both
+unknown, not just the credential value - see
+:mod:`streetworks.datex2.austria`).
 """
 
+from .austria import AsfinagClient
 from .belgium import BASE_URL as BELGIUM_BASE_URL
 from .belgium import CRS as BELGIUM_CRS
 from .belgium import DATEX_PATH as BELGIUM_DATEX_PATH
@@ -131,4 +138,5 @@ __all__ = [
     "TRAFIKVERKET_DATA_PATH",
     "parse_trafikverket_situations",
     "VejdirektoratetClient",
+    "AsfinagClient",
 ]

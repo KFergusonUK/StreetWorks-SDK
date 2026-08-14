@@ -349,6 +349,16 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     confirmed via public docs) or SA (public layer metadata) - see
     streetworks.stockholm.client's own module docstring.
 
+    Austria (`austria`) is genuine DATEX II, so it's better-schema-
+    confirmed than Trafikverket's bespoke envelope, but worse-access-
+    confirmed than Vejdirektoratet at the same stage: Vejdirektoratet's
+    protocol spec states its auth scheme (HTTP Basic) verbatim; no
+    equivalent statement exists anywhere public for ASFINAG - checked
+    the dataset page, its licence page, and the registration portal's
+    own JS bundle. The auth mechanism itself, not just the credential
+    value, is unknown - see streetworks.datex2.austria's own module
+    docstring.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
     assert {e.key for e in unverified} == {
@@ -360,6 +370,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "maproad",
         "greece",
         "stockholm",
+        "austria",
     }
 
 
