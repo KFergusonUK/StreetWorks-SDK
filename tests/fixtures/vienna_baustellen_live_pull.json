@@ -1,0 +1,149 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "BAUSTELLENPKTOGD.1656294455",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2174.303875,
+          336902.667
+        ]
+      },
+      "geometry_name": "SHAPE",
+      "properties": {
+        "OBJECTID": 1656294455,
+        "BEZIRK": 10,
+        "BEZEICHNUNG": "Troststraße 85",
+        "BEHINDERUNGSART": "Straßenbau",
+        "PRESSETEXT": "ImBaustellenbereich wird ein Fahrstreifen freigehalten und der Verkehr wechselweise durchgeschleust.",
+        "GISCODE": 1,
+        "GISCODE_TXT": "P90 Baustellen",
+        "OBJEKT_BEGINN": "2026-08-10Z",
+        "OBJEKT_ENDE": "2026-08-21Z",
+        "ANTRAGSTELLER": "MA28",
+        "ANSPRECHPERSON": "Kundenzentrum",
+        "ANSPRECHPERSON_TEL": "Tel.: 01-4000/49600",
+        "SE_ANNO_CAD_DATA": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "BAUSTELLENPKTOGD.1655785353",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -576.109375,
+          343150.61725
+        ]
+      },
+      "geometry_name": "SHAPE",
+      "properties": {
+        "OBJECTID": 1655785353,
+        "BEZIRK": 17,
+        "BEZEICHNUNG": "Lidlgasse Kreuzung Gersthofer Straße und Schöffelgasse und Lazargasse",
+        "BEHINDERUNGSART": "Straßenbau",
+        "PRESSETEXT": "Im Kreuzungsbereich wird ein Kreisverkehr errichtet. In Fahrtrichtung 16. Bezirk wird der Verkehr weiterhin über die Gersthofer Straße und Lidlgasse geführt. In Fahrtrichtung 18. Bezirk wird der Verkehr über die Roggendorfgasse Pezzlgasse - Gschwandnergasse Rötzergasse Rosensteingasse Kreuzgasse in die Gersthofer Straße umgeleitet.",
+        "GISCODE": 1,
+        "GISCODE_TXT": "P90 Baustellen",
+        "OBJEKT_BEGINN": "2026-06-01Z",
+        "OBJEKT_ENDE": "2026-09-04Z",
+        "ANTRAGSTELLER": null,
+        "ANSPRECHPERSON": "Kundenzentrum",
+        "ANSPRECHPERSON_TEL": "Tel.: 01-4000/49600",
+        "SE_ANNO_CAD_DATA": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "BAUSTELLENLINOGD.604816047",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            4722.09,
+            340825.36
+          ],
+          [
+            4727.99,
+            340826.74
+          ],
+          [
+            4730.7,
+            340827.27
+          ]
+        ]
+      },
+      "geometry_name": "SHAPE",
+      "properties": {
+        "OBJECTID": 604816047,
+        "BEZIRK": 3,
+        "BEZEICHNUNG": "Rasumofskygasse von 1 bis 2",
+        "BEHINDERUNGSART": "Rohrlegung",
+        "PRESSETEXT": "Der Individualverkehr wird über das richtungsführende Gleis geführt. Derrechte Fahrstreifen auf der Weißgerberlände in Fahrtrichtung Rasumofskygasse wird gesperrt. Die restlichenFahrstreifen werden aufrechtgehalten. Die Haltestelle Löwengasse der Straßenbahn wird nach Löwengasse 47 bis 51 versetzt. Die Haltestelle der Buslinie 4A wird aufgelassen. DerFußgängerverkehr kann aufrecht gehalten werden.",
+        "GISCODE": 1,
+        "GISCODE_TXT": "P90 Baustellen",
+        "OBJEKT_BEGINN": "2026-07-20Z",
+        "OBJEKT_ENDE": "2026-09-06Z",
+        "ANTRAGSTELLER": "MA31",
+        "ANSPRECHPERSON": "Ma 31 Kundencenter",
+        "ANSPRECHPERSON_TEL": "Tel.: 01-59959/31600",
+        "SE_ANNO_CAD_DATA": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "BAUSTELLENLINOGD.604815961",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3749.16,
+            334191.67
+          ],
+          [
+            3753.88,
+            334059.59
+          ],
+          [
+            3755.66,
+            333999.32
+          ],
+          [
+            3756.71,
+            333962.49
+          ],
+          [
+            3758.7,
+            333876.87
+          ],
+          [
+            3762.64,
+            333783.63
+          ],
+          [
+            3764.58,
+            333685.25
+          ]
+        ]
+      },
+      "geometry_name": "SHAPE",
+      "properties": {
+        "OBJECTID": 604815961,
+        "BEZIRK": 10,
+        "BEZEICHNUNG": "Himberger Straße von Favoritenstraße und Bahnlände und Gewidmete Verkehrsfläche bis Remystraße",
+        "BEHINDERUNGSART": "Straßenbau",
+        "PRESSETEXT": "Die Arbeiten werden in Fahrtrichtung stadteinwärts zwischen 09:00 und 17:00 Uhr und in Fahrtrichtung stadtauswärts zwischen 07:00 und 15:00 Uhr durchgeführt. Ein Fahrstreifen je Fahrtrichtung bleibt aufrecht. Außerhalbder Arbeitszeit bleibt der Verkehr unbehindert.",
+        "GISCODE": 1,
+        "GISCODE_TXT": "P90 Baustellen",
+        "OBJEKT_BEGINN": "2026-06-08Z",
+        "OBJEKT_ENDE": "2026-08-17Z",
+        "ANTRAGSTELLER": "MA28",
+        "ANSPRECHPERSON": "Kundenzentrum",
+        "ANSPRECHPERSON_TEL": "Tel.: 01-4000/49600",
+        "SE_ANNO_CAD_DATA": null
+      }
+    }
+  ]
+}

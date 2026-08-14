@@ -52,6 +52,7 @@ from .from_trafficwatchni import from_trafficwatchni
 from .from_vegvesen import from_vegvesen
 from .from_vialietuva import from_vialietuva
 from .from_vic_disruptions import from_vic_disruptions
+from .from_vienna import from_vienna
 from .from_wzdx import from_wzdx
 from .from_zurich import from_zurich
 from .gazetteer import (
@@ -144,4 +145,5 @@ __all__ = [
     "from_milano",
     "from_canton_zurich",
     "from_zurich",
+    "from_vienna",
 ]

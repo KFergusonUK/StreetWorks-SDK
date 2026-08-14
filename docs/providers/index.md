@@ -9,7 +9,7 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Belgium · Bulgaria · Denmark · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · UK   ~ Austria · Greece · Ireland · Sweden
+**Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · UK   ~ Greece · Ireland · Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
@@ -23,12 +23,15 @@ provider ([`streetworks.arcgis.jersey`](uk.md#jersey-roadworkx-and-tigerweb-arcg
 not one of the four UK nations. "In progress" also collapses two
 genuinely different states (credentials-wanted vs.
 documented-but-unavailable) for scannability — the matrix below
-distinguishes these. **Canada and Portugal both moved from in-progress
-to live** once DriveBC (British Columbia) and Lisboa (Condicionamentos
-de Trânsito) shipped — both real coverage is still partial (one
-province/city, not national), same as every other ✓ entry that isn't
-literally comprehensive; see [`docs/providers/canada.md`](canada.md) and
-[`docs/providers/portugal.md`](portugal.md) for exactly what's covered
+distinguishes these. **Canada, Portugal, and Austria all moved from
+in-progress to live** once DriveBC (British Columbia), Lisboa
+(Condicionamentos de Trânsito), and Vienna (verkehrswirksame
+Baustellen) shipped — real coverage in each is still partial
+(one province/city, not national — Austria's own national ASFINAG feed
+stays a Credentials-wanted scaffold), same as every other ✓ entry that
+isn't literally comprehensive; see [`docs/providers/canada.md`](canada.md),
+[`docs/providers/portugal.md`](portugal.md) and
+[`docs/providers/austria.md`](austria.md) for exactly what's covered
 and what isn't. This is the canonical coverage roster; `docs/index.md`'s
 copy quotes it rather than restating it independently.*
 
@@ -138,6 +141,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.copenhagen` | Københavns Kommune's "Gravetilladelser" excavation-permit register (no credentials, confirmed live 2026-08-10, 2240 real feature rows), this SDK's first Nordic coverage. The investigation brief's guessed dataset name and ArcGIS/OGC Features backend don't match reality — the real source is a WFS 1.0.0 GetFeature endpoint. Real geometry mixes Point/LineString/Polygon, with the same permit recorded once per shape; deduped by case number (`sagsnr`), preferring LineString over Point, Polygon never used. Licence: CC-BY-4.0, confirmed live | read |
 | `streetworks.oslo` | Oslo kommune's "SøkSys" digging/work-permit case system (no credentials, confirmed live 2026-08-10, 1354 real feature rows), this SDK's second Nordic coverage. Neither brief-guessed backend (Origo/Bymiljøetaten, or NVDB) matches reality — the real source, found by reading the public map's own JS bundle, is a permit system run by Geomatikk. Real coordinates are projected `EPSG:25832` (UTM32N), stored unswapped. Deduped by exact row id (drops real tiling-query duplicates), then grouped by activity into one `Works` with several `WorksSite`s where a permit genuinely spans distinct real sub-areas. Licence unconfirmed | read |
 | `streetworks.helsinki` | City of Helsinki's "Kaivuilmoitus" (excavation-notification) register (no credentials, confirmed live 2026-08-13, 3431 real feature rows), this SDK's third Nordic coverage — resolves the investigation brief's own unconfirmed claim that a Helsinki roadworks dataset might not exist. Found via Helsinki Region Infoshare's CKAN catalogue, served from a live GeoServer WFS. Real geometry is `MultiPolygon`; grouped by `hakemustunnus` (application reference) into one `Works` with several `WorksSite`s where a notification genuinely spans distinct real sub-areas (up to 164 real rows under one reference). Real coordinates are projected `EPSG:3879` (ETRS-GK25FIN), stored unswapped even though the WFS can reproject to WGS84 on request. A genuinely informative two-value `status` field (`Käynnissä`/`Tuleva`) drives real VERIFIED/ESTIMATED date-confidence grading. Licence: CC-BY-4.0, confirmed live | read |
+| `streetworks.vienna` | Stadt Wien's "verkehrswirksame Baustellen" traffic-relevant roadworks/closures register (no credentials, confirmed live 2026-08-14, 111 real feature rows), this SDK's second Austria coverage. The real data lives on Vienna's own GeoServer WFS, not the brief's candidate `data.gv.at` URL (a JS-rendered SPA with no reachable content). Two real layers (`Point`, `LineString`) are genuinely disjoint, not the same data twice — both fetched and combined. CRS is `EPSG:31256` (MGI/Austria GK East), cross-verified via a WGS84 reprojection. A real correction to the source brief: `ANTRAGSTELLER` shows genuine third-party applicants (utilities, the transit operator, a private developer), confirming this is a permit register — `source_grade=REGISTER`, not the brief's assumed operator. Licence: Stadt Wien's stated general CC BY 4.0 policy, not per-dataset-confirmed | read |
 | `streetworks.stockholm` | Stockholm's Trafikkontoret geodata WFS — a **[Credentials wanted](#credentials-wanted)** Phase 0 scaffold, worse-off than any other row here: every real surface tested (WFS/WMS `GetCapabilities`) 401s before any dataset name, layer, or field is ever revealed. Resolves the Nordic-capitals investigation brief's "Rome-risk" flag on Stockholm by confirming it, not disproving it — a promising "regional roadworks coordination map" lead traces back to the already credential-parked national Trafikverket system, not a separate Stockholm dataset. Whether a real roadworks dataset exists on this platform at all is genuinely unresolved | read |
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
 | `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |

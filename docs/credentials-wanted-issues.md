@@ -125,7 +125,11 @@ full detail behind each claim above.
 `streetworks.datex2.austria` is a Phase 0 scaffold — one phase earlier
 than Vejdirektoratet: built against ASFINAG's own confirmed dataset
 description, but neither the real pull URL nor the auth mechanism
-(not just the credential value) is known.
+(not just the credential value) is known. Austria does have live
+keyless coverage already via Vienna's own municipal roadworks register
+(`streetworks.vienna`, see `docs/providers/austria.md`) — this scaffold
+is specifically about the separate *national* motorway network ASFINAG
+operates, not a gap in Austria's coverage overall.
 
 **Confirmed, live, credential-free:** ASFINAG's own official dataset
 page (`mobilitaetsdaten.gv.at/daten/verkehrsmeldungen-zu-geplanten-ereignissen-asfinag`)

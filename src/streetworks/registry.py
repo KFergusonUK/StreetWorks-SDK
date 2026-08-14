@@ -2527,6 +2527,56 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.zurich import ZurichClient",
     ),
     ProviderEntry(
+        key="vienna",
+        name="Vienna (verkehrswirksame Baustellen)",
+        description=(
+            "Stadt Wien's traffic-relevant roadworks/closures register, "
+            "this SDK's second Austria coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Austria", "Vienna"}),
+        administrative_area="Stadt Wien",
+        scope_note=(
+            "Confirmed live (2026-08-14, 111 real feature rows) - "
+            "credential-free. The brief's own candidate URL (data.gv.at) "
+            "is a JS-rendered SPA with no real content reachable from a "
+            "plain fetch; the real data lives directly on Vienna's own "
+            "GeoServer WFS, found via web search. Two real layers "
+            "(BAUSTELLENPKTOGD/Point, 39 rows; BAUSTELLENLINOGD/"
+            "LineString, 72 rows) are genuinely disjoint, not the same "
+            "data twice - zero real ID or location-name overlap - both "
+            "are fetched and combined. Two real server quirks, both "
+            "masked-failure risks confirmed by reading response bodies "
+            "not just status codes: application/geo+json returns a real "
+            "HTTP 200 wrapping an XML error, and the server needs WFS "
+            "1.1.0's singular TYPENAME alongside the shared client's own "
+            "plural TYPENAMES. CRS is EPSG:31256 (MGI/Austria GK East), "
+            "cross-verified via a same-feature WGS84 reprojection landing "
+            "on real Vienna coordinates. A real correction to the "
+            "brief's own framing: ANTRAGSTELLER (applicant) shows genuine "
+            "third-party applicants (utility companies, the transit "
+            "operator, even a private developer), confirming this is a "
+            "permit register, not an authority publishing only its own "
+            "works - source_grade is REGISTER, not the brief's assumed "
+            "operator. A real false lead (Bausperre §8 zoning-freeze "
+            "layers) was checked and correctly excluded. Licence: Stadt "
+            "Wien's stated general CC BY 4.0 open-data policy, not this "
+            "specific dataset's own confirmed per-record licence field "
+            "(unreachable behind the same JS-rendered catalogue)."
+        ),
+        credentials=None,
+        licence=(
+            "CC BY 4.0 - Stadt Wien's stated general open-data policy, "
+            "not per-dataset-confirmed (see scope_note)"
+        ),
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.vienna",
+        _client_name="ViennaClient",
+        import_line="from streetworks.vienna import ViennaClient",
+    ),
+    ProviderEntry(
         key="stockholm",
         name="Stockholm (Trafikkontoret)",
         description="Stockholm city geodata WFS - blocked before any schema was ever seen.",
