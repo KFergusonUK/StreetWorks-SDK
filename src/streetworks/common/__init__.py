@@ -17,6 +17,7 @@ from .from_bag import from_bag
 from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
 from .from_berlin import from_berlin
+from .from_canton_zurich import from_canton_zurich
 from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
 from .from_copenhagen import from_copenhagen
@@ -52,6 +53,7 @@ from .from_vegvesen import from_vegvesen
 from .from_vialietuva import from_vialietuva
 from .from_vic_disruptions import from_vic_disruptions
 from .from_wzdx import from_wzdx
+from .from_zurich import from_zurich
 from .gazetteer import (
     Address,
     AddressRange,
@@ -140,4 +142,6 @@ __all__ = [
     "from_oslo",
     "from_helsinki",
     "from_milano",
+    "from_canton_zurich",
+    "from_zurich",
 ]

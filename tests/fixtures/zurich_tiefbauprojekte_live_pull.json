@@ -1,0 +1,651 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "bbox": [
+        8.572705,
+        47.404685,
+        8.572991,
+        47.405303
+      ],
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              [
+                8.57289,
+                47.405303
+              ],
+              [
+                8.57281,
+                47.405045
+              ],
+              [
+                8.572802,
+                47.405018
+              ],
+              [
+                8.572794,
+                47.404987
+              ],
+              [
+                8.572705,
+                47.4047
+              ],
+              [
+                8.572808,
+                47.404685
+              ],
+              [
+                8.57294,
+                47.405105
+              ],
+              [
+                8.572991,
+                47.405289
+              ],
+              [
+                8.57289,
+                47.405303
+              ]
+            ]
+          ]
+        ],
+        "type": "MultiPolygon"
+      },
+      "id": "aer_baustellen_a.1",
+      "properties": {
+        "adresse": null,
+        "baubeginn": "2026-09-14",
+        "baubereich": "Herzogenmühlestrasse und Parkplatz Schwammendingerplatz",
+        "bauende": "2026-10-30",
+        "baunr": "18071",
+        "foto": "NEIN",
+        "geometrie_gdo": null,
+        "id_proj_taz_z": 6180.0,
+        "kategorie": "Grössere Baustelle",
+        "kreis": 12.0,
+        "name": "Schwamendingerplatz",
+        "objectid": 1,
+        "plz": null,
+        "poi_id": null,
+        "projektbeschrieb": "Das Tiefbauamt baut die Haltestelle «Schwamendingerplatz» in der Herzogenmühlestrasse hindernisfrei aus. Die bestehende Betonplatte wird ersetzt und der Strassenbelag erneuert. Die Haltestelleninfrastruktur wird durch die Verkehrsbetriebe Zürich ersetzt. Die Dienstabteilung Verkehr wird nach Abschluss der Bauarbeiten die Markierungen und die Signalisationen anbringen. ",
+        "projektleiter": "Mike Dossenbach",
+        "projektleiter_email": "Mike.Dossenbach@zuerich.ch",
+        "publish_internet": "1",
+        "stand": "20260813",
+        "suchen": "Projekt Bauen Tiefbauamt Strassenbau Baustelle Schwamendingerplatz",
+        "tel": "+41 44 412 67 85",
+        "titel": "Schwamendingerplatz",
+        "www": "https://www.stadt-zuerich.ch/de/planen-und-bauen/projekte-und-ausschreibungen/strassen-freiraum/baustellen/baustellen-info.html?id=6180",
+        "x": null,
+        "y": null
+      },
+      "type": "Feature"
+    },
+    {
+      "bbox": [
+        8.527082,
+        47.355523,
+        8.529497,
+        47.359055
+      ],
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              [
+                8.528778,
+                47.359055
+              ],
+              [
+                8.52867,
+                47.358988
+              ],
+              [
+                8.529317,
+                47.357606
+              ],
+              [
+                8.529331,
+                47.357554
+              ],
+              [
+                8.529335,
+                47.357496
+              ],
+              [
+                8.529326,
+                47.357434
+              ],
+              [
+                8.529318,
+                47.35741
+              ],
+              [
+                8.529317,
+                47.357406
+              ],
+              [
+                8.529317,
+                47.357406
+              ],
+              [
+                8.529177,
+                47.357018
+              ],
+              [
+                8.529155,
+                47.356991
+              ],
+              [
+                8.529116,
+                47.356965
+              ],
+              [
+                8.52909,
+                47.356958
+              ],
+              [
+                8.529089,
+                47.356866
+              ],
+              [
+                8.529102,
+                47.356843
+              ],
+              [
+                8.529095,
+                47.356807
+              ],
+              [
+                8.529089,
+                47.356689
+              ],
+              [
+                8.529102,
+                47.356568
+              ],
+              [
+                8.529299,
+                47.355614
+              ],
+              [
+                8.529284,
+                47.35561
+              ],
+              [
+                8.529264,
+                47.3556
+              ],
+              [
+                8.529252,
+                47.355586
+              ],
+              [
+                8.52925,
+                47.355575
+              ],
+              [
+                8.529244,
+                47.355572
+              ],
+              [
+                8.529497,
+                47.355523
+              ],
+              [
+                8.529477,
+                47.355551
+              ],
+              [
+                8.529457,
+                47.355571
+              ],
+              [
+                8.529241,
+                47.356613
+              ],
+              [
+                8.529234,
+                47.35672
+              ],
+              [
+                8.529237,
+                47.356747
+              ],
+              [
+                8.529246,
+                47.356814
+              ],
+              [
+                8.529261,
+                47.356878
+              ],
+              [
+                8.52946,
+                47.357431
+              ],
+              [
+                8.529469,
+                47.357494
+              ],
+              [
+                8.529466,
+                47.35756
+              ],
+              [
+                8.529419,
+                47.357681
+              ],
+              [
+                8.528779,
+                47.359037
+              ],
+              [
+                8.528778,
+                47.359055
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                8.528642,
+                47.357426
+              ],
+              [
+                8.528218,
+                47.357409
+              ],
+              [
+                8.528218,
+                47.357407
+              ],
+              [
+                8.528223,
+                47.357383
+              ],
+              [
+                8.528652,
+                47.357399
+              ],
+              [
+                8.528697,
+                47.357398
+              ],
+              [
+                8.528752,
+                47.357392
+              ],
+              [
+                8.528799,
+                47.357382
+              ],
+              [
+                8.528841,
+                47.357384
+              ],
+              [
+                8.529317,
+                47.357406
+              ],
+              [
+                8.529318,
+                47.35741
+              ],
+              [
+                8.529325,
+                47.357437
+              ],
+              [
+                8.528843,
+                47.35741
+              ],
+              [
+                8.528808,
+                47.357409
+              ],
+              [
+                8.528751,
+                47.357421
+              ],
+              [
+                8.528695,
+                47.357424
+              ],
+              [
+                8.528642,
+                47.357426
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                8.527082,
+                47.357486
+              ],
+              [
+                8.527087,
+                47.357344
+              ],
+              [
+                8.527099,
+                47.357356
+              ],
+              [
+                8.527113,
+                47.357364
+              ],
+              [
+                8.527138,
+                47.357371
+              ],
+              [
+                8.527785,
+                47.357406
+              ],
+              [
+                8.527805,
+                47.357396
+              ],
+              [
+                8.527808,
+                47.35736
+              ],
+              [
+                8.528219,
+                47.357383
+              ],
+              [
+                8.528218,
+                47.357407
+              ],
+              [
+                8.528217,
+                47.357409
+              ],
+              [
+                8.528218,
+                47.357409
+              ],
+              [
+                8.528218,
+                47.357412
+              ],
+              [
+                8.528144,
+                47.357939
+              ],
+              [
+                8.528134,
+                47.358055
+              ],
+              [
+                8.528152,
+                47.358181
+              ],
+              [
+                8.528169,
+                47.35826
+              ],
+              [
+                8.528172,
+                47.358288
+              ],
+              [
+                8.528174,
+                47.358321
+              ],
+              [
+                8.528169,
+                47.358382
+              ],
+              [
+                8.528157,
+                47.358428
+              ],
+              [
+                8.528146,
+                47.358462
+              ],
+              [
+                8.528119,
+                47.358519
+              ],
+              [
+                8.528033,
+                47.358684
+              ],
+              [
+                8.528032,
+                47.358698
+              ],
+              [
+                8.52804,
+                47.358714
+              ],
+              [
+                8.527915,
+                47.358667
+              ],
+              [
+                8.528046,
+                47.358395
+              ],
+              [
+                8.528056,
+                47.358316
+              ],
+              [
+                8.528043,
+                47.35825
+              ],
+              [
+                8.528018,
+                47.358117
+              ],
+              [
+                8.52801,
+                47.358037
+              ],
+              [
+                8.52806,
+                47.35768
+              ],
+              [
+                8.52785,
+                47.357667
+              ],
+              [
+                8.527874,
+                47.357494
+              ],
+              [
+                8.527137,
+                47.357452
+              ],
+              [
+                8.52712,
+                47.357453
+              ],
+              [
+                8.527096,
+                47.357467
+              ],
+              [
+                8.527082,
+                47.357486
+              ]
+            ]
+          ]
+        ],
+        "type": "MultiPolygon"
+      },
+      "id": "aer_baustellen_a.2",
+      "properties": {
+        "adresse": null,
+        "baubeginn": "2026-04-27",
+        "baubereich": "Gabler- bis Brunaustrasse",
+        "bauende": "2027-08-13",
+        "baunr": "16024",
+        "foto": "NEIN",
+        "geometrie_gdo": null,
+        "id_proj_taz_z": 5704.0,
+        "kategorie": "Grössere Baustelle",
+        "kreis": 2.0,
+        "name": "Scheideggstrasse, Steinhaldenstrasse",
+        "objectid": 2,
+        "plz": null,
+        "poi_id": null,
+        "projektbeschrieb": "An der Steinhaldenstrasse wird die Strasse inklusive Trottoirs erneuert und im Bereich Brunnenhof eine platzartige Gestaltung umgesetzt. Zusätzlich wird eine Begegnungszone eingeführt, Leitungen erneuert und die Abflusskapazität der Kanalisation ausgebaut.",
+        "projektleiter": "Waldemar Kaiser",
+        "projektleiter_email": "Waldemar.Kaiser@zuerich.ch",
+        "publish_internet": "1",
+        "stand": "20260813",
+        "suchen": "Projekt Bauen Tiefbauamt Strassenbau Baustelle Scheideggstrasse, Steinhaldenstrasse",
+        "tel": "+41 44 412 27 90",
+        "titel": "Scheideggstrasse, Steinhaldenstrasse",
+        "www": "https://www.stadt-zuerich.ch/de/planen-und-bauen/projekte-und-ausschreibungen/strassen-freiraum/baustellen/baustellen-info.html?id=5704",
+        "x": null,
+        "y": null
+      },
+      "type": "Feature"
+    },
+    {
+      "bbox": [
+        8.564697,
+        47.381487,
+        8.565997,
+        47.383057
+      ],
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              [
+                8.564888,
+                47.381589
+              ],
+              [
+                8.564878,
+                47.381609
+              ],
+              [
+                8.565103,
+                47.381924
+              ],
+              [
+                8.565213,
+                47.38208
+              ],
+              [
+                8.565323,
+                47.38224
+              ],
+              [
+                8.565445,
+                47.382401
+              ],
+              [
+                8.565642,
+                47.382631
+              ],
+              [
+                8.565921,
+                47.382945
+              ],
+              [
+                8.565945,
+                47.382968
+              ],
+              [
+                8.565997,
+                47.38299
+              ],
+              [
+                8.565927,
+                47.383057
+              ],
+              [
+                8.565906,
+                47.383013
+              ],
+              [
+                8.565585,
+                47.382652
+              ],
+              [
+                8.56539,
+                47.382419
+              ],
+              [
+                8.565264,
+                47.382258
+              ],
+              [
+                8.565041,
+                47.381945
+              ],
+              [
+                8.564829,
+                47.381639
+              ],
+              [
+                8.564774,
+                47.381634
+              ],
+              [
+                8.564697,
+                47.381559
+              ],
+              [
+                8.564852,
+                47.381487
+              ],
+              [
+                8.564931,
+                47.381569
+              ],
+              [
+                8.564888,
+                47.381589
+              ]
+            ]
+          ]
+        ],
+        "type": "MultiPolygon"
+      },
+      "id": "aer_baustellen_a.3",
+      "properties": {
+        "adresse": null,
+        "baubeginn": "2026-06-01",
+        "baubereich": "Orellistrasse bis Susenbergstrasse",
+        "bauende": "2026-10-09",
+        "baunr": "16028",
+        "foto": "NEIN",
+        "geometrie_gdo": null,
+        "id_proj_taz_z": 5700.0,
+        "kategorie": "Grössere Baustelle",
+        "kreis": 7.0,
+        "name": "Heubeeriweg",
+        "objectid": 3,
+        "plz": null,
+        "poi_id": null,
+        "projektbeschrieb": "ERZ Entsorgung + Recycling erneuert am Heubeeriweg den Kanal.",
+        "projektleiter": "Carla Hagen",
+        "projektleiter_email": "Carla.Hagen@zuerich.ch",
+        "publish_internet": "1",
+        "stand": "20260813",
+        "suchen": "Projekt Bauen Tiefbauamt Strassenbau Baustelle Heubeeriweg",
+        "tel": "+41 44 412 50 94",
+        "titel": "Heubeeriweg",
+        "www": "https://www.stadt-zuerich.ch/de/planen-und-bauen/projekte-und-ausschreibungen/strassen-freiraum/baustellen/baustellen-info.html?id=5700",
+        "x": null,
+        "y": null
+      },
+      "type": "Feature"
+    }
+  ]
+}

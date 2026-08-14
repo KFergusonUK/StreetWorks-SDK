@@ -2441,6 +2441,92 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.milano import MilanoClient",
     ),
     ProviderEntry(
+        key="canton_zurich",
+        name="Kanton Zürich (Baustellen Kantonsstrassen)",
+        description=(
+            "Kanton Zürich's own cantonal-road works register, this SDK's "
+            "first Swiss coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Switzerland", "Zürich"}),
+        administrative_area="Kanton Zürich",
+        scope_note=(
+            "Confirmed live (2026-08-14, 66 real feature rows) - "
+            "credential-free. Found via opendata.swiss's own CKAN "
+            "catalogue (wfs-baustellen-kantonsstrassen), a real GeoServer "
+            "WFS run by the canton's own Tiefbauamt. Two real layers "
+            "carry the same 66 closures, not disjoint data (confirmed by "
+            "matching properties 1:1) - the detail layer's real Polygon "
+            "footprints are used, the overview layer's Point geometry is "
+            "not. CRS is EPSG:2056 (Swiss LV95, confirmed live), stored "
+            "unswapped. No unique identifier field exists anywhere in "
+            "the schema - a composite key is 65/66 unique, but the one "
+            "collision is two genuinely distinct real closures (opposite "
+            "directions of the same road) sharing every composite field, "
+            "proving a fabricated key would misrepresent them - reference "
+            "stays None, a documented gap not a guess. status_baustelle "
+            "is a real, informative two-value field (aktiv/zukünftig) "
+            "driving real VERIFIED/ESTIMATED date-confidence grading, the "
+            "same shape as Helsinki's Käynnissä/Tuleva. Deliberately not "
+            "deduped against the separate, non-overlapping Stadt Zürich "
+            "city-streets coverage. Licence: opendata.swiss 'Open use' "
+            "tier, confirmed live via the resource's own rights field "
+            "(not its empty CKAN license_id) - no attribution required."
+        ),
+        credentials=None,
+        licence=(
+            "opendata.swiss 'Open use' - usable commercially and "
+            "non-commercially, no attribution required, confirmed live"
+        ),
+        source_grade="operator",
+        _module="streetworks.canton_zurich",
+        _client_name="CantonZurichClient",
+        import_line="from streetworks.canton_zurich import CantonZurichClient",
+    ),
+    ProviderEntry(
+        key="zurich",
+        name="Stadt Zürich (Aktuelle Tiefbauprojekte)",
+        description=(
+            "City of Zürich's own current civil-engineering-projects "
+            "register, this SDK's second Swiss coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Switzerland", "Zürich"}),
+        administrative_area="Stadt Zürich",
+        scope_note=(
+            "Confirmed live (2026-08-14, 140 real feature rows) - "
+            "credential-free. Found via the same opendata.swiss CKAN "
+            "catalogue entry as Kanton Zürich (aktuelle-tiefbauprojekte-"
+            "im-offentlichen-grund), the city's own GeoServer WFS. Two "
+            "real quirks confirmed live: this server's only working JSON "
+            "format is application/vnd.geo+json, not the shared client's "
+            "own default; and it 500s on WFS 2.0.0's plural TYPENAMES "
+            "alone, needing the real working 1.1.0 singular TYPENAME "
+            "sent alongside it. CRS is genuinely WGS84, confirmed "
+            "empirically (real coordinates match the layer's own stated "
+            "WGS84BoundingBox) despite an empty DefaultSRS capabilities "
+            "tag - a real metadata gap, not a parsing miss. baunr (project "
+            "number) is a real, 100%-unique identifier, unlike the "
+            "canton's dataset. kategorie is a constant 'Grössere "
+            "Baustelle' - this feed is already curated to significant "
+            "projects, stated honestly rather than implied exhaustive. "
+            "Deliberately not deduped against the separate, non-"
+            "overlapping Kanton Zürich cantonal-road coverage. Licence: "
+            "the same opendata.swiss 'Open use' tier, confirmed live."
+        ),
+        credentials=None,
+        licence=(
+            "opendata.swiss 'Open use' - usable commercially and "
+            "non-commercially, no attribution required, confirmed live"
+        ),
+        source_grade="operator",
+        _module="streetworks.zurich",
+        _client_name="ZurichClient",
+        import_line="from streetworks.zurich import ZurichClient",
+    ),
+    ProviderEntry(
         key="stockholm",
         name="Stockholm (Trafikkontoret)",
         description="Stockholm city geodata WFS - blocked before any schema was ever seen.",

@@ -61,7 +61,7 @@ with StreetManagerClient("api-user@example.com", password, environment=Environme
 
 - **Getting started** — [installation](getting-started/installation.md), [quickstart](getting-started/quickstart.md), [development](getting-started/development.md)
 - **Concepts** — [architecture](concepts/architecture.md), [data model](concepts/data-model.md), [data integrity discipline](concepts/data-integrity.md), [CRS & datums](concepts/crs-and-datums.md), [write path (Section 50)](concepts/write-path.md)
-- **Providers** — [index / coverage matrix / credentials wanted](providers/index.md), [UK & Crown Dependencies](providers/uk.md), [Europe](providers/europe.md), [Italy](providers/italy.md), [Portugal](providers/portugal.md), [United States](providers/us.md), [Canada](providers/canada.md), [Australia](providers/australia.md), [New Zealand](providers/new-zealand.md), [pending candidates](providers/pending.md)
+- **Providers** — [index / coverage matrix / credentials wanted](providers/index.md), [UK & Crown Dependencies](providers/uk.md), [Europe](providers/europe.md), [Italy](providers/italy.md), [Switzerland](providers/switzerland.md), [Portugal](providers/portugal.md), [United States](providers/us.md), [Canada](providers/canada.md), [Australia](providers/australia.md), [New Zealand](providers/new-zealand.md), [pending candidates](providers/pending.md)
 - **Examples** — [`examples.md`](examples.md) (curated, one line per example in `examples/`)
 - **Roadmap** — [`roadmap.md`](roadmap.md) (chronological build log)
 - **Domain notes** — [provider quirks (index)](domain-notes/provider-quirks.md), [UK permits](domain-notes/uk-permits.md), [excluded territories](domain-notes/excluded-territories.md)
