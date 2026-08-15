@@ -19,8 +19,11 @@ from streetworks.registry import _REGISTRY, Kind, NetworkScope, get_provider, pr
 PACKAGE_ROOT = Path(inspect.getfile(inspect.getmodule(providers))).parent
 
 # Top-level packages/modules that are infrastructure, not providers, and are
-# deliberately not in the registry.
-_NON_PROVIDER_MODULES = {"common", "registry", "exceptions", "ogc", "socrata"}
+# deliberately not in the registry. "nuar" is a different case within this
+# set - not infrastructure, but a testing-only reference model with no live
+# connector yet (see streetworks.nuar's own module docstring) - registering
+# it would misrepresent it as a queryable provider before one exists.
+_NON_PROVIDER_MODULES = {"common", "registry", "exceptions", "ogc", "socrata", "nuar"}
 
 
 def test_every_import_line_actually_works():

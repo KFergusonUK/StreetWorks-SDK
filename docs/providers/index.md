@@ -147,6 +147,18 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.police` | [UK Police](https://data.police.uk/docs/) — street-level crime, as a worker-safety signal, not a street-works feed (no credentials) | read |
 | `streetworks.common` | Canonical cross-provider works types (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`, `Notice`) with per-provider converters, alongside every native interface above | — |
 
+## Underground assets (model only)
+
+A different data class from everything above — buried utility assets
+(pipes, cables, ducts, chambers), not roadworks and not a street
+gazetteer — kept out of the module table on purpose, since that table's
+"read"/"write" columns imply something queryable, and there is nothing to
+query here yet.
+
+| Module | Status | Notes |
+|---|---|---|
+| `streetworks.nuar` | **Testing-only reference model — not a live provider, not registered, not counted in [Coverage](#coverage)** | [NUAR (National Underground Asset Register)](https://www.nuar.uk/) — no consumption API exists yet: OS/GDS opened a synthetic-data Sandbox on 2026-08-07 to test access routes, but endpoints/auth/wire format are unpublished. The *data model*, however, is already public — the NUAR Harmonised Data Model (OGL v3.0, a UK profile of the approved OGC MUDDI standard) — so `UndergroundAsset` exists now, derived from that published schema, ready for a connector once the transport lands. `NUAR_CONNECTOR_LIVE` is `False`; importing the package warns. See [`docs/providers/pending.md`](pending.md) for the fuller writeup. |
+
 ## Status
 
 Early alpha. **Authentication and read/consume access are verified against

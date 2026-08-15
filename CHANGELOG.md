@@ -2,6 +2,42 @@
 
 ## [Unreleased]
 
+### Added — NUAR (National Underground Asset Register), a testing-only reference model (2026-08-15)
+
+`streetworks.nuar` - not a live provider, and not registered as one:
+there is no NUAR consumption API yet to connect to. A secure Sandbox
+opened 2026-08-07 (synthetic data) to test access routes, including a
+future consumption API, but its endpoints, auth and wire format are
+unpublished - that's the one real blocker. The *data model*, however, is
+already public: the NUAR Harmonised Data Model
+(`github.com/national-underground-asset-register/nuar-datamodel`, OGL
+v3.0, a UK profile of the approved OGC MUDDI standard) ships XMI + PostGIS
+DDL encodings with geometries defaulting to EPSG:27700 (BNG).
+
+- **`UndergroundAsset`** - a native model (no `streetworks.common`
+  converter, the same discipline `streetworks.kartverket` uses), derived
+  from the published DDL column names, not guessed. First non-roadworks,
+  non-gazetteer entity in this SDK - buried utility assets (pipes,
+  cables, ducts, chambers), never coerced into `Works`/`WorksSite`.
+- Depth and positional-quality fields are preserved as stated `Measure`s
+  with their own units, never defaulted - a fabricated zero depth for a
+  buried asset would be a safety lie, not a harmless default.
+- **Geometry is deliberately left to the caller.** The published schema
+  fixes the attributes but not how a future API will encode geometry on
+  the wire - `underground_asset_from_nhdm_row` accepts a ready-built
+  `Coordinate` and never parses geometry itself.
+- **Not registered, not queryable, not counted as coverage.**
+  `NUAR_CONNECTOR_LIVE` is `False`; importing `streetworks.nuar` warns;
+  `docs/providers/index.md`'s roadworks matrix is untouched. Added to
+  `docs/providers/pending.md` instead, and to `tests/test_registry.py`'s
+  non-provider-module allowlist, since there is genuinely nothing to
+  query yet - only a shape ready for when the sandbox transport lands.
+- Even once a connector exists, NUAR *data* stays bring-your-own-
+  credentials only (legally enforceable access agreements) - never
+  bundled, unlike the freely-reusable OGL-licensed schema itself.
+- New `tests/test_nuar_model.py` (mocked, no network - there is no
+  endpoint).
+
 ## [0.9.0] - 2026-08-15
 
 ### Changed — Documentation jargon cleanup, plus a new Common Model concepts page (2026-08-15)
