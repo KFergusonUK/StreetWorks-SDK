@@ -59,6 +59,27 @@ Credentials-wanted, or Documented-unavailable; see
   bundled. Scope: England, Wales, Northern Ireland (not Scotland,
   consistent with this SDK's existing OSG/Scotland gating). Sandbox trial
   applied for by the project owner, 2026-08.
+- **Spain — Catastro (Dirección General del Catastro), INSPIRE
+  Addresses (AD) — a different case again: real, current data exists,
+  but the licence is the blocker, not the endpoint.** Investigated
+  2026-08-15 alongside [IDEE Transportes](europe.md#idee-transportes-spain-national-road-network)
+  (Spain's separate national road network, which *was* built the same
+  day). Catastro's documented WFS endpoint
+  (`ovc.catastro.meh.es/INSPIRE/wfsAD.aspx`) no longer responds to any
+  request variant tried, including a bare `GetCapabilities` — a real
+  ATOM bulk-download route is confirmed live and current instead
+  (`ES.SDGC.AD.atom.xml`, per-province entries). The real blocker is
+  Catastro's own confirmed licence (`Licencia.pdf`): the *original* data
+  may not be redistributed over the internet in unmodified form — only
+  "transformed, value-added" products may be — which conflicts with this
+  SDK's usual convention of committing a real trimmed API-response
+  fixture per provider. Not built until that's resolved, one way or
+  another — either using only synthetic/structurally-representative
+  fixtures instead of a real captured sample, or a clearer read on
+  whether this SDK's own object conversion counts as "transformation"
+  under that clause. Covers 95% of Spanish territory by the DGC's own
+  stated completeness figure — Basque Country and Navarre run their own
+  independent cadastral offices.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and

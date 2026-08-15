@@ -2146,6 +2146,39 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.linz import LinzClient",
     ),
     ProviderEntry(
+        key="idee",
+        name="IDEE Transportes (Spain national road network)",
+        description="Spain's national road-transport network, published by IGN.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Spain"}),
+        administrative_area="Instituto Geográfico Nacional (IGN)",
+        scope_note=(
+            "Confirmed live (2026-08-15) - credential-free, never a "
+            "Credentials-wanted scaffold. A different agency and data "
+            "class from this SDK's existing Spanish roadworks coverage "
+            "(DGT, Consell de Mallorca, SCT) - do not conflate. Resolves "
+            "docs/inspire-gml-investigation.md's own real problem: a "
+            "RoadLink carries geometry but no name, so this client "
+            "fetches Road (name/codes plus a list of RoadLink "
+            "references) and batch-resolves its RoadLinks in one "
+            "RESOURCEID request - a broken cross-reference is a "
+            "confirmed real case, counted not raised. Spain's separate "
+            "INSPIRE Addresses service (Catastro) was investigated the "
+            "same day and deliberately not built alongside this - its "
+            "documented endpoint no longer responds, and its own "
+            "confirmed licence prohibits redistributing original data "
+            "unmodified, conflicting with this SDK's usual real-fixture "
+            "convention. See module docstring and "
+            "docs/providers/pending.md."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.idee",
+        _client_name="IdeeTransportesClient",
+        import_line="from streetworks.idee import IdeeTransportesClient",
+    ),
+    ProviderEntry(
         key="drivebc",
         name="DriveBC (British Columbia, Open511)",
         description="British Columbia's provincial road-events feed.",

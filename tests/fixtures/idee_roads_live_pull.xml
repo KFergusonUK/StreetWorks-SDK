@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd http://inspire.ec.europa.eu/schemas/base/3.3 https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2" xmlns:wfs="http://www.opengis.net/wfs/2.0" timeStamp="2026-08-15T18:16:57Z" xmlns:gml="http://www.opengis.net/gml/3.2" numberMatched="2" numberReturned="2">
+  <wfs:boundedBy>
+    <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+      <gml:lowerCorner>41.584192 2.273826</gml:lowerCorner>
+      <gml:upperCorner>41.613948 2.291900</gml:upperCorner>
+    </gml:Envelope>
+  </wfs:boundedBy>
+  <wfs:member>
+    <tn-ro:Road xmlns:tn-ro="http://inspire.ec.europa.eu/schemas/tn-ro/4.0" gml:id="TN-RO_ROAD_VIAL_LI80960000289">
+      <net:beginLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">2017-03-17T00:00:00</net:beginLifespanVersion>
+      <net:inspireId xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <base:Identifier xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3">
+          <base:localId>VIAL_LI80960000289</base:localId>
+          <base:namespace>ES.SCNE.IGR-RT</base:namespace>
+        </base:Identifier>
+      </net:inspireId>
+      <net:endLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <net:inNetwork xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true"/>
+      <net:link xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADLINK_VIAL_TR80960215938#TN-RO_ROADLINK_VIAL_TR80960215938"/>
+      <tn:geographicalName xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0">
+        <gn:GeographicalName xmlns:gn="http://inspire.ec.europa.eu/schemas/gn/4.0">
+          <gn:language xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:nativeness xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://inspire.ec.europa.eu/codelist/NativenessValue/endonym"/>
+          <gn:nameStatus xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:sourceOfName xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:pronunciation xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:spelling>
+            <gn:SpellingOfName>
+              <gn:text>CONCORDIA</gn:text>
+              <gn:script>Latn</gn:script>
+            </gn:SpellingOfName>
+          </gn:spelling>
+        </gn:GeographicalName>
+      </tn:geographicalName>
+      <tn:validFrom xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn:validTo xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn-ro:localRoadCode>48</tn-ro:localRoadCode>
+      <tn-ro:nationalRoadCode>0809602044</tn-ro:nationalRoadCode>
+    </tn-ro:Road>
+  </wfs:member>
+  <wfs:member>
+    <tn-ro:Road xmlns:tn-ro="http://inspire.ec.europa.eu/schemas/tn-ro/4.0" gml:id="TN-RO_ROAD_VIAL_LI80960000322">
+      <net:beginLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">2017-03-17T00:00:00</net:beginLifespanVersion>
+      <net:inspireId xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <base:Identifier xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3">
+          <base:localId>VIAL_LI80960000322</base:localId>
+          <base:namespace>ES.SCNE.IGR-RT</base:namespace>
+        </base:Identifier>
+      </net:inspireId>
+      <net:endLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <net:inNetwork xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true"/>
+      <net:link xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADLINK_VIAL_TR80960195292#TN-RO_ROADLINK_VIAL_TR80960195292"/>
+      <net:link xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADLINK_VIAL_TR80960195331#TN-RO_ROADLINK_VIAL_TR80960195331"/>
+      <tn:geographicalName xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0">
+        <gn:GeographicalName xmlns:gn="http://inspire.ec.europa.eu/schemas/gn/4.0">
+          <gn:language xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:nativeness xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://inspire.ec.europa.eu/codelist/NativenessValue/endonym"/>
+          <gn:nameStatus xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:sourceOfName xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:pronunciation xsi:nil="true" nilReason="other:unpopulated"/>
+          <gn:spelling>
+            <gn:SpellingOfName>
+              <gn:text>ARQUIMEDES</gn:text>
+              <gn:script>Latn</gn:script>
+            </gn:SpellingOfName>
+          </gn:spelling>
+        </gn:GeographicalName>
+      </tn:geographicalName>
+      <tn:validFrom xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn:validTo xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn-ro:localRoadCode>426</tn-ro:localRoadCode>
+      <tn-ro:nationalRoadCode>0809601906</tn-ro:nationalRoadCode>
+    </tn-ro:Road>
+  </wfs:member>
+</wfs:FeatureCollection>

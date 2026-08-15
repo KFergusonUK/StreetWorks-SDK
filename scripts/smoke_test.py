@@ -1493,6 +1493,24 @@ def check_police() -> str:
     )
 
 
+def check_idee() -> str:
+    """Spain IDEE Transportes (IGN) needs no credentials. Exercises the
+    real Road -> RoadLink two-hop join (see streetworks.idee.client's
+    module docstring) against one small live page."""
+    from streetworks.idee import IdeeTransportesClient
+
+    with IdeeTransportesClient() as idee:
+        roads = []
+        for road in idee.iter_roads(count=5):
+            roads.append(road)
+            if len(roads) >= 5:
+                break
+    if not roads:
+        raise RuntimeError("query returned no real roads")
+    resolved = sum(1 for r in roads if r.geometry is not None)
+    return f"{len(roads)} road(s), {resolved} with resolved geometry"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1647,6 +1665,8 @@ def main() -> int:
     reporter.check("Oslo (SøkSys)", [], check_oslo)
     # UK Police (data.police.uk) needs no credentials
     reporter.check("UK Police (crime safety signal)", [], check_police)
+    # IDEE Transportes (Spain national road network) needs no credentials
+    reporter.check("IDEE Transportes (Spain)", [], check_idee)
 
     print()
     if reporter.ran == 0:

@@ -2,6 +2,95 @@
 
 ## [Unreleased]
 
+### Added — IDEE Transportes (Spain national road network), this SDK's first Spanish `streets` gazetteer (2026-08-15)
+
+`streetworks.idee` / `streetworks.common.from_idee` - Spain's national
+road-transport network, published by IGN (Instituto Geográfico Nacional)
+over IDEE's INSPIRE WFS. A different agency and data class from this
+SDK's existing Spanish roadworks coverage (DGT, Consell de Mallorca,
+SCT) - not a duplicate.
+
+```python
+from streetworks.idee import IdeeTransportesClient
+from streetworks.common import from_idee
+
+with IdeeTransportesClient() as idee:
+    streets = [from_idee(road) for road in idee.iter_roads()]
+```
+
+- **Built directly from a prior, dedicated investigation
+  (`docs/inspire-gml-investigation.md`) that had found the real shape
+  but never shipped it - re-verified live before writing any new code,
+  and every finding still held.** The real, decisive problem: `RoadLink`
+  (the feature type carrying geometry) states no name at all - confirmed
+  at the schema level (`RoadLinkType` extends the shared base type with
+  an empty `<sequence/>`) and live (the one schema-legal inline name
+  field is absent on every real `RoadLink` sampled). Name, road codes,
+  and the list of constituent `RoadLink`s all live one hop up, on
+  `Road`.
+- **`RESOLVE` doesn't work, confirmed dead both ways, re-verified.**
+  Neither no resolve parameter nor `RESOLVE=local` (matching the
+  service's own declared `ResolveLocalScope=*`) inlines the referenced
+  feature - both leave a bare `xlink:href`. So the client follows the
+  href's own URL fragment (the real `gml:id` after `#`) directly rather
+  than asking for resolve.
+- **WFS 2.0's `RESOURCEID` genuinely accepts a same-type batch -
+  re-confirmed live.** One `GetFeature&RESOURCEID=id1,id2,...` returns
+  every requested `RoadLink`, geometry included, in one round trip. A
+  mixed `RoadLink`+`RoadNode` batch was tried live and returned a real
+  `HTTP 500`, so same-type batching only. Real shape per page of
+  `Road`s: one paged `GetFeature` for `Road` (following the server's own
+  stated `next` link, never computed `STARTINDEX` math), then one
+  batched `RESOURCEID` call covering every distinct `RoadLink` id that
+  page's `Road`s reference - two requests total, not one per `Road`.
+- **A broken cross-reference is a confirmed, real, non-fatal case, not
+  assumed impossible.** The original investigation found 1 of 3 real
+  hrefs it followed returned a genuine
+  `403 OperationProcessingFailed: feature not found`. An unresolved
+  `net:link` is skipped and counted on `Road.unresolved_links`, never
+  raised - `Road.geometry` is `None` only when every real link on that
+  Road failed to resolve.
+- **Geometry aggregation reuses the same multi-line shape DataVIA's
+  `StreetLines` already established** - a `Road` genuinely spans several
+  `RoadLink`s (up to 40 seen live in this build's own sampling), each
+  its own real `LineString`; one part per successfully-resolved
+  `RoadLink` goes into `Coordinate.parts`, in the `Road`'s own stated
+  order. No `Segment` is emitted per `RoadLink` - a real classification
+  layer (`FunctionalRoadClass`/`FormOfWay`/`NumberOfLanes`) exists one
+  hop further but would mean per-attribute-type round trips beyond this
+  bounded two-hop shape, for data this model's three use cases don't
+  need.
+- **CRS confirmed live: `EPSG:4258` (ETRS89), genuine lat/lon axis
+  order** - every real `srsName` is the OGC "http URI" form; a real
+  vertex `41.613948 2.291140` places the road in Barcelona, not the
+  Mediterranean, confirming no swap is needed. No credentials. Licence
+  CC BY 4.0.
+- **Coverage confirmed live to include the Balearic Islands (Mallorca) -
+  but the service's own declared bounding box does not.**
+  `GetCapabilities` states an `ows:WGS84BoundingBox` reaching only to
+  `3.20°E`, which would exclude part of Mallorca - a real spatial query
+  (`fes:BBOX` against `RoadLink`, since `Road` has no geometry property
+  to filter on) returned real features at `3.24-3.26°E`, genuinely east
+  of the stated box. The capabilities bounding box understates real
+  coverage; only a live query confirms what's actually in scope. Plain
+  KVP `BBOX=` filtering timed out repeatedly and was abandoned - a
+  proper `fes:Filter` POST request is what works. A different data class
+  from the existing Consell de Mallorca roadworks provider covering the
+  same island - no dedup conflict.
+- **Spain's separate INSPIRE Addresses service (Catastro) was
+  investigated the same day and deliberately not built alongside this.**
+  Its documented WFS endpoint no longer responds to any request variant
+  tried; a real ATOM bulk-download route is confirmed live instead. More
+  significantly, Catastro's own confirmed licence explicitly prohibits
+  redistributing the *original* data over the internet in unmodified
+  form, conflicting with this SDK's usual real-fixture test convention -
+  genuinely unresolved, not silently dropped, see
+  `docs/providers/pending.md`.
+- Registry entry (`idee`, `kind=streets`), new tests against real
+  trimmed live-pull XML fixtures (roads, a paginated page, and a batched
+  RoadLink response) plus one synthetic fixture for the non-reproducible
+  broken-cross-reference case, and a `scripts/smoke_test.py` check.
+
 ### Added — NUAR (National Underground Asset Register), a testing-only reference model (2026-08-15)
 
 `streetworks.nuar` - not a live provider, and not registered as one:

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd http://inspire.ec.europa.eu/schemas/base/3.3 https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2" xmlns:wfs="http://www.opengis.net/wfs/2.0" timeStamp="2026-08-15T18:17:15Z" xmlns:gml="http://www.opengis.net/gml/3.2" numberMatched="3" numberReturned="3">
+  <wfs:boundedBy>
+    <gml:Envelope srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+      <gml:lowerCorner>41.584192 2.273826</gml:lowerCorner>
+      <gml:upperCorner>41.613948 2.291900</gml:upperCorner>
+    </gml:Envelope>
+  </wfs:boundedBy>
+  <wfs:member>
+    <tn-ro:RoadLink xmlns:tn-ro="http://inspire.ec.europa.eu/schemas/tn-ro/4.0" gml:id="TN-RO_ROADLINK_VIAL_TR80960195331">
+      <net:beginLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">2024-12-31T00:00:00</net:beginLifespanVersion>
+      <net:inspireId xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <base:Identifier xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3">
+          <base:localId>VIAL_TR80960195331</base:localId>
+          <base:namespace>ES.SCNE.IGR-RT</base:namespace>
+        </base:Identifier>
+      </net:inspireId>
+      <net:endLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <net:inNetwork xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true"/>
+      <net:centrelineGeometry xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <!--Inlined geometry 'TN-RO_ROADLINK_VIAL_TR80960195331_NET_CENTRELINEGEOMETRY'-->
+        <gml:LineString gml:id="TN-RO_ROADLINK_VIAL_TR80960195331_NET_CENTRELINEGEOMETRY" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+          <gml:posList>41.584405 2.273826 41.584402 2.273883 41.584399 2.273940 41.584396 2.273997 41.584393 2.274053 41.584390 2.274110 41.584387 2.274167 41.584383 2.274224 41.584380 2.274281 41.584377 2.274337 41.584374 2.274394 41.584371 2.274451 41.584368 2.274508 41.584365 2.274564 41.584362 2.274621 41.584359 2.274678 41.584356 2.274735 41.584353 2.274792 41.584350 2.274848 41.584347 2.274905 41.584344 2.274962 41.584341 2.275019 41.584338 2.275075 41.584334 2.275132 41.584331 2.275189 41.584328 2.275246</gml:posList>
+        </gml:LineString>
+      </net:centrelineGeometry>
+      <net:fictitious xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">true</net:fictitious>
+      <net:endNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_2603869#TN-RO_ROADNODE_VIAL_N_2603869"/>
+      <net:startNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_2782759#TN-RO_ROADNODE_VIAL_N_2782759"/>
+      <tn:validFrom xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn:validTo xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+    </tn-ro:RoadLink>
+  </wfs:member>
+  <wfs:member>
+    <tn-ro:RoadLink xmlns:tn-ro="http://inspire.ec.europa.eu/schemas/tn-ro/4.0" gml:id="TN-RO_ROADLINK_VIAL_TR80960195292">
+      <net:beginLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">2024-12-31T00:00:00</net:beginLifespanVersion>
+      <net:inspireId xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <base:Identifier xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3">
+          <base:localId>VIAL_TR80960195292</base:localId>
+          <base:namespace>ES.SCNE.IGR-RT</base:namespace>
+        </base:Identifier>
+      </net:inspireId>
+      <net:endLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <net:inNetwork xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true"/>
+      <net:centrelineGeometry xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <!--Inlined geometry 'TN-RO_ROADLINK_VIAL_TR80960195292_NET_CENTRELINEGEOMETRY'-->
+        <gml:LineString gml:id="TN-RO_ROADLINK_VIAL_TR80960195292_NET_CENTRELINEGEOMETRY" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+          <gml:posList>41.584328 2.275246 41.584326 2.275292 41.584323 2.275338 41.584312 2.275392 41.584302 2.275446 41.584291 2.275500 41.584280 2.275553 41.584269 2.275607 41.584258 2.275661 41.584247 2.275714 41.584236 2.275768 41.584225 2.275822 41.584214 2.275876 41.584203 2.275929 41.584192 2.275983 41.584194 2.276036 41.584196 2.276089 41.584198 2.276142 41.584200 2.276195 41.584207 2.276225 41.584215 2.276254</gml:posList>
+        </gml:LineString>
+      </net:centrelineGeometry>
+      <net:fictitious xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">true</net:fictitious>
+      <net:endNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_449979#TN-RO_ROADNODE_VIAL_N_449979"/>
+      <net:startNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_2603869#TN-RO_ROADNODE_VIAL_N_2603869"/>
+      <tn:validFrom xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn:validTo xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+    </tn-ro:RoadLink>
+  </wfs:member>
+  <wfs:member>
+    <tn-ro:RoadLink xmlns:tn-ro="http://inspire.ec.europa.eu/schemas/tn-ro/4.0" gml:id="TN-RO_ROADLINK_VIAL_TR80960215938">
+      <net:beginLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">2024-12-31T00:00:00</net:beginLifespanVersion>
+      <net:inspireId xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <base:Identifier xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3">
+          <base:localId>VIAL_TR80960215938</base:localId>
+          <base:namespace>ES.SCNE.IGR-RT</base:namespace>
+        </base:Identifier>
+      </net:inspireId>
+      <net:endLifespanVersion xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <net:inNetwork xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xsi:nil="true"/>
+      <net:centrelineGeometry xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">
+        <!--Inlined geometry 'TN-RO_ROADLINK_VIAL_TR80960215938_NET_CENTRELINEGEOMETRY'-->
+        <gml:LineString gml:id="TN-RO_ROADLINK_VIAL_TR80960215938_NET_CENTRELINEGEOMETRY" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+          <gml:posList>41.613948 2.291140 41.613940 2.291198 41.613931 2.291257 41.613923 2.291315 41.613915 2.291374 41.613906 2.291432 41.613898 2.291491 41.613890 2.291549 41.613881 2.291608 41.613873 2.291666 41.613864 2.291725 41.613856 2.291783 41.613848 2.291842 41.613839 2.291900</gml:posList>
+        </gml:LineString>
+      </net:centrelineGeometry>
+      <net:fictitious xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0">true</net:fictitious>
+      <net:endNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_2783161#TN-RO_ROADNODE_VIAL_N_2783161"/>
+      <net:startNode xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://servicios.idee.es/wfs-inspire/transportes?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetFeature&amp;OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&amp;STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&amp;ID=TN-RO_ROADNODE_VIAL_N_2798925#TN-RO_ROADNODE_VIAL_N_2798925"/>
+      <tn:validFrom xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+      <tn:validTo xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xsi:nil="true" nilReason="other:unpopulated"/>
+    </tn-ro:RoadLink>
+  </wfs:member>
+</wfs:FeatureCollection>

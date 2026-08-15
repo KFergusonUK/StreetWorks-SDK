@@ -1,6 +1,13 @@
 # INSPIRE GML investigation — Spain's road transport network WFS
 
-Investigation only. No code, no module, no reader was built. Endpoint:
+> **Update, 2026-08-15: built.** Re-verified live and acted on the same
+> day — see `streetworks.idee` (`src/streetworks/idee/`) and
+> [`docs/providers/europe.md`](providers/europe.md#idee-transportes-spain-national-road-network).
+> Every finding below still held live, unchanged, on re-check. The rest
+> of this document is the original investigation, kept as-is.
+
+Investigation only at the time this was written. No code, no module, no
+reader was built yet. Endpoint:
 `https://servicios.idee.es/wfs-inspire/transportes` (WFS 2.0.0, deegree,
 INSPIRE Annex I Theme 7, CC BY 4.0, no credentials). All findings below are
 from real, live requests made this session.
