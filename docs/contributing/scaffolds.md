@@ -13,9 +13,10 @@ section:
 1. **Credentials wanted** — built to the service's own documented/
    confirmed API shape, covered by mocked tests, but never run against a
    real authenticated response, because the project genuinely doesn't
-   have the access to try. Four providers currently in this state:
-   Trafikverket (Sweden), Vejdirektoratet (Denmark), Traffic SA (South
-   Australia), and LINZ NZ Addresses: Roads/Road Sections. See
+   have the access to try. Six providers currently in this state:
+   Trafikverket (Sweden), Vejdirektoratet (Denmark), ASFINAG (Austria),
+   Traffic SA (South Australia), LINZ NZ Addresses: Roads/Road Sections,
+   and Stockholm (Sweden). See
    [`docs/providers/index.md#credentials-wanted`](../providers/index.md#credentials-wanted)
    for the full per-provider table (what's confirmed, what's pending,
    which credential, how to get it).
