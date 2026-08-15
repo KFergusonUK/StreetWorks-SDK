@@ -70,6 +70,19 @@ with NationalHighwaysClient(subscription_key) as nh:
 headers unless you also send `X-Response-MediaType: application/json` — the
 client sends this for you.)
 
+Every DATEX-parsed source in this cluster — NDW, National Highways,
+Digitraffic, and every other adapter below — converts the same way, onto
+the shared cross-provider model:
+
+```python
+from streetworks.common import from_datex2
+
+works = from_datex2(situation, territory="Netherlands")  # or England, Finland, ...
+```
+
+(`territory`/`administrative_area` can't be derived from a `Situation`
+alone, so pass them explicitly — see the module docstring.)
+
 **Finland's Digitraffic** (Fintraffic's open data platform) publishes
 national roadworks credential-free as its own JSON schema — **not** a DATEX
 II serialisation, unlike National Highways — so
@@ -687,7 +700,7 @@ with BerlinClient() as berlin:
     works_list = from_berlin(list(berlin.iter_roadworks()))
 ```
 
-**Two feeds, and the source brief's assumption about them turned out
+**Two feeds, and the initial assumption about them turned out
 wrong once checked live.** The dataset's own official description says
 Verkehrsredaktion (`daten/baustellen_sperrungen_viz.json`) is "a subset
 of Landesmeldestelle (`tic3/baustellen_sperrungen_tic.json`) with extra
@@ -708,9 +721,9 @@ matched pair it prefers Verkehrsredaktion's richer fields (`severity`,
 own `id` as the canonical reference. Every merged record carries an
 explicit `sources` list — never silently blended without provenance.
 
-**Roadworks filter, evidenced not the source brief's assumed upstream
-values.** The brief named `TrafficMessage_RoadWorks`/
-`TrafficMessage_Incidents` as the upstream OCIT object types, but those
+**Roadworks filter, evidenced not the initially assumed upstream
+values.** `TrafficMessage_RoadWorks`/
+`TrafficMessage_Incidents` were first assumed to be the upstream OCIT object types, but those
 don't survive the OCIT→GeoJSON conversion — the real field on the
 published output is `subtype`, with exactly three roadworks-relevant
 values plus `Gefahr` (hazard/danger warning, excluded — a warning
@@ -907,9 +920,9 @@ with MadridClient() as madrid:
 works = from_madrid(incidents)
 ```
 
-**The investigation brief's stated URL is dead — checked live before
+**The first-tried URL is dead — checked live before
 writing any code, not assumed working.** `informo.munimadrid.es` (the
-brief's URL, and the host still named in the open-data portal's own
+initial URL, and the host still named in the open-data portal's own
 October-2023 PDF schema document) returns `NXDOMAIN` on two independent
 resolvers, including a public DNS-over-HTTPS lookup used specifically to
 rule out a local network quirk rather than a genuinely dead host. Madrid
@@ -928,7 +941,7 @@ offset and **seven** fractional-second digits — one more than Python's
 failing.
 
 **Roadworks filter: the source's own `es_obras` flag, not a free-text
-type guess** — settling two questions the brief left open, with real
+type guess** — settling two open questions, with real
 evidence: `cortes de carriles` (lane closures, 7/217 live) and
 `operación asfalto` (asphalt resurfacing, 2/217) are both real and
 common, but neither is flagged `es_obras` by Madrid's own system —
@@ -937,7 +950,7 @@ reads like roadworks to a human) but the source's own classification is
 trusted over what the label sounds like, the same discipline Chicago's
 `worktype` filter and Berlin's `subtype` filter already apply.
 
-**`source_grade="operator"`, not the `traveller_info` the brief
+**`source_grade="operator"`, not the `traveller_info` first
 guessed** — Madrid's own field dictionary states its incident-type codes
 follow "la normativa DATEX 2," and the feed is published directly by the
 city's own traffic-circulation management directorate, not a separate
@@ -968,7 +981,7 @@ a city traffic-management feed, not DGT's `multi_authority_interurban`.
 **Licence: CC BY, confirmed live** at `nap.dgt.es/dataset/trafico-
 incidencias-en-via-publica` (organization `ayuntamiento-de-madrid`,
 license field `cc-by`, "Creative Commons Attribution" stated on the page
-itself) — not just carried over from the investigation brief. The exact
+itself) — not just carried over from an earlier assumption. The exact
 attribution string on `datos.madrid.es`'s own new portal wasn't
 separately re-verified.
 
@@ -1011,6 +1024,14 @@ The documented API endpoint (`api-adresse.data.gouv.fr`) is past its
 2026-01-31 sunset; this client targets its confirmed-live replacement,
 `data.geopf.fr/geocodage`. Licence Ouverte / Open Licence 2.0 (Etalab).
 
+Convert a geocoding hit to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_ban
+
+gazetteer_address = from_ban(hits[0])
+```
+
 ## Basisregistratie Adressen en Gebouwen (BAG)
 
 Dutch national addresses and buildings register — no credentials. Two
@@ -1035,6 +1056,14 @@ with BAGDatabase(path) as db:
         print(table.table, table.geometry_type)           # 5 real tables
     for address in db.iter_features("verblijfsobject", limit=5):
         print(address.raw["openbare_ruimte_naam"], address.geometry)
+```
+
+Convert a `type="adres"` location to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_bag
+
+gazetteer_address = from_bag(hits[0])
 ```
 
 **The critical shape question — is a street its own object? — has a
@@ -1090,6 +1119,14 @@ with KartverketClient() as kv:
     # -> Norsk Karasjok / Nordsamisk Kárášjohka / Kvensk Kaarasjoki
 ```
 
+Convert an address hit to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_kartverket
+
+gazetteer_address = from_kartverket(hits[0])
+```
+
 **Multilingual naming lives on the place, not the address — confirmed
 live, not assumed.** A real SSR place (Karasjok/Kárášjohka/Kaarasjoki)
 carries three parallel official names, Norwegian/Northern Sámi/Kven, each
@@ -1111,8 +1148,8 @@ vegvesen product, NVDB, does, and is Norway's own `streets` counterpart —
 see below.
 
 Licence: Creative Commons BY 4.0 (confirmed independently for both the
-address API and SSR, per the design brief's own instruction not to assume
-they matched).
+address API and SSR, rather than assuming they matched just because
+they're the same agency).
 
 ## NVDB (Norway)
 
@@ -1131,6 +1168,14 @@ with NVDBClient(client_name="my-app") as nvdb:
     sequences = nvdb.veglenkesekvenser(kommune=4201)      # link topology
     addresses = nvdb.adresser(kommune=4201)               # naming layer
     print(addresses[0].adressenavn, addresses[0].veglenkesekvens_ids)
+```
+
+Convert either shape to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_nvdb
+
+segment_or_street = from_nvdb(sequences[0])  # Segment or Street, see module docstring
 ```
 
 **`veglenkesekvens` (road link sequence) is purely topological — it has
@@ -1153,7 +1198,7 @@ too, `vegsystemreferanser` (administrative road-numbering, e.g. the real
 `"KV1140 S1D1 m0-65"`) — independent of both, preserved in `.raw`, not
 modelled as a first-class field.
 
-CRS is **EPSG:5973, not the design brief's expected EPSG:25833** — see
+CRS is **EPSG:5973, not the initially expected EPSG:25833** — see
 [`docs/concepts/crs-and-datums.md`](../concepts/crs-and-datums.md) for
 the full finding. Licence is **NLOD 1.0** (Norsk lisens for offentlige
 data), confirmed from the NVDB API's own documentation — not
@@ -1177,9 +1222,9 @@ with OsloClient() as oslo:
 works = from_oslo(features)  # id-deduped, activity_id-grouped
 ```
 
-**Built from `nordic-capitals-investigation.md`'s recommendation to build
-Oslo second. Live verification found a different real source than either
-brief guess** (an Origo/Bymiljøetaten GeoServer layer, or the national
+**Built second among the Nordic capitals. Live verification found a
+different real source than either early
+guess** (an Origo/Bymiljøetaten GeoServer layer, or the national
 NVDB above). A web search for Oslo kommune's own page on this system
 found **"SøkSys"** — a 2024-introduced permit/case-management system
 (replacing older "Kgrav"/"ISYcase") covering crossing/proximity permits
@@ -1272,8 +1317,8 @@ with HelsinkiClient() as helsinki:
 works = from_helsinki(features)  # grouped by hakemustunnus
 ```
 
-**Resolves the investigation brief's own open question, not assumed.**
-`nordic-capitals-investigation.md` flagged Helsinki "least urgent" and
+**Resolves an open question from earlier investigation, not assumed.**
+Helsinki was flagged "least urgent" among the Nordic capitals, and
 left its own core claim unconfirmed: *"a roadworks
 (`katutyöt`/excavation-permits) dataset is not confirmed"* on Helsinki
 Region Infoshare. Checked live via HRI's own CKAN `package_search` API:
@@ -1374,15 +1419,23 @@ objects. `Wegvak.toponyme_id()` returns `bag_orl` where present and
 over-merge in exactly these real cases.
 
 Two access-route findings worth knowing before you build against this
-data yourself: the WFS's own paging **does** work (the design brief's
-warning traced to an unencoded `+` in `outputFormat`, decoded server-side
-as a space) — but **PDOK's WFS proxy silently ignores `CQL_FILTER`
+data yourself: the WFS's own paging **does** work (an earlier report of
+broken paging traced to an unencoded `+` in `outputFormat`, decoded
+server-side as a space) — but **PDOK's WFS proxy silently ignores `CQL_FILTER`
 entirely**, while Rijkswaterstaat's own WFS filters correctly on the
 identical query, so this client queries Rijkswaterstaat directly and
 only uses PDOK's Atom feed for the (unaffected) bulk GeoPackage download.
 CRS is EPSG:28992, matching BAG; licence is CC0 1.0 Universal, matching
 BAG too — confirmed from the Atom feed's own `<rights>` element, not a
 portal page.
+
+Convert a road segment to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_nwb
+
+gazetteer_segment = from_nwb(segments[0])
+```
 
 ## BD TOPO (France)
 
@@ -1402,6 +1455,14 @@ with BDTopoClient() as bdtopo:
 
     streets = bdtopo.query_voies_nommees(cql_filter="insee_commune='01004'")
     print(streets[0].nom_voie_ban, streets[0].liens_vers_supports)  # -> a real troncon cleabs
+```
+
+Convert either shape to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_bdtopo
+
+segment_or_street = from_bdtopo(segments[0])  # Segment or Street, see module docstring
 ```
 
 **Both answers are yes, confirmed live, and BD TOPO's are richer than

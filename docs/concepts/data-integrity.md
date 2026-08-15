@@ -17,12 +17,12 @@ against a real live pull before shipping, and correct the record when
 reality disagrees. Representative, verbatim instances (see the full
 per-provider detail in [`docs/providers/`](../providers/index.md)):
 
-- NWB: *"Corrected the design brief's own WFS paging warning (an unencoded `+` in `outputFormat`, not a paging bug) but found a real one of its own: PDOK's WFS silently ignores `CQL_FILTER` entirely."*
+- NWB: *"Corrected an earlier WFS paging warning (an unencoded `+` in `outputFormat`, not a paging bug) but found a real one of its own: PDOK's WFS silently ignores `CQL_FILTER` entirely."*
 - QLDTraffic: *"Two real doc-vs-reality mismatches, confirmed live... not implemented mechanically from the spec's own text."*
-- Chicago CDOT: *"The source brief's own primary dataset id turned out to be dead — found live, not guessed."*
+- Chicago CDOT: *"The obvious primary dataset id turned out to be dead — found live, not guessed."*
 - Berlin (VIZ): *"The dataset's own official description says Verkehrsredaktion is 'a subset of Landesmeldestelle with extra detail.' Live data disagrees."*
-- NVDB: *"CRS is EPSG:5973, not the design brief's expected EPSG:25833 — confirmed live on every real geometry checked."*
-- G-NAF/National Roads: *"A real correction to the source investigation. The brief that started this build concluded Australia has 'no clean national open road-centreline register with identifiers.'... It missed a separate, genuinely open publication route."*
+- NVDB: *"CRS is EPSG:5973, not the initially expected EPSG:25833 — confirmed live on every real geometry checked."*
+- G-NAF/National Roads: *"A real correction to the initial research. Australia was first thought to have 'no clean national open road-centreline register with identifiers.'... A separate, genuinely open publication route was missed at first."*
 - BAG: *"Licence: CC0 1.0 Universal — confirmed from the Atom feed's own `<rights>` element, a correction to what was originally documented (Public Domain Mark 1.0 — a different, if similarly permissive, legal instrument)."*
 
 This is not a one-off habit on hard cases — see

@@ -58,18 +58,18 @@ with RomaClient() as roma:
 works = from_roma(interventi)
 ```
 
-**Built from `rome-athens-investigation.md`, but the brief's proposed
-source doesn't exist as described.** The brief proposed Roma Servizi per
+**The most obvious candidate source doesn't exist as expected.** The
+first guess was Roma Servizi per
 la Mobilità's (RSM) ArcGIS Hub (`data-rsm.opendata.arcgis.com`),
 reasoning RSM "explicitly tracks cantieri" so a roadworks layer was
 "very likely" present in its open data. Checked live before writing any
 code: RSM's real DCAT feed lists 81 real datasets — ZTL zones, bike
 infrastructure, metro/tram lines, bus lanes, traffic signals, parking,
 mobility managers — and **not one is roadworks-related**. Roma
-Capitale's own CKAN portal (`dati.comune.roma.it`, the brief's own named
-fallback) was checked next — zero real results for "cantieri", "lavori",
+Capitale's own CKAN portal (`dati.comune.roma.it`) was checked next as a
+fallback — zero real results for "cantieri", "lavori",
 "viabilità" or "opere" via its real search API. **The real source is a
-third site the brief never named**: `romasitrasforma.it` ("Roma si
+third site neither candidate named**: `romasitrasforma.it` ("Roma si
 trasforma"), a Drupal-based civic-projects portal, found by reading its
 own custom Drupal module's bundled JS
 (`modules/custom/roma_api_mappa/assets/main.js`) — the same technique
@@ -145,7 +145,7 @@ Lombardy portal at all** (searched "cantieri", "cantieri stradali",
 (`dati.comune.milano.it`) has none named "cantieri" either — but
 searching "scavo" (excavation) surfaces **`ds925_avvisi-di-
 manomissione`**, the real Italian legal term for a road-excavation
-notice, not the term the brief guessed. Maintained by **Comune di
+notice, not the first-guessed term. Maintained by **Comune di
 Milano — Direzione Mobilità e Trasporti**, updated **daily**, CC-BY,
 with a direct GeoJSON download — no API, no WFS, no key.
 
@@ -158,7 +158,7 @@ the real timestamped URL. `MANOMISSIONE_URL` uses a stable,
 non-timestamped filename deliberately, so it keeps serving each day's
 fresh file without ever going stale.
 
-**Geometry: real `Point`, native WGS84 — not the brief's guessed Monte
+**Geometry: real `Point`, native WGS84 — not the first-guessed Monte
 Mario/ETRF2000 projected CRS.** Every feature states
 `"crs": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}` and separately
 carries explicit `LONG_X_4326`/`LAT_Y_4326` properties confirming it —
@@ -194,13 +194,13 @@ the dataset's own CKAN metadata (`license_id: "cc-by"`).
 
 ## Athens — checked, off the board
 
-Investigated alongside Rome (same brief) as a second Mediterranean-
+Investigated alongside Rome as a second Mediterranean-
 capital municipal candidate — confirmed, not assumed, that no roadworks
 open data exists for the City of Athens at any level. Beyond the checks
-the investigation brief itself ran (`cityofathens.gr`, the Greek
+already run against (`cityofathens.gr`, the Greek
 national NAP — see [`docs/providers/index.md`](index.md#credentials-wanted)
 and `streetworks.greece`'s own module docstring for the national-level
-finding this repeats), a genuinely promising lead the brief hadn't found
+finding this repeats), a genuinely promising lead not found earlier
 was checked directly: Athens runs a real, live OGC API Features server
 (`api.gis.cityofathens.gr`, `pygeoapi`) — but its real collection list
 is exactly three layers (`lakes`, `geitonies` — neighbourhood

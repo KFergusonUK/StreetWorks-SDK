@@ -2,6 +2,990 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-08-15
+
+### Changed — Documentation jargon cleanup, plus a new Common Model concepts page (2026-08-15)
+
+Every remaining end-user-facing doc still carried the same unexplained
+external-reference jargon the registry rewrite (below) had already been
+flagged for - internal investigation-document phrasing readers had never
+seen, and couldn't resolve. Removed from `docs/providers/*.md`,
+`docs/concepts/*.md`, `docs/examples.md`, and `docs/governance/licensing.md` -
+every finding now states itself directly ("a real correction", "checked
+live", "confirmed") rather than pointing at a document outside the docs
+tree.
+
+- **New: `docs/concepts/common-model.md`** - a practical, converter-by-
+  converter index of every `from_<provider>` function across both
+  canonical families: Works-model converters (`from_streetmanager`,
+  `from_wzdx`, `from_paris`, `from_vienna`, ... 34 in total, each with a
+  one-line note on its real grouping/dedup/gap behaviour) and gazetteer
+  converters (`from_ban`, `from_gnaf_address`, `from_datavia`, ... 11 in
+  total, one canonical record in, one out, never a list). Ends with a
+  worked cross-provider comparison (Street Manager + Paris, the same
+  pattern `compare_active_works.py` runs live) and the standing
+  never-deduplicate-across-providers rule.
+- Cross-linked from `docs/concepts/data-model.md`'s own type reference and
+  `docs/index.md`'s map, alongside the existing architecture/data-model/
+  data-integrity/CRS-and-datums/write-path pages.
+- No code or behaviour change - documentation only.
+
+### Changed — Registry `scope_note` text rewritten to stand on its own for end users (2026-08-15)
+
+`src/streetworks/registry.py` - roughly 20 `scope_note` entries (Madrid,
+ASFINAG, Berlin, Chicago, TfL, DriveBC, Roma, Copenhagen, Oslo, Milano,
+Vienna, Stockholm, Roads ACT, NZTA, GNAF, Helsinki) referred an end user
+running `sw.providers()` to internal investigation documents they'd never
+seen and have no way to open - a real usability gap in output that's
+supposed to be self-explanatory. Rewritten so every `scope_note` reads as
+a complete, standalone statement of what that provider covers and why it's
+scoped that way - no external pointer left unexplained. No functional
+change - `providers()`/`get_provider()` behaviour, filtering, and every
+other registry field are unchanged.
+
+### Added — TfL (Road Disruption), this SDK's first standalone London roadworks provider (2026-08-15)
+
+`streetworks.tfl` / `streetworks.common.from_tfl` - London already had
+roadworks coverage via Street Manager (the England-wide statutory permit
+register, gated behind an account), but nothing keyless and London-
+specific until now. TfL's Road Disruption feed is the accessible
+complement, not a replacement.
+
+```python
+from streetworks.tfl import TflClient
+from streetworks.common import from_tfl
+
+with TflClient() as tfl:
+    disruptions = tfl.iter_roadworks()  # category == "Works" only
+works = from_tfl(disruptions)
+```
+
+- **Genuinely keyless, confirmed live, better than commonly assumed.**
+  `GET https://api.tfl.gov.uk/Road/all/Disruption` returns full real data
+  (118 real disruption rows at investigation time) with no `app_key` at
+  all - TfL's free 500-requests-a-minute key plan is real but purely an
+  optional rate-limit courtesy, the same role Socrata's `X-App-Token`
+  plays for `SodaClient`.
+- **`category == "Works"` is a real, clean filter** - 116/118 real live
+  records; the other 2 (`Hazards`/Fire, `Network delays`/Heavy traffic)
+  were checked directly and are genuinely not roadworks.
+- **The cleanest CRS situation of any provider in this SDK** - every
+  record states its own CRS explicitly (`"crs": {"type": "name",
+  "properties": {"name": "EPSG:4326"}}`), genuine WGS84, no inference or
+  cross-checking needed. Only `Point` geometry was ever seen live -
+  `roadDisruptionLines` exists in the schema but was empty on every real
+  record checked, so it isn't handled.
+- **A real correction to "TLRN, not all-London."** `corridorIds` (a
+  plausible road-number field) is genuinely incomplete - only 51/116
+  (44%) of real Works records carry one, including just 11/21 of the core
+  "TfL works" subcategory itself - not a reliable network-membership
+  signal, never promoted to `street_ref`.
+- `status` was `"Active"` on every real record checked, driving real
+  `VERIFIED` date-confidence grading - this endpoint only returns
+  currently-active disruptions, a genuinely different epistemic class
+  from a permit application's own scheduled dates.
+- **Do-not-dedupe against Street Manager** - a works on a TLRN red route
+  can genuinely appear in both (Street Manager as the all-borough permit
+  record, TfL as the live operational disruption); they answer different
+  questions for different audiences.
+- **Licence: TfL's own OGL v2.0-with-amendments terms, confirmed live** -
+  requiring three real attribution statements, not just the commonly-
+  quoted one: "Powered by TfL Open Data", "Contains OS data (c) Crown
+  copyright and database rights 2016", and "Geomni UK Map data (c) and
+  database rights [2019]".
+- Registry entry (`tfl`, `network_scope=strategic`), a London map centroid
+  added to `examples/roadworks_world_map.py`, and new tests against a real
+  fixture covering the category filter and the incomplete `corridorIds`
+  field.
+
+### Added — Vienna (verkehrswirksame Baustellen), this SDK's second Austria roadworks provider (2026-08-14)
+
+`streetworks.vienna` / `streetworks.common.from_vienna` - Stadt Wien's own
+register of current and future traffic-relevant roadworks and closures on
+the city's higher-order road network.
+
+```python
+from streetworks.vienna import ViennaClient
+from streetworks.common import from_vienna
+
+with ViennaClient() as vienna:
+    features = vienna.iter_roadworks()  # both real layers, combined
+works = from_vienna(features)
+```
+
+- **The first candidate URL (`data.gv.at`) turned out to be a JS-rendered
+  SPA - the real data lives directly on Vienna's own GeoServer WFS
+  instead.** A plain unauthenticated fetch of any `data.gv.at` catalogue
+  page returns an identical empty shell. The real endpoint,
+  `https://data.wien.gv.at/daten/geo`, is a real, live, 377-layer WFS,
+  confirmed reachable with no key.
+- **Two real layers, genuinely disjoint** - `BAUSTELLENPKTOGD` (Point, 39
+  real features) and `BAUSTELLENLINOGD` (LineString, 72 real features) -
+  confirmed live: zero real `OBJECTID` overlap and zero location-name
+  overlap between them. Each worksite is recorded once, as either a point
+  or a line; both layers are fetched and combined (111 real works total).
+- **Two real server quirks, found by reading response bodies, not just
+  status codes.** This GeoServer returns a genuine `HTTP 200` wrapping an
+  XML `InvalidParameterValue` exception for the shared client's own
+  `application/geo+json` default - plain `application/json` is what
+  actually returns real GeoJSON. It also rejects both WFS 2.0.0's and
+  1.1.0's plural `TYPENAMES` alone - it needs 1.1.0's singular `TYPENAME`
+  sent alongside it.
+- **CRS confirmed live, cross-verified two ways**: `EPSG:31256` (MGI /
+  Austria GK East), stated in `GetCapabilities` and confirmed by
+  reprojecting a real feature to `EPSG:4326` and landing on real Vienna
+  coordinates matching that feature's own stated district. Stored
+  unswapped.
+- **A real correction to the initial framing: this is a permit register,
+  not an operator publishing only its own works.** `ANTRAGSTELLER`
+  (applicant) shows genuine third-party applicants - the electricity/gas
+  utility, the transit operator, the sewage utility, even a private
+  developer - alongside city departments. Ships `source_grade=REGISTER`,
+  the same tier as Copenhagen/Helsinki/NYC DOT/Chicago, correcting the
+  initial "operator" assumption.
+- **A real, confirmed CPython date-parsing quirk, not a bug in this SDK.**
+  Real dates are shaped `"2026-08-10Z"` (a bare date plus a bare `Z`) -
+  `datetime.fromisoformat` silently drops the offset and returns a naive
+  datetime, confirmed in a plain Python shell independent of this SDK's
+  own code.
+- Licence: Stadt Wien's stated general CC BY 4.0 open-data policy,
+  confirmed live - a general stated practice, not this specific dataset's
+  own confirmed per-record licence field. `network_scope` scoped honestly
+  to the "higher-order road network," not every residential street.
+- Registry entry (`vienna`), a Vienna map centroid, `scripts/smoke_test.py`
+  check, and new tests against a real fixture.
+
+### Added — Kanton Zürich and Stadt Zürich, this SDK's first Swiss roadworks providers (2026-08-14)
+
+`streetworks.canton_zurich` / `streetworks.zurich` /
+`streetworks.common.from_canton_zurich` / `from_zurich` - two deliberately
+separate providers, a cantonal-road register and a city-streets register,
+built together and confirmed genuinely non-overlapping (neither dataset's
+records appear in the other) - the same do-not-dedupe discipline as every
+other national/regional-vs-municipal pair in this SDK.
+
+```python
+from streetworks.canton_zurich import CantonZurichClient
+from streetworks.zurich import ZurichClient
+from streetworks.common import from_canton_zurich, from_zurich
+```
+
+- **Both found via opendata.swiss's own CKAN catalogue**, each over its
+  own real GeoServer WFS - the canton's `TbaBaustellenZHWFS` (Tiefbauamt,
+  civil engineering office, 66 real features) and the city's own WFS
+  (140 real features). Both keyless.
+- **Kanton Zürich: two real layers carry the same closures, not disjoint
+  data** - confirmed live, every sampled feature's non-geometry properties
+  match 1:1 across both; the richer real `Polygon` detail layer is used.
+  **No unique identifier field exists anywhere in the schema** - a
+  composite key is 65/66 unique, but the one real collision is two
+  genuinely distinct closures (opposite directions, different times)
+  sharing every composite field - `reference` stays `None` rather than a
+  fabricated key that would misrepresent two real works as one.
+  `status_baustelle` is a real, informative two-value field
+  (`aktiv`/`zukünftig`) driving real VERIFIED/ESTIMATED grading.
+- **Stadt Zürich: a real, confirmed 100%-unique identifier** (`baunr`),
+  unlike the canton's dataset. Two real server quirks confirmed live: only
+  `application/vnd.geo+json` works (not the shared client's default), and
+  the server 500s on WFS 2.0.0's plural `TYPENAMES` alone. CRS is
+  genuinely WGS84, confirmed empirically (real coordinates match the
+  layer's own stated bounding box) despite an empty `DefaultSRS`
+  capabilities tag. `kategorie` is a constant `"Grössere Baustelle"` -
+  this feed is already curated to significant projects, stated honestly
+  rather than implied exhaustive.
+- **CRS**: the canton's is `EPSG:2056` (Swiss LV95), stored unswapped as
+  `(easting, northing)`.
+- **Neither dataset names an organisation as contact** - `ansprechperson`/
+  `projektleiter` name individual staff members, never promoted to
+  `promoter`, which would misrepresent a person as a company.
+- **Licence: opendata.swiss's "Open use" tier for both, confirmed live -
+  but not from the obvious field.** Both datasets' CKAN `license_id` is
+  empty; the real licence surfaced only via the WFS resource's own
+  separate `rights` field. That tier permits commercial use with no
+  attribution required.
+- Registry entries (`canton_zurich`, `zurich`), a Zürich map centroid,
+  `scripts/smoke_test.py` checks, and new tests against real fixtures for
+  both.
+
+### Added — ASFINAG (Austria) as a Credentials-wanted DATEX II scaffold (2026-08-14)
+
+`streetworks.datex2.austria` - Austria's national motorway network,
+genuinely separate from Vienna's municipal coverage above (the same
+national-vs-municipal split as every other pair in this SDK). Ships as a
+Phase 0 scaffold, worse-off than most other Credentials-wanted rows: even
+the authentication mechanism is unconfirmed, not just the credential
+itself.
+
+- **A real dataset confirmed to exist, not guessed at** - ASFINAG's own
+  official dataset page confirms a genuine DATEX II Situations/
+  SituationRecords roadworks dataset (`Baustellen`/
+  `Instandhaltungsarbeiten`/`Sanierungen`), CC-BY-4.0 licensed with real
+  supplementary conditions, confirmed live.
+- **A hoped-for keyless shortcut was checked live and ruled out, not
+  assumed to fail.** A candidate RSS feed was tested directly - it carries
+  only unplanned/safety events, no roadworks at all.
+- **Genuinely unknown: the pull URL and the auth scheme itself.** Checked
+  the dataset page, the licence page, and the registration portal's own
+  JS bundle - none states whether access is API-key, Basic, or Bearer, or
+  whether the response is a bare DATEX document or wrapped in an
+  envelope. Registration is real and reachable (ASFINAG Content Portal,
+  `contentportal.asfinag.at`) but the flow wasn't walked through this
+  session.
+- `AsfinagClient` (once built) will follow this SDK's shared
+  `streetworks.datex2` parser, the same pattern already verified against
+  NDW/National Highways/Digitraffic/DGT/Statens vegvesen - implemented to
+  the documented shape and covered by mocked tests, never run against a
+  real authenticated response.
+- Added to the Credentials-wanted table in `docs/providers/index.md` and
+  the drafted issue text in `docs/credentials-wanted-issues.md` (`help
+  wanted` only). Import-time `UserWarning`, excluded from the verified-
+  providers claim until confirmed.
+
+### Added — Milan (Avvisi di manomissione), this SDK's second Italy municipal provider (2026-08-14)
+
+`streetworks.milano` / `streetworks.common.from_milano` - Comune di
+Milano's own road-excavation-notice register, resolving the "populous
+cities" pivot's own open question left by Rome falling off-board
+(Roma si trasforma is a general capital-projects tracker, not a
+dedicated roadworks register - see the earlier Roma entry).
+
+```python
+from streetworks.milano import MilanoClient
+from streetworks.common import from_milano
+
+with MilanoClient() as milano:
+    notices = list(milano.iter_roadworks())  # raw, unfiltered
+works = from_milano(notices)
+```
+
+- **Neither obvious source held up.** Checked live: no Milan or Città
+  Metropolitana di Milano dataset exists on the Lombardy regional Socrata
+  portal (`dati.lombardia.it`) at all, despite it hosting real "Cantieri
+  stradali attivi" datasets for smaller Lombardy towns. Milan's own CKAN
+  portal has nothing named "cantieri" either - searching "scavo"
+  (excavation) surfaced the real dataset, `ds925_avvisi-di-manomissione`,
+  the real Italian legal term for a road-excavation notice, not the
+  first-guessed term.
+- Maintained by Comune di Milano - Direzione Mobilità e Trasporti,
+  updated daily, CC-BY, direct GeoJSON download - no API, no WFS, no key.
+- **A real, confirmed quirk: the download URL is filename-agnostic.** The
+  CKAN resource's stated `url` embeds a daily generation timestamp, but
+  CKAN resolves purely by resource UUID - a request substituting an
+  arbitrary filename returned identical live content. A stable,
+  non-timestamped filename is used deliberately so it keeps serving each
+  day's fresh file without going stale.
+- **Geometry: real `Point`, native WGS84 - not the first-guessed
+  Monte Mario/ETRF2000 projected CRS.** Every feature states
+  `"crs": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}` and separately
+  carries explicit `LONG_X_4326`/`LAT_Y_4326` properties confirming it -
+  flipped to `(lat, lon)`.
+- **A utility-operator excavation register, the Milan equivalent of
+  Paris's "Opérateurs de réseau" category** - real promoters seen live:
+  `MM Spa` (water), `Unareti S.p.A` (gas/electricity), `A2A Calore &
+  Servizi` (district heating). Every real row carries a unique protocol
+  number (139/139) - one `Works` per feature, no grouping, the same shape
+  as Lisboa.
+- 138/139 real rows have a planned end date current or future - this
+  "final" download is already close to active-scoped, not a full
+  historical archive. No explicit status field - `date_confidence` is
+  uniformly `ESTIMATED`.
+- Licence: CC-BY, confirmed live from the dataset's own CKAN metadata.
+- Same commit fixed a login-tier world-map marker bug found while wiring
+  Milan in.
+- Registry entry (`milano`), a Milan map centroid, `scripts/smoke_test.py`
+  check, and new tests against a real fixture.
+
+### Added — Stockholm as a Credentials-wanted scaffold (2026-08-13)
+
+`streetworks.stockholm` - resolves a real risk flagged early across the
+Nordic capitals rather than disproving it. Every real surface tested on
+Trafikkontoret's own geodata platform (both WFS and WMS
+`GetCapabilities`) requires an API key before revealing even a layer
+name, let alone whether a `vägarbete` (roadworks) dataset exists on it at
+all.
+
+- **Worse-off than every other Credentials-wanted row: no schema of any
+  kind confirmed.** Only that the platform genuinely exists and requires
+  a key - a real `HTTP 401` (`text/plain`, "You must provide a valid key
+  to consume this API.") confirmed on both `GetCapabilities` endpoints.
+- **A promising "regional roadworks coordination map" lead was checked
+  and traces back to the already credential-parked national Trafikverket
+  system**, not a separate Stockholm dataset - not a new lead, a
+  dead end already accounted for.
+- Ships as a Phase 0 scaffold (implemented to the one confirmed real auth
+  shape - a documented Parking-API `apiKey=` example, unconfirmed for WFS
+  specifically - and covered by mocked tests only), rather than a
+  live-verified build.
+- Added to the Credentials-wanted table in `docs/providers/index.md` and
+  `docs/providers/denmark.md`'s "The rest of the Danish landscape"
+  section (which also now records Oslo and Helsinki as resolved). Import-
+  time `UserWarning`, excluded from the verified-providers claim until
+  confirmed.
+
+### Added — Helsinki (Kaivuilmoitus), this SDK's third Nordic roadworks provider (2026-08-13)
+
+`streetworks.helsinki` / `streetworks.common.from_helsinki` - City of
+Helsinki's own excavation-notification register, alongside the separate,
+already-built national Digitraffic DATEX II feed.
+
+```python
+from streetworks.helsinki import HelsinkiClient
+from streetworks.common import from_helsinki
+
+with HelsinkiClient() as helsinki:
+    features = list(helsinki.iter_roadworks())  # raw, ungrouped
+works = from_helsinki(features)  # grouped by hakemustunnus
+```
+
+- **Resolves a real open question left unconfirmed by earlier
+  investigation** - whether a roadworks (`kaivulupa`/excavation-permits)
+  dataset exists on Helsinki Region Infoshare at all. Checked live via
+  HRI's own CKAN `package_search` API: every excavation/permit search term
+  surfaces one real dataset, backed by a live GeoServer WFS, layer
+  `Kaivuilmoitus_alue`. Keyless - 3,431 real features at investigation
+  time.
+- **CRS confirmed live: `EPSG:3879`** (ETRS-GK25FIN), a genuinely
+  projected CRS - the WFS can reproject to WGS84 on request but this SDK
+  carries the native CRS through explicitly instead, per its standing
+  policy. Stored unswapped as `(easting, northing)`.
+- **A real, load-bearing grouping finding, Oslo-shaped not Copenhagen-
+  shaped.** `id` is genuinely unique across every row (no tiling-
+  duplicate problem, unlike Oslo) - but `hakemustunnus` (application
+  reference) repeats heavily, up to 164 real rows under one reference,
+  confirmed to be one notification genuinely spanning many real segmented
+  dig zones. `from_helsinki` groups by it into one `Works` with one
+  `WorksSite` per surviving geometry row.
+- **Two other real layers on this WFS, checked live and deliberately not
+  used** - the point-version layer is confirmed a redundant subset (not
+  additional coverage), and a "temporary traffic arrangement" layer is a
+  genuinely different application type, left for a future investigation.
+- **`status` is genuinely informative, unlike Oslo's always-"granted"
+  status** - `Käynnissä` (in progress, 3,223/3,431) and `Tuleva` (upcoming,
+  208/3,431), cross-checked live against a date-based future/past split
+  and matching exactly. Drives real VERIFIED/ESTIMATED date-confidence
+  grading, unlike Oslo's always-ESTIMATED.
+- `promoter` is never populated - a real, confirmed absence, not a gap:
+  both applicant and contractor fields are empty on all 3,431 real rows,
+  matching the dataset's own published description.
+- Licence: CC-BY-4.0, confirmed live via the dataset's own CKAN metadata.
+- Registry entry (`helsinki`), a Helsinki map centroid,
+  `scripts/smoke_test.py` check, and new tests against a real fixture.
+
+### Fixed — Street Manager Reporting API filter usage in two examples, new coordination/comparison maps (2026-08-13)
+
+The Reporting API's `permits` endpoint has no working `town`/`swa_code`/
+`highway_authority` filter - live-verified against both sandbox and
+production: every variant returned identical results, scoped only to the
+authenticated account's own registration. An unfiltered production pull
+was traced past 2000 rows with no end in sight before being killed by its
+own timeout - this is what "the feed wasn't loading anything" actually
+was. The Reporting API's own documented resource guide names real filters
+that do work, checked live one at a time:
+
+- **`compare_active_works.py`** now uses `work_status="in_progress"` +
+  `street_descriptor` (defaults to `"DURHAM CITY"`, not bare `"DURHAM"` -
+  live-verified the bare form also matches unrelated towns via street-
+  name substring hits) instead of the old full-account pull. Production
+  now completes in ~2s instead of never finishing. `--sm-since-days`
+  exposes the real `work_start_date_from` filter, off by default since
+  combined with `work_status` it can genuinely return few or none. New
+  `--map` writes a side-by-side comparison map (Plotly `Scattermap`,
+  free CartoDB street tiles).
+- **`collaboration_finder.py`** now pulls `work_status="planned"` and
+  `"in_progress"`, each capped - live-verified `"planned"` alone doesn't
+  terminate within 60s uncapped in production (future work genuinely
+  outnumbers current work by a wide margin); capped, it completes in
+  ~12s. Only future-starting permits are now considered, since a permit
+  that already started can't be usefully coordinated around. The single
+  most obviously-should-have-coordinated pair gets its own callout. New
+  `--map` draws one line per coordination pair, the callout pair
+  highlighted in red - hover text was later extended (2026-08-13, same
+  cluster) to show promoter and traffic-management type, not just the
+  permit reference, alongside a real generated map screenshot
+  highlighting a real pair confirmed (via a full `WorkAPI.get_permit`
+  lookup) to have neither `collaborative_working` nor
+  `others_can_collaborate_on_work` set - the tool genuinely surfacing a
+  gap the promoters hadn't flagged themselves.
+- **CartoDB street tiles, not Plotly's other free "open-street-map"
+  style** - real testing found the latter gets blocked (403) by OSM's own
+  tile-server usage policy for this kind of embedded use.
+- A coverage-map image and description were also added to the README/docs
+  this same day, with two small follow-up wording/formatting passes.
+
+### Added — Oslo (SøkSys) as this SDK's second Nordic roadworks provider (2026-08-10)
+
+`streetworks.oslo` / `streetworks.common.from_oslo` - Oslo kommune's real
+digging/work-permit case system, alongside the separate, already-verified
+national Statens vegvesen DATEX II feed.
+
+```python
+from streetworks.oslo import OsloClient
+from streetworks.common import from_oslo
+
+with OsloClient() as oslo:
+    features = list(oslo.iter_roadworks())  # Containerutsett excluded
+works = from_oslo(features)  # id-deduped, activity_id-grouped
+```
+
+- **Neither early-guessed backend matched reality.** A web search for
+  Oslo kommune's own page on this system found "SøkSys" - a
+  2024-introduced permit/case system run on Oslo's behalf by Geomatikk, a
+  real Norwegian utility-location company - not the guessed Origo/
+  Bymiljøetaten GeoServer layer or the national NVDB. The real internal
+  API (`pub.soksys.no/api/map/soksys-activities`) was found by reading the
+  public map's own `map.js` bundle directly. Keyless - 1,354 real
+  features at investigation time.
+- **The response body double-encodes its own JSON** - the raw HTTP body
+  is a JSON string literal containing escaped GeoJSON, needing
+  `json.loads` twice - handled inside `OsloClient` so callers never see
+  the intermediate string.
+- **CRS confirmed live: `EPSG:25832`** (ETRS89/UTM zone 32N), a genuinely
+  projected CRS - stored unswapped as `(easting, northing)`, unlike
+  Copenhagen's genuine WGS84 source.
+- **Roadworks filter, evidenced not guessed**: `activity_type` has 3 real
+  values - `Arbeidstillatelse` (work permit, 934/1354), `Gravearbeid`
+  (excavation, 412/1354), `Containerutsett` (container placement,
+  8/1354, excluded - real senders are the city agency or property
+  managers, not construction).
+- **A real, load-bearing geometry/grouping finding, genuinely different
+  from Copenhagen's own dedupe pattern.** 1354 raw rows collapse to 631
+  distinct `activity_id`s; 256 multi-row groups are pure duplicate
+  artifacts (identical id and geometry, a tiling/extent artifact of
+  querying a wide bbox) but a real handful of permits genuinely span
+  several distinct sub-areas - `from_oslo` dedupes by exact `id` first,
+  then groups survivors by `activity_id`.
+- Polygon geometry (the majority shape here, unlike Copenhagen where it
+  was always droppable) uses its first ring's first vertex only.
+- Licence: genuinely unconfirmed - checked both the live map page and
+  Oslo kommune's own explainer page, no statement found on either.
+- Registry entry (`oslo`), an Oslo map centroid, `scripts/smoke_test.py`
+  check, and new tests against a real fixture.
+
+### Added — Roma Capitale (Roma si trasforma) as this SDK's second Italy provider (2026-08-10)
+
+`streetworks.roma` / `streetworks.common.from_roma` - Roma Capitale's own
+civic-interventions tracker, filtered to real, currently in-progress
+street/infrastructure work.
+
+```python
+from streetworks.roma import RomaClient
+from streetworks.common import from_roma
+
+with RomaClient() as roma:
+    interventi = list(roma.iter_roadworks())  # Strade e infrastrutture + Cantiere only
+works = from_roma(interventi)
+```
+
+- **The most obvious candidate source doesn't exist as expected.** Roma
+  Servizi per la Mobilità's ArcGIS Hub was checked live first - 81 real
+  datasets, none roadworks-related. Roma Capitale's own CKAN portal was
+  checked next - zero real results for "cantieri"/"lavori"/"viabilità"/
+  "opere". The real source is a third site neither candidate named -
+  `romasitrasforma.it`, a Drupal-based civic-projects portal, found by
+  reading its own bundled JS, the same technique that found Lisboa's and
+  Road Report NT's real backends.
+- **A genuinely broader scope than "roadworks" - Rome's general
+  capital-projects tracker, not a dedicated register.** 1215 real records
+  span four macro-themes; street/road work is one sub-tag among many.
+  **This is the thinnest real roadworks signal of any municipal provider
+  this SDK has built** - only 69/1215 (5.7%) of the source feed pass the
+  real filter (`field_tag_temi` contains "Strade e infrastrutture" AND
+  `field_stato_lavori == "Cantiere"`).
+- **A real bug in the source, found and corrected, not reproduced.** The
+  `field_posizione` object's own key names are swapped relative to true
+  geography - what it calls `"lon"` holds latitude-range values and vice
+  versa, confirmed against every real coordinate in the pull.
+  `from_roma` reads them by their correct meaning, not the source's own
+  key names.
+- **No date fields exist anywhere in this schema** - a first for a
+  municipal provider in this SDK. `date_confidence` is always `UNKNOWN`.
+- Geolocation is genuinely partial even within the filtered subset -
+  35/69 real records carry a coordinate; the rest have only a
+  district-level value.
+- Licence: genuinely unconfirmed - checked the live site's page text,
+  footer, and common Italian open-data terms; none found.
+- Same investigation folded an Athens check into Greece's existing docs -
+  confirmed no roadworks open data exists for the City of Athens at any
+  level either, extending rather than duplicating the existing Greece
+  finding.
+- Registry entry (`roma`), a Rome map centroid, `scripts/smoke_test.py`
+  check, and new tests against a real fixture.
+
+### Added — Copenhagen (Gravetilladelser) as this SDK's first Nordic roadworks provider (2026-08-10)
+
+`streetworks.copenhagen` / `streetworks.common.from_copenhagen` -
+Københavns Kommune's own excavation-permit register, alongside the
+separate credential-parked national Vejdirektoratet feed.
+
+```python
+from streetworks.copenhagen import CopenhagenClient
+from streetworks.common import from_copenhagen
+
+with CopenhagenClient() as copenhagen:
+    features = list(copenhagen.iter_roadworks())  # raw, undeduped
+works = from_copenhagen(features)  # deduped by sagsnr, one Works each
+```
+
+- **Live verification corrected several early guesses before any code was
+  written.** The first guess was a dataset named "vejarbejde" over an
+  assumed ArcGIS Hub/OGC API Features backend - checked directly on
+  `opendata.dk`, the real dataset is titled "Gravetilladelser", over a
+  classic WFS 1.0.0 GetFeature endpoint, not ArcGIS/OGC Features. Layer
+  `gravetilladelser_aktiv_aabne` is already server-side filtered to
+  current permits - 2240 real rows confirmed.
+- **A real, load-bearing geometry finding not anticipated going in: this
+  layer mixes `Point`, `LineString` and `Polygon`, and the same real
+  permit is recorded once per geometry shape it has, not once per
+  permit.** Grouping by `sagsnr` gives 1241 distinct real permits; every
+  multi-row permit has identical non-geometry properties across its rows.
+  Confirmed live: zero of the 1241 real permits are Polygon-only, so
+  `from_copenhagen` dedupes by `sagsnr` and prefers LineString over
+  Point, never needing to handle a polygon ring.
+- Coordinates are genuine WGS84, confirmed in the response's own embedded
+  `crs` block - swapped to `(lat, lon)`.
+- **Real schema, 12 fields, confirmed 100% populated, zero nulls across
+  all 2240 rows** - including real Danish `DD-MM-YY` dates (parsed via a
+  bespoke `strptime`) and `entreprenoer` (the contractor), folded into
+  `traffic_management` rather than dropped.
+- `date_confidence` is `ESTIMATED`, never `VERIFIED` - a granted permit's
+  stated window isn't an independently confirmed "work is happening"
+  signal. `street_ref` is never populated - only free-text `lokation`
+  exists.
+- `source_grade="register"` - a formal municipal permit register, the
+  same tier as Street Manager/NYC DOT/Chicago/Paris/Jersey.
+- Licence: CC-BY-4.0, confirmed live via the dataset's own CKAN metadata -
+  no hedging required. No credentials required anywhere in this build.
+- Registry entry (`copenhagen`), a Copenhagen map centroid,
+  `scripts/smoke_test.py` check, and new tests against a real fixture.
+
+### Fixed — 4 pre-existing mypy findings: a bad `iter[]` type hint, 3 sites where None-narrowing didn't survive a stored boolean (2026-08-10)
+
+`srwr/client.py`'s three reader wrappers were annotated
+`-> iter[Record]`/`iter[Activity]`, using the builtin `iter` as a generic
+type - not valid syntax, previously silenced with `# noqa: F821` rather
+than fixed. Now `Iterator[...]` from `collections.abc`, matching every
+other iterator-returning method in this SDK.
+
+`vegvesen.py` and both `datavia/client.py` constructors computed
+`basic = username is not None and password is not None`, then guarded
+`BasicAuth(username, password)` on that stored bool - correct at runtime,
+but mypy can't narrow `username`/`password` through an intermediate
+variable. Inlined the None-checks at the point of use so mypy can
+actually prove what was already true.
+
+No behaviour change; all 1035 tests still pass. mypy error count on these
+files: 9 -> 0. A handful of other pre-existing, unrelated mypy findings
+remain (`opendata/sns.py`, `datex2/parser.py`,
+`datex2/nationalhighways.py`, `srwr/reader.py`, `smoke_test.py`) - each is
+a real optionality the type system can't narrow at a specific known-good
+call site, not a runtime bug, and left alone.
+
+### Fixed — EPSG:4326 coordinate axis order at the source across 8 converters, widen the world-map example's US/live coverage (2026-08-10)
+
+A live pull surfaced Australian roadworks plotting near Antarctica: WA,
+SA, ACT, TAS, QLD, NSW, VIC and NZTA were each storing raw, unswapped
+GeoJSON `(lon, lat)` in `Coordinate.value` instead of this SDK's own
+stated `(lat, lon)` WGS84 convention.
+
+- Fixed at the source in each converter (`from_au_wa_mainroads`,
+  `from_au_sa_trafficsa`, `from_au_act_ttm`, `from_au_tas_roadworks`,
+  `from_au_qld_qldtraffic`, `from_nsw_livetraffic`, `from_vic_disruptions`,
+  `from_nzta`) - not just patched in the example script - with every
+  affected test updated to match.
+- **Jersey, NYC DOT and Via Lietuva were checked and deliberately left
+  alone** - their CRSs are genuinely projected (`EPSG:3109`/`2263`/
+  `3346`), where `(x, y)` unswapped is correct, matching this SDK's
+  existing British National Grid handling.
+- A real secondary bug fixed in the same converter pass:
+  `from_nsw_livetraffic` used to leave `Coordinate.value` and
+  `Coordinate.points` on the same object in two genuinely different axis
+  orders (`points`, decoded from Google's Encoded Polyline format, was
+  already `(lat, lon)` per that algorithm's own convention) - fixing
+  `value` removes that internal mismatch too, not just the external one.
+- Also widens `roadworks_world_map.py`'s live coverage: WZDx now sweeps
+  up to 25 keyless US/regional feeds (was 5), and NYC DOT pulls a larger
+  raw sample since only ~87% of its rows carry usable geometry. Removes
+  the now-redundant `_LONLAT_NATIVE` per-key workaround the source fix
+  makes unnecessary, and adds a real `--live` run's output image to
+  `docs/examples.md`.
+
+### Added — coverage-map example relocated, shrunk, and cross-linked; real example output images embedded in the docs (2026-08-08 to 2026-08-09)
+
+`examples/map.html` and its screenshot were loose in `examples/` root -
+moved into `examples/roadworks_world_map/`, matching the folder-per-
+example pattern already used for `nsg_terrain_drape/`/`crime_context/`.
+The screenshot was 902KB at 3428x1970 - resized to <=1200px wide and
+re-encoded as an adaptive-palette PNG (48KB), the same treatment applied
+earlier the same cluster to two other example images (2.3MB -> 96KB,
+712KB -> 122KB) for the same repo-history-weight reason. Adds a one-line
+pointer from `docs/providers/index.md`'s Coverage section to the map
+example - it's registry-driven, so it's a genuine visual complement to
+that exact roster, not just a generic example. A day earlier, both real
+output images (`WorksiteRisk.png`, the terrain-drape screenshot) were
+verified as genuine example output rather than mockups and embedded
+inline in `docs/examples.md` next to their entries, instead of just
+linked out.
+
+### Added — Câmara Municipal de Lisboa (Condicionamentos de Trânsito), this SDK's first Portugal provider (2026-08-09)
+
+`streetworks.lisboa` / `streetworks.common.from_lisboa` - active and
+planned traffic-restriction feed for the city, sidestepping the still
+credential-parked national IMT National Access Point entirely.
+
+```python
+from streetworks.lisboa import LisboaClient
+from streetworks.common import from_lisboa
+
+with LisboaClient() as lisboa:
+    features = list(lisboa.iter_roadworks())  # evidence-based motivo filter
+works = from_lisboa(features)
+```
+
+- **A key gating check - is the live platform actually current, or a
+  stale 2023 snapshot? - resolved before writing any client code.** The
+  catalogue record states "última atualização: 22 de maio de 2023" -
+  exactly the kind of stale-portal signal that's meant a dead dataset
+  elsewhere in this SDK. But CML's real live platform (a live Angular
+  SPA) has a backend found by reading its own bundled JS - genuinely
+  current: 453/694 real features carry a 2026 case-reference id.
+- **The real endpoint isn't documented anywhere public** - found in the
+  app's own `environment` config. A single keyless `GET` returns the
+  full real GeoJSON FeatureCollection - 694 real features, no pagination.
+- **Roadworks filter: `motivo` (free-text reason), evidence-based, not a
+  clean boolean like Madrid's `es_obras`.** 27 real distinct values exist;
+  473/694 (68%) classify as roadworks (anything containing "OBRA", plus a
+  small explicit construction-activity set) - genuinely ambiguous values
+  (`LIGAÇÃO DE RAMAL`, `AUTOGRUA`) are excluded rather than guessed
+  either way.
+- **Geometry: real `MultiLineString`, not `Point`/`LineString` like this
+  SDK's other municipal sources.** Only the first sub-line's vertices are
+  used, the same simplification `from_berlin` already makes for a
+  `GeometryCollection`. CRS `EPSG:4326`, evidenced from the app's own WMS
+  requests.
+- **Dates: `periodos_condicionamentos` is a list, not one window** -
+  richer than Madrid/DriveBC's single start/end, up to 4 real periods on
+  some records, including a real `is_interrupted` flag (true on 583/727
+  real periods, the majority, not an edge case).
+- Network scope `comprehensive` - 27 distinct freguesias confirmed live.
+  Licence: CC BY 4.0, confirmed live at `dados.gov.pt`'s catalogue page.
+- Registry entry (`lisboa`), a Lisbon map centroid,
+  `scripts/smoke_test.py` check, README/docs section, and new tests
+  against a real fixture.
+
+### Added — DriveBC (British Columbia) as this SDK's first Canadian roadworks provider (2026-08-08)
+
+`streetworks.drivebc` / `streetworks.common.from_drivebc` - British
+Columbia's own implementation of Open511, a Canadian-origin multi-
+jurisdiction road-events standard.
+
+```python
+from streetworks.drivebc import DriveBCClient
+from streetworks.common import from_drivebc
+
+with DriveBCClient() as drivebc:
+    events = list(drivebc.iter_roadworks())  # event_type == "CONSTRUCTION" only
+works = from_drivebc(events)
+```
+
+- **Bespoke, not a general `streetworks.open511` parser.** DriveBC is the
+  only real, confirmed roadworks-events Open511 implementation found live
+  - Bay Area 511's own Open511 use is transit data, a different resource
+  entirely. Per this SDK's "extract shared code only on the second real
+  consumer" pattern (the same reasoning that kept Paris Chantiers
+  bespoke), this ships as `streetworks.drivebc`.
+- Keyless `GET` on `api.open511.gov.bc.ca/events`, confirmed live (246
+  real events at investigation time). `limit`/`offset` pagination, max
+  `limit=500` confirmed via the API's own structured error.
+- **Roadworks filter: `event_type == "CONSTRUCTION"`** - confirmed live,
+  194/246 real events; `INCIDENT`/`ROAD_CONDITION`/`WEATHER_CONDITION`
+  excluded.
+- **Two real, mutually-exclusive schedule shapes, beyond the original
+  plan.** 222/246 real events state `schedule.intervals` (ISO-8601
+  interval strings); the other 24 state `schedule.recurring_schedules`
+  instead - a weekday work-window shape `intervals` can't express. No
+  event carries both or neither; `from_drivebc` reconciles both into one
+  `WorksSite` window each.
+- Interval date-times carry no UTC offset, unlike the top-level
+  `created`/`updated` fields - almost certainly local BC time (the
+  jurisdiction resource states `"America/Vancouver"`) but parsed naive
+  rather than a timezone silently attached.
+- Geometry: real GeoJSON, `Point` or `LineString`, native WGS84.
+  `roads[]` is free-text - no join key, `street_ref` stays unpopulated.
+- **Licence: Open Government Licence - British Columbia (OGL-BC),
+  confirmed live from the API's own `/help` page** - the jurisdiction
+  resource's own `license_url` field is a dead PDF link, confirmed
+  404-redirecting; the real, live OGL-BC text is cited instead.
+- Registry entry (`drivebc`), a BC map centroid, `scripts/smoke_test.py`
+  check, README/docs section, and new tests against a real fixture.
+
+### Added — Madrid (INFORMO) as this SDK's fourth Spanish provider (2026-08-08)
+
+`streetworks.madrid` / `streetworks.common.from_madrid` - Madrid's own
+municipal traffic-incidents feed, the gap DGT's national coverage
+explicitly doesn't reach (DGT never touches municipal streets).
+
+```python
+from streetworks.madrid import MadridClient
+from streetworks.common import from_madrid
+
+with MadridClient() as madrid:
+    incidents = list(madrid.iter_roadworks())  # es_obras == "S" only
+works = from_madrid(incidents)
+```
+
+- **The first-tried URL is dead - checked live before writing any code.**
+  `informo.munimadrid.es` returns `NXDOMAIN` on two independent
+  resolvers. Madrid relaunched its entire open-data portal on a new CKAN
+  platform in February 2026 - the real current host is
+  `informo.madrid.es` (`munimadrid.es` -> `madrid.es`, not just a path
+  change), targeted directly rather than via the CKAN redirect hop.
+- **The live wire date format also doesn't match the portal's own
+  documentation.** The PDF states a UTC-offset format; every one of 217
+  real records checked live instead uses no offset and seven fractional-
+  second digits - one more than Python's `%f` accepts.
+  `from_madrid` truncates rather than failing.
+- **Roadworks filter: the source's own `es_obras` flag, not a free-text
+  type guess.** Real evidence: `cortes de carriles` (lane closures) and
+  `operación asfalto` (asphalt resurfacing) are both real and common but
+  neither is flagged `es_obras` - excluded. The asphalt exclusion is a
+  genuine surprise (it reads like roadworks to a human) but the source's
+  own classification is trusted over what the label sounds like.
+- **`source_grade="operator"`, not the `traveller_info` first guessed** -
+  Madrid's own field dictionary states its codes follow DATEX 2 practice,
+  published directly by the city's traffic-circulation directorate, not
+  a separate editorial relay.
+- Coordinates given directly, labelled `EPSG:4258` (ETRS89) rather than
+  silently assumed WGS84 - the source states its UTM pair is
+  `EPSG:25830` explicitly, so the geographic pair is used and labelled
+  from the same reference frame.
+- `id_incidencia` is the reliable reference, not `codigo` - `codigo` is
+  unique on only 212/217 real records (6 share the literal placeholder
+  `"2025/0"`, a real source data-quality gap).
+- Network scope `comprehensive` - real records span named residential
+  streets to motorway sections across the whole municipality.
+- Licence: CC BY, confirmed live at `nap.dgt.es`'s dataset page.
+- Registry entry (`madrid`), a Madrid map centroid,
+  `scripts/smoke_test.py` check, README/docs section, and new tests
+  against a real fixture.
+
+### Changed — Documentation restructure: migrated README into a docs/ tree (2026-08-08)
+
+Non-functional - no code or behaviour changes. The README had grown into
+a single sprawling document; migrated into a proper `docs/` tree in two
+phases, both now complete (see `docs/index.md`'s own "Status of this
+migration" section).
+
+- **Phase one**: a lossless, extract-and-relocate migration of every
+  README section into `docs/` (providers by territory, concepts,
+  examples, governance, domain notes) - editorial changes deliberately
+  deferred to phase two. Documented personal-capacity framing, Chris
+  Carlon attribution, UK permit/S50 domain notes, excluded territories,
+  agent boundaries, and pending providers along the way.
+- **Phase two**: slimmed the README itself down to a front door (badges,
+  install, a working quickstart, and links into the docs tree) now that
+  every removed block had a confirmed docs home. Added an examples index
+  and front-door link, fixing two stale S50 claims found while writing
+  it. Repointed the README-parsing test at `docs/`, making
+  `docs/providers/index.md` the canonical coverage roster rather than the
+  README's own copy.
+- **Two real coverage-roster errors were found and fixed while doing
+  this** - Jersey was missing from the roster entirely, and Canada's
+  coverage was overstated. Also reworded the opening line to name
+  Australia/New Zealand explicitly and replaced "well-tested" with
+  "verification-first" (a more accurate description of this SDK's actual
+  discipline), and added a "Why?" section explaining the integration
+  problem this SDK solves.
+- The pre-slim README is preserved in git history, not archived
+  separately.
+
+### Added — Berlin VIZ roadworks provider (Baustellen/Sperrungen) (2026-08-08)
+
+`streetworks.berlin` / `streetworks.common.from_berlin` - the largest
+remaining German gap this cluster had: Berlin is a city-state Land in its
+own right, entirely surrounded by the already-covered Brandenburg. A
+genuinely different platform from the Hamburg/Brandenburg/Saxony WFS/
+GeoJSON cluster - two public, keyless GeoJSON feeds published hourly by
+VIZ (Verkehrsinformationszentrale), each a plain static file.
+
+```python
+from streetworks.berlin import BerlinClient
+from streetworks.common import from_berlin
+
+with BerlinClient() as berlin:
+    works_list = from_berlin(list(berlin.iter_roadworks()))
+```
+
+- **Two feeds, and the initial assumption about them turned out wrong
+  once checked live.** The dataset's own description says
+  Verkehrsredaktion is "a subset of Landesmeldestelle with extra detail."
+  Live data disagrees: using the real, verified join key (`lms_id` ->
+  `id`, confirmed live on 199/205 records) and restricting both to real
+  roadworks values, Landesmeldestelle has 215 such records,
+  Verkehrsredaktion has 202, and only 104 overlap - neither feed alone is
+  complete. `iter_roadworks()` merges both via the verified join key
+  rather than picking one as primary, preferring Verkehrsredaktion's
+  richer fields on a matched pair while keeping Landesmeldestelle's `id`
+  as the canonical reference. Every merged record carries an explicit
+  `sources` list.
+- **Roadworks filter, evidenced not the initially assumed upstream
+  values.** The real field on the published output is `subtype`, with
+  exactly three roadworks-relevant values plus `Gefahr` (hazard warning,
+  excluded even though some free text happens to mention nearby
+  construction).
+- Two date formats depending on feed (near-ISO vs. German
+  `DD.MM.YYYY HH:MM`, sometimes blank). Geometry is `Point` or a real
+  `GeometryCollection` pairing a Point with LineString entries - the
+  first LineString's vertices map to `Coordinate.points`.
+- No grouping - no umbrella-application field exists in either real feed,
+  so one `Works` per record. `source_grade="traveller_info"` - VIZ is a
+  traffic-information/editorial source, not a statutory register.
+- Licence: Datenlizenz Deutschland - Namensnennung - Version 2.0
+  (dl-de/by-2-0), the same licence Hamburg/Brandenburg already publish
+  under.
+- Registry entry (`berlin`), a Berlin map centroid,
+  `scripts/smoke_test.py` check, README/docs section, and new tests
+  against a real fixture.
+
+### Added — Paris municipal roadworks provider (Chantiers à Paris) (2026-08-06)
+
+`streetworks.paris` / `streetworks.common.from_paris` - this SDK's third
+municipal permit register, and the French analogue of NYC DOT/Chicago
+CDOT (same `source_grade=register` tier, same "one application groups
+several sites" shape), but the first provider on OpenDataSoft rather
+than Socrata.
+
+```python
+from streetworks.paris import ParisClient
+from streetworks.common import from_paris
+
+with ParisClient() as paris:
+    works_list = from_paris(list(paris.iter_roadworks()))
+```
+
+- **Built bespoke, not a shared `streetworks.opendatasoft` client** - the
+  same sequence that produced `streetworks.socrata`'s `SodaClient`
+  (bespoke first, shared only once a second same-platform provider needs
+  the identical shape).
+- **Municipal, not national - deliberately not deduplicated against
+  Bison Futé.** France is already covered nationally, but that coverage
+  doesn't reach Paris city streets.
+- **Roadworks-vs-private filter, evidenced not guessed.** The real
+  `chantier_categorie` field has 3 live values - "Ville de Paris" (598
+  rows) and "Opérateurs de réseau" (1,191 rows) are genuine street/
+  public-space works; "Tiers (travaux sur bâtiment)" (2,918 rows, private
+  building works) is excluded.
+- **Geometry is already WGS84, despite the underlying survey CRS being
+  Lambert 93** - OpenDataSoft reprojects on the way out, so no CRS
+  transform was needed. The full polygon is preserved in
+  `WorksSite.raw`; `Coordinate.value` uses the representative point.
+- A real Works-umbrella grouping - `chantier_cite_id` genuinely groups
+  multiple real emprise rows under one parent chantier (a real example
+  spanning 3 genuinely different polygons).
+- No stated join to a street register - `street_ref` never populated.
+  Licence: ODbL 1.0 (Open Database License, share-alike), confirmed from
+  the dataset's own metadata - meaning an adapted/derived database must
+  itself be released under ODbL or a compatible licence.
+- Registry entry (`paris`), a Paris map centroid, `scripts/smoke_test.py`
+  check, README/docs section, new tests against a real fixture, and
+  `compare_active_works.py` repointed at Durham City vs. Paris as its own
+  worked cross-provider example.
+
+### Added — Section 50 licence connector for Street Manager, the write path (2026-08-06)
+
+`examples/streetmanager_section_50.py` - applying for, starting, and
+stopping a Section 50 licence works record under a highway authority's
+own promoter account. Transport and identity injection only: reprojects
+the applicant's WGS84 extent to BNG, stamps the SWA codes and
+`activity_type`/`work_type`, passes everything else through unchanged.
+The reusable request-assembly logic lives in
+`streetworks.streetmanager.utils.section_50_utils`; the WGS84<->BNG
+transform (no `pyproj` - a pure-Python implementation of Ordnance
+Survey's own published Helmert + Transverse Mercator formulas) lives in
+`streetworks.common._bng`.
+
+- **Sandbox-verified end-to-end 2026-08-06** - `create_work`,
+  `start_work`, and `stop_work` all succeeded against a real sandbox
+  record. Needs Promoter-role sandbox credentials specifically, not the
+  Highway Authority login the other Street Manager examples use - an
+  HA-role login got 400s and would likely 403 on `create_work` regardless
+  of payload correctness. Production remains untouched.
+- Field disposition checked field-by-field against the real Durham S50/01
+  paper form: structured fields (licensee identity, apparatus
+  description, drawn location, road/USRN, traffic management, duration)
+  land on `WorkCreateRequest`; free-text supporting info fits
+  `additional_info`; genuinely out-of-scope items (contractor identity
+  distinct from the licensee, accreditation, insurance, Land Registry
+  references, adoption agreements, signed declarations) are the evidence/
+  accreditation/land-title/legal work a licensing authority needs to
+  grant a licence, not a works-coordination permit's job.
+- **`examples/streetmanager_section_50_form.html`** (added the same day)
+  is a static, disconnected visual mockup of the applicant-facing flow -
+  no server, nothing calls Street Manager - but its "Build request"
+  buttons run a real, faithful in-page port of both the BNG reprojection
+  and the request-assembly logic, so the JSON shown is genuinely what the
+  Python connector would send. Restyled 2026-08-10 from a parchment/
+  dossier look to an official council-portal aesthetic, and given a real
+  screenshot 2026-08-11.
+- **Evidence attachment, sandbox-verified 2026-08-12**: two placeholder
+  files uploaded via `WorkAPI.upload_file` (already a generic wrapper, no
+  new `client.py` method needed), the real returned `file_id`s included
+  on `WorkCreateRequest.file_ids`, and `create_work` still succeeding
+  with that field present - a real run produced real ids
+  (`file_ids=[80475, 80476]`) against a real created work
+  (`UG05046633203`), not a mocked assertion.
+- **An illustrative bond estimate, added the same day**: `calculate_bond`,
+  a pure function computing itemised per-surface costs from the drawn
+  extent's own real BNG area via a shoelace formula, times council rates -
+  folded into `additional_info` as a labelled note, never a structured
+  field. What's real: the upload calls, the returned ids, and the area
+  arithmetic. What's illustrative: the placeholder documents and the bond
+  rates - both flagged for replacement with real evidence and a real
+  council's current schedule. Amended 2026-08-12.
+- See [`docs/concepts/write-path.md`](../docs/concepts/write-path.md) for
+  the fee-suppression behaviour this connector's own docstring can't
+  show - Street Manager, not the connector, decides not to bill an S50.
+
+### Added — crime_context_lsoa sample outputs (2026-08-06)
+
+`examples/crime_context_lsoa/WorksiteRisk.png` (a real worksite-risk map
+image) and `worksite_context.html` (a real generated example HTML
+report) - sample outputs for the existing `crime_context_lsoa` example,
+demonstrating what its worker-safety context signal actually produces
+against real UK Police/Census data, not just describing it in prose.
+
+### Added — nsg_terrain_drape: drape OS Open USRN over real terrain, plus 3D-print export (2026-08-06)
+
+A new example - a field of USRN centrelines draped over real OS Terrain
+50 / EA LIDAR Composite relief, rendered with `pydeck`. Doubles as a live
+teaching example for stated-vs-derived elevation: the drape is a sampled
+guess at the ground, never written back into `Coordinate`.
+
+- `terrain.py` is a stdlib-only single-band raster reader (tiled/stripped
+  GeoTIFF, ESRI ASCII Grid) with two live clients - `EALidarWCSClient`
+  (on-demand OGC WCS, the first-class adapter) and `OSTerrain50Client`
+  (bulk-download-then-cache, the awkward fallback) - built and tested
+  against real captured fixtures, no GDAL/rasterio.
+- `drape.py` densifies and bilinear-samples USRN geometry, handling
+  `MULTILINESTRING` as the normal case after a live pull showed it's 67%
+  of real USRN geometries, not an edge case.
+- `export_stl.py` adds a real "Export for 3D Print" button: a watertight
+  heightmap mesh of the AOI (stdlib `struct`, no mesh library) with the
+  USRN field embossed into its own top surface as a raised ridge, so the
+  terrain supports the road by construction. Both deliberate distortions
+  (print scale, 2.5x vertical exaggeration) are reported on the page and
+  console, never applied silently.
+- **A real rendering artifact found from a live screenshot, fixed not
+  left in**: the ghost terrain mesh's blocky (strided) cells and the
+  road's separately bilinear-sampled height could visibly disagree,
+  letting a road appear to dip under the mesh. `render.py` now embosses
+  the road into the ghost mesh and lifts it to clear whatever cell
+  renders beneath it, both computed from the same numbers so they can't
+  disagree - verified against real Durham LIDAR data with zero
+  violations.
+- A generated real-output HTML showcase and screenshot were added the
+  same day, alongside two small test-infrastructure fixes (a missing
+  `pytest` import, skipping tests cleanly when `pydeck` isn't installed).
+
 ### Added — Greece, a documented-unavailable scaffold (2026-08-03)
 
 `streetworks.greece` - Greece is now registered (`verified=False`)
@@ -80,7 +1064,7 @@ investigation only considered.
 reuses `streetworks.socrata` and the NYC permit-register pattern
 directly, confirming the multi-city Socrata shape works a second time.
 
-- **The source brief's own primary dataset id is dead - found live, not
+- **The obvious primary dataset id is dead - found live, not
   guessed.** `6fd2-pzze` ("CDOT Permits") returns a genuinely empty
   schema (`X-SODA2-Fields: []`) despite 2.3M historical rows. The real,
   current dataset is `jdis-5sry` ("...- Street Closures", 46 columns,
@@ -173,7 +1157,7 @@ NYC Open Data (Socrata), not WZDx at all.
 - **No stated join to a street register** - the real 39-column schema
   has no LION `segmentid` or any other street identifier, only free-text
   cross-streets - `WorksSite.street_ref` is never populated, settling
-  the source brief's own hoped-for question honestly. Real geometry
+  a genuinely open question honestly. Real geometry
   exists anyway: a real `wkt` column populated on 80.5% of all rows
   (`LINESTRING`/`POINT`/a real, confirmed-live `MULTIPOINT` shape - added
   support for the latter to the shared `_wkt` helper, previously
@@ -200,11 +1184,11 @@ NYC Open Data (Socrata), not WZDx at all.
 
 `streetworks.wzdx.registry` extended, not rebuilt - the existing
 `WZDxClient.fetch()` (version-tolerant v3.1-v4.2 parser) and
-`list_feeds()` already matched the "registry-driven, not per-state
-adapter" shape this brief wanted; what was missing was CWZ/version
+`list_feeds()` already matched the intended "registry-driven, not
+per-state adapter" shape; what was missing was CWZ/version
 awareness and auth-tier modelling on `RegistryEntry` itself.
 
-- **A real correction to the source brief's CWZ-filter assumption.**
+- **A real correction to an early CWZ-filter assumption.**
   Confirmed live (2026-08-02, 41 real registry rows): the `format`
   column never distinguishes WZDx from CWZ (Connected Work Zone, a
   different ITE schema) - it's always just `"geojson"`/`"json"`. The
@@ -220,7 +1204,7 @@ awareness and auth-tier modelling on `RegistryEntry` itself.
 - **511NY (NYSDOT) confirmed live end-to-end** - the first concrete
   verified US feed via the actual registry pipeline: `list_feeds()` ->
   real NY row -> real fetch (`https://511ny.org/api/wzdx`, no key) ->
-  real parse, 6,895+ real events. A real correction to the brief's own
+  real parse, 6,895+ real events. A real correction to the initial
   geometry assumption: 100% `MultiPoint`, not `LineString` - both are
   legitimate WZDx shapes, this just wasn't the one guessed.
 - **A real, live, active Quebec City (Canada) feed is registered too** -
@@ -245,15 +1229,15 @@ awareness and auth-tier modelling on `RegistryEntry` itself.
 **Digital Atlas of Australia** (`digital.atlas.gov.au`), a whole-of-
 government ArcGIS Online platform, not Geoscape's own commercial API.
 
-- **A real correction to the source investigation.** The brief concluded
-  Australia has no clean national *open* road-centreline register,
+- **A real correction to the source investigation.** It was initially
+  assumed Australia has no clean national *open* road-centreline register,
   because Geoscape's own **Roads** product is commercial. True of
   Geoscape's direct API - but the Digital Atlas re-publishes an open
   derivative of both G-NAF and Geoscape Roads anyway, under CC BY 4.0,
   found by resolving each dataset's Digital Atlas item to its real
   underlying ArcGIS `FeatureServer` URL (not documented on the JS-
   rendered dataset landing pages themselves). This supersedes the
-  brief's own fallback plan (SA's CRRS / Tasmania's State Roads as
+  earlier fallback plan (SA's CRRS / Tasmania's State Roads as
   state-scoped consolation prizes).
 - **National Address Points (G-NAF derivative)** - 15,901,249 real
   addresses, native SR EPSG:7844 (GDA2020), `outSR=4326` confirmed
@@ -304,7 +1288,7 @@ technologies, sharing a country only incidentally).
   live 2026-08-02 (104 real records), credential-free, shipped
   live-verified with a real fixture from day one. A real correction to
   the source investigation: this is the ArcGIS open-data portal service,
-  not the bespoke `trafficnz.info` REST/SOAP API the brief also flagged -
+  not the bespoke `trafficnz.info` REST/SOAP API also considered -
   reuses the existing `ArcGISFeatureClient`. Two real layers share an
   identical field schema but never overlap on `eventId`: layer 0 ("Road
   Events", point) is roadworks-relevant; layer 1 ("Road Area Events",
@@ -419,8 +1403,8 @@ fixtures from day one.
   being honoured) - `scripts/smoke_test.py` carries a plausible-range
   check instead. **Licence genuinely unconfirmed**, checked directly (the
   ArcGIS item's own `licenseInfo`/`accessInformation` are both `null`,
-  and this service isn't even hosted on the LIST portal the source brief
-  guessed the licence from) - shipped anyway on the same openly-queryable
+  and this service isn't even hosted on the LIST portal the licence was
+  first guessed from) - shipped anyway on the same openly-queryable
   basis as `streetworks.arcgis.jersey`, distinct from being blocked the
   way SA is.
 - **The Northern Territory was investigated and found to have no
@@ -428,7 +1412,7 @@ fixtures from day one.
   real-time hub (`roadsReportingHub`, confirmed live by reverse-
   engineering the site's own minified Angular bundle), a materially
   different, undocumented client protocol this SDK has never needed
-  elsewhere, on top of the source brief's own already-flagged concerns
+  elsewhere, on top of already-flagged concerns
   (thin roadworks content, unspecified licence). Registered as a
   documented scaffold rather than silently omitted - see "Road Report NT"
   below for the follow-up that formalised this.
@@ -505,8 +1489,8 @@ Credentials-wanted scaffold.
   routes.
 - **Real coordinates are `EPSG:7844` (GDA2020), not WGS84** - confirmed
   live on every single feature via its own embedded GeoJSON `crs` member,
-  never assumed or silently relabelled `EPSG:4326` the way the source
-  investigation brief's "WGS84" framing would have.
+  never assumed or silently relabelled `EPSG:4326` the way the initial
+  "WGS84" framing would have.
 - **A deliberate, evidence-based departure from Victoria's own "prefer the
   Point, drop the LineString" precedent**: 88.5% of real Roadworks events
   have no Point at all, only a LineString - dropping it the way Victoria's
@@ -559,8 +1543,8 @@ never a Credentials-wanted scaffold.
   strips any per-feature CRS statement, a runtime coordinate guard is
   built anyway: any point outside plausible WGS84 degree range is treated
   as unreprojected Web Mercator metres and reprojected explicitly. **A
-  deliberate deviation from the source brief**: uses a small closed-form
-  spherical-Mercator inverse formula instead of `pyproj` (the brief's own
+  deliberate deviation from the original plan**: uses a small closed-form
+  spherical-Mercator inverse formula instead of `pyproj` (the initial
   suggestion) - the exact algebraic inverse of EPSG:3857's own spherical
   definition, not an approximation, chosen to avoid adding a heavy
   geospatial dependency this SDK has explicitly avoided everywhere else
@@ -570,7 +1554,7 @@ never a Credentials-wanted scaffold.
   `EstimatedC`/`EntryDate` are plain strings; a full live pull (227 real
   records, 681 date values) confirms `DD/MM/YYYY HH:MM:SS` unambiguously
   (397 real values have a day > 12, zero have a month > 12).
-- **Real findings from that same live pull, not in the source brief**:
+- **Real findings from that same live pull, not anticipated beforehand**:
   `Road` states the literal sentinel `"LOCAL ROAD"` (not a real road name)
   on 28/227 (~12.3%) records - `LocalRoadName` carries the real name in
   exactly those, confirmed perfectly mutually exclusive across every real
@@ -586,15 +1570,14 @@ never a Credentials-wanted scaffold.
 - `network_scope` stays `NetworkScope.UNKNOWN`, not promoted - the real
   local-road minority (~12.3%) is far larger than NSW's own (~1.7%, which
   was judged small enough to promote to `STRATEGIC`), so honest-unknown
-  was chosen over a confident guess, per the source brief's own
-  instruction.
+  was chosen over a confident guess, per the original instruction.
 - **Reference is keyed on `GlobalID`** (a genuine, confirmed-unique GUID),
   **never `FID`** - this is a real `isView: true` ArcGIS view, so its own
   object ids are reassignable view artefacts, not stable identity.
 - Licensed **CC BY 4.0**, confirmed live from the ArcGIS item's own
   catalogue metadata (`licenseInfo`) - the layer's own `copyrightText` is
   empty, so attribution genuinely doesn't ride on the layer itself, as
-  the brief expected. `administrative_area="Main Roads Western
+  first expected. `administrative_area="Main Roads Western
   Australia"`, the operator-as-authority rule already applied to Autobahn
   GmbH/TfNSW/DTP.
 - Added `tests/fixtures/wa_mainroads_live_pull.json` (five real trimmed
@@ -619,8 +1602,8 @@ confirmed most of what Phase 1 had only guessed at for all three.
 - **NSW: a real bug, found and fixed** - the correct endpoint paths are
   `roadwork/open`-style, not `roadwork-open.json`-style. Phase 1 had
   read TfNSW's own Developer Guide Table 1 literally and trusted it over
-  the source investigation brief's paraphrase, reasoning the primary
-  document was more authoritative - a live pull proved this backwards:
+  an earlier paraphrase, reasoning the primary document was more
+  authoritative - a live pull proved this backwards:
   `roadwork-open.json` returns a genuine `404` even with a valid key,
   while `roadwork/open` returns real data (363 roadwork + 19 majorevent
   features in one pull). A humbling, generalisable lesson: reading a
@@ -796,9 +1779,9 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   instead). A Phase 1 scaffold, grouped with Norway/Sweden/Denmark under
   **Credentials wanted** - not DATEX-family like those three, TfNSW's own
   GeoJSON hazards schema.
-  Built from a dedicated investigation brief, then independently
+  Built from dedicated investigation, then independently
   re-verified this session by reading TfNSW's own 42-page "Live Traffic
-  NSW Developer Guide" (v1.9) directly rather than trusting the brief's
+  NSW Developer Guide" (v1.9) directly rather than trusting an earlier
   paraphrase, plus a live, credential-free probe of the real endpoint.
   - **One adapter, parameterised over layer - not one per layer.** All
     six of TfNSW's hazard types (plus the differently-shaped
@@ -829,7 +1812,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
     endpoint independent of any documentation's own claims. The CC-BY
     licence was independently re-confirmed via the TfNSW Open Data Hub's
     own catalogue page.
-  - **A correction to the source investigation brief**: the brief
+  - **A correction to the source investigation**: it initially
     described the roadwork endpoints as `roadwork/open`/`roadwork/closed`/
     `roadwork/all`; reading the guide's own Table 1 directly gives
     different literal filenames - `roadwork-open.json`/
@@ -923,8 +1906,8 @@ each scaffold as originally built, kept for history rather than rewritten.)*
     docs-vs-docs conflicts (rate limit 10/min not 20, token-based
     pagination not page/limit, 10-minute cache not 30), all independently
     confirmed straight from the real spec text.
-  - **A correction to this module's own design brief**: the brief
-    proposed `administrative_area = localGovernmentArea`. Checked against
+  - **A correction to the initial design**: `administrative_area =
+    localGovernmentArea` was initially proposed. Checked against
     `Works.administrative_area`'s own documented semantics (data
     *ownership*, not geography) - an LGA is where a disruption sits, not
     who owns the data, so `administrative_area` is set to "Department of
@@ -1045,12 +2028,12 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   `None` for SRWR, which states street identity only at the activity
   level (record type `004`) with no phase/site join, so populating it
   would have fabricated a link the source doesn't make.
-  **Two design-brief assumptions corrected against real data**: the brief
-  expected `Segment.names` to be BD-TOPO-only, but NWB's real `stt_naam`
+  **Two early assumptions corrected against real data**: `Segment.names`
+  was expected to be BD-TOPO-only, but NWB's real `stt_naam`
   (even purely-numbered roads carry one, e.g. a real A79 motorway segment)
   populates it too; and DataVIA's real ESU schema (confirmed via WFS
   `DescribeFeatureType`, live, mid-session) has *no name field at all*,
-  closing the brief's own open question about whether a real named
+  closing a genuinely open question about whether a real named
   sub-street ("Anchorage Terrace", part of Church Street, Durham) is
   recoverable from DataVIA at any level - it isn't, structurally, not just
   unpopulated.
@@ -1082,10 +2065,10 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   whole - the national file is ~1.4 GB gzipped). Verified live, not
   assumed: the documented API endpoint (`api-adresse.data.gouv.fr`) is past
   its stated 2026-01-31 sunset, so this client targets its confirmed-live
-  replacement, `data.geopf.fr/geocodage`; the design brief's own claim that
+  replacement, `data.geopf.fr/geocodage`; an earlier claim that
   the new endpoint returned HTTP 400 did not reproduce - a plain
   `q=`/`lon=`&`lat=` request succeeds. Of the four bulk CSV format variants
-  the brief named, only two (`csv`, `csv-bal`) exist as real downloadable
+  originally identified, only two (`csv`, `csv-bal`) exist as real downloadable
   files today - `csv-with-ids` and `csv-bal-with-lang` do not.
   **BAN is an address base, not a street register**: there is no
   `id_ban_toponyme` field under any format checked, but a street's identity
@@ -1098,7 +2081,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   format's `uid_adresse` are the *same* permanent UUID for the same real
   address, not just similarly-shaped identifiers; the plain `csv` bulk
   format carries neither, only the compact `id`.
-  A user-supplied addendum mid-build corrected the brief's claim that
+  A user-supplied addendum mid-build corrected an earlier claim that
   street naming belongs to FANTOIR: FANTOIR was replaced by DGFiP's
   **TOPO** register in July 2023 and is now archived. Investigated live in
   response: BAN's plain `csv` format's `id_fantoir` column is, despite its
@@ -1124,8 +2107,8 @@ each scaffold as originally built, kept for history rather than rewritten.)*
 
 - **Netherlands: BAG (Basisregistratie Adressen en Gebouwen)**
   (`streetworks.bag`) - the third gazetteer, and the last before the
-  canonical-model design session (per the design brief's own framing),
-  native only. Wraps the credential-free PDOK Locatieserver (`search`/
+  canonical-model design session, native only. Wraps the
+  credential-free PDOK Locatieserver (`search`/
   `suggest`/`reverse`/`lookup`) and the bulk GeoPackage (`bag-light.gpkg`,
   current status only, no history), whose download URL is discovered from
   an Atom feed every call rather than hardcoded - PDOK republishes monthly
@@ -1146,7 +2129,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   The fuller picture needed checking the *other* real product too: the
   full-history XML extract (investigated via HTTP range requests against
   the real 3.6 GB zip - a nested zip-of-zips, one member per BAG object
-  type - without downloading it whole; not parsed, per the brief's own
+  type - without downloading it whole; not parsed, per the original
   scope) confirms `openbare ruimte` genuinely *is* a first-class,
   separately-versioned BAG object there, with its own identity and a real
   `status` lifecycle - but still carries no geometry of its own in either
@@ -1162,13 +2145,13 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   Also confirmed live in the XML extract: a bitemporal `voorkomen`
   versioning model (validity period *and* registration period tracked
   separately) - documented, not parsed, the same "investigate, don't
-  build" scope the design brief drew around this product.
-  A correction to the design brief: "Gemeente" (municipality) is not part
-  of the BAG at all, per Kadaster's own disclaimer in the (explicitly
+  build" scope drawn around this product.
+  A correction to the initial understanding: "Gemeente" (municipality) is
+  not part of the BAG at all, per Kadaster's own disclaimer in the (explicitly
   unofficial) `GEM-WPL-RELATIE` helper file - `Woonplaats` (settlement) is
   BAG's real administrative concept. Also corrected: the live Atom feed's
   own `<rights>` element names **CC0 1.0 Universal**, not the "Public
-  Domain Mark 1.0" the brief named - a different (if similarly permissive)
+  Domain Mark 1.0" first assumed - a different (if similarly permissive)
   legal instrument. A `"weg"` (street) Locatieserver result can carry a
   real `MULTILINESTRING` geometry with `fl=*`, but its `bron` field says
   `"BAG/NWB"` - that line comes from NWB (a separate national roads
@@ -1190,7 +2173,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   confirmed live via the Geonorge catalogue, so CSV was picked
   deliberately for the same standard-library-only reason every other bulk
   provider in this SDK was.
-  **Multilingual naming - the finding the design brief flagged as most
+  **Multilingual naming - the finding flagged early on as most
   likely to change the canonical model - lives on the SSR *place*, not the
   address, confirmed live, not assumed**: a real place
   (Karasjok/Kárášjohka/Kaarasjoki, `stedsnummer` 868181) carries three
@@ -1223,9 +2206,9 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   France's TOPO and the Netherlands' NWB got. That makes three of the four
   European gazetteers built in this SDK with no street centreline of their
   own.
-  Two design-brief corrections, both live-verified: SSR's default output
-  CRS is the *same* `EPSG:4258` as the address API (the brief suggested
-  checking for a difference; only the query's *input* flexibility differs,
+  Two early corrections, both live-verified: SSR's default output
+  CRS is the *same* `EPSG:4258` as the address API (a difference was
+  suspected; only the query's *input* flexibility differs,
   accepting `25833` alongside `4258` via `koordsys`) - and the "requires an
   agreement with Kartverket" note some catalogues attach turned out to
   name a completely different, SOAP-based, access-restricted service
@@ -1265,8 +2248,8 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   genuinely different BAG street objects). `Wegvak.toponyme_id()` returns
   `bag_orl` where present and `None` otherwise, never falling back to the
   name, which would silently over-merge in exactly these real cases.
-  Corrected the design brief's own WFS paging warning, live: `count`
-  paging works fine - the brief's two failed attempts almost certainly
+  Corrected an earlier WFS paging warning, live: `count`
+  paging works fine - two earlier failed attempts almost certainly
   hit an unencoded `+` in `outputFormat=application/geopackage+sqlite3`,
   which decodes server-side as a literal space (confirmed: that exact
   rejection message reproduces the failure). But a real bug of the same
@@ -1363,13 +2346,13 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   fourth non-UK street-geometry provider, native only, the
   `kind="streets"` counterpart to `kartverket`'s `kind="addresses"`, and
   the last planned provider in the international-gazetteers strand.
-  **Task one, checked first, per the design brief's own instruction**: no
+  **Task one, checked first, per the original plan**: no
   credentials required for reads - confirmed live (only a required
   `X-Client` self-identifying header, not an API key; a bare request
   without it returns HTTP 400) and confirmed in NVDB's own API
   documentation ("Det er ikke nødvendig å registrere en bruker..." - "It
   is not necessary to register a user..."). This is the striking
-  asymmetry the brief asked about: Statens vegvesen's own DATEX roadworks
+  asymmetry originally flagged: Statens vegvesen's own DATEX roadworks
   feed (`streetworks.datex2.vegvesen`) remains one of this SDK's
   credential-blocked, unverified providers (see Credentials wanted,
   below), while NVDB, from the same agency, is wide open.
@@ -1392,7 +2375,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   `vegsystemreferanser` (administrative road-numbering, e.g. the real
   `"KV1140 S1D1 m0-65"`), preserved in `.raw`, not modelled as a
   first-class field.
-  **CRS corrected live: EPSG:5973, not the design brief's expected
+  **CRS corrected live: EPSG:5973, not the initially expected
   EPSG:25833** - a compound 3D CRS ("ETRS89-NOR [EUREF89] / UTM zone 33N
   + NN2000 height"), not a plain 2D UTM33 one; every real geometry
   checked is a genuine `LINESTRING Z` with real altitude values, matching
@@ -1400,13 +2383,13 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   data), not Elveg's CC BY 4.0** - confirmed from the NVDB API's own
   documentation (`nvdb-vegdata/apidokumentasjon` on GitHub, the real
   source behind `api.vegdata.no`) rather than assumed from Kartverket's
-  Elveg distribution metadata, per the brief's own instruction. Same
+  Elveg distribution metadata, per the original instruction. Same
   underlying road network, two different publishers, two different
   licences.
   REST is this module's only access route - both endpoints paginate with
   a real cursor and accept a `kommune` filter, confirmed live at real
   scale, so the CSV export service (`nvdb-eksport`) was evaluated and not
-  built, per the brief's "don't build two routes for the same job."
+  built, per the "don't build two routes for the same job" principle.
   Registered in `streetworks.registry` as `nvdb` (`kind="streets"`) -
   Norway now has three providers (`vegvesen` roadworks, `kartverket`
   addresses, `nvdb` streets), so `get_provider("norway")` raises
@@ -1419,7 +2402,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   pyramid, not distinct road classes - confirmed live by comparing feature
   counts (layers 1/2 both 17,612 nationally, 4/5/6 all 248,106, 7/8 both
   16,150,491 - the same data at different generalisation tiers, a real
-  correction to the initial design brief's framing). Produces `Segment`
+  correction to the initial framing). Produces `Segment`
   only, never a `Street` - checked live, not assumed: no layer anywhere in
   the service aggregates segments under a named-street entity, the same
   shape as the Netherlands. No Address Ranges layer exists over this REST
@@ -1794,7 +2777,7 @@ each scaffold as originally built, kept for history rather than rewritten.)*
   `get_provider()` still imports the target client lazily, only on call.
   Two real, previously-undocumented gaps surfaced while verifying every
   territory/licence claim against actual module docstrings rather than
-  copying the design brief on trust: Street Manager and DataVIA never
+  taking earlier notes on trust: Street Manager and DataVIA never
   state their territory anywhere in code or README prose (England+Wales
   here is inferred by elimination against SRWR/TrafficWatchNI covering the
   other nations separately, not an explicit statement); NDW and

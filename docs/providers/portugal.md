@@ -23,8 +23,7 @@ with LisboaClient() as lisboa:
 works = from_lisboa(features)
 ```
 
-**Built from `lisbon-condicionamentos-investigation.md`. The brief's own
-named gating check — is the live platform actually current, or a stale
+**A key gating check — is the live platform actually current, or a stale
 2023 snapshot? — resolved before writing any client code.** The
 catalogue record for this dataset (`dados.gov.pt`) states *"Última
 atualização: 22 de maio de 2023"* — taken alone, exactly the kind of
@@ -101,7 +100,7 @@ for a `GeometryCollection` carrying multiple `LineString` entries, since
 — evidenced from the same app bundle's own WMS map-layer requests
 (`SRS=EPSG:4326`) and independently consistent with the real coordinate
 ranges (~-9.1 to -9.2°E, ~38.7-38.8°N — genuine Lisbon values), not the
-projected PT-TM06/EPSG:3763 easting/northing pair the source brief had
+projected PT-TM06/EPSG:3763 easting/northing pair initially
 flagged as a real possibility for Portuguese data.
 
 **Dates: `periodos_condicionamentos` is a list, not one window** — a

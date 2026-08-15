@@ -22,10 +22,9 @@ with CopenhagenClient() as copenhagen:
 works = from_copenhagen(features)  # deduped by sagsnr, one Works each
 ```
 
-**Built from `nordic-capitals-investigation.md`'s (Copenhagen/Oslo/
-Stockholm/Helsinki) recommendation to build Copenhagen first. Live
-verification corrected several of the brief's own guesses before any
-code was written.** The brief guessed a dataset named "vejarbejde" over
+**Copenhagen was built first among the Nordic capitals. Live
+verification corrected several early guesses before any
+code was written.** The first guess was a dataset named "vejarbejde" over
 an assumed ArcGIS Hub/OGC API Features backend. Checked directly on
 `opendata.dk` (the shared Danish municipal open-data platform,
 CKAN/Datopian-backed): the real, live dataset is titled
@@ -47,7 +46,7 @@ server-side filtered to current permits — confirmed live, every one of
 2240 real rows carries the literal `sagstype="Gravetilladelser"`, so no
 client-side type filter is applied on top of it.
 
-**A real, load-bearing geometry finding the brief never anticipated:
+**A real, load-bearing geometry finding not anticipated going in:
 this layer mixes `Point`, `LineString` and `Polygon` geometry, and the
 same real permit is recorded once per geometry shape it has, not once
 per permit.** Grouping the raw 2240 rows by `sagsnr` (the real case/
@@ -115,12 +114,12 @@ unauthenticated GetFeature request.
 **Oslo** (Norway, `streetworks.oslo`) and **Helsinki** (Finland,
 `streetworks.helsinki` — see
 [`docs/providers/europe.md`](europe.md#helsinki-kaivuilmoitus)) are now
-both built, resolving two more of `nordic-capitals-investigation.md`'s
-findings; both needed real live-verification before building, since
-neither matched the brief's own guess (Oslo's guessed Origo/NVDB
+both built, resolving two more open questions across the Nordic capitals;
+both needed real live-verification before building, since
+neither matched the first guess (Oslo's guessed Origo/NVDB
 backend, Helsinki's own unconfirmed "does a dataset even exist"
-question). **Stockholm** (Sweden, `streetworks.stockholm`) resolves the
-brief's own "Rome-risk" flag by confirming it, not disproving it — every
+question). **Stockholm** (Sweden, `streetworks.stockholm`) confirms a
+real risk flagged early on rather than disproving it — every
 real surface tested (WFS/WMS `GetCapabilities`) requires an API key
 before revealing even a layer name, let alone whether a `vägarbete`
 dataset exists at all, so it ships as a Phase 0 Credentials-wanted

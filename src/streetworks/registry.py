@@ -14,7 +14,7 @@ before. This is a discovery facade, not a new abstraction: the common model
 (`streetworks.common.Works`/`WorksSite`) is already the provider-agnostic
 layer.
 
-**Deliberately not built here** (see the design brief): no uniform
+**Deliberately not built here**: no uniform
 `search()`/query facade - a method that looks like a database query but is
 actually a 170 MB download (NDW), 113 sequential HTTP calls (Autobahn), or a
 UTM33N ZIP needing reprojection before a WGS84 bbox could even apply

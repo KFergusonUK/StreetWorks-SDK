@@ -28,6 +28,14 @@ with WZDxClient() as wzdx:
             print(event.road_names, event.vehicle_impact, event.geometry.point)
 ```
 
+Convert to the shared cross-provider model:
+
+```python
+from streetworks.common import from_wzdx
+
+works = from_wzdx(feed.road_events, territory="Washington")  # non-work-zone events skipped
+```
+
 Use `streetworks.wzdx.list_feeds()` to discover feed URLs from the [USDOT
 feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
 rather than hardcoding one — **confirmed live 2026-08-02, 41 real
@@ -122,8 +130,8 @@ many street segments) — `from_nycdot` groups by it the same way
 `from_wzdx` groups by `works_ref`, one `Works` per application, one
 `WorksSite` per permit.
 
-**No stated join to a street register — settles the source brief's own
-hoped-for question, honestly, not the way it hoped.** The full real
+**No stated join to a street register — settles a genuinely open
+question, honestly, not the hoped-for way.** The full real
 39-column schema was checked directly: there is no LION `segmentid` (or
 any other street-register identifier) anywhere on this dataset — only
 free-text cross-street names, so `WorksSite.street_ref` is never
@@ -181,7 +189,7 @@ with ChicagoDotClient() as chicago:
     works_list = from_chicagodot(list(chicago.iter_roadworks()))
 ```
 
-**The source brief's own primary dataset id turned out to be dead —
+**The obvious primary dataset id turned out to be dead —
 found live, not guessed.** `6fd2-pzze` ("CDOT Permits") returns a
 genuinely empty schema (`X-SODA2-Fields: []`, confirmed via a real
 request) despite 2.3M historical rows and a fresh `Last-Modified` — a
@@ -201,8 +209,8 @@ the way NYC's EPSG:2263 needed. Geometry and dates are both populated on
 geometry rate.
 
 **The view's own pre-filter isn't sufficient on its own — a real
-correction found live, matching the source brief's own explicit
-warning.** Even within the 3 pre-filtered `applicationtype` values, a
+correction found live, matching an explicit warning found during
+investigation.** Even within the 3 pre-filtered `applicationtype` values, a
 finer real field, `worktype`, still mixes in confirmed non-roadworks
 activity: `BlockParty` (53,679 real rows — the single largest worktype
 after genuine openings), `Festival` (8,938), `Athletic` (3,863),

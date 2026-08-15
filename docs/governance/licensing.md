@@ -42,7 +42,7 @@ Confirmed and named explicitly:
 | Berlin (VIZ) | Datenlizenz Deutschland — Namensnennung — Version 2.0 (dl-de/by-2-0) | [`docs/providers/europe.md`](../providers/europe.md#berlin-viz) |
 | Consell de Mallorca | **Unconfirmed** | [`docs/providers/europe.md`](../providers/europe.md#consell-de-mallorca-island-roadworks) |
 | Servei Català de Trànsit (Catalonia) | Catalonia's own "Llicència oberta d'ús d'informació" — confirmed genuinely open | [`docs/providers/europe.md`](../providers/europe.md#servei-català-de-trànsit-catalonia) |
-| Ayuntamiento de Madrid (INFORMO) | CC BY — confirmed live at nap.dgt.es, not just carried over from the investigation brief | [`docs/providers/europe.md`](../providers/europe.md#ayuntamiento-de-madrid-informo) |
+| Ayuntamiento de Madrid (INFORMO) | CC BY — confirmed live at nap.dgt.es, not just carried over from an earlier assumption | [`docs/providers/europe.md`](../providers/europe.md#ayuntamiento-de-madrid-informo) |
 | CCISS (Italy) | **Unconfirmed** | [`docs/providers/italy.md`](../providers/italy.md) |
 | Roma (Roma si trasforma) | **Unconfirmed** — checked the live site's page text, footer, and common Italian open-data terms; none found | [`docs/providers/italy.md`](../providers/italy.md#roma-roma-si-trasforma) |
 | Copenhagen (Gravetilladelser) | CC-BY-4.0, confirmed live via the dataset's own CKAN metadata | [`docs/providers/denmark.md`](../providers/denmark.md#copenhagen-gravetilladelser) |

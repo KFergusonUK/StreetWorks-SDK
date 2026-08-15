@@ -29,7 +29,7 @@ silently reprojected, only carried through and labelled explicitly on
 
 ## Compound / 3D CRS
 
-- **NVDB (Norway)** — `EPSG:5973`, *not* the design brief's expected plain `EPSG:25833`: *"a compound 3D CRS ('ETRS89-NOR / UTM zone 33N + NN2000 height'), not a plain 2D UTM33 one — every real geometry is a genuine `LINESTRING Z` with real altitude values, matching the CRS exactly."* Z is preserved, never defaulted to zero — see [`docs/concepts/data-model.md`](data-model.md).
+- **NVDB (Norway)** — `EPSG:5973`, *not* the initially expected plain `EPSG:25833`: *"a compound 3D CRS ('ETRS89-NOR / UTM zone 33N + NN2000 height'), not a plain 2D UTM33 one — every real geometry is a genuine `LINESTRING Z` with real altitude values, matching the CRS exactly."* Z is preserved, never defaulted to zero — see [`docs/concepts/data-model.md`](data-model.md).
 
 ## Mixed CRS within a single feed
 
@@ -54,5 +54,5 @@ silently reprojected, only carried through and labelled explicitly on
 - **BAG (Netherlands)** / **NWB (Netherlands)** — `EPSG:28992`, confirmed matching between the two (NWB is the `streets` counterpart to BAG's `addresses`).
 - **BAN (France)** — WGS84 (`lon`/`lat` stated directly on bulk/geocoding records).
 - **BD TOPO (France)** — see above (route-specific).
-- **Kartverket (Norway)** — SSR's default output CRS confirmed the *same* `EPSG:4258` as the address API — *"the brief's own CRS hint about the SSR API needing separate verification from the address API turned out backwards... only its query-input flexibility differs."*
+- **Kartverket (Norway)** — SSR's default output CRS confirmed the *same* `EPSG:4258` as the address API — *"the early assumption that the SSR API needed separate CRS verification from the address API turned out backwards... only its query-input flexibility differs."*
 - **TIGERweb (US)** — a statistical/cartographic product; CRS handling inherited from the shared `ArcGISFeatureClient` guard.

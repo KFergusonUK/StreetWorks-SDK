@@ -59,7 +59,7 @@ came back), but because GeoJSON strips any per-feature CRS statement, a
 runtime coordinate guard is built anyway: any point outside plausible
 degree range is treated as unreprojected Web Mercator metres and converted
 via a small closed-form spherical-Mercator inverse — **not** `pyproj`
-(the source brief's own suggestion), to avoid adding a heavy geospatial
+(the initial suggestion), to avoid adding a heavy geospatial
 dependency this SDK has deliberately avoided everywhere else (see
 `streetworks/au/wa.py`'s own module docstring for the full reasoning). (2)
 *Date format* — `DateStarte`/`EstimatedC`/`EntryDate` are plain strings; a
@@ -231,7 +231,7 @@ plausible-range check instead, the same "fail loudly, don't guess"
 discipline. **Licence is genuinely unconfirmed** — checked directly on
 the ArcGIS item's own portal metadata (`licenseInfo`/`accessInformation`
 both `null`), not inferred from Tasmania's LISTdata CC-BY norms the way
-the source brief speculated (this service isn't even hosted on the LIST
+first speculated (this service isn't even hosted on the LIST
 portal). Shipped anyway on the same openly-queryable basis as
 `streetworks.arcgis.jersey` — real data, real fixture, honest licence
 caveat, not blocked the way SA is.
@@ -244,7 +244,7 @@ reverse-engineering the site's own minified Angular bundle found a
 genuine SignalR real-time hub connection (`roadsReportingHub`, invoking
 hub methods like `GetAllMajorRoadObstructions`) — an undocumented,
 materially different client protocol this SDK has never needed elsewhere,
-on top of the source investigation's own already-flagged concerns
+on top of already-flagged concerns from earlier investigation
 (roadworks is a minor subset of a road-condition system dominated by
 closures/flooding, and the licence is unspecified). Rather than encode
 that reverse-engineered hub as a stable contract, `RoadReportNtClient()`
@@ -268,17 +268,17 @@ with GnafClient() as gnaf:
     roads = [from_gnaf_road(r) for r in gnaf.iter_roads(where="state='ACT'")]
 ```
 
-**A real correction to the source investigation.** The brief that
-started this build concluded Australia has "no clean national *open*
+**A real correction to the source investigation.** Australia was first
+thought to have "no clean national *open*
 road-centreline register with identifiers" — true of Geoscape's own
-commercial **Roads** API, which is what the brief checked. It missed a
+commercial **Roads** API, which is what was checked first. It missed a
 separate, genuinely open publication route: the Digital Atlas
 re-publishes both a G-NAF-derived address layer and a Geoscape
 Roads-derived road network, both under **CC BY 4.0**, both live,
 neither documented on the platform's own JS-rendered dataset pages —
 found only by resolving each dataset's Digital Atlas item to its real
 underlying `services-ap1.arcgis.com` `FeatureServer` URL. This
-supersedes the brief's own fallback plan (SA's CRRS / Tasmania's State
+supersedes the original fallback plan (SA's CRRS / Tasmania's State
 Roads as state-scoped consolation prizes) — Australia now has a genuine
 *national* road register, the same tier as New Zealand's LINZ.
 
@@ -315,7 +315,7 @@ roads)"`) and both `OPERATIONAL` and `PROPOSED` (not-yet-built) real
 default, not a curated "built only" view. Licence CC BY 4.0, no extra
 restriction.
 
-**No stated join between addresses and roads — resolves the brief's
+**No stated join between addresses and roads — resolves an earlier open
 join question, on better evidence than it had.** Neither layer states a
 reference to the other; the only possible link is a name match
 (`STREET_NAME` against `full_street_name`), forbidden by this SDK's
@@ -323,5 +323,5 @@ stated-identifiers-only rule. So Australia's addresses and roads stand
 alone from each other, the same conclusion already reached about the AU
 roadworks cluster (no AU roadworks feed states a G-NAF/road identifier
 either) — now settled for the gazetteer side too, on the real open
-register rather than the commercial one the brief assumed was the only
+register rather than the commercial one first assumed to be the only
 option.

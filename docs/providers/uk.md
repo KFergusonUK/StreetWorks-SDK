@@ -40,6 +40,14 @@ with StreetManagerClient(
     updates = sm.event.works_updates()
 ```
 
+Convert permits to the shared cross-provider model:
+
+```python
+from streetworks.common import from_streetmanager
+
+works = from_streetmanager(list(sm.reporting.iter_permits(status="submitted")))
+```
+
 Async is a mirror image:
 
 ```python
@@ -229,6 +237,14 @@ info = dv.get_feature_info(Layer.STREET_LINES, (424000, 533800, 426000, 535200),
 Coordinates default to British National Grid (EPSG:27700), which sidesteps
 the WMS 1.3.0 lat/lon axis-order trap that bites with EPSG:4326.
 
+Convert a street/segment feature to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_datavia
+
+street_or_segment = from_datavia(street)  # Street or Segment, see module docstring
+```
+
 ## DfT D-TRO
 
 OAuth2 client credentials (30-minute tokens, cached and renewed
@@ -284,6 +300,14 @@ data are all exposed; `describe()` translates the register's coded values.
 > it isn't covered. The Open Data feed carries the register's noticing data
 > and needs no account.
 
+Convert an Activity bundle to the shared cross-provider model:
+
+```python
+from streetworks.common import from_srwr
+
+works = from_srwr(activity)
+```
+
 ## OS Open USRN
 
 Every Unique Street Reference Number in Great Britain, with street geometry,
@@ -302,6 +326,14 @@ with OpenUSRNClient() as client:
 with UsrnDatabase(extract_gpkg(archive)) as db:
     street = db.get(33909869)
     print(street.geometry)        # WKT, British National Grid (EPSG:27700)
+```
+
+Convert to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_openusrn
+
+gazetteer_street = from_openusrn(street)
 ```
 
 ## Jersey RoadWorkx and TIGERweb (ArcGIS REST)
@@ -437,6 +469,15 @@ with TrafficWatchNIClient() as twni:
 with TrafficWalesClient() as tw:
     for item in tw.fetch(Feed.ROADWORKS):
         print(item.roads, item.title)
+```
+
+Convert either feed's items to the shared cross-provider model:
+
+```python
+from streetworks.common import from_trafficwatchni, from_trafficwales
+
+ni_works = [from_trafficwatchni(item) for item in twni.fetch()]
+wales_works = [from_trafficwales(item) for item in tw.fetch(Feed.ROADWORKS)]
 ```
 
 ## UK Police (crime data — a worker-safety signal)

@@ -4,6 +4,10 @@
 > gazetteer model` sections (phase one, lossless restructure — see
 > `docs/migration-mapping.md`).
 
+For a practical, converter-by-converter guide to using this model against a
+specific provider, see
+[Using the common model](common-model.md).
+
 ## Works model (`Works`, `WorksSite`, `WorksPlanning`, `Coordinate`)
 
 Every provider has its own native, full-fidelity shape — that's

@@ -21,9 +21,8 @@ with DriveBCClient() as drivebc:
 works = from_drivebc(events)
 ```
 
-**Built from `canada-open511-investigation.md`, but bespoke, not the
-brief's proposed general `streetworks.open511` parser.** The brief's
-reasoning was sound in principle — Open511 is a real multi-jurisdiction
+**Bespoke, not a general `streetworks.open511` parser.** The
+initial reasoning for a shared parser was sound in principle — Open511 is a real multi-jurisdiction
 standard, the same shape that made a shared WZDx parser worthwhile — but
 checked live before committing: DriveBC is the only real, confirmed
 roadworks-events Open511 implementation found. San Francisco Bay Area
@@ -48,7 +47,7 @@ short page, per the API's own documented pattern.
 `WEATHER_CONDITION` (2) are excluded.
 
 **Two real, mutually-exclusive schedule shapes — a genuine finding
-beyond the brief's own plan.** 222/246 real events state
+beyond the original plan.** 222/246 real events state
 `schedule.intervals` (ISO-8601 time-interval strings, closed
 `"2026-05-07T04:00/2026-11-25T21:00"` or open-ended
 `"2022-12-07T20:19/"`); the other 24 state `schedule.recurring_schedules`

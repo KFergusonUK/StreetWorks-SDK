@@ -29,7 +29,7 @@ with LinzClient() as linz:
 2026-08-02 (104 real records), credential-free.** A real correction to
 the source investigation: this is the ArcGIS open-data portal service
 (`opendata-nzta.opendata.arcgis.com`), not the bespoke `trafficnz.info`
-REST/SOAP API the brief also flagged — reuses the same
+REST/SOAP API also considered early on — reuses the same
 `ArcGISFeatureClient` every AU ArcGIS provider does. Two real layers share
 an identical field schema but never overlap: layer 0 ("Road Events",
 point, 104 real records) is roadworks-relevant; layer 1 ("Road Area

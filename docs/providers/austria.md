@@ -24,11 +24,11 @@ with ViennaClient() as vienna:
 works = from_vienna(features)
 ```
 
-**The candidate URL a source brief proposed (`data.gv.at`) turned out
+**The candidate URL first proposed (`data.gv.at`) turned out
 to be a JS-rendered SPA - the real data lives directly on Vienna's own
 GeoServer WFS instead.** A plain unauthenticated fetch of any
 `data.gv.at` catalogue page, including the CKAN-style API path the
-brief's own dataset naming implied, returns an identical empty shell,
+early dataset naming implied, returns an identical empty shell,
 not real content. The real endpoint, found via web search:
 `https://data.wien.gv.at/daten/geo` - a real, live, 377-layer WFS,
 confirmed reachable with no key.
@@ -70,9 +70,9 @@ all): real values seen live include `Rohrlegung` (pipe-laying),
 `U-Bahnbau` (metro construction), and `Gleisbau` (tram-track
 construction).
 
-**A real correction to the source brief's own framing: this is a
-permit register, not an operator publishing only its own works.** The
-brief called Vienna's dataset "operator"-graded (Stadt Wien as the
+**A real correction to the initial framing: this is a
+permit register, not an operator publishing only its own works.** Vienna's
+dataset was first assumed "operator"-graded (Stadt Wien as the
 traffic authority publishing its own works) - but `ANTRAGSTELLER`
 (applicant)'s real values are genuine third-party applicants:
 `Wiener Netze - Bereich Fernwärme`/`Bereich Gas` (the electricity/gas
@@ -80,7 +80,7 @@ utility), `Wiener Linien GmbH & Co KG` (the transit operator),
 `Wienkanal` (the sewage utility), even `Privater Bauträger` (a private
 developer) - alongside city departments (`MA28`/`MA31`/`MA29`). This
 SDK ships it `source_grade = REGISTER`, the same tier as
-Copenhagen/Helsinki/NYC DOT/Chicago, correcting the brief's assumption.
+Copenhagen/Helsinki/NYC DOT/Chicago, correcting the initial assumption.
 8/39 real point rows have `ANTRAGSTELLER = null` - a genuine partial
 gap, left `None` rather than filled in.
 

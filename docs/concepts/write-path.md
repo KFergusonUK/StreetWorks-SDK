@@ -23,7 +23,7 @@ login (which the read-only Street Manager examples use) got 400s and would
 likely 403 on `create_work` regardless of payload correctness - see that
 script's own docstring. Sandbox success says nothing about production,
 which remains untouched and shouldn't be exercised casually here given the
-promoter-account/council-policy considerations noted in that module's brief.
+promoter-account/council-policy considerations noted in that module's docstring.
 
 **Also sandbox-verified, 2026-08-12:** the evidence-attachment addition to
 the same `apply()` flow - two placeholder files uploaded via

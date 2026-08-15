@@ -31,7 +31,7 @@ from .exceptions import (
 )
 from .registry import Kind, ProviderEntry, get_provider, providers
 
-__version__ = "0.8.0"  # keep in sync with pyproject.toml
+__version__ = "0.9.0"  # keep in sync with pyproject.toml
 
 __all__ = [
     "APIError",
