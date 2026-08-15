@@ -1,0 +1,139 @@
+[
+  {
+    "$type": "Tfl.Api.Presentation.Entities.RoadDisruption, Tfl.Api.Presentation.Entities",
+    "id": "TIMS-231236",
+    "url": "/Road/All/Disruption/TIMS-231236",
+    "point": "[-0.058822,51.659637]",
+    "severity": "Moderate",
+    "ordinal": 1,
+    "category": "Works",
+    "subCategory": "TfL works",
+    "comments": "[A10] Great Cambridge Road (Both directions) between [A105] Carterhatch Lane and Cambridge Gardens - Various lane closures and temporary pedestrian crossing signals are in operation to facilitate TfL works.",
+    "currentUpdate": "Traffic is flowing well.",
+    "currentUpdateDateTime": "2026-08-15T01:14:57Z",
+    "corridorIds": [
+      "a10"
+    ],
+    "startDateTime": "2026-07-23T07:00:00Z",
+    "endDateTime": "2026-09-12T04:00:00Z",
+    "lastModifiedTime": "2026-08-15T01:14:57Z",
+    "levelOfInterest": "High",
+    "location": "[A10] GREAT CAMBRIDGE ROAD (EN1 ) (Enfield)",
+    "status": "Active",
+    "geography": {
+      "type": "Point",
+      "coordinates": [
+        -0.058822,
+        51.659637
+      ],
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "EPSG:4326"
+        }
+      }
+    },
+    "isProvisional": false,
+    "hasClosures": false,
+    "roadDisruptionLines": [],
+    "roadDisruptionImpactAreas": [],
+    "recurringSchedules": []
+  },
+  {
+    "$type": "Tfl.Api.Presentation.Entities.RoadDisruption, Tfl.Api.Presentation.Entities",
+    "id": "TIMS-221115",
+    "url": "/Road/All/Disruption/TIMS-221115",
+    "point": "[-0.034587,51.525164]",
+    "severity": "Moderate",
+    "ordinal": 8,
+    "category": "Works",
+    "subCategory": "Utility works",
+    "comments": "[A11] Mile End Road (Both directions) at the junction of [A1205] Burdett Road - Various restrictions in place to facilitate Thames Water works. Additionally, Burdett Road is reduced to one lane in both directions. ",
+    "currentUpdate": "Delays are possible. ",
+    "currentUpdateDateTime": "2026-08-14T22:24:22Z",
+    "corridorIds": [],
+    "startDateTime": "2026-03-09T08:00:00Z",
+    "endDateTime": "2027-01-19T23:59:00Z",
+    "lastModifiedTime": "2026-08-14T22:24:44Z",
+    "levelOfInterest": "High",
+    "location": "[A11] MILE END ROAD (E1 ,E3 ) (Tower Hamlets)",
+    "status": "Active",
+    "geography": {
+      "type": "Point",
+      "coordinates": [
+        -0.034587,
+        51.525164
+      ],
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "EPSG:4326"
+        }
+      }
+    },
+    "streets": [
+      {
+        "$type": "Tfl.Api.Presentation.Entities.Street, Tfl.Api.Presentation.Entities",
+        "name": "[A11] MILE END ROAD (E1 ,E3 )",
+        "closure": "Open",
+        "directions": "Eastbound",
+        "segments": [
+          {
+            "$type": "Tfl.Api.Presentation.Entities.StreetSegment, Tfl.Api.Presentation.Entities",
+            "toid": "5000005169365987",
+            "lineString": "[[-0.034795,51.525086],[-0.034182,51.525255]]",
+            "sourceSystemId": 221115,
+            "sourceSystemKey": "TIMS"
+          }
+        ],
+        "sourceSystemId": 221115,
+        "sourceSystemKey": "TIMS"
+      }
+    ],
+    "isProvisional": false,
+    "hasClosures": false,
+    "roadDisruptionLines": [],
+    "roadDisruptionImpactAreas": [],
+    "recurringSchedules": []
+  },
+  {
+    "$type": "Tfl.Api.Presentation.Entities.RoadDisruption, Tfl.Api.Presentation.Entities",
+    "id": "TIMS-233394",
+    "url": "/Road/All/Disruption/TIMS-233394",
+    "point": "[0.211325,51.503382]",
+    "severity": "Minimal",
+    "ordinal": 51,
+    "category": "Hazards",
+    "subCategory": "Fire",
+    "comments": "[A13] Thames Gateway (Eastbound) at the junction of [A13] Thames Gateway - The lay-by is closed due to an earlier vehicle fire. ",
+    "currentUpdate": "Traffic is flowing well. ",
+    "currentUpdateDateTime": "2026-08-15T01:38:08Z",
+    "corridorIds": [
+      "a13"
+    ],
+    "startDateTime": "2026-08-14T08:49:07Z",
+    "endDateTime": "2026-08-14T23:59:59Z",
+    "lastModifiedTime": "2026-08-15T01:38:08Z",
+    "levelOfInterest": "Low",
+    "location": "[A13] THAMES GATEWAY (RM13 ,RM15 ) (Havering)",
+    "status": "Active",
+    "geography": {
+      "type": "Point",
+      "coordinates": [
+        0.211325,
+        51.503382
+      ],
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "EPSG:4326"
+        }
+      }
+    },
+    "isProvisional": false,
+    "hasClosures": false,
+    "roadDisruptionLines": [],
+    "roadDisruptionImpactAreas": [],
+    "recurringSchedules": []
+  }
+]

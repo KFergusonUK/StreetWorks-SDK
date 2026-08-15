@@ -239,6 +239,7 @@ def _fetch_works(key, client):
         from_paris,
         from_roma,
         from_sct,
+        from_tfl,
         from_trafficwales,
         from_trafficwatchni,
         from_vegvesen,
@@ -326,7 +327,7 @@ def _fetch_works(key, client):
         "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
-        "copenhagen": from_copenhagen,
+        "copenhagen": from_copenhagen, "tfl": from_tfl,
         # oslo's, helsinki's, canton_zurich's and vienna's coordinates are
         # projected (EPSG:25832, EPSG:3879, EPSG:2056 and EPSG:31256
         # respectively), so _coord_lonlat's WGS84-only guard skips them on

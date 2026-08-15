@@ -112,6 +112,68 @@ complete FastAPI receiver.
 > credentials, though the messages, once flowing, are received the same
 > credential-free way. This module handles the receiving side of both.
 
+## Transport for London (TfL Road Disruption)
+
+London roadworks are already in this SDK via Street Manager (the
+England-wide permit register covering every London borough) — but
+that's register-grade data reached through the SNS/S3 open-data
+machinery above, or an account-gated API. **TfL's Road Disruption feed
+is the accessible complement**: a plain keyless REST/JSON endpoint for
+anyone who wants to look at London roadworks without the Street Manager
+apparatus:
+
+```python
+from streetworks.tfl import TflClient
+from streetworks.common import from_tfl
+
+with TflClient() as tfl:
+    disruptions = tfl.iter_roadworks()  # category == "Works" only
+works = from_tfl(disruptions)
+```
+
+**Genuinely keyless — confirmed live, better than commonly assumed.**
+`GET https://api.tfl.gov.uk/Road/all/Disruption` returns full real data
+(118 real disruption rows at investigation time) with no `app_key` at
+all. TfL's free 500-requests-a-minute key plan remains real and
+available, but purely as an optional rate-limit courtesy — the same
+role Socrata's `X-App-Token` plays for `SodaClient`.
+
+**`category == "Works"` is a real, clean filter** — 116/118 real live
+records; the other 2 (`Hazards`/Fire, `Network delays`/Heavy traffic)
+were checked directly and are genuinely not roadworks.
+
+**Geometry states its own CRS explicitly on every record** — the
+cleanest CRS situation of any provider in this SDK: `"crs": {"type":
+"name", "properties": {"name": "EPSG:4326"}}`, genuine WGS84, no
+inference or cross-checking needed. Only `Point` geometry was ever seen
+live — a `roadDisruptionLines` field exists in the schema but was empty
+on every real record checked, so it isn't handled.
+
+**A real nuance to "TLRN, not all-London" — found, not just assumed.**
+`corridorIds` (a plausible road-number field, e.g. `["a10"]`) is
+**genuinely incomplete — only 51/116 (44%) of real Works records carry
+one, including just 11/21 of the core "TfL works" subcategory itself.**
+Not a reliable network-membership signal or join key — never promoted
+to `street_ref`.
+
+**`status` was `"Active"` on every real record checked** — this
+endpoint only returns currently-active disruptions, a genuinely
+different epistemic class from a permit application's own scheduled
+dates. Drives real `VERIFIED` date-confidence grading.
+
+**Do-not-dedupe against `streetworks.opendata`/Street Manager.** A
+works on a TLRN red route can genuinely appear in both — Street Manager
+as the permit record (register-grade, all-borough), TfL as the live
+operational disruption (operator-grade, strategic network). They answer
+different questions for different audiences; keep both.
+
+**Licence: TfL's own OGL v2.0-with-amendments terms, confirmed live**
+from `tfl.gov.uk/corporate/terms-and-conditions/transport-data-service`
+— requiring **three** real attribution statements, not just the one
+commonly quoted: *"Powered by TfL Open Data"*, *"Contains OS data ©
+Crown copyright and database rights 2016"*, and *"Geomni UK Map data ©
+and database rights [2019]"*.
+
 ## Geoplace DataVIA
 
 Basic auth or OAuth2 client credentials (server-to-server), the full NSG layer

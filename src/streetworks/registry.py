@@ -1833,6 +1833,54 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.trafficwales import TrafficWalesClient",
     ),
     ProviderEntry(
+        key="tfl",
+        name="Transport for London (Road Disruption)",
+        description=(
+            "TfL's live operational roadworks/disruption feed for London's "
+            "strategic road network - the accessible complement to Street "
+            "Manager's own all-borough permit register."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"England", "London"}),
+        administrative_area="Transport for London",
+        scope_note=(
+            "Confirmed live (2026-08-15, 118 real disruption rows, 116 "
+            "real Works rows) - credential-free, genuinely keyless, "
+            "better than the source brief's own 'register for a free "
+            "key' assumption; TfL's optional app_key only raises the "
+            "rate limit, the same role Socrata's X-App-Token plays for "
+            "SodaClient. category == 'Works' is a real, clean filter, "
+            "confirmed by reading the two excluded non-Works records "
+            "directly. Geometry states its own CRS explicitly "
+            "(EPSG:4326) on every record - the cleanest CRS situation "
+            "of any provider in this SDK. corridorIds (a plausible "
+            "road-number field) is genuinely incomplete - only 44% of "
+            "real Works rows carry one, including just half of the core "
+            "'TfL works' subcategory - so it's never promoted to "
+            "street_ref. status was 'Active' on every real row checked "
+            "(this endpoint only returns currently-active disruptions), "
+            "checked explicitly rather than assumed constant, driving "
+            "real VERIFIED date-confidence grading. Do-not-dedupe "
+            "against streetmanager's own opendata (all-London-borough "
+            "permit register, register-grade) - a works on a TLRN red "
+            "route can genuinely appear in both. Licence: TfL's own OGL "
+            "v2.0-with-amendments terms, confirmed live, requiring three "
+            "real attribution statements, not just the one commonly "
+            "quoted."
+        ),
+        credentials=None,
+        licence=(
+            "OGL v2.0 with TfL amendments - confirmed live; requires "
+            "three attribution statements ('Powered by TfL Open Data', "
+            "OS data, and Geomni UK Map data credits)"
+        ),
+        source_grade="operator",
+        _module="streetworks.tfl",
+        _client_name="TflClient",
+        import_line="from streetworks.tfl import TflClient",
+    ),
+    ProviderEntry(
         key="cciss",
         name="CCISS (Centro di Coordinamento Informazioni sulla Sicurezza Stradale)",
         description="Italy's real-time traffic bulletin RSS, from Italy's own confirmed RTTI NAP.",
