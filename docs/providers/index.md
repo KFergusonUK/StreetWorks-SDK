@@ -9,7 +9,7 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Gibraltar · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · UK   ~ Greece · Ireland · Sweden
+**Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Gibraltar · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · Ireland · UK   ~ Greece · Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
@@ -26,15 +26,18 @@ different constitutional category again, with its own
 [`streetworks.gibraltar`](gibraltar.md). "In progress" also collapses two
 genuinely different states (credentials-wanted vs.
 documented-but-unavailable) for scannability — the matrix below
-distinguishes these. **Canada, Portugal, and Austria all moved from
-in-progress to live** once DriveBC (British Columbia), Lisboa
-(Condicionamentos de Trânsito), and Vienna (verkehrswirksame
-Baustellen) shipped — real coverage in each is still partial
-(one province/city, not national — Austria's own national ASFINAG feed
-stays a Credentials-wanted scaffold), same as every other ✓ entry that
-isn't literally comprehensive; see [`docs/providers/canada.md`](canada.md),
-[`docs/providers/portugal.md`](portugal.md) and
-[`docs/providers/austria.md`](austria.md) for exactly what's covered
+distinguishes these. **Canada, Portugal, Austria, and Ireland all moved
+from in-progress to live** once DriveBC (British Columbia), Lisboa
+(Condicionamentos de Trânsito), Vienna (verkehrswirksame Baustellen),
+and Monaghan's own road network shipped — real coverage in each is
+still partial (one province/city/county, not national — Austria's own
+national ASFINAG feed stays a Credentials-wanted scaffold, and
+Ireland's own national MapRoad roadworks stays a documented-unavailable
+scaffold), same as every other ✓ entry that isn't literally
+comprehensive; see [`docs/providers/canada.md`](canada.md),
+[`docs/providers/portugal.md`](portugal.md),
+[`docs/providers/austria.md`](austria.md) and
+[`docs/providers/ireland.md`](ireland.md) for exactly what's covered
 and what isn't. This is the canonical coverage roster; `docs/index.md`'s
 copy quotes it rather than restating it independently.*
 
@@ -130,14 +133,14 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |
 | `streetworks.berlin` | Berlin's VIZ traffic-information-centre feeds — Landesmeldestelle + Verkehrsredaktion (no credentials, confirmed live 2026-08-08), the largest remaining German gap, merged via a verified id join key since neither feed alone is complete (an early assumption corrected by live data). Comprehensive city-wide streets, not state-network-only like Hamburg/Brandenburg | read |
 | `streetworks.madrid` | Ayuntamiento de Madrid's INFORMO municipal traffic-incidents feed (no credentials, confirmed live 2026-08-08, 217 real incidents), the gap DGT's national coverage never reaches (municipal streets). The first-tried URL was dead — Madrid relaunched its open-data portal in February 2026; this client targets the real current host. Filters on the source's own `es_obras` flag, not a free-text guess — real evidence excludes both lane closures and, surprisingly, asphalt-resurfacing operations | read |
-| `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks) and its real [Jersey Street Gazetteer](https://roadworks.gov.je/) sibling, [Guernsey Street Gazetteer](https://roadworks.gov.gg/) (both streets, licence unconfirmed, confirmed live 2026-08-16), [National Road Network (Canada)](https://geo.statcan.gc.ca/) (streets, Open Government Licence – Canada, confirmed live 2026-08-16), and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for any) | read |
+| `streetworks.arcgis` | [Jersey RoadWorkx](https://roadworks.gov.je/) (roadworks) and its real [Jersey Street Gazetteer](https://roadworks.gov.je/) sibling, [Guernsey Street Gazetteer](https://roadworks.gov.gg/) (both streets, licence unconfirmed, confirmed live 2026-08-16), [National Road Network (Canada)](https://geo.statcan.gc.ca/) (streets, Open Government Licence – Canada, confirmed live 2026-08-16), [Monaghan County Council road network](https://services-eu1.arcgis.com/YDJmfAKmZVpOnK2Q/) (segments, Ireland, licence unconfirmed, confirmed live 2026-08-16), and [TIGERweb](https://tigerweb.geo.census.gov/) (US Census Bureau road segments, public domain) — a reusable ArcGIS REST Feature/Map Service client underneath, not provider-specific (no credentials for any) | read |
 | `streetworks.wzdx` | [WZDx](https://github.com/usdot-jpo-ode/wzdx) — US roadworks ("work zones") via the WZDx standard — parser (v3.1–v4.2), generic feed client, and USDOT registry helper (no credentials) | read |
 | `streetworks.nycdot` | [NYC DOT Street Construction Permits](https://data.cityofnewyork.us/Transportation/Street-Construction-Permits-2022-Present/tqtj-sjs8) — New York City's own street-opening permit register (no credentials, confirmed live 2026-08-02), this SDK's second `source_grade=register` source after Street Manager and the first in the US. Not WZDx — a separate authority, separate shape, the local follow-on to 511NY's state coverage. Built on `streetworks.socrata`, a generic Socrata (SODA) client shared with `streetworks.wzdx.registry` | read |
 | `streetworks.chicagodot` | [CDOT Street Closures](https://data.cityofchicago.org/Transportation/Transportation-Department-Permits-Street-Closures/jdis-5sry) — Chicago's own street-closure permit register (no credentials, confirmed live 2026-08-03), this SDK's second US city permit register after NYC. Native WGS84 GeoJSON Point geometry (no WKT/CRS question, unlike NYC) — `iter_roadworks()` filters on real `worktype` values since the dataset's own pre-filter alone still mixes in block parties, festivals and filming | read |
 | `streetworks.paris` | [Chantiers à Paris](https://opendata.paris.fr/explore/dataset/chantiers-a-paris/) — the City of Paris's own occupation-permit register for street/public-space worksites (no credentials, confirmed live 2026-08-06), this SDK's third municipal permit register and the first on OpenDataSoft (the French/EU Socrata-equivalent), built bespoke. Geometry already WGS84 despite the underlying Lambert 93 survey CRS — OpenDataSoft reprojects on the way out. Licence ODbL 1.0 (share-alike), confirmed | read |
 | `streetworks.drivebc` | [DriveBC](https://api.open511.gov.bc.ca/) — British Columbia's own Open511 road-events feed (no credentials, confirmed live 2026-08-08, 246 real events), this SDK's first Canadian roadworks provider. Built bespoke, not a general Open511 parser — only one real roadworks-events Open511 jurisdiction was found live. Two real, mutually-exclusive schedule shapes (`intervals`/`recurring_schedules`) both handled. Licence OGL-BC, confirmed live | read |
 | `streetworks.lisboa` | Câmara Municipal de Lisboa's Condicionamentos de Trânsito feed (no credentials, confirmed live 2026-08-09, 694 real features), this SDK's first Portugal provider at any level — sidesteps the still-credential-parked national IMT NAP entirely. Real endpoint found by reading the platform's own Angular app bundle, not documented anywhere public; the catalogue's stale 2023 metadata doesn't reflect the genuinely current live data (453/694 real features carry a 2026 case id). Evidence-based `motivo` filter (68% classify as roadworks). Licence CC BY 4.0, confirmed live | read |
-| `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work | read |
+| `streetworks.maproad` | [MapRoad Roadworks Licensing](https://maproadroadworkslicensing.ie/MRL/) (Ireland) — registered as a documented, honestly-unavailable scaffold. A real, government-catalogued permit register (national + local roads) with a real API, but Ireland's own catalogue metadata (API Available: Yes, Open Data: No, Data Sharing: Yes, Personal Data: Yes) describes a formal, GDPR-gated data-sharing arrangement, not a self-service key — no published read-path shape found, so `MapRoadClient()` always raises `ProviderUnavailableError` rather than pretending to work. See [`docs/providers/ireland.md`](ireland.md#ireland--maproad-roadworks-licensing-documented-unavailable) | read |
 | `streetworks.greece` | Greece — registered as a documented, honestly-unavailable scaffold, the same tier as Road Report NT. Its real NAP ([nap.gov.gr](https://data.nap.gov.gr/)) carries only POI/sensor data (truck parking, VMS/VDS, weather, floating car data) — no roadworks or DATEX II Situation dataset at all, confirmed via its own real dataset titles. The portal is also currently unreachable (a real live 502). `GreeceClient()` always raises `ProviderUnavailableError` rather than guessing | read |
 | `streetworks.trafficwatchni` | [TrafficWatchNI](https://trafficwatchni.com/) — Northern Ireland roadworks/incidents RSS (DfI TICC; no credentials) | read |
 | `streetworks.trafficwales` | [Traffic Wales](https://traffic.wales/) — Welsh motorway/trunk roadworks RSS, EN + CY (no credentials) | read |

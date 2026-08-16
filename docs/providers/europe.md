@@ -1668,44 +1668,9 @@ navigation, but the exact self-service page returned a 404 — contact
 See [`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
 for the condensed table entry.
 
-## Ireland — MapRoad Roadworks Licensing (documented, unavailable)
-
-Investigated and registered honestly-unavailable, the same treatment
-Road Report NT (Australia) already established (see
-[`docs/providers/australia.md`](australia.md#act--tasmania--the-au-tail-plus-a-documented-northern-territory))
-— not silently skipped, but not a working client either.
-
-**TII's own DATEX II feed (`data.tii.ie`) was checked first and ruled
-out as the roadworks source.** Its real, published dataset catalogue
-(verified directly against its data.gov.ie mirror — all 20 real dataset
-titles enumerated) carries travel times, weather, VMS/VDS, collision
-rates, WIM sensor data, and traffic counts — no roadworks or Situation
-publication at all.
-
-**MapRoad Roadworks Licensing is the real roadworks source — a genuine
-national permit register covering both national and local roads** (TII's
-own national-road consents route through it; local authorities' regional/
-local consents also do), run by the Road Management Office under the
-Local Government Management Agency. If it were reachable, this would be
-this SDK's third `source_grade=register` source, and the first genuinely
-combined national+local one.
-
-**Why it's a documented scaffold, not a working client.** Ireland's own
-[PSB Data Catalogue entry](https://datacatalogue.gov.ie/dataset/maproad-roadworks-licensing-system)
-states, together: `API Available: Yes`, `Open Data: No`, `Data Sharing:
-Yes`, `Personal Data: Yes`. Read as a whole, this describes a real API
-gated behind a formal, GDPR-relevant data-sharing arrangement — not a
-self-service developer key the way Trafikverket/LINZ's are. Registration
-for MapRoad itself (`rmo.ie`) is a real, formal process (download a
-registration pack, complete it, email it to `contact@rmo.ie`) aimed at
-licence *applicants*, not read-only consumers. No endpoint, schema, or
-authentication mechanism for a read path was found published anywhere.
-`MapRoadClient()` always raises `ProviderUnavailableError` immediately,
-with no network call, rather than guessing at an unpublished private
-contract with real personal-data implications — see
-[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
-for the condensed table entry, and revisit if a documented read API, or
-a confirmed data-sharing route for non-applicants, ever surfaces.
+> Ireland — MapRoad Roadworks Licensing (documented, unavailable) moved
+> to its own page, [`docs/providers/ireland.md`](ireland.md), once
+> Ireland got a real, live provider (Monaghan) alongside it.
 
 ## Greece (documented, unavailable)
 

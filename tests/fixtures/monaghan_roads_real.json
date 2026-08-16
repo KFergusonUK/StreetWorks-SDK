@@ -1,0 +1,144 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.91563665072058,
+            54.100396544242
+          ],
+          [
+            -6.9155363759453,
+            54.1004026490003
+          ],
+          [
+            -6.91494546591585,
+            54.1004384731011
+          ],
+          [
+            -6.91482621688963,
+            54.1004323654438
+          ]
+        ]
+      },
+      "properties": {
+        "Road_Name": "L-31011-0",
+        "Road_Class": "Local Tertiary",
+        "Municipal_District": "Ballybay - Clones",
+        "Start_At": "Creeve - 4 Roads",
+        "Finish_At": "Creeve -4 Roads",
+        "OBJECTID": 1,
+        "GlobalID": "a058e4c6-3d2c-405a-9509-43d2fb289686",
+        "Shape__Length": 633.7433655221865
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.90022066786701,
+            54.1217724051656
+          ],
+          [
+            -6.9009477029804,
+            54.1215102063912
+          ],
+          [
+            -6.90127861607101,
+            54.1213382836958
+          ],
+          [
+            -6.9014448961721,
+            54.1212902035225
+          ]
+        ]
+      },
+      "properties": {
+        "Road_Name": "L-31002-0",
+        "Road_Class": "Local Tertiary",
+        "Municipal_District": "Ballybay - Clones",
+        "Start_At": "Corrybrannan -3 Roads South",
+        "Finish_At": "Corrybrannan",
+        "OBJECTID": 2,
+        "GlobalID": "8d1a3e38-6588-4f44-b58c-f8aadeafda9b",
+        "Shape__Length": 340.55276940609474
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.9028363997353,
+            54.1300229063846
+          ],
+          [
+            -6.90139038442742,
+            54.1296985506211
+          ],
+          [
+            -6.90100512801628,
+            54.1296139850224
+          ],
+          [
+            -6.90064171043597,
+            54.1295386029989
+          ]
+        ]
+      },
+      "properties": {
+        "Road_Name": "R-183-12",
+        "Road_Class": "Regional",
+        "Municipal_District": "Ballybay - Clones",
+        "Start_At": "Ballybay Town Boundary - Cornamucklaglass",
+        "Finish_At": "Tonyglassan - 3 Roads",
+        "OBJECTID": 1,
+        "GlobalID": "8a19ea5b-aa85-4926-bfde-7da14f5fd617",
+        "Shape__Length": 2900.279171551006
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.86667540424498,
+            54.2752477083205
+          ],
+          [
+            -6.86673801428122,
+            54.2752271821711
+          ],
+          [
+            -6.867066126399,
+            54.2751200187961
+          ],
+          [
+            -6.86730865097979,
+            54.2750539203359
+          ]
+        ]
+      },
+      "properties": {
+        "Road_Name": "N-12-0",
+        "Road_Class": "National Primary",
+        "Start_At": "CB at Ardgonnell Bridge",
+        "Finish_At": "N2 Junction at Coolshannagh",
+        "OBJECTID": 1,
+        "GlobalID": "b3625ae0-8546-4bd6-a833-4d2e1632174f",
+        "Shape__Length": 6861.286136884491
+      }
+    }
+  ]
+}

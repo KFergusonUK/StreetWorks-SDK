@@ -2068,6 +2068,38 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.arcgis.nrn import NrnClient",
     ),
     ProviderEntry(
+        key="monaghan",
+        name="Monaghan County Council road network",
+        description="A real Irish county's own road network, over its ArcGIS REST services.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Ireland", "Monaghan"}),
+        administrative_area="Monaghan County Council",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, this SDK's "
+            "first Irish gazetteer coverage. A pilot for a real, "
+            "genuine 31-county fan-out (see docs/providers/pending.md's "
+            "own live investigation, which ruled out a single national "
+            "named-street source for Ireland). Segment only, and "
+            "deliberately never a fabricated Street - real Irish rural "
+            "roads genuinely have no name; the real Road_Name field is "
+            "Ireland's own official route number ('L-31011-0'), not a "
+            "street name, carried as a real Identifier instead of a "
+            "fabricated one. Three real, distinct road-class services "
+            "(National/Regional/Local, 27/122/1,612 real segments). "
+            "Licence unconfirmed - no explicit statement found on the "
+            "real ArcGIS Online items checked, the same open-by-design "
+            "situation Jersey's own services have; see module "
+            "docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.arcgis.monaghan",
+        _client_name="MonaghanRoadsClient",
+        import_line="from streetworks.arcgis.monaghan import MonaghanRoadsClient",
+    ),
+    ProviderEntry(
         key="vialietuva",
         name="Via Lietuva",
         description="Lithuania's national roadworks feed (open data.gov.lt route).",

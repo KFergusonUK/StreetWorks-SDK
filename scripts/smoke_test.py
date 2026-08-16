@@ -1618,6 +1618,20 @@ def check_gibraltar() -> str:
     return f"{len(streets)} real street(s), e.g. {sample!r}"
 
 
+def check_monaghan() -> str:
+    """Monaghan County Council road network needs no credentials.
+    Fetches the smallest real road class (National, 27 records) - see
+    streetworks.arcgis.monaghan's module docstring."""
+    from streetworks.arcgis.monaghan import MonaghanRoadsClient
+
+    with MonaghanRoadsClient() as monaghan:
+        roads = list(monaghan.iter_roads("national"))
+    if not roads:
+        raise RuntimeError("query returned no real roads")
+    sample = roads[0]["properties"].get("Road_Name")
+    return f"{len(roads)} real road(s), e.g. {sample!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1787,6 +1801,8 @@ def main() -> int:
     reporter.check("ANNCSU (Italy)", [], check_anncsu)
     # Gibraltar Street Gazetteer needs no credentials
     reporter.check("Gibraltar Street Gazetteer", [], check_gibraltar)
+    # Monaghan County Council road network needs no credentials
+    reporter.check("Monaghan County Council road network", [], check_monaghan)
 
     print()
     if reporter.ran == 0:

@@ -2,6 +2,49 @@
 
 ## [Unreleased]
 
+### Added — Monaghan County Council road network, this SDK's first Irish gazetteer coverage (2026-08-16)
+
+`streetworks.arcgis.monaghan.MonaghanRoadsClient` / `streetworks.common
+.from_monaghan_road` - reopens the Ireland streets question from a
+different angle after the national-level ruling below: a real,
+genuine county-council pilot rather than a national build. Ireland
+now moves from "in progress" to "live" in the coverage roster, the
+same way Canada/Portugal/Austria did on a real partial build.
+
+```python
+from streetworks.arcgis.monaghan import MonaghanRoadsClient
+from streetworks.common import from_monaghan_road
+
+with MonaghanRoadsClient() as monaghan:
+    segments = [from_monaghan_road(f) for f in monaghan.iter_roads("local")]
+```
+
+- **`Segment` only, and deliberately never a fabricated `Street`** -
+  real Irish rural roads genuinely have no name (confirmed live, see
+  the investigation below); `Road_Name` is Ireland's own official route
+  number (`"L-31011-0"`), carried as a real `Identifier`
+  (`scheme="road_number"`) rather than misrepresented as a street name.
+  `names` is always the empty tuple on every real record this converter
+  produces - the same honest "no synthetic streets" discipline
+  TIGERweb's and NRN's own converters already established.
+- **Three real, distinct road-class services** (National: 27 real
+  segments, Regional: 122, Local: 1,612), all on the same hosted
+  ArcGIS deployment. `Road_Class` becomes `StreetType.label`;
+  `Municipal_District` becomes `administrative_area` where stated
+  (checked live: absent on every real `National_Roads` record).
+- **Real WGS84 GeoJSON by default** - the service's stated native
+  reference is `EPSG:2157` (Irish Transverse Mercator), but a plain
+  request with no `outSR` already returns genuine WGS84, the same real
+  behaviour TIGERweb's and NRN's own services show.
+- **Licence unconfirmed** - no explicit statement found on the real
+  ArcGIS Online items checked, the same open-by-design situation
+  Jersey's own services have; built on the project owner's explicit
+  instruction.
+- Ireland's docs moved to their own page,
+  [`docs/providers/ireland.md`](docs/providers/ireland.md) (MapRoad's
+  existing content relocated verbatim from `europe.md`, no change),
+  now that there's a real live provider alongside it.
+
 ### Investigated — Ireland streets gazetteer, ruled out on a real structural finding (2026-08-16)
 
 Not a missing-data gap - Ireland's road network outside towns is
@@ -20,7 +63,7 @@ the open. See `docs/providers/pending.md`.
 ### Added — Gibraltar Street Gazetteer, this SDK's first British Overseas Territory coverage (2026-08-16)
 
 `streetworks.gibraltar.GibraltarStreetsClient` / `streetworks.common
-.from_gibraltar_street` - found by checking two things the user flagged
+.from_gibraltar_street` - found by checking two things flagged
 as possibly missed: the Shetland Isles (confirmed already fully covered
 by existing `srwr`/`openusrn` national coverage, nothing to build) and
 Gibraltar (genuinely new - not built at all before this).
