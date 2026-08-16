@@ -2,7 +2,33 @@
 
 ## [Unreleased]
 
-### Added — ANNCSU, this SDK's first Italian streets gazetteer, breaking the Germany/Portugal streak (2026-08-16)
+### Added — `av_route_avoiding_works.py`, a real Durham last-mile routing example (2026-08-16)
+
+A new `examples/` script: plans a pickup -> dropoff route across Durham
+City (OSRM's public demo server, real OpenStreetMap roads), checks it
+against Street Manager's real, live, in-progress works, and reroutes
+around any that sit within `--threshold-m` (default 40m) of the route -
+or says so honestly when no detour clears them, rather than pretending
+success. Default pickup/dropoff are real, Nominatim-geocoded Durham
+landmarks (railway station, Market Place); real production Street
+Manager data for that pair currently has exactly one unavoidable
+conflict, on Leazes Road - a genuine chokepoint on Durham's historic
+river-loop peninsula, not a bug (independently confirmed by finding a
+real, successful reroute elsewhere, in Newton Hall's grid-street estate,
+under the same code path). `--map [PATH]` writes a Plotly/CartoDB map
+matching the style of `compare_active_works.py`/`collaboration_finder.py`.
+
+- **A real bug found and fixed via live testing, not assumed correct
+  from code review: a single fixed 180m detour offset was too small.**
+  OSRM's own waypoint-snapping behaviour means a modest offset can
+  still route back onto the same road the conflict sits on - confirmed
+  live in Newton Hall, where a 180m offset left the route passing
+  exactly back through the conflict point (0.0m clearance) while 200m
+  cleared it via a genuinely different parallel street. Fixed by trying
+  a short escalating list of offsets (150/250/400/600/900m), both
+  sides, smallest first - still one bounded heuristic, not a search
+  algorithm, just one that actually succeeds when a real detour exists.
+
 
 `streetworks.anncsu` / `streetworks.common.from_anncsu` - Italy's real
 national street-name register, jointly run by Agenzia delle Entrate (the

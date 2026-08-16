@@ -74,6 +74,10 @@ missing.
   download — disproportionate just to plot a few dots, so it isn't done here. (Scotland still
   shows on the coverage layer above, correctly, as keyless-covered.)
 
+## Applications
+
+- **[`av_route_avoiding_works.py`](../examples/av_route_avoiding_works.py)** — a small, visual "AV last-mile" demo: plans a real pickup → dropoff route across Durham City on OSRM's public demo server (real OpenStreetMap roads, keyless), checks it against Street Manager's real, live, in-progress works, and reroutes around any that sit within `--threshold-m` (default 40m) of the route — or says so plainly when no detour clears them, rather than pretending success. Default pickup/dropoff are real Nominatim-geocoded Durham landmarks (the railway station, Market Place); needs Street Manager credentials for the works side, none for routing. `--map [PATH]` writes a Plotly/CartoDB map in the same style as `compare_active_works.py`. Distance/offset maths is a simple equirectangular approximation, adequate at Durham's ~1-2km route scale — stated honestly, not geodesically exact.
+
 ## Worker-safety context
 
 - **[`crime_context/`](../examples/crime_context/)** — a neighbourhood-level recorded-crime context map for one police force, built on `streetworks.police`. Background context for lone-worker/night-shift planning around street works — explicitly not a risk score or risk assessment. See its own [README](../examples/crime_context/README.md).
