@@ -2,6 +2,36 @@
 
 ## [Unreleased]
 
+### Changed — Portugal streets gazetteer investigated and ruled out at the national level, matching Germany's outcome (2026-08-16)
+
+Followed up an older, partial finding in `docs/nap-survey.md` that had
+never made it into `docs/providers/pending.md`. Full findings now in
+`docs/portugal-streets-investigation.md`.
+
+- **Infraestruturas de Portugal (IP)'s promoted national road-network
+  distribution is shapefile-only, confirmed live.** DGT's own INSPIRE
+  ATOM feed for the national 1:200,000 Transport Networks dataset
+  contains the spec's optional WFS-link element still commented out,
+  with the literal unfilled template placeholder
+  (`href="http://xyz.org/wfs?..."`) - a decisive confirmation no
+  direct-access query service was ever wired up, not an oversight in
+  the search. The same feed states a real licence discrepancy against
+  `dados.gov.pt`'s `cc-by` label for the nominally same data
+  (`<rights>Sujeito a licenciamento</rights>`), not reconciled.
+- **A real, live, keyless, queryable ArcGIS MapServer exists anyway -
+  found by tracing IP's own public map viewer**, the same technique that
+  found DfI Roads' real backend. Its full real field list
+  (`roadnumber`/`jurisdicao`/`gestao`/`road1`) carries no name field at
+  all; real sample values (`roadnumber="A1"`/`road1="IC1"`) are
+  route-classification codes, not street names - the same "real
+  geometry, no named-street identity" outcome Germany's BKG landed on,
+  confirmed by content, not assumed from the dataset's coarse scale.
+- IMT's national NAP remains exactly as previously found - an Angular
+  SPA with no discoverable backend, genuinely unresolved, not
+  ruled out. Municipal fallback (Porto and others) remains real,
+  open-ended, unchecked work - the same shape as Germany's own state
+  fan-out.
+
 ### Changed — Dedicated docs sections for four Credentials-wanted scaffolds that only had table/blockquote mentions (2026-08-16)
 
 `streetworks.datex2.trafikverket`, `streetworks.datex2.vejdirektoratet`,

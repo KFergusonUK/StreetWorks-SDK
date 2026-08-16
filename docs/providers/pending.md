@@ -17,12 +17,27 @@ its API shape has been confirmed one way or another (live-verified,
 Credentials-wanted, or Documented-unavailable; see
 [`docs/contributing/scaffolds.md`](../contributing/scaffolds.md)).
 
-- **Portugal — partially built, no longer fully pending.** Lisboa
-  (Condicionamentos de Trânsito) is now a real, confirmed provider,
+- **Portugal — roadworks partially built; streets gazetteer checked and
+  ruled out at the national level, the same outcome as Germany.** Lisboa
+  (Condicionamentos de Trânsito) is a real, confirmed roadworks provider,
   sidestepping the still-credential-parked national IMT National Access
-  Point entirely — see [`docs/providers/portugal.md`](portugal.md). Porto
-  and other municipalities, and the national NAP itself, remain
-  genuinely unchecked/unbuilt.
+  Point (`nap-portugal.imt-ip.pt`, an Angular SPA with no discoverable
+  backend, genuinely unresolved not ruled out) entirely — see
+  [`docs/providers/portugal.md`](portugal.md). **Streets** is a separate
+  question, investigated 2026-08-16 — full findings in
+  [`docs/portugal-streets-investigation.md`](../portugal-streets-investigation.md).
+  Infraestruturas de Portugal (IP)'s promoted national road-network
+  distribution is shapefile-only (its own ATOM feed's WFS-link element
+  is a literal unfilled template placeholder, never wired up), but a
+  real, live, keyless, queryable ArcGIS MapServer was found anyway by
+  tracing IP's own public map viewer — the same technique that found DfI
+  Roads' real backend. Its full field list (`roadnumber`/`jurisdicao`/
+  `gestao`/`road1`) carries **no name field at all**; real sample values
+  (`roadnumber="A1"`/`road1="IC1"`) are route-classification codes, not
+  street names — the same "real geometry, no named-street identity"
+  outcome Germany's BKG landed on. Porto and other municipalities remain
+  genuinely unchecked/unbuilt — the same open, per-municipality fallback
+  shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
 - **Canada — partially built, no longer fully pending.** British
   Columbia (DriveBC, Open511) is now a real, confirmed provider, and
