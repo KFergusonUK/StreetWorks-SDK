@@ -92,11 +92,12 @@ Map showing areas included in the SDK (Green - Open / Orange - Registration) as 
 
 ## Examples
 
-18 runnable examples in [`examples/`](examples/) — single-provider reads,
+19 runnable examples in [`examples/`](examples/) — single-provider reads,
 a Street Manager Open Data receiver, a Section 50 write-path connector
 (sandbox-verified, not production), two cross-provider comparisons/maps,
-and two visual showcases (a lone-worker crime-context map, an OS Open
-USRN terrain drape with a 3D-print export). Each one's docstring states
+a real-time AV last-mile router that reroutes around live roadworks, and
+two visual showcases (a lone-worker crime-context map, an OS Open USRN
+terrain drape with a 3D-print export). Each one's docstring states
 exactly what it needs and what state it's really in — see
 [`docs/examples.md`](docs/examples.md) for the curated, one-line-per-example
 index.
