@@ -94,6 +94,56 @@ path) is dead — confirmed to 404-redirect to a generic catalogue landing
 page — so this cites the real, live OGL-BC text instead, not that stale
 pointer.
 
+## National Road Network (NRN, streets gazetteer)
+
+This SDK's first Canadian streets/gazetteer provider — Statistics
+Canada / Natural Resources Canada's real, live, keyless ArcGIS REST
+service, found via the same `open.canada.ca` catalogue-entry route that
+gave IDEE Transportes its shape for Spain:
+
+```python
+from streetworks.arcgis.nrn import NrnClient, LAYER_IDS
+from streetworks.common import from_nrn
+
+toronto_bbox = (-79.40, 43.64, -79.38, 43.66)
+layer = LAYER_IDS["local_roads"]["ON"]
+with NrnClient() as nrn:
+    segments = [from_nrn(f) for f in nrn.iter_roads(layer, bbox=toronto_bbox)]
+```
+
+**Segment only, same TIGERweb/NWB outcome — no separate named-street
+entity exists in this REST service**, checked live, not assumed. **65
+real, genuinely non-redundant layers** — 5 road-class tiers (Trans-Canada
+Highway, National Highway System, Major Roads, Local Roads, Alleyways) ×
+13 provinces/territories, confirmed live by comparing feature counts
+(Alberta alone: 2,556 / 7,700 / 55,876 / 443,392 / 443,593 — five
+genuinely different totals, not a cartographic-scale pyramid the way
+TIGERweb's own layers 0–9 turned out to be). Real street names confirmed
+live in downtown Toronto (`"Wellington Street West"`, `"Mccaul Street"`,
+`"F G Gardiner Expressway"`) alongside a real `"Unknown"` placeholder
+NRN itself uses for genuinely unrecorded names — treated as no name at
+all, never carried through literally.
+
+**No genuine per-segment identifier is exposed over this REST
+service** (unlike the bulk GeoPackage/Shapefile product's own real `NID`
+field) — `Segment.identifiers` stays empty on every real record.
+**`administrative_area` uses the same shared-value-only discipline
+`from_bdtopo` established** for its own real left/right commune split:
+`l_placenam`/`r_placenam` genuinely diverge on segments that sit on a
+real administrative boundary (confirmed live, a real Ontario segment
+between "Township of MacDonald, Meredith and Aberdeen Additional" and
+"Township of Laird") — a single field can't honestly state two
+different real values, so this stays `None` rather than an arbitrary
+pick.
+
+**CRS**: the service's stated native reference is NAD83(CSRS) (`wkid
+4140`/`4617`), but real `f=geojson` output comes back genuinely WGS84-
+shaped regardless of `outSR` — confirmed live, the same real behaviour
+TIGERweb's own service exhibits. Pagination and bounding-box filtering
+both genuinely work (confirmed live against a 644,758-record Ontario
+layer). Licence: **Open Government Licence – Canada**, stated directly
+on the real `open.canada.ca` catalogue entry.
+
 ## The rest of the Canadian landscape
 
 Not built yet — see [`docs/providers/pending.md`](pending.md) for what's

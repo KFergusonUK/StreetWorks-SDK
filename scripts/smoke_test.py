@@ -1094,6 +1094,24 @@ def check_tigerweb() -> str:
     return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
 
 
+def check_nrn() -> str:
+    """National Road Network (Canada) needs no credentials. Queries a
+    small real bounding box (downtown Toronto, Local Roads/Ontario layer)
+    rather than the full national dataset - see streetworks.arcgis.nrn's
+    module docstring."""
+    from streetworks.arcgis.nrn import LAYER_IDS, NrnClient
+
+    toronto_bbox = (-79.40, 43.64, -79.38, 43.66)
+    layer = LAYER_IDS["local_roads"]["ON"]
+    with NrnClient() as nrn:
+        roads = list(nrn.iter_roads(layer, bbox=toronto_bbox))
+    if not roads:
+        raise RuntimeError("bbox query returned no results for a known real area")
+    named = [r for r in roads if r["properties"].get("l_stname_c") not in (None, "Unknown")]
+    sample_name = named[0]["properties"]["l_stname_c"]
+    return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
+
+
 def check_wa_mainroads() -> str:
     """Main Roads WA WebEOC Roadworks needs no credentials - see
     streetworks.au.wa. Fetches the whole layer (a real total of 227
@@ -1670,6 +1688,8 @@ def main() -> int:
     # Jersey and Guernsey Street Gazetteers need no credentials
     reporter.check("Jersey Street Gazetteer", [], check_jersey_streets)
     reporter.check("Guernsey Street Gazetteer", [], check_guernsey_streets)
+    # National Road Network (Canada) needs no credentials
+    reporter.check("National Road Network (Canada)", [], check_nrn)
     # Main Roads WA WebEOC Roadworks needs no credentials
     reporter.check("Main Roads WA (Australia)", [], check_wa_mainroads)
     # QLDTraffic Events needs no credentials (a real, shared public API key)

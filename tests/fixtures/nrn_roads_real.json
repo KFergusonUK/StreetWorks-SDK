@@ -1,0 +1,360 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 26431,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.39177153547757,
+            43.644726880518824
+          ],
+          [
+            -79.3905131350978,
+            43.64500358062391
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 26431,
+        "datasetnam": "Ontario",
+        "roadclass": "Collector",
+        "l_stname_c": "Wellington Street West",
+        "r_stname_c": "Wellington Street West",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "City of Toronto",
+        "r_placenam": "City of Toronto",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.0012884616602532874
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27011,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.39304093701436,
+            43.65809308282966
+          ],
+          [
+            -79.39330383715327,
+            43.658739182932386
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 27011,
+        "datasetnam": "Ontario",
+        "roadclass": "Collector",
+        "l_stname_c": "Mccaul Street",
+        "r_stname_c": "Mccaul Street",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "City of Toronto",
+        "r_placenam": "City of Toronto",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.0006975396906623479
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27179,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.39709953810832,
+            43.65565168221639
+          ],
+          [
+            -79.39712713812267,
+            43.65571738222679
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 27179,
+        "datasetnam": "Ontario",
+        "roadclass": "Local / Street",
+        "l_stname_c": "Huron Street",
+        "r_stname_c": "Huron Street",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "City of Toronto",
+        "r_placenam": "City of Toronto",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 7.126184109694498e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27822,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.39313203588895,
+            43.64443718040683
+          ],
+          [
+            -79.39319063591847,
+            43.6445639804267
+          ],
+          [
+            -79.3932098359282,
+            43.644606180433335
+          ],
+          [
+            -79.39322553593504,
+            43.64462828043658
+          ],
+          [
+            -79.39325043594454,
+            43.64464588043854
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 27822,
+        "datasetnam": "Ontario",
+        "roadclass": "Collector",
+        "l_stname_c": "Clarence Square",
+        "r_stname_c": "Clarence Square",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "City of Toronto",
+        "r_placenam": "City of Toronto",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.0015086049183115219
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28262,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.38500843292205,
+            43.64012598000502
+          ],
+          [
+            -79.38465483282019,
+            43.64026118004473
+          ],
+          [
+            -79.3841826326803,
+            43.64039638008972
+          ],
+          [
+            -79.38378743256496,
+            43.64052948013092
+          ],
+          [
+            -79.38356063249897,
+            43.64060858015503
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 28262,
+        "datasetnam": "Ontario",
+        "roadclass": "Ramp",
+        "l_stname_c": "F G Gardiner Expressway",
+        "r_stname_c": "F G Gardiner Expressway",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "City of Toronto",
+        "r_placenam": "City of Toronto",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.0035541215578389178
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -88.60455503433245,
+            53.531711076401216
+          ],
+          [
+            -88.60469423438722,
+            53.53174677639473
+          ],
+          [
+            -88.60483343444723,
+            53.53180737639121
+          ],
+          [
+            -88.6049869345144,
+            53.531878776387735
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 3,
+        "datasetnam": "Ontario",
+        "roadclass": "Local / Street",
+        "l_stname_c": "Unknown",
+        "r_stname_c": "Unknown",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "Unknown",
+        "r_placenam": "Unknown",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.00046481724776944674
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 242,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -84.04667030467658,
+            46.44158621415801
+          ],
+          [
+            -84.03105489969774,
+            46.44163751504175
+          ],
+          [
+            -84.03034129947021,
+            46.441639915082106
+          ],
+          [
+            -84.03020089942696,
+            46.44165341509211
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 242,
+        "datasetnam": "Ontario",
+        "roadclass": "Local / Street",
+        "l_stname_c": "Bar River Road East",
+        "r_stname_c": "Bar River Road East",
+        "rtename1en": "Unknown",
+        "rtename2en": "Unknown",
+        "rtename3en": "Unknown",
+        "rtename4en": "Unknown",
+        "rtename1fr": "Unknown",
+        "rtename2fr": "Unknown",
+        "rtename3fr": "Unknown",
+        "rtename4fr": "Unknown",
+        "rtnumber1": "Unknown",
+        "rtnumber2": "Unknown",
+        "rtnumber3": "Unknown",
+        "rtnumber4": "Unknown",
+        "rtnumber5": "Unknown",
+        "l_placenam": "Township of MacDonald, Meredith and Aberdeen Additional",
+        "r_placenam": "Township of Laird",
+        "wms_50m": 0,
+        "wms_4m": 0,
+        "wms_500k": 0,
+        "wms_100k": 1,
+        "wms_10k": 1,
+        "SHAPE_Length": 0.01647013584667155
+      }
+    }
+  ]
+}

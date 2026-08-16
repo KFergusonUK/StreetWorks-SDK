@@ -39,13 +39,17 @@ Credentials-wanted, or Documented-unavailable; see
   genuinely unchecked/unbuilt — the same open, per-municipality fallback
   shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
-- **Canada — partially built, no longer fully pending.** British
-  Columbia (DriveBC, Open511) is now a real, confirmed provider, and
-  Quebec City's WZDx feed was already covered — see
-  [`docs/providers/canada.md`](canada.md). Ontario 511 was checked live
-  (confirmed not to publish WZDx) but not built; other provinces and
-  municipal portals (Toronto, Montreal, Vancouver) remain genuinely
-  unchecked.
+- **Canada — roadworks partially built, streets now fully built
+  nationally.** British Columbia (DriveBC, Open511) is a real, confirmed
+  roadworks provider, and Quebec City's WZDx feed was already covered —
+  see [`docs/providers/canada.md`](canada.md). Ontario 511 was checked
+  live (confirmed not to publish WZDx) but not built; other provinces
+  and municipal roadworks portals (Toronto, Montreal, Vancouver) remain
+  genuinely unchecked. **Streets is no longer pending at all** — the
+  National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
+  is real, live, keyless, and covers all 13 provinces/territories
+  nationally in one build (Segment only, the same TIGERweb/NWB
+  outcome — see `docs/providers/canada.md`).
 - **NUAR (National Underground Asset Register, UK) — a different case
   from every other entry on this page: the model is scoped, only the
   transport is still pending.** A new data class, not roadworks — buried

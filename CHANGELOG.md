@@ -2,6 +2,50 @@
 
 ## [Unreleased]
 
+### Added — National Road Network (NRN), this SDK's first Canadian streets/gazetteer provider (2026-08-16)
+
+`streetworks.arcgis.nrn.NrnClient` / `streetworks.common.from_nrn` -
+Statistics Canada / Natural Resources Canada's real, live, keyless
+ArcGIS REST service, found via the same `open.canada.ca` catalogue-entry
+route that gave IDEE Transportes its shape for Spain. TIGERweb-scale on
+purpose - the user asked for a full national build, not a single-
+province pilot.
+
+```python
+from streetworks.arcgis.nrn import NrnClient, LAYER_IDS
+from streetworks.common import from_nrn
+
+toronto_bbox = (-79.40, 43.64, -79.38, 43.66)
+layer = LAYER_IDS["local_roads"]["ON"]
+with NrnClient() as nrn:
+    segments = [from_nrn(f) for f in nrn.iter_roads(layer, bbox=toronto_bbox)]
+```
+
+- **Segment only** - the same TIGERweb/NWB outcome, confirmed live: no
+  separate named-street entity exists anywhere in this REST service.
+- **65 real, genuinely non-redundant layers** - 5 road-class tiers x 13
+  provinces/territories, confirmed live by comparing feature counts
+  (Alberta: 2,556/7,700/55,876/443,392/443,593 - five different totals,
+  not a cartographic pyramid the way TIGERweb's own layers 0-9 turned
+  out to be).
+- **A real `"Unknown"` placeholder** - NRN's own stated convention for
+  "genuinely no name recorded" - applies to both street names and place
+  names (confirmed live on a real 13% of a 644,758-record Ontario
+  sample for place names alone); treated as no value at all, never
+  carried through literally.
+- **`administrative_area` uses the same shared-value-only discipline**
+  `from_bdtopo` established for its own real left/right commune split:
+  a real Ontario segment's `l_placenam`/`r_placenam` genuinely diverge
+  on an actual township boundary - stays `None` rather than an
+  arbitrary pick.
+- **No genuine per-segment identifier exposed over this REST service**
+  (unlike the bulk GeoPackage product's own real `NID` field) -
+  `Segment.identifiers` stays empty on every real record.
+- **CRS**: stated native NAD83(CSRS) (`wkid 4140`/`4617`), but real
+  `f=geojson` output is genuinely WGS84-shaped regardless of `outSR` -
+  the same real behaviour TIGERweb's own service exhibits. Licence:
+  Open Government Licence - Canada.
+
 ### Added — Jersey and Guernsey Street Gazetteers, this SDK's first Channel Islands streets coverage (2026-08-16)
 
 `streetworks.arcgis.jersey.JerseyStreetsClient` / `streetworks.common

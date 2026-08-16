@@ -38,6 +38,7 @@ from .from_lisboa import from_lisboa
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
 from .from_milano import from_milano
+from .from_nrn import from_nrn
 from .from_nsw_livetraffic import from_nsw_livetraffic
 from .from_nvdb import from_nvdb
 from .from_nwb import from_nwb
@@ -160,4 +161,5 @@ __all__ = [
     "from_anncsu",
     "from_jersey_street",
     "from_guernsey_street",
+    "from_nrn",
 ]

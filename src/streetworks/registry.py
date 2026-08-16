@@ -2035,6 +2035,39 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.arcgis.tigerweb import TIGERwebClient",
     ),
     ProviderEntry(
+        key="nrn",
+        name="National Road Network (NRN, Canada)",
+        description="Canada's national road-segment network, over Statistics Canada's ArcGIS REST.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Canada"}),
+        administrative_area="Statistics Canada / Natural Resources Canada",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, this SDK's "
+            "first Canadian streets/gazetteer provider, found via the "
+            "same GeoBase-series catalogue entry that gave IDEE "
+            "Transportes its shape for Spain. Segment only, the same "
+            "TIGERweb/NWB outcome - no separate named-street entity "
+            "exists in this REST service. 65 real, genuinely "
+            "non-redundant layers (5 road-class tiers x 13 provinces/ "
+            "territories, confirmed live by comparing feature counts - "
+            "not a cartographic pyramid like TIGERweb's own layers "
+            "0-9). No genuine per-segment identifier is exposed over "
+            "this REST service (unlike the bulk GeoPackage product's "
+            "own NID field) - Segment.identifiers stays empty. Real "
+            "left/right place-name divergence on administrative-"
+            "boundary segments handled the same way from_bdtopo's own "
+            "commune split is: administrative_area is the shared value "
+            "only, None where the two sides genuinely differ, never an "
+            "arbitrary pick. Licence: Open Government Licence - Canada."
+        ),
+        credentials=None,
+        licence="Open Government Licence - Canada",
+        source_grade="register",
+        _module="streetworks.arcgis.nrn",
+        _client_name="NrnClient",
+        import_line="from streetworks.arcgis.nrn import NrnClient",
+    ),
+    ProviderEntry(
         key="vialietuva",
         name="Via Lietuva",
         description="Lithuania's national roadworks feed (open data.gov.lt route).",
