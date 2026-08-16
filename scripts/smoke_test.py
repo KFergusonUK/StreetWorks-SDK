@@ -107,6 +107,7 @@ refuses to touch production. All checks are read-only either way.
 
 from __future__ import annotations
 
+import itertools
 import os
 import sys
 import traceback
@@ -1511,6 +1512,20 @@ def check_idee() -> str:
     return f"{len(roads)} road(s), {resolved} with resolved geometry"
 
 
+def check_osni() -> str:
+    """Northern Ireland OSNI Streetnames needs no credentials. Exercises
+    the real OpenDataNI bulk-download route (the documented ArcGIS REST
+    MapServer endpoint is currently down - see
+    streetworks.osni.client's module docstring)."""
+    from streetworks.osni import OsniStreetnamesClient
+
+    with OsniStreetnamesClient() as osni:
+        streets = list(itertools.islice(osni.iter_streetnames(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streetnames")
+    return f"{len(streets)} real street(s), e.g. {streets[0].streetname!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1667,6 +1682,8 @@ def main() -> int:
     reporter.check("UK Police (crime safety signal)", [], check_police)
     # IDEE Transportes (Spain national road network) needs no credentials
     reporter.check("IDEE Transportes (Spain)", [], check_idee)
+    # OSNI Streetnames (Northern Ireland gazetteer) needs no credentials
+    reporter.check("OSNI Streetnames (Northern Ireland)", [], check_osni)
 
     print()
     if reporter.ran == 0:

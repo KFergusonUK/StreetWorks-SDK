@@ -2179,6 +2179,40 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.idee import IdeeTransportesClient",
     ),
     ProviderEntry(
+        key="osni",
+        name="OSNI Open Data - Gazetteer - Streetnames",
+        description="Northern Ireland's street-name gazetteer - name plus one point.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Northern Ireland"}),
+        administrative_area="Ordnance Survey Northern Ireland (OSNI)",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, via a real "
+            "bulk-download route, not the documented ArcGIS REST "
+            "MapServer endpoint, which is currently down (the whole "
+            "services.spatialni.gov.uk domain redirects to a broken "
+            "NICS holding page). A genuinely thinner shape than a full "
+            "street/address register - name plus one point, no ASD-"
+            "style richness. Carries a real, fully-populated, fully-"
+            "unique USRN field, but it is OSNI's own, not confirmed to "
+            "cross-reference GB's national USRN/NSG scheme - Northern "
+            "Ireland sits outside that scheme, so this is scoped "
+            "'OSNI', not presented as a national identifier. CRS is "
+            "Irish Grid (EPSG:29903), used from the feed's own "
+            "X_Coord/Y_Coord fields rather than its reprojected WGS84 "
+            "geometry - inferred from coordinate plausibility, not "
+            "read from a live spatialReference response, since that "
+            "endpoint is the same one that's down. Jurisdiction-"
+            "distinct, same treatment as Jersey/Scotland - never folded "
+            "under a generic UK territory. See module docstring."
+        ),
+        credentials=None,
+        licence="Open Government Licence v3.0 (OGL)",
+        source_grade="register",
+        _module="streetworks.osni",
+        _client_name="OsniStreetnamesClient",
+        import_line="from streetworks.osni import OsniStreetnamesClient",
+    ),
+    ProviderEntry(
         key="drivebc",
         name="DriveBC (British Columbia, Open511)",
         description="British Columbia's provincial road-events feed.",

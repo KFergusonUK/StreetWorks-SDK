@@ -2,6 +2,58 @@
 
 ## [Unreleased]
 
+### Added — OSNI Streetnames, this SDK's first Northern Ireland gazetteer (2026-08-16)
+
+`streetworks.osni` / `streetworks.common.from_osni` - Ordnance Survey
+Northern Ireland's "Open Data - Gazetteer - Streetnames": a street name
+plus one representative point, for every real street in Northern
+Ireland. Jurisdiction-distinct, the same treatment Jersey and Scotland
+already get - never folded under a generic UK territory.
+
+```python
+from streetworks.osni import OsniStreetnamesClient
+from streetworks.common import from_osni
+
+with OsniStreetnamesClient() as osni:
+    streets = [from_osni(s) for s in osni.iter_streetnames()]
+```
+
+- **Not built the way this was originally scoped - the documented
+  ArcGIS REST MapServer endpoint is genuinely down, not a stale URL.**
+  The whole `services.spatialni.gov.uk` domain redirects every request
+  (`GetCapabilities`, a plain root probe, everything tried) to
+  `holdingpage.nics.gov.uk`, a Northern Ireland Civil Service holding
+  page that itself doesn't respond - confirmed systemic, not one broken
+  path. Built instead against a real bulk-download route (CSV/SHP/KML/
+  GeoJSON via OpenDataNI), confirmed live end-to-end - the download URL
+  302s to a signed, time-limited Cloudflare R2 URL, followed rather than
+  hardcoded.
+- **A real, load-bearing CRS disagreement within the one file, found and
+  resolved, not assumed.** The GeoJSON's own `geometry` is reprojected
+  to WGS84 by this download route, but every real feature also carries
+  separate `X_Coord`/`Y_Coord` properties whose magnitude is only
+  consistent with the old Irish Grid (TM65/TM75), not WGS84. Uses
+  `X_Coord`/`Y_Coord`, never the reprojected `geometry` - labelled
+  `EPSG:29903`, **inferred from coordinate plausibility, not read from a
+  live `spatialReference` response**, since the endpoint that would
+  state it explicitly is the same one that's down.
+- **A real, live-confirmed `USRN` field, genuinely surprising - kept,
+  but scoped honestly, not assumed to match the initial framing.**
+  Every one of 25,643 real features carries a populated, unique `USRN`
+  value. Northern Ireland is not part of GB's national USRN/NSG scheme,
+  so this is not presented as a cross-referencing national identifier -
+  it's OSNI's own field, promoted as `Identifier(scheme="usrn",
+  scope="OSNI")` rather than silently dropped or conflated with the GB
+  scheme.
+- **Graded honestly as a name+point gazetteer, not a street-geometry or
+  address register** - one name plus one point, no ASD-style richness,
+  no address points; `Street.segment_refs` stays empty. 7 of 25,643 real
+  `STREETNAME` values are road numbers (`A0002`, `M2`, `M3`, `M5`,
+  `M12`, `M22`) rather than street names - genuine content, kept as-is.
+- No credentials. Licence: Open Government Licence v3.0. Registry entry
+  (`osni`, `kind=streets`), new tests against a real trimmed live-pull
+  GeoJSON fixture, and a `scripts/smoke_test.py` check.
+
 ### Added — IDEE Transportes (Spain national road network), this SDK's first Spanish `streets` gazetteer (2026-08-15)
 
 `streetworks.idee` / `streetworks.common.from_idee` - Spain's national
