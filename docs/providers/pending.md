@@ -153,6 +153,22 @@ Credentials-wanted, or Documented-unavailable; see
   wrong shape" — it's "no open access route found at all." Genuinely
   unresolved, not ruled out — a future direct enquiry to Isle of Man
   Government (rather than more endpoint-hunting) is the real next step.
+- **Gibraltar — roadworks checked, ruled out at the only real candidate
+  found, not just unchecked.** Streets is now built
+  (`streetworks.gibraltar`, see [`docs/providers/gibraltar.md`](gibraltar.md));
+  roadworks is a separate question, investigated the same day
+  (2026-08-16). The Geoportal's own GeoServer (the same real deployment
+  streets uses) publishes a `gibgis:under_construction` polygon layer -
+  live, keyless, 23 real features - but its schema, confirmed via
+  `DescribeFeatureType`, carries **only a geometry field**: no name,
+  date, description, status, or type attribute of any kind. Genuinely
+  unusable as a works feed, not a licence or access blocker like
+  Gibraltar's own streets side had - there is simply nothing to read
+  beyond "a polygon exists somewhere." No other roadworks-shaped layer
+  was found on this deployment. The Technical Services Department's own
+  public-facing pages (`gibraltar.gov.gi/transport-traffic-and-technical-services`)
+  were not checked for a separate, non-GIS works register - a real,
+  open next step, not attempted this session.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and

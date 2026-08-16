@@ -300,6 +300,15 @@ data are all exposed; `describe()` translates the register's coded values.
 > it isn't covered. The Open Data feed carries the register's noticing data
 > and needs no account.
 
+**Genuinely national, not mainland-only — checked live, not assumed.**
+The Shetland Isles came up as a possible gap; a live daily extract's own
+`099` (District) reference records confirm **Shetland Islands Council**
+is a real registered authority (organisation code `009010`, prefix
+`SI`) reporting into this same single national register, the same as
+every other of Scotland's 32 local roads authorities — no separate
+island-specific provider needed. OS Open USRN's own Scotland coverage
+(below) is nationwide on the same basis, not a mainland subset.
+
 Convert an Activity bundle to the shared cross-provider model:
 
 ```python

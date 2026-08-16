@@ -9,7 +9,7 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
-**Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · UK   ~ Greece · Ireland · Sweden
+**Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Gibraltar · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · UK   ~ Greece · Ireland · Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
 **Asia**  ~ Singapore
@@ -21,7 +21,9 @@ Basque Country, Mallorca, Madrid; the four UK nations) — see the
 Jersey and Guernsey are listed separately from UK: Crown Dependencies with
 their own providers ([`streetworks.arcgis.jersey`](uk.md#jersey-roadworkx-and-tigerweb-arcgis-rest),
 [`streetworks.arcgis.guernsey`](uk.md#guernsey-street-gazetteer)), not one
-of the four UK nations. "In progress" also collapses two
+of the four UK nations; Gibraltar is a British Overseas Territory, a
+different constitutional category again, with its own
+[`streetworks.gibraltar`](gibraltar.md). "In progress" also collapses two
 genuinely different states (credentials-wanted vs.
 documented-but-unavailable) for scannability — the matrix below
 distinguishes these. **Canada, Portugal, and Austria all moved from
@@ -122,6 +124,7 @@ client, documented in its own section in [`docs/providers/`](.).
 | `streetworks.dfi_roads` | DfI Roads Highway Network centreline — Northern Ireland's real, maintained road-network centreline geometry (no credentials, confirmed live 2026-08-16, 71,596 real sections). The geometry counterpart to `osni`'s name+point gazetteer. The promoted CSV/XML "open data" downloads are genuinely attribute-only — zero geometry — so this client uses the real ArcGIS FeatureServer behind the public map viewer instead, found by tracing the viewer app's own item/web-map/layer chain. Not built on the shared `streetworks.arcgis` client, since its `f=geojson`-first behaviour would silently reproject this service's real Irish Grid coordinates without ever triggering its native-format fallback. CRS is `EPSG:29902`, read directly from this service's own `spatialReference` — the same code `osni`'s own label was corrected to match. Real, genuinely two-valued `ADOPTION_S` field (Adopted/Unadopted); defaults to adopted-only. Licence OGL v3.0. See [`docs/providers/uk.md`](uk.md#dfi-roads-highway-network-centreline-northern-ireland) | read |
 | `streetworks.anncsu` | [ANNCSU](https://www.anncsu.gov.it/) — Italy's national street-name register (no credentials, confirmed live 2026-08-16, 1,219,990 real streets), jointly run by Agenzia delle Entrate and ISTAT since DPCM 12 May 2016. Streets only — the same registry's address/civic-number side is real but has only partial coordinate coverage, scoped out (see [pending candidates](pending.md)). Uses the real national bulk ZIP+CSV download, not the separate live point-query API, since the API only supports municipality+name lookup, not "everything." **No geometry exists anywhere in this resource** — every `Street` converts with `GeometryGrade.ABSENT`, the same documented state OS Open USRN already establishes, not a gap in this build. Two real, independently-stated municipality identifiers kept (the "Belfiore" code and ISTAT's own code). Licence CC BY 4.0. See [`docs/providers/italy.md`](italy.md#anncsu-national-street-name-register) | read |
 | `streetworks.autobahn` | [Autobahn GmbH](https://verkehr.autobahn.de/) — Germany's national motorway roadworks, its own JSON REST API, not DATEX (no credentials; **licence unconfirmed**, see [`docs/providers/europe.md`](europe.md)) | read |
+| `streetworks.gibraltar` | [Gibraltar Street Gazetteer](https://www.geoportal.gov.gi/) — 277 real named road segments over HM Government of Gibraltar's own GeoServer WFS (no credentials, confirmed live 2026-08-16), this SDK's first British Overseas Territory coverage. The INSPIRE-mandated `TN_RoadTransportNetwork_RoadLink` layer carries no name field at all — the native `gibgis:roads_lb_vw` layer underneath is the real, named one. Genuinely multi-part `MultiLineString` geometry on 54% of records, handled via `Coordinate.parts`, never a first-line-only shortcut. **Licence unconfirmed** — built on instruction, see module docstring. See [`docs/providers/gibraltar.md`](gibraltar.md) | read |
 | `streetworks.sct` | [Servei Català de Trànsit](https://transit.gencat.cat/) — Catalonia's real-time road incidents, a flat WFS/GML feed, not DATEX or GeoJSON (no credentials; open licence, confirmed) — fills the larger of DGT's two documented exclusions | read |
 | `streetworks.vialietuva` | [Via Lietuva](https://get.data.gov.lt/) — Lithuania's national roadworks, the open data.gov.lt route (CSV, CC BY 4.0; no credentials), not the agreement-gated RTTI NAP; own small parser, not DATEX — real LKS-94 (EPSG:3346) coordinates, not WGS84 | read |
 | `streetworks.ogc` | German *state* roadworks — Hamburg, Brandenburg, Saxony (open geodata over OGC WFS/direct GeoJSON download; no credentials) — plus Consell de Mallorca's island roadworks (Spain, WFS, no credentials, licence unconfirmed); a reusable OGC-features fetch client underneath, not roadworks-specific. **New in 0.7.0 — interface provisional**, may change as the gazetteer work exercises it | read |

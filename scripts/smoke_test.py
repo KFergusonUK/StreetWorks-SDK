@@ -1603,6 +1603,21 @@ def check_anncsu() -> str:
     return f"{len(streets)} real street(s), e.g. {streets[0].odonimo!r}"
 
 
+def check_gibraltar() -> str:
+    """Gibraltar Street Gazetteer needs no credentials. Fetches the
+    whole real layer - a real total of 277 records, small enough that a
+    full pull is cheap here, see streetworks.gibraltar.client's module
+    docstring."""
+    from streetworks.gibraltar import GibraltarStreetsClient
+
+    with GibraltarStreetsClient() as gibraltar:
+        streets = list(gibraltar.iter_streets())
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample = streets[0]["properties"].get("name")
+    return f"{len(streets)} real street(s), e.g. {sample!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1770,6 +1785,8 @@ def main() -> int:
     reporter.check("DfI Roads Highway Network (Northern Ireland)", [], check_dfi_roads)
     # ANNCSU (Italy street-name register) needs no credentials
     reporter.check("ANNCSU (Italy)", [], check_anncsu)
+    # Gibraltar Street Gazetteer needs no credentials
+    reporter.check("Gibraltar Street Gazetteer", [], check_gibraltar)
 
     print()
     if reporter.ran == 0:

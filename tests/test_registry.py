@@ -94,6 +94,7 @@ def test_providers_kind_filter_streets():
     assert {e.key for e in streets} == {
         "datavia", "openusrn", "nwb", "bdtopo", "nvdb", "tigerweb", "linz_roads", "gnaf_roads",
         "idee", "osni", "dfi_roads", "anncsu", "jersey_streets", "guernsey_streets", "nrn",
+        "gibraltar",
     }
     assert all(e.kind is Kind.STREETS for e in streets)
     # Enum and string both accepted.

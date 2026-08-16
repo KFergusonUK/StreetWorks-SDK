@@ -2,6 +2,56 @@
 
 ## [Unreleased]
 
+### Added — Gibraltar Street Gazetteer, this SDK's first British Overseas Territory coverage (2026-08-16)
+
+`streetworks.gibraltar.GibraltarStreetsClient` / `streetworks.common
+.from_gibraltar_street` - found by checking two things the user flagged
+as possibly missed: the Shetland Isles (confirmed already fully covered
+by existing `srwr`/`openusrn` national coverage, nothing to build) and
+Gibraltar (genuinely new - not built at all before this).
+
+```python
+from streetworks.gibraltar import GibraltarStreetsClient
+from streetworks.common import from_gibraltar_street
+
+with GibraltarStreetsClient() as gibraltar:
+    streets = [from_gibraltar_street(f) for f in gibraltar.iter_streets()]
+```
+
+- **Shetland confirmed covered, not a gap** - a real SRWR daily extract's
+  own `099` (District) reference records show Shetland Islands Council
+  (org code `009010`) reporting into the same single national register
+  as every other Scottish authority; OS Open USRN's Scotland coverage is
+  equally nationwide. See `docs/providers/uk.md`.
+- **Gibraltar's INSPIRE-mandated road layer has no name field at all**
+  (the same "geometry with no identity" outcome Germany's BKG WFS had) -
+  found instead by walking the Geoportal's *service-wide* WFS
+  capabilities rather than just the INSPIRE workspace: `gibgis:roads_lb_vw`,
+  a real, live, keyless, named-road layer (277 real streets).
+- **`label` is a composed display string, not a single real name** -
+  confirmed live across the full layer, not assumed from a small sample:
+  `label` and `name` genuinely differ on 21% of records, always
+  `"{name} - {collname1}[ - {collname2}]"` (a real English name plus a
+  real Llanito/Spanish local name). `from_gibraltar_street` reads
+  `name`/`collname1`/`collname2` individually, never `label` itself -
+  fusing them would produce an unsearchable compound string.
+- **Genuinely multi-part `MultiLineString` geometry on 54% of records** -
+  `Coordinate.parts` always used, the same real handling `from_tigerweb`
+  already established, never a first-line-only shortcut.
+- **A real GeoServer pagination quirk found and worked around**: this
+  view-backed layer's `count`+`startIndex` combination fails outright
+  without an explicit `sortBy` (`Cannot do natural order without a
+  primary key`) - confirmed live, handled by always sorting on
+  `inspireId` and checking `numberMatched` rather than trusting a short
+  page.
+- **Licence**: no single confirmed open document found - built on the
+  project owner's explicit instruction, the same basis Jersey shipped
+  on, stated honestly rather than overclaimed.
+- **Roadworks checked and ruled out, not just unbuilt** - a real
+  `gibgis:under_construction` layer exists (23 real features) but its
+  schema carries only a geometry field, no attributes at all; genuinely
+  unusable as a works feed. See `docs/providers/pending.md`.
+
 ### Added — National Road Network (NRN), this SDK's first Canadian streets/gazetteer provider (2026-08-16)
 
 `streetworks.arcgis.nrn.NrnClient` / `streetworks.common.from_nrn` -

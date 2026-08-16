@@ -26,6 +26,7 @@ from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_dfi_roads import from_dfi_roads
 from .from_drivebc import from_drivebc
+from .from_gibraltar import from_gibraltar_street
 from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_guernsey_streets import from_guernsey_street
 from .from_helsinki import from_helsinki
@@ -162,4 +163,5 @@ __all__ = [
     "from_jersey_street",
     "from_guernsey_street",
     "from_nrn",
+    "from_gibraltar_street",
 ]

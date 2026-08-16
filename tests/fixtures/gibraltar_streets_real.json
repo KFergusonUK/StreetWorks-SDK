@@ -1,0 +1,309 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "roads_lb_vw.fid--46194158_1a00bad2789_-5bd9",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -5.355724,
+              36.14059027
+            ],
+            [
+              -5.35547819,
+              36.140672
+            ],
+            [
+              -5.35514868,
+              36.14081203
+            ],
+            [
+              -5.35504579,
+              36.14086175
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "inspireId": 269,
+        "label": "Reclamation Road",
+        "name": "Reclamation Road",
+        "collname1": null,
+        "collname2": null,
+        "tho_ref": 2477,
+        "type": null,
+        "sourceorg": "HMGoG",
+        "geosrcname": null,
+        "attsrcname": null,
+        "editor": "003",
+        "geoacc": null,
+        "attacc": null,
+        "beginLifespanVersion": "2019-07-16",
+        "endLifespanVersion": null,
+        "beingupd": null,
+        "datecreate": "2019-07-15Z",
+        "dateacq": null,
+        "dateedit": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "roads_lb_vw.fid--46194158_1a00bad2789_-5bcf",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -5.34433832,
+              36.11827766
+            ],
+            [
+              -5.3443584,
+              36.1183157
+            ],
+            [
+              -5.34484321,
+              36.11837154
+            ],
+            [
+              -5.34527776,
+              36.11841011
+            ]
+          ],
+          [
+            [
+              -5.34492709,
+              36.11857274
+            ],
+            [
+              -5.34451794,
+              36.11857531
+            ],
+            [
+              -5.34424336,
+              36.11859157
+            ],
+            [
+              -5.34416233,
+              36.11834821
+            ]
+          ],
+          [
+            [
+              -5.34605827,
+              36.11883291
+            ],
+            [
+              -5.3460511,
+              36.11883843
+            ],
+            [
+              -5.34604314,
+              36.11884544
+            ],
+            [
+              -5.34603115,
+              36.11886153
+            ]
+          ],
+          [
+            [
+              -5.34620225,
+              36.11870461
+            ],
+            [
+              -5.346198,
+              36.11870853
+            ],
+            [
+              -5.34619386,
+              36.11871236
+            ],
+            [
+              -5.34618982,
+              36.11871608
+            ]
+          ],
+          [
+            [
+              -5.34596941,
+              36.1180727
+            ],
+            [
+              -5.3459839,
+              36.11807719
+            ],
+            [
+              -5.34600258,
+              36.11808399
+            ],
+            [
+              -5.34602725,
+              36.11809622
+            ]
+          ],
+          [
+            [
+              -5.3463989,
+              36.11834554
+            ],
+            [
+              -5.34640801,
+              36.11835884
+            ],
+            [
+              -5.34641581,
+              36.1183717
+            ],
+            [
+              -5.34642175,
+              36.11838542
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "inspireId": 123,
+        "label": "Lathbury Road",
+        "name": "Lathbury Road",
+        "collname1": null,
+        "collname2": null,
+        "tho_ref": 1564,
+        "type": null,
+        "sourceorg": "HMGoG",
+        "geosrcname": null,
+        "attsrcname": null,
+        "editor": "003",
+        "geoacc": null,
+        "attacc": null,
+        "beginLifespanVersion": "2019-07-16",
+        "endLifespanVersion": null,
+        "beingupd": null,
+        "datecreate": "2019-07-15Z",
+        "dateacq": null,
+        "dateedit": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "roads_lb_vw.fid--46194158_1a00bad2789_-5b76",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -5.35393095,
+              36.13378563
+            ],
+            [
+              -5.35390021,
+              36.13370984
+            ],
+            [
+              -5.3538554,
+              36.13366826
+            ],
+            [
+              -5.35385542,
+              36.13366828
+            ]
+          ],
+          [
+            [
+              -5.3538554,
+              36.13366826
+            ],
+            [
+              -5.35379969,
+              36.13356337
+            ],
+            [
+              -5.35377591,
+              36.1335273
+            ],
+            [
+              -5.35374589,
+              36.13348677
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "inspireId": 73,
+        "label": "Queensway - Dockyard Road - Dockyard Approach Road",
+        "name": "Queensway",
+        "collname1": "Dockyard Road",
+        "collname2": "Dockyard Approach Road",
+        "tho_ref": 2728,
+        "type": null,
+        "sourceorg": "HMGoG",
+        "geosrcname": null,
+        "attsrcname": null,
+        "editor": "003",
+        "geoacc": null,
+        "attacc": null,
+        "beginLifespanVersion": "2019-07-16",
+        "endLifespanVersion": null,
+        "beingupd": null,
+        "datecreate": "2019-07-15Z",
+        "dateacq": null,
+        "dateedit": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "roads_lb_vw.fid--46194158_1a00bad2789_-5bd4",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -5.34799465,
+              36.14435029
+            ],
+            [
+              -5.34803947,
+              36.14428185
+            ],
+            [
+              -5.34807584,
+              36.14413001
+            ],
+            [
+              -5.34807434,
+              36.14392731
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "inspireId": 276,
+        "label": "La Marcha Atras",
+        "name": null,
+        "collname1": "La Marcha Atras",
+        "collname2": null,
+        "tho_ref": 318,
+        "type": null,
+        "sourceorg": "HMGoG",
+        "geosrcname": null,
+        "attsrcname": null,
+        "editor": "003",
+        "geoacc": null,
+        "attacc": null,
+        "beginLifespanVersion": "2017-20-02",
+        "endLifespanVersion": null,
+        "beingupd": null,
+        "datecreate": null,
+        "dateacq": null,
+        "dateedit": null
+      }
+    }
+  ]
+}

@@ -2383,6 +2383,37 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.anncsu import AnncsuClient",
     ),
     ProviderEntry(
+        key="gibraltar",
+        name="Gibraltar Street Gazetteer",
+        description="Gibraltar's real named-road layer, over the Geoportal's own GeoServer WFS.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Gibraltar"}),
+        administrative_area="HM Government of Gibraltar",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, this SDK's "
+            "first British Overseas Territory coverage. Found by "
+            "walking the Geoportal's service-wide WFS capabilities, "
+            "not just its INSPIRE workspace - the INSPIRE-mandated "
+            "TN_RoadTransportNetwork_RoadLink layer is real but carries "
+            "no name field anywhere, the same 'geometry with no "
+            "identity' outcome Germany's BKG WFS had; the native "
+            "gibgis:roads_lb_vw layer underneath is the real, named one "
+            "(277 real streets). Genuinely multi-part MultiLineString "
+            "geometry on 54% of real records - Coordinate.parts is "
+            "always used, never a first-line-only shortcut. Licence: "
+            "no single confirmed open document - built on the project "
+            "owner's explicit instruction, the same basis Jersey "
+            "shipped on; see module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.gibraltar",
+        _client_name="GibraltarStreetsClient",
+        import_line="from streetworks.gibraltar import GibraltarStreetsClient",
+    ),
+    ProviderEntry(
         key="drivebc",
         name="DriveBC (British Columbia, Open511)",
         description="British Columbia's provincial road-events feed.",
