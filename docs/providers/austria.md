@@ -118,3 +118,63 @@ field is the same JS-rendered SPA shell noted above).
 Vienna's "höherrangiges Straßennetz" (higher-order road network) - real
 and comprehensive for that tier, but not every minor residential
 street, stated honestly rather than implied exhaustive.
+
+## ASFINAG (national motorway network) — Credentials wanted
+
+Austria's national motorway/expressway roadworks source — ASFINAG's own
+genuine DATEX II feed, the same credential-gated shape as Denmark's
+Vejdirektoratet, but **less confirmed**: even the auth mechanism itself,
+not just the credential value, is unknown. Do-not-dedupe against Vienna
+above — genuinely different road tiers, national motorways vs. one
+city's higher-order network.
+
+```python
+from streetworks.datex2.austria import AsfinagClient
+from streetworks.common import from_datex2
+
+# base_url is issued at registration; auth mechanism is unconfirmed, so
+# this client accepts a pre-configured httpx.Client instead of guessing one
+with AsfinagClient(base_url=pull_url, client=my_authenticated_httpx_client) as asfinag:
+    for situation in asfinag.iter_situations():
+        works = from_datex2(situation, territory="Austria")
+```
+
+**Confirmed from ASFINAG's own official dataset page** on Austria's
+National Access Point (`mobilitaetsdaten.gv.at`, checked live 2026-08-14):
+the dataset covers real event types `Baustellen` (roadworks),
+`Instandhaltungsarbeiten` (maintenance), `Sanierungen` (renovations),
+stated explicitly as **DATEX II Situations with SituationRecords**, on
+the ASFINAG motorway/expressway network. Real technical metadata is
+stated (format XML, update rate 1 minute, transfer mode pull), but no
+sample is downloadable without registration.
+
+**A hoped-for keyless RSS shortcut was checked live and ruled out, not
+just assumed unavailable.** A genuinely keyless public RSS/ATOM feed
+exists on the same NAP, but its own page states explicitly it covers
+"unplanned and safety-related traffic events," filed under "Road events
+and conditions," not "Road work information" (the roadworks dataset's
+own category) — confirmed live that this keyless route does not carry
+roadworks. Unlike Italy's CCISS, there's no keyless shortcut for Austria.
+
+**No hardcoded data URL, and no confirmed auth scheme — genuinely more
+open than Vejdirektoratet in one sense, less confirmed in another.** The
+dataset page states access requires registration via ASFINAG's own
+Content Portal (`contentportal.asfinag.at`), but neither that page, its
+licence terms, nor its JS bundle (read directly, the same technique that
+found Roma's/Lisboa's/Oslo's real backends) state the real pull URL or
+credential mechanism. `AsfinagClient` therefore takes `base_url` as a
+required argument and accepts a pre-configured `httpx.Client` rather
+than guessing a header name or auth scheme.
+
+**Licence: CC-BY-4.0, confirmed live, with real supplementary conditions
+beyond plain CC-BY.** Confirmed directly from ASFINAG's own licence page:
+the base licence is unmodified CC BY 4.0, but registration requires
+accepting real supplementary conditions — disclosing your own downstream
+services built on this data back to ASFINAG, and ASFINAG reserving the
+right to publicly reference your name when describing that it supplies
+you data. Credentials: registration via the
+[ASFINAG Content Portal](https://contentportal.asfinag.at/) (confirmed
+live and reachable) — whether it's genuinely self-service or requires
+manual approval is itself unconfirmed. See
+[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
+for the condensed table entry.

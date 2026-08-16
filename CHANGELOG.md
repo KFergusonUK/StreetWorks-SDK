@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Changed — Dedicated docs sections for four Credentials-wanted scaffolds that only had table/blockquote mentions (2026-08-16)
+
+`streetworks.datex2.trafikverket`, `streetworks.datex2.vejdirektoratet`,
+`streetworks.datex2.austria` (ASFINAG), and `streetworks.stockholm` were
+each already registered and listed in `docs/providers/index.md`'s
+Credentials-wanted table, but had no dedicated `##` section of their
+own anywhere in `docs/providers/` - only a blockquote cross-reference in
+their country's page. Added full sections (`docs/providers/europe.md`
+for Trafikverket and Stockholm, matching the existing Ireland/Greece
+precedent of keeping scaffold-only countries in `europe.md` rather than
+a dedicated file; `docs/providers/denmark.md` for Vejdirektoratet;
+`docs/providers/austria.md` for ASFINAG), each condensed from the real
+module docstring's own findings - no new investigation, just giving
+existing evidence a proper home. Also caught two more stray unexplained
+"brief" references in `docs/providers/denmark.md` that an earlier
+cleanup pass missed.
+
 ### Added — DfI Roads Highway Network centreline, the geometry counterpart to OSNI Streetnames (2026-08-16)
 
 `streetworks.dfi_roads` / `streetworks.common.from_dfi_roads` - DfI

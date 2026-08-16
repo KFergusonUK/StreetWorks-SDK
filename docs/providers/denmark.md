@@ -109,6 +109,62 @@ licence, no hedging required.
 **No credentials required** — every claim above came from a fully
 unauthenticated GetFeature request.
 
+## Vejdirektoratet (national roadworks) — Credentials wanted
+
+Denmark's national roadworks source — the Danish Road Directorate's own
+genuine DATEX II 3.2 feed, credential-gated at the data-pull layer only.
+Do-not-dedupe against Copenhagen above: national trunk roads vs. one
+city's own excavation permits, the same relationship Kanton Zürich/Stadt
+Zürich already establishes.
+
+```python
+from streetworks.datex2.vejdirektoratet import VejdirektoratetClient
+from streetworks.common import from_datex2
+
+# base_url is issued per-dataset at registration - no public constant exists
+with VejdirektoratetClient(base_url=pull_url, username=username, password=password) as vd:
+    for situation in vd.iter_situations():
+        works = from_datex2(situation, territory="Denmark")
+```
+
+**Genuine, standard DATEX II vocabulary — confirmed from Vejdirektoratet's
+own protocol spec, not inferred.** Real `sit:ConstructionWorks`/
+`sit:MaintenanceWorks` `SituationRecord` types are explicitly enumerated,
+both rolling up to a `Roadworks` class in the spec's own class diagram,
+with real `constructionWorkType`/`roadMaintenanceType` values listed
+(`constructionWork`, `roadWideningWork`, `resurfacingWork`, `roadworks`,
+...). This is standard DATEX vocabulary this SDK's shared roadworks
+discriminator already recognises — no Denmark-specific logic needed,
+unlike Sweden (see Trafikverket above).
+
+**No hardcoded data URL — genuinely different from every other DATEX
+adapter in this SDK.** Vejdirektoratet issues the actual per-dataset
+REST pull address during registration, not as a public constant
+(confirmed: the protocol doc and the open catalogue both stop at
+"configured when the dataset is set up," no public data endpoint exists
+to probe). `VejdirektoratetClient` therefore takes `base_url` as a
+required constructor argument, not a module default.
+
+**The open metadata catalogue is genuinely open, confirmed live** — all
+196 registered datasets are reachable keyless (DCAT/RDF-XML), including
+the specific roadworks dataset ("OOV2 Trafikmeldinger"), tagged
+`road-work-information`, `datex-II`, and licensed `CC_BY_4_0` in the
+catalogue's own per-dataset licence field — confirmed per-dataset, not
+assumed from the catalogue in general (other datasets in the same
+catalogue carry different licences). Only the actual data pull remains
+credential-gated.
+
+**Auth: HTTP Basic, stated verbatim in the protocol documentation** —
+*"A request must use HTTP Basic Authentication... username and password
+are configured in DU when the dataset is set up"* — both the scheme and
+the fact that credentials are per-dataset, not global, are stated
+directly rather than inferred. Credentials: registration via
+[Dataudveksleren](https://du-portal-ui.dataudveksler.app.vd.dk/),
+confirmed live and reachable. Licence: **CC BY 4.0**, confirmed live and
+per-dataset (see above). See
+[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
+for the condensed table entry.
+
 ## The rest of the Danish landscape
 
 **Oslo** (Norway, `streetworks.oslo`) and **Helsinki** (Finland,
@@ -118,12 +174,14 @@ both built, resolving two more open questions across the Nordic capitals;
 both needed real live-verification before building, since
 neither matched the first guess (Oslo's guessed Origo/NVDB
 backend, Helsinki's own unconfirmed "does a dataset even exist"
-question). **Stockholm** (Sweden, `streetworks.stockholm`) confirms a
-real risk flagged early on rather than disproving it — every
+question). **Stockholm** (Sweden, `streetworks.stockholm` — see
+[`docs/providers/europe.md`](europe.md#stockholm-trafikkontoret--credentials-wanted))
+confirms a real risk flagged early on rather than disproving it — every
 real surface tested (WFS/WMS `GetCapabilities`) requires an API key
 before revealing even a layer name, let alone whether a `vägarbete`
 dataset exists at all, so it ships as a Phase 0 Credentials-wanted
 scaffold (see [Credentials wanted](index.md#credentials-wanted)) rather
 than a live-verified build — the same discipline that corrected the
-Copenhagen and Helsinki briefs once actually checked, applied here to an
-outcome that stayed genuinely blocked instead of resolving cleanly.
+Copenhagen and Helsinki teams' own early guesses once actually checked,
+applied here to an outcome that stayed genuinely blocked instead of
+resolving cleanly.

@@ -1570,6 +1570,104 @@ database must itself be released under ODbL (or a compatible licence) —
 the same nuance `streetworks.au.act`'s CC BY-SA carries relative to its
 plain-CC-BY siblings. Attribution: "Ville de Paris".
 
+## Trafikverket (Sweden roadworks) — Credentials wanted
+
+Sweden's national roadworks source — the Swedish Transport
+Administration's own `Situation`/`Deviation` API. **Not a DATEX II
+serialisation** — Trafikverket's own request/response envelope (XML in,
+JSON out), so this parses onto the shared `Situation`/`SituationRecord`
+models directly rather than reusing the streaming DATEX XML parser.
+
+```python
+from streetworks.datex2.trafikverket import TrafikverketClient
+from streetworks.common import from_datex2
+
+with TrafikverketClient(api_key=api_key) as trafikverket:  # requires an API key
+    for situation in trafikverket.iter_situations():
+        works = from_datex2(situation, territory="Sweden")
+```
+
+**Confirmed live, credential-free, without ever pulling real data.** A
+deliberately invalid key against the real endpoint
+(`api.trafikinfo.trafikverket.se/v2/data.json`) returns a genuine,
+structured rejection, not a generic error page — confirming the
+endpoint, the request envelope shape, the `Situation` object name, and
+schema version `1.5` all live, independent of any documentation page's
+own claims. Better-confirmed than most Credentials-wanted scaffolds at
+this stage for exactly that reason.
+
+**Field names are documented, not verified** — cross-referenced across
+Trafikverket's own API console description, a real published example
+query, and independent third-party client libraries (C#, R) that all
+agree on the same field set (`Header`, `Message`, `MessageType`,
+`MessageCode`, `RoadNumber`, `Geometry.WGS84`, ...). Trafikverket's own
+description of `Situation` states it covers "traffic messages, road work
+(vägarbeten), accidents, restrictions" — so roadworks are genuinely in
+scope — but **no confirmed value distinguishes a roadworks `Deviation`
+from any other kind** yet. Rather than guess, `MessageType` is preserved
+verbatim and `iter_roadworks()` honestly returns an empty list against
+real data until a real credentialed pull confirms the discriminator —
+use `iter_situations()` and inspect `record_type` directly in the
+meantime.
+
+**Licence: CC0 1.0 Universal (Public Domain Dedication)**, confirmed via
+the catalogue's own per-dataset licence facet — the least restricted
+tier in this SDK, no attribution required. Credentials: free,
+self-service registration at
+[data.trafikverket.se](https://data.trafikverket.se/) or via
+[Trafiklab](https://www.trafiklab.se/api/other-apis/trafikverket/),
+issuing an API key (not Basic Auth). See
+[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
+for the condensed table entry.
+
+## Stockholm (Trafikkontoret) — Credentials wanted
+
+Stockholm's own city geodata service — the least-confirmed
+Credentials-wanted scaffold in this SDK, one phase earlier than
+Trafikverket above.
+
+```python
+from streetworks.stockholm import StockholmClient
+
+with StockholmClient(api_key=api_key) as stockholm:  # requires an API key
+    capabilities = stockholm.get_wfs_capabilities()  # nothing more is confirmed yet
+```
+
+**Every real data-fetching surface tested returns a genuine `HTTP 401`
+before any dataset name, layer, or field is ever revealed** — unlike
+South Australia (whose layer definition is public) or Trafikverket
+(whose object type and fields are confirmed via documentation), no real
+schema of any kind has been seen for Stockholm. Both WFS `GetCapabilities`
+and WMS `GetCapabilities` (metadata only, no data) return a structured
+401 (`text/plain`, *"You must provide a valid key to consume this API."*)
+from Trafikkontoret's own geodata service
+(`openstreetgs.stockholm.se`) — confirmed live, not assumed.
+
+**A real, promising-sounding lead traced back to a dead end, not left
+unchecked.** Stockholm's open-data catalogue (`dataportalen.stockholm.se`)
+has a non-functional full-text search — a nonsense search term returns
+the identical record count as no filter at all, so no dataset could be
+located that way. A lead about "a map that coordinates roadworks to
+minimise regional traffic impact" traces back to the Regionala
+Trafikgruppen, which resolves to the already credential-parked
+**national** Trafikverket system above, not a separate Stockholm
+dataset — so it doesn't add new disjoint coverage. **Whether a roadworks
+(`vägarbete`) dataset exists on this platform at all is genuinely
+unresolved** — not confirmed present, and not confirmed absent either.
+
+**Auth mechanism partially evidenced, not fully confirmed.** The one
+real documented example on Trafikkontoret's own getting-started guide
+(a working Parking-API query) uses `apiKey=<key>` as a query parameter —
+used here on the WFS endpoint since it's the only real evidence
+available, but unconfirmed for WFS/OGC API specifically. Licence:
+unconfirmed — no dataset has ever been reached to check one against.
+Credentials: an API key: registration path found via the site's own
+navigation, but the exact self-service page returned a 404 — contact
+`api.it.tk@stockholm.se` or navigate the portal's own menu from
+[openstreetgs.stockholm.se/home/](https://openstreetgs.stockholm.se/home/).
+See [`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
+for the condensed table entry.
+
 ## Ireland — MapRoad Roadworks Licensing (documented, unavailable)
 
 Investigated and registered honestly-unavailable, the same treatment
