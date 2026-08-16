@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added — `AGENTS.md` and `llms.txt` (2026-08-16)
+
+`AGENTS.md` (repo root): a load-bearing quick-reference for coding
+agents - the verify-live discipline, never-fabricate/never-silently-
+reproject rules, access boundaries, licensing judgement calls, and the
+"adding a new provider" checklist this session followed throughout -
+linking out to `docs/contributing/agent-boundaries.md`,
+`docs/concepts/data-integrity.md`, `docs/contributing/scaffolds.md` and
+`CONTRIBUTING.md` for full detail rather than duplicating it.
+`llms.txt` (repo root): a concise, structured project summary and docs
+map for external LLMs/crawlers, following the emerging `llms.txt`
+convention - discoverability, not contribution guidance.
+
 ### Added — Monaghan County Council road network, this SDK's first Irish gazetteer coverage (2026-08-16)
 
 `streetworks.arcgis.monaghan.MonaghanRoadsClient` / `streetworks.common

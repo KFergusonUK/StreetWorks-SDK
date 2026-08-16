@@ -3,12 +3,15 @@
 > New content, not a migration — not in README.md (see
 > `docs/migration-reconciliation.md`, Case 3: "Agent boundaries", listed
 > there as living in project-conventions/CLAUDE.md-adjacent material
-> rather than the README). No `CLAUDE.md` or `AGENTS.md` currently
-> exists in this repository to migrate from, so this page is the first
-> place these rules are written down. **Recorded on the project owner's
-> own authority as stated ground rules for how an AI coding agent should
-> work on this project, not derived from any file that already
-> encoded them.**
+> rather than the README). No `CLAUDE.md` or `AGENTS.md` existed in this
+> repository at the time this page was first written, so it was the
+> first place these rules were written down. **Recorded on the project
+> owner's own authority as stated ground rules for how an AI coding
+> agent should work on this project, not derived from any file that
+> already encoded them.** A repo-root [`AGENTS.md`](../../AGENTS.md) now
+> exists too — a load-bearing quick-reference that links back to this
+> page (and `docs/concepts/data-integrity.md`, `docs/contributing/scaffolds.md`,
+> `CONTRIBUTING.md`) for full detail, rather than duplicating it.
 
 Rules for any AI agent (or anyone else) working on this codebase,
 particularly when investigating a new data provider:

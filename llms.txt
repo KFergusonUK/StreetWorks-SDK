@@ -1,0 +1,58 @@
+# streetworks
+
+> An open-source Python SDK unifying street works and roadworks data
+> across 81 providers worldwide (58 roadworks feeds, 17 street/road-
+> segment gazetteers, 5 address registers, 1 worker-safety context
+> source) behind one consistent, typed, verification-first client.
+> Covers UK statutory registers (Street Manager, SRWR, OSNI, DfI Roads),
+> European national/regional feeds (DATEX II, WFS/GeoJSON sources
+> across a dozen-plus countries), the US WZDx standard and TIGERweb,
+> Australia, New Zealand, Canada, and more. Every provider preserves
+> its source's real shape, licence, and limitations rather than
+> pretending they're equivalent — nothing here is a guessed or
+> synthesised field. Pre-1.0, early alpha, MIT licensed. Developed and
+> published independently, in a personal capacity — not on behalf of,
+> or endorsed by, any employer.
+
+## Start here
+
+- [README.md](README.md): install, quickstart, project overview
+- [docs/index.md](docs/index.md): full documentation map
+- [docs/providers/index.md](docs/providers/index.md): the live coverage matrix, module table, and provider-discovery API (`providers()`/`get_provider()`)
+- [CONTRIBUTING.md](CONTRIBUTING.md): ground rules for contributing
+- [AGENTS.md](AGENTS.md): house rules for AI coding agents working in this repo
+
+## Concepts
+
+- [docs/concepts/architecture.md](docs/concepts/architecture.md)
+- [docs/concepts/common-model.md](docs/concepts/common-model.md): the shared `Works`/`WorksSite`/`Street`/`Segment`/`Address` model every provider converts into
+- [docs/concepts/data-integrity.md](docs/concepts/data-integrity.md): the never-fabricate, never-silently-reproject discipline
+- [docs/concepts/crs-and-datums.md](docs/concepts/crs-and-datums.md)
+- [docs/concepts/write-path.md](docs/concepts/write-path.md): Section 50 write-path connectors
+
+## Providers, by region
+
+- [docs/providers/uk.md](docs/providers/uk.md): UK & Crown Dependencies (Jersey, Guernsey)
+- [docs/providers/europe.md](docs/providers/europe.md): DATEX II, German states, France, Netherlands, Norway, Spain, Nordics
+- [docs/providers/italy.md](docs/providers/italy.md)
+- [docs/providers/switzerland.md](docs/providers/switzerland.md)
+- [docs/providers/austria.md](docs/providers/austria.md)
+- [docs/providers/portugal.md](docs/providers/portugal.md)
+- [docs/providers/ireland.md](docs/providers/ireland.md)
+- [docs/providers/gibraltar.md](docs/providers/gibraltar.md)
+- [docs/providers/us.md](docs/providers/us.md): WZDx, TIGERweb, state/city feeds
+- [docs/providers/canada.md](docs/providers/canada.md)
+- [docs/providers/australia.md](docs/providers/australia.md)
+- [docs/providers/new-zealand.md](docs/providers/new-zealand.md)
+- [docs/providers/pending.md](docs/providers/pending.md): territories genuinely investigated and either ruled out (with evidence) or left open
+
+## Examples
+
+- [docs/examples.md](docs/examples.md): curated, one line per example script in `examples/`
+
+## Optional
+
+- [docs/roadmap.md](docs/roadmap.md): chronological build log
+- [docs/domain-notes/provider-quirks.md](docs/domain-notes/provider-quirks.md)
+- [docs/governance/licensing.md](docs/governance/licensing.md)
+- [CHANGELOG.md](CHANGELOG.md)
