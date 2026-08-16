@@ -1047,6 +1047,36 @@ def check_jersey() -> str:
     return f"{len(records)} in-progress record(s), e.g. PROJID={sample.get('PROJID')!r}"
 
 
+def check_jersey_streets() -> str:
+    """Jersey Street Gazetteer needs no credentials - a real second
+    service (JSearch) on the same deployment as Jersey RoadWorkx, see
+    streetworks.arcgis.jersey's module docstring. Only fetches a small,
+    filtered slice, not the full 2,159-record 'Road' layer."""
+    from streetworks.arcgis.jersey import JerseyStreetsClient
+
+    with JerseyStreetsClient() as jersey:
+        records = list(itertools.islice(jersey.iter_streets(), 5))
+    if not records:
+        raise RuntimeError("query returned no real streets - real data may have changed")
+    sample = records[0]["properties"]
+    return f"{len(records)} real street(s), e.g. {sample.get('REAL_NAME')!r}"
+
+
+def check_guernsey_streets() -> str:
+    """Guernsey Street Gazetteer needs no credentials - Guernsey's own
+    real analogue of Jersey's JSearch service, see
+    streetworks.arcgis.guernsey's module docstring. Only fetches a small,
+    filtered slice, not the full 2,591-record layer."""
+    from streetworks.arcgis.guernsey import GuernseyStreetsClient
+
+    with GuernseyStreetsClient() as guernsey:
+        records = list(itertools.islice(guernsey.iter_streets(), 5))
+    if not records:
+        raise RuntimeError("query returned no real streets - real data may have changed")
+    sample = records[0]["properties"]
+    return f"{len(records)} real street(s), e.g. {sample.get('ROAD')!r}"
+
+
 def check_tigerweb() -> str:
     """TIGERweb (US Census Bureau) needs no credentials. Queries a small
     real bounding box (downtown Washington DC) rather than the full
@@ -1637,6 +1667,9 @@ def main() -> int:
     # Jersey RoadWorkx and TIGERweb (US) need no credentials
     reporter.check("Jersey RoadWorkx", [], check_jersey)
     reporter.check("TIGERweb (USA)", [], check_tigerweb)
+    # Jersey and Guernsey Street Gazetteers need no credentials
+    reporter.check("Jersey Street Gazetteer", [], check_jersey_streets)
+    reporter.check("Guernsey Street Gazetteer", [], check_guernsey_streets)
     # Main Roads WA WebEOC Roadworks needs no credentials
     reporter.check("Main Roads WA (Australia)", [], check_wa_mainroads)
     # QLDTraffic Events needs no credentials (a real, shared public API key)

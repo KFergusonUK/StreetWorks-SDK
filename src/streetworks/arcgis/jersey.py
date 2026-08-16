@@ -92,6 +92,54 @@ roadworks shipped on. Real, live-captured records are committed as test
 fixtures on that basis (``tests/fixtures/jersey_roadworks_real.json``), not
 synthetic ones. Confirm your own reuse/redistribution rights before
 redistributing data pulled through this module further downstream.
+
+**Streets: a second, distinct real service on the same deployment -
+``JSearch``, not ``JSWFeatureService``.** Found by walking the service
+root (``roadworks.gov.je/arcgis/rest/services``) rather than assumed from
+the roadworks brief - real layers ``0 Roads`` (``esriGeometryPolygon`` -
+the one :class:`JerseyStreetsClient` uses) and ``1 postcode``. 7,553 real
+polygon features total; 2,159 carry ``FEATURE="Road"`` (the rest are
+``"Pavement"`` - a real, clean, decodable distinguishing field, unlike
+Guernsey's equivalent service - see :mod:`streetworks.arcgis.guernsey`).
+Real fields: ``REAL_NAME`` (the street name - real values include
+placeholder-style names for unnamed connector roads, e.g. ``"Road Off La
+Rue de la Piece Mauger"``, ``"Road Between la Rue des Landes & la Rue
+Cappelain"`` - genuinely stated by the source, not this SDK's own
+fabrication, so kept as-is), ``USRN`` (Jersey's own Unique Street
+Reference Number - the same GB-NSG-style concept OS Open USRN publishes
+for England/Wales, in a distinct Crown-Dependency numbering block,
+``40000000``-``40010000``ish - confirmed live, every real Jersey USRN
+sampled is a whole integer, unlike Guernsey's genuine fractional
+subdivisions), ``PARISH`` (one of Jersey's 12 real parishes), ``BKSTOID``
+(a real per-polygon area id, e.g. ``"AREA000000142346"``).
+
+**A genuine two-CRS-in-one-record situation - confirmed live, not
+assumed from the roadworks layer's own established CRS.** Unlike
+``JSWFeatureService`` (whose ``f=geojson`` output stays in native
+``EPSG:3109`` regardless of ``outSR`` - see above), ``JSearch``'s real
+``f=geojson`` polygon geometry comes back as genuine **WGS84**
+(``EPSG:4326``) - confirmed live by inspecting real returned coordinates
+(``-2.19, 49.22``-shaped, correct for Jersey), with and without an
+explicit ``outSR=4326``, byte-identical either way. But ``USRN_XY1``/
+``USRN_XY2`` - two real, separately stated attribute fields carrying a
+comma-separated easting/northing pair each (Jersey's own real,
+stated start/end point for the street, e.g. ``"35752,69684"``) - are
+plain text attributes, never touched by any geometry reprojection, and
+stay in the roadworks layer's native ``EPSG:3109``. Confirmed live on
+2,159 real ``FEATURE="Road"`` rows: 1,937 (89.7%) carry a real non-blank
+``USRN_XY1``, 20 carry neither a stated ``REAL_NAME`` nor coordinates.
+
+**Geometry: the real stated point pair, not the polygon - same
+discipline as** :mod:`streetworks.common.from_paris`. ``Coordinate
+.points``/``.parts`` are documented for line-geometry vertices, not
+polygon rings - forcing this real ring into either would misuse that
+contract the same way Paris's `emprise` footprint would. So
+:func:`streetworks.common.from_jersey_street` uses the real, source-
+stated ``USRN_XY1``/``USRN_XY2`` pair as ``Coordinate.value``/``.points``
+(a genuine two-point line, native ``EPSG:3109``, never reprojected) where
+present; ``GeometryGrade.ABSENT`` otherwise - never a fabricated
+centroid. The real WGS84 polygon is preserved unmodified in
+``Street.raw`` for any caller that needs the full footprint.
 """
 
 from __future__ import annotations
@@ -103,7 +151,16 @@ import httpx
 
 from .client import ArcGISFeatureClient
 
-__all__ = ["BASE_URL", "ROADWORKS_LAYER", "PROJECTS_LAYER", "CRS", "JerseyRoadworksClient"]
+__all__ = [
+    "BASE_URL",
+    "ROADWORKS_LAYER",
+    "PROJECTS_LAYER",
+    "CRS",
+    "JerseyRoadworksClient",
+    "JSEARCH_BASE_URL",
+    "STREETS_LAYER",
+    "JerseyStreetsClient",
+]
 
 JSON = dict[str, Any]
 
@@ -120,8 +177,53 @@ PROJECTS_LAYER = 4
 #: module docstring for the verification chain. ``outSR`` is not honoured
 #: by this service (also confirmed live), so every real response is in
 #: this CRS regardless of what's requested - this constant is
-#: authoritative, not a hint.
+#: authoritative, not a hint. Also the real, native CRS of the streets
+#: layer's own ``USRN_XY1``/``USRN_XY2`` attribute strings (see below) -
+#: **not** of that layer's polygon geometry, which is real WGS84 instead
+#: (confirmed live, separately - see module docstring).
 CRS = "EPSG:3109"
+
+#: The real Jersey street/address search service - a distinct real
+#: service from ``JSWFeatureService`` on the same deployment. See module
+#: docstring.
+JSEARCH_BASE_URL = "https://roadworks.gov.je/arcgis/rest/services/JSearch/MapServer"
+
+#: The real streets layer - esriGeometryPolygon (road extent, not a
+#: centreline). See module docstring.
+STREETS_LAYER = 0
+
+
+class JerseyStreetsClient:
+    """Fetch Jersey's real street gazetteer. No credentials required - see
+    :class:`JerseyRoadworksClient` for the same open-by-design, no-
+    explicit-licence situation on this deployment.
+
+    >>> from streetworks.arcgis.jersey import JerseyStreetsClient
+    >>> from streetworks.common import from_jersey_street
+    >>> with JerseyStreetsClient() as jersey:  # doctest: +SKIP
+    ...     streets = [from_jersey_street(f) for f in jersey.iter_streets()]
+    """
+
+    def __init__(self, *, client: httpx.Client | None = None) -> None:
+        self._arcgis = ArcGISFeatureClient(client=client)
+
+    def iter_streets(self, *, where: str = "FEATURE='Road'") -> Iterator[JSON]:
+        """Yield every real street feature (GeoJSON ``Feature`` dicts).
+        Defaults to the real ``FEATURE='Road'`` filter (excludes
+        ``'Pavement'`` rows - see module docstring); pass ``where="1=1"``
+        for the raw, unfiltered layer instead."""
+        yield from self._arcgis.iter_features(
+            JSEARCH_BASE_URL, STREETS_LAYER, where=where, out_fields="*"
+        )
+
+    def close(self) -> None:
+        self._arcgis.close()
+
+    def __enter__(self) -> JerseyStreetsClient:
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.close()
 
 
 class JerseyRoadworksClient:

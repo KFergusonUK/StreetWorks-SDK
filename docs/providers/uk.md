@@ -400,6 +400,83 @@ public consumption, so real, live-captured records are committed as this
 module's test fixtures, the same basis Autobahn GmbH's roadworks shipped
 on; see `streetworks/arcgis/jersey.py`'s module docstring.
 
+### Jersey Street Gazetteer
+
+A real, distinct second service on the same deployment — `JSearch`, not
+`JSWFeatureService` — found by walking the service root rather than
+assumed from the roadworks brief.
+
+```python
+from streetworks.arcgis.jersey import JerseyStreetsClient
+from streetworks.common import from_jersey_street
+
+with JerseyStreetsClient() as jersey:
+    streets = [from_jersey_street(f) for f in jersey.iter_streets()]
+```
+
+2,159 real `FEATURE='Road'` features (of 7,553 total polygons — the rest
+are `'Pavement'`, a real, clean, decodable distinguishing field), each a
+real road-*extent* polygon, not a centreline. Real fields: `REAL_NAME`
+(including genuine placeholder-style names for unnamed connector roads,
+e.g. `"Road Off La Rue de la Piece Mauger"` — stated by the source, not
+this SDK's fabrication), `USRN` (Jersey's own real Unique Street
+Reference Number, the same GB-NSG-style concept as OS Open USRN, in a
+distinct Crown-Dependency numbering block — every real value confirmed a
+whole integer), `PARISH` (one of Jersey's 12 real parishes), `BKSTOID`
+(a real per-polygon area id).
+
+**A genuine two-CRS-in-one-record situation — confirmed live, not
+assumed from the roadworks layer's own established CRS.** Unlike
+`JSWFeatureService`, `JSearch`'s real `f=geojson` polygon geometry comes
+back as genuine **WGS84**, confirmed live regardless of `outSR`. But
+`USRN_XY1`/`USRN_XY2` — two real, separately stated attribute fields
+carrying a comma-separated easting/northing pair each (Jersey's own
+real, stated start/end point for the street) — are plain text, never
+touched by reprojection, and stay in the native `EPSG:3109`.
+`Coordinate.points` is documented for line vertices, not polygon rings —
+forcing this real ring into it would misuse that contract the same way
+Paris's own `emprise` footprint would — so `from_jersey_street` uses the
+real, stated `USRN_XY1`/`USRN_XY2` pair instead (present on 89.7% of
+real `'Road'` rows; `GeometryGrade.ABSENT` otherwise, never a fabricated
+centroid). The real WGS84 polygon is preserved unmodified in
+`Street.raw` for any caller that needs the full footprint. Same
+open-by-design, no-explicit-licence situation as Jersey RoadWorkx above.
+
+### Guernsey Street Gazetteer
+
+Guernsey's own real analogue of Jersey's setup — found by checking
+whether Jersey's real service has a Guernsey sibling; it does, on
+`roadworks.gov.gg`'s own ArcGIS deployment (`GSearch`, mirroring
+Jersey's `JSearch`).
+
+```python
+from streetworks.arcgis.guernsey import GuernseyStreetsClient
+from streetworks.common import from_guernsey_street
+
+with GuernseyStreetsClient() as guernsey:
+    streets = [from_guernsey_street(f) for f in guernsey.iter_streets()]
+```
+
+2,591 real named `'Road'` features (of 2,727 total polygons). Unlike
+Jersey, there's no clean type field separating genuine street names from
+other real `ROAD` values sharing the same field (e.g. `"CAR PARK"`,
+observed live) — every real non-blank `ROAD` converts regardless, this
+SDK's standing "never fabricate a filter the source doesn't state" rule.
+Real `USRN`s include genuine fractional subdivisions (confirmed live —
+e.g. a real parent `20194` with real child polygons
+`20194.02`/`20194.04`/`20194.05`/`20194.06`, a subdivided car park —
+formatted to two decimal places to mask real IEEE-754 float-encoding
+noise, not passed through raw). `CLASS` (a real, undocumented 3-letter
+code, e.g. `"PCP"`, `"XDA"`) is carried as `StreetType.code`, undecoded —
+the same treatment NWB's own `bst_code` gets. **CRS: `ESRI:102070`
+"Guernsey_Grid"**, confirmed live via an external projection registry (a
+real, named Channel Islands local grid, no EPSG equivalent) — but, same
+as Jersey's `JSearch`, this layer's real geometry comes back as genuine
+WGS84 regardless. No stated point/line field exists at all here (unlike
+Jersey's own `USRN_XY1`/`USRN_XY2`) — every `Street` carries
+`GeometryGrade.ABSENT`, the real polygon preserved in `.raw` only. Same
+open-by-design, no-explicit-licence situation as Jersey.
+
 ```python
 from streetworks.arcgis.tigerweb import TIGERwebClient, LOCAL_ROADS_LAYER
 from streetworks.common import from_tigerweb

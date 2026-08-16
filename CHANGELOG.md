@@ -2,6 +2,54 @@
 
 ## [Unreleased]
 
+### Added — Jersey and Guernsey Street Gazetteers, this SDK's first Channel Islands streets coverage (2026-08-16)
+
+`streetworks.arcgis.jersey.JerseyStreetsClient` / `streetworks.common
+.from_jersey_street` and `streetworks.arcgis.guernsey.GuernseyStreetsClient`
+/ `streetworks.common.from_guernsey_street` - found by asking "does Jersey
+RoadWorkx's own ArcGIS deployment have a streets sibling, and does
+Guernsey have the same setup Jersey does?" Both real, live, credential-free.
+
+```python
+from streetworks.arcgis.jersey import JerseyStreetsClient
+from streetworks.common import from_jersey_street
+
+with JerseyStreetsClient() as jersey:
+    streets = [from_jersey_street(f) for f in jersey.iter_streets()]
+```
+
+- **Jersey**: a real second service (`JSearch`, not `JSWFeatureService`)
+  on the same `roadworks.gov.je` deployment. 2,159 real named streets
+  (`FEATURE='Road'`, decodable field, excludes `'Pavement'`). Real
+  GB-NSG-style USRNs in a distinct Crown-Dependency block. A genuine
+  two-CRS-in-one-record situation confirmed live: the real polygon
+  geometry is WGS84, but the real, separately-stated `USRN_XY1`/
+  `USRN_XY2` attribute pair stays in native `EPSG:3109`, never
+  reprojected - used as `Coordinate.value`/`.points` where stated
+  (89.7% of real rows), `GeometryGrade.ABSENT` otherwise, never a
+  fabricated centroid (the same discipline `from_paris` established for
+  a real polygon-only footprint).
+- **Guernsey**: found by checking whether Jersey's real setup has a
+  sibling - it does, `roadworks.gov.gg`'s own `GSearch` service. 2,591
+  real named streets; no clean type field exists to separate genuine
+  street names from other real `ROAD` values sharing the same field
+  (e.g. `"CAR PARK"`), so every non-blank one converts. Real USRNs
+  include genuine fractional subdivisions (e.g. parent `20194` with
+  child polygons `20194.02`/`20194.04`/...), formatted to 2dp to mask
+  real float-encoding noise. `CRS: ESRI:102070 "Guernsey_Grid"` (a real
+  named Channel Islands local grid, confirmed live via an external
+  projection registry) is the layer's *stated* CRS - not its real
+  returned geometry, which is WGS84 regardless, the same split Jersey's
+  own two services show. No stated point/line field exists at all here
+  (unlike Jersey's real `USRN_XY1`/`USRN_XY2`) - every `Street` carries
+  `GeometryGrade.ABSENT`, the real polygon preserved in `.raw` only.
+- **Isle of Man checked too, genuinely not found open** - the Island's
+  real ArcGIS Online organisation (329 items) and its own hosted ArcGIS
+  REST deployment were both walked in full; no street/road layer exists
+  in either. A real Street Gazetteer product exists but sits behind an
+  academic-only (Chest/JISC) licensing scheme, not a public endpoint.
+  See `docs/providers/pending.md`.
+
 ### Added — `av_route_avoiding_works.py`, a real Newton Aycliffe last-mile routing example (2026-08-16)
 
 A new `examples/` script: plans a pickup -> dropoff route across Newton

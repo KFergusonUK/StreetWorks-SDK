@@ -27,9 +27,11 @@ from .from_datex2 import from_datex2
 from .from_dfi_roads import from_dfi_roads
 from .from_drivebc import from_drivebc
 from .from_gnaf import from_gnaf_address, from_gnaf_road
+from .from_guernsey_streets import from_guernsey_street
 from .from_helsinki import from_helsinki
 from .from_idee import from_idee
 from .from_jersey import from_jersey
+from .from_jersey_streets import from_jersey_street
 from .from_kartverket import from_kartverket
 from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
 from .from_lisboa import from_lisboa
@@ -156,4 +158,6 @@ __all__ = [
     "from_osni",
     "from_dfi_roads",
     "from_anncsu",
+    "from_jersey_street",
+    "from_guernsey_street",
 ]

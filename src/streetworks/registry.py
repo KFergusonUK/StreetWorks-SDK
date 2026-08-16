@@ -1951,6 +1951,71 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.arcgis.jersey import JerseyRoadworksClient",
     ),
     ProviderEntry(
+        key="jersey_streets",
+        name="Jersey Street Gazetteer",
+        description="Jersey's real street register, over the same ArcGIS deployment as RoadWorkx.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Jersey"}),
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, found by "
+            "walking the same roadworks.gov.je ArcGIS deployment "
+            "'jersey' (roadworks) already uses. A real second service "
+            "(JSearch, not JSWFeatureService) - 2,159 real named 'Road' "
+            "features (of 7,553 total polygons; the rest are "
+            "'Pavement'). Real GB-NSG-style USRNs in a distinct "
+            "Crown-Dependency numbering block, every one confirmed a "
+            "whole integer. Geometry is a genuine two-CRS-in-one-record "
+            "situation: the real polygon geometry is WGS84, but this "
+            "converts on the real, separately-stated USRN_XY1/USRN_XY2 "
+            "attribute pair instead (native EPSG:3109, never "
+            "reprojected) - forcing the polygon ring into "
+            "Coordinate.points would misuse that field's own contract, "
+            "the same discipline from_paris established. 89.7% of real "
+            "'Road' rows carry a stated pair; GeometryGrade.ABSENT on "
+            "the rest, never a fabricated centroid. Licence unconfirmed "
+            "- see the module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.arcgis.jersey",
+        _client_name="JerseyStreetsClient",
+        import_line="from streetworks.arcgis.jersey import JerseyStreetsClient",
+    ),
+    ProviderEntry(
+        key="guernsey_streets",
+        name="Guernsey Street Gazetteer",
+        description="Guernsey's real street register, over its own public ArcGIS deployment.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Guernsey"}),
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free. This SDK's "
+            "second Channel Islands streets provider, found by checking "
+            "whether Jersey's real setup has a Guernsey sibling - it "
+            "does, on the same real shape (roadworks.gov.gg's own "
+            "ArcGIS deployment, a GSearch service mirroring Jersey's "
+            "JSearch). 2,591 real named 'Road' features (of 2,727 total "
+            "polygons) - no clean type field exists to separate genuine "
+            "street names from other real values sharing the same field "
+            "(e.g. 'CAR PARK'), so every non-blank one converts. Real "
+            "USRNs include genuine fractional subdivisions (e.g. parent "
+            "20194 with child polygons 20194.02/20194.04/...), a "
+            "distinct numbering block from Jersey's own. No stated "
+            "point/line field exists at all (unlike Jersey's own real "
+            "USRN_XY1/USRN_XY2 pair) - every Street carries "
+            "GeometryGrade.ABSENT, the real polygon preserved in .raw "
+            "only. Licence unconfirmed - see the module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.arcgis.guernsey",
+        _client_name="GuernseyStreetsClient",
+        import_line="from streetworks.arcgis.guernsey import GuernseyStreetsClient",
+    ),
+    ProviderEntry(
         key="tigerweb",
         name="TIGERweb (US Census Bureau)",
         description="The US national road-segment network, over the TIGERweb ArcGIS service.",

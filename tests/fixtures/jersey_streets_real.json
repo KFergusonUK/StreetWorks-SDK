@@ -1,0 +1,280 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.077505437950469,
+              49.22290582004854
+            ],
+            [
+              -2.0777607762719286,
+              49.22294097840303
+            ],
+            [
+              -2.0780655925556046,
+              49.22298598848576
+            ],
+            [
+              -2.078068094856628,
+              49.2229707038788
+            ],
+            [
+              -2.077505437950469,
+              49.22290582004854
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 1,
+        "FEATURE": "Road",
+        "REAL_NAME": "Road Off La Rue de la Piece Mauger",
+        "FIND_NAME": "No Name Road Off La Rue de la Piece Mauger",
+        "THEME": "Roads",
+        "USRN": 40002555,
+        "USRN_XY1": " ",
+        "USRN_XY2": " ",
+        "BKSTOID": "AREA000000142346",
+        "CREATED": 20060220,
+        "UPDATED": 20130227,
+        "OBJ_ADMIN": " ",
+        "OBJ_CLASS": 0,
+        "OBJ_TYPE": " ",
+        "OBJ_CAT": " ",
+        "OBJ_NO": 0,
+        "FEATURE_CO": 203,
+        "CHANGEHIST": "New+20060220;Edit+20130227",
+        "GlobalID": "{7902D71A-A0D2-4E61-AD7B-5DF523848BF3}",
+        "PARISH": "Trinity",
+        "Shape_Length": 720.0322920029657,
+        "Shape_Area": 863.225617098052
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.192642571227834,
+              49.2229492929484
+            ],
+            [
+              -2.192672193699697,
+              49.222970975064555
+            ],
+            [
+              -2.192672817473376,
+              49.222971429731665
+            ],
+            [
+              -2.1926743645410376,
+              49.222972556514776
+            ],
+            [
+              -2.192642571227834,
+              49.2229492929484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2,
+        "FEATURE": "Road",
+        "REAL_NAME": "La Ruelle du Coin",
+        "FIND_NAME": "La Ruelle du Coin",
+        "THEME": "Roads",
+        "USRN": 40000338,
+        "USRN_XY1": "35752,69684",
+        "USRN_XY2": "35800,69778",
+        "BKSTOID": "AREA000000142348",
+        "CREATED": 20050811,
+        "UPDATED": 0,
+        "OBJ_ADMIN": " ",
+        "OBJ_CLASS": 0,
+        "OBJ_TYPE": " ",
+        "OBJ_CAT": " ",
+        "OBJ_NO": 0,
+        "FEATURE_CO": 203,
+        "CHANGEHIST": "New+20050811",
+        "GlobalID": "{71ADB71D-F41A-4EE1-828B-625C92B7CE01}",
+        "PARISH": "St. Ouen",
+        "Shape_Length": 226.58621909200744,
+        "Shape_Area": 342.24549705807715
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.108625769191205,
+              49.18109411411191
+            ],
+            [
+              -2.1086817287998367,
+              49.18100360977045
+            ],
+            [
+              -2.1088674135735506,
+              49.18070183531987
+            ],
+            [
+              -2.109182546402162,
+              49.18018768045913
+            ],
+            [
+              -2.108625769191205,
+              49.18109411411191
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 9,
+        "FEATURE": "Road",
+        "REAL_NAME": "Commercial Buildings",
+        "FIND_NAME": "Commercial Buildings",
+        "THEME": "Roads",
+        "USRN": 40002086,
+        "USRN_XY1": "41941,65171",
+        "USRN_XY2": "41908,64867",
+        "BKSTOID": "AREA000000034951",
+        "CREATED": 20050811,
+        "UPDATED": 20090813,
+        "OBJ_ADMIN": "TTS",
+        "OBJ_CLASS": 0,
+        "OBJ_TYPE": "Road",
+        "OBJ_CAT": "-",
+        "OBJ_NO": 0,
+        "FEATURE_CO": 203,
+        "CHANGEHIST": "New+20050811",
+        "GlobalID": "{9A30CB00-63C3-434D-BD6D-EBD77E5B0DE3}",
+        "PARISH": "St. Helier",
+        "Shape_Length": 743.4057312926795,
+        "Shape_Area": 3964.44706301585
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 248,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.1085815105514953,
+              49.181120563977004
+            ],
+            [
+              -2.10856456813632,
+              49.181146454500706
+            ],
+            [
+              -2.1085447986763137,
+              49.18118282604048
+            ],
+            [
+              -2.108535382896966,
+              49.18120255265036
+            ],
+            [
+              -2.1085815105514953,
+              49.181120563977004
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 248,
+        "FEATURE": "Pavement",
+        "REAL_NAME": " ",
+        "FIND_NAME": " ",
+        "THEME": "Roads",
+        "USRN": 40002086,
+        "USRN_XY1": " ",
+        "USRN_XY2": " ",
+        "BKSTOID": "AREA000000034453",
+        "CREATED": 20050910,
+        "UPDATED": 20090813,
+        "OBJ_ADMIN": "TTS",
+        "OBJ_CLASS": 0,
+        "OBJ_TYPE": "Footway",
+        "OBJ_CAT": "gk-cs",
+        "OBJ_NO": 2,
+        "FEATURE_CO": 214,
+        "CHANGEHIST": "New+20050910",
+        "GlobalID": "{564720A4-A8BE-490D-8BEA-19990CC163F0}",
+        "PARISH": " ",
+        "Shape_Length": 668.4102003908221,
+        "Shape_Area": 893.9012682716357
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1373,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.1080513607273237,
+              49.18170296656277
+            ],
+            [
+              -2.1080588226129104,
+              49.1817052261283
+            ],
+            [
+              -2.1081592675394614,
+              49.181731568323755
+            ],
+            [
+              -2.108181981853873,
+              49.18173178041036
+            ],
+            [
+              -2.1080513607273237,
+              49.18170296656277
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 1373,
+        "FEATURE": "Pavement",
+        "REAL_NAME": " ",
+        "FIND_NAME": " ",
+        "THEME": "Roads",
+        "USRN": 40002086,
+        "USRN_XY1": " ",
+        "USRN_XY2": " ",
+        "BKSTOID": "AREA000000035437",
+        "CREATED": 20050910,
+        "UPDATED": 20090813,
+        "OBJ_ADMIN": "TTS",
+        "OBJ_CLASS": 0,
+        "OBJ_TYPE": "Footway",
+        "OBJ_CAT": "gk-gs",
+        "OBJ_NO": 1,
+        "FEATURE_CO": 214,
+        "CHANGEHIST": "New+20050910",
+        "GlobalID": "{C29819A5-9341-4872-B1BA-A4C335FF4433}",
+        "PARISH": " ",
+        "Shape_Length": 818.8129706623865,
+        "Shape_Area": 1039.5993523830248
+      }
+    }
+  ]
+}

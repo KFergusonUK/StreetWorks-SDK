@@ -129,6 +129,26 @@ Credentials-wanted, or Documented-unavailable; see
   file — both real and live, just larger and messier than the simpler
   streets resource. Would map to `Address`, joined to the already-built
   `Street` records via `PROGRESSIVO_NAZIONALE` (a real, stated link).
+- **Isle of Man — streets gazetteer checked, genuinely not found open,
+  the third Crown Dependency checked this session after Jersey and
+  Guernsey both turned out real and buildable.** Investigated
+  2026-08-16, live, not from documentation alone. The Island's own real
+  ArcGIS Online organisation (`manngis`) was enumerated in full (329
+  real items) — no street/road/gazetteer dataset anywhere in it; its
+  hosted `manngispubserver` ArcGIS REST deployment
+  (`maps.gov.im`/`ppmaps.gov.im`) was walked folder by folder too, the
+  same technique that found Jersey's and Guernsey's real services — real
+  services exist (flood risk, basemaps, a `CorporateDynamicServices/
+  ProdFeeds` points-of-interest layer with schools/GPs/bus stops/postboxes)
+  but none is a street or road layer. A real Street Gazetteer product
+  (BS7666-based) is referenced by the UK academic Chest/JISC digital-map
+  licensing scheme (`chest.ac.uk/agreements/iom`) — genuinely real, but
+  behind an academic-only licence agreement, not a public endpoint;
+  Cloudflare blocked a direct check of that page's own terms. Unlike
+  Germany/Portugal's national-streets rulings, this isn't "real data,
+  wrong shape" — it's "no open access route found at all." Genuinely
+  unresolved, not ruled out — a future direct enquiry to Isle of Man
+  Government (rather than more endpoint-hunting) is the real next step.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and
