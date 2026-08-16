@@ -516,12 +516,22 @@ Cloudflare R2 URL, which the client follows rather than hardcoding.
 **A real, load-bearing CRS disagreement within the one file, found and
 resolved, not assumed.** The GeoJSON's own `geometry` is reprojected to
 WGS84 by this download route, but every real feature also carries
-separate `X_Coord`/`Y_Coord` properties whose magnitude is only
-consistent with the old Irish Grid (TM65/TM75), not WGS84. This client
-uses `X_Coord`/`Y_Coord`, never the reprojected `geometry` field —
-labelled `EPSG:29903`, **inferred from coordinate plausibility, not read
-from a live `spatialReference` response**, since the endpoint that would
-state it explicitly is the same one that's currently down.
+separate `X_Coord`/`Y_Coord` properties, real Irish Grid values, not
+WGS84. This client uses `X_Coord`/`Y_Coord`, never the reprojected
+`geometry` field — labelled **`EPSG:29902` (TM65 / Irish Grid)**,
+corrected from an initial `EPSG:29903` guess once better evidence
+existed. OSNI's own endpoint (which would state `spatialReference.wkid`
+directly) is still down, but a directly comparable NI government
+service — the DfI Roads Highway Network centreline, checked the same
+week — states its own `spatialReference` explicitly as `{"wkid": 29900,
+"latestWkid": 29902}`; `29900` (TM65 / Irish National Grid) is
+EPSG-deprecated in favour of `29902` (TM65 / Irish Grid), confirmed via
+the EPSG registry, not assumed. `29903` (TM75 / Irish Grid) is a real,
+formally distinct later code — geodetically near-identical per Irish
+authorities, but `29902` is the better-evidenced label for Northern
+Ireland government Irish Grid data specifically. Still not a direct live
+read of *this* dataset's own declared CRS — revisit if OSNI's endpoint
+ever recovers.
 
 **A real, live-confirmed `USRN` field — genuinely surprising, kept
 rather than dropped, but scoped honestly.** Every one of 25,643 real
@@ -538,6 +548,75 @@ stays empty. 7 of 25,643 real `STREETNAME` values are road numbers
 (`A0002`, `M2`, `M3`, `M5`, `M12`, `M22`) rather than street names —
 genuine content, kept as-is. No credentials. Licence: Open Government
 Licence v3.0.
+
+## DfI Roads Highway Network centreline (Northern Ireland)
+
+DfI (Department for Infrastructure) Roads' own real maintained-road
+network centreline — the geometry counterpart to OSNI Streetnames above.
+
+```python
+from streetworks.dfi_roads import DfiRoadsClient
+
+with DfiRoadsClient() as dfi:
+    sections = list(dfi.iter_road_sections())  # adopted only, real line geometry
+    print(sections[0].section_name, sections[0].class_name, sections[0].adoption_status)
+```
+
+Convert to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_dfi_roads
+
+segment = from_dfi_roads(sections[0])
+```
+
+**The promoted "open data" downloads are genuinely attribute-only —
+checked live, not assumed.** Both the CSV and XML exports
+(`dfi.highway-iams.uk`, OGL v3.0) carry the same 8 columns and **zero
+geometry**, despite the dataset being titled a "centreline" product. The
+real geometry lives behind the linked ArcGIS Experience Builder public
+viewer instead — found by tracing that app's own item → its web map →
+its operational layer's `FeatureServer` URL, the same technique that
+found Roma's/Lisboa's/Oslo's real backends.
+
+**Not built on this SDK's shared `streetworks.arcgis` client — a real,
+checked reason.** That client always requests `f=geojson` first and only
+falls back to Esri's native `f=json` format when the geojson response
+fails to parse as a genuine `FeatureCollection`. This service's
+`f=geojson` output *is* a genuine, valid `FeatureCollection` — it just
+silently reprojects to WGS84 (confirmed live: a real vertex came back
+`-5.67296285796857, 54.6009670090229`). So the shared client's fallback
+would never trigger here, and using it would mean silently losing the
+native Irish Grid coordinates. This client requests `f=json` directly
+instead.
+
+**CRS confirmed live, directly from this service's own
+`spatialReference`** — `{"wkid": 29900, "latestWkid": 29902}`. `29900`
+(TM65 / Irish National Grid) is EPSG-deprecated in favour of `29902`
+(TM65 / Irish Grid) — a genuine, direct live read, unlike OSNI
+Streetnames above, whose own endpoint is down and had to infer its CRS
+by analogy to this exact service (now corrected to match).
+
+**Pagination confirmed live to genuinely advance** — `resultOffset`
+checked two pages deep (`[1, 2, 3]` then `[4, 5, 6]`), not Jersey's own
+silently-repeating first-page trap. `exceededTransferLimit` correctly
+signals more pages remain (`maxRecordCount` is 2,000).
+
+**A real, genuinely two-valued `ADOPTION_S` field** — `Adopted` (70,522
+of 71,596 real sections) and `Unadopted` (1,074). `iter_road_sections()`
+defaults to adopted-only (the real public network); pass
+`adopted_only=False` for everything. **No USRN or USRN-shaped field
+exists anywhere in this schema** — confirmed by the full real field
+list, unlike OSNI's own surprise.
+
+**Sections, not streets — maps to `Segment`, never a synthesised
+`Street`.** DfI publishes road sections with a repeated name attribute
+(`SECTION_NA`, e.g. multiple distinct sections all named "BELFAST RD"),
+not a separate named-street entity — the second real source (after BD
+TOPO) to populate `Segment.names`. A genuine multi-path section exists
+(`7020U2252_17`, confirmed live — 2 of 10,000 sampled) and maps to
+`Coordinate.parts`, not silently collapsed to its first path. No
+credentials. Licence: Open Government Licence v3.0.
 
 ## UK Police (crime data — a worker-safety signal)
 

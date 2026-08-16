@@ -33,23 +33,28 @@ resolved, not assumed.** The GeoJSON's own top-level ``crs`` block states
 WGS84 (`urn:ogc:def:crs:OGC:1.3:CRS84`), and its ``geometry.coordinates``
 are real WGS84 lon/lat values - this specific download route reprojects
 on the way out. But every real feature *also* carries separate
-``X_Coord``/``Y_Coord`` properties, and their magnitude
-(`~334186, 377179`) is only consistent with the old Irish Grid (TM65/TM75,
-`EPSG:29903`), not WGS84 and not the modern Irish Transverse Mercator.
-This client uses ``X_Coord``/``Y_Coord``, not ``geometry`` - the native
-Irish Grid value, not the reprojected one, per this SDK's standing
-"never silently reproject" discipline.
+``X_Coord``/``Y_Coord`` properties, real Irish Grid values (magnitude
+`~334186, 377179`), not WGS84 and not the modern Irish Transverse
+Mercator. This client uses ``X_Coord``/``Y_Coord``, not ``geometry`` -
+the native Irish Grid value, not the reprojected one, per this SDK's
+standing "never silently reproject" discipline.
 
-**`EPSG:29903` is inferred from coordinate plausibility, not read from a
-live `spatialReference` response - stated honestly, not presented as
-confirmed the way this SDK's other CRS claims usually are.** The REST
-endpoint that would state `spatialReference.wkid` explicitly is the same
-one that's currently down (see above); this bulk route's own metadata
-doesn't carry an EPSG code for the ``X_Coord``/``Y_Coord`` pair at all.
-`EPSG:29903` is Ireland's standard historical Irish Grid code and the
-coordinate ranges fit it, but this has not been independently confirmed
-against a live authoritative source the way this SDK's other CRS labels
-are - revisit once the REST endpoint recovers.
+**`EPSG:29902` (TM65 / Irish Grid), corrected from an initial
+`EPSG:29903` guess once better live evidence existed - a real example of
+this SDK revising a label rather than defending a first guess.** OSNI's
+own REST endpoint, which would state `spatialReference.wkid` directly,
+is still down (see above), so this dataset's own CRS still can't be
+read live. But a directly comparable, same-jurisdiction service
+(`streetworks.dfi_roads`' real ArcGIS FeatureServer, checked the same
+week, coordinates in the same numeric range) states its own
+`spatialReference` explicitly as `{"wkid": 29900, "latestWkid": 29902}`
+- `29900` (TM65 / Irish National Grid) is EPSG-deprecated in favour of
+`29902` (TM65 / Irish Grid), confirmed via the EPSG registry itself, not
+assumed. The originally-guessed `29903` (TM75 / Irish Grid) is a real,
+different, later code (geodetically near-identical per Irish
+authorities, but formally distinct) - `29902` is the better-evidenced
+label for Northern Ireland government Irish Grid data specifically,
+still not a direct live read of *this* dataset's own declared CRS.
 
 **A real, live-confirmed `USRN` field - genuinely surprising, kept
 rather than dropped, but scoped honestly.** Every one of 25,643 real

@@ -2,6 +2,82 @@
 
 ## [Unreleased]
 
+### Added — DfI Roads Highway Network centreline, the geometry counterpart to OSNI Streetnames (2026-08-16)
+
+`streetworks.dfi_roads` / `streetworks.common.from_dfi_roads` - DfI
+(Department for Infrastructure) Roads' own real maintained-road network
+centreline for Northern Ireland - real line geometry, sitting beside
+OSNI Streetnames' name+point gazetteer above.
+
+```python
+from streetworks.dfi_roads import DfiRoadsClient
+from streetworks.common import from_dfi_roads
+
+with DfiRoadsClient() as dfi:
+    segments = [from_dfi_roads(s) for s in dfi.iter_road_sections()]  # adopted only
+```
+
+- **The promoted "open data" downloads (CSV/XML via
+  `dfi.highway-iams.uk`, OGL v3.0) are genuinely attribute-only - checked
+  live, not assumed.** Both carry the same 8 columns and zero geometry,
+  despite the dataset being titled a "centreline" product. The real
+  geometry lives behind the linked ArcGIS Experience Builder public
+  viewer instead - found by tracing that app's own item -> web map ->
+  operational layer's `FeatureServer` URL, the same technique that found
+  Roma's/Lisboa's/Oslo's real backends.
+- **Not built on this SDK's shared `streetworks.arcgis` client - a
+  real, checked reason, not a style choice.** That client always
+  requests `f=geojson` first and only falls back to Esri's native
+  `f=json` format when the geojson response fails to parse as a genuine
+  `FeatureCollection`. This service's `f=geojson` output *is* a genuine,
+  valid `FeatureCollection` - it just silently reprojects to WGS84
+  (confirmed live). So the shared client's fallback would never trigger
+  here; this client requests `f=json` directly instead.
+- **CRS confirmed live, directly from this service's own
+  `spatialReference`** - `{"wkid": 29900, "latestWkid": 29902}`. `29900`
+  (TM65 / Irish National Grid) is EPSG-deprecated in favour of `29902`
+  (TM65 / Irish Grid) - a genuine, direct live read, which is what
+  prompted correcting OSNI Streetnames' own inferred CRS label to match
+  (see below).
+- **Pagination confirmed live to genuinely advance, not assumed from
+  stated capability** - `resultOffset` checked two pages deep (`[1, 2,
+  3]` then `[4, 5, 6]`), not Jersey's own silently-repeating first-page
+  trap. `exceededTransferLimit` correctly signals more pages remain
+  (`maxRecordCount` is 2,000 real records); raises
+  `TruncatedResultError` rather than silently returning a partial result
+  if a page is ever empty while still signalling more data.
+- **A real, genuinely two-valued `ADOPTION_S` field, confirmed live** -
+  `Adopted` (70,522 of 71,596 real sections) and `Unadopted` (1,074).
+  `iter_road_sections()` defaults to adopted-only, with an escape hatch
+  for the unfiltered set.
+- **Sections, not streets - maps to `Segment`, never a synthesised
+  `Street`.** DfI publishes road sections with a repeated name attribute
+  (multiple distinct sections all named e.g. "BELFAST RD"), not a
+  separate named-street entity - the second real source (after BD TOPO)
+  to populate `Segment.names`. A genuine multi-path section exists
+  (confirmed live, 2 of 10,000 sampled) and maps to `Coordinate.parts`,
+  never silently collapsed to its first path.
+- No USRN or USRN-shaped field exists anywhere in this schema -
+  confirmed by the full real field list, unlike OSNI Streetnames' own
+  surprise. No credentials. Licence: Open Government Licence v3.0.
+  Registry entry (`dfi_roads`, `kind=streets`), new tests against a real
+  trimmed live-pull JSON fixture, and a `scripts/smoke_test.py` check.
+
+### Fixed — OSNI Streetnames' inferred CRS corrected from EPSG:29903 to EPSG:29902 (2026-08-16)
+
+While investigating DfI Roads (above), that service's own
+`spatialReference` gave a real, direct live read for the same Irish Grid
+coordinate family OSNI Streetnames uses - `EPSG:29902` (TM65 / Irish
+Grid), not the `EPSG:29903` (TM75 / Irish Grid) originally inferred from
+coordinate plausibility alone, since OSNI's own endpoint (which would
+state this directly) is still down. `29900` (TM65 / Irish National Grid,
+DfI's own stated `wkid`) is EPSG-deprecated in favour of `29902`,
+confirmed via the EPSG registry, not assumed - `29903` is a real,
+formally distinct code, not the better-evidenced one here. Updated
+`streetworks.osni`'s CRS label, docstring, registry `scope_note`, docs,
+and tests to match - still not a direct live read of OSNI's own CRS,
+stated honestly as corrected-by-analogy, not confirmed.
+
 ### Added — OSNI Streetnames, this SDK's first Northern Ireland gazetteer (2026-08-16)
 
 `streetworks.osni` / `streetworks.common.from_osni` - Ordnance Survey
@@ -31,12 +107,16 @@ with OsniStreetnamesClient() as osni:
 - **A real, load-bearing CRS disagreement within the one file, found and
   resolved, not assumed.** The GeoJSON's own `geometry` is reprojected
   to WGS84 by this download route, but every real feature also carries
-  separate `X_Coord`/`Y_Coord` properties whose magnitude is only
-  consistent with the old Irish Grid (TM65/TM75), not WGS84. Uses
-  `X_Coord`/`Y_Coord`, never the reprojected `geometry` - labelled
-  `EPSG:29903`, **inferred from coordinate plausibility, not read from a
-  live `spatialReference` response**, since the endpoint that would
-  state it explicitly is the same one that's down.
+  separate `X_Coord`/`Y_Coord` properties, real Irish Grid values, not
+  WGS84. Uses `X_Coord`/`Y_Coord`, never the reprojected `geometry` -
+  labelled **`EPSG:29902` (TM65 / Irish Grid)**, corrected from an
+  initial `EPSG:29903` guess once a directly comparable NI government
+  service (DfI Roads' Highway Network centreline, checked the same
+  week) confirmed `EPSG:29902` live for the same coordinate family -
+  `29903` is a real, formally distinct code, not the better-evidenced
+  one here. Still not a direct live read of this dataset's own CRS,
+  since the endpoint that would state it explicitly is the same one
+  that's down.
 - **A real, live-confirmed `USRN` field, genuinely surprising - kept,
   but scoped honestly, not assumed to match the initial framing.**
   Every one of 25,643 real features carries a populated, unique `USRN`

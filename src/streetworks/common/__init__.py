@@ -23,6 +23,7 @@ from .from_chicagodot import from_chicagodot
 from .from_copenhagen import from_copenhagen
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
+from .from_dfi_roads import from_dfi_roads
 from .from_drivebc import from_drivebc
 from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_helsinki import from_helsinki
@@ -152,4 +153,5 @@ __all__ = [
     "from_tfl",
     "from_idee",
     "from_osni",
+    "from_dfi_roads",
 ]

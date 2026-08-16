@@ -1,0 +1,354 @@
+{
+  "objectIdFieldName": "OBJECTID",
+  "geometryType": "esriGeometryPolyline",
+  "spatialReference": {
+    "wkid": 29900,
+    "latestWkid": 29902
+  },
+  "fields": [
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeOID",
+      "alias": "OBJECTID",
+      "sqlType": "sqlTypeOther",
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "Section_Code",
+      "type": "esriFieldTypeString",
+      "alias": "Section Code",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "SECTION_NA",
+      "type": "esriFieldTypeString",
+      "alias": "Section Name",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "DIVISION_N",
+      "type": "esriFieldTypeString",
+      "alias": "Division Name",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "SECTION_OF",
+      "type": "esriFieldTypeString",
+      "alias": "Section Office Name",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "CLASS_NAME",
+      "type": "esriFieldTypeString",
+      "alias": "CLASS_NAME",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "ADOPTION_S",
+      "type": "esriFieldTypeString",
+      "alias": "Adoption Status",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "SECTION_TY",
+      "type": "esriFieldTypeString",
+      "alias": "Section Type Name",
+      "sqlType": "sqlTypeOther",
+      "length": 254,
+      "domain": null,
+      "defaultValue": null
+    },
+    {
+      "name": "Shape__Length",
+      "type": "esriFieldTypeDouble",
+      "alias": "Shape__Length",
+      "sqlType": "sqlTypeDouble",
+      "domain": null,
+      "defaultValue": null
+    }
+  ],
+  "exceededTransferLimit": false,
+  "features": [
+    {
+      "attributes": {
+        "OBJECTID": 1,
+        "Section_Code": "7065U9014_16",
+        "SECTION_NA": "PINECROFT AV1",
+        "DIVISION_N": "SOUTHERN",
+        "SECTION_OF": "ARDS and NORTH DOWN",
+        "CLASS_NAME": "Unclassified",
+        "ADOPTION_S": "Adopted",
+        "SECTION_TY": "Single Carriageway",
+        "Shape__Length": 141.87246744001828
+      },
+      "geometry": {
+        "paths": [
+          [
+            [
+              350431.0313,
+              375015.6875
+            ],
+            [
+              350430.6563,
+              374988.093800001
+            ],
+            [
+              350429.1875,
+              374949.156300001
+            ],
+            [
+              350426.1563,
+              374873.906300001
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "attributes": {
+        "OBJECTID": 2,
+        "Section_Code": "7020A0002_02",
+        "SECTION_NA": "BELFAST RD",
+        "DIVISION_N": "NORTHERN",
+        "SECTION_OF": "MID and EAST ANTRIM",
+        "CLASS_NAME": "A Class",
+        "ADOPTION_S": "Adopted",
+        "SECTION_TY": "DUAL 2-LANE",
+        "Shape__Length": 1167.0465897418237
+      },
+      "geometry": {
+        "paths": [
+          [
+            [
+              338735.9063,
+              385763.843800001
+            ],
+            [
+              338754.3125,
+              385775.343800001
+            ],
+            [
+              338772,
+              385788.875
+            ],
+            [
+              338794.1875,
+              385810.375
+            ],
+            [
+              338810.125,
+              385827.375
+            ],
+            [
+              338820.1875,
+              385838.8125
+            ],
+            [
+              338833.3125,
+              385854.5
+            ],
+            [
+              338851.8125,
+              385878.875
+            ],
+            [
+              338894.4688,
+              385929.781300001
+            ],
+            [
+              338919.2813,
+              385962.218800001
+            ],
+            [
+              338951.7188,
+              386000
+            ],
+            [
+              338983.6875,
+              386040.406300001
+            ],
+            [
+              339038.5625,
+              386105.625
+            ],
+            [
+              339086.125,
+              386161.718800001
+            ],
+            [
+              339130.625,
+              386209.906300001
+            ],
+            [
+              339170.875,
+              386250.125
+            ],
+            [
+              339197.9375,
+              386275.968800001
+            ],
+            [
+              339200,
+              386277.9375
+            ],
+            [
+              339225.3438,
+              386299.5625
+            ],
+            [
+              339252.5625,
+              386322.9375
+            ],
+            [
+              339310.0625,
+              386365.093800001
+            ],
+            [
+              339329.5938,
+              386378.531300001
+            ],
+            [
+              339361.625,
+              386400
+            ],
+            [
+              339374.8438,
+              386409.031300001
+            ],
+            [
+              339394.4375,
+              386421.406300001
+            ],
+            [
+              339426.5313,
+              386441.375
+            ],
+            [
+              339502.5938,
+              386487.468800001
+            ],
+            [
+              339513.25,
+              386494.218800001
+            ],
+            [
+              339532.375,
+              386504.875
+            ],
+            [
+              339553.0625,
+              386517.6875
+            ],
+            [
+              339571.7813,
+              386526.5625
+            ],
+            [
+              339593.4688,
+              386537.375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "attributes": {
+        "OBJECTID": 5342,
+        "Section_Code": "7020U2252_17",
+        "SECTION_NA": "FENAGHY PK1",
+        "DIVISION_N": "NORTHERN",
+        "SECTION_OF": "MID and EAST ANTRIM",
+        "CLASS_NAME": "Unclassified",
+        "ADOPTION_S": "Adopted",
+        "SECTION_TY": "Single Carriageway",
+        "Shape__Length": 153.06209289464286
+      },
+      "geometry": {
+        "paths": [
+          [
+            [
+              307637.09,
+              402906.689999999
+            ],
+            [
+              307657.12,
+              402919.720000001
+            ],
+            [
+              307688.31,
+              402943.880000001
+            ]
+          ],
+          [
+            [
+              307688.31,
+              402943.880000001
+            ],
+            [
+              307717.22,
+              402965.4
+            ],
+            [
+              307737.84,
+              402979.880000001
+            ],
+            [
+              307749.48,
+              403005.869999999
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "attributes": {
+        "OBJECTID": 6562,
+        "Section_Code": "7020U4087_15",
+        "SECTION_NA": "PRIORY PL1",
+        "DIVISION_N": "NORTHERN",
+        "SECTION_OF": "MID and EAST ANTRIM",
+        "CLASS_NAME": "Unclassified",
+        "ADOPTION_S": "Unadopted",
+        "SECTION_TY": "Single Carriageway",
+        "Shape__Length": 56.27166869643197
+      },
+      "geometry": {
+        "paths": [
+          [
+            [
+              339248.6563,
+              402307.718800001
+            ],
+            [
+              339260.6875,
+              402310.281300001
+            ],
+            [
+              339302.75,
+              402323.093800001
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

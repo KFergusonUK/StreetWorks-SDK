@@ -16,10 +16,13 @@ from .models import Coordinate, Identifier, SourceGrade
 
 __all__ = ["from_osni"]
 
-#: Confirmed by coordinate-value plausibility, not read from a live
-#: spatialReference response - see streetworks.osni.client's own module
-#: docstring for why.
-_CRS = "EPSG:29903"
+#: TM65 / Irish Grid - corrected from an initial EPSG:29903 guess once a
+#: directly comparable NI government service (DfI Roads) confirmed
+#: EPSG:29902 live for the same coordinate family. Still not a direct
+#: live read of this dataset's own CRS (OSNI's REST endpoint remains
+#: down) - see streetworks.osni.client's own module docstring for the
+#: full reasoning.
+_CRS = "EPSG:29902"
 
 
 def from_osni(streetname: Streetname) -> Street:

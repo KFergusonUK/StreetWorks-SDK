@@ -1526,6 +1526,21 @@ def check_osni() -> str:
     return f"{len(streets)} real street(s), e.g. {streets[0].streetname!r}"
 
 
+def check_dfi_roads() -> str:
+    """Northern Ireland DfI Roads Highway Network needs no credentials.
+    Exercises the real ArcGIS FeatureServer behind the public map
+    viewer, not the attribute-only CSV/XML downloads - see
+    streetworks.dfi_roads.client's module docstring."""
+    from streetworks.dfi_roads import DfiRoadsClient
+
+    with DfiRoadsClient() as dfi:
+        sections = list(itertools.islice(dfi.iter_road_sections(), 5))
+    if not sections:
+        raise RuntimeError("query returned no real road sections")
+    with_geometry = sum(1 for s in sections if s.geometry is not None)
+    return f"{len(sections)} real section(s), {with_geometry} with geometry"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1684,6 +1699,8 @@ def main() -> int:
     reporter.check("IDEE Transportes (Spain)", [], check_idee)
     # OSNI Streetnames (Northern Ireland gazetteer) needs no credentials
     reporter.check("OSNI Streetnames (Northern Ireland)", [], check_osni)
+    # DfI Roads Highway Network (Northern Ireland centreline) needs no credentials
+    reporter.check("DfI Roads Highway Network (Northern Ireland)", [], check_dfi_roads)
 
     print()
     if reporter.ran == 0:

@@ -2197,13 +2197,16 @@ _REGISTRY: list[ProviderEntry] = [
             "cross-reference GB's national USRN/NSG scheme - Northern "
             "Ireland sits outside that scheme, so this is scoped "
             "'OSNI', not presented as a national identifier. CRS is "
-            "Irish Grid (EPSG:29903), used from the feed's own "
+            "Irish Grid (EPSG:29902, TM65), used from the feed's own "
             "X_Coord/Y_Coord fields rather than its reprojected WGS84 "
-            "geometry - inferred from coordinate plausibility, not "
-            "read from a live spatialReference response, since that "
-            "endpoint is the same one that's down. Jurisdiction-"
-            "distinct, same treatment as Jersey/Scotland - never folded "
-            "under a generic UK territory. See module docstring."
+            "geometry - corrected from an initial EPSG:29903 guess once "
+            "a directly comparable NI government service (dfi_roads) "
+            "confirmed EPSG:29902 live for the same coordinate family; "
+            "still not a direct live read of this dataset's own CRS, "
+            "since OSNI's own endpoint is the same one that's down. "
+            "Jurisdiction-distinct, same treatment as Jersey/Scotland - "
+            "never folded under a generic UK territory. See module "
+            "docstring."
         ),
         credentials=None,
         licence="Open Government Licence v3.0 (OGL)",
@@ -2211,6 +2214,41 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.osni",
         _client_name="OsniStreetnamesClient",
         import_line="from streetworks.osni import OsniStreetnamesClient",
+    ),
+    ProviderEntry(
+        key="dfi_roads",
+        name="DfI Roads Highway Network centreline",
+        description="Northern Ireland's real, maintained road-network centreline geometry.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Northern Ireland"}),
+        administrative_area="Department for Infrastructure (DfI) Roads",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free. The real "
+            "geometry counterpart to osni's name+point gazetteer. The "
+            "promoted 'open data' CSV/XML downloads are genuinely "
+            "attribute-only - zero geometry, despite being called a "
+            "centreline product - so this client uses the real ArcGIS "
+            "FeatureServer behind the public map viewer instead, found "
+            "by tracing the viewer app's own item/web-map/layer chain. "
+            "Not built on this SDK's shared ArcGISFeatureClient, since "
+            "that client's f=geojson-first behaviour would silently "
+            "reproject this service's real Irish Grid coordinates to "
+            "WGS84 without ever triggering its native-format fallback - "
+            "confirmed live, not assumed. CRS is EPSG:29902 (TM65 / "
+            "Irish Grid), read directly from this service's own "
+            "spatialReference, not inferred - the same code osni's own "
+            "CRS label was corrected to match once this evidence "
+            "existed. Real, genuinely two-valued ADOPTION_S field "
+            "(Adopted/Unadopted) - iter_road_sections() defaults to "
+            "adopted-only. No USRN or USRN-shaped field exists in this "
+            "schema. See module docstring."
+        ),
+        credentials=None,
+        licence="Open Government Licence v3.0 (OGL)",
+        source_grade="register",
+        _module="streetworks.dfi_roads",
+        _client_name="DfiRoadsClient",
+        import_line="from streetworks.dfi_roads import DfiRoadsClient",
     ),
     ProviderEntry(
         key="drivebc",

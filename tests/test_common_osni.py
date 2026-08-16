@@ -26,7 +26,7 @@ def test_from_osni_converts_a_real_streetname():
     assert street.territory == "Northern Ireland"
     assert street.source_grade == SourceGrade.REGISTER
     assert street.geometry_grade == GeometryGrade.PUBLISHED
-    assert street.geometry == Coordinate(value=(358572.0, 355614.0), crs="EPSG:29903")
+    assert street.geometry == Coordinate(value=(358572.0, 355614.0), crs="EPSG:29902")
     assert street.raw is _REAL_STREETNAME
 
 
@@ -41,7 +41,7 @@ def test_from_osni_scopes_usrn_to_osni_not_the_gb_national_scheme():
 def test_from_osni_never_reprojects_the_irish_grid_coordinate():
     street = from_osni(_REAL_STREETNAME)
     assert street.geometry is not None
-    assert street.geometry.crs == "EPSG:29903"
+    assert street.geometry.crs == "EPSG:29902"
     assert street.geometry.value == (358572.0, 355614.0)
 
 
