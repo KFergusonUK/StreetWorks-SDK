@@ -2,22 +2,31 @@
 
 ## [Unreleased]
 
-### Added — `av_route_avoiding_works.py`, a real Durham last-mile routing example (2026-08-16)
+### Added — `av_route_avoiding_works.py`, a real Newton Aycliffe last-mile routing example (2026-08-16)
 
-A new `examples/` script: plans a pickup -> dropoff route across Durham
-City (OSRM's public demo server, real OpenStreetMap roads), checks it
-against Street Manager's real, live, in-progress works, and reroutes
+A new `examples/` script: plans a pickup -> dropoff route across Newton
+Aycliffe (OSRM's public demo server, real OpenStreetMap roads), checks
+it against Street Manager's real, live, in-progress works, and reroutes
 around any that sit within `--threshold-m` (default 40m) of the route -
 or says so honestly when no detour clears them, rather than pretending
-success. Default pickup/dropoff are real, Nominatim-geocoded Durham
-landmarks (railway station, Market Place); real production Street
-Manager data for that pair currently has exactly one unavoidable
-conflict, on Leazes Road - a genuine chokepoint on Durham's historic
-river-loop peninsula, not a bug (independently confirmed by finding a
-real, successful reroute elsewhere, in Newton Hall's grid-street estate,
-under the same code path). `--map [PATH]` writes a Plotly/CartoDB map
-matching the style of `compare_active_works.py`/`collaboration_finder.py`.
+success. Default pickup/dropoff are real, Nominatim-geocoded Newton
+Aycliffe streets (Emerson Way, Van Mildert Road); real production
+Street Manager data for that pair currently has one real conflict, on
+Greville Way, which the script successfully routes around via Central
+Avenue. `--map [PATH]` writes a Plotly/CartoDB map matching the style
+of `compare_active_works.py`/`collaboration_finder.py`.
 
+- **Newton Aycliffe chosen over Durham City's historic core, based on
+  live testing, not assumed.** Durham station -> Market Place (the
+  original candidate pickup/dropoff pair) has exactly one real
+  conflict, on Leazes Road - and no detour, tried at any of many
+  offsets, ever clears it. That's a genuine chokepoint on Durham's
+  river-loop peninsula (too few road crossings), not a bug - confirmed
+  by finding a real, successful reroute elsewhere (Newton Hall's
+  grid-street estate) under the same code path. Newton Aycliffe, a
+  planned town with a proper street grid, was picked as the shipped
+  default specifically because it offers genuine parallel-street
+  alternatives a detour can use.
 - **A real bug found and fixed via live testing, not assumed correct
   from code review: a single fixed 180m detour offset was too small.**
   OSRM's own waypoint-snapping behaviour means a modest offset can

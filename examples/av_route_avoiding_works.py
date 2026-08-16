@@ -1,7 +1,7 @@
 """A small, visual "AV last-mile" demo: route a pickup -> dropoff hop
-across Durham City, then check that route against Street Manager's own
-real, live, in-progress roadworks - and reroute around any that sit too
-close to the road, using nothing fancier than one extra waypoint.
+across Newton Aycliffe, then check that route against Street Manager's
+own real, live, in-progress roadworks - and reroute around any that sit
+too close to the road, using nothing fancier than one extra waypoint.
 
 The point isn't a production routing engine - it's showing what this SDK
 is *for*: real ground-truth works data feeding a real decision (which
@@ -13,17 +13,24 @@ Needs SM_EMAIL / SM_PASSWORD for Street Manager (SM_ENV=sandbox|production,
 default sandbox - see .env.example). No credentials for routing.
 
 **Real data, one honestly-labelled shortcut.** Pickup/dropoff points are
-real Durham landmarks (Durham railway station, Durham Town Hall/Market
-Place - geocoded live via Nominatim, not guessed), and the roadworks are
-Street Manager's real, live, in-progress permits for "DURHAM CITY" (the
-same server-side filter `compare_active_works.py` already established -
-see that module's own docstring for why `street_descriptor`/
-`work_status` are the real, working params). The road-following route
-itself comes from OSRM's **public demo server**
-(`router.project-osrm.org`) - free, keyless, genuinely real routing over
-OpenStreetMap's road network, but explicitly not licensed for production
-traffic (OSRM's own terms) - swap in a self-hosted OSRM/GraphHopper/ORS
-instance for anything beyond this kind of illustrative run.
+real Newton Aycliffe streets (Emerson Way, Van Mildert Road - geocoded
+live via Nominatim, not guessed), and the roadworks are Street Manager's
+real, live, in-progress permits for "NEWTON AYCLIFFE" (the same
+server-side filter `compare_active_works.py` already established for
+Durham City - see that module's own docstring for why
+`street_descriptor`/`work_status` are the real, working params). Newton
+Aycliffe - a planned post-war new town with a proper grid of residential
+streets - was chosen deliberately over Durham City's own historic core:
+live testing found Durham's peninsula (formed by a loop in the River
+Wear) genuinely has too few road crossings for this script's simple
+detour heuristic to ever find a clean alternative, whereas Newton
+Aycliffe's grid offers real parallel streets a detour can actually use -
+confirmed live, not assumed. The road-following route itself comes from
+OSRM's **public demo server** (`router.project-osrm.org`) - free,
+keyless, genuinely real routing over OpenStreetMap's road network, but
+explicitly not licensed for production traffic (OSRM's own terms) - swap
+in a self-hosted OSRM/GraphHopper/ORS instance for anything beyond this
+kind of illustrative run.
 
 **Conflict check is a planar distance approximation, not a lane-level
 closure model - stated honestly, not overclaimed.** Street Manager gives
@@ -34,7 +41,7 @@ this script flags a real conflict when the route passes within
 location, a reasonable proxy at street scale, not a precise
 "is this lane closed" answer. Distance/offset maths uses a simple
 equirectangular approximation (flat-earth, scaled by latitude) - accurate
-enough at Durham's ~1-2km route scale, not geodesically exact.
+enough at this route's ~1-2km scale, not geodesically exact.
 
 **Rerouting is one bounded, honest heuristic, not a search algorithm.**
 If the direct route conflicts with real active works, this script offsets
@@ -59,11 +66,11 @@ from streetworks.common import Works, WorksSite, from_streetmanager
 
 OSRM_BASE_URL = "https://router.project-osrm.org/route/v1/driving"
 
-#: Real Durham landmarks, geocoded live via Nominatim (OpenStreetMap) -
-#: not guessed. (lon, lat), matching this script's own coordinate
-#: convention throughout (OSRM/GeoJSON order).
-PICKUP = (-1.5819682, 54.7799643)  # Durham railway station
-DROPOFF = (-1.5757810, 54.7773522)  # Durham Town Hall, Market Place
+#: Real Newton Aycliffe streets, geocoded live via Nominatim
+#: (OpenStreetMap) - not guessed. (lon, lat), matching this script's own
+#: coordinate convention throughout (OSRM/GeoJSON order).
+PICKUP = (-1.5778218, 54.6160118)  # Emerson Way
+DROPOFF = (-1.5610720, 54.6170340)  # Van Mildert Road
 
 DEFAULT_CONFLICT_THRESHOLD_M = 40.0
 #: Tried smallest-first, both sides, first one that clears every real
@@ -361,8 +368,8 @@ def build_map(plan: dict, works_points: list[tuple[Works, WorksSite, tuple[float
         )
 
     for point, label, colour in (
-        (PICKUP, "Pickup - Durham railway station", "#1a9850"),
-        (DROPOFF, "Dropoff - Durham Market Place", "#313695"),
+        (PICKUP, "Pickup - Emerson Way", "#1a9850"),
+        (DROPOFF, "Dropoff - Van Mildert Road", "#313695"),
     ):
         fig.add_trace(
             go.Scattermap(
@@ -385,7 +392,7 @@ def build_map(plan: dict, works_points: list[tuple[Works, WorksSite, tuple[float
             "zoom": 15,
         },
         margin={"l": 0, "r": 0, "t": 40, "b": 0},
-        title="AV last-mile demo: Durham City, avoiding real active roadworks",
+        title="AV last-mile demo: Newton Aycliffe, avoiding real active roadworks",
         legend={"yanchor": "top", "y": 0.99, "xanchor": "left", "x": 0.01},
     )
     return fig
@@ -393,7 +400,7 @@ def build_map(plan: dict, works_points: list[tuple[Works, WorksSite, tuple[float
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--sm-town", default="DURHAM CITY")
+    parser.add_argument("--sm-town", default="NEWTON AYCLIFFE")
     parser.add_argument(
         "--threshold-m",
         type=float,

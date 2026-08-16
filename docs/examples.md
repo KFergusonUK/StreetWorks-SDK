@@ -76,7 +76,14 @@ missing.
 
 ## Applications
 
-- **[`av_route_avoiding_works.py`](../examples/av_route_avoiding_works.py)** — a small, visual "AV last-mile" demo: plans a real pickup → dropoff route across Durham City on OSRM's public demo server (real OpenStreetMap roads, keyless), checks it against Street Manager's real, live, in-progress works, and reroutes around any that sit within `--threshold-m` (default 40m) of the route — or says so plainly when no detour clears them, rather than pretending success. Default pickup/dropoff are real Nominatim-geocoded Durham landmarks (the railway station, Market Place); needs Street Manager credentials for the works side, none for routing. `--map [PATH]` writes a Plotly/CartoDB map in the same style as `compare_active_works.py`. Distance/offset maths is a simple equirectangular approximation, adequate at Durham's ~1-2km route scale — stated honestly, not geodesically exact.
+- **[`av_route_avoiding_works.py`](../examples/av_route_avoiding_works.py)** — a small, visual "AV last-mile" demo: plans a real pickup → dropoff route across Newton Aycliffe on OSRM's public demo server (real OpenStreetMap roads, keyless), checks it against Street Manager's real, live, in-progress works, and reroutes around any that sit within `--threshold-m` (default 40m) of the route — or says so plainly when no detour clears them, rather than pretending success. Default pickup/dropoff are real Nominatim-geocoded Newton Aycliffe streets (Emerson Way, Van Mildert Road); needs Street Manager credentials for the works side, none for routing. Newton Aycliffe — a planned town with a proper street grid — was chosen deliberately over Durham City's historic core: live testing found Durham's river-loop peninsula genuinely has too few road crossings for this script's simple detour heuristic to ever clear, whereas Newton Aycliffe's grid offers real parallel streets a detour can actually use. `--map [PATH]` writes a Plotly/CartoDB map in the same style as `compare_active_works.py`. Distance/offset maths is a simple equirectangular approximation, adequate at this route's ~1-2km scale — stated honestly, not geodesically exact.
+
+  <img src="../examples/AV_WorksReRoute.png" width="600" alt="Map of a rerouted AV last-mile path in Newton Aycliffe: the grey direct route passes an active worksite on Greville Way, the green rerouted path swings around via Central Avenue instead.">
+
+  Real `--map` output against production Street Manager, 16 Aug 2026 — the direct route (grey)
+  passes within 25m of a real active worksite on Greville Way; the rerouted path (green) swings
+  north via Central Avenue and a roundabout to clear it entirely, with the other 36 real nearby
+  works shown for context (blue).
 
 ## Worker-safety context
 
