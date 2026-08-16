@@ -192,6 +192,70 @@ only planned start/end dates — so `date_confidence` is uniformly
 **Licence: Creative Commons Attribution (CC-BY), confirmed live** via
 the dataset's own CKAN metadata (`license_id: "cc-by"`).
 
+## ANNCSU (national street-name register)
+
+Italy's first `streets` gazetteer coverage — a genuine national street-
+name registry, jointly run by Agenzia delle Entrate (the tax/cadastre
+agency) and ISTAT, established by DPCM 12 May 2016.
+
+```python
+from streetworks.anncsu import AnncsuClient
+
+with AnncsuClient() as anncsu:
+    streets = list(anncsu.iter_odonimi())  # the full national bulk download
+    print(streets[0].odonimo, streets[0].codice_comune, streets[0].codice_istat)
+```
+
+Convert to the shared cross-provider gazetteer model:
+
+```python
+from streetworks.common import from_anncsu
+
+street = from_anncsu(streets[0])
+```
+
+**Two real access routes exist; the bulk one is used deliberately.** A
+real, live, keyless point-query API also exists
+(`querydata.php?resource=odonimi&codicecomune=...&denominazione=...`,
+confirmed live with a real matching record for "VIA MILANO" in Rome),
+but it only supports lookup by municipality code plus a (partial) name
+match — enumerating all ~7,900 real Italian municipalities one at a
+time would be impractical for a full national pull. This client uses
+the real national bulk download instead (`getds.php?STRAD_ITA`, a real
+bare-flag query parameter — a plain `?STRAD_ITA=` is genuinely rejected
+by the server with *"Errore durante il download: Il file specificato
+non ha un contenuto associato"*, confirmed live) — a ZIP wrapping one
+date-suffixed CSV, **1,219,990 real streets**, confirmed live, updated
+2026-08-03 at investigation time.
+
+**No geometry anywhere in this resource — a real, defining
+characteristic, not a gap.** `odonimi` (street names) is a pure name
+registry: real street name, real national and municipal identifiers, a
+real stated count of address points on that street (`TOTALE_ACCESSI`) —
+nothing spatial. Real coordinates exist only on the separate `accessi`
+(civic numbers/address points) resource, checked and confirmed real but
+only ~20% populated in a real regional sample — deliberately not built
+here, see [pending candidates](pending.md). Every canonical `Street`
+this converts to carries `GeometryGrade.ABSENT`, the same documented
+"real NULL-geometry rows" state OS Open USRN already establishes for
+this model — not synthesised.
+
+**Encoding confirmed by decoding real accented content, not assumed.**
+The raw byte range first suggested Windows-1252, but that encoding
+actually fails to decode a real byte in this file — UTF-8 decodes
+cleanly and produces genuine text (confirmed live: `LOCALITÀ
+CASTELLUCCIO`, a real value, only decodes correctly as UTF-8).
+
+**Two real, independently-stated municipality identifiers, both kept.**
+`CODICE_COMUNE` (the traditional "Belfiore" cadastral/tax code, e.g.
+`"H501"` for Roma) and `CODICE_ISTAT` (ISTAT's own numeric municipality
+code, e.g. `"058091"`) — related but not interchangeable, both stated
+on every real row, confirmed distinct systems.
+
+**No credentials.** Licence: **CC BY 4.0**, confirmed live from the
+dataset's own catalogue metadata on
+[dati.gov.it](https://www.dati.gov.it/).
+
 ## Athens — checked, off the board
 
 Investigated alongside Rome as a second Mediterranean-

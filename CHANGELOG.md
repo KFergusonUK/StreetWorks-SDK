@@ -2,6 +2,59 @@
 
 ## [Unreleased]
 
+### Added — ANNCSU, this SDK's first Italian streets gazetteer, breaking the Germany/Portugal streak (2026-08-16)
+
+`streetworks.anncsu` / `streetworks.common.from_anncsu` - Italy's real
+national street-name register, jointly run by Agenzia delle Entrate (the
+tax/cadastre agency) and ISTAT since DPCM 12 May 2016. Unlike Germany's
+BKG and Portugal's IP/DGT (both investigated and ruled out this same
+day), this one is genuinely buildable.
+
+```python
+from streetworks.anncsu import AnncsuClient
+from streetworks.common import from_anncsu
+
+with AnncsuClient() as anncsu:
+    streets = [from_anncsu(o) for o in anncsu.iter_odonimi()]
+```
+
+- **1,219,990 real street names, confirmed live, credential-free.**
+  Real entries verified live: "Arco degli Acetari," "Bastioni di Porta
+  Nuova." Updated 2026-08-03 at investigation time.
+- **Two real access routes exist; the bulk one is used deliberately.**
+  A real, live, keyless point-query API also exists, but only supports
+  lookup by municipality code plus a (partial) name match - enumerating
+  all ~7,900 real Italian municipalities one at a time would be
+  impractical for a full national pull. Uses the real national bulk
+  download instead (`getds.php?STRAD_ITA`) - a genuine bare-flag query
+  parameter, confirmed live: a plain `?STRAD_ITA=` (what a normal params
+  dict would send) is rejected by the server with a real structured
+  error, not silently accepted.
+- **No geometry anywhere in this resource - a real, defining
+  characteristic, not a gap in this build.** `odonimi` is a pure name
+  registry: real street name, real national/municipal identifiers, a
+  real stated count of address points on that street - nothing spatial.
+  Every canonical `Street` carries `GeometryGrade.ABSENT`, the same
+  documented "real NULL-geometry rows" state OS Open USRN already
+  establishes, never synthesised.
+- **Encoding confirmed by decoding real accented content, not
+  assumed.** The raw byte range first suggested Windows-1252, but that
+  encoding actually fails to decode a real byte in this file - UTF-8
+  decodes cleanly and produces genuine text (confirmed live: "LOCALITÀ
+  CASTELLUCCIO," a real value, only decodes correctly as UTF-8).
+- **Two real, independently-stated municipality identifiers, both
+  kept** - the traditional "Belfiore" cadastral/tax code and ISTAT's own
+  numeric municipality code, related but not interchangeable.
+- No credentials. Licence: **CC BY 4.0**, confirmed live from the
+  dataset's own catalogue metadata on dati.gov.it. Registry entry
+  (`anncsu`, `kind=streets`), new tests against a real trimmed live-pull
+  ZIP fixture, and a `scripts/smoke_test.py` check.
+- **The address/civic-number side of the same registry (`accessi`) was
+  deliberately scoped out, not blocked** - real, live, CC BY 4.0, but
+  only ~20% coordinate coverage confirmed live in a real regional
+  sample. Documented in `docs/providers/pending.md`, not silently
+  dropped.
+
 ### Changed — Portugal streets gazetteer investigated and ruled out at the national level, matching Germany's outcome (2026-08-16)
 
 Followed up an older, partial finding in `docs/nap-survey.md` that had

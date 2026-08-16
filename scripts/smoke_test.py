@@ -1541,6 +1541,20 @@ def check_dfi_roads() -> str:
     return f"{len(sections)} real section(s), {with_geometry} with geometry"
 
 
+def check_anncsu() -> str:
+    """Italy ANNCSU street-name register needs no credentials. Exercises
+    the real national bulk ZIP+CSV download - not a small pull, the
+    full national file (~1.2M real rows) is fetched, see
+    streetworks.anncsu.client's module docstring."""
+    from streetworks.anncsu import AnncsuClient
+
+    with AnncsuClient() as anncsu:
+        streets = list(itertools.islice(anncsu.iter_odonimi(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real street names")
+    return f"{len(streets)} real street(s), e.g. {streets[0].odonimo!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1701,6 +1715,8 @@ def main() -> int:
     reporter.check("OSNI Streetnames (Northern Ireland)", [], check_osni)
     # DfI Roads Highway Network (Northern Ireland centreline) needs no credentials
     reporter.check("DfI Roads Highway Network (Northern Ireland)", [], check_dfi_roads)
+    # ANNCSU (Italy street-name register) needs no credentials
+    reporter.check("ANNCSU (Italy)", [], check_anncsu)
 
     print()
     if reporter.ran == 0:

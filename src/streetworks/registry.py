@@ -2251,6 +2251,40 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.dfi_roads import DfiRoadsClient",
     ),
     ProviderEntry(
+        key="anncsu",
+        name="ANNCSU (Anagrafe Nazionale Numeri Civici e Strade Urbane)",
+        description="Italy's national street-name register - name only, no geometry.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Italy"}),
+        administrative_area="Agenzia delle Entrate / ISTAT",
+        scope_note=(
+            "Confirmed live (2026-08-16) - credential-free, this SDK's "
+            "first Italian streets gazetteer. A genuine national street-"
+            "name registry (1,219,990 real streets), jointly run by "
+            "Agenzia delle Entrate and ISTAT since DPCM 12 May 2016. "
+            "Streets only, deliberately - the address/civic-number side "
+            "of the same registry is real but has only partial "
+            "coordinate coverage and was scoped out; see "
+            "docs/providers/pending.md. Uses the real national bulk "
+            "download (a keyless ZIP+CSV), not the separate live "
+            "point-query API, since the API only supports lookup by "
+            "municipality plus a name match, not 'give me everything'. "
+            "No geometry exists anywhere in this resource - a real, "
+            "defining characteristic, not a gap: every Street converts "
+            "with GeometryGrade.ABSENT, the same documented state OS "
+            "Open USRN already establishes. Two real, independently-"
+            "stated municipality identifiers are kept (the traditional "
+            "'Belfiore' code and ISTAT's own numeric code). See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.anncsu",
+        _client_name="AnncsuClient",
+        import_line="from streetworks.anncsu import AnncsuClient",
+    ),
+    ProviderEntry(
         key="drivebc",
         name="DriveBC (British Columbia, Open511)",
         description="British Columbia's provincial road-events feed.",

@@ -112,6 +112,23 @@ Credentials-wanted, or Documented-unavailable; see
   Hamburg, Brandenburg, Saxony, or Berlin (the four states already
   touched for roadworks) expose a genuine named-street layer of their
   own — real, open-ended per-state work, not started.
+- **Italy — ANNCSU's address/civic-number side (`accessi`), deliberately
+  scoped out of the streets build, not blocked.** A different case from
+  every other entry on this page: real, live, keyless, CC BY 4.0, and
+  confirmed buildable — just not built yet, by choice, alongside
+  `streetworks.anncsu` (streets only) on 2026-08-16. `accessi` is
+  ANNCSU's own civic-number/address-point resource — real `CIVICO`
+  (house number), `ESPONENTE`, real coordinates (`COORD_X_COMUNE`/
+  `COORD_Y_COMUNE`, genuine WGS84, comma-decimal-separated — a real
+  Italian-locale format, not a bug) and a real accuracy codelist
+  (`METODO`, 5 values). The real gap: coordinates are only **~20%
+  populated**, confirmed live in a real regional sample (Valle d'Aosta,
+  19,297/94,302 real rows) — genuinely partial, not a small edge case.
+  Real access is per-region bulk CSV (`getds.php?INDIR_<region>`, the
+  same ZIP+CSV shape as the streets side) or the national `INDIR_ITA`
+  file — both real and live, just larger and messier than the simpler
+  streets resource. Would map to `Address`, joined to the already-built
+  `Street` records via `PROGRESSIVO_NAZIONALE` (a real, stated link).
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and
