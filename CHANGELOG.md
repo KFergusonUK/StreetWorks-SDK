@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Investigated — Ireland streets gazetteer, ruled out on a real structural finding (2026-08-16)
+
+Not a missing-data gap - Ireland's road network outside towns is
+genuinely organised by route *number*, not name. Tailte Éireann's own
+open-data catalogue (CC BY 4.0) has boundaries and a nameless
+1:250,000-scale road layer; TII's live "National Road Network 2024" is
+motorways/N-roads only, `Road` field a real route code (`"M7"`). Two
+real County Council pilots checked (a real per-authority fan-out, the
+same shape Germany's states have) both confirmed the pattern: Donegal's
+Road Network has no name field at all (`Road_id="N-13-21"`); Monaghan's
+Local_Roads' own `Road_Name` field is itself a route number
+(`"L-31011-0"`). No Dublin City Council ArcGIS Online org was found to
+check the one place urban street names would most plausibly appear in
+the open. See `docs/providers/pending.md`.
+
 ### Added — Gibraltar Street Gazetteer, this SDK's first British Overseas Territory coverage (2026-08-16)
 
 `streetworks.gibraltar.GibraltarStreetsClient` / `streetworks.common

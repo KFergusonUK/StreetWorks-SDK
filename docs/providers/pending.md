@@ -169,6 +169,35 @@ Credentials-wanted, or Documented-unavailable; see
   public-facing pages (`gibraltar.gov.gi/transport-traffic-and-technical-services`)
   were not checked for a separate, non-GIS works register - a real,
   open next step, not attempted this session.
+- **Ireland — streets gazetteer investigated live and ruled out, a
+  genuine structural finding, not a missing-data gap.** Roadworks was
+  already covered (MapRoad, a documented-but-unavailable
+  data-sharing-gated scaffold - see `streetworks.maproad`'s own module
+  docstring); streets is a separate question, investigated 2026-08-16.
+  National bodies checked first: Tailte Éireann's own real open-data
+  catalogue (GeoHive/ArcGIS Online, CC BY 4.0) publishes administrative
+  boundaries and a 1:250,000-scale generalised road layer with **no name
+  field anywhere** (`FCsubtype`/`RTT` route-classification codes only,
+  5,188 real features); TII's own live "National Road Network 2024"
+  service is real but is the motorway/N-road tier only, with a `Road`
+  field that's a real route code (`"M7"`, `"N06"`), not a street name -
+  the same shape as Canada's own Trans-Canada Highway/National Highway
+  System tiers. **The real, decisive finding**: Ireland's road network
+  outside towns is genuinely organised by route *number*, not name - a
+  real structural characteristic of the Irish system, confirmed live
+  against two of the 31 County Councils' own independent ArcGIS Online
+  feeds (a real per-authority fan-out, the same shape Germany's states
+  have): Donegal's "Road Network" (4,409 real features, fields
+  `Road_id`/`type`/`Electoral_Area` - `Road_id` values like `"N-13-21"`,
+  no name field exists at all) and Monaghan's "Local_Roads" (1,612 real
+  features, a `Road_Name` field that is itself a real L-road route
+  number, e.g. `"L-31011-0"` - `Start_At`/`Finish_At` carry real
+  junction/townland descriptions, not the road's own name). No Dublin
+  City Council ArcGIS Online organisation was found to check the one
+  place genuinely urban street names would most plausibly appear in the
+  open. Not built - two real county pilots both confirmed the same
+  numbered-not-named shape rather than one being an outlier worth
+  building against.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and
