@@ -2,6 +2,50 @@
 
 ## [Unreleased]
 
+### Added — Marousi (Greece), this SDK's first Greek gazetteer coverage (2026-08-17)
+
+`streetworks.marousi.MarousiStreetsClient` / `streetworks.common
+.from_marousi_street` - a municipal pilot, not a national build.
+Greece's own roadworks side is already a documented-unavailable
+scaffold (`streetworks.greece`); streets went the same way at the
+national level before finding a real per-municipality path instead.
+
+```python
+from streetworks.marousi import MarousiStreetsClient
+from streetworks.common import from_marousi_street
+
+with MarousiStreetsClient() as marousi:
+    streets = [from_marousi_street(f) for f in marousi.iter_streets()]
+```
+
+- **National geospatial infrastructure genuinely unreachable or
+  blocked** - Greece's official INSPIRE geoportal (`geodata.gov.gr`)
+  times out completely on every real connection attempt, the same real
+  failure already documented for `nap.gov.gr`; the national cadastre
+  403s. Greece's real national open-data portal (`data.gov.gr`, CKAN)
+  is reachable and lists street data, but comprehensively fragmented:
+  580 real datasets, each published independently by one of Greece's
+  municipalities. Marousi (a real Athens suburb) was picked as the
+  pilot for having a genuinely live, queryable WFS rather than a static
+  download.
+- **721 real named street-extent polygon features, 100% carrying a
+  real name** - confirmed against the complete dataset, not a sample.
+  Real, recognisable Greek street names: `"ΑΓΑΜΕΜΝΟΝΟΣ"` (Agamemnon),
+  `"25ΗΣ ΜΑΡΤΙΟΥ"` (25th of March - Greek Independence Day).
+- **Geometry always absent on the canonical model** - this layer's
+  minimal schema states no point/line field at all, only the real
+  polygon; `GeometryGrade.ABSENT` on every real `Street`, the same
+  discipline `from_guernsey_street` established, the real polygon
+  preserved in `.raw` only.
+- **Licence genuinely unstated, checked not assumed** - every one of
+  the 580 real municipal datasets on `data.gov.gr` (Marousi included)
+  shows "License not specified." Built on the project owner's explicit
+  instruction, the same basis Jersey shipped on.
+- Greece's roadworks docs moved to their own page,
+  [`docs/providers/greece.md`](docs/providers/greece.md) (content
+  relocated verbatim from `europe.md`, no change), now that there's a
+  real live provider alongside it.
+
 ### Added — Digiroad (Finland), this SDK's first Finnish streets provider (2026-08-17)
 
 `streetworks.digiroad.DigiroadClient` / `streetworks.common

@@ -1672,41 +1672,9 @@ for the condensed table entry.
 > to its own page, [`docs/providers/ireland.md`](ireland.md), once
 > Ireland got a real, live provider (Monaghan) alongside it.
 
-## Greece (documented, unavailable)
-
-Investigated and registered honestly-unavailable, the same treatment as
-Road Report NT and MapRoad — not silently skipped, but no roadworks
-source exists at all.
-
-**Greece's real National Access Point** (`nap.gov.gr`, confirmed as the
-official MMTIS/RTTI/SRTI/SSTP access point per the European Commission's
-own October 2025 National Access Points list) **is a decentralised
-metadata catalogue (CKAN), not a centralised DATEX II feed** — the
-reason Greece is absent from the pan-EU DATEX aggregators that carry
-~24 other live NAPs, Italy among them (see
-[`docs/providers/italy.md`](italy.md)). Its own real dataset
-titles were checked directly, not assumed: truck parking, refuelling
-points, KTEL bus/ferry timetables, Thessaloniki floating car data, and
-toll-operator sensor feeds — real Vehicle Detection Sensor data from
-Attiki Odos, Road Weather Information System locations for Egnatia
-Odos, and real-time Variable Message Sign data from the Hellastron
-network. **No roadworks or DATEX II Situation Publication dataset
-anywhere.**
-
-**A second, independent reason: the portal itself is currently down.**
-Confirmed live (2026-08-03) via direct probing: `data.nap.gov.gr`
-returns a real `502 Bad Gateway` from its own CKAN backend, reproduced
-on both the dataset-list page and its `/api/3/action/package_list`
-endpoint; its mirror, `data.nap.imet.gr`, hangs at the TLS handshake
-stage and never completes a connection.
-
-`GreeceClient()` always raises `ProviderUnavailableError` immediately,
-with no network call — see
-[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
-for the condensed table entry, and revisit if a documented roadworks
-source (national or toll-operator) ever surfaces. Even a best-case
-future toll-operator feed would only ever be motorway-concession-only,
-fragmented per operator — not a genuine national source.
+> Greece (documented, unavailable) moved to its own page,
+> [`docs/providers/greece.md`](greece.md), once Greece got a real,
+> live provider (Marousi) alongside it.
 
 ## European & Crown Dependency roadworks — separate strand
 

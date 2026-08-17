@@ -2379,6 +2379,42 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.digiroad import DigiroadClient",
     ),
     ProviderEntry(
+        key="marousi",
+        name="Δήμος Αμαρουσίου (Marousi, Greece)",
+        description="A real Greek municipality's own street-name register, over its GeoServer WFS.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Greece", "Marousi"}),
+        administrative_area="Δήμος Αμαρουσίου (Municipality of Marousi)",
+        scope_note=(
+            "Confirmed live (2026-08-17) - credential-free, this SDK's "
+            "first Greek gazetteer coverage. A pilot for a real, "
+            "genuine per-municipality fan-out (580 real datasets on "
+            "data.gov.gr matching 'streets'), not a national build - "
+            "Greece's official INSPIRE geoportal (geodata.gov.gr) times "
+            "out completely on every real connection attempt, the same "
+            "real failure streetworks.greece already documented for "
+            "nap.gov.gr; the national cadastre 403s. 721 real named "
+            "street-extent polygon features, 100% carrying a real "
+            "name, confirmed against the complete dataset. No stated "
+            "point/line field exists on this minimal schema - every "
+            "Street carries GeometryGrade.ABSENT, the real polygon "
+            "preserved in .raw only, the same discipline "
+            "from_guernsey_street established. Licence genuinely "
+            "unstated - every one of the 580 real municipal datasets "
+            "checked on data.gov.gr shows 'License not specified,' a "
+            "real consistent gap, not an oversight on this one; built "
+            "on the project owner's explicit instruction, the same "
+            "basis Jersey shipped on. See module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.marousi",
+        _client_name="MarousiStreetsClient",
+        import_line="from streetworks.marousi import MarousiStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

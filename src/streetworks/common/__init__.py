@@ -40,6 +40,7 @@ from .from_lisboa import from_lisboa
 from .from_lmi import from_lmi_street
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
+from .from_marousi import from_marousi_street
 from .from_milano import from_milano
 from .from_monaghan import from_monaghan_road
 from .from_nrn import from_nrn
@@ -170,4 +171,5 @@ __all__ = [
     "from_monaghan_road",
     "from_lmi_street",
     "from_digiroad_street",
+    "from_marousi_street",
 ]

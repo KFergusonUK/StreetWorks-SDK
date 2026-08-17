@@ -1667,6 +1667,20 @@ def check_digiroad() -> str:
     return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
 
 
+def check_marousi() -> str:
+    """Marousi (Greece) needs no credentials. Fetches the whole real
+    layer - a real total of 721 records, small enough that a full pull
+    is cheap here, see streetworks.marousi.client's module docstring."""
+    from streetworks.marousi import MarousiStreetsClient
+
+    with MarousiStreetsClient() as marousi:
+        streets = list(marousi.iter_streets())
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample = streets[0]["properties"].get("onoma_is")
+    return f"{len(streets)} real street(s), e.g. {sample!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1842,6 +1856,8 @@ def main() -> int:
     reporter.check("Landmælingar Íslands (Iceland)", [], check_lmi)
     # Digiroad (Finland) needs no credentials
     reporter.check("Digiroad (Finland)", [], check_digiroad)
+    # Marousi (Greece) needs no credentials
+    reporter.check("Marousi (Greece)", [], check_marousi)
 
     print()
     if reporter.ran == 0:
