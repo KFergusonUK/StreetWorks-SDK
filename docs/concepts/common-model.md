@@ -167,3 +167,10 @@ neither should code built on top of it. See
 [`docs/concepts/data-model.md`](data-model.md#never-deduplicate-across-providers)
 for the full reasoning and a real case where two feeds turned out to
 genuinely overlap.
+
+For a mixed list of those `Works` near a WGS84 point or UK USRN, use
+[`streetworks.query.works_near`](../../src/streetworks/query.py) — a
+documented UK-first join over a subset of live providers (not a uniform
+`search()` facade). Distance is haversine on `EPSG:4326` only; records
+whose only geometry is in another CRS are skipped, never silently
+reprojected. See [`examples/works_near.py`](../../examples/works_near.py).

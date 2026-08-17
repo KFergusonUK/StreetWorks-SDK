@@ -23,7 +23,16 @@ PACKAGE_ROOT = Path(inspect.getfile(inspect.getmodule(providers))).parent
 # set - not infrastructure, but a testing-only reference model with no live
 # connector yet (see streetworks.nuar's own module docstring) - registering
 # it would misrepresent it as a queryable provider before one exists.
-_NON_PROVIDER_MODULES = {"common", "registry", "exceptions", "ogc", "socrata", "nuar"}
+# "query" is the works_near join layer over already-registered providers.
+_NON_PROVIDER_MODULES = {
+    "common",
+    "registry",
+    "exceptions",
+    "ogc",
+    "socrata",
+    "nuar",
+    "query",
+}
 
 
 def test_every_import_line_actually_works():

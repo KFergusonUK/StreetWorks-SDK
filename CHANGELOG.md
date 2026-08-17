@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — `works_near` / `works_near_usrn`, a UK-first join over the common model (2026-08-17)
+
+`streetworks.query` - one call that takes a WGS84 point and/or a UK USRN
+plus a radius, queries a **documented subset** of live providers, converts
+through the existing `from_<provider>` functions, and returns a mixed
+list of canonical `Works` (wrapped as `NearbyWorks` so each hit keeps
+its registry key and, where computed, a haversine distance).
+
+This is the user-facing join layer the common model was missing, not a
+new data model and not the uniform `search()` facade the registry
+deliberately refused to grow.
+
+- **v1 distance path (WGS84 `EPSG:4326` only).** Haversine on a sphere of
+  radius 6 371 000 m - the same constant `examples/compare_active_works.py`
+  already uses. Distance is to `Coordinate.value` (the representative
+  point; first vertex of a line), never a silent reprojection. Records
+  whose only geometry is in another CRS are skipped for this path.
+  Always queries Traffic Wales (keyless RSS, motorway/trunk). Queries
+  National Highways planned SRN closures only when the caller supplies a
+  client or subscription key.
+- **v1 USRN path.** Exact match on populated USRN fields. Street Manager
+  only when the caller passes a client (`reporting.iter_permits(usrn=...)`
+  plus a client-side filter - the caller's organisation's permits, not
+  an England-wide spatial search). SRWR only when the caller passes a
+  local extract - this will not download the national daily zip.
+- **Explicitly not in v1:** TrafficWatchNI (no geometry), OS Open USRN
+  (gazetteer, ~300 MB bulk), TfL (no provider in this SDK), DataVIA /
+  D-TRO / Open Data, every non-UK roadworks feed, and every
+  Credentials-wanted / unverified / `ProviderUnavailable` scaffold.
+  `v1_providers()` consults the registry's `verified` / `credentials`
+  flags so those cannot be queried by accident.
+- **Never deduplicates across providers.** Provenance (`provider`,
+  `territory`, `administrative_area`, `.raw`) is left intact.
+- Example: `examples/works_near.py`. Tests in `tests/test_query.py`
+  cover the distance filter, the no-dedupe rule, skip-unverified /
+  skip-without-credentials, and the USRN path, all against existing
+  fixtures.
+
 ### Added — Österreichisches Adressregister (BEV), this SDK's first Austrian streets provider (2026-08-18)
 
 `streetworks.bev.BevStreetsClient` / `streetworks.common.from_bev_street`
