@@ -1,5 +1,132 @@
 # Roadmap
 
+> Forward-looking **coverage roadmap**, organised by theme strand rather than
+> version number — coverage doesn't cleave along release boundaries, so the old
+> phase framing was dropped. The authoritative record of what is actually
+> **live** is [`docs/providers/index.md`](providers/index.md); this page lists
+> direction, live candidates, and open decisions (including declines with their
+> reasons). The chronological build log is preserved below under
+> [Build log](#build-log).
+
+## Street Gazetteer Feeds
+
+Streets and roadworks are **independent data classes from independent
+custodians** — a territory with no roadworks feed can still have a perfectly
+good open street gazetteer, and roadworks coverage shifts anyway (a
+credential-blocked national could land tomorrow). So this strand is **not**
+gated on roadworks; the trigger is an open street source, wherever one exists.
+
+### Investigate and build — European territories with no streets coverage yet
+**First candidates** — the SDK already operates in these, so the territory is
+familiar (a prioritisation hint only, *not* a gate): Austria, Belgium, Bulgaria,
+Denmark, Finland, Greece, Iceland, Lithuania, Luxembourg, Sweden, Switzerland.
+
+**Rest of Europe** — no current SDK presence, investigate from scratch: Croatia,
+Cyprus, Czechia, Estonia, Hungary, Latvia, Malta, Poland, Romania, Slovakia,
+Slovenia; Albania, Bosnia & Herzegovina, Kosovo, Moldova, Montenegro, North
+Macedonia, Serbia, Ukraine; and other European states as they surface.
+Microstates (Andorra, Liechtenstein, Monaco, San Marino) typically sit inside a
+neighbour's cadastre — fold in with that neighbour rather than as standalone
+builds. Russia and Belarus stay out on the existing sanctions / compliance line.
+
+### Investigated, partially resolved — real open follow-on exists
+- **Germany** — federal level ruled out (BKG's INSPIRE WFS has geometry but no
+  real street names — DLM250 is route codes + scenic-route branding, no
+  `net:link`). Hamburg / Brandenburg / Saxony / Berlin state-level layers never
+  checked.
+- **Portugal** — national level ruled out (IP's ArcGIS layer carries route
+  codes, not names; national toponymy is 1:200k census places). Santa Maria da
+  Feira confirms the open, per-municipality "Eixos de Via e Toponímia" shape
+  (CC-BY) — found, not yet built. Porto and other municipalities unchecked.
+- **Ireland** — national level ruled out (rural roads are genuinely numbered,
+  not named). Monaghan proved the county-level pilot works (built); ~30 more
+  county / city councils are the same shape, unbuilt.
+- **Isle of Man** — genuinely unresolved, *not* ruled out: a real BS7666
+  gazetteer exists but sits behind an academic-only licence; no open endpoint
+  found. The last remaining Crown Dependency gazetteer gap.
+
+> Already done — do not re-open: Italy (ANNCSU national register, ~1.22M
+> streets), Jersey + Guernsey + Gibraltar gazetteers (Gibraltar is streets-only;
+> its roadworks candidate was ruled out), Spain (IDEE Transportes), the
+> France / Netherlands / Norway address+street pairs, US TIGERweb, Canada
+> National Road Network.
+
+## Adopted Highway Extents (UK-wide, where available)
+
+The spatial **extent** of the adopted / maintainable highway — where the highway
+boundary runs to (carriageway + footways + verges), the layer that defines
+maintenance responsibility on the ground. Distinct from road **centrelines** (a
+line down the middle tells you the road exists, not where the adopted extent
+runs) and from the textual **List of Streets** register (the s36 list of
+maintainable streets, name / USRN-based, no boundary).
+
+- **England** — per-authority adopted-highway extent / highway-boundary polygons
+  where published. Per-LHA (~150), patchy open availability — the lowest
+  yield-per-effort strand here.
+- **Scotland / Wales / Northern Ireland** — each roads authority holds
+  maintainable-highway extent data; investigate where published open. (NI's DfI
+  Roads centreline — already built — carries adoption *status* but is a
+  centreline, not the extent.)
+
+## New Roadworks Feeds
+
+The **sub-national layer is already substantially built** — and not only cities:
+the target is any sub-national permit-holding authority. City-level feeds are
+live for Madrid, Paris, Lisbon, Milan, Rome, Copenhagen, Oslo, Helsinki, Vienna
+and Berlin; region / canton / Land / community-level feeds for Kanton Zürich, the
+German Land cluster (Hamburg / Brandenburg / Saxony / Berlin), Catalonia and the
+Basque Country, and Monaghan (county) — plus NYC, Chicago and the Australian
+states outside Europe. So most large European authorities now carry *both* a
+national/strategic feed and a sub-national one. Stockholm was attempted but is
+credential-blocked (whether an open roadworks dataset exists there at all is
+unresolved). Forward work is filling regions, finishing partial nationals, and
+extending to the next tier of authorities — not adding the layer from scratch.
+
+### Partial-national — fill the remaining regions
+- **Belgium** — Flanders live; add Wallonia (SPW) and Brussels (published
+  separately, not yet wrapped).
+- **Germany** — Autobahn + Hamburg / Brandenburg / Saxony / Berlin live; add the
+  remaining states.
+
+### National / strategic gaps
+- **France** — Bison Futé (non-concessionary national) live; add the
+  concessionary motorway networks (APRR / Vinci / Sanef).
+
+### Credentials wanted — need a tester, not new investigation
+The national motorway feeds behind several already-live cities sit here:
+Austria (ASFINAG) · Denmark (Vejdirektoratet) · Sweden (Trafikverket) ·
+Switzerland (ASTRA) · Stockholm (Trafikkontoret) · Portugal (IMT NAP) ·
+South Australia (Traffic SA) · New Zealand (LINZ Roads).
+
+### Sub-national / local-authority feeds — the next tier
+Cities usually surface first — they have the GIS teams and open-data portals —
+but the target is *any* sub-national permit-holding authority: county, unitary
+authority, Land, canton, province, région, autonomous community, wherever one
+publishes an open excavation / permit register. Investigate-first; an open
+register is still the exception, so expect declines. Candidates: secondary
+cities (Barcelona, Munich / Frankfurt / Cologne, Rotterdam / Amsterdam,
+Marseille, Naples, Sofia, Vilnius) and non-city authorities in countries without
+a national register — remaining German Länder, other Swiss cantons, further
+Spanish autonomous communities, Italian regioni / province. (UK authorities are
+already covered nationally by Street Manager / SRWR, so they aren't targets
+here.)
+
+### New territories / continents to extend
+- **Singapore** — not yet investigated (LTA DataMall the likely route).
+- **Canada** — National Road Network (streets) done; roadworks: Québec (511)
+  live-not-built, other provinces + municipal (Toronto / Montréal / Vancouver)
+  open.
+
+## Examples & derived layers *(not coverage)*
+- **Roadworks-aware routing example** — OS Open Roads (keyless OGL, strategic
+  base network) with live Street Manager works and D-TRO restrictions overlaid,
+  demonstrating the dynamic disruption layer a router — or an AV — consumes on
+  top of a base map. Open Roads is strategic, not AV-grade (no one-ways, turn
+  restrictions, or lane geometry); framed honestly as an illustration of the
+  overlay, not an AV base map.
+
+## Build log
+
 > Migrated verbatim from README.md's `## Roadmap` section (phase one,
 > lossless restructure — see `docs/migration-mapping.md`). This is a
 > chronological build log (`[x]` shipped, `[ ]` not yet built) — most
