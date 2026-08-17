@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+### Investigated — Sweden streets gazetteer, ruled out on registration gates (2026-08-17)
+
+Not a technical or provenance blocker - both real national candidates
+have genuine street-name fields and no OSM-provenance concerns, but
+every real access route requires account registration or approval.
+**NVDB** (Trafikverket's national road database, CC0, a real `Gatunamn`
+field) is only reachable via Lastkajen (email account + licence
+agreement) or the Öppna API/Datautbytesportalen (confirmed live:
+browsable without login, but registration required to fetch data). A
+real, live-looking API key found hardcoded in a public Trafikverket
+news article's JavaScript was deliberately not used - not explicitly
+provided by the project owner, and Trafikverket's own docs confirm
+registration is the required path. **Lantmäteriet's Belägenhetsadress**
+(a real `Adressområde`/`gatuadressområde` street-name field, fee-free
+since 2025-02-03) requires a Geotorget account with per-product purpose
+review under the Real Property Register Act and GDPR - not instant
+self-service. No municipal-level fallback (Stockholm/Gothenburg,
+matching the Marousi/Greece pilot pattern) checked yet. See
+`docs/providers/pending.md`.
+
 ### Added — Marousi (Greece), this SDK's first Greek gazetteer coverage (2026-08-17)
 
 `streetworks.marousi.MarousiStreetsClient` / `streetworks.common

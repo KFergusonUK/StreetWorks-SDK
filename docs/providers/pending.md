@@ -227,6 +227,44 @@ Credentials-wanted, or Documented-unavailable; see
   of crowdsourced data, and Sofia's case didn't warrant being the first
   exception.
 
+- **Sweden — streets gazetteer investigated live and ruled out, on
+  registration gates rather than a technical or provenance blocker.**
+  Roadworks was already covered by two Credentials-wanted scaffolds
+  (Trafikverket's own DATEX-adjacent API and Stockholm Trafikkontoret,
+  both requiring an `api_key` - see `docs/providers/europe.md`); streets
+  is a separate question, investigated 2026-08-17. Two real national
+  candidates were checked, both with genuine street-name fields and no
+  provenance concerns, unlike Bulgaria: **NVDB** (Nationell VägDataBas,
+  Trafikverket's national road database, CC0, confirmed via the OSM
+  wiki's own field-description page to carry a real `Gatunamn` attribute)
+  and **Lantmäteriet's Belägenhetsadress** (property/access-address
+  product, fee-free since 2025-02-03, a real `Adressområde`/
+  `gatuadressområde` street-name field per Lantmäteriet's own address
+  spec PDF). **The real, decisive finding**: every live access route for
+  both sources requires account registration. NVDB's Lastkajen download
+  portal requires an email account plus accepting a licence agreement;
+  its Öppna API/Datautbytesportalen route was confirmed live via
+  Trafikverket's own nvdb.se page to allow browsing without login but
+  require account registration to fetch data ("...kan du läsa utan att
+  logga in, men om du vill hämta data behöver du registrera ett konto").
+  A real, live-looking API key was found hardcoded in a public
+  Trafikverket news article's client-side JavaScript (pointing at the
+  same `api.trafikinfo.trafikverket.se` endpoint the existing roadworks
+  scaffold targets) - not used, since it wasn't explicitly provided by
+  the project owner and Trafikverket's own documentation confirms
+  registration is the required path; using a scraped key would route
+  around that gate, which `docs/contributing/agent-boundaries.md`
+  explicitly rules out. Lantmäteriet's Belägenhetsadress Direkt route
+  requires a Geotorget account issued via OAuth2 "behörighetsnycklar"
+  only after access is already granted, with per-product purpose review
+  under the Real Property Register Act and GDPR ("Omfattas av juridisk
+  prövning... Särskilda användningsvillkor måste godkännas", confirmed
+  live via Lantmäteriet's own versioned fee/delivery PDF) - not
+  instant self-service. No municipal-level fallback (a Stockholm- or
+  Gothenburg-scoped open dataset, matching the Marousi/Greece pilot
+  pattern) has been checked yet - a real, open next step if this is
+  revisited.
+
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and
 [`docs/contributing/scaffolds.md`](../contributing/scaffolds.md)), any
