@@ -1,0 +1,264 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "dr_tielinkki_hall_lk.b32bdcc9-79a3-483e-bf52-7c87579240b6:2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            24.93024435,
+            60.1725711,
+            16.321
+          ],
+          [
+            24.93020849,
+            60.17255971,
+            16.425
+          ],
+          [
+            24.93013576,
+            60.17253663,
+            16.558
+          ],
+          [
+            24.93005632,
+            60.17251143,
+            16.763
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "link_id": "b32bdcc9-79a3-483e-bf52-7c87579240b6:2",
+        "link_mmlid": "388606803",
+        "hallinn_lk": 2,
+        "toiminn_lk": 5,
+        "ajosuunta": 2,
+        "linkkityyp": 3,
+        "silta_alik": 0,
+        "link_tila": 3,
+        "tienimi_su": "Temppelikatu",
+        "tienimi_ru": "Tempelgatan",
+        "tienim_psa": "",
+        "tienim_isa": "",
+        "tienim_ksa": "",
+        "ens_talo_v": 2,
+        "ens_talo_o": null,
+        "viim_tal_v": 6,
+        "viim_tal_o": null,
+        "kuntakoodi": 91,
+        "muokkauspv": "17.05.2025 08:49:42",
+        "tienumero": null,
+        "tieosanro": null,
+        "ajorata": null,
+        "aet": null,
+        "let": null,
+        "sij_tark": 5,
+        "kor_tark": 0.4,
+        "geom_flip": 0,
+        "alku_paalu": 0,
+        "lopp_paalu": 103,
+        "geom_lahde": 1,
+        "cust_owner": "",
+        "tien_kasvu": null,
+        "mtk_tie_lk": 12131
+      },
+      "bbox": [
+        24.9287764,
+        60.17249086,
+        24.93024435,
+        60.17295735
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "dr_tielinkki_hall_lk.fced41b1-dbda-4f1b-8ea8-92a8bb3cb78c:2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            24.93026665,
+            60.16032148,
+            2.447
+          ],
+          [
+            24.93041031,
+            60.16036288,
+            2.677
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "link_id": "fced41b1-dbda-4f1b-8ea8-92a8bb3cb78c:2",
+        "link_mmlid": "1147049299",
+        "hallinn_lk": 2,
+        "toiminn_lk": 5,
+        "ajosuunta": 2,
+        "linkkityyp": 3,
+        "silta_alik": 0,
+        "link_tila": 3,
+        "tienimi_su": "Hietalahdenlaituri",
+        "tienimi_ru": "",
+        "tienim_psa": "",
+        "tienim_isa": "",
+        "tienim_ksa": "",
+        "ens_talo_v": null,
+        "ens_talo_o": null,
+        "viim_tal_v": null,
+        "viim_tal_o": null,
+        "kuntakoodi": 91,
+        "muokkauspv": "24.05.2025 14:10:15",
+        "tienumero": null,
+        "tieosanro": null,
+        "ajorata": null,
+        "aet": null,
+        "let": null,
+        "sij_tark": 5,
+        "kor_tark": 0.4,
+        "geom_flip": 1,
+        "alku_paalu": 0,
+        "lopp_paalu": 9,
+        "geom_lahde": 1,
+        "cust_owner": "",
+        "tien_kasvu": null,
+        "mtk_tie_lk": 12131
+      },
+      "bbox": [
+        24.93026665,
+        60.16032148,
+        24.93041031,
+        60.16036288
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "dr_tielinkki_hall_lk.c21d878d-abdf-42b1-beba-b356063a53f5:2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            24.93522372,
+            60.17218335,
+            9.091
+          ],
+          [
+            24.93494692,
+            60.17246882,
+            9.348
+          ],
+          [
+            24.93493051,
+            60.17249354,
+            9.37
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "link_id": "c21d878d-abdf-42b1-beba-b356063a53f5:2",
+        "link_mmlid": "388603977",
+        "hallinn_lk": 2,
+        "toiminn_lk": 1,
+        "ajosuunta": 4,
+        "linkkityyp": 2,
+        "silta_alik": 1,
+        "link_tila": 3,
+        "tienimi_su": "Mannerheimintie",
+        "tienimi_ru": "Mannerheimvägen",
+        "tienim_psa": "",
+        "tienim_isa": "",
+        "tienim_ksa": "",
+        "ens_talo_v": null,
+        "ens_talo_o": null,
+        "viim_tal_v": null,
+        "viim_tal_o": null,
+        "kuntakoodi": 91,
+        "muokkauspv": "17.05.2025 08:49:42",
+        "tienumero": 1,
+        "tieosanro": 1,
+        "ajorata": 1,
+        "aet": 777,
+        "let": 815,
+        "sij_tark": 5,
+        "kor_tark": 0.4,
+        "geom_flip": 0,
+        "alku_paalu": 0,
+        "lopp_paalu": 38,
+        "geom_lahde": 1,
+        "cust_owner": "",
+        "tien_kasvu": 1,
+        "mtk_tie_lk": 12121
+      },
+      "bbox": [
+        24.93493051,
+        60.17218335,
+        24.93522372,
+        60.17249354
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "dr_tielinkki_hall_lk.bccecaf5-89cf-4a98-b975-0c41bdacef71:2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            24.95289778,
+            60.16485989,
+            2.191
+          ],
+          [
+            24.95318338,
+            60.16486549,
+            2.067
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "link_id": "bccecaf5-89cf-4a98-b975-0c41bdacef71:2",
+        "link_mmlid": "388607115",
+        "hallinn_lk": 2,
+        "toiminn_lk": 5,
+        "ajosuunta": 2,
+        "linkkityyp": 3,
+        "silta_alik": 0,
+        "link_tila": 3,
+        "tienimi_su": "",
+        "tienimi_ru": "",
+        "tienim_psa": "",
+        "tienim_isa": "",
+        "tienim_ksa": "",
+        "ens_talo_v": null,
+        "ens_talo_o": null,
+        "viim_tal_v": null,
+        "viim_tal_o": null,
+        "kuntakoodi": 91,
+        "muokkauspv": "17.05.2025 08:49:42",
+        "tienumero": 40102,
+        "tieosanro": 1,
+        "ajorata": 0,
+        "aet": 413,
+        "let": 429,
+        "sij_tark": 3,
+        "kor_tark": 0.4,
+        "geom_flip": 0,
+        "alku_paalu": 0,
+        "lopp_paalu": 16,
+        "geom_lahde": 1,
+        "cust_owner": "",
+        "tien_kasvu": 2,
+        "mtk_tie_lk": 12122
+      },
+      "bbox": [
+        24.95289778,
+        60.16485989,
+        24.95318338,
+        60.16486549
+      ]
+    }
+  ]
+}

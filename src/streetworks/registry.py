@@ -2342,6 +2342,43 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.lmi import LmiStreetsClient",
     ),
     ProviderEntry(
+        key="digiroad",
+        name="Digiroad (Finland)",
+        description="Finland's real national road/street network, over Väylävirasto's open WFS.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Finland"}),
+        administrative_area="Väylävirasto (Finnish Transport Infrastructure Agency)",
+        scope_note=(
+            "Confirmed live (2026-08-17) - credential-free, this SDK's "
+            "first Finnish streets/gazetteer provider, and a real "
+            "sibling to Finland's existing roadworks coverage "
+            "(Digitraffic, streetworks.datex2.digitraffic) from the "
+            "same real government department. Maanmittauslaitos' own "
+            "Maastotietokanta was checked first but genuinely requires "
+            "a self-service API key (confirmed live via a real 401) - "
+            "per this project's own access-boundary rules, not "
+            "registered on the project's behalf; Väylävirasto's "
+            "separate WFS deployment is genuinely keyless instead. "
+            "3,363,654 real national road-link features - three "
+            "identically-shaped layer names on this deployment "
+            "(confirmed via DescribeFeatureType and resultType=hits) "
+            "resolve to the same real table, the same cartographic-view "
+            "trap TIGERweb's own layers 0-9 were. Real bilingual names "
+            "(Finnish/Swedish, Finland's genuine official convention) "
+            "carried as two Name objects via Name.language, never "
+            "merged. Real 3D geometry - Z genuinely present and "
+            "preserved through reprojection, never defaulted to zero. "
+            "Licence: Creative Commons Attribution 4.0 International, "
+            "confirmed live from the dataset's own avoindata.fi entry."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.digiroad",
+        _client_name="DigiroadClient",
+        import_line="from streetworks.digiroad import DigiroadClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

@@ -1650,6 +1650,23 @@ def check_lmi() -> str:
     return f"{len(roads)} real road(s), {len(named)} named"
 
 
+def check_digiroad() -> str:
+    """Digiroad (Finland) needs no credentials. Queries a small real
+    bounding box (central Helsinki) rather than the full 3.36M-feature
+    national layer - see streetworks.digiroad.client's module
+    docstring."""
+    from streetworks.digiroad import DigiroadClient
+
+    helsinki_bbox = (24.93, 60.16, 24.94, 60.17)
+    with DigiroadClient() as digiroad:
+        roads = list(digiroad.iter_streets(bbox=helsinki_bbox))
+    if not roads:
+        raise RuntimeError("bbox query returned no results for a known real area")
+    named = [r for r in roads if (r["properties"].get("tienimi_su") or "").strip()]
+    sample_name = named[0]["properties"]["tienimi_su"] if named else None
+    return f"{len(roads)} road(s) in bbox, {len(named)} named, e.g. {sample_name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1823,6 +1840,8 @@ def main() -> int:
     reporter.check("Monaghan County Council road network", [], check_monaghan)
     # Landmælingar Íslands (Iceland) needs no credentials
     reporter.check("Landmælingar Íslands (Iceland)", [], check_lmi)
+    # Digiroad (Finland) needs no credentials
+    reporter.check("Digiroad (Finland)", [], check_digiroad)
 
     print()
     if reporter.ran == 0:

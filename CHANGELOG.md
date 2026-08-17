@@ -2,6 +2,45 @@
 
 ## [Unreleased]
 
+### Added — Digiroad (Finland), this SDK's first Finnish streets provider (2026-08-17)
+
+`streetworks.digiroad.DigiroadClient` / `streetworks.common
+.from_digiroad_street` - Finland's real national road/street database,
+over Väylävirasto's own genuinely keyless WFS.
+
+```python
+from streetworks.digiroad import DigiroadClient
+from streetworks.common import from_digiroad_street
+
+helsinki_bbox = (24.90, 60.14, 25.00, 60.22)
+with DigiroadClient() as digiroad:
+    streets = [from_digiroad_street(f) for f in digiroad.iter_streets(bbox=helsinki_bbox)]
+```
+
+- **Chose a different agency after the obvious one required an account**:
+  Maanmittauslaitos' own Maastotietokanta genuinely needs a self-service
+  API key (confirmed live via a real `401`) - per this project's own
+  access-boundary rules, not registered on the project's behalf.
+  Väylävirasto's separate WFS deployment is genuinely keyless instead,
+  and turned out to carry Digiroad - Finland's real national road/street
+  database - not just the state road-asset-management layers that
+  dominate the same 328-layer deployment.
+- **A real cartographic-view duplication caught before picking a
+  layer** - three real layer names all resolve to the identical
+  underlying table (confirmed via `DescribeFeatureType` and
+  `resultType=hits`), the same trap TIGERweb's own layers 0-9 were.
+- **Real bilingual names** (Finnish/Swedish, Finland's genuine official
+  convention) carried as two `Name` objects via `Name.language`, never
+  merged - real examples confirmed live: `"Mannerheimintie"`/
+  `"Mannerheimvägen"` (Helsinki's most famous street).
+- **Real 3D geometry** - `Z` genuinely present on every vertex checked
+  and preserved through reprojection, never defaulted to zero.
+- **3,363,654 real national features** - TIGERweb/NRN-scale, bbox-
+  queryable, with a real ~5,000-feature-per-request cap the client
+  pages past automatically.
+- **Licence**: Creative Commons Attribution 4.0 International,
+  confirmed live from the dataset's own `avoindata.fi` catalogue entry.
+
 ### Investigated — Bulgaria streets gazetteer, ruled out on a provenance judgement call (2026-08-17)
 
 Not a technical blocker - a deliberate scope decision. The national
