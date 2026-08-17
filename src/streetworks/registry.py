@@ -2309,6 +2309,39 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.idee import IdeeTransportesClient",
     ),
     ProviderEntry(
+        key="lmi",
+        name="Landmælingar Íslands (IS 50V road network)",
+        description="Iceland's national road network, published by the National Land Survey.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Iceland"}),
+        administrative_area="Landmælingar Íslands (National Land Survey of Iceland)",
+        scope_note=(
+            "Confirmed live (2026-08-17) - credential-free, this SDK's "
+            "first Icelandic streets/gazetteer provider. A real sibling "
+            "to Iceland's existing roadworks coverage (IRCA/Vegagerðin, "
+            "streetworks.datex2.irca) - both point to the same real "
+            "agency, Vegagerðin, confirmed via this layer's own "
+            "gagnaeigandi field. 58,266 real national road-segment "
+            "features, 84.0% carrying a real stated name - confirmed "
+            "against the complete dataset, not a naive IS NOT NULL "
+            "check, which overstated this at 99.98% (a real majority of "
+            "unnamed rows store a literal single-space string, not "
+            "NULL) - see module docstring. A separate INSPIRE Transport "
+            "Networks layer also exists on this deployment but carries "
+            "no name field at all, the same outcome Germany's BKG and "
+            "Gibraltar's own INSPIRE layer had; this native IS 50V "
+            "layer was built instead. Licence: Creative Commons "
+            "Attribution 4.0 International, confirmed live directly "
+            "from Landmælingar Íslands' own licence page."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.lmi",
+        _client_name="LmiStreetsClient",
+        import_line="from streetworks.lmi import LmiStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

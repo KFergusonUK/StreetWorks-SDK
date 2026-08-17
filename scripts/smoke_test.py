@@ -1632,6 +1632,24 @@ def check_monaghan() -> str:
     return f"{len(roads)} real road(s), e.g. {sample!r}"
 
 
+def check_lmi() -> str:
+    """Landmælingar Íslands (Iceland) IS 50V road network needs no
+    credentials. Only takes a small slice (real pagination is lazy per
+    page, so islice(..., 5) triggers exactly one HTTP request) rather
+    than the full 58,266-record national layer - see
+    streetworks.lmi.client's module docstring."""
+    import itertools
+
+    from streetworks.lmi import LmiStreetsClient
+
+    with LmiStreetsClient() as lmi:
+        roads = list(itertools.islice(lmi.iter_streets(), 5))
+    if not roads:
+        raise RuntimeError("query returned no real roads")
+    named = [r for r in roads if (r["properties"].get("nafnfitju") or "").strip()]
+    return f"{len(roads)} real road(s), {len(named)} named"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1803,6 +1821,8 @@ def main() -> int:
     reporter.check("Gibraltar Street Gazetteer", [], check_gibraltar)
     # Monaghan County Council road network needs no credentials
     reporter.check("Monaghan County Council road network", [], check_monaghan)
+    # Landmælingar Íslands (Iceland) needs no credentials
+    reporter.check("Landmælingar Íslands (Iceland)", [], check_lmi)
 
     print()
     if reporter.ran == 0:

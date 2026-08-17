@@ -2,6 +2,47 @@
 
 ## [Unreleased]
 
+### Added — Landmælingar Íslands (IS 50V), this SDK's first Icelandic streets provider (2026-08-17)
+
+`streetworks.lmi.LmiStreetsClient` / `streetworks.common.from_lmi_street`
+- a real sibling to Iceland's existing roadworks coverage
+(IRCA/Vegagerðin): both this layer's own `gagnaeigandi` field and
+IRCA's own feed point to the same real agency, Vegagerðin, confirmed
+live not assumed.
+
+```python
+from streetworks.lmi import LmiStreetsClient
+from streetworks.common import from_lmi_street
+
+with LmiStreetsClient() as lmi:
+    streets = [from_lmi_street(f) for f in lmi.iter_streets()]
+```
+
+- **58,266 real national road-segment features**, found by walking the
+  service's own full `GetCapabilities` (473 real layers) rather than
+  assuming a promising layer name. A separate INSPIRE Transport
+  Networks layer on the same deployment carries no name field at all -
+  the same outcome Germany's BKG and Gibraltar's own INSPIRE layer had
+  - so this native `IS_50V:samgongur_linur` layer was built instead.
+- **A real self-caught measurement error, corrected before shipping**:
+  a first `nafnfitju IS NOT NULL` check suggested 99.98% real name
+  coverage. Checking against the complete real dataset (not a sample)
+  found the true figure is 84.0% (48,959/58,266) - most unnamed rows
+  store a literal single-space string, not a database `NULL`, which
+  the naive filter missed. Both are treated as no name, never
+  fabricated.
+- Real coverage spans the full density range: `"Gnúpverjavegur"` (a
+  rural connecting road, with a real Vegagerðin route number
+  alongside its name) and `"Laugavegur"` (Reykjavík's own main
+  shopping street, 63 real segments, genuinely no route number - urban
+  streets are named, not numbered, unlike Ireland's own rural Monaghan
+  roads).
+- Genuinely multi-part `MultiLineString` geometry on a real minority of
+  records - `Coordinate.parts` always used, the same discipline
+  `from_gibraltar`/`from_tigerweb` already established.
+- **Licence**: Creative Commons Attribution 4.0 International,
+  confirmed live directly from Landmælingar Íslands' own licence page.
+
 ### Added — `AGENTS.md` and `llms.txt` (2026-08-16)
 
 `AGENTS.md` (repo root): a load-bearing quick-reference for coding

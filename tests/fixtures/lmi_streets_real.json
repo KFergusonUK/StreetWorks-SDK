@@ -1,0 +1,289 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "samgongur_linur.119297",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -20.188,
+              64.065
+            ],
+            [
+              -20.1879,
+              64.065
+            ],
+            [
+              -20.1878,
+              64.0651
+            ],
+            [
+              -20.1876,
+              64.0652
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "objectid": 119297,
+        "uuid": "c0c25230-b1d9-471f-9344-2c797c771094",
+        "fitjuflokkur": 301,
+        "vegtegund": "C",
+        "vegflokkun": 2,
+        "vegnr": "325",
+        "kaflanr": "01",
+        "einingvegakerfis": 1,
+        "slitlag": 21,
+        "nafnfitju": "Gnúpverjavegur",
+        "ath": null,
+        "vinnsluferlifitju": 5,
+        "dagsheimildar": "2023-01-01T00:00:00Z",
+        "dagsinnsetningar": "2002-01-01Z",
+        "dagsleidrettingar": "2024-12-17Z",
+        "dagsuppfaerslu": "2025-10-03Z",
+        "nakvaemnixy": 5,
+        "heimild": "GPS-mæling",
+        "skyringnotkunar": null,
+        "notkun": "O",
+        "gagnaeigandi": "Vg",
+        "gagnasafn": "IS 50V, útgáfa 03.10.2025",
+        "einingvegakerfis_text_is": "Vegur",
+        "slitlag_text_is": "Malarvegur",
+        "vegflokkun_text_is": "Tengivegur",
+        "kortlabel": "Minni vegir",
+        "kortbirta": 1100000,
+        "kortvegtegund": "Malarvegur"
+      },
+      "bbox": [
+        -20.188,
+        64.065,
+        -20.1791,
+        64.0695
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "samgongur_linur.75723",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -19.4462,
+              65.5525
+            ],
+            [
+              -19.4463,
+              65.5525
+            ],
+            [
+              -19.4464,
+              65.5526
+            ],
+            [
+              -19.4465,
+              65.5527
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "objectid": 75723,
+        "uuid": "b5f0b494-8e85-a5f7-2c4a-d7ddcf2879d9",
+        "fitjuflokkur": 301,
+        "vegtegund": "D",
+        "vegflokkun": 5,
+        "vegnr": null,
+        "kaflanr": null,
+        "einingvegakerfis": 1,
+        "slitlag": 10,
+        "nafnfitju": "Laugavegur",
+        "ath": " ",
+        "vinnsluferlifitju": 5,
+        "dagsheimildar": "2002-01-01T00:00:00Z",
+        "dagsinnsetningar": "2003-01-01Z",
+        "dagsleidrettingar": "2006-01-30Z",
+        "dagsuppfaerslu": "2025-10-03Z",
+        "nakvaemnixy": 5,
+        "heimild": "GPS-mæling",
+        "skyringnotkunar": " ",
+        "notkun": "O",
+        "gagnaeigandi": "NÁTT",
+        "gagnasafn": "IS 50V, útgáfa 03.10.2025",
+        "einingvegakerfis_text_is": "Vegur",
+        "slitlag_text_is": "Bundið slitlag",
+        "vegflokkun_text_is": "Almennur vegur",
+        "kortlabel": null,
+        "kortbirta": 50000,
+        "kortvegtegund": "Innanbæjar"
+      },
+      "bbox": [
+        -19.4509,
+        65.5525,
+        -19.4462,
+        65.5552
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "samgongur_linur.119192",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -21.9372,
+              64.0481
+            ],
+            [
+              -21.9372,
+              64.0481
+            ],
+            [
+              -21.9372,
+              64.0481
+            ],
+            [
+              -21.9372,
+              64.0481
+            ]
+          ],
+          [
+            [
+              -21.9372,
+              64.0481
+            ],
+            [
+              -21.9368,
+              64.0483
+            ],
+            [
+              -21.9363,
+              64.0486
+            ],
+            [
+              -21.9358,
+              64.049
+            ]
+          ],
+          [
+            [
+              -21.9338,
+              64.0517
+            ],
+            [
+              -21.9342,
+              64.0508
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "objectid": 119192,
+        "uuid": "3176e53b-981c-4664-b37d-aa43b1bdee1c",
+        "fitjuflokkur": 1,
+        "vegtegund": "C",
+        "vegflokkun": 11,
+        "vegnr": null,
+        "kaflanr": null,
+        "einingvegakerfis": 1,
+        "slitlag": 20,
+        "nafnfitju": "Virkisás",
+        "ath": null,
+        "vinnsluferlifitju": 4,
+        "dagsheimildar": "2024-01-01T00:00:00Z",
+        "dagsinnsetningar": "2024-10-02Z",
+        "dagsleidrettingar": null,
+        "dagsuppfaerslu": "2025-10-03Z",
+        "nakvaemnixy": 5,
+        "heimild": "Hafnarfjarðarbær",
+        "skyringnotkunar": null,
+        "notkun": "O",
+        "gagnaeigandi": "Hafnarfj",
+        "gagnasafn": "IS 50V, útgáfa 03.10.2025",
+        "einingvegakerfis_text_is": "Vegur",
+        "slitlag_text_is": "Annað óbundið slitlag",
+        "vegflokkun_text_is": null,
+        "kortlabel": null,
+        "kortbirta": null,
+        "kortvegtegund": null
+      },
+      "bbox": [
+        -21.9373,
+        64.0479,
+        -21.9338,
+        64.0517
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "samgongur_linur.90918",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -20.9556,
+              64.0234
+            ],
+            [
+              -20.9556,
+              64.0234
+            ],
+            [
+              -20.9554,
+              64.0234
+            ],
+            [
+              -20.955,
+              64.0235
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geom",
+      "properties": {
+        "objectid": 90918,
+        "uuid": "ec60efd6-3d34-184d-ebe0-5a568ae80ca1",
+        "fitjuflokkur": 301,
+        "vegtegund": "D",
+        "vegflokkun": 12,
+        "vegnr": null,
+        "kaflanr": null,
+        "einingvegakerfis": 1,
+        "slitlag": 21,
+        "nafnfitju": " ",
+        "ath": "Sumarhús",
+        "vinnsluferlifitju": 5,
+        "dagsheimildar": "1999-01-01T00:00:00Z",
+        "dagsinnsetningar": "1999-01-01Z",
+        "dagsleidrettingar": "2006-02-03Z",
+        "dagsuppfaerslu": "2025-10-03Z",
+        "nakvaemnixy": 5,
+        "heimild": "GPS-mæling",
+        "skyringnotkunar": " ",
+        "notkun": "O",
+        "gagnaeigandi": "NÁTT",
+        "gagnasafn": "IS 50V, útgáfa 03.10.2025",
+        "einingvegakerfis_text_is": "Vegur",
+        "slitlag_text_is": "Malarvegur",
+        "vegflokkun_text_is": "Einkavegur",
+        "kortlabel": null,
+        "kortbirta": 50000,
+        "kortvegtegund": "Malarvegur"
+      },
+      "bbox": [
+        -20.9556,
+        64.0234,
+        -20.9521,
+        64.0252
+      ]
+    }
+  ]
+}
