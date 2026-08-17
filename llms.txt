@@ -23,6 +23,37 @@
 - [CONTRIBUTING.md](CONTRIBUTING.md): ground rules for contributing
 - [AGENTS.md](AGENTS.md): house rules for AI coding agents working in this repo
 
+## Patterns
+
+Canonical usage — copy these rather than guessing the API.
+
+Install (Python 3.10+):
+
+```bash
+pip install streetworks
+```
+
+Discover and use a provider (there is no country-level aggregation — each provider is its own client):
+
+```python
+from streetworks import providers, get_provider
+uk = providers(territory="UK")            # what's registered for a territory
+
+# Keyless, end-to-end: native client + convert to the common model
+from streetworks.srwr import SRWRClient, iter_activities
+from streetworks.common import from_srwr   # every converter is streetworks.common.from_<provider>
+
+with SRWRClient() as srwr:                  # SRWR needs no credentials
+    archive = srwr.download_daily("srwr-daily.zip")
+    for activity in iter_activities(archive):
+        works = from_srwr(activity)         # -> Works, with .sites: list[WorksSite]
+
+# A credentialed provider looks like this instead:
+from streetworks.streetmanager import StreetManagerClient, Environment
+```
+
+**Credentials:** most providers are keyless — SRWR, OS Open USRN, WZDx, TrafficWatchNI, Traffic Wales, UK Police, TfL, and most DATEX feeds. A few need accounts or keys: Street Manager, DataVIA, D-TRO, National Highways. Don't invent auth for the keyless ones.
+
 ## Concepts
 
 - [docs/concepts/architecture.md](docs/concepts/architecture.md)

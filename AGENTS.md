@@ -18,6 +18,17 @@ was actually observed live (real field values, real record counts, real
 error messages) rather than what a spec claims. If something can't be
 checked live, say so honestly rather than assuming it works.
 
+## Commands
+
+```bash
+pip install -e ".[dev]"        # editable install + dev tooling (ruff, mypy, pytest)
+ruff check .                   # lint
+mypy                           # type-check (uses [tool.mypy] config)
+pytest                         # full suite, credential-free
+pytest -m integration          # opt-in: live/sandbox tests, need credentials
+python scripts/smoke_test.py   # end-to-end smoke check
+```
+
 ## Data-handling rules
 
 - **Never fabricate.** No invented street names, no guessed centroids
@@ -138,6 +149,14 @@ Overseas Territory), and the devolved UK nations each stand alone, never
 folded under "UK". Coverage can
 legitimately be sub-national (a city, a canton, a county) — state that
 in `network_scope` rather than overclaiming national reach.
+
+**Don't invent a unified national client.** There is deliberately no
+country-level aggregation — merging Street Manager, SRWR and the NI /
+Wales feeds into one "UK roadworks" client is exactly the fabricated
+equivalence the SDK refuses (the registry comments say as much).
+Discovery *by* territory is supported — `providers(territory="UK")`
+lists what's there — but each provider stays its own native module: the
+caller composes, the SDK doesn't pretend the sources are one.
 
 ## Model & branch discipline
 
