@@ -27,7 +27,7 @@ Slovenia; Albania, Bosnia & Herzegovina, Kosovo, Moldova, Montenegro, North
 Macedonia, Serbia, Ukraine; and other European states as they surface.
 Microstates (Andorra, Liechtenstein, Monaco, San Marino) typically sit inside a
 neighbour's cadastre — fold in with that neighbour rather than as standalone
-builds. Russia and Belarus stay out on the existing sanctions / compliance line.
+builds.
 
 ### Investigated, partially resolved — real open follow-on exists
 - **Germany** — federal level ruled out (BKG's INSPIRE WFS has geometry but no
