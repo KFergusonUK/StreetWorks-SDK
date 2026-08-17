@@ -198,6 +198,34 @@ Credentials-wanted, or Documented-unavailable; see
   open. Not built - two real county pilots both confirmed the same
   numbered-not-named shape rather than one being an outlier worth
   building against.
+- **Bulgaria — streets gazetteer investigated live and ruled out, on a
+  provenance judgement call rather than a technical blocker.**
+  Roadworks was already covered (the Road Infrastructure Agency/LIMA,
+  `streetworks.datex2.bulgaria`); streets is a separate question,
+  investigated 2026-08-17. National bodies checked first: the Geodesy,
+  Cartography and Cadastre Agency's real, live ArcGIS/WFS deployment
+  (`inspire.cadastre.bg`) publishes only `Administrative_Unit`,
+  `Building`, `Cadastral_Parcel`, and `Geo_Names` - and that last one,
+  despite the promising name, is a real hydrography/physical-geography
+  gazetteer (rivers - real values include `"Тимок/Timok"`,
+  `"Дунав/Dunav"`, the Danube), the same "general place-names register,
+  not streets" trap Gibraltar's own `GN_GeographicalNames` was. The
+  national open-data portal (`data.egov.bg`) genuinely blocks automated
+  access (a real `403`, confirmed twice with realistic headers, not
+  routed around per `docs/contributing/agent-boundaries.md`). **The
+  real, decisive finding**: Sofia Municipality's own open-data platform
+  (Sofiaplan, `api.sofiaplan.bg`) does have a real, live, keyless,
+  comprehensive streets dataset (`osi_ulici`, 46,017 real features,
+  51.9% named) - but its own stated `provider` field is `"ОСМ"`
+  (OpenStreetMap), not an independent government survey. Two smaller,
+  genuinely non-OSM alternatives exist on the same platform but are far
+  narrower in scope: a 618-row field survey for one specific
+  hydro-assessment area, and a 216-row cultural-heritage "paved
+  streets" subset. Checked with the project owner and deliberately not
+  built - this SDK's standing convention has been independent
+  government registers or surveys, not a municipality's own republish
+  of crowdsourced data, and Sofia's case didn't warrant being the first
+  exception.
 
 Following this project's own standing pattern (see
 [`docs/roadmap.md`](../roadmap.md) and

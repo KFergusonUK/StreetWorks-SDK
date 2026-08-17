@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Investigated — Bulgaria streets gazetteer, ruled out on a provenance judgement call (2026-08-17)
+
+Not a technical blocker - a deliberate scope decision. The national
+cadastre agency's real ArcGIS/WFS deployment has no street/road layer
+at all (its "Geo_Names" layer is real but is rivers, not streets - the
+same "general place-names register, not streets" trap Gibraltar's own
+`GN_GeographicalNames` was); the national open-data portal genuinely
+blocks automated access (a real 403, not routed around). Sofia
+Municipality's own open-data platform does have a real, live, keyless,
+comprehensive streets dataset (46,017 features, 51.9% named) - but it's
+an explicit republish of OpenStreetMap data (`provider: "ОСМ"`), not an
+independent government survey, and the project owner chose not to make
+this SDK's first exception to that convention. Two smaller, genuinely
+non-OSM alternatives exist but are too narrow (a 618-row single-area
+survey, a 216-row cultural-heritage subset). See
+`docs/providers/pending.md`.
+
 ### Added — Landmælingar Íslands (IS 50V), this SDK's first Icelandic streets provider (2026-08-17)
 
 `streetworks.lmi.LmiStreetsClient` / `streetworks.common.from_lmi_street`
