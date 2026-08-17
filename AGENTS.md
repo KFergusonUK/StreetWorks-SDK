@@ -27,11 +27,31 @@ checked live, say so honestly rather than assuming it works.
   gap — `GeometryGrade.ABSENT`, an empty `names` tuple, `None` — never
   papered over. See `docs/concepts/data-integrity.md`.
 - **Never silently reproject or silently truncate.** Carry a source's
-  stated CRS as given (`Coordinate.crs`), and detect + raise
+  stated CRS as given (`Coordinate.crs`) and preserve Z where the source
+  states it (never default it to zero); detect + raise
   (`TruncatedResultError`) rather than quietly returning a partial
   result when a service's pagination can't be trusted — several real
   providers in this SDK have pagination or CRS-reprojection quirks that
   were only caught by testing live, not by reading the docs.
+- **Never deduplicate across providers.** Overlap between two providers
+  is real data, not a bug. Both republication-style overlap (e.g. DGT
+  and Consell de Mallorca in the Balearics) and jurisdictional-boundary
+  overlap (e.g. National Highways and Street Manager on slip roads, or
+  Kanton vs Stadt Zürich carrying the same closure) are expected and
+  kept — deduping would silently drop genuine records.
+- **Preserve provenance.** Every converter keeps the untouched source
+  record(s) on `.raw`; the canonical model is additive over the native
+  data, never lossy. Two independently-stated identifiers stay as two,
+  not collapsed into one.
+- **Grade honestly, don't assume.** `source_grade`
+  (`REGISTER`/`OPERATOR`/`TRAVELLER_INFO`) and date-confidence
+  (`VERIFIED`/`ESTIMATED`) must reflect what the source actually is and
+  states, confirmed live — not what's convenient. A permit register with
+  real third-party applicants is `REGISTER`; a status field that
+  genuinely distinguishes active from future works earns real date
+  confidence; when a source states neither, say so rather than inventing
+  a grade. These are roadworks-provenance fields — a streets/addresses
+  feed doesn't set them, and grades geometry via `GeometryGrade` instead.
 - **Real fixtures over synthetic ones.** Test fixtures are real,
   trimmed, captured API responses wherever a source's licence allows —
   not invented data — with a short note on what was trimmed and why.
@@ -63,18 +83,35 @@ the project owner, not something to infer.
 
 ## Adding a new provider
 
+The skeleton is identical whether it's a **roadworks**, **streets**, or
+**addresses** feed — module, docs, registry, index-table row, tests,
+changelog. Two steps diverge by data class; both paths are spelled out.
+
 1. One module under `src/streetworks/<provider>/` (or
-   `src/streetworks/arcgis/<name>.py` if it's a plain ArcGIS REST
-   FeatureServer/MapServer — reuse `ArcGISFeatureClient`, don't
-   reinvent it; same idea for `streetworks.ogc.OGCFeaturesClient` on
-   classic WFS/OGC API Features sources), built on
-   `streetworks._transport`, raising `streetworks.exceptions` types.
+   `src/streetworks/arcgis/<name>.py` for a plain ArcGIS REST
+   FeatureServer/MapServer — reuse `ArcGISFeatureClient`, don't reinvent
+   it; same idea for `streetworks.ogc.OGCFeaturesClient` on classic
+   WFS / OGC API Features sources), built on `streetworks._transport`,
+   raising `streetworks.exceptions` types. Expose the iterator for the
+   data class — `iter_roadworks()` for works, `iter_streets()` /
+   `iter_addresses()` for a gazetteer (a source that publishes both, like
+   a national register, exposes both siblings).
 2. A converter in `src/streetworks/common/from_<provider>.py` into the
-   shared `Works`/`WorksSite` or `Street`/`Segment`/`Address` model —
-   see `docs/concepts/common-model.md`.
-3. A registry entry in `src/streetworks/registry.py` — every roadworks
-   entry needs a real, audited `network_scope`
-   (`docs/network-scope-audit.md`), never left at the bare default.
+   shared model **for that class — `Works`/`WorksSite` for roadworks,
+   `Street`/`Segment`/`Address` for a gazetteer** (see
+   `docs/concepts/common-model.md`). Either way: preserve `.raw`, grade
+   geometry honestly, label CRS, never synthesise a street.
+3. A registry entry in `src/streetworks/registry.py`. Every entry sets
+   `kind` (`roadworks` / `streets` / `addresses` / `context`). Then, by
+   class:
+   - **roadworks** — a real, audited `network_scope`
+     (`docs/network-scope-audit.md`) plus a `source_grade`
+     (`REGISTER`/`OPERATOR`/`TRAVELLER_INFO`) and date-confidence that
+     reflect the source honestly, never left at the bare default.
+   - **streets / addresses** — no `network_scope` or `source_grade`
+     (those are roadworks-provenance concepts); the gazetteer-integrity
+     rules carry the load instead (honest `GeometryGrade`, labelled CRS,
+     no synthetic streets).
 4. A docs section in the relevant `docs/providers/<place>.md` (or a new
    file if the territory doesn't have one yet) — write the live
    evidence into the module docstring first, then mirror the key points
@@ -89,6 +126,24 @@ the project owner, not something to infer.
    (investigated, ruled out) recorded in `docs/providers/pending.md`,
    not just for a successful build.
 
+A **distinct legal jurisdiction gets its own entry** — the Crown
+Dependencies (Jersey, Guernsey, Isle of Man, Gibraltar) and the devolved
+UK nations each stand alone, never folded under "UK". Coverage can
+legitimately be sub-national (a city, a canton, a county) — state that
+in `network_scope` rather than overclaiming national reach.
+
+## Model & branch discipline
+
+- **Defer, don't pre-build.** Don't add a canonical field or capability
+  until a real, provider-agnostic consumer needs it. A single confirmed
+  source, or a throwaway example, doesn't justify promoting a field —
+  linear referencing stayed deferred on one confirmed source for exactly
+  this reason.
+- **No drive-by scope changes.** Stay on the branch's stated task. A new
+  source spotted mid-build, or a refactor idea, is a separate piece of
+  work — record it (the roadmap, an issue, or `pending.md`), don't
+  smuggle it into an unrelated branch.
+
 ## Before calling anything done
 
 - `ruff check .` and `mypy` clean on every new/changed file.
@@ -101,8 +156,9 @@ the project owner, not something to infer.
 Multi-provider roadworks/street-works/gazetteer data — see
 [`README.md`](README.md) and [`docs/index.md`](docs/index.md) for the
 full picture, [`docs/providers/index.md`](docs/providers/index.md) for
-the live coverage matrix (81 providers as of the last count: 58
-roadworks, 17 streets, 5 addresses, 1 context), and
+the live coverage matrix and current provider count (that table is
+`pytest`-enforced against the registry, so treat it — not any number
+memorised elsewhere — as the source of truth for what's live), and
 [`docs/providers/pending.md`](docs/providers/pending.md) for genuine,
 evidenced negative findings — territories checked and ruled out, not
 just unstarted.
