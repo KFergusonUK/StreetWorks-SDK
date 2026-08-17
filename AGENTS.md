@@ -115,7 +115,13 @@ changelog. Two steps diverge by data class; both paths are spelled out.
 4. A docs section in the relevant `docs/providers/<place>.md` (or a new
    file if the territory doesn't have one yet) — write the live
    evidence into the module docstring first, then mirror the key points
-   into the docs page.
+   into the docs page. Show **both** access paths in the guide: the
+   native, full-fidelity client (`iter_roadworks()` / `iter_streets()` /
+   `iter_addresses()`, the provider's own rich types) and — where a
+   converter exists — the common-model path (`from_<provider>(...)` into
+   `Works` / `Street` / `Address`). Documenting both is the point of the
+   SDK; `docs/concepts/common-model.md` is the companion for the
+   conversion side.
 5. A `docs/providers/index.md` module-table row — `pytest` enforces
    registry ⟷ docs-table agreement
    (`test_registry_top_level_modules_match_docs_provider_table`), so a
