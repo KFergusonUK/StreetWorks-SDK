@@ -1,12 +1,13 @@
 # streetworks
 
 > An open-source Python SDK unifying street works and roadworks data
-> across 81 providers worldwide (58 roadworks feeds, 17 street/road-
-> segment gazetteers, 5 address registers, 1 worker-safety context
-> source) behind one consistent, typed, verification-first client.
-> Covers UK statutory registers (Street Manager, SRWR, OSNI, DfI Roads),
-> European national/regional feeds (DATEX II, WFS/GeoJSON sources
-> across a dozen-plus countries), the US WZDx standard and TIGERweb,
+> across 80+ providers worldwide — roadworks feeds, street/road-segment
+> gazetteers, address registers, and a worker-safety context source —
+> behind one consistent, typed, verification-first client.
+> Covers UK statutory roadworks registers (Street Manager, SRWR) and
+> gazetteer/network sources (OSNI, DfI Roads), European national/regional
+> feeds (DATEX II, WFS/GeoJSON sources across a dozen-plus countries), the
+> US WZDx standard and TIGERweb,
 > Australia, New Zealand, Canada, and more. Every provider preserves
 > its source's real shape, licence, and limitations rather than
 > pretending they're equivalent — nothing here is a guessed or
@@ -37,6 +38,7 @@
 - [docs/providers/italy.md](docs/providers/italy.md)
 - [docs/providers/switzerland.md](docs/providers/switzerland.md)
 - [docs/providers/austria.md](docs/providers/austria.md)
+- [docs/providers/denmark.md](docs/providers/denmark.md)
 - [docs/providers/portugal.md](docs/providers/portugal.md)
 - [docs/providers/ireland.md](docs/providers/ireland.md)
 - [docs/providers/gibraltar.md](docs/providers/gibraltar.md)
@@ -52,7 +54,7 @@
 
 ## Optional
 
-- [docs/roadmap.md](docs/roadmap.md): chronological build log
+- [docs/roadmap.md](docs/roadmap.md): coverage roadmap and build log
 - [docs/domain-notes/provider-quirks.md](docs/domain-notes/provider-quirks.md)
 - [docs/governance/licensing.md](docs/governance/licensing.md)
 - [CHANGELOG.md](CHANGELOG.md)

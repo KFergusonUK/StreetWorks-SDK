@@ -127,8 +127,9 @@ changelog. Two steps diverge by data class; both paths are spelled out.
    not just for a successful build.
 
 A **distinct legal jurisdiction gets its own entry** — the Crown
-Dependencies (Jersey, Guernsey, Isle of Man, Gibraltar) and the devolved
-UK nations each stand alone, never folded under "UK". Coverage can
+Dependencies (Jersey, Guernsey, Isle of Man), Gibraltar (a British
+Overseas Territory), and the devolved UK nations each stand alone, never
+folded under "UK". Coverage can
 legitimately be sub-national (a city, a canton, a county) — state that
 in `network_scope` rather than overclaiming national reach.
 
