@@ -60,6 +60,7 @@ from .from_roma import from_roma
 from .from_sct import from_sct
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
+from .from_swisstopo import from_swisstopo_street
 from .from_tfl import from_tfl
 from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
@@ -176,4 +177,5 @@ __all__ = [
     "from_lmi_street",
     "from_digiroad_street",
     "from_marousi_street",
+    "from_swisstopo_street",
 ]

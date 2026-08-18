@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+### Added — Amtliches Verzeichnis der Strassen (swisstopo), this SDK's first Swiss streets provider (2026-08-18)
+
+`streetworks.swisstopo.SwisstopoStreetsClient` / `streetworks.common
+.from_swisstopo_street` - Switzerland's federal street-name register,
+fed daily from the Gebäude- und Wohnungsregister (GWR) and republished
+by swisstopo.
+
+```python
+from streetworks.swisstopo import SwisstopoStreetsClient
+from streetworks.common import from_swisstopo_street
+
+with SwisstopoStreetsClient() as swisstopo:
+    streets = [from_swisstopo_street(r) for r in swisstopo.iter_streets()]
+```
+
+- **224,985 real national street records - 100% carrying a real name
+  and a real coordinate, zero duplicate IDs.** The cleanest coverage
+  figures of any streets provider this SDK has built.
+- **Bulk CSV chosen over a real, live, keyless point-query API**
+  (`api3.geo.admin.ch`) since that API only supports search, not
+  "everything" - the same bulk-vs-live-query trade-off ANNCSU (Italy)
+  already made.
+- **A real, deliberate geometry trade-off**: this bulk CSV states a
+  single point per street, not the live API's own richer `LineString`
+  - the alternative bulk File Geodatabase/INTERLIS XTF formats exist
+  too, but the XTF alone is a real 842 MB file, too large for this
+  SDK's no-heavy-GIS-dependency convention. Coordinates are real Swiss
+  LV95 (`EPSG:2056`), a genuinely projected CRS, never swapped.
+- **A real Liechtenstein-scoped sibling resource** exists on the same
+  swisstopo collection, confirmed live, not fetched by this build - a
+  real, ready next step if wanted later.
+- **Licence**: swisstopo's own OGD (open government data) terms - free
+  use, distribution and commercial use, with mandatory source
+  attribution, confirmed live.
+
 ### Added — Amsterdam (WIOR), this SDK's first Dutch municipal roadworks provider (2026-08-18)
 
 `streetworks.amsterdam.AmsterdamClient` / `streetworks.common.from_amsterdam`

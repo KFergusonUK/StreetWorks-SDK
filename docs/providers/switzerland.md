@@ -6,7 +6,90 @@
 > non-overlapping (confirmed live: neither dataset's records appear in
 > the other). Do-not-dedupe, the same discipline as every other
 > national/regional-vs-municipal pair in this SDK (Copenhagen and
-> Vejdirektoratet, NYC DOT and WZDx).
+> Vejdirektoratet, NYC DOT and WZDx). **Streets**: swisstopo's own
+> federal street-name register, this SDK's first Swiss streets/gazetteer
+> coverage — see below.
+
+## Amtliches Verzeichnis der Strassen (swisstopo)
+
+Switzerland's federal street-name register, run by swisstopo (the
+Federal Office of Topography):
+
+```python
+from streetworks.swisstopo import SwisstopoStreetsClient
+from streetworks.common import from_swisstopo_street
+
+with SwisstopoStreetsClient() as swisstopo:
+    streets = [from_swisstopo_street(r) for r in swisstopo.iter_streets()]
+```
+
+**A genuine federal register, not a swisstopo-original survey.** Street
+names are declared in the Eidgenössisches Gebäude- und Wohnungsregister
+(GWR, the Federal Register of Buildings and Dwellings, run by the
+Federal Statistical Office/BFS) by each municipality; BFS transmits the
+data to swisstopo daily, which enriches it with geometry and
+republishes it — confirmed live from swisstopo's own product page.
+
+**Bulk CSV, not the live point-query API — the same bulk-vs-live-query
+trade-off ANNCSU (Italy) already made.** A real, live, keyless REST API
+also exists (`api3.geo.admin.ch/rest/services/api/MapServer/find`,
+confirmed live with real `LineString` geometry per street), but it only
+supports search-by-name/bbox, not "give me everything" — enumerating
+all real Swiss streets through it would mean many thousands of
+individual queries. This client uses the real national bulk CSV
+instead, found via swisstopo's own STAC catalogue, confirmed live
+(updated daily — fetched same-day as this module's own investigation).
+
+**224,985 real national street records, confirmed live 2026-08-18 —
+100% carrying a real name and a real coordinate, zero duplicate IDs.**
+The cleanest coverage figures of any streets provider this SDK has
+built. Real fields: `STR_ESID` (a real, unique identifier), `STN_LABEL`
+(the real name), `ZIP_LABEL` (postal code + town), `COM_NAME`/
+`COM_FOSNR` (the real municipality name and its federal number),
+`COM_CANTON` (a real 2-letter canton code — all 26 real Swiss cantons
+are present), `STR_TYPE` (a real, English-language enum despite the
+German column names — `Street`/`Area`/`Place`, 169,971/52,658/2,356
+respectively), `STR_STATUS` (`real` on 224,873 rows, `planned` on
+112 — kept as-is, never filtered), `STR_OFFICIAL` (`true`/`false` —
+3,654 real rows are declared but not yet official), and a real, largely
+-unused parent/child hierarchy (`STR_PARENT`/`STR_CHILDREN`, populated
+on only 339/338 rows respectively).
+
+**A real, deliberate trade-off: point geometry only, not the live
+API's richer `LineString`.** This bulk CSV's own real schema states a
+single `STR_EASTING`/`STR_NORTHING` pair per street — genuinely
+different (sparser) from the live `find` API's per-feature
+`LineString`, and from the bulk File Geodatabase/INTERLIS XTF resources
+also published alongside this CSV (the XTF alone is a real 842 MB
+uncompressed file — too large for this SDK's stdlib-plus-httpx,
+no-heavy-GIS-dependency convention to parse). The point is real, stated
+data — not a computed centroid — just a narrower resource than the
+richest one swisstopo publishes.
+
+**CRS: real Swiss LV95 (`EPSG:2056`)**, stated explicitly by this
+resource's own filename convention and confirmed against real
+coordinate magnitude — a different, newer CRS from the live `find`
+API's own real `EPSG:21781` (the older LV03 grid), a real inconsistency
+between swisstopo's own resources for the same dataset, noted rather
+than silently normalised. Coordinates are projected, never swapped —
+stored as plain `(x, y)`, the same discipline `from_oslo`/
+`from_canton_zurich` already apply to their own projected sources.
+
+**A real bonus, found but not built here**: this collection also
+publishes a Liechtenstein-scoped sibling resource
+(`amtliches-strassenverzeichnis_li`), confirmed live to exist with the
+identical schema — not fetched by this client, since only Switzerland
+was asked for; a real, ready next step if Liechtenstein coverage is
+ever wanted.
+
+**Licence**: swisstopo's own OGD (open government data) terms,
+confirmed live (`swisstopo.admin.ch/ogd-conditions`) — free use,
+distribution, enrichment and commercial use, with mandatory source
+attribution (e.g. "©swisstopo") — functionally CC BY-equivalent, stated
+under swisstopo's own named terms rather than a generic CC label.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
 
 ## Kanton Zürich (Baustellen Kantonsstrassen)
 

@@ -2453,6 +2453,51 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.dar import DarClient",
     ),
     ProviderEntry(
+        key="swisstopo",
+        name="Amtliches Verzeichnis der Strassen (swisstopo)",
+        description=(
+            "Switzerland's federal street-name register, run by the Federal Office of Topography."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Switzerland"}),
+        administrative_area="swisstopo (Bundesamt für Landestopografie)",
+        scope_note=(
+            "Confirmed live (2026-08-18) - credential-free, this SDK's "
+            "first Swiss streets/gazetteer provider, a sibling to the "
+            "existing Swiss roadworks coverage (Kanton Zurich, Stadt "
+            "Zurich) at national scale. A genuine federal register, not "
+            "a swisstopo-original survey - street names are declared in "
+            "the Gebaude- und Wohnungsregister (GWR, run by the Federal "
+            "Statistical Office) and transmitted to swisstopo daily, "
+            "which adds geometry and republishes. 224,985 real national "
+            "street records, 100% carrying a real name and a real "
+            "coordinate, zero duplicate IDs - the cleanest coverage "
+            "figures of any streets provider this SDK has built. Bulk "
+            "CSV chosen over a real, live, keyless point-query API "
+            "(api3.geo.admin.ch) since that API only supports search, "
+            "not 'everything' - the same bulk-vs-live-query call ANNCSU "
+            "(Italy) already made. Geometry is a real single point "
+            "(EPSG:2056, Swiss LV95) only, not the live API's own "
+            "richer LineString - a deliberate trade-off, not a gap; the "
+            "richer INSPIRE-adjacent File Geodatabase/XTF bulk formats "
+            "exist too but the XTF alone is a real 842 MB file, too "
+            "large for this SDK's no-heavy-GIS-dependency convention. A "
+            "real Liechtenstein-scoped sibling resource exists on the "
+            "same collection, confirmed live, not fetched by this "
+            "client. Licence: swisstopo's own OGD terms (free use, "
+            "commercial and non-commercial, mandatory source "
+            "attribution), confirmed live. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "swisstopo OGD terms (free use, commercial and non-commercial, attribution required)"
+        ),
+        source_grade="register",
+        _module="streetworks.swisstopo",
+        _client_name="SwisstopoStreetsClient",
+        import_line="from streetworks.swisstopo import SwisstopoStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

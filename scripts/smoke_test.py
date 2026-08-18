@@ -1720,6 +1720,20 @@ def check_dar() -> str:
     return f"{len(roads)} real road(s), {len(named)} named, e.g. {sample_name!r}"
 
 
+def check_swisstopo() -> str:
+    """swisstopo Amtliches Verzeichnis der Strassen (Switzerland) needs
+    no credentials. Exercises the real national bulk ZIP+CSV download -
+    not a small pull, the full national file (~225k real rows) is
+    fetched, see streetworks.swisstopo.client's module docstring."""
+    from streetworks.swisstopo import SwisstopoStreetsClient
+
+    with SwisstopoStreetsClient() as swisstopo:
+        streets = list(itertools.islice(swisstopo.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    return f"{len(streets)} real street(s), e.g. {streets[0]['STN_LABEL']!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1901,6 +1915,8 @@ def main() -> int:
     reporter.check("Marousi (Greece)", [], check_marousi)
     # Danmarks Adresseregister (Denmark) needs no credentials
     reporter.check("Danmarks Adresseregister (Denmark)", [], check_dar)
+    # swisstopo Amtliches Verzeichnis der Strassen (Switzerland) needs no credentials
+    reporter.check("Amtliches Verzeichnis der Strassen (Switzerland)", [], check_swisstopo)
 
     print()
     if reporter.ran == 0:
