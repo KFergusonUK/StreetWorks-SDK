@@ -2790,6 +2790,60 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.copenhagen import CopenhagenClient",
     ),
     ProviderEntry(
+        key="amsterdam",
+        name="Amsterdam (WIOR)",
+        description=(
+            "Gemeente Amsterdam's public-space-works coordination register, this SDK's "
+            "first Dutch municipal roadworks coverage."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Netherlands", "Amsterdam"}),
+        administrative_area="Gemeente Amsterdam",
+        scope_note=(
+            "Confirmed live (2026-08-18) - credential-free, this SDK's "
+            "first Dutch municipal roadworks provider, a sibling to the "
+            "existing national coverage (NDW/streetworks.datex2, "
+            "NWB/streets, BAG/addresses) at city scale, the same "
+            "national-plus-one-city shape Denmark (Vejdirektoratet + "
+            "Copenhagen), Norway (Vegvesen + Oslo) and Switzerland "
+            "(Kanton Zurich + Stadt Zurich) already have. WIOR (Werken "
+            "in de Openbare Ruimte) is Gemeente Amsterdam's own "
+            "coordination register for public-space works - 10,063 real "
+            "records confirmed live, 100% carrying real start/end dates "
+            "and a real project name. Served over api.data.amsterdam.nl "
+            "(Amsterdam's own DSO-API platform) - a real path quirk was "
+            "found and worked around: the dataset's own published path "
+            "is relative to its sub-router, so the real live endpoint is "
+            "the doubled /v1/wior/wior/. Geometry is real "
+            "Polygon/MultiPolygon only (no Point/LineString rows found "
+            "live) - the first ring's first vertex is used as a "
+            "representative point, the same discipline from_oslo/"
+            "from_canton_zurich already apply; unlike Denmark's DAR, "
+            "this endpoint genuinely honours server-side reprojection "
+            "to WGS84 via a real Accept-Crs header, confirmed live. A "
+            "real data-quality quirk kept rather than normalised away: "
+            "one live record carries hoofdstatus='Yes' instead of a "
+            "genuine Dutch status value - the status field is never "
+            "validated against a closed enum. Licence: Gemeente "
+            "Amsterdam's own general open-data terms (free reuse, "
+            "commercial and non-commercial, attribution not required) - "
+            "functionally CC0-equivalent but not asserted under that "
+            "specific label, since it wasn't stated under it anywhere "
+            "checked. See module docstring."
+        ),
+        credentials=None,
+        licence=(
+            "Gemeente Amsterdam's own open-data terms - free reuse, commercial and "
+            "non-commercial, attribution not required (not asserted as CC0, since that "
+            "specific label wasn't found stated)"
+        ),
+        source_grade="register",
+        _module="streetworks.amsterdam",
+        _client_name="AmsterdamClient",
+        import_line="from streetworks.amsterdam import AmsterdamClient",
+    ),
+    ProviderEntry(
         key="oslo",
         name="Oslo (SøkSys)",
         description=(

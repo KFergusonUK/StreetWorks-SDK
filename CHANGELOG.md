@@ -2,6 +2,38 @@
 
 ## [Unreleased]
 
+### Added — Amsterdam (WIOR), this SDK's first Dutch municipal roadworks provider (2026-08-18)
+
+`streetworks.amsterdam.AmsterdamClient` / `streetworks.common.from_amsterdam`
+- Gemeente Amsterdam's own public-space-works coordination register, a
+sibling to the existing national Dutch coverage (NDW, NWB, BAG) at city
+scale.
+
+```python
+from streetworks.amsterdam import AmsterdamClient
+from streetworks.common import from_amsterdam
+
+with AmsterdamClient() as amsterdam:
+    works = from_amsterdam(list(amsterdam.iter_roadworks()))
+```
+
+- **A real path quirk found and worked around**: the dataset's own
+  published OpenAPI path is relative to its own sub-router, not the API
+  root - the real live endpoint is the doubled `/v1/wior/wior/`.
+- **10,063 real works records** - 100% carrying real start/end dates. A
+  real data-quality quirk kept rather than normalised away: one live
+  record carries `hoofdstatus: "Yes"` instead of a genuine Dutch status
+  value - never validated against a closed enum.
+- **Real `Polygon`/`MultiPolygon`-only geometry** - the first ring's
+  first vertex is used as a representative point, the same discipline
+  `from_oslo`/`from_canton_zurich` already apply. Unlike Denmark's DAR
+  (added earlier today), this endpoint genuinely honours server-side
+  reprojection to WGS84 via a real `Accept-Crs` header, confirmed live.
+- **Licence**: Gemeente Amsterdam's own general open-data terms (free
+  reuse, commercial and non-commercial, attribution not required) -
+  checked live rather than assumed CC0, since that specific label
+  wasn't found stated anywhere checked.
+
 ### Added — Danmarks Adresseregister (DAR), this SDK's first Danish streets provider (2026-08-18)
 
 `streetworks.dar.DarClient` / `streetworks.common.from_dar_street` -

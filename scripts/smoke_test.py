@@ -548,6 +548,25 @@ def check_copenhagen() -> str:
     )
 
 
+def check_amsterdam() -> str:
+    """Amsterdam (WIOR) needs no credentials - confirmed live (see
+    streetworks.amsterdam). Only takes a small page (page_size=5, real
+    HAL pagination - one HTTP request) rather than the full 10,063-record
+    national register."""
+    import itertools
+
+    from streetworks.amsterdam import AmsterdamClient
+    from streetworks.common import from_amsterdam
+
+    with AmsterdamClient(page_size=5) as amsterdam:
+        raw = list(itertools.islice(amsterdam.iter_roadworks(), 5))
+    if not raw:
+        raise RuntimeError("query returned no real works")
+    works = from_amsterdam(raw)
+    in_progress = sum(1 for w in works if w.sites[0].status == "Uitvoering")
+    return f"{len(works)} real work(s), {in_progress} in progress (Uitvoering)"
+
+
 def check_oslo() -> str:
     """Oslo (SøkSys) needs no credentials - confirmed live (see
     streetworks.oslo). Reports raw row count, the count after the
@@ -1856,6 +1875,8 @@ def main() -> int:
     reporter.check("Roma (Roma si trasforma)", [], check_roma)
     # Copenhagen (Gravetilladelser) needs no credentials
     reporter.check("Copenhagen (Gravetilladelser)", [], check_copenhagen)
+    # Amsterdam (WIOR) needs no credentials
+    reporter.check("Amsterdam (WIOR)", [], check_amsterdam)
     # Oslo (SøkSys) needs no credentials
     reporter.check("Oslo (SøkSys)", [], check_oslo)
     # UK Police (data.police.uk) needs no credentials

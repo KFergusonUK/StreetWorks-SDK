@@ -1,0 +1,334 @@
+[
+  {
+    "_links": {
+      "schema": "https://schemas.data.amsterdam.nl/datasets/wior/wior/v2",
+      "self": {
+        "href": "https://api.data.amsterdam.nl/v1/wior/wior/000192b1-5ed4-45e6-a650-a708938b12db",
+        "title": "W22013761",
+        "id": "000192b1-5ed4-45e6-a650-a708938b12db"
+      }
+    },
+    "id": "000192b1-5ed4-45e6-a650-a708938b12db",
+    "geometrie": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            4.805515272582743,
+            52.39446733736515
+          ],
+          [
+            4.805426937822157,
+            52.394427645116416
+          ],
+          [
+            4.805506668463518,
+            52.39437065908531
+          ],
+          [
+            4.805580313737499,
+            52.39440121951369
+          ],
+          [
+            4.805515272582743,
+            52.39446733736515
+          ]
+        ]
+      ]
+    },
+    "wiorNummer": "W22013761",
+    "projectnaam": "Noordzeeweg (tussen Luvernes en Hornweg) T-stukken vervangen 550037139",
+    "beschrijving": "We gaan in ons bestaande net T-stukken vervangen.",
+    "datumStartUitvoering": "2022-08-29",
+    "datumEindeUitvoering": "2022-09-16",
+    "periodeGeplandeUitvoering": "29-08-2022,16-09-2022",
+    "hoofdstatus": "Uitvoering",
+    "typeWerkzaamheden": "Vervanging"
+  },
+  {
+    "_links": {
+      "schema": "https://schemas.data.amsterdam.nl/datasets/wior/wior/v2",
+      "self": {
+        "href": "https://api.data.amsterdam.nl/v1/wior/wior/003d2130-f177-49cd-8018-5e40747b6e65",
+        "title": "W23009721",
+        "id": "003d2130-f177-49cd-8018-5e40747b6e65"
+      }
+    },
+    "id": "003d2130-f177-49cd-8018-5e40747b6e65",
+    "geometrie": {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [
+              4.905389713059919,
+              52.36587378586453
+            ],
+            [
+              4.905275633631598,
+              52.36573176505837
+            ],
+            [
+              4.905500439909629,
+              52.36561471617849
+            ],
+            [
+              4.905446895488176,
+              52.36557674991257
+            ],
+            [
+              4.905389713059919,
+              52.36587378586453
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              4.921095812232883,
+              52.36732344537017
+            ],
+            [
+              4.921131968427748,
+              52.367366054596616
+            ],
+            [
+              4.921145560365202,
+              52.367356671012544
+            ],
+            [
+              4.921113238488127,
+              52.36731525427349
+            ],
+            [
+              4.921095812232883,
+              52.36732344537017
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              4.91022531510995,
+              52.36900124350339
+            ],
+            [
+              4.910375533848726,
+              52.36901128565584
+            ],
+            [
+              4.910368129794605,
+              52.36898294456573
+            ],
+            [
+              4.910237138627462,
+              52.368977698406965
+            ],
+            [
+              4.91022531510995,
+              52.36900124350339
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              4.916065675082597,
+              52.37071858419522
+            ],
+            [
+              4.916148471675074,
+              52.37072598693727
+            ],
+            [
+              4.916148621986508,
+              52.37071183190934
+            ],
+            [
+              4.916071623083897,
+              52.37070327484788
+            ],
+            [
+              4.916065675082597,
+              52.37071858419522
+            ]
+          ]
+        ]
+      ]
+    },
+    "wiorNummer": "W23009721",
+    "projectnaam": "Weesperstraat - Pilot autoluw incl locaties Anne Frankstraat, Hoogte Kadijk en Kattenburgergracht",
+    "beschrijving": "De Agenda Amsterdam Autoluw bevat 27 voorstellen voor maatregelen, pilots en onderzoeken voor meer leefruimte en schone lucht. \n\nEen van de voorgestelde onderzoeken uit de Agenda Amsterdam Autoluw is een tijdelijke knip in een van de hoofdroutes door de stad, de Weesperstraat.\nOm de negatieve en positieve effecten van een dergelijke knip in een hoofdroute te onderzoeken sluiten we de Weesperstraat tussen de Nieuwe Herengracht en de Nieuwe Keizersgracht voor een aaneengesloten periode van 6 weken (12 juni 2023 tot 23 juli 2023) af voor auto verkeer tussen 6.00 en 23.00 uur",
+    "datumStartUitvoering": "2023-06-12",
+    "datumEindeUitvoering": "2023-07-23",
+    "periodeGeplandeUitvoering": "12-06-2023,23-07-2023",
+    "hoofdstatus": "Uitvoering",
+    "typeWerkzaamheden": "Onderzoeken/Verkennen"
+  },
+  {
+    "_links": {
+      "schema": "https://schemas.data.amsterdam.nl/datasets/wior/wior/v2",
+      "self": {
+        "href": "https://api.data.amsterdam.nl/v1/wior/wior/00658935-4ce7-4ad1-9794-15d3391bb146",
+        "title": "W23007308",
+        "id": "00658935-4ce7-4ad1-9794-15d3391bb146"
+      }
+    },
+    "id": "00658935-4ce7-4ad1-9794-15d3391bb146",
+    "geometrie": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            4.916248301544335,
+            52.33239610967843
+          ],
+          [
+            4.916249755548513,
+            52.33239457855702
+          ],
+          [
+            4.916251662145182,
+            52.33239325595551
+          ],
+          [
+            4.91625394750543,
+            52.33239218651894
+          ],
+          [
+            4.916256537895674,
+            52.3323914059048
+          ],
+          [
+            4.916259330146109,
+            52.332390958641426
+          ],
+          [
+            4.916262206893014,
+            52.332390844261674
+          ],
+          [
+            4.916265065252533,
+            52.33239108033158
+          ],
+          [
+            4.916267802722033,
+            52.332391648467755
+          ],
+          [
+            4.916270287457921,
+            52.33239253016988
+          ],
+          [
+            4.916272461064253,
+            52.3323936982423
+          ],
+          [
+            4.916274206749072,
+            52.33239509829363
+          ],
+          [
+            4.916275481072757,
+            52.33239667622442
+          ],
+          [
+            4.916276225925194,
+            52.332398377876785
+          ],
+          [
+            4.916276412632497,
+            52.332400140222305
+          ],
+          [
+            4.916276027286541,
+            52.33240189130339
+          ],
+          [
+            4.91627509999064,
+            52.332403559337806
+          ],
+          [
+            4.915950050409633,
+            52.33284014931302
+          ],
+          [
+            4.915948596475856,
+            52.33284167144321
+          ],
+          [
+            4.915946689850872,
+            52.33284299403967
+          ],
+          [
+            4.915944404460003,
+            52.33284406347021
+          ],
+          [
+            4.915941814037854,
+            52.33284484407738
+          ],
+          [
+            4.91593902166031,
+            52.33284530032056
+          ],
+          [
+            4.915936144978518,
+            52.33284540570505
+          ],
+          [
+            4.915933286496155,
+            52.33284517861455
+          ],
+          [
+            4.915930563673636,
+            52.33284461052908
+          ],
+          [
+            4.915928064343995,
+            52.332843719774075
+          ],
+          [
+            4.915925890629376,
+            52.3328425606828
+          ],
+          [
+            4.915924144938007,
+            52.332841160626444
+          ],
+          [
+            4.915922870709486,
+            52.33283957370463
+          ],
+          [
+            4.915922125863252,
+            52.33283787205018
+          ],
+          [
+            4.915921939168235,
+            52.33283610970431
+          ],
+          [
+            4.9159223244366,
+            52.3328343676119
+          ],
+          [
+            4.915923251754795,
+            52.33283269958044
+          ],
+          [
+            4.916248301544335,
+            52.33239610967843
+          ]
+        ]
+      ]
+    },
+    "wiorNummer": "W23007308",
+    "projectnaam": "Joan Muyskenweg 25 , 1096 CJ Amsterdam - Elektra",
+    "beschrijving": "Aanleg nieuwe elektra aansluitingen tbv lichtmasten te plaatsen door de Gemeente Amsterdam",
+    "datumStartUitvoering": "2023-05-22",
+    "datumEindeUitvoering": "2023-05-26",
+    "periodeGeplandeUitvoering": "22-05-2023,26-05-2023",
+    "hoofdstatus": "Projectaanpak",
+    "typeWerkzaamheden": "Aanleggen"
+  }
+]

@@ -1437,6 +1437,76 @@ from streetworks.common import from_nwb
 gazetteer_segment = from_nwb(segments[0])
 ```
 
+## Amsterdam (WIOR)
+
+Gemeente Amsterdam's own public-space-works coordination register —
+**WIOR** (Werken in de Openbare Ruimte, "Works in the Public Space") —
+no credentials. This SDK's first Dutch *municipal* roadworks provider,
+a sibling to the existing national coverage (NDW's DATEX II feed, NWB's
+road network, BAG's addresses) at city scale — the same national-plus-
+one-city shape Denmark (Vejdirektoratet + Copenhagen), Norway (Vegvesen
++ Oslo) and Switzerland (Kanton Zürich + Stadt Zürich) already have:
+
+```python
+from streetworks.amsterdam import AmsterdamClient
+from streetworks.common import from_amsterdam
+
+with AmsterdamClient() as amsterdam:
+    works = from_amsterdam(list(amsterdam.iter_roadworks()))
+```
+
+**Real, live, genuinely keyless REST API on `api.data.amsterdam.nl`**
+(Amsterdam's own DSO-API open-data platform, 120+ real datasets) —
+confirmed live with a plain unauthenticated `GET`; the dataset's own
+catalogue metadata states `"api_authentication": ["OPENBAAR"]` ("public").
+**A real path quirk found and worked around**: the dataset's own
+published OpenAPI path is `/wior`, relative to its own sub-router, not
+the API root — the real, live data endpoint is the doubled
+`https://api.data.amsterdam.nl/v1/wior/wior/` (confirmed live: the
+undoubled path 404s).
+
+**10,063 real works records, confirmed live 2026-08-18** — real project
+names (`"Noordzeeweg (tussen Luvernes en Hornweg) T-stukken vervangen"`),
+100% carrying real start/end dates. A real, live-confirmed data-quality
+quirk kept rather than normalised away: one real record carries
+`hoofdstatus: "Yes"` instead of a genuine Dutch status value —
+`from_amsterdam` treats `hoofdstatus` as an open string, never validated
+against a closed enum.
+
+**Geometry is real `Polygon`/`MultiPolygon` only** — genuinely no
+Point/LineString rows found live (a live 1000-record sample: 867
+Polygon, 133 MultiPolygon). The first ring's first vertex is used as a
+representative `Coordinate.value`, the same discipline `from_oslo`/
+`from_canton_zurich` already apply to their own polygon case; the full
+raw geometry stays in `WorksSite.raw`. **Unlike Denmark's DAR, this
+endpoint genuinely honours server-side reprojection to WGS84** — a real
+`Accept-Crs: EPSG:4326` request header is confirmed live to be honoured
+(the response's own `Content-Crs` header echoes it back, and real
+Amsterdam coordinates come back), so no client-side reprojection is
+needed here.
+
+**`date_confidence` is `VERIFIED` (with `actual_start`/`actual_end`
+populated) only when `hoofdstatus == "Uitvoering"`** ("execution" — the
+dominant real value, 774/1000 in a live sample) — every other value
+falls back to `ESTIMATED`, the same "only a confirmed-active status
+earns VERIFIED" discipline this SDK applies everywhere else.
+`location_description` carries the real `projectnaam` (project name),
+confirmed live to usually embed real street/location context in its own
+text — the closest real fit to an address field on a schema that has
+none. `promoter` and `street_ref` are never populated — no
+organisation/contractor or street-identifier field exists anywhere in
+this schema.
+
+**Licence: Gemeente Amsterdam's own general open-data terms, checked
+live rather than assumed CC0.** The dataset's own catalogue metadata
+states `"license": "public"`; Gemeente Amsterdam's general geodata terms
+page (`maps.amsterdam.nl/open_geodata/terms.php`, confirmed live) grants
+free use and reuse "voor elk wettig doel" ("for any lawful purpose"),
+commercial and non-commercial, with attribution appreciated but
+explicitly not required — functionally CC0-equivalent in permissiveness,
+but not stated under that specific label anywhere checked, so this SDK
+doesn't assert one.
+
 ## BD TOPO (France)
 
 French national road network (IGN) — no credentials. **The `streets`
