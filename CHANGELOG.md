@@ -2,6 +2,37 @@
 
 ## [Unreleased]
 
+### Added — Österreichisches Adressregister (BEV), this SDK's first Austrian streets provider (2026-08-18)
+
+`streetworks.bev.BevStreetsClient` / `streetworks.common.from_bev_street`
+- Austria's national street-name register, run by BEV (Bundesamt für
+Eich- und Vermessungswesen).
+
+```python
+from streetworks.bev import BevStreetsClient
+from streetworks.common import from_bev_street
+
+with BevStreetsClient() as bev:
+    streets = [from_bev_street(r) for r in bev.iter_streets()]
+```
+
+- **Not the first source found** - BEV's own product page is a paid,
+  per-record shop product; a separate free CC-BY-4.0 line was found
+  instead on BEV's own `data.bev.gv.at` GeoNetwork portal.
+- **137,767 real national street rows, 100% carrying a real name, zero
+  duplicate SKZ** - the same pure name-registry shape ANNCSU (Italy)
+  already established. Joined against a real municipality table so
+  `administrative_area` carries a resolved name, not a bare code.
+- **No geometry anywhere in this resource** - `GeometryGrade.ABSENT` on
+  every `Street`, not a gap; real coordinates exist only on a much
+  larger sibling address-level resource, deliberately not fetched here.
+- **A real, disclosed limitation**: this product is a periodically
+  dated snapshot with no stable "latest" alias found anywhere checked -
+  the base URL points at the most recent snapshot confirmed live at
+  investigation time, stated honestly as needing future maintenance.
+- **Licence**: Creative Commons Attribution 4.0 International, confirmed
+  live from the product's own ISO19139 metadata.
+
 ### Added — Amtliches Verzeichnis der Strassen (swisstopo), this SDK's first Swiss streets provider (2026-08-18)
 
 `streetworks.swisstopo.SwisstopoStreetsClient` / `streetworks.common

@@ -19,6 +19,7 @@ from .from_bag import from_bag
 from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
 from .from_berlin import from_berlin
+from .from_bev import from_bev_street
 from .from_canton_zurich import from_canton_zurich
 from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
@@ -178,4 +179,5 @@ __all__ = [
     "from_digiroad_street",
     "from_marousi_street",
     "from_swisstopo_street",
+    "from_bev_street",
 ]

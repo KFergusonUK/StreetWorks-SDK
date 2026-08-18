@@ -1734,6 +1734,25 @@ def check_swisstopo() -> str:
     return f"{len(streets)} real street(s), e.g. {streets[0]['STN_LABEL']!r}"
 
 
+def check_bev() -> str:
+    """BEV Österreichisches Adressregister (Austria) needs no
+    credentials. Exercises the real national bulk ZIP+CSV download -
+    not a small pull, the full national file (~137k real rows across
+    STRASSE.csv + GEMEINDE.csv) is fetched, see streetworks.bev.client's
+    module docstring."""
+    from streetworks.bev import BevStreetsClient
+
+    with BevStreetsClient() as bev:
+        streets = list(itertools.islice(bev.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample = streets[0]
+    return (
+        f"{len(streets)} real street(s), e.g. {sample['STRASSENNAME']!r} "
+        f"in {sample['GEMEINDENAME']!r}"
+    )
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1917,6 +1936,8 @@ def main() -> int:
     reporter.check("Danmarks Adresseregister (Denmark)", [], check_dar)
     # swisstopo Amtliches Verzeichnis der Strassen (Switzerland) needs no credentials
     reporter.check("Amtliches Verzeichnis der Strassen (Switzerland)", [], check_swisstopo)
+    # BEV Österreichisches Adressregister (Austria) needs no credentials
+    reporter.check("Österreichisches Adressregister (Austria)", [], check_bev)
 
     print()
     if reporter.ran == 0:

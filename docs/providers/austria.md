@@ -9,6 +9,69 @@
 > and ASFINAG's national motorway network are genuinely different road
 > tiers, the same relationship every other national-vs-municipal pair in
 > this SDK has (Copenhagen/Vejdirektoratet, Kanton Zürich/Stadt Zürich).
+> **Streets**: BEV's own federal street-name register, this SDK's first
+> Austrian streets/gazetteer coverage - see below.
+
+## Österreichisches Adressregister (BEV)
+
+Austria's national street-name register, run by BEV (Bundesamt für
+Eich- und Vermessungswesen, the Federal Office of Metrology and
+Surveying):
+
+```python
+from streetworks.bev import BevStreetsClient
+from streetworks.common import from_bev_street
+
+with BevStreetsClient() as bev:
+    streets = [from_bev_street(r) for r in bev.iter_streets()]
+```
+
+**Not the first source found - BEV's own product page is a paid shop, a
+separate free line was found instead.**
+`bev.gv.at/Services/Produkte/Adressregister/` lists a per-record priced
+product (e.g. €0.045/record for 1m-geocoded addresses, ordered via
+"Bestellformulare"/"BEV Shops") - its own downloadable sample ZIP turned
+out to be a single-municipality demo (Zell am See, 190 real rows), not
+the national dataset. A **separate, free, CC-BY-4.0 product line** is
+published directly on BEV's own GeoNetwork data portal,
+`data.bev.gv.at` (distinct from the general `data.gv.at` national
+portal, a JS SPA with no easily discoverable API) - confirmed live via
+its own ISO19139 metadata: *"Für dieses Produkt gilt die Standardlizenz
+CC-BY-4.0"*, access constraint `noLimitations`.
+
+**137,767 real national street rows, 100% carrying a real name, zero
+duplicate `SKZ`** - the same pure name-registry shape ANNCSU (Italy)
+already established. Joined against a real 2,092-row municipality table
+(`GEMEINDE.csv`, a clean 1:1 join confirmed against the complete
+dataset) so `administrative_area` carries a resolved name, not a bare
+code - unlike Denmark's DAR, which left its own raw kommune code
+unresolved since no lookup table was fetched there.
+
+**No geometry anywhere in this resource - `GeometryGrade.ABSENT` on
+every real `Street`, not a gap in this build.** Real coordinates exist
+only on a much larger sibling address-level resource (a real 325 MB
+`ADRESSE.csv`, plus a separate ~183 MB INSPIRE address product,
+`AT-INSPIRE_AD_Address`, both confirmed live) - deliberately not
+fetched here, the same streets-built/address-side-scoped-out call
+ANNCSU already made for its own `accessi` sibling.
+
+**A real, disclosed limitation: a dated snapshot, no stable "latest"
+alias found.** This product is published periodically (roughly twice
+yearly - live-confirmed Stichtag dates include 01.04.2025 and
+01.10.2025) under a URL that bakes the snapshot date in
+(`..._Stichtagsdaten_20251001.zip`) - `BASE_URL` points at the most
+recent snapshot confirmed live at investigation time (2026-08-18); a
+future maintainer will need to update it once BEV publishes a newer
+one, a real constraint stated honestly rather than engineered around.
+
+**Licence: Creative Commons Attribution 4.0 International (CC BY
+4.0)**, confirmed live from this product's own ISO19139 metadata -
+required attribution wording stated verbatim: *"© Österreichisches
+Adressregister, Stichtagsdaten vom 01.10.2025"* (the date changes per
+snapshot).
+
+**No credentials required** - every claim above came from a fully
+unauthenticated GET request.
 
 ## Vienna (verkehrswirksame Baustellen)
 

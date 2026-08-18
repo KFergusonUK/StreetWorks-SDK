@@ -2498,6 +2498,54 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.swisstopo import SwisstopoStreetsClient",
     ),
     ProviderEntry(
+        key="bev",
+        name="Österreichisches Adressregister (BEV)",
+        description=(
+            "Austria's national street-name register, run by the Federal Office "
+            "of Metrology and Surveying."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Austria"}),
+        administrative_area="BEV (Bundesamt für Eich- und Vermessungswesen)",
+        scope_note=(
+            "Confirmed live (2026-08-18) - credential-free, this SDK's "
+            "first Austrian streets/gazetteer provider, a sibling to "
+            "the existing Austrian roadworks coverage (Vienna's own "
+            "WFS; ASFINAG's national Credentials-wanted scaffold). Not "
+            "the first source found - BEV's own product page "
+            "(bev.gv.at) lists a paid, per-record shop product; a "
+            "separate free CC-BY-4.0 line was found instead on BEV's "
+            "own data.bev.gv.at GeoNetwork portal (distinct from the "
+            "general data.gv.at national portal, a JS SPA with no "
+            "easily discoverable API). 137,767 real national street "
+            "rows, 100% carrying a real name, zero duplicate SKZ - the "
+            "same pure name-registry shape ANNCSU (Italy) already "
+            "established, joined against a real 2,092-row municipality "
+            "table (GEMEINDE.csv, a clean 1:1 join, confirmed against "
+            "the complete dataset) so administrative_area carries a "
+            "resolved name, not a bare code. No geometry anywhere in "
+            "this resource - GeometryGrade.ABSENT on every Street, not "
+            "a gap - real coordinates exist only on a much larger "
+            "sibling address-level resource (325MB ADRESSE.csv, plus a "
+            "separate ~183MB INSPIRE address product), deliberately not "
+            "fetched here, the same streets-built/address-side-scoped-"
+            "out call ANNCSU already made. A real, disclosed "
+            "limitation: this product is a periodically dated snapshot "
+            "('Stichtag') with no stable latest-alias URL found "
+            "anywhere checked - BASE_URL points at the most recent "
+            "snapshot confirmed live (Stichtag 01.10.2025) at "
+            "investigation time; a future maintainer will need to "
+            "update it once BEV publishes a newer one. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.bev",
+        _client_name="BevStreetsClient",
+        import_line="from streetworks.bev import BevStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",
