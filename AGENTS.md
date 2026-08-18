@@ -29,6 +29,10 @@ pytest -m integration          # opt-in: live/sandbox tests, need credentials
 python scripts/smoke_test.py   # end-to-end smoke check
 ```
 
+Live/integration runs (`smoke_test.py`, `pytest -m integration`) target
+non-production by default and refuse production unless explicitly opted
+in (`--allow-production` / `STREETWORKS_ALLOW_PRODUCTION=1`).
+
 ## Data-handling rules
 
 - **Never fabricate.** No invented street names, no guessed centroids
@@ -69,6 +73,16 @@ python scripts/smoke_test.py   # end-to-end smoke check
 - **No synthetic streets.** A `Street`/`Segment` is only ever emitted
   by a provider that actually publishes one; never derived by grouping
   addresses or route segments.
+- **Keep the dependency surface tiny.** Runtime dependencies are
+  deliberately just `httpx` + `pydantic` (standard library otherwise —
+  no GDAL, no geopandas). Do geometry / CRS work by hand or skip it (per
+  the CRS rule above); don't pull in a heavy geo stack to sidestep the
+  discipline.
+- **Don't hand-edit generated models.** The Pydantic models under
+  `streetmanager/models/` and `dtro/models/` are generated-and-committed
+  (so PyPI users get them without running the generators) and
+  ruff-excluded — regenerate via `scripts/generate_models.py` /
+  `scripts/generate_dtro_models.py`, don't edit them by hand.
 
 ## Access boundaries (see `docs/contributing/agent-boundaries.md`)
 
@@ -103,7 +117,9 @@ changelog. Two steps diverge by data class; both paths are spelled out.
    FeatureServer/MapServer — reuse `ArcGISFeatureClient`, don't reinvent
    it; same idea for `streetworks.ogc.OGCFeaturesClient` on classic
    WFS / OGC API Features sources), built on `streetworks._transport`,
-   raising `streetworks.exceptions` types. Expose the iterator for the
+   raising `streetworks.exceptions` types (never call `httpx` directly —
+   the shared transport centralises retries, backoff, `Retry-After` and
+   error-mapping). Expose the iterator for the
    data class — `iter_roadworks()` for works, `iter_streets()` /
    `iter_addresses()` for a gazetteer (a source that publishes both, like
    a national register, exposes both siblings).
@@ -111,7 +127,10 @@ changelog. Two steps diverge by data class; both paths are spelled out.
    shared model **for that class — `Works`/`WorksSite` for roadworks,
    `Street`/`Segment`/`Address` for a gazetteer** (see
    `docs/concepts/common-model.md`). Either way: preserve `.raw`, grade
-   geometry honestly, label CRS, never synthesise a street.
+   geometry honestly, label CRS, never synthesise a street. The native
+   client returns raw decoded JSON (`dict`); this converter and the
+   generated Pydantic models are opt-in layers the caller applies, not
+   the client's return type.
 3. A registry entry in `src/streetworks/registry.py`. Every entry sets
    `kind` (`roadworks` / `streets` / `addresses` / `context`). Then, by
    class:
@@ -176,6 +195,8 @@ caller composes, the SDK doesn't pretend the sources are one.
 - Full `pytest` suite green (credential-free).
 - If it's a UI/example change, actually run it — type-checking is not
   the same as confirming the feature works.
+- `__version__` in `src/streetworks/__init__.py` must equal the version
+  in `pyproject.toml` — update both together; they drift easily.
 
 ## Scope of this SDK
 
