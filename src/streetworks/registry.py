@@ -2415,6 +2415,44 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.marousi import MarousiStreetsClient",
     ),
     ProviderEntry(
+        key="dar",
+        name="Danmarks Adresseregister (DAR)",
+        description="Denmark's national named-road register, over Datafordeleren's REST API.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Denmark"}),
+        administrative_area="SDFI (Danish Agency for Data Supply and Infrastructure)",
+        scope_note=(
+            "Confirmed live (2026-08-18) - credential-free, this SDK's "
+            "first Danish streets/gazetteer provider, a real sibling to "
+            "Denmark's existing roadworks coverage (Copenhagen/"
+            "Gravetilladelser, streetworks.copenhagen; Vejdirektoratet, "
+            "Credentials wanted). Built against DAR's own Navngivenvej "
+            "(named-road) entity on Datafordeleren, not the originally "
+            "checked DAWA (api.dataforsyningen.dk) - DAWA's own docs "
+            "carry a live 'DAWA lukker' warning, confirmed via web "
+            "search to be closing toward 1 October 2026, superseded by "
+            "Datafordeleren; building on a feed six weeks from shutdown "
+            "would ship something already due to break. 99.96% of a "
+            "live 5000-record sample carries a real stated name - the "
+            "highest name coverage of any streets provider built this "
+            "session. Real CRS-only gap: this REST endpoint states only "
+            "ETRS89/UTM32N (EPSG:25832) geometry, confirmed live (a "
+            "srid=EPSG:4326 parameter was tried and rejected with a "
+            "real 400) - reprojected client-side via a closed-form "
+            "Transverse Mercator inverse (streetworks.common._utm32n, "
+            "no Helmert step needed since ETRS89 and WGS84 are "
+            "coincident at this SDK's stated accuracy), cross-checked "
+            "against DAWA's own real WGS84 output for the same road "
+            "(agreement to within a few metres). See module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.dar",
+        _client_name="DarClient",
+        import_line="from streetworks.dar import DarClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

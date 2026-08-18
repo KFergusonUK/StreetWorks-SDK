@@ -1681,6 +1681,26 @@ def check_marousi() -> str:
     return f"{len(streets)} real street(s), e.g. {sample!r}"
 
 
+def check_dar() -> str:
+    """Danmarks Adresseregister (DAR, Denmark) needs no credentials.
+    Only takes a small page (page_size=5, real server-side pagination -
+    one HTTP request) rather than the full national named-road register -
+    see streetworks.dar.client's module docstring."""
+    from streetworks.dar import DarClient
+
+    with DarClient(page_size=5) as dar:
+        roads = []
+        for record in dar.iter_streets():
+            roads.append(record)
+            if len(roads) >= 5:
+                break
+    if not roads:
+        raise RuntimeError("query returned no real roads")
+    named = [r for r in roads if (r.get("vejnavn") or "").strip()]
+    sample_name = named[0]["vejnavn"] if named else None
+    return f"{len(roads)} real road(s), {len(named)} named, e.g. {sample_name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1858,6 +1878,8 @@ def main() -> int:
     reporter.check("Digiroad (Finland)", [], check_digiroad)
     # Marousi (Greece) needs no credentials
     reporter.check("Marousi (Greece)", [], check_marousi)
+    # Danmarks Adresseregister (Denmark) needs no credentials
+    reporter.check("Danmarks Adresseregister (Denmark)", [], check_dar)
 
     print()
     if reporter.ran == 0:

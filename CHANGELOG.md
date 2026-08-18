@@ -2,6 +2,48 @@
 
 ## [Unreleased]
 
+### Added — Danmarks Adresseregister (DAR), this SDK's first Danish streets provider (2026-08-18)
+
+`streetworks.dar.DarClient` / `streetworks.common.from_dar_street` -
+Denmark's national named-road register, over Datafordeleren's genuinely
+keyless REST API.
+
+```python
+from streetworks.dar import DarClient
+from streetworks.common import from_dar_street
+
+with DarClient() as dar:
+    streets = [from_dar_street(r) for r in dar.iter_streets()]
+```
+
+- **Not the source originally investigated - the obvious one is being
+  shut down, found before any code was written.** DAWA (Danmarks
+  Adressers Web API) is genuinely keyless with real national street
+  data, but its own docs carry a live "DAWA lukker" (closing) warning -
+  confirmed via web search to be phased out toward 1 October 2026,
+  superseded by Datafordeleren. DAR (the actual successor) was built
+  instead.
+- **Real CRS-only gap, worked around with a new closed-form transform,
+  not a dependency.** This REST endpoint states geometry only in
+  ETRS89/UTM32N (`EPSG:25832`) - a `srid=EPSG:4326` parameter was tried
+  and rejected (real `400`). `streetworks.common._utm32n` adds a new
+  closed-form ellipsoidal Transverse Mercator inverse (no `pyproj`, no
+  Helmert step needed since ETRS89 and WGS84 are coincident at this
+  SDK's stated accuracy) - cross-checked against DAWA's own real WGS84
+  output for the same road before shipping, agreement to within a few
+  metres.
+- **A real, three-tier geometry fallback, found live rather than
+  assumed uniform**: line, then a real "road connection point" field
+  where there's no line, then genuinely `GeometryGrade.ABSENT` only
+  where neither exists (confirmed live on a 5000-record sample). A
+  sibling real polygon field ("road name area") is never read into
+  `Coordinate` - kept `.raw`-only, the same discipline
+  `from_marousi_street`/`from_guernsey_street` already established.
+- **99.96% real name coverage** (4998/5000 in a live sample) - the
+  highest of any streets provider this SDK has built.
+- **Licence**: Creative Commons Attribution 4.0 International,
+  confirmed live from Datafordeleren's own terms page.
+
 ### Investigated — Sweden streets gazetteer, ruled out on registration gates (2026-08-17)
 
 Not a technical or provenance blocker - both real national candidates

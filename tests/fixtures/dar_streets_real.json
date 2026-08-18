@@ -1,0 +1,123 @@
+[
+  {
+    "datafordelerOpdateringstid": "2021-01-05T19:50:41.431082+01:00",
+    "administreresAfKommune": "0217",
+    "id_lokalId": "00008748-e0ee-4cb3-83b7-167455a2efaf",
+    "id_namespace": "http://data.gov.dk/dar/navngivenvej",
+    "registreringFra": "2018-05-29T17:30:00.004005+02:00",
+    "registreringsaktør": "DAR",
+    "status": "3",
+    "udtaltVejnavn": "Halvdansvej",
+    "vejadresseringsnavn": "Halvdansvej",
+    "vejnavn": "Halvdansvej",
+    "vejnavnebeliggenhed_oprindelse_kilde": "Ekstern",
+    "vejnavnebeliggenhed_oprindelse_nøjagtighedsklasse": "B",
+    "vejnavnebeliggenhed_vejnavnelinje": "MULTILINESTRING((715111.99 6213560.73,715113.38 6213568.14),(715072.22 6213623.04,715070.42 6213614.23,715064.61 6213572.46))",
+    "navngivenVejKommunedelList": [
+      {
+        "navngivenVejKommunedel": {
+          "kommune": "0217",
+          "vejkode": "2844"
+        }
+      }
+    ]
+  },
+  {
+    "datafordelerOpdateringstid": "2026-06-10T14:02:56.872144+02:00",
+    "administreresAfKommune": "0561",
+    "id_lokalId": "000150a4-3d0f-4848-b43d-9556e8cc9916",
+    "id_namespace": "http://data.gov.dk/dar/navngivenvej",
+    "registreringFra": "2026-06-10T14:02:21.561788+02:00",
+    "registreringsaktør": "DAR",
+    "status": "3",
+    "udtaltVejnavn": "Mølhøjstien",
+    "vejadresseringsnavn": "Mølhøjstien",
+    "vejnavn": "Mølhøjstien",
+    "vejnavnebeliggenhed_oprindelse_kilde": "Ekstern",
+    "vejnavnebeliggenhed_oprindelse_nøjagtighedsklasse": "B",
+    "vejnavnebeliggenhed_vejnavnelinje": "MULTILINESTRING((469917.45 6151156.75,469912.71 6151157.64,469910.47 6151158.25),(469910.47 6151158.25,469901.08 6151161.64,469895.33 6151165))",
+    "navngivenVejKommunedelList": [
+      {
+        "navngivenVejKommunedel": {
+          "kommune": "0561",
+          "vejkode": "1329"
+        }
+      }
+    ],
+    "postnummerList": [
+      {
+        "postnummer": {
+          "navn": "Esbjerg Ø",
+          "postnr": "6705"
+        }
+      }
+    ]
+  },
+  {
+    "datafordelerOpdateringstid": "2024-10-23T10:42:16.051847+02:00",
+    "administreresAfKommune": "0306",
+    "id_lokalId": "03adbd7e-5541-4e6f-9396-105f3cce7d3a",
+    "id_namespace": "http://data.gov.dk/dar/navngivenvej",
+    "registreringFra": "2024-10-23T10:41:37.877583+02:00",
+    "registreringsaktør": "DAR",
+    "status": "4",
+    "udtaltVejnavn": "Højby Have",
+    "vejadresseringsnavn": "Højby Have",
+    "vejnavn": "Højby Have",
+    "vejnavnebeliggenhed_oprindelse_kilde": "Adressemyn",
+    "vejnavnebeliggenhed_oprindelse_nøjagtighedsklasse": "C",
+    "vejnavnebeliggenhed_vejnavneområde": "POLYGON((661456.24 6199172.99,661451.20 6198998.83,661656.16 6198996.59,661664.56 6199057.63,661456.24 6199172.99))",
+    "vejnavnebeliggenhed_vejtilslutningspunkter": "MULTIPOINT(661525.4443727618 6199170.66716204)",
+    "navngivenVejKommunedelList": [
+      {
+        "navngivenVejKommunedel": {
+          "kommune": "0306",
+          "vejkode": "2917"
+        }
+      }
+    ]
+  },
+  {
+    "datafordelerOpdateringstid": "2025-08-26T07:53:54.401640+02:00",
+    "administreresAfKommune": "0561",
+    "id_lokalId": "040d9520-5dd4-433c-ad82-d34a52f2675b",
+    "id_namespace": "http://data.gov.dk/dar/navngivenvej",
+    "registreringFra": "2025-08-26T07:53:34.837062+02:00",
+    "registreringsaktør": "DAR",
+    "status": "5",
+    "vejnavnebeliggenhed_oprindelse_kilde": "Adressemyn",
+    "vejnavnebeliggenhed_oprindelse_nøjagtighedsklasse": "C",
+    "vejnavnebeliggenhed_vejnavneområde": "POLYGON((462621.55 6152949.94,462785.63 6152915.78,462950.83 6152915.78,462893.15 6152719.22,462621.55 6152949.94))",
+    "vejnavnebeliggenhed_vejtilslutningspunkter": "MULTIPOINT(462584.60504562524 6152888.352329424)",
+    "navngivenVejKommunedelList": [
+      {
+        "navngivenVejKommunedel": {
+          "kommune": "0561",
+          "vejkode": "1334"
+        }
+      }
+    ]
+  },
+  {
+    "datafordelerOpdateringstid": "2021-01-05T19:54:29.759790+01:00",
+    "administreresAfKommune": "0540",
+    "id_lokalId": "07f648f5-bf05-4ead-aef6-e13fb566b3ea",
+    "id_namespace": "http://data.gov.dk/dar/navngivenvej",
+    "registreringFra": "2020-03-06T10:35:31.181215+01:00",
+    "registreringsaktør": "DAR",
+    "status": "4",
+    "udtaltVejnavn": "Danfoss-Nordre Ringvej",
+    "vejadresseringsnavn": "Danfoss-Nordre Ringv",
+    "vejnavn": "Danfoss-Nordre Ringvej",
+    "vejnavnebeliggenhed_oprindelse_kilde": "Adressemyn",
+    "vejnavnebeliggenhed_oprindelse_nøjagtighedsklasse": "C",
+    "navngivenVejKommunedelList": [
+      {
+        "navngivenVejKommunedel": {
+          "kommune": "0540",
+          "vejkode": "0327"
+        }
+      }
+    ]
+  }
+]

@@ -6,7 +6,90 @@
 > per-dataset, no public data URL exists; see `docs/providers/index.md`'s
 > Credentials-wanted table). Do-not-dedupe: Copenhagen and Vejdirektoratet
 > are kept as two distinct providers, the same way NYC DOT and WZDx both
-> cover the USA without merging.
+> cover the USA without merging. **Streets**: DAR (Danmarks
+> Adresseregister), this SDK's first Danish streets/gazetteer provider —
+> see below.
+
+## Danmarks Adresseregister (DAR)
+
+Denmark's national named-road register, hosted on **Datafordeleren**
+(Denmark's national data-distribution platform), this SDK's first Danish
+streets/gazetteer coverage:
+
+```python
+from streetworks.dar import DarClient
+from streetworks.common import from_dar_street
+
+with DarClient() as dar:
+    streets = [from_dar_street(r) for r in dar.iter_streets()]
+```
+
+**Not the source originally investigated — the obvious one is being shut
+down, found before any code was written.** DAWA (Danmarks Adressers Web
+API, `api.dataforsyningen.dk`) was checked first and is genuinely
+keyless, with a real national `vejstykker`/`navngivneveje` road-segment
+dataset confirmed live (113,826 real features, real WGS84 GeoJSON, real
+street names like `"Abel Cathrines Gade"`). But DAWA's own docs page
+carries a live warning — *"DAWA lukker"* ("DAWA is closing") — confirmed
+via web search: DAWA is being phased out toward **1 October 2026**
+(investigated 2026-08-18, six weeks out), superseded by Datafordeleren.
+Building a provider against a feed six weeks from shutdown would ship
+something already due to break, so **DAR** — the actual successor,
+hosted directly on Datafordeleren — was built instead.
+
+**Real, live, genuinely keyless REST endpoint — confirmed directly, not
+assumed from Datafordeleren's general portal**, which does push account
+creation for its higher-sensitivity registers (CPR, CVR, property
+valuation). A plain unauthenticated `GET` against
+`https://services.datafordeler.dk/DAR/DAR/3.0.0/rest/Navngivenvej`
+returns real national data (`200`, no auth header sent or required,
+`Access-Control-Allow-Origin: *`).
+
+**CRS: real ETRS89 / UTM zone 32N (`EPSG:25832`) only — no
+server-side reprojection option, confirmed live, not assumed.** A
+`srid=EPSG:4326` query parameter (following DAWA's own convention) was
+tried and rejected with a real `400`: *"Parameter: srid unrecognized. Did
+you mean: id?"*. `streetworks.common.from_dar` reprojects client-side via
+a new closed-form Transverse Mercator inverse
+(`streetworks.common._utm32n`) — no Helmert datum step needed, since
+ETRS89 and WGS84 are coincident at this SDK's stated accuracy (the same
+reasoning `streetworks.common._bng`'s own docstring gives for *why* BNG's
+case, unlike this one, genuinely does need one). Cross-checked against
+DAWA's own real WGS84 output for the same real road (Halvdansvej, kommune
+`0217`/vejkode `2844`) before shipping: both agree to within a few
+metres.
+
+**A real, three-tier geometry fallback, found live rather than assumed
+uniform.** 3/5000 (0.06%) of a live sample carry a real `null` in the
+line field (`vejnavnebeliggenhed_vejnavnelinje`) — but 2 of those 3 still
+carry a real `vejnavnebeliggenhed_vejtilslutningspunkter` ("road
+connection points", WKT `MULTIPOINT`) alongside a real
+`vejnavnebeliggenhed_vejnavneområde` ("road name area", WKT `POLYGON`).
+The converter prefers the line where stated; falls back to the first real
+connection point (`GeometryGrade.PUBLISHED`, not a gap) where there's a
+point but no line; and only grades `GeometryGrade.ABSENT` where neither
+exists (the third of the three, confirmed live: no line, no point, no
+polygon at all). The polygon itself is never read into `Coordinate` —
+kept `.raw`-only always, the same discipline `from_marousi_street`/
+`from_guernsey_street` already established.
+
+**Real name coverage: 99.96% (4998/5000) in a live sample** — the
+highest of any streets provider this SDK has built. Real WKT
+`MULTILINESTRING` is genuinely multi-part on most records (a named road
+rarely reduces to one unbroken line) — parsed into `Coordinate.parts`,
+never a first-part-only shortcut.
+
+**`administrative_area` carries the real `administreresAfKommune`
+4-digit kommune code**, kept as the raw code rather than resolved to a
+name — no kommune-code-to-name lookup is fetched by this converter.
+
+**Licence: CC BY 4.0, confirmed live** via Datafordeleren's own terms
+page (`datafordeler.dk/vejledning/brugervilkaar/danmarks-adresseregister-dar/`):
+*"Som bruger af frie grunddata er du underlagt CC BY 4.0 licens"*,
+requiring attribution to Klimadatastyrelsen (SDFI's parent authority).
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
 
 ## Copenhagen (Gravetilladelser)
 

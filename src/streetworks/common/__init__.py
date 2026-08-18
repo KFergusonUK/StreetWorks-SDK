@@ -22,6 +22,7 @@ from .from_canton_zurich import from_canton_zurich
 from .from_cciss import from_cciss
 from .from_chicagodot import from_chicagodot
 from .from_copenhagen import from_copenhagen
+from .from_dar import from_dar_street
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
 from .from_dfi_roads import from_dfi_roads
@@ -153,6 +154,7 @@ __all__ = [
     "from_lisboa",
     "from_roma",
     "from_copenhagen",
+    "from_dar_street",
     "from_oslo",
     "from_helsinki",
     "from_milano",
