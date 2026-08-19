@@ -22,14 +22,15 @@ section:
    which credential, how to get it).
 
 2. **Documented, unavailable** — genuinely no working interface exists at
-   all, not a credential gate: Road Report NT (Northern Territory — a
-   reverse-engineered SignalR hub, not a REST/GeoJSON API), MapRoad
-   Roadworks Licensing (Ireland — a real API, but gated behind a formal
-   GDPR data-sharing arrangement, not a self-service key), and Greece (no
-   roadworks dataset exists on the national NAP at all, and the portal is
-   currently down). See
+   all, not a credential gate: MapRoad Roadworks Licensing (Ireland — a
+   real API, but gated behind a formal GDPR data-sharing arrangement,
+   not a self-service key) and Greece (no roadworks dataset exists on
+   the national NAP at all, and the portal is currently down). Road
+   Report NT used to sit in this tier; it graduated on 2026-08-19 after
+   a public `GET /api/Obstruction/GetAll` JSON endpoint was confirmed
+   live. See
    [`docs/providers/index.md#credentials-wanted`](../providers/index.md#credentials-wanted)
-   for the second table covering these three.
+   for the second table covering the remaining two.
 
 **The standing contribution pattern**: if you have access to any
 Credentials-wanted provider, running `python scripts/smoke_test.py` and

@@ -1,113 +1,177 @@
 """Northern Territory: Road Report NT (Department of Infrastructure,
 Planning and Logistics - DIPL, since renamed Department of Logistics and
-Infrastructure - DLI; the agency name is itself in flux) - investigated,
-and **deliberately not built as a functional adapter**.
+Infrastructure - DLI; the agency name is itself in flux).
 
 .. attention::
-   **This is a documented, honest scaffold, not a working client.**
-   Constructing :class:`RoadReportNtClient` raises
-   :class:`~streetworks.exceptions.ProviderUnavailableError` immediately -
-   there is no network call, no parser, no fixture, because there is
-   nothing real to build against. See "Why scaffold, not build" below.
+   **Confirmed live (2026-08-19)** against a real, unauthenticated pull of
+   ``GET https://roadreport.nt.gov.au/api/Obstruction/GetAll`` (140
+   CURRENT records, 26 of them ``obstructionType == "Roadworks"``).
+   Credential-free. **Licence genuinely unconfirmed** - no reuse statement
+   was found on the site or any catalogue listing, the same unconfirmed
+   basis :mod:`streetworks.au.tas` / :mod:`streetworks.arcgis.jersey`
+   already ship on. This is a working adapter, not the
+   ``ProviderUnavailableError`` scaffold it used to be.
 
 **Coverage** (from ``roadreport.nt.gov.au``'s own public description):
 all NT-Government-managed roads statewide, including remote/unsealed and
 Aboriginal-land access roads - **council roads excluded** (the site
 directs those inquiries to the relevant local council instead).
 
-**Nature - a road-*condition* system, not a roadworks/permit system.**
-Real page content is dominated by closures, impassable-road reports,
-weight/vehicle-type restrictions, and flooding; roadworks is, at best, a
-minor subset of what this service actually publishes - the weakest real
-works-fit of any provider this SDK has looked at.
+**Nature - still a road-*condition* system.** The live GetAll mix is
+dominated by weight/vehicle-type restrictions, changing surface
+conditions, road damage and flooding. Roadworks is a real, official
+subset - 26/140 on the 2026-08-19 pull - not the whole feed.
+``roadreport.nt.gov.au/terminology`` defines Roadwork as construction,
+repair or maintenance in the road reserve. :meth:`RoadReportNtClient.iter_roadworks`
+therefore returns only records that are actually works
+(``obstructionType == "Roadworks"``, type-code ``28``). Every other
+obstruction type stays reachable via :meth:`iter_obstructions` for a
+conditions/routing consumer, and is **not** mapped onto
+:class:`~streetworks.common.Works`.
 
-**Why scaffold, not build.** Every other credential-blocked provider in
-this SDK (Trafikverket, Vejdirektoratet, Traffic SA) is blocked on
-*access* to a real, published interface - a key or a token away from
-working, with a documented (or at least self-describing, live-probed)
-contract to build against. NT is different in kind: it has **no
-published REST/GeoJSON API at all**. The real frontend
-(``roadreport.nt.gov.au/road-map``, a minified Angular single-page app)
-was inspected directly - its bundled JavaScript references the Microsoft
-SignalR client library (``aka.ms/signalr-core-differences`` appears
-verbatim in the bundle) and a real hub connection named
-``"roadsReportingHub"``, invoking hub methods by name over that
-persistent connection - a real one, ``"GetAllMajorRoadObstructions"``, was
-found as a literal string in the bundle. **This is inferred from a
-minified JS bundle, not a published specification** - stated explicitly
-here so no future contributor mistakes reverse-engineered hub method
-names for a documented contract, the same distinction this SDK draws
-everywhere else between "confirmed live" and "guessed."
+**The public JSON endpoint, not the SignalR hub.** Earlier investigation
+of the minified Angular frontend found an undocumented SignalR hub
+(``roadsReportingHub`` / ``GetAllMajorRoadObstructions``). That hub is
+still not consumed here - encoding reverse-engineered hub internals as
+a stable contract is out of scope, the same distinction this SDK draws
+everywhere else. The adapter talks only to the ordinary HTTP JSON
+endpoint the site itself exposes at ``/api/Obstruction/GetAll``.
 
-Building a working client against that inference would mean: (1)
-encoding hub method names / the SignalR negotiate handshake / message
-framing as if they were a stable public contract, when they're a private
-app's internal implementation detail that could change without notice;
-(2) committing this SDK to an entirely new persistent-connection
-transport (WebSocket/long-polling via SignalR) for its single weakest
-real works-fit provider - every other client in this SDK is a plain
-request/response HTTP call; (3) consuming what is, functionally, a
-private mobile-app backend rather than an offered open data feed. None of
-that is worth doing for a source whose own real content is mostly road
-*conditions*, not roadworks. So: documented, not implemented.
+**Envelope, confirmed live:** ``{ success, message, response: [...] }``
+(plus a JSON.NET ``$id``). HTTP 200 on the confirmation pull;
+``success`` was ``true``; ``message`` was ``null``. No pagination - one
+response held every current record (140 items, ~106 KB), matching the
+endpoint's own "GetAll" name. ``status`` was ``"CURRENT"`` on 140/140.
 
-**The cleaner alternative for anyone who actually needs NT roadworks
-data**: the National Freight Data Hub's harmonised aggregate feed is,
-for once, plausibly the *right* source rather than the usual
-lossier-re-serve - precisely because no direct NT API exists to prefer
-over it. **Unverified whether it actually carries real NT records** (as
-opposed to a catalogue pointer back to this same unreachable interface) -
-worth checking before relying on it.
+**Real field list** (every key present on 140/140 unless noted):
+``recordId`` / ``obstructionId`` (both unique across the pull;
+``Works.reference`` uses ``obstructionId`` as the obstruction's own id,
+not the JSON.NET ``$id`` and not ``recordId``), ``status``, ``road`` /
+``roadName``, ``lane``, ``prpFrom`` / ``distanceFrom`` / ``prpTo`` /
+``distanceTo``, ``obstructionType`` / ``obstructionTypeCode``,
+``restrictionType`` / ``restrictionTypeCode``, ``dateFrom`` (always
+populated) / ``dateTo`` (**0/140 populated** on this pull - mapped when
+present, usually ``None``), ``dateActive`` (139/140),
+``dateLastUpdated``, ``startPoint`` / ``endPoint`` (``[lat, lon]``
+arrays, not GeoJSON), ``comment``, ``locationComment``,
+``isDefaultLocationComment``, ``reversed``. ``geometry`` and
+``geometries`` were empty on every record - line/point geometry is
+taken from the start/end points only.
+
+**Dates are naive local-looking ``YYYY-MM-DD HH:MM:SS`` strings** - no
+offset, no ``Z``, no stated timezone. Parsed as naive datetimes, never
+assigned ACST/ACDT, because the source does not state one.
 
 **Licence**: not specified on any catalogue listing found.
 
-**Credentials**: none apply - there is no API to authenticate to.
+**Credentials**: none. Confirmed live - the GetAll pull succeeded with
+no authentication.
 """
 
 from __future__ import annotations
 
-import warnings
 from typing import Any
 
-from ..exceptions import ProviderUnavailableError
+import httpx
 
-__all__ = ["RoadReportNtClient"]
+from .._transport import RetryConfig, SyncTransport
+from ..exceptions import StreetworksError
 
-warnings.warn(
-    "streetworks.au.nt is a documented-but-unavailable scaffold: Road "
-    "Report NT has no published REST/GeoJSON API - its real backend is an "
-    "undocumented SignalR hub, reverse-engineered from a minified JS "
-    "bundle, not a contract this SDK builds clients against. "
-    "RoadReportNtClient() always raises ProviderUnavailableError - see "
-    "the module docstring for the full investigation, and the 'help "
-    "wanted' issues at "
-    "https://github.com/KFergusonUK/StreetWorks-SDK/issues if a "
-    "documented REST equivalent ever surfaces.",
-    UserWarning,
-    stacklevel=2,
-)
+__all__ = [
+    "BASE_URL",
+    "GETALL_PATH",
+    "ROADWORKS_TYPE",
+    "ROADWORKS_TYPE_CODE",
+    "RoadReportNtClient",
+    "is_roadworks",
+]
 
-_UNAVAILABLE_MESSAGE = (
-    "streetworks.au.nt: Road Report NT has no published REST/GeoJSON API. "
-    "Its real backend is an undocumented SignalR real-time hub "
-    "('roadsReportingHub', confirmed live by inspecting the site's own "
-    "minified Angular bundle - a hub method literally named "
-    "'GetAllMajorRoadObstructions' was found there), not a published "
-    "contract this SDK can build a stable client against. Consuming a "
-    "private app backend inferred from minified JS is out of scope - see "
-    "this module's own docstring for the full reasoning, and the National "
-    "Freight Data Hub for a possible alternative route (unverified whether "
-    "it carries real NT records)."
-)
+JSON = dict[str, Any]
+
+BASE_URL = "https://roadreport.nt.gov.au"
+GETALL_PATH = "/api/Obstruction/GetAll"
+
+#: Official Road Report NT terminology for construction / repair /
+#: maintenance in the road reserve. Confirmed live as the only works
+#: type in the GetAll mix (26/140 records, 2026-08-19).
+ROADWORKS_TYPE = "Roadworks"
+ROADWORKS_TYPE_CODE = "28"
+
+
+def is_roadworks(record: JSON) -> bool:
+    """True when a GetAll record is actually works - the official
+    ``Roadworks`` type (code ``28``). Other obstruction types are
+    conditions (weight limits, flooding, surface damage) and stay out
+    of :meth:`RoadReportNtClient.iter_roadworks`."""
+    if record.get("obstructionType") == ROADWORKS_TYPE:
+        return True
+    code = record.get("obstructionTypeCode")
+    return code == ROADWORKS_TYPE_CODE or code == 28
 
 
 class RoadReportNtClient:
-    """Road Report NT has **no published REST/GeoJSON API** - construction
-    itself raises :class:`~streetworks.exceptions.ProviderUnavailableError`
-    immediately, making no network call and offering no other entry point
-    to work around it. See module docstring for the full investigation
-    and why this is a documented scaffold, not a functional client.
+    """Fetch current NT-Government road obstructions from Road Report
+    NT's public ``GET /api/Obstruction/GetAll`` JSON endpoint. No
+    credentials required - see module docstring.
+
+    >>> from streetworks.au.nt import RoadReportNtClient
+    >>> from streetworks.common import from_au_nt_roadreport
+    >>> with RoadReportNtClient() as nt:  # doctest: +SKIP
+    ...     works_list = from_au_nt_roadreport(nt.iter_roadworks())
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        raise ProviderUnavailableError(_UNAVAILABLE_MESSAGE)
+    def __init__(
+        self,
+        *,
+        base_url: str = BASE_URL,
+        retry: RetryConfig | None = None,
+        timeout: float = 60.0,
+        client: httpx.Client | None = None,
+    ) -> None:
+        self.base_url = base_url.rstrip("/")
+        client = client or httpx.Client(timeout=timeout, follow_redirects=True)
+        self._transport = SyncTransport(
+            retry=retry or RetryConfig(), timeout=timeout, client=client
+        )
+
+    def get_obstructions(self) -> JSON:
+        """``GET /api/Obstruction/GetAll`` - every current obstruction,
+        all types mixed, as the live envelope
+        ``{success, message, response: [...]}``. No pagination (confirmed
+        live: one response held the full current set). Returns the parsed
+        JSON envelope."""
+        response = self._transport.request("GET", f"{self.base_url}{GETALL_PATH}")
+        payload = response.json()
+        if not isinstance(payload, dict):
+            raise StreetworksError(
+                "Road Report NT GetAll returned a non-object JSON payload"
+            )
+        if payload.get("success") is False:
+            raise StreetworksError(
+                f"Road Report NT GetAll reported success=false: {payload.get('message')!r}"
+            )
+        return payload
+
+    def iter_obstructions(self) -> list[JSON]:
+        """Every current obstruction in ``response``, every type -
+        roadworks, weight/vehicle restrictions, flooding, surface
+        conditions, and the rest. See :meth:`iter_roadworks` for the
+        works-only convenience."""
+        payload = self.get_obstructions()
+        items = payload.get("response") or []
+        return [item for item in items if isinstance(item, dict)]
+
+    def iter_roadworks(self) -> list[JSON]:
+        """``obstructionType == "Roadworks"`` (code ``28``) only - the
+        official works slice of a conditions-dominated feed (26/140 on
+        the 2026-08-19 pull). Other types stay out of this iterator."""
+        return [item for item in self.iter_obstructions() if is_roadworks(item)]
+
+    def close(self) -> None:
+        self._transport.close()
+
+    def __enter__(self) -> RoadReportNtClient:
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.close()

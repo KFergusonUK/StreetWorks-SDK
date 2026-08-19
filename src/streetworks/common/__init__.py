@@ -10,6 +10,7 @@ where, and :mod:`.gazetteer` for the `Street`/`Segment`/`Address` design.
 from .from_amsterdam import from_amsterdam
 from .from_anncsu import from_anncsu
 from .from_au_act_ttm import from_au_act_ttm
+from .from_au_nt_roadreport import from_au_nt_roadreport
 from .from_au_qld_qldtraffic import from_au_qld_qldtraffic
 from .from_au_sa_trafficsa import from_au_sa_trafficsa
 from .from_au_tas_roadworks import from_au_tas_roadworks
@@ -141,6 +142,7 @@ __all__ = [
     "from_au_sa_trafficsa",
     "from_au_act_ttm",
     "from_au_tas_roadworks",
+    "from_au_nt_roadreport",
     "from_nzta",
     "from_linz_address",
     "from_linz_road",
