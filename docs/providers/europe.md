@@ -806,8 +806,8 @@ for w in works:
     print(w.administrative_area, w.sites[0].works_type, w.sites[0].location_description)
 ```
 
-Five states are live, all verified against real data — the first three
-2026-07, the last two 2026-08-20: **Hamburg** (130 features, `Point`
+Six states are live, all verified against real data — the first three
+2026-07, the last three 2026-08-20: **Hamburg** (130 features, `Point`
 geometry, dates `DD.MM.YYYY`, via WFS), **Brandenburg** (487 features,
 `LineString`, dates ISO, via WFS), **Saxony** (1,531 real closures + 813
 diversions, `LineString`, dates `DD.MM.YYYY` with an occasional real hour
@@ -815,14 +815,47 @@ suffix, via a direct GeoJSON download — Saxony has no queryable service
 at all), **Baden-Württemberg** (928 features, `LineString`, real
 time-of-day ISO 8601 dates with a UTC offset — the one state in this
 cluster with a genuine time component — via a real direct GeoJSON
-download, MobiData BW), and **Schleswig-Holstein** (1,116 features,
+download, MobiData BW), **Schleswig-Holstein** (1,116 features,
 `LineString`, via a genuinely GML-only WFS parsed client-side — see
+below), and **Rheinland-Pfalz** (999 features, `Point`, via a real WFS
+that genuinely aggregates several sources on one shared platform — see
 below). Hamburg, Brandenburg and Baden-Württemberg publish under
 **Datenlizenz Deutschland — Namensnennung — Version 2.0** (dl-de/by-2-0);
 Saxony and Schleswig-Holstein under **Creative Commons Attribution 4.0
-International**. All five confirmed directly from each service's own
+International**; Rheinland-Pfalz's licence is genuinely unconfirmed (see
+below). Five of six confirmed directly from each service's own
 `GetCapabilities`/catalogue metadata, with exact attribution wording
 baked into each state's field-map entry.
+
+**Rheinland-Pfalz's real WFS layer is a genuine multi-source
+aggregation, not RLP's own data alone — found and scoped, not assumed.**
+`maps.mobilitaetsatlas.de`'s `mwvlw:baustelle` layer (run directly by
+RLP's own transport ministry, MWVLW) states a real `quelle` (source)
+property per feature — live grouping found 999 records genuinely from
+`"Verkehrsbehörden in Rheinland-Pfalz"` (RLP's own state/county traffic
+authorities, real per-record contact emails down to individual
+Kreis/municipal level — comprehensive, not state-network-only), but
+also 1,201 from `"Autobahn GmbH"`, 652 from
+`"Verkehrsministerium Baden-Württemberg"` and 220 from
+`"Stadt Karlsruhe - Tiefbauamt"` — all three already covered by this
+SDK's own separate providers. A real `cql_filter` (a new
+`StateFieldMap.extra_params`, passed through to
+`OGCFeaturesClient.get_wfs_features`) scopes this entry to RLP's own
+real contribution only, the same discipline already applied when
+Schleswig-Holstein's own shared WFS was found to also carry
+Niedersachsen/Mecklenburg-Vorpommern data. This GeoServer also only
+registers `application/json` for this layer, not
+`OGCFeaturesClient`'s own `application/geo+json` default — a real
+`InvalidParameterValue` exception confirmed live, handled via a new
+`StateFieldMap.output_format` override (both are structurally identical
+GeoJSON here — only the registered MIME type differs). Real `von`/`bis`
+dates state a bare `"Z"` UTC suffix (e.g. `"2026-05-25T18:00:00Z"`) —
+the same `"iso_datetime"` format Baden-Württemberg's own explicit-offset
+dates use, with `Z` rewritten to `+00:00` first for Python 3.10
+compatibility (this SDK's own minimum). **Licence genuinely
+unconfirmed, not "none exists"** — `govdata.de`, the WFS's own
+`GetCapabilities` `AccessConstraints` (empty), and `open.rlp.de`'s own
+API (a real `403`, not routed around) were all checked.
 
 **Schleswig-Holstein is genuinely GML-only — parsed anyway, not routed
 around.** Its real WFS (`dienste.gdi-sh.de`, run by LBV.SH) rejects
@@ -879,6 +912,30 @@ open geodata is road *network* data (a `streets`-kind concern, the same
 category as NWB below), not roadworks — its actual roadworks route is the
 gated Mobilithek/DATEX path already out of scope elsewhere; Bavaria's
 BAYSIS portal has no Baustellen (roadworks) layer at all.
+
+**Bremen — a real, live, well-shaped feed found, then ruled out on
+licence, not access.** `vmz.bremen.de`'s own real "Mapsight" map app
+(found by reading its bundled JS config for the real relative path,
+`geojson/construction-work.geojson`) is genuinely open and keyless — 241
+real features, a real `GeometryCollection` (`Point` + `LineString`, the
+same shape `from_berlin` already handles), real ISO 8601 dates with an
+explicit UTC offset. But the page's own footer states the licence
+directly: **Creative Commons BY-NC-ND** (non-commercial, no-derivatives)
+— an explicit restriction, the same conflict-with-this-SDK's-own-MIT-
+licence category Saxony-Anhalt's own roadworks feed already sits in, so
+this is parked for the same reason, not a technical blocker.
+
+**Hesse and Thüringen — real state-wide platforms found, no queryable
+endpoint discovered within reasonable effort.** Hesse's
+`verkehrsservice.hessen.de` (a real Vue SPA, TraffGo Road-powered) and
+Thüringen's `baustellen.tlbv.de/app/Bis/` (a real Novasib/Kendo UI app)
+were both found live, but neither states a fetchable data URL in its
+own bundled JS the way Bremen's/Saarland's own apps do — genuinely
+unresolved, not ruled out, a real next step if picked back up. A real,
+separate, *municipal* Frankfurt am Main WFS was found for Hesse
+(`geowebdienste.frankfurt.de/Baustellen`, `dl-by-de/2.0`, confirmed via
+`opendata.hessen.de`) — city-scoped, not this cluster's state-wide
+concern, noted but not built.
 
 **CRS is stated per state, never assumed — and Saxony breaks the
 "always WGS84" pattern deliberately.** See
@@ -940,6 +997,56 @@ no single clean status field either — six independent boolean flags
 all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
 field-by-field mapping and every state's exact attribution text.
+
+## Saarland (Landesbetrieb für Straßenbau)
+
+Saarland's own roadworks feed, run by LfS (Landesbetrieb für
+Straßenbau) — no credentials. A real state that isn't published through
+a WFS at all, so unlike its siblings above this doesn't go through
+`streetworks.ogc.germany`'s shared field-map architecture — it's a
+bespoke `streetworks.saarland` client instead:
+
+```python
+from streetworks.saarland import SaarlandClient
+from streetworks.common import from_saarland
+
+with SaarlandClient() as saarland:
+    works = from_saarland(list(saarland.iter_roadworks()))
+```
+
+**Found by reading LfS's own real public map app's bundled JS — the
+same technique that found Lisboa's Condicionamentos endpoint.**
+`baustellen.saarland` is a real Leaflet-based map, confirmed live, no
+login; its `js/map.js` states two real relative data paths —
+`data/baustellen/roadworks_line_geojson.geojson` (used here — real
+`MultiLineString` geometry, every vertex kept) and the same 38 records
+again as `Point`-only (not consumed, a strict subset).
+
+**38 real features at investigation time (2026-08-20) — genuinely
+smaller than this SDK's other German states**, consistent with
+Saarland's own small size. Real road-class prefixes found in the free-
+text `description` field span `L` (Landesstraße) and `B`
+(Bundesstraße) only — no `K`/`A` seen live.
+
+**`roadname` is a real field, genuinely blank on 14/38 records at
+investigation time — not a data-quality gap.** Where blank, the real
+route number is still stated inside `description` as free text; per
+this SDK's "never extract structured data from free text" discipline,
+it stays there rather than being parsed out.
+
+**Dates are genuinely naive — no UTC offset stated at all**
+(`"2022-11-28T00:00"`), unlike Baden-Württemberg's own real
+`+02:00`-suffixed dates on the same shared cluster — localised to
+Europe/Berlin via `zoneinfo`, the same date-only-state convention this
+cluster already uses throughout.
+
+**Licence genuinely unconfirmed, not "none exists" — three real
+sources checked, none confirm.** No entry found on `govdata.de`; the
+GDI-DE metadata catalogue search API returned a real `403`; `saarland.de`'s
+own general pages returned a real `403` too (a site-wide WAF, not this
+dataset specifically — confirmed by the same block on unrelated
+`saarland.de` pages, not routed around). The same honest tier Autobahn
+GmbH's own licence already sits at in this SDK.
 
 ## Zentraler AdressService Hamburg (GAGES)
 

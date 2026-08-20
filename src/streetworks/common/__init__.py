@@ -65,6 +65,7 @@ from .from_osni import from_osni
 from .from_paris import from_paris
 from .from_registrucentras import from_registrucentras_street
 from .from_roma import from_roma
+from .from_saarland import from_saarland
 from .from_sct import from_sct
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
@@ -196,4 +197,5 @@ __all__ = [
     "from_brandenburg_street",
     "from_geosn_street",
     "from_lisboa_street",
+    "from_saarland",
 ]

@@ -17,6 +17,7 @@ from streetworks.ogc.germany import (
     GERMANY_LAT_RANGE,
     GERMANY_LON_RANGE,
     HAMBURG,
+    RHEINLAND_PFALZ,
     SAXONY,
     SCHLESWIG_HOLSTEIN,
     StateFieldMap,
@@ -33,6 +34,7 @@ BW_PAYLOAD = json.loads((FIXTURES / "ogc_bw_roadworks.json").read_text())
 SH_FEATURES = _parse_lbv_sh_gml(
     (FIXTURES / "ogc_sh_baustellen.xml").read_bytes(), SCHLESWIG_HOLSTEIN.type_name
 )
+RLP_PAYLOAD = json.loads((FIXTURES / "ogc_rlp_baustelle.json").read_text())
 
 
 def test_hamburg_de_date_format_and_point_geometry():
@@ -206,3 +208,31 @@ def test_sh_bare_g_prefixed_road_name_is_real_not_filtered():
     works = from_ogc_features(SH_FEATURES, SCHLESWIG_HOLSTEIN)
     w = next(w for w in works if w.sites[0].location_description == "G")
     assert w.sites[0].works_type  # still a real Art_der_Maßnahme value
+
+
+def test_rlp_z_suffixed_iso_datetime_parsed():
+    # RLP's real von/bis state a bare "Z" UTC suffix, not an explicit
+    # +HH:MM offset like Baden-Württemberg's own real dates on the same
+    # shared cluster - see from_ogc_features's own module docstring for
+    # the Python 3.10 compatibility handling this needs.
+    works = from_ogc_features(RLP_PAYLOAD["features"], RHEINLAND_PFALZ)
+    w = next(w for w in works if w.sites[0].location_description == "K106")
+    assert str(w.sites[0].proposed_start) == "2026-02-02 07:00:00+00:00"
+    assert str(w.sites[0].proposed_end) == "2026-12-31 18:00:00+00:00"
+    assert w.sites[0].date_confidence is DateConfidence.VERIFIED
+
+
+def test_rlp_road_title_and_status_fields():
+    works = from_ogc_features(RLP_PAYLOAD["features"], RHEINLAND_PFALZ)
+    w = next(w for w in works if w.sites[0].location_description == "K2")
+    assert w.sites[0].status == "roadClosed"
+    assert "Brückenschäden" in w.sites[0].works_type
+
+
+def test_rlp_coordinate_is_genuine_wgs84_no_flip_ambiguity():
+    works = from_ogc_features(RLP_PAYLOAD["features"], RHEINLAND_PFALZ)
+    w = next(w for w in works if w.sites[0].location_description == "K106")
+    assert w.coordinate.crs == "EPSG:4326"
+    lat, lon = w.coordinate.value
+    assert GERMANY_LAT_RANGE[0] <= lat <= GERMANY_LAT_RANGE[1]
+    assert GERMANY_LON_RANGE[0] <= lon <= GERMANY_LON_RANGE[1]

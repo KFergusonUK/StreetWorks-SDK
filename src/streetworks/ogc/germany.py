@@ -3,8 +3,11 @@ over :class:`~streetworks.ogc.client.OGCFeaturesClient`.
 
 Adding a new state is writing a new :class:`StateFieldMap` entry, not a new
 converter - :func:`streetworks.common.from_ogc_features` reads the map
-generically. Five states are live, all verified against real data - the
-first three 2026-07, Baden-Württemberg and Schleswig-Holstein 2026-08-20:
+generically. Six states are live, all verified against real data - the
+first three 2026-07, Baden-Württemberg/Schleswig-Holstein/Rheinland-Pfalz
+2026-08-20 (Saarland was found the same day but doesn't fit this
+declarative shape at all - no WFS exists for it - see
+:mod:`streetworks.saarland` instead):
 
 - **Hamburg** (``de.hh.up:baustelle``, WFS 2.0.0/1.1.0): 130 real features,
   ``Point`` geometry, dates ``DD.MM.YYYY`` (``baubeginn``/``bauende``).
@@ -156,6 +159,47 @@ first three 2026-07, Baden-Württemberg and Schleswig-Holstein 2026-08-20:
   pre-existing parking reason below either, for the same reason. **Not
   routed around** - Schleswig-Holstein's own real, separately-confirmed
   CC BY 4.0 licence covers only its own state's layer.
+- **Rheinland-Pfalz**: 999 real features (of this layer's own real
+  3,072 total - see below), ``Point`` geometry, run directly by RLP's
+  own transport ministry (MWVLW,
+  ``maps.mobilitaetsatlas.de/geoserver/ows``, real ``mwvlw:baustelle``
+  layer). **This GeoServer only registers ``application/json`` for this
+  layer, not ``application/geo+json``** - a real ``InvalidParameterValue``
+  exception confirmed live on this client's own default output format -
+  handled via a new :attr:`StateFieldMap.output_format` override (both
+  are structurally identical GeoJSON, only the registered MIME type
+  differs). Real ``von``/``bis`` dates state a bare ``"Z"`` UTC suffix
+  (e.g. ``"2026-05-25T18:00:00Z"``) - the same ``"iso_datetime"`` format
+  Baden-Württemberg's own explicit-offset dates use, with ``Z``
+  rewritten to ``+00:00`` first (see
+  :func:`streetworks.common.from_ogc_features._parse_date`) since this
+  SDK supports Python 3.10+, which doesn't accept a bare ``Z`` in
+  ``fromisoformat``.
+
+  **A genuine multi-source aggregation, found and scoped, not
+  assumed.** This real layer states a real ``quelle`` (source) property
+  per feature - live grouping of the full 3,072-feature layer found
+  999 records genuinely from ``"Verkehrsbehörden in Rheinland-Pfalz"``
+  (RLP's own state/county traffic authorities - real per-record contact
+  emails down to individual Kreis/municipal level, e.g.
+  ``verkehr@morbach.de`` - comprehensive, not state-network-only), but
+  also 1,201 from ``"Autobahn GmbH"``, 652 from
+  ``"Verkehrsministerium Baden-Württemberg"`` and 220 from
+  ``"Stadt Karlsruhe - Tiefbauamt"`` - all three already covered by this
+  SDK's own separate providers. A real ``cql_filter`` (the new
+  :attr:`StateFieldMap.extra_params`, passed through to
+  :meth:`OGCFeaturesClient.get_wfs_features`) scopes this entry to RLP's
+  own real contribution only - the same discipline already applied
+  above for Schleswig-Holstein's own shared WFS carrying
+  Niedersachsen/Mecklenburg-Vorpommern data.
+
+  **Licence genuinely unconfirmed, not "none exists" - three real
+  sources checked, none confirm.** No entry found on GOVdata; the WFS's
+  own ``GetCapabilities`` ``AccessConstraints``/``Fees`` are both empty
+  (unconfirmed, not explicitly restricted); ``open.rlp.de``'s own
+  Transparenz- und OpenData-Plattform blocks its ``/api/`` path outright
+  (a real ``403``, confirmed with a realistic browser user agent, not
+  routed around) even though its own web UI loads fine.
 
 **Parked, not built:**
 
@@ -172,6 +216,25 @@ first three 2026-07, Baden-Württemberg and Schleswig-Holstein 2026-08-20:
   licence and no independent open republish found on any Niedersachsen
   state portal. The same gated-at-origin shape already parked for NRW;
   see above for the full reasoning.
+- **Bremen** - a real, live, well-shaped feed found (``vmz.bremen.de``'s
+  own "Mapsight" map app, ``geojson/construction-work.geojson`` - 241
+  real features, a real ``GeometryCollection`` of ``Point``+
+  ``LineString`` the same shape :func:`streetworks.common.from_berlin`
+  already handles, real ISO 8601 dates with an explicit UTC offset) -
+  but the page's own footer states the licence directly: **Creative
+  Commons BY-NC-ND** (non-commercial, no-derivatives), an explicit
+  restriction that conflicts with this SDK's own MIT licence, the same
+  category Saxony-Anhalt's own restriction already sits in. Parked on
+  licence, not access.
+- **Hesse** and **Thüringen** - real state-wide platforms found
+  (``verkehrsservice.hessen.de``, a real Vue SPA; ``baustellen.tlbv.de/
+  app/Bis/``, a real Novasib/Kendo UI app), but neither states a
+  fetchable data URL in its own bundled JS the way Bremen's/Saarland's
+  own apps do - genuinely unresolved, not ruled out. A real, separate,
+  *municipal* Frankfurt am Main WFS was found for Hesse
+  (``geowebdienste.frankfurt.de/Baustellen``, ``dl-by-de/2.0``,
+  confirmed via ``opendata.hessen.de``) - city-scoped, not this
+  cluster's state-wide concern, noted but not built.
 - **Saxony-Anhalt** - confirmed live GML-only (tested
   ``OUTPUTFORMAT=application/json`` directly against the real WFS; it
   raises an ``msPostGISLayer`` exception - no JSON output exists) *and*
@@ -198,12 +261,17 @@ first three 2026-07, Baden-Württemberg and Schleswig-Holstein 2026-08-20:
   roadworks route to Bayerninfo, then to Mobilithek and, in border
   regions only, into Saxony's own system.
 
-The states that ship publish under **Creative Commons Attribution 4.0**
-(Saxony) or **Datenlizenz Deutschland - Namensnennung - Version 2.0**
-(dl-de/by-2-0; Hamburg, Brandenburg) - both confirmed directly from each
-service's own ``GetCapabilities``/catalogue metadata, free reuse,
-redistribution, and commercial exploitation permitted with attribution.
-Exact attribution text is on each :class:`StateFieldMap` entry below.
+Most states that ship publish under **Creative Commons Attribution 4.0**
+(Saxony, Schleswig-Holstein) or **Datenlizenz Deutschland - Namensnennung
+- Version 2.0** (dl-de/by-2-0; Hamburg, Brandenburg, Baden-Württemberg) -
+all confirmed directly from each service's own ``GetCapabilities``/
+catalogue metadata, free reuse, redistribution, and commercial
+exploitation permitted with attribution. **Rheinland-Pfalz is the one
+real exception - its licence is genuinely unconfirmed**, not "none
+exists" (three real sources checked, none confirm - see above); shipped
+anyway, the same honest tier Autobahn GmbH's own licence already sits at
+in this SDK. Exact attribution text is on each :class:`StateFieldMap`
+entry below.
 """
 
 from __future__ import annotations
@@ -314,6 +382,23 @@ class StateFieldMap:
     #: of Hamburg/Brandenburg/Saxony's own identifiers use. See
     #: :func:`streetworks.common.from_ogc_features._to_works`.
     id_field: str | None = None
+    #: Extra WFS query params passed straight through to
+    #: :meth:`OGCFeaturesClient.get_wfs_features` - needed for
+    #: Rheinland-Pfalz, whose real WFS layer (`mwvlw:baustelle`) is a
+    #: genuine multi-source aggregation (RLP's own state/county roadworks
+    #: *and* re-published Autobahn GmbH/Baden-Württemberg/Karlsruhe data,
+    #: confirmed live via the real `quelle` property), not RLP's own data
+    #: alone - a real `cql_filter` scopes this to RLP's own real
+    #: contribution only. See :data:`RHEINLAND_PFALZ`.
+    extra_params: dict[str, str] | None = None
+    #: Overrides :meth:`OGCFeaturesClient.get_wfs_features`'s own
+    #: ``application/geo+json`` default - Rheinland-Pfalz's real
+    #: GeoServer only registers ``application/json`` for this layer, a
+    #: real ``InvalidParameterValue`` exception confirmed live on
+    #: ``application/geo+json``. The two formats are structurally
+    #: identical GeoJSON here (confirmed live, byte-for-byte the same
+    #: shape) - only the registered MIME type differs per deployment.
+    output_format: str = "application/geo+json"
     licence: str = ""
     attribution: str = ""
     version: str = "2.0.0"
@@ -537,12 +622,41 @@ SCHLESWIG_HOLSTEIN = StateFieldMap(
     attribution="Landesbetrieb Straßenbau und Verkehr Schleswig-Holstein (LBV.SH)",
 )
 
+RHEINLAND_PFALZ = StateFieldMap(
+    state="Rheinland-Pfalz",
+    base_url="https://maps.mobilitaetsatlas.de/geoserver/ows",
+    type_name="mwvlw:baustelle",
+    # This real WFS layer aggregates several sources on one shared
+    # platform (confirmed live via the real `quelle` property: 999
+    # records genuinely from RLP's own traffic authorities, plus 1,201
+    # from Autobahn GmbH, 652 from Baden-Württemberg and 220 from the
+    # city of Karlsruhe - all already covered by this SDK's own separate
+    # providers) - scoped to RLP's own real contribution only, the same
+    # discipline already applied when Schleswig-Holstein's shared WFS
+    # was found to also carry Niedersachsen/Mecklenburg-Vorpommern data.
+    extra_params={"cql_filter": "quelle='Verkehrsbehörden in Rheinland-Pfalz'"},
+    # This GeoServer only registers application/json for this layer - a
+    # real InvalidParameterValue exception confirmed live on
+    # application/geo+json, OGCFeaturesClient's own default.
+    output_format="application/json",
+    title_field="beschreibung",
+    promoter_field=None,
+    start=DateField("von", "iso_datetime"),
+    end=DateField("bis", "iso_datetime"),
+    road_field="strasse",
+    status_field="sperrungstyp",
+    # unconfirmed - see module docstring and registry.py's own licence_confirmed=False
+    licence="",
+    attribution="Ministerium für Wirtschaft, Verkehr, Landwirtschaft und Weinbau (MWVLW)",
+)
+
 FIELD_MAPS: dict[str, StateFieldMap] = {
     "Hamburg": HAMBURG,
     "Brandenburg": BRANDENBURG,
     "Sachsen": SAXONY,
     "Baden-Württemberg": BADEN_WUERTTEMBERG,
     "Schleswig-Holstein": SCHLESWIG_HOLSTEIN,
+    "Rheinland-Pfalz": RHEINLAND_PFALZ,
 }
 
 
@@ -580,7 +694,9 @@ class GermanRoadworksClient:
             field_map.base_url,
             type_name=field_map.type_name,
             version=field_map.version,
+            output_format=field_map.output_format,
             srs_name=field_map.crs,
+            extra_params=field_map.extra_params,
         )
         return list(payload.get("features") or ())
 

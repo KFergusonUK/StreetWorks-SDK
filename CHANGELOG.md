@@ -2,6 +2,48 @@
 
 ## [Unreleased]
 
+### Added — Rheinland-Pfalz and Saarland, this SDK's sixth and seventh German state roadworks feeds (2026-08-20)
+
+`streetworks.ogc.germany.GermanRoadworksClient` / `streetworks.saarland.SaarlandClient`
+- Two more German state roadworks feeds, continuing the state fan-out.
+
+```python
+from streetworks.common import from_ogc_features
+from streetworks.ogc.germany import RHEINLAND_PFALZ, GermanRoadworksClient
+
+with GermanRoadworksClient() as germany:
+    features = germany.fetch("Rheinland-Pfalz")
+
+works = from_ogc_features(features, RHEINLAND_PFALZ)
+```
+
+- **Rheinland-Pfalz**: 999 real features, run directly by RLP's own
+  transport ministry (MWVLW). **This real WFS layer genuinely aggregates
+  several sources on one shared platform** - confirmed live via a real
+  `quelle` property (999 records from RLP's own traffic authorities,
+  plus 1,201 from Autobahn GmbH, 652 from Baden-Württemberg and 220 from
+  the city of Karlsruhe, all already covered by this SDK's own separate
+  providers) - scoped to RLP's own real contribution via a new
+  `StateFieldMap.extra_params` (`cql_filter`). This GeoServer also only
+  registers `application/json`, not `OGCFeaturesClient`'s own
+  `application/geo+json` default - handled via a new
+  `StateFieldMap.output_format` override. Licence genuinely unconfirmed
+  (three real sources checked, none confirm).
+- **Saarland**: 38 real features via LfS's own real public map app,
+  found by reading its bundled JS - the same technique that found
+  Lisboa's Condicionamentos endpoint. Not a WFS at all, so this ships as
+  a bespoke `streetworks.saarland` client rather than a
+  `streetworks.ogc.germany` field map. Genuinely naive dates (no UTC
+  offset stated at all). Licence genuinely unconfirmed.
+- **Checked and parked**: Bremen has a real, well-shaped feed
+  (`vmz.bremen.de`) but its licence is explicit **CC BY-NC-ND**
+  (non-commercial, no-derivatives), conflicting with this SDK's MIT
+  licence - the same category Saxony-Anhalt already sits in. Hesse and
+  Thüringen have real state-wide platforms with no discoverable data
+  endpoint within reasonable effort; a real municipal-only Frankfurt am
+  Main WFS was found for Hesse but is out of this cluster's state-wide
+  scope.
+
 ### Added — Baden-Württemberg and Schleswig-Holstein, this SDK's fourth and fifth German state roadworks feeds (2026-08-20)
 
 `streetworks.ogc.germany.GermanRoadworksClient` / `streetworks.common.from_ogc_features`

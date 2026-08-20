@@ -1649,6 +1649,88 @@ _REGISTRY: list[ProviderEntry] = [
         ),
     ),
     ProviderEntry(
+        key="rheinland_pfalz",
+        name="Rheinland-Pfalz",
+        description="Rhineland-Palatinate's state roadworks feed (Baustelleninformationen).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Germany"}),
+        administrative_area=(
+            "Ministerium für Wirtschaft, Verkehr, Landwirtschaft und Weinbau (MWVLW)"
+        ),
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, real WFS run "
+            "directly by RLP's own transport ministry "
+            "(maps.mobilitaetsatlas.de/geoserver). This exact real layer "
+            "(mwvlw:baustelle) genuinely aggregates several sources on "
+            "one shared platform - confirmed live via the real 'quelle' "
+            "property: 999 records genuinely from RLP's own traffic "
+            "authorities, plus 1,201 from Autobahn GmbH, 652 from Baden-"
+            "Württemberg and 220 from the city of Karlsruhe, all already "
+            "covered by this SDK's own separate providers. A real "
+            "cql_filter scopes this entry to RLP's own real contribution "
+            "only (999 records, 100% carrying a real road field). "
+            "Real ansprechpartner (contact) values vary per record down "
+            "to individual Kreis/municipal traffic authorities - "
+            "comprehensive, not state-network-only. This GeoServer only "
+            "registers application/json for this layer, not "
+            "OGCFeaturesClient's own application/geo+json default - a "
+            "real InvalidParameterValue exception confirmed live, "
+            "handled via a new StateFieldMap.output_format override. "
+            "Licence genuinely unconfirmed, not 'none exists' - "
+            "govdata.de, the WFS's own GetCapabilities AccessConstraints, "
+            "and open.rlp.de's own API were all checked; the last two "
+            "state nothing and the latter blocks the API path outright "
+            "(a real 403, not routed around). See the module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        aliases=frozenset({"rlp"}),
+        _module="streetworks.ogc.germany",
+        _client_name="GermanRoadworksClient",
+        import_line=(
+            'from streetworks.ogc.germany import GermanRoadworksClient '
+            '# .fetch("Rheinland-Pfalz")'
+        ),
+    ),
+    ProviderEntry(
+        key="saarland",
+        name="Saarland",
+        description="Saarland's state roadworks feed (Landesbetrieb für Straßenbau).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MULTI_AUTHORITY_INTERURBAN,
+        territories=frozenset({"Germany"}),
+        administrative_area="Landesbetrieb für Straßenbau (LfS)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 38 real "
+            "features at investigation time, genuinely smaller than "
+            "this SDK's other German states, consistent with Saarland's "
+            "own small size. Found by reading LfS's own real public map "
+            "app's bundled JS (baustellen.saarland) - the same "
+            "technique that found Lisboa's Condicionamentos endpoint - "
+            "not a WFS, so this doesn't go through "
+            "streetworks.ogc.germany's shared field-map architecture; "
+            "it's a bespoke streetworks.saarland client instead. Real "
+            "road-class prefixes span B (Bundesstraße)/L (Landesstraße) "
+            "only - no K/A seen live. Dates are genuinely naive (no UTC "
+            "offset stated at all), unlike Baden-Württemberg's own "
+            "explicit-offset dates. Licence genuinely unconfirmed, not "
+            "'none exists' - govdata.de, the GDI-DE metadata catalogue "
+            "(a real 403), and saarland.de's own general pages (a real "
+            "403, a site-wide WAF, not this dataset specifically) were "
+            "all checked. See the module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.saarland",
+        _client_name="SaarlandClient",
+        import_line="from streetworks.saarland import SaarlandClient",
+    ),
+    ProviderEntry(
         key="berlin",
         name="Berlin (VIZ)",
         description="Berlin's city-wide traffic-information-centre Baustellen/Sperrungen feeds.",

@@ -21,6 +21,13 @@ elements off LBV.SH's own WFS (posList trimmed to 5 coordinate pairs
 each): a real `L281`, a real `B5`, and a real `G`-prefixed record (a
 genuine, if uninformative, real value - see
 :mod:`streetworks.ogc.germany`'s module docstring for what "G" means).
+
+Rheinland-Pfalz (`tests/fixtures/ogc_rlp_baustelle.json`) - 5 real
+trimmed GeoJSON features, all with the real
+`quelle="Verkehrsbehörden in Rheinland-Pfalz"` value (the real filter
+that scopes out this shared layer's own Autobahn GmbH/Baden-
+Württemberg/Karlsruhe content - see module docstring), spanning real
+`K106`/`K2`/`L453`/`L514`/`L530`, one with a real non-null `speedlimit`.
 """
 
 import io
@@ -38,6 +45,7 @@ from streetworks.ogc.germany import (
     GERMANY_LAT_RANGE,
     GERMANY_LON_RANGE,
     HAMBURG,
+    RHEINLAND_PFALZ,
     SAXONY,
     SAXONY_EASTING_RANGE,
     SAXONY_NORTHING_RANGE,
@@ -53,6 +61,7 @@ BRANDENBURG_PAYLOAD = json.loads(
 SAXONY_PAYLOAD = json.loads((FIXTURES / "ogc_saxony_sperrungen.json").read_text())
 BW_PAYLOAD = json.loads((FIXTURES / "ogc_bw_roadworks.json").read_text())
 SH_XML = (FIXTURES / "ogc_sh_baustellen.xml").read_bytes()
+RLP_PAYLOAD = json.loads((FIXTURES / "ogc_rlp_baustelle.json").read_text())
 
 
 def _zipped(payload: dict, member: str) -> bytes:
@@ -224,3 +233,27 @@ def test_german_roadworks_client_fetch_schleswig_holstein_parses_gml():
     assert l281["properties"]["Dauer_der_Bauphase"] == (
         "2026-08-03 23:00:00 bis 2026-09-11 22:59:00"
     )
+
+
+def test_rlp_field_map_scopes_to_its_own_real_contribution():
+    # This shared WFS layer also carries Autobahn GmbH/Baden-Württemberg/
+    # Karlsruhe data - the real cql_filter scopes to RLP's own real
+    # contribution only. See module docstring.
+    assert RHEINLAND_PFALZ.extra_params == {
+        "cql_filter": "quelle='Verkehrsbehörden in Rheinland-Pfalz'"
+    }
+    # This GeoServer only registers application/json for this layer.
+    assert RHEINLAND_PFALZ.output_format == "application/json"
+
+
+@respx.mock
+def test_german_roadworks_client_fetch_rheinland_pfalz_requests_the_override_format():
+    route = respx.get(RHEINLAND_PFALZ.base_url).mock(
+        return_value=httpx.Response(200, json=RLP_PAYLOAD)
+    )
+    with GermanRoadworksClient() as germany:
+        features = germany.fetch("Rheinland-Pfalz")
+    assert len(features) == 5
+    sent = route.calls.last.request.url.params
+    assert sent.get("OUTPUTFORMAT") == "application/json"
+    assert sent.get("cql_filter") == "quelle='Verkehrsbehörden in Rheinland-Pfalz'"

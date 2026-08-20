@@ -340,12 +340,14 @@ def check_german_regional() -> str:
     """German state (Bundesland) roadworks needs no credentials - confirmed
     live for Hamburg (Point, WFS), Brandenburg (LineString, WFS), Saxony
     (LineString, direct GeoJSON download, UTM33N not WGS84),
-    Baden-Württemberg (LineString, direct GeoJSON, real time-of-day dates)
-    and Schleswig-Holstein (LineString, GML-only WFS parsed client-side,
-    UTM32N reprojected to WGS84). Mecklenburg-Vorpommern, Saxony-Anhalt,
-    and (via Schleswig-Holstein's own shared WFS) Niedersachsen were
-    checked and parked (GML-only and/or unconfirmed licence - Saxony-
-    Anhalt's is also explicitly non-commercial) - see
+    Baden-Württemberg (LineString, direct GeoJSON, real time-of-day dates),
+    Schleswig-Holstein (LineString, GML-only WFS parsed client-side,
+    UTM32N reprojected to WGS84) and Rheinland-Pfalz (Point, a real
+    multi-source WFS filtered to RLP's own contribution via cql_filter).
+    Mecklenburg-Vorpommern, Saxony-Anhalt, Niedersachsen and (checked
+    separately) Bremen were checked and parked (GML-only and/or
+    unconfirmed/explicitly restrictive licence - Saxony-Anhalt's and
+    Bremen's are both explicitly non-commercial) - see
     streetworks.ogc.germany's module docstring."""
     from streetworks.common import from_ogc_features
     from streetworks.ogc.germany import FIELD_MAPS, GermanRoadworksClient
@@ -374,6 +376,22 @@ def check_berlin() -> str:
         raise RuntimeError("query returned no records - real data may have changed")
     sources = Counter(tuple(sorted(r["properties"]["sources"])) for r in records)
     return f"{len(records)} merged roadworks record(s), source breakdown: {dict(sources)}"
+
+
+def check_saarland() -> str:
+    """Saarland LfS needs no credentials - see streetworks.saarland.
+    Found by reading the real public map app's own bundled JS
+    (baustellen.saarland), not a WFS - the same technique that found
+    Lisboa's Condicionamentos endpoint."""
+    from streetworks.saarland import SaarlandClient
+
+    with SaarlandClient() as saarland:
+        features = list(saarland.iter_roadworks())
+    if not features:
+        raise RuntimeError("query returned no real features")
+    sample = features[0]["properties"]
+    label = sample.get("roadname") or sample.get("description", "")[:40]
+    return f"{len(features)} real feature(s), e.g. {label!r}"
 
 
 def check_dgt() -> str:
@@ -2057,6 +2075,7 @@ def main() -> int:
     # German state roadworks (Hamburg, Brandenburg) need no credentials
     reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
     reporter.check("Berlin VIZ Baustellen/Sperrungen", [], check_berlin)
+    reporter.check("Saarland LfS roadworks", [], check_saarland)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)

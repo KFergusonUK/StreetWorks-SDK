@@ -1,0 +1,108 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              7.181568,
+              49.362812
+            ],
+            [
+              7.181631,
+              49.362858
+            ],
+            [
+              7.181736,
+              49.362911
+            ],
+            [
+              7.181933,
+              49.362988
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "roadclosed": "false",
+        "description": "L 124 Wiebelskirchen\nKuchenbergstraße 145-147\n\nWeitere Informationen in der \n<a href=\"https://www.saarland.de/lfs/DE/aktuelles/neues-vom-lfs/news/2024/2024_09_19_Stellungnahme_Kuchenbergstra%C3%9Fe\">Pressemitteilung</a> \n(externes Fenster)\n (Fahrbahninstandsetzung)",
+        "roadname": "Kuchenbergstraße",
+        "recordid": "290005362842-760924601",
+        "number": 99999,
+        "starttime": "2022-11-28T00:00",
+        "endtime": "2026-12-31T23:59:59",
+        "event": ""
+      },
+      "id": "fid--510f16d5_1a0201ad9f6_-7fb6"
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              7.242841,
+              49.403633
+            ],
+            [
+              7.24275,
+              49.403732
+            ],
+            [
+              7.242663,
+              49.403805
+            ],
+            [
+              7.242542,
+              49.403877
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "roadclosed": "false",
+        "description": "L 116 Eichelthaler Mühle\n\nWeitere Informationen in der \n<a href=\"https://www.saarland.de/lfs/DE/aktuelles/wo_wird_gebaut/aktuelle-meldungen/medieninfos/2025/20251212_pm_l116_hanauer_muehle_eichelthalermuehle\" target=\"_blank\">Pressemitteilung</a> \n(externes Fenster)\n (Fahrbahninstandsetzung)",
+        "roadname": "",
+        "recordid": "2900053631841952216676",
+        "number": 99999,
+        "starttime": "2025-12-23T00:00",
+        "endtime": "2026-07-06T23:59:59",
+        "event": ""
+      },
+      "id": "fid--510f16d5_1a0201ad9f6_-7fc0"
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              6.629885,
+              49.441337
+            ],
+            [
+              6.629898,
+              49.441335
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "roadclosed": "false",
+        "description": "L 173 Merzig - Hilbringen \nInstandsetzung Brückenbauwerk 5\n\nWeitere Informationen in der \n<a href=\"https://www.saarland.de/lfs/DE/aktuelles/wo_wird_gebaut/aktuelle-meldungen/medieninfos/2026/20260210_l173_merzig_hilbringer_bruecke\" target=\"_blank\">Pressemitteilung</a> \n(externes Fenster)\n (Brückeninstandsetzung)",
+        "roadname": "Merziger Straße",
+        "recordid": "290005362811641153519",
+        "number": 99999,
+        "starttime": "2026-03-02T00:00",
+        "endtime": "2027-07-31T23:59:59",
+        "event": ""
+      },
+      "id": "fid--510f16d5_1a0201ad9f6_-7fb8"
+    }
+  ]
+}

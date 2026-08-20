@@ -1,0 +1,165 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "baustelle.GVMORBA_MOR-26/01/006/2-161-03/md_OVERALL_58326610",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.16425,
+          49.86505
+        ]
+      },
+      "geometry_name": "coordinates_flipped",
+      "properties": {
+        "typ": "B",
+        "von": "2026-02-02T07:00:00Z",
+        "bis": "2026-12-31T18:00:00Z",
+        "art_der_arbeiten": "Verkehrsraumeinschränkung",
+        "strasse": "K106",
+        "speedlimit": null,
+        "version": "2026-01-29T16:10:38Z",
+        "ansprechpartner": "verkehr@morbach.de",
+        "beschreibung": "In der Ortslage Wederath kann es aufgrund von Glasfaserverlegung zu zwischenzeitlichen Vollsperrungen der Seitenstraßen kommen. Die Durchfahrt der Hauptverkehrsstraßen Keltenstraße (K 106) und Alte Poststraße (K105) ist während der Maßnahme gewährleistet.",
+        "frc": "FRC3",
+        "sperrungstyp": "maintenanceWork",
+        "quelle": "Verkehrsbehörden in Rheinland-Pfalz"
+      },
+      "bbox": [
+        7.16425,
+        49.86505,
+        7.16425,
+        49.86505
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baustelle.KVBADDUE_2024B00107N1_OVERALL_49955627",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.19172,
+          49.51835
+        ]
+      },
+      "geometry_name": "coordinates_flipped",
+      "properties": {
+        "typ": "G",
+        "von": "2024-02-01T07:00:00Z",
+        "bis": "2026-12-31T18:00:00Z",
+        "art_der_arbeiten": "Vollsperrung",
+        "strasse": "K2",
+        "speedlimit": null,
+        "version": "2026-04-28T12:42:06Z",
+        "ansprechpartner": "verkehr@kreis-bad-duerkheim.de",
+        "beschreibung": "Vollsperrung der K2 Freinsheim - Dackenheim wegen Brückenschäden an der Eisenbahnbrücke. Die Sperrung wird vsl. über die angegebene Dauer bestehen bleiben.",
+        "frc": "FRC3",
+        "sperrungstyp": "roadClosed",
+        "quelle": "Verkehrsbehörden in Rheinland-Pfalz"
+      },
+      "bbox": [
+        8.19172,
+        49.51835,
+        8.19172,
+        49.51835
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baustelle.KVBADDUE_KVDÜW-CM26/07/005-L453GFVGLeil_OVERALL_44804710",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.18489,
+          49.56349
+        ]
+      },
+      "geometry_name": "coordinates_flipped",
+      "properties": {
+        "typ": "B",
+        "von": "2026-07-14T00:00:00Z",
+        "bis": "2026-09-07T23:59:00Z",
+        "art_der_arbeiten": "Verkehrsraumeinschränkung",
+        "strasse": "L453",
+        "speedlimit": null,
+        "version": "2026-07-14T10:22:18Z",
+        "ansprechpartner": "verkehr@kreis-bad-duerkheim.de",
+        "beschreibung": "wegen Glasfaserverlegung kommt es zu Verkehrsbeschränkung",
+        "frc": "FRC2",
+        "sperrungstyp": "maintenanceWork",
+        "quelle": "Verkehrsbehörden in Rheinland-Pfalz"
+      },
+      "bbox": [
+        8.18489,
+        49.56349,
+        8.18489,
+        49.56349
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baustelle.KVBADDUE_KVDÜW-TH26/05/002-LDT01-1_OVERALL_57860789",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.93221,
+          49.34178
+        ]
+      },
+      "geometry_name": "coordinates_flipped",
+      "properties": {
+        "typ": "G_GEPLANT",
+        "von": "2026-08-22T15:15:00Z",
+        "bis": "2026-08-22T16:30:00Z",
+        "art_der_arbeiten": "Vollsperrung",
+        "strasse": "L514",
+        "speedlimit": null,
+        "version": "2026-08-17T11:46:47Z",
+        "ansprechpartner": "verkehr@kreis-bad-duerkheim.de",
+        "beschreibung": "Lidl Deutschland Tour: Es ist für den Zeitraum der Durchfahrt der Tour mit Verkehrseinschränkungen zu rechnen. Nähere Infos unter: https://www.deutschland-tour.com/de/verkehr",
+        "frc": "FRC2",
+        "sperrungstyp": "roadClosed",
+        "quelle": "Verkehrsbehörden in Rheinland-Pfalz"
+      },
+      "bbox": [
+        7.93221,
+        49.34178,
+        7.93221,
+        49.34178
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baustelle.KVBADDUE_KVDÜW-TH26/08/003-L530GVHaßWL_OVERALL_49890455",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.24713,
+          49.32591
+        ]
+      },
+      "geometry_name": "coordinates_flipped",
+      "properties": {
+        "typ": "B",
+        "von": "2026-08-20T10:00:00Z",
+        "bis": "2026-09-10T16:00:00Z",
+        "art_der_arbeiten": "Verkehrsraumeinschränkung",
+        "strasse": "L530",
+        "speedlimit": 30,
+        "version": "2026-08-20T16:08:01Z",
+        "ansprechpartner": "verkehr@kreis-bad-duerkheim.de",
+        "beschreibung": "Leitungsarbeiten im Gehwegbereich.",
+        "frc": "FRC2",
+        "sperrungstyp": "maintenanceWork",
+        "quelle": "Verkehrsbehörden in Rheinland-Pfalz"
+      },
+      "bbox": [
+        8.24713,
+        49.32591,
+        8.24713,
+        49.32591
+      ]
+    }
+  ]
+}

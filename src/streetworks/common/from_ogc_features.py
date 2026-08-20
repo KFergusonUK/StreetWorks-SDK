@@ -93,12 +93,19 @@ def _parse_date(value: str | None, date_format: str) -> datetime | None:
     docstring). ``"iso_datetime"`` is the one genuinely time-of-day-bearing
     format in this cluster - Baden-Württemberg's real ``starttime``/
     ``endtime`` fields state a full ISO 8601 datetime with an explicit UTC
-    offset (e.g. ``"2015-06-01T00:00:00.000+02:00"``), parsed via
-    :meth:`datetime.fromisoformat` rather than forced through the
-    date-only path every other state in this cluster uses."""
+    offset (e.g. ``"2015-06-01T00:00:00.000+02:00"``); Rheinland-Pfalz's
+    real ``von``/``bis`` fields state the same shape but with a bare
+    ``"Z"`` UTC suffix instead (e.g. ``"2026-05-25T18:00:00Z"``) - genuine
+    Python 3.11+ ``fromisoformat`` accepts ``Z`` directly, but this SDK
+    supports 3.10+, so ``Z`` is rewritten to ``+00:00`` first for
+    portability. Both parsed via :meth:`datetime.fromisoformat` rather
+    than forced through the date-only path every other state in this
+    cluster uses."""
     if not value:
         return None
     if date_format == "iso_datetime":
+        if value.endswith("Z"):
+            value = value[:-1] + "+00:00"
         try:
             return datetime.fromisoformat(value)
         except ValueError:
