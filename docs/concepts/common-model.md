@@ -167,3 +167,19 @@ neither should code built on top of it. See
 [`docs/concepts/data-model.md`](data-model.md#never-deduplicate-across-providers)
 for the full reasoning and a real case where two feeds turned out to
 genuinely overlap.
+
+For a mixed list of those `Works` near a WGS84 point or UK USRN, see
+[`examples/works_near/`](../../examples/works_near/) — a documented
+UK-first join over a four-provider subset (Traffic Wales, National
+Highways, Street Manager, SRWR), not a uniform `search()` facade. This
+is deliberately example code, not a `streetworks` package export: a
+top-level `streetworks.works_near(lat, lon)` would sit next to
+`providers()`/`get_provider()`, which genuinely do span every
+registered provider, and a caller would have no signal at the call site
+that this one is a curated UK-only subset — a point in, say, Zürich or
+Amsterdam would just silently come back empty. Keeping it under
+`examples/` (not shipped in the installed package — see `pyproject.toml`'s
+`packages = ["src/streetworks"]`) makes that scope obvious from where
+the code lives, not just from a docstring caveat. Distance is haversine
+on `EPSG:4326` only; records whose only geometry is in another CRS are
+skipped, never silently reprojected.

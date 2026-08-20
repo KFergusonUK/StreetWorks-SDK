@@ -2,6 +2,59 @@
 
 ## [Unreleased]
 
+### Added — `examples/works_near`, a UK-first works-near-here join pattern (2026-08-20)
+
+`examples.works_near.query` (`v1_providers`, `works_near`,
+`works_near_usrn`, `NearbyWorks`) - one call that takes a WGS84 point
+and/or a UK USRN plus a radius, queries a **documented four-provider
+subset** of live providers, converts through the existing
+`from_<provider>` functions, and returns a mixed list of canonical
+`Works` (wrapped as `NearbyWorks` so each hit keeps its registry key
+and, where computed, a haversine distance).
+
+```bash
+python -m examples.works_near.cli
+python -m examples.works_near.cli --lat 51.48 --lon -3.18 --radius-m 10000
+python -m examples.works_near.cli --usrn 33909869   # needs SM_EMAIL / SM_PASSWORD
+```
+
+**Deliberately example code, not a `streetworks` package export.** An
+earlier iteration of this pattern exported `works_near`/
+`works_near_usrn`/`NearbyWorks` from `streetworks`'s own top-level
+`__all__`, right next to `providers()`/`get_provider()` - which
+genuinely do span every registered provider. A caller doing
+`from streetworks import works_near` would have no signal that this is
+a curated UK-only subset, not a query over this SDK's full coverage
+(Denmark, Switzerland, Austria, ...); a point outside the UK would just
+silently return an empty list. Moving the whole thing under `examples/`
+(not shipped in the installed package - `pyproject.toml` only packages
+`src/streetworks`) makes the UK-only scope obvious from where the code
+lives, not just from a docstring caveat.
+
+- **v1 distance path (WGS84 `EPSG:4326` only).** Haversine on a sphere of
+  radius 6,371,000 m. Distance is to `Coordinate.value` (the
+  representative point; first vertex of a line), never a silent
+  reprojection. Records whose only geometry is in another CRS are
+  skipped for this path. Always queries Traffic Wales (keyless RSS,
+  motorway/trunk). Queries National Highways planned SRN closures only
+  when the caller supplies a client or subscription key.
+- **v1 USRN path.** Exact match on populated USRN fields. Street Manager
+  only when the caller passes a client (the caller's organisation's
+  permits, not an England-wide spatial search). SRWR only when the
+  caller passes a local extract - this will not download the national
+  daily zip.
+- **Explicitly not in v1:** TrafficWatchNI (no geometry), OS Open USRN
+  (gazetteer, ~300 MB bulk), TfL (no provider in this SDK), DataVIA /
+  D-TRO / Open Data, every non-UK roadworks feed, and every
+  Credentials-wanted / unverified / `ProviderUnavailable` scaffold.
+  `v1_providers()` consults the registry's `verified` / `credentials`
+  flags so those cannot be queried by accident.
+- **Never deduplicates across providers.** Provenance (`provider`,
+  `territory`, `administrative_area`, `.raw`) is left intact.
+- Tests in `tests/test_examples_works_near.py` cover the distance
+  filter, the no-dedupe rule, skip-unverified / skip-without-credentials,
+  and the USRN path, all against existing fixtures.
+
 ### Added — Straatnamenregister (Flanders, Belgium), this SDK's first Belgian streets provider (2026-08-20)
 
 `streetworks.vlaanderen.VlaanderenStreetsClient` / `streetworks.common
