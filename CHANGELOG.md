@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+### Added — WFS BB-BE Gazetteer, this SDK's second German state-level streets provider (2026-08-20)
+
+`streetworks.brandenburg.BrandenburgStreetsClient` / `streetworks.common.from_brandenburg_street`
+- Brandenburg's own street gazetteer, run by LGB (Landesvermessung und
+Geobasisinformation Brandenburg), continuing the "state fan-out"
+fallback path Germany's national streets investigation left open.
+
+```python
+from streetworks.brandenburg import BrandenburgStreetsClient
+from streetworks.common import from_brandenburg_street
+
+with BrandenburgStreetsClient() as bb:
+    streets = [from_brandenburg_street(r) for r in bb.iter_streets()]
+```
+
+- **52,902 real street records - much larger than Hamburg's 9,639**,
+  consistent with Brandenburg's far greater land area.
+- **A real, confirmed GML-only WFS** - no JSON output format exists (a
+  real `outputFormat=application/json` request was rejected with a
+  genuine 400). Parsed directly via the standard library's own
+  `xml.etree.ElementTree`, not the shared JSON-first OGC client.
+- **`administrative_area` reconstructed from two real, independently-
+  stated fields** (`ortsnamePost` + `zusatzOrtsname`), confirmed live
+  to match the record's own `gemeindename_normalisiert`, not a guessed
+  concatenation.
+- **No geometry on this resource** - the only real geometry stated is a
+  `Polygon` (areal extent), so `GeometryGrade.ABSENT` on every
+  `Street`, the same shape `from_marousi_street` already established.
+- **A real, live-confirmed, non-exhaustive Berlin presence** (8/500 in
+  a real sample carry Berlin's own state code) - scoped and documented
+  as Brandenburg's own provider, not exhaustive Berlin coverage.
+- **Licence**: Datenlizenz Deutschland - Namensnennung - 2.0.
+
 ### Added — Zentraler AdressService Hamburg (GAGES), this SDK's first German state-level streets provider (2026-08-20)
 
 `streetworks.hamburg.HamburgStreetsClient` / `streetworks.common.from_hamburg_street`

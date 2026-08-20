@@ -3,9 +3,10 @@
 Investigation only, per `germany-streets-brief.md`. Findings for steps
 1 and 2 below are from real, live requests made 2026-08-16. Status:
 **federal source ruled out, address layer ruled out, state fan-out
-started 2026-08-20 — Hamburg built (`streetworks.hamburg`), Berlin
-genuinely blocked, Brandenburg/Saxony not yet checked** — see
-`docs/providers/pending.md` for the current summary.
+started 2026-08-20 — Hamburg built (`streetworks.hamburg`), Brandenburg
+built (`streetworks.brandenburg`), Berlin genuinely blocked, Saxony not
+yet checked** — see `docs/providers/pending.md` for the current
+summary.
 
 ## Verify-first step 1 — BKG federal streets (ruled out)
 
@@ -108,11 +109,35 @@ genuinely reprojected server-side to WGS84 by default. Shipped as
 see `docs/providers/europe.md#zentraler-adressservice-hamburg-gages`
 for the full write-up.
 
-**Brandenburg, Saxony — not yet checked.**
+**Brandenburg — checked, built.** LGB's own "WFS BB-BE Gazetteer"
+(`isk.geobasis-bb.de/ows/gazetteer_wfs`, found via Brandenburg's own
+geoportal metadata record) is real, live, and keyless - 52,902 real
+street records, 100% carrying a real name. A real, confirmed GML-only
+WFS (no JSON output format exists - a real `outputFormat=application/
+json` request was rejected with a genuine `400`), parsed directly via
+the standard library's own `xml.etree.ElementTree` rather than the
+shared JSON-first OGC client. `administrative_area` is reconstructed
+from two real, independently-stated fields (`ortsnamePost` +
+`zusatzOrtsname`), confirmed to match the record's own
+`gemeindename_normalisiert`. Only real geometry stated is a `Polygon`
+(areal extent) - `GeometryGrade.ABSENT` on every `Street`, the real
+polygon preserved unmodified on `.raw`. A real, live-confirmed,
+non-exhaustive Berlin presence was also found (8/500 real sample rows
+carry Berlin's own state code, sourced from Geoportal Berlin's own
+Amtliche Hauskoordinaten) - not claimed as exhaustive Berlin coverage,
+since this build is scoped and documented as Brandenburg's own
+provider. Shipped as `streetworks.brandenburg.BrandenburgStreetsClient`
+/ `from_brandenburg_street` - see
+`docs/providers/europe.md#wfs-bb-be-gazetteer-brandenburg` for the full
+write-up.
+
+**Saxony — not yet checked.**
 
 ## Recommendation
 
-Brandenburg and Saxony remain open, real next steps if picked back up
-- steps 1 and 2 are decisively closed and don't need re-checking unless
-BKG's own services change. Berlin is worth a real retry once
-`gdi.berlin.de` comes back from maintenance.
+Saxony remains open, a real next step if picked back up - steps 1 and 2
+are decisively closed and don't need re-checking unless BKG's own
+services change. Berlin is worth a real retry once `gdi.berlin.de`
+comes back from maintenance - note that Brandenburg's own WFS BB-BE
+Gazetteer already carries a real, if non-exhaustive, slice of Berlin
+street data in the meantime.

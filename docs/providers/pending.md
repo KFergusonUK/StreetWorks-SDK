@@ -115,15 +115,21 @@ Credentials-wanted, or Documented-unavailable; see
   and eligible users" — not cleanly open. **The per-state fallback path
   is now real and partially built**: Hamburg's own joint address/
   street gazetteer (GAGES) is real, live, and keyless — 9,639 real
-  streets, 100% named, shipped as `streetworks.hamburg`. Berlin was
-  checked next and is genuinely blocked, not ruled out: its entire GDI
-  WFS host (`gdi.berlin.de`) is confirmed live to be down for
-  maintenance with no ETA, plausibly tied to its FIS-Broker system
-  having been shut down 1 December 2025 in favour of new
-  infrastructure — a real, reportable connectivity failure, not routed
-  around; two real candidate datasets were found on `daten.berlin.de`
-  before hitting the wall, worth a retry once the host is back.
-  Brandenburg and Saxony remain genuinely unchecked.
+  streets, 100% named, shipped as `streetworks.hamburg`. Brandenburg's
+  own "WFS BB-BE Gazetteer" (LGB) is real, live, and keyless too —
+  52,902 real streets, 100% named, shipped as `streetworks.brandenburg`
+  — a real, confirmed GML-only WFS (no JSON output format exists),
+  parsed via the standard library's own `xml.etree.ElementTree`, and
+  carrying a real, non-exhaustive slice of Berlin street data alongside
+  Brandenburg's own (Berlin's own contribution sourced from Geoportal
+  Berlin, not claimed as complete). Berlin's own dedicated GDI WFS host
+  is genuinely blocked, not ruled out: `gdi.berlin.de` is confirmed
+  live to be down for maintenance with no ETA, plausibly tied to its
+  FIS-Broker system having been shut down 1 December 2025 in favour of
+  new infrastructure — a real, reportable connectivity failure, not
+  routed around; two real candidate datasets were found on
+  `daten.berlin.de` before hitting the wall, worth a retry once the
+  host is back. Saxony remains genuinely unchecked.
 - **Italy — ANNCSU's address/civic-number side (`accessi`), deliberately
   scoped out of the streets build, not blocked.** A different case from
   every other entry on this page: real, live, keyless, CC BY 4.0, and

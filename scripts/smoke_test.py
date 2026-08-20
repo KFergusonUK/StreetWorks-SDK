@@ -1863,6 +1863,23 @@ def check_hamburg_streets() -> str:
     return f"{len(streets)} real street(s), e.g. {sample_name!r}"
 
 
+def check_brandenburg_streets() -> str:
+    """WFS BB-BE Gazetteer (Brandenburg) needs no credentials. Only
+    takes a small page (page_size=5, real server-side pagination - one
+    HTTP request) rather than the full ~52.9k-record register - see
+    streetworks.brandenburg.client's module docstring."""
+    import itertools
+
+    from streetworks.brandenburg import BrandenburgStreetsClient
+
+    with BrandenburgStreetsClient(page_size=5) as bb:
+        streets = list(itertools.islice(bb.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample_name = streets[0]["strassenname"]
+    return f"{len(streets)} real street(s), e.g. {sample_name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -2057,6 +2074,8 @@ def main() -> int:
     reporter.check("CACLR (Luxembourg)", [], check_caclr)
     # Zentraler AdressService Hamburg (Germany) needs no credentials
     reporter.check("Zentraler AdressService Hamburg (Germany)", [], check_hamburg_streets)
+    # WFS BB-BE Gazetteer (Brandenburg) needs no credentials
+    reporter.check("WFS BB-BE Gazetteer (Brandenburg)", [], check_brandenburg_streets)
 
     print()
     if reporter.ran == 0:

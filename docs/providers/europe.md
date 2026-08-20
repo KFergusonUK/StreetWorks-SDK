@@ -953,6 +953,75 @@ dataset's own CKAN metadata on `suche.transparenz.hamburg.de`.
 **No credentials required** — every claim above came from a fully
 unauthenticated GET request.
 
+## WFS BB-BE Gazetteer (Brandenburg)
+
+Brandenburg's own street gazetteer, run by LGB (Landesvermessung und
+Geobasisinformation Brandenburg) — no credentials. This SDK's second
+German state-level streets/gazetteer coverage, continuing the "state
+fan-out" fallback path Germany's national streets investigation left
+open:
+
+```python
+from streetworks.brandenburg import BrandenburgStreetsClient
+from streetworks.common import from_brandenburg_street
+
+with BrandenburgStreetsClient() as bb:
+    streets = [from_brandenburg_street(r) for r in bb.iter_streets()]
+```
+
+**52,902 real street records, confirmed live 2026-08-20 via
+`resultType=hits`** — much larger than Hamburg's 9,639, consistent with
+Brandenburg's far greater land area. Found via Brandenburg's own
+geoportal metadata record for "Deutschland-Online-Gazetteer Brandenburg
+mit Berlin (WFS)", resolving to `isk.geobasis-bb.de/ows/gazetteer_wfs`.
+
+**A real, confirmed GML-only WFS — no JSON output format exists,
+checked live rather than assumed.** `GetCapabilities` lists only GML
+output formats for this feature type; a real
+`outputFormat=application/json` request was tried and rejected with a
+genuine `400` (`"This WFS is not configured to handle the output/input
+format 'application/json'"`). This module doesn't use the shared
+`OGCFeaturesClient` (JSON-first) and instead parses the real GML/XML
+response directly via the standard library's own `xml.etree.ElementTree`
+— no `lxml`, matching this SDK's stdlib-plus-httpx convention.
+
+**Real, comprehensive per-record fields, richer than Hamburg's own
+simpler schema.** `strassenname` (the real name), `postleitzahl`
+(postal code), `postOrtsteil`/`ortsteilname` (real district names, not
+just codes), `land` (the real German state code), and a real
+`strassenschluessel` (structured street key). `administrative_area`
+reconstructs the real municipality name from two real, independently-
+stated fields — `ortsnamePost` + `zusatzOrtsname` (e.g.
+`"Brandenburg"` + `"an der Havel"` → `"Brandenburg an der Havel"`) —
+confirmed live to match the same record's own
+`gemeindename_normalisiert` field, not a guessed concatenation.
+
+**No geometry — the only real geometry this source states is a
+`Polygon`** (the street's areal extent, in `geographicExtent`) —
+`GeometryGrade.ABSENT` on every real `Street`, the same discipline
+`from_marousi_street` already established for its own polygon-only
+Greek source; the real polygon GML is preserved unmodified on `.raw`.
+
+**A real, live-confirmed, non-exhaustive Berlin presence.** The
+service's own abstract states it directly: data covers both Brandenburg
+and Berlin (Berlin's own contribution sourced from Geoportal Berlin's
+Amtliche Hauskoordinaten) — confirmed live in a real 500-record sample,
+8/500 rows genuinely carry `land=11` (Berlin's real ISO 3166-2:DE
+code), the rest `land=12` (Brandenburg's own code). This build is
+scoped and documented as Brandenburg's own provider — the real Berlin
+content is a genuine bonus, not claimed as exhaustive Berlin coverage
+(unlike this SDK's own Hamburg build, which is a complete state
+gazetteer). Berlin's own dedicated GDI WFS host remains genuinely
+blocked (see the Hamburg section above) — worth a retry once it's back.
+
+**Licence: Datenlizenz Deutschland - Namensnennung - 2.0**, confirmed
+live directly from this WFS's own `GetCapabilities` `AccessConstraints`
+element, with a real, stated attribution string: *"© GeoBasis-DE/LGB,
+dl-de/by-2-0, (Daten geändert)"*.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
+
 ## Berlin (VIZ)
 
 The largest remaining German gap this cluster had — Berlin is a

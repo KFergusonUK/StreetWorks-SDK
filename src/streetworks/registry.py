@@ -2728,6 +2728,56 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.hamburg import HamburgStreetsClient",
     ),
     ProviderEntry(
+        key="brandenburg_streets",
+        name="WFS BB-BE Gazetteer (Brandenburg)",
+        description=(
+            "Brandenburg's own street gazetteer, run by the state surveying and "
+            "geoinformation agency."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Germany"}),
+        administrative_area="Land Brandenburg (LGB)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "second German state-level streets/gazetteer provider "
+            "(after Hamburg's own GAGES), continuing the 'state "
+            "fan-out' fallback path Germany's national streets "
+            "investigation left open. 52,902 real street records, "
+            "confirmed live via resultType=hits - much larger than "
+            "Hamburg's 9,639, consistent with Brandenburg's far "
+            "greater land area. A real, confirmed GML-only WFS - no "
+            "JSON output format exists (a real outputFormat=application/"
+            "json request was rejected with a genuine 400), so this "
+            "module parses real GML/XML directly via the standard "
+            "library's own xml.etree.ElementTree rather than using the "
+            "shared JSON-first OGCFeaturesClient. Real, comprehensive "
+            "per-record fields, richer than Hamburg's own schema - "
+            "administrative_area is reconstructed from two real, "
+            "independently-stated fields (ortsnamePost + "
+            "zusatzOrtsname), confirmed live to match the record's own "
+            "gemeindename_normalisiert field, not a guessed "
+            "concatenation. The only real geometry stated is a Polygon "
+            "(the street's areal extent) - GeometryGrade.ABSENT on "
+            "every Street, the same discipline from_marousi_street "
+            "already established for its own polygon-only source; the "
+            "real polygon is preserved unmodified on .raw. A real, "
+            "live-confirmed, non-exhaustive Berlin presence: this "
+            "source's own land field carries both Brandenburg's and "
+            "Berlin's real German state codes (8/500 in a live sample "
+            "were Berlin) - scoped and documented as Brandenburg's own "
+            "provider, not a claim of exhaustive Berlin coverage. "
+            "Licence: Datenlizenz Deutschland - Namensnennung - 2.0, "
+            "confirmed live from this WFS's own GetCapabilities "
+            "AccessConstraints element. See module docstring."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Namensnennung - 2.0 (DL-DE-BY-2.0)",
+        source_grade="register",
+        _module="streetworks.brandenburg",
+        _client_name="BrandenburgStreetsClient",
+        import_line="from streetworks.brandenburg import BrandenburgStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

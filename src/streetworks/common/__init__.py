@@ -21,6 +21,7 @@ from .from_ban import from_ban
 from .from_bdtopo import from_bdtopo
 from .from_berlin import from_berlin
 from .from_bev import from_bev_street
+from .from_brandenburg import from_brandenburg_street
 from .from_caclr import from_caclr_street
 from .from_canton_zurich import from_canton_zurich
 from .from_cciss import from_cciss
@@ -190,4 +191,5 @@ __all__ = [
     "from_registrucentras_street",
     "from_caclr_street",
     "from_hamburg_street",
+    "from_brandenburg_street",
 ]
