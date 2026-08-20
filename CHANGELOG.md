@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Investigated — Isle of Man streets gazetteer, re-checked, still not built (2026-08-20)
+
+Re-investigated from a different angle at the project owner's request,
+four days after the first pass (2026-08-16) concluded "no open access
+route found at all." A new third-party platform ("Smart Island") was
+checked and ruled out - its own page states its geography data is
+"derived from OpenStreetMap contributors," the same provenance
+disqualifier already applied to Bulgaria's Sofiaplan. A genuine
+first-party government dataset was found this time: the Isle of Man
+Government's own Land Registry "Land Transactions" CSV (OGL/Crown
+Copyright, confirmed live, 44,132 real rows since 6 November 2000,
+4,107 distinct real street names via a real `Street_Name` field). **Not
+built, on the project owner's explicit call** - it's a transaction log,
+not a dedicated street register, so coverage is structurally
+incomplete by construction (only streets with a registered sale since
+2000 appear at all). See `docs/providers/pending.md`.
+
 ### Added — CACLR, this SDK's first Luxembourgish streets provider (2026-08-20)
 
 `streetworks.caclr.CaclrStreetsClient` / `streetworks.common.from_caclr_street`
