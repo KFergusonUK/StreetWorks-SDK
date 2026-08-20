@@ -226,6 +226,27 @@ declarative shape at all - no WFS exists for it - see
   restriction that conflicts with this SDK's own MIT licence, the same
   category Saxony-Anhalt's own restriction already sits in. Parked on
   licence, not access.
+
+  **A real, unstarted next step, not a dead end**: relicensing this
+  SDK itself cannot fix this - the SDK's own licence governs its code,
+  not Bremen's copyright in the data, and NC/ND are two genuinely
+  separate problems. Adding an attribution requirement to this SDK's
+  own licence would not make Bremen's feed NC-compatible (NC is a
+  commercial-use restriction, unrelated to attribution, and making this
+  whole package non-commercial-only to accommodate one provider would
+  regress every other one); and no downstream licence choice can lift
+  an ND restriction on the *source* data - only the rights holder can
+  do that, or the SDK could stop transforming/redistributing it
+  (parsing into ``Works``, reprojecting, committing a real trimmed test
+  fixture - all of which are themselves derivatives under CC terms).
+  The real move, matching the same open-question status Spain's
+  Catastro already has in this SDK (also blocked on a real "no
+  unmodified redistribution / transforms-only" clause): a direct
+  enquiry to VMZ Bremen asking whether they'd grant explicit permission
+  for an attributed, open-source SDK to build a connector - many German
+  public-sector CC BY-NC-ND footers are generic site-wide defaults, not
+  a bespoke per-dataset decision, so this is genuinely worth asking
+  rather than assuming the badge is final. Not yet contacted.
 - **Hesse** and **Thüringen** - real state-wide platforms found
   (``verkehrsservice.hessen.de``, a real Vue SPA; ``baustellen.tlbv.de/
   app/Bis/``, a real Novasib/Kendo UI app), but neither states a

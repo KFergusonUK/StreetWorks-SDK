@@ -925,6 +925,22 @@ directly: **Creative Commons BY-NC-ND** (non-commercial, no-derivatives)
 licence category Saxony-Anhalt's own roadworks feed already sits in, so
 this is parked for the same reason, not a technical blocker.
 
+**A real, unstarted next step, not a dead end.** Relicensing this SDK
+itself cannot fix this: the SDK's own licence governs its code, not
+Bremen's copyright in the data, and NC/ND are two separate problems —
+adding an attribution clause wouldn't make the feed NC-compatible (NC
+restricts commercial use, unrelated to attribution, and making the
+whole package non-commercial to accommodate one provider would regress
+every other one), and no downstream licence choice can lift an ND
+restriction on the source data itself — only the rights holder can do
+that, or the SDK could stop transforming/redistributing it entirely.
+The real move, matching the same open-question status Spain's Catastro
+already has in this SDK: a direct enquiry to VMZ Bremen asking whether
+they'd grant explicit permission for an attributed, open-source SDK to
+build a connector — many German public-sector CC BY-NC-ND footers are
+generic site-wide defaults, not a bespoke per-dataset decision. Not yet
+contacted — the project owner's own next step, to revisit.
+
 **Hesse and Thüringen — real state-wide platforms found, no queryable
 endpoint discovered within reasonable effort.** Hesse's
 `verkehrsservice.hessen.de` (a real Vue SPA, TraffGo Road-powered) and
