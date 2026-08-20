@@ -1,9 +1,10 @@
 # Germany streets gazetteer — investigation notes
 
-Investigation only, per `germany-streets-brief.md`. No module, no
-client, no tests. All findings below are from real, live requests made
-2026-08-16. Status: **federal source ruled out, address layer ruled
-out, state fan-out not yet checked** — parked, not abandoned; see
+Investigation only, per `germany-streets-brief.md`. Findings for steps
+1 and 2 below are from real, live requests made 2026-08-16. Status:
+**federal source ruled out, address layer ruled out, state fan-out
+started 2026-08-20 — Hamburg built (`streetworks.hamburg`), Berlin
+genuinely blocked, Brandenburg/Saxony not yet checked** — see
 `docs/providers/pending.md` for the current summary.
 
 ## Verify-first step 1 — BKG federal streets (ruled out)
@@ -69,20 +70,49 @@ cleanly open → Germany lands as a streets-only entry"), no German
 address register is buildable now regardless of what happens with
 streets.
 
-## Verify-first step 3 — state fan-out (not yet checked)
+## Verify-first step 3 — state fan-out (started 2026-08-20)
 
 The brief's own fallback path — checking whether Hamburg, Brandenburg,
 Saxony, and Berlin (the four states already touched for roadworks via
 `streetworks.ogc.germany`/`streetworks.berlin`) expose a genuine
-named-street layer via their own WFS/OGC API Features — has **not**
-been investigated. This is real, open-ended work: four separate
-per-state checks, not a quick follow-up. Nothing found or ruled out
-here yet.
+named-street layer via their own WFS/OGC API Features.
+
+**Berlin — checked first, genuinely blocked, not ruled out.** Berlin's
+own GDI WFS host (`gdi.berlin.de`, serving every real Berlin state
+geodata WFS - addresses, street network, everything) is confirmed live
+to be down for maintenance across every real path tried (a generic
+German "Wartungsarbeiten" page, no ETA stated), confirmed via multiple
+different guessed service paths and repeated retries over several
+seconds, all returning the identical maintenance page. This lines up
+with a real, separately-confirmed fact: Berlin's older FIS-Broker
+system was fully shut down 1 December 2025 in favour of new
+open-source infrastructure, so this outage plausibly reflects an
+active migration rather than a permanent closure - but that couldn't
+be confirmed from outside. Two real candidate datasets were found on
+`daten.berlin.de` before hitting the wall (`Adressen Berlin` and
+`Detailnetz Straßenabschnitte`, both real WFS entries) but neither is
+checkable while the backing host is down. Revisit later - this is a
+real, live, currently-open lead, not a dead end.
+
+**Hamburg — checked, built.** Hamburg's own joint address/street
+gazetteer, "Zentraler AdressService Hamburg" (GAGES, run by the
+Statistisches Amt für Hamburg und Schleswig-Holstein plus the
+Landesbetrieb Geoinformation und Vermessung), is real, live, and
+keyless via a modern OGC API Features service
+(`qs-api.hamburg.de/datasets/v1/gages_vereinfacht`, found via the
+dataset's own catalogue page rather than the archived FIS-Broker-era
+WFS the catalogue still lists as a legacy snapshot). 9,639 real
+Hamburg street records, 100% carrying a real name, real Point geometry
+genuinely reprojected server-side to WGS84 by default. Shipped as
+`streetworks.hamburg.HamburgStreetsClient` / `from_hamburg_street` -
+see `docs/providers/europe.md#zentraler-adressservice-hamburg-gages`
+for the full write-up.
+
+**Brandenburg, Saxony — not yet checked.**
 
 ## Recommendation
 
-Park here. If picked back up, start directly at step 3 (state
-fan-out) — steps 1 and 2 are decisively closed and don't need
-re-checking unless BKG's own services change. Per the brief's own
-scope discipline: prove the shape on one state first, then stop and
-report back before fanning out to all four.
+Brandenburg and Saxony remain open, real next steps if picked back up
+- steps 1 and 2 are decisively closed and don't need re-checking unless
+BKG's own services change. Berlin is worth a real retry once
+`gdi.berlin.de` comes back from maintenance.

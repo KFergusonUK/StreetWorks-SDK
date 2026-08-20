@@ -1846,6 +1846,23 @@ def check_caclr() -> str:
     return f"{len(streets)} real street(s), e.g. {sample['NOM']!r} in {sample['COMMUNE_NOM']!r}"
 
 
+def check_hamburg_streets() -> str:
+    """Zentraler AdressService Hamburg (Germany) needs no credentials.
+    Only takes a small page (page_size=5, real server-side pagination -
+    one HTTP request) rather than the full 9.6k-record register - see
+    streetworks.hamburg.client's module docstring."""
+    import itertools
+
+    from streetworks.hamburg import HamburgStreetsClient
+
+    with HamburgStreetsClient(page_size=5) as hamburg:
+        streets = list(itertools.islice(hamburg.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample_name = streets[0]["properties"]["strname"]
+    return f"{len(streets)} real street(s), e.g. {sample_name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -2038,6 +2055,8 @@ def main() -> int:
     reporter.check("Adresų registras (Lithuania)", [], check_registrucentras)
     # CACLR (Luxembourg) needs no credentials
     reporter.check("CACLR (Luxembourg)", [], check_caclr)
+    # Zentraler AdressService Hamburg (Germany) needs no credentials
+    reporter.check("Zentraler AdressService Hamburg (Germany)", [], check_hamburg_streets)
 
     print()
     if reporter.ran == 0:

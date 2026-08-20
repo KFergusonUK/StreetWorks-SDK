@@ -99,23 +99,31 @@ Credentials-wanted, or Documented-unavailable; see
   under that clause. Covers 95% of Spanish territory by the DGC's own
   stated completeness figure — Basque Country and Navarre run their own
   independent cadastral offices.
-- **Germany — streets gazetteer, a two-part ruling: both the obvious
-  federal source and the address layer are closed off, one real
-  fallback path remains unchecked.** Full findings in
+- **Germany — streets gazetteer, a two-part national ruling plus a
+  state fan-out now in progress.** Full findings in
   [`docs/germany-streets-investigation.md`](../germany-streets-investigation.md)
-  (investigated 2026-08-16). BKG's federal ATKIS DLM250-based INSPIRE
-  Transport Networks WFS (`sg.geodatenzentrum.de/wfs_dlm250_inspire`,
-  confirmed live) is real but genuinely too coarse — a live 200-record
-  sample found 0/200 records reference their own geometry via the
-  standard `RoadLink` association, 86.5% carry no name at all, and the
-  13.5% that do are named tourist/scenic driving routes (e.g.
-  "Romantische Straße"), not street names. BKG's own address product
+  (national rulings investigated 2026-08-16, state fan-out started
+  2026-08-20). BKG's federal ATKIS DLM250-based INSPIRE Transport
+  Networks WFS (`sg.geodatenzentrum.de/wfs_dlm250_inspire`, confirmed
+  live) is real but genuinely too coarse — a live 200-record sample
+  found 0/200 records reference their own geometry via the standard
+  `RoadLink` association, 86.5% carry no name at all, and the 13.5%
+  that do are named tourist/scenic driving routes (e.g. "Romantische
+  Straße"), not street names. BKG's own address product
   (Georeferenzierte Adressdaten) is confirmed partly sourced from
   Deutsche Post Direkt (commercial) and gated to "Federal authorities
-  and eligible users" — not cleanly open. What's left unchecked: whether
-  Hamburg, Brandenburg, Saxony, or Berlin (the four states already
-  touched for roadworks) expose a genuine named-street layer of their
-  own — real, open-ended per-state work, not started.
+  and eligible users" — not cleanly open. **The per-state fallback path
+  is now real and partially built**: Hamburg's own joint address/
+  street gazetteer (GAGES) is real, live, and keyless — 9,639 real
+  streets, 100% named, shipped as `streetworks.hamburg`. Berlin was
+  checked next and is genuinely blocked, not ruled out: its entire GDI
+  WFS host (`gdi.berlin.de`) is confirmed live to be down for
+  maintenance with no ETA, plausibly tied to its FIS-Broker system
+  having been shut down 1 December 2025 in favour of new
+  infrastructure — a real, reportable connectivity failure, not routed
+  around; two real candidate datasets were found on `daten.berlin.de`
+  before hitting the wall, worth a retry once the host is back.
+  Brandenburg and Saxony remain genuinely unchecked.
 - **Italy — ANNCSU's address/civic-number side (`accessi`), deliberately
   scoped out of the streets build, not blocked.** A different case from
   every other entry on this page: real, live, keyless, CC BY 4.0, and

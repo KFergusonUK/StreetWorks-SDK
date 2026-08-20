@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "00001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.223554163367309,
+          53.4855241782816
+        ]
+      },
+      "properties": {
+        "strname": "Möllers Kamp - Ernst-Henning-Straße-Parkanlagen",
+        "strassenname_kurz": "-",
+        "strname_normalisiert": "MOLERSKAMPERNSTHENINGSTRASEPARKANLAGEN",
+        "geographicidentifier": "Möllers Kamp - Ernst-Henning-Straße-Parkanlagen (OT 0603), Hamburg (21029)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "00002",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.099336506403334,
+          53.48686624283109
+        ]
+      },
+      "properties": {
+        "strname": "Wasserpark Dove-Elbe",
+        "strassenname_kurz": "Wasserpark Dove-Elbe",
+        "strname_normalisiert": "WASERPARKDOVELBE",
+        "geographicidentifier": "Wasserpark Dove-Elbe (OT 0610), Hamburg (21037)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "00003",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.937268192175651,
+          53.56064966765521
+        ]
+      },
+      "properties": {
+        "strname": "Harkortstraße-Parkanlagen",
+        "strassenname_kurz": "Harkortstraße-Parkanlagen",
+        "strname_normalisiert": "HARKORTSTRASEPARKANLAGEN",
+        "geographicidentifier": "Harkortstraße-Parkanlagen (OT 0210), Hamburg (22765)"
+      }
+    }
+  ]
+}

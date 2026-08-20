@@ -2,6 +2,37 @@
 
 ## [Unreleased]
 
+### Added — Zentraler AdressService Hamburg (GAGES), this SDK's first German state-level streets provider (2026-08-20)
+
+`streetworks.hamburg.HamburgStreetsClient` / `streetworks.common.from_hamburg_street`
+- Hamburg's own street gazetteer, run jointly by the state statistics
+and surveying offices, picking up the "state fan-out" fallback path
+Germany's national streets investigation left open.
+
+```python
+from streetworks.hamburg import HamburgStreetsClient
+from streetworks.common import from_hamburg_street
+
+with HamburgStreetsClient() as hamburg:
+    streets = [from_hamburg_street(f) for f in hamburg.iter_streets()]
+```
+
+- **Berlin was checked first - genuinely blocked, not ruled out.**
+  Berlin's entire GDI WFS host (`gdi.berlin.de`) is confirmed live to
+  be down for maintenance with no ETA, plausibly tied to its
+  FIS-Broker system having been shut down 1 December 2025 - a real,
+  reportable connectivity failure, not routed around. Worth a retry
+  later.
+- **9,639 real Hamburg street records - 100% carrying a real name.**
+  Found via the dataset's own current OGC API Features landing page,
+  not the archived FIS-Broker-era WFS its catalogue page still lists.
+- **Real Point geometry, genuinely reprojected server-side to WGS84 by
+  default** - the collection's own storage CRS is EPSG:25832.
+- **`administrative_area` is a per-provider constant** (`"Hamburg"`) -
+  a finer real Ortsteil (district) code exists inline on each record
+  but no lookup collection resolves it to a name on this API.
+- **Licence**: Datenlizenz Deutschland - Namensnennung - 2.0.
+
 ### Investigated — Isle of Man streets gazetteer, re-checked, still not built (2026-08-20)
 
 Re-investigated from a different angle at the project owner's request,

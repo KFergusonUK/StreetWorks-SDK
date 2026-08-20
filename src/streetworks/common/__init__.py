@@ -35,6 +35,7 @@ from .from_drivebc import from_drivebc
 from .from_gibraltar import from_gibraltar_street
 from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_guernsey_streets import from_guernsey_street
+from .from_hamburg import from_hamburg_street
 from .from_helsinki import from_helsinki
 from .from_idee import from_idee
 from .from_jersey import from_jersey
@@ -188,4 +189,5 @@ __all__ = [
     "from_vlaanderen_street",
     "from_registrucentras_street",
     "from_caclr_street",
+    "from_hamburg_street",
 ]

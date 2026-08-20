@@ -2687,6 +2687,47 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.caclr import CaclrStreetsClient",
     ),
     ProviderEntry(
+        key="hamburg_streets",
+        name="Zentraler AdressService Hamburg (GAGES)",
+        description=(
+            "Hamburg's own street gazetteer, run jointly by the state statistics and "
+            "surveying offices."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Germany"}),
+        administrative_area="Hamburg",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "first German state-level streets/gazetteer provider. "
+            "Berlin was checked first - genuinely blocked, not ruled "
+            "out: its own GDI WFS host (gdi.berlin.de, serving every "
+            "Berlin geodata WFS) is confirmed live to be down for "
+            "maintenance across every real path tried, no ETA stated - "
+            "a real, reportable connectivity failure, not routed "
+            "around. Hamburg's own joint StA-Nord/LGV gazetteer "
+            "(GAGES) was checked instead, over a real, live, keyless "
+            "OGC API Features service (found via the dataset's own "
+            "catalogue page, not the archived FIS-Broker-era WFS it "
+            "still lists). 9,639 real Hamburg street records, 100% "
+            "carrying a real name. Real Point geometry, genuinely "
+            "reprojected server-side to WGS84 by this API's own "
+            "default (native storage is EPSG:25832). "
+            "administrative_area is a per-provider constant "
+            "('Hamburg') - a finer real Ortsteil (district) code exists "
+            "inline in one composite field but no separate lookup "
+            "collection exists on this API to resolve it to a name. "
+            "Licence: Datenlizenz Deutschland - Namensnennung - 2.0, "
+            "confirmed live from the dataset's own CKAN metadata. See "
+            "module docstring."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Namensnennung - 2.0 (DL-DE-BY-2.0)",
+        source_grade="register",
+        _module="streetworks.hamburg",
+        _client_name="HamburgStreetsClient",
+        import_line="from streetworks.hamburg import HamburgStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

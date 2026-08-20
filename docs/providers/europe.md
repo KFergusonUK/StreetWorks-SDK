@@ -890,6 +890,69 @@ all preserved on `.raw`, none forced into the common model. See
 `streetworks/ogc/germany.py`'s module docstring for the full
 field-by-field mapping and every state's exact attribution text.
 
+## Zentraler AdressService Hamburg (GAGES)
+
+Hamburg's own street gazetteer, run jointly by the Statistisches Amt
+für Hamburg und Schleswig-Holstein (StA-Nord) and the Landesbetrieb
+Geoinformation und Vermessung (LGV) — no credentials. This SDK's first
+German state-level streets/gazetteer coverage, picking up the "state
+fan-out" fallback path Germany's own national investigation left open
+(see [`docs/germany-streets-investigation.md`](../germany-streets-investigation.md)):
+
+```python
+from streetworks.hamburg import HamburgStreetsClient
+from streetworks.common import from_hamburg_street
+
+with HamburgStreetsClient() as hamburg:
+    streets = [from_hamburg_street(f) for f in hamburg.iter_streets()]
+```
+
+**Berlin was checked first — genuinely blocked, not ruled out.**
+Berlin's own GDI WFS host (`gdi.berlin.de`, serving every real Berlin
+state geodata WFS — addresses, street network, everything) is
+confirmed live to be down for maintenance across every real path
+tried, no ETA stated — a real, reportable connectivity failure,
+confirmed via multiple different service paths and repeated retries,
+not routed around. This lines up with a real, separately-confirmed
+fact: Berlin's older FIS-Broker system was fully shut down 1 December
+2025 in favour of new open-source infrastructure, so this outage
+plausibly reflects an active migration rather than a permanent
+closure. Two real candidate datasets were found on `daten.berlin.de`
+before hitting the wall (`Adressen Berlin`, `Detailnetz
+Straßenabschnitte`) — worth a retry once the host is back.
+
+**Not the archived WFS this dataset's own catalogue page still
+lists.** Hamburg's catalogue entry (`suche.transparenz.hamburg.de`)
+lists two older WFS snapshots (`DOG`/`GAGES` XML, from the shut-down
+FIS-Broker era) alongside a real, current OGC API Features landing
+page — this module uses the live one, resolved to
+`qs-api.hamburg.de/datasets/v1/gages_vereinfacht`, confirmed live with
+two real collections (`hauskoordinaten`, `strassen`).
+
+**9,639 real Hamburg street records, confirmed live 2026-08-20 — 100%
+carrying a real name.** Real Point geometry, genuinely reprojected
+server-side to WGS84 by this API's own default (the collection's own
+storage CRS is `EPSG:25832`, confirmed live via its metadata, but a
+plain unparametrised request already returns real WGS84 coordinates).
+
+**Pagination: real, standard OGC API Features `links` with `rel:
+"next"`**, followed directly rather than reconstructing offsets — the
+same "follow the real link until it's genuinely absent" discipline
+already applied to Amsterdam's WIOR and Flanders' Straatnamenregister.
+
+**`administrative_area` is a per-provider constant, `"Hamburg"`.** The
+real per-feature `geographicidentifier` field states a finer Ortsteil
+(district) code inline (e.g. `"(OT 0603)"`), but no separate
+code-to-name lookup collection exists on this API — kept `.raw`-only
+rather than parsed into a fabricated field.
+
+**Licence: Datenlizenz Deutschland - Namensnennung - 2.0** (Germany's
+own standard open-data attribution licence), confirmed live from this
+dataset's own CKAN metadata on `suche.transparenz.hamburg.de`.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
+
 ## Berlin (VIZ)
 
 The largest remaining German gap this cluster had — Berlin is a
