@@ -1,0 +1,379 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.415605",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.88007186,
+                45.74242931
+              ],
+              [
+                4.88012678,
+                45.74258084
+              ],
+              [
+                4.88049285,
+                45.7424934
+              ],
+              [
+                4.88223047,
+                45.74220757
+              ],
+              [
+                4.88220178,
+                45.74212279
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Avenue Rockefeller",
+        "nomchantier": "Travaux voirie",
+        "commune1": "Lyon 8e Arrondissement",
+        "insee": "69388",
+        "precisionlocalisation": null,
+        "debutchantier": "2026-08-17",
+        "finchantier": "2026-08-21",
+        "descripchantierinternet": "7h-17h",
+        "avancement": "Chantier en cours",
+        "importance": "Chantier perturbant",
+        "typeperturbation": "Circulation alternée",
+        "intervenant": "Autre",
+        "validite": "A vérifier",
+        "codeimportance": 2,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 415605
+      },
+      "bbox": [
+        4.88007186,
+        45.74212279,
+        4.88223047,
+        45.74258084
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.415731",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.85253272,
+                45.75927624
+              ],
+              [
+                4.85413769,
+                45.75940071
+              ],
+              [
+                4.85415144,
+                45.7593122
+              ],
+              [
+                4.85255125,
+                45.75916428
+              ],
+              [
+                4.85253272,
+                45.75927624
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Rue Docteur Bouchut",
+        "nomchantier": "Travaux de voirie",
+        "commune1": "Lyon 3e Arrondissement",
+        "insee": "69383",
+        "precisionlocalisation": "Entre la rue Garibaldi et la rue du Lac",
+        "debutchantier": "2026-08-25",
+        "finchantier": "2026-10-09",
+        "descripchantierinternet": null,
+        "avancement": "Chantier en cours",
+        "importance": "Chantier très perturbant",
+        "typeperturbation": "Circulation interdite",
+        "intervenant": "Autre",
+        "validite": "A vérifier",
+        "codeimportance": 1,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 415731
+      },
+      "bbox": [
+        4.85253272,
+        45.75916428,
+        4.85415144,
+        45.75940071
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.412902",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.87675684,
+                45.77687883
+              ],
+              [
+                4.87682013,
+                45.77687423
+              ],
+              [
+                4.87721824,
+                45.77694047
+              ],
+              [
+                4.87776798,
+                45.77698822
+              ],
+              [
+                4.87804452,
+                45.77706179
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Rue du Pérou",
+        "nomchantier": "Travaux piste cyclable",
+        "commune1": "Villeurbanne",
+        "insee": "69266",
+        "precisionlocalisation": "de la Rue Edouard Vaillant jusqu'à l'Avenue Roger Salengro",
+        "debutchantier": "2025-11-25",
+        "finchantier": "2026-11-20",
+        "descripchantierinternet": "Dans le sens Est-Ouest",
+        "avancement": "Chantier en cours",
+        "importance": "Chantier très perturbant",
+        "typeperturbation": "Circulation interdite",
+        "intervenant": "Autre",
+        "validite": "A vérifier",
+        "codeimportance": 1,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 412902
+      },
+      "bbox": [
+        4.87675684,
+        45.77681456,
+        4.87964445,
+        45.77739094
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.415519",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.83463877,
+                45.76423058
+              ],
+              [
+                4.83490482,
+                45.76418609
+              ],
+              [
+                4.83491494,
+                45.76412551
+              ],
+              [
+                4.83470367,
+                45.76414905
+              ],
+              [
+                4.83469824,
+                45.76416822
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                4.83463847,
+                45.76423915
+              ],
+              [
+                4.83463877,
+                45.76423058
+              ],
+              [
+                4.8346382,
+                45.76423068
+              ],
+              [
+                4.83463847,
+                45.76423915
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Rue de la Poulaillerie",
+        "nomchantier": "Grutage matériel",
+        "commune1": "Lyon 2e Arrondissement",
+        "insee": "69382",
+        "precisionlocalisation": null,
+        "debutchantier": "2026-08-07",
+        "finchantier": "2026-08-28",
+        "descripchantierinternet": null,
+        "avancement": "Chantier en cours",
+        "importance": "Chantier très perturbant",
+        "typeperturbation": "Circulation interdite",
+        "intervenant": "Autre",
+        "validite": "A vérifier",
+        "codeimportance": 1,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 415519
+      },
+      "bbox": [
+        4.8346382,
+        45.76412551,
+        4.83491494,
+        45.76423915
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.415518",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.80078941,
+                45.78035026
+              ],
+              [
+                4.80094592,
+                45.78041139
+              ],
+              [
+                4.801095,
+                45.7802426
+              ],
+              [
+                4.80093576,
+                45.78019106
+              ],
+              [
+                4.80078941,
+                45.78035026
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Rue de Bourgogne",
+        "nomchantier": "Branchement",
+        "commune1": "Lyon 9e Arrondissement",
+        "insee": "69389",
+        "precisionlocalisation": null,
+        "debutchantier": "2026-08-13",
+        "finchantier": "2026-08-28",
+        "descripchantierinternet": null,
+        "avancement": "Chantier en cours",
+        "importance": "Chantier perturbant",
+        "typeperturbation": "Circulation réduite",
+        "intervenant": "Autre",
+        "validite": "A vérifier",
+        "codeimportance": 2,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 415518
+      },
+      "bbox": [
+        4.80078941,
+        45.78019106,
+        4.801095,
+        45.78041139
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "pvo_patrimoine_voirie.pvochantierperturbant.415565",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                4.74413781,
+                45.82308722
+              ],
+              [
+                4.74384488,
+                45.82252924
+              ],
+              [
+                4.74397703,
+                45.82172327
+              ],
+              [
+                4.74380813,
+                45.82135598
+              ],
+              [
+                4.74364941,
+                45.82103438
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "the_geom",
+      "properties": {
+        "nom": "Montée du Clair",
+        "nomchantier": "Travaux de Construction de canalisation",
+        "commune1": "Dardilly",
+        "insee": "69072",
+        "precisionlocalisation": "Sur l'ensemble de l'axe",
+        "debutchantier": "2026-08-31",
+        "finchantier": "2026-10-09",
+        "descripchantierinternet": null,
+        "avancement": "Chantier en cours",
+        "importance": "Chantier très perturbant",
+        "typeperturbation": "Circulation interdite",
+        "intervenant": "Grand Lyon",
+        "validite": "A vérifier",
+        "codeimportance": 1,
+        "document_joint": "",
+        "url_document": "",
+        "gid": 415565
+      },
+      "bbox": [
+        4.74345345,
+        45.81972203,
+        4.7462448,
+        45.82322958
+      ]
+    }
+  ]
+}

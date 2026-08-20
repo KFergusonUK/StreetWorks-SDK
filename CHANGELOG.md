@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+### Added — Lyon (Métropole de Lyon), this SDK's third French roadworks platform shape (2026-08-20)
+
+`streetworks.lyon.LyonClient` / `streetworks.common.from_lyon`
+- Found while surveying major French cities for coverage gaps
+(Marseille, Bordeaux, Nantes, Strasbourg, Nice, Montpellier all checked
+and came back empty). A plain WFS 2.0.0 (GeoServer) - neither
+OpenDataSoft nor Bison Futé's own DATEX II - built bespoke over the
+same generic `streetworks.ogc.client.OGCFeaturesClient` the German
+state cluster already uses.
+
+```python
+from streetworks.lyon import LyonClient
+from streetworks.common import from_lyon
+
+with LyonClient() as lyon:
+    works = from_lyon(list(lyon.iter_roadworks()))
+```
+
+- **351 real features**, real road name/works description/commune+INSEE
+  code/4-value status field, a real stable per-feature id.
+- **Only real geometry is `MultiPolygon`** - the real first ring's
+  first vertex used as the representative point, never a computed
+  centroid, the same discipline this SDK's own gazetteer converters
+  (Oslo, Kanton Zürich, GeoSN) already establish.
+- **Two real but weak-signal fields, documented honestly**:
+  `avancement` (progress) is constant across every record at
+  investigation time (currently-active only, no planned tier);
+  `intervenant` (promoter) is the uninformative literal `"Autre"` on
+  347/351 records.
+- **Licence**: Licence Ouverte / Open Licence 2.0 (Etalab).
+- **World map example**: this session's new German/French providers
+  (10 from earlier plus Lyon) are now wired into
+  `examples/roadworks_world_map.py`'s `--live` point-plotting dispatch
+  table - the offline coverage map was already registry-driven and
+  picked them up automatically, but live mode's per-provider dispatch
+  needed explicit entries, now added.
+
 ### Added — Toulouse Métropole and Rennes Métropole, this SDK's first French métropole roadworks providers (2026-08-20)
 
 `streetworks.opendatasoft.france_departements.DepartementRoadworksClient`

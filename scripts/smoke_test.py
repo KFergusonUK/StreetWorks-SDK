@@ -433,6 +433,22 @@ def check_france_departements() -> str:
     )
 
 
+def check_lyon() -> str:
+    """Lyon (Métropole de Lyon) needs no credentials - see
+    streetworks.lyon. A plain GeoServer WFS, not OpenDataSoft - a third
+    real French roadworks platform shape."""
+    from streetworks.common import from_lyon
+    from streetworks.lyon import LyonClient
+
+    with LyonClient() as lyon:
+        features = list(lyon.iter_roadworks())
+    if not features:
+        raise RuntimeError("query returned no real features")
+    works = from_lyon(features)
+    sample = works[0]
+    return f"{len(works)} real roadwork(s), e.g. {sample.sites[0].location_description!r}"
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -2117,6 +2133,7 @@ def main() -> int:
     reporter.check("Saarland LfS roadworks", [], check_saarland)
     reporter.check("Dortmund roadworks", [], check_dortmund)
     reporter.check("French département roadworks", [], check_france_departements)
+    reporter.check("Lyon (Métropole de Lyon) roadworks", [], check_lyon)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)

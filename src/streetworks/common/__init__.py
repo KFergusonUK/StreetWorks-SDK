@@ -49,6 +49,7 @@ from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
 from .from_lisboa import from_lisboa
 from .from_lisboa_streets import from_lisboa_street
 from .from_lmi import from_lmi_street
+from .from_lyon import from_lyon
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
 from .from_marousi import from_marousi_street
@@ -201,5 +202,6 @@ __all__ = [
     "from_lisboa_street",
     "from_saarland",
     "from_dortmund",
+    "from_lyon",
     "from_departement_roadworks",
 ]

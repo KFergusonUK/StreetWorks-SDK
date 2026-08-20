@@ -970,6 +970,46 @@ _REGISTRY: list[ProviderEntry] = [
         ),
     ),
     ProviderEntry(
+        key="lyon",
+        name="Lyon (Métropole de Lyon)",
+        description="Métropole de Lyon's own roadworks feed, over a plain GeoServer WFS.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"France"}),
+        administrative_area="Métropole de Lyon",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 351 real "
+            "features on a plain WFS 2.0.0 (GeoServer), not "
+            "OpenDataSoft - a genuine third real platform shape in "
+            "this SDK's French cluster, built bespoke over the same "
+            "generic streetworks.ogc.client.OGCFeaturesClient the "
+            "German state cluster already uses. Real road name (100% "
+            "populated), real commune/INSEE code (genuinely spans "
+            "several communes, not Lyon city alone), a real 4-value "
+            "restriction-type status field. Only real geometry is "
+            "MultiPolygon (worksite footprint) - no point/line field "
+            "exists at all - the real first ring's first vertex is "
+            "used as the representative point, the same 'one real, "
+            "arbitrarily-chosen-but-genuinely-stated point, never a "
+            "computed centroid' discipline this SDK's own gazetteer "
+            "converters (Oslo, Kanton Zürich, GeoSN) already "
+            "establish, applied here to a roadworks record. Real "
+            "'intervenant' promoter field is genuinely uninformative "
+            "on 347/351 records ('Autre') - mapped anyway, since it's "
+            "what the source states. avancement (status/progress) is "
+            "real but constant ('Chantier en cours') on every record "
+            "at investigation time - this endpoint states only "
+            "currently-active works, no separate planned tier. See "
+            "the module docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        source_grade="operator",
+        _module="streetworks.lyon",
+        _client_name="LyonClient",
+        import_line="from streetworks.lyon import LyonClient",
+    ),
+    ProviderEntry(
         key="dgt",
         name="DGT (Dirección General de Tráfico)",
         description="Spain's national roadworks feed.",

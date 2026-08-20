@@ -2407,6 +2407,62 @@ licence `streetworks.paris` already carries**, confirmed the same way:
 an adapted/derived database must itself be released under ODbL (or a
 compatible licence).
 
+## Lyon (Métropole de Lyon)
+
+Métropole de Lyon's own real roadworks feed — no credentials. Found
+while surveying major French cities for coverage gaps (Marseille,
+Bordeaux, Nantes, Strasbourg, Nice and Montpellier were all checked the
+same way and came back empty — no `data.gouv.fr` entry, no dataset on
+their own OpenDataSoft portals). A genuine third real platform shape in
+this SDK's French cluster — a plain WFS 2.0.0 (GeoServer), neither
+OpenDataSoft nor Bison Futé's own DATEX II — built bespoke over the
+same generic `streetworks.ogc.client.OGCFeaturesClient` the German
+state cluster already uses:
+
+```python
+from streetworks.lyon import LyonClient
+from streetworks.common import from_lyon
+
+with LyonClient() as lyon:
+    works = from_lyon(list(lyon.iter_roadworks()))
+```
+
+**351 real features ("chantier perturbant" — disruptive worksite),
+confirmed live via the WFS's own `numberMatched`.** Real road name
+(`nom`, 100% populated), a real varied works description (`nomchantier`
+— not a fixed enum), real commune + INSEE code (`commune1`/`insee` —
+genuinely spans several real communes within the métropole, e.g.
+`"Francheville"`, not Lyon city alone), a real clean 4-value
+restriction-type status field (`typeperturbation` —
+`"Circulation interdite"`/`"réduite"`/`"alternée"`/`"interdite de
+jour"`), a real stable per-feature id (`gid`).
+
+**Only real geometry is `MultiPolygon` — no point or line field exists
+at all.** Per this SDK's "never force a polygon into
+`Coordinate.points`/`.parts`" rule (already established for
+Guernsey/Paris's own real polygon cases) and its "never a computed
+centroid" rule, the real first ring's first vertex is used as
+`Coordinate.value` — the same "one real, arbitrarily-chosen-but-
+genuinely-stated point" precedent this SDK's own gazetteer converters
+(Oslo, Kanton Zürich, GeoSN) already established, applied here to a
+roadworks record rather than a street. The full real polygon survives
+unmodified in `.raw`.
+
+**Two fields are real but genuinely weak signals — documented honestly,
+not hidden.** `avancement` (progress) states the literal value
+`"Chantier en cours"` on all 351 real records at investigation time —
+this endpoint only ever returns currently-active works, no separate
+planned tier. `intervenant` (a real promoter-shaped field) states the
+uninformative literal `"Autre"` on 347/351 real records — only 4 carry
+a real specific value (`"Grand Lyon"` ×2, `"Concessionnaire"` ×1,
+`None` ×1). Both are mapped anyway, since it's what the source states,
+not suppressed for looking unhelpful.
+
+**Licence: Licence Ouverte / Open Licence 2.0 (Etalab), confirmed**
+directly from this dataset's own catalogue metadata on `data.gouv.fr` —
+the same licence already confirmed for Bison Futé and most of this
+SDK's other French providers.
+
 ## Trafikverket (Sweden roadworks) — Credentials wanted
 
 Sweden's national roadworks source — the Swedish Transport
