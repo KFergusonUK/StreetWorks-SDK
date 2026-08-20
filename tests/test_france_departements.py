@@ -1,5 +1,6 @@
 """Tests for streetworks.opendatasoft (generic client + the French
-département field-map registry) and streetworks.common.from_departement_roadworks.
+département/métropole field-map registry) and
+streetworks.common.from_departement_roadworks.
 
 Fixtures are real trimmed OpenDataSoft Explore API v2.1 responses,
 2026-08-20 (``limit=3`` each, ``geo_shape`` line coordinates trimmed to
@@ -7,7 +8,9 @@ Fixtures are real trimmed OpenDataSoft Explore API v2.1 responses,
 ISO dates), Loire-Atlantique (real "Déviation"/"Travaux sur ouvrage
 d'art" records, no structured dates - see module docstring for why),
 Hauts-de-Seine (real tramway/cycle-lane infrastructure-project records,
-also no structured dates).
+also no structured dates), Toulouse Métropole (real ``T26...`` case
+numbers) and Rennes Métropole (real ``id_evt`` values, the 30-day
+window dataset).
 """
 
 import json
@@ -21,13 +24,17 @@ from streetworks.opendatasoft import OpenDataSoftClient
 from streetworks.opendatasoft.france_departements import (
     HAUTS_DE_SEINE,
     LOIRE_ATLANTIQUE,
+    RENNES_METROPOLE,
     SARTHE,
+    TOULOUSE_METROPOLE,
     DepartementRoadworksClient,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
 SARTHE_PAYLOAD = json.loads((FIXTURES / "france_sarthe_roadworks.json").read_text())
 LA_PAYLOAD = json.loads((FIXTURES / "france_loire_atlantique_roadworks.json").read_text())
+TOULOUSE_PAYLOAD = json.loads((FIXTURES / "france_toulouse_roadworks.json").read_text())
+RENNES_PAYLOAD = json.loads((FIXTURES / "france_rennes_roadworks.json").read_text())
 HDS_PAYLOAD = json.loads((FIXTURES / "france_hauts_de_seine_roadworks.json").read_text())
 
 
@@ -131,3 +138,30 @@ def test_hauts_de_seine_multilinestring_first_part_only():
     # The real first MultiLineString part for this record has 4 vertices
     # (untrimmed - shorter than the fixture's own 5-point trim cap).
     assert len(w.coordinate.points) == 4
+
+
+def test_toulouse_metropole_real_case_number_and_promoter():
+    works = from_departement_roadworks(TOULOUSE_PAYLOAD["results"], TOULOUSE_METROPOLE)
+    w = next(w for w in works if w.reference == "T26VLT04616")
+    site = w.sites[0]
+    assert site.location_description == "RUE DE MAGUELONNES"
+    assert w.promoter == "ORANGE"
+    assert site.status == "Alternat - Occupation de 1 file - Occupation du trottoir"
+    assert str(site.proposed_start) == "2026-08-03 00:00:00+00:00"
+    assert site.date_confidence is DateConfidence.VERIFIED
+    assert w.administrative_area == "Toulouse Métropole"
+
+
+def test_rennes_metropole_uses_the_30_day_superset_dataset():
+    assert "travaux_30_jours" in RENNES_METROPOLE.records_url
+
+
+def test_rennes_metropole_real_id_evt_and_disruption_level_status():
+    works = from_departement_roadworks(RENNES_PAYLOAD["results"], RENNES_METROPOLE)
+    w = next(w for w in works if w.reference == "78332")
+    site = w.sites[0]
+    assert site.location_description == "171 Rue de Vern"
+    assert site.status == "Impact nul"
+    assert site.works_type == "Interdiction de stationnement"
+    assert str(site.proposed_start) == "2025-12-04 00:00:00+00:00"
+    assert w.administrative_area == "Rennes Métropole"

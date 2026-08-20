@@ -2,6 +2,42 @@
 
 ## [Unreleased]
 
+### Added — Toulouse Métropole and Rennes Métropole, this SDK's first French métropole roadworks providers (2026-08-20)
+
+`streetworks.opendatasoft.france_departements.DepartementRoadworksClient`
+- Extends the same OpenDataSoft field-map registry into a genuine
+municipal tier, the same way Dortmund reopened one for Germany.
+
+```python
+from streetworks.common import from_departement_roadworks
+from streetworks.opendatasoft.france_departements import TOULOUSE_METROPOLE, DepartementRoadworksClient
+
+with DepartementRoadworksClient() as france:
+    records = france.fetch("Toulouse Métropole")
+
+works = from_departement_roadworks(records, TOULOUSE_METROPOLE)
+```
+
+- **Toulouse Métropole**: 987 real features - the richest area in this
+  SDK's French cluster. Real per-record case numbers (`numero`),
+  structured ISO dates, a real specific promoter (`declarant`). Real
+  `commune` values confirm this genuinely spans several communes, not
+  Toulouse city alone.
+- **Rennes Métropole**: 463 real features - the largest of three real
+  time-window siblings the source itself publishes (1/6/30-day; the
+  30-day superset used here). A real, clean disruption-level status
+  field (`niv_perturbation`). Licence: ODbL (the one exception among
+  five French areas built so far, otherwise all Licence Ouverte).
+- **Autoroute concessionaires checked separately - genuinely,
+  structurally closed, not just unfound.** No open dataset exists for
+  any concessionaire (VINCI, APRR, SANEF, Cofiroute); VINCI's own
+  real-time platform requires a paid `webSiteAuthorisationKey`; and
+  France's own ITS Directive National Access Point explicitly limits
+  concessionaire data to aggregate traffic volume only - roadworks/
+  events data is scoped to the non-concessioned network alone (Bison
+  Futé's own existing coverage). The converse of Autobahn GmbH's own
+  case (public vs private motorway authority).
+
 ### Added — Sarthe, Loire-Atlantique and Hauts-de-Seine, this SDK's first French département roadworks providers (2026-08-20)
 
 `streetworks.opendatasoft.OpenDataSoftClient` / `streetworks.opendatasoft.france_departements.DepartementRoadworksClient`

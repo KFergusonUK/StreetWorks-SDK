@@ -1,0 +1,130 @@
+{
+  "total_count": 987,
+  "results": [
+    {
+      "geo_point_2d": {
+        "lon": 1.3307569716929215,
+        "lat": 43.5282062457374
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              1.332193529187463,
+              43.52360668970832
+            ],
+            [
+              1.332492212769378,
+              43.52336308325461
+            ],
+            [
+              1.335583581029183,
+              43.526914010395004
+            ],
+            [
+              1.324305882572859,
+              43.53169158016362
+            ],
+            [
+              1.323791013132763,
+              43.53094034223211
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "duree": 19,
+      "numero": "T26VLT04616",
+      "voie": "RUE DE MAGUELONNES",
+      "commune": "Villeneuve-Tolosane",
+      "pole": null,
+      "declarant": "ORANGE",
+      "entreprise": "SPIE",
+      "datedebut": "2026-08-03T00:00:00+00:00",
+      "datefin": "2026-08-21T00:00:00+00:00",
+      "libelle": "RUE DE MAGUELONNES - Telecom, adduction télécom, Telecom, tirage de câble",
+      "commentaire": "Tirage et raccordement fibre pour mise en service de l'antenne Orange ( chambre sur trottoir aucune gêne à la circulation et piétons )",
+      "circulation": "Alternat - Occupation de 1 file - Occupation du trottoir"
+    },
+    {
+      "geo_point_2d": {
+        "lon": 1.395034351857325,
+        "lat": 43.5779617506899
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              1.395424165475542,
+              43.57710564457802
+            ],
+            [
+              1.395252840572857,
+              43.57715909887693
+            ],
+            [
+              1.394821894745903,
+              43.57824451130786
+            ],
+            [
+              1.395087126650349,
+              43.57892225654105
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "duree": 5,
+      "numero": "T26TLS07084",
+      "voie": "IMP DU MIRAILHON",
+      "commune": "Toulouse",
+      "pole": "Sud",
+      "declarant": "TM - TERRITOIRE SUD",
+      "entreprise": "LHERM TP",
+      "datedebut": "2026-09-07T00:00:00+00:00",
+      "datefin": "2026-09-11T00:00:00+00:00",
+      "libelle": "IMP DU MIRAILHON - Voirie - Aménagement d'espace vert",
+      "commentaire": "Pose de madriers autour des espaces verts dans le cadre des travaux des parkings azur  et Mirailhon. Pas de DESC car pas d'impact sur la circulation ni sur les piétons (zone rouge sur le plan). 2 jours de travail si pas d'aléa",
+      "circulation": "Occupation du trottoir"
+    },
+    {
+      "geo_point_2d": {
+        "lon": 1.4050183818419537,
+        "lat": 43.58611098074017
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              1.40491811566203,
+              43.586118818967876
+            ],
+            [
+              1.405118648021878,
+              43.58610314251247
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "duree": 5,
+      "numero": "T26TLS07026",
+      "voie": "RPT DU PR LEON SCHWARTZENBERG",
+      "commune": "Toulouse",
+      "pole": "Centre",
+      "declarant": "ORANGE",
+      "entreprise": "ENSIO",
+      "datedebut": "2026-09-07T00:00:00+00:00",
+      "datefin": "2026-09-11T00:00:00+00:00",
+      "libelle": "RPT DU PR LEON SCHWARTZENBERG - Tous intervenants, mise à la cote d?émergences",
+      "commentaire": "Mise à la cote d'une chambre K3C sur chaussée suite à la réalisation du rev 6 rte de st simon.",
+      "circulation": "Rue barrée"
+    }
+  ]
+}

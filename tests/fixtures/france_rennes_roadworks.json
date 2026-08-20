@@ -1,0 +1,122 @@
+{
+  "total_count": 463,
+  "results": [
+    {
+      "geo_point_2d": {
+        "lon": -1.6447814691810152,
+        "lat": 48.09052557756537
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              [
+                -1.64477459501859,
+                48.09048740094317
+              ],
+              [
+                -1.64478834334344,
+                48.09056375418757
+              ]
+            ]
+          ],
+          "type": "MultiLineString"
+        },
+        "properties": {}
+      },
+      "gml_id": "v_geotravaux_evenement_30j.15",
+      "id": 15,
+      "id_evt": 78332,
+      "commune": "35238 - Rennes",
+      "quartier": "7 - La Pommeraie",
+      "localisation": "171 Rue de Vern",
+      "commentaire": "Interdiction de stationnement",
+      "date_deb": "2025-12-04T00:00:00+00:00",
+      "date_fin": "2026-12-31T00:00:00+00:00",
+      "type": "Interdiction de stationnement",
+      "libelle": "désaffectation de parcelle",
+      "niv_perturbation": "Impact nul",
+      "date_maj": "2025-12-03T18:24:21+00:00",
+      "interlocuteur": null
+    },
+    {
+      "geo_point_2d": {
+        "lon": -1.6652690403442723,
+        "lat": 48.10167753029636
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              [
+                -1.665306347990935,
+                48.10195056039377
+              ],
+              [
+                -1.665231732697609,
+                48.10140450019894
+              ]
+            ]
+          ],
+          "type": "MultiLineString"
+        },
+        "properties": {}
+      },
+      "gml_id": "v_geotravaux_evenement_30j.23",
+      "id": 23,
+      "id_evt": 79884,
+      "commune": "35238 - Rennes",
+      "quartier": "8 - Sud gare",
+      "localisation": "Rue Albert de Mun, du 16 jusqu'à la Rue Pierre Martin",
+      "commentaire": "Rétrécissement temporaire de largeur de voie",
+      "date_deb": "2026-02-17T00:00:00+00:00",
+      "date_fin": "2026-12-31T00:00:00+00:00",
+      "type": "Rétrécissement temporaire de largeur de voie",
+      "libelle": "de construction de bâtiment",
+      "niv_perturbation": "Impact limité",
+      "date_maj": "2026-02-16T16:48:38+00:00",
+      "interlocuteur": null
+    },
+    {
+      "geo_point_2d": {
+        "lon": -1.678765139563,
+        "lat": 48.11929903563494
+      },
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              [
+                -1.678305675793537,
+                48.119154689755625
+              ],
+              [
+                -1.679224603332463,
+                48.11944338151425
+              ]
+            ]
+          ],
+          "type": "MultiLineString"
+        },
+        "properties": {}
+      },
+      "gml_id": "v_geotravaux_evenement_30j.25",
+      "id": 25,
+      "id_evt": 80028,
+      "commune": "35238 - Rennes",
+      "quartier": "1 - Centre",
+      "localisation": "Rue Saint-Martin, du Mail Germaine Poinso-Chapuis jusqu'à Allée Léonie Chaptal",
+      "commentaire": "Rétrécissement temporaire de largeur de voie",
+      "date_deb": "2026-03-09T00:00:00+00:00",
+      "date_fin": "2026-12-31T00:00:00+00:00",
+      "type": "Rétrécissement temporaire de largeur de voie",
+      "libelle": "d'installation de chantier",
+      "niv_perturbation": "Impact limité",
+      "date_maj": "2026-02-24T18:52:53+00:00",
+      "interlocuteur": null
+    }
+  ]
+}

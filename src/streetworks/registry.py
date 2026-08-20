@@ -903,6 +903,73 @@ _REGISTRY: list[ProviderEntry] = [
         ),
     ),
     ProviderEntry(
+        key="toulouse",
+        name="Toulouse Métropole",
+        description="Toulouse Métropole's own roadworks register, over OpenDataSoft.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"France"}),
+        administrative_area="Toulouse Métropole",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 987 real "
+            "features - the richest area in this SDK's French cluster, "
+            "and this SDK's second French *municipal*-tier roadworks "
+            "provider after Paris, found via the same real OpenDataSoft "
+            "shape the département field maps already established. "
+            "Real per-record case numbers (numero, e.g. "
+            "'T26VLT04616'), structured ISO dates, a real specific "
+            "promoter (declarant, e.g. 'ORANGE' - a utility, not always "
+            "the métropole itself). Real commune values confirm this "
+            "genuinely spans several communes within the métropole, not "
+            "Toulouse city alone. See "
+            "streetworks.opendatasoft.france_departements's module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        source_grade="operator",
+        _module="streetworks.opendatasoft.france_departements",
+        _client_name="DepartementRoadworksClient",
+        import_line=(
+            "from streetworks.opendatasoft.france_departements import "
+            'DepartementRoadworksClient # .fetch("Toulouse Métropole")'
+        ),
+    ),
+    ProviderEntry(
+        key="rennes",
+        name="Rennes Métropole",
+        description="Rennes Métropole's own roadworks register, over OpenDataSoft.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"France"}),
+        administrative_area="Rennes Métropole",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 463 real "
+            "features - the largest of three real time-window siblings "
+            "the source itself publishes (1-day/6-day/30-day; the "
+            "30-day superset used here, avoiding three overlapping "
+            "client calls for what's genuinely one underlying feed). A "
+            "real, clean disruption-level status field "
+            "(niv_perturbation, e.g. 'Circulation difficile'), a real "
+            "per-record business identifier (id_evt) preferred over the "
+            "dataset's own opaque row id. No real promoter field - a "
+            "real interlocuteur field exists but is populated on only "
+            "1/463 real records checked live, with a cryptic "
+            "abbreviation, not an organisation name. See "
+            "streetworks.opendatasoft.france_departements's module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="ODC Open Database License (ODbL)",
+        source_grade="operator",
+        _module="streetworks.opendatasoft.france_departements",
+        _client_name="DepartementRoadworksClient",
+        import_line=(
+            "from streetworks.opendatasoft.france_departements import "
+            'DepartementRoadworksClient # .fetch("Rennes Métropole")'
+        ),
+    ),
+    ProviderEntry(
         key="dgt",
         name="DGT (Dirección General de Tráfico)",
         description="Spain's national roadworks feed.",

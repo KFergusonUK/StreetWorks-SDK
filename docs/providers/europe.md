@@ -2287,18 +2287,22 @@ database must itself be released under ODbL (or a compatible licence) —
 the same nuance `streetworks.au.act`'s CC BY-SA carries relative to its
 plain-CC-BY siblings. Attribution: "Ville de Paris".
 
-## French département roadworks (Routes Départementales)
+## French département and métropole roadworks (Routes Départementales)
 
 Individual French *départements* each publish their own Routes
 Départementales (RD) roadworks — the majority of the French road
 network by length, and genuinely separate from Bison Futé's own
 non-concessionary national network. `streetworks.opendatasoft` is a
 generic OpenDataSoft Explore API v2.1 client, plus a declarative
-per-département field-map registry
+per-area field-map registry
 (`streetworks.opendatasoft.france_departements`) — the same shape
 `streetworks.ogc.germany` already established for German state
-roadworks, adding a département is writing a new field-map entry, not
-a new converter.
+roadworks, adding an area is writing a new field-map entry, not a new
+converter. Despite the module's own "département" naming (the first
+real tier found), it genuinely also covers French *métropoles*
+(Toulouse, Rennes) — the same real OpenDataSoft shape turned out to
+recur at municipal level too, the same way Dortmund reopened a
+municipal tier for Germany after its own state fan-out.
 
 ```python
 from streetworks.common import from_departement_roadworks
@@ -2324,13 +2328,35 @@ own dataset uses. Paris's own `ParisClient` is left exactly as it was —
 not retrofitted, since it already works and retrofitting it would
 carry real regression risk for no functional gain.
 
-Three départements are live, all verified against real data
-(2026-08-20): **Sarthe** (9 real features, `LineString`, structured ISO
-datetimes with an explicit UTC offset — the only département checked
-so far with real structured dates), **Loire-Atlantique** (21 real
-features, `Point` only, described by its own publisher as real-time),
-and **Hauts-de-Seine** (122 real features, `LineString`/
-`MultiLineString`).
+Five areas are live, all verified against real data (2026-08-20):
+**Sarthe** (9 real features, `LineString`, structured ISO datetimes
+with an explicit UTC offset — the only département checked so far with
+real structured dates), **Loire-Atlantique** (21 real features, `Point`
+only, described by its own publisher as real-time), **Hauts-de-Seine**
+(122 real features, `LineString`/`MultiLineString`), **Toulouse
+Métropole** (987 real features — the richest area in this cluster, real
+per-record case numbers and structured ISO dates), and **Rennes
+Métropole** (463 real features — the largest of three real
+time-window siblings the source itself publishes, the 30-day superset
+used here).
+
+**Autoroute concessionaires were checked separately and found to be
+genuinely, structurally closed — not just unfound.** Three converging
+findings: no open dataset for any concessionaire (VINCI, APRR, SANEF,
+Cofiroute) exists on `data.gouv.fr`; VINCI's own real-time traffic
+platform requires a real, paid `webSiteAuthorisationKey` (a licensed
+commercial gate, confirmed via its own `authenticate.js`, not open
+data); and France's own official ITS Directive National Access Point
+(`transport.data.gouv.fr`) explicitly limits concessionaire ("SCA")
+data to aggregate traffic *volume* only — real roadworks/events data is
+scoped to the non-concessioned network alone (Bison Futé's own existing
+coverage), confirmed by the real dataset catalogue itself (only
+"Évènements routiers - Réseau routier non concédé" exists, no
+concession-network equivalent). Not built — a real, structural/
+regulatory finding, the converse of Autobahn GmbH's own case (Germany's
+motorway authority *is* public/state-owned, so it publishes openly;
+France's concessionaires are private, and the regulatory framework
+deliberately excludes them from the open-roadworks mandate).
 
 **A real fourth département was found and set aside, not built.**
 Corrèze's own WFS (`ogc.geo-ide.developpement-durable.gouv.fr`, a real
@@ -2373,9 +2399,13 @@ real `geo_shape` line exists) is the separately real line geometry —
 `points[0]` is never asserted to equal `value`.
 
 **Licence: Licence Ouverte / Open Licence 2.0 (Etalab), confirmed for
-all three** — France's own standard open licence, the same one already
-confirmed for Bison Futé, directly from each dataset's own catalogue
-metadata on `data.gouv.fr`.
+four of five** — France's own standard open licence, the same one
+already confirmed for Bison Futé, directly from each dataset's own
+catalogue metadata on `data.gouv.fr`. **Rennes Métropole is the one
+exception — ODC Open Database License (ODbL), the same share-alike
+licence `streetworks.paris` already carries**, confirmed the same way:
+an adapted/derived database must itself be released under ODbL (or a
+compatible licence).
 
 ## Trafikverket (Sweden roadworks) — Credentials wanted
 

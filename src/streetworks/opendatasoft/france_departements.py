@@ -1,9 +1,13 @@
-"""French département roadworks - a declarative field-map registry over
-:class:`~streetworks.opendatasoft.client.OpenDataSoftClient`, the same
-shape :mod:`streetworks.ogc.germany` already established for German
-state roadworks (a new field-map entry, not a new converter, for each
-new département - :func:`streetworks.common.from_departement_roadworks`
-reads the map generically).
+"""French département and métropole roadworks - a declarative field-map
+registry over :class:`~streetworks.opendatasoft.client.OpenDataSoftClient`,
+the same shape :mod:`streetworks.ogc.germany` already established for
+German state roadworks (a new field-map entry, not a new converter, for
+each new area - :func:`streetworks.common.from_departement_roadworks`
+reads the map generically). Despite the "département" naming (the first
+real tier found), this registry genuinely also covers French
+*métropoles* (Toulouse, Rennes) - the same real OpenDataSoft shape
+turned out to recur at municipal level too, the same way Dortmund
+reopened a municipal tier for Germany after the state fan-out there.
 
 **Why this exists alongside Bison Futé.** France's own national
 roadworks feed (``streetworks.datex2.BisonFuteClient``) is scoped to
@@ -13,7 +17,27 @@ Départementales (RD), is each département's own responsibility and
 isn't in Bison Futé at all. This is the same real gap Germany's own
 state fan-out closed for its own Autobahn-GmbH/Länder split.
 
-Three départements are live, all verified against real data, 2026-08-20:
+**Autoroute concessionaires were checked separately and found to be
+genuinely, structurally closed - not just unfound.** Three converging
+findings: no open dataset for any concessionaire (VINCI, APRR, SANEF,
+Cofiroute) exists on ``data.gouv.fr``; VINCI's own real-time traffic
+platform (``carteinfotraficrec.azurewebsites.net``, backed by
+``wt3.autoroutes-trafic.fr``) requires a real, paid
+``webSiteAuthorisationKey`` - a licensed commercial gate, not open
+data; and France's own official ITS Directive National Access Point
+(``transport.data.gouv.fr``) explicitly limits concessionaire ("SCA")
+data to aggregate traffic *volume* only - real roadworks/events data is
+scoped to the non-concessioned network alone (Bison Futé's own existing
+coverage), confirmed by the real dataset catalogue itself (only
+"Évènements routiers - Réseau routier non concédé" exists, no
+concession-network equivalent). Not built - a real, structural/
+regulatory finding, the same category as Autobahn GmbH's own converse
+finding (Germany's motorway authority *is* public/state-owned, so it
+does publish openly - France's concessionaires are private, and the
+regulatory framework deliberately excludes them from the open-roadworks
+mandate).
+
+Five areas are live, all verified against real data, 2026-08-20:
 
 - **Sarthe** (``227200029_chantiers_routiers``, ``data.sarthe.fr``): 9
   real features, ``LineString`` geometry, structured ISO datetimes with
@@ -54,6 +78,38 @@ Three départements are live, all verified against real data, 2026-08-20:
   (comma-separated, e.g. ``"RD 13, RD 97, RD 98, RD 106, RD 909,
   RD986, RD 992"``) since one capital-works project can span several
   routes - kept as one real string, never split into a fabricated list.
+- **Toulouse Métropole** (``chantiers-en-cours``,
+  ``data.toulouse-metropole.fr``): 987 real features - the richest area
+  in this registry. ``LineString`` geometry, structured ISO datetimes
+  with an explicit UTC offset (``datedebut``/``datefin``). A real,
+  stable per-record case number (``numero``, e.g. ``"T26VLT04616"``,
+  used as ``id_field``). A real, specific promoter (``declarant``, e.g.
+  ``"ORANGE"`` - a utility, not always the métropole itself; the real
+  contractor doing the work is a separate field, ``entreprise``, not
+  used here). Real ``commune`` values confirm this genuinely spans
+  several real communes within the métropole (e.g.
+  ``"Villeneuve-Tolosane"``), not Toulouse city alone - kept on
+  ``.raw`` only, no canonical field exists for it.
+- **Rennes Métropole** (``travaux_30_jours``,
+  ``data.rennesmetropole.fr``): 463 real features - the largest of
+  three real time-window siblings the source itself publishes
+  (``travaux_1_jour``, 197; ``travaux_6_jours``, 310;
+  ``travaux_30_jours``, 463) - the 30-day one used here as the real
+  superset, avoiding three overlapping client calls for what's
+  genuinely one underlying feed at different real look-ahead windows.
+  ``MultiLineString`` geometry, structured ISO datetimes
+  (``date_deb``/``date_fin``). A real, clean disruption-level status
+  field (``niv_perturbation``, e.g. ``"Circulation difficile"``) -
+  distinct from, and cleaner than, the real restriction-category field
+  (``type``, e.g. ``"Sens interdit (ou sens unique)"``, used as
+  ``title_field``). A real per-record business identifier
+  (``id_evt``) - preferred over the dataset's own opaque row ``id``,
+  the same "prefer the real business identifier over an opaque row id"
+  discipline Brandenburg's own ``ID`` vs WFS-assigned id already
+  established. A real ``interlocuteur`` field exists but is populated
+  on only 1/463 real records checked live, with a cryptic abbreviation
+  (``"DVE"``) rather than a real organisation name - not used as
+  ``promoter_field``, kept on ``.raw`` only.
 
 **A real fourth département was found and set aside, not built -
 Corrèze's own WFS is genuinely GML-only** (its ``GetCapabilities``
@@ -113,7 +169,7 @@ class DepartementFieldMap:
     ``DateConfidence.UNKNOWN``, never a guess parsed out of free text.
     """
 
-    departement: str
+    area: str
     records_url: str
     point_field: str = "geo_point_2d"
     line_field: str | None = "geo_shape"
@@ -129,7 +185,7 @@ class DepartementFieldMap:
 
 
 SARTHE = DepartementFieldMap(
-    departement="Sarthe",
+    area="Sarthe",
     records_url=(
         "https://data.sarthe.fr/api/explore/v2.1/catalog/datasets/"
         "227200029_chantiers_routiers/records"
@@ -144,7 +200,7 @@ SARTHE = DepartementFieldMap(
 )
 
 LOIRE_ATLANTIQUE = DepartementFieldMap(
-    departement="Loire-Atlantique",
+    area="Loire-Atlantique",
     records_url=(
         "https://data.loire-atlantique.fr/api/explore/v2.1/catalog/datasets/"
         "224400028_info-route-departementale/records"
@@ -158,7 +214,7 @@ LOIRE_ATLANTIQUE = DepartementFieldMap(
 )
 
 HAUTS_DE_SEINE = DepartementFieldMap(
-    departement="Hauts-de-Seine",
+    area="Hauts-de-Seine",
     records_url=(
         "https://opendata.hauts-de-seine.fr/api/explore/v2.1/catalog/datasets/"
         "fr-229200506-travaux-et-projets-sur-voirie-departementale/records"
@@ -170,10 +226,44 @@ HAUTS_DE_SEINE = DepartementFieldMap(
     attribution="Département des Hauts-de-Seine",
 )
 
+TOULOUSE_METROPOLE = DepartementFieldMap(
+    area="Toulouse Métropole",
+    records_url=(
+        "https://data.toulouse-metropole.fr/api/explore/v2.1/catalog/datasets/"
+        "chantiers-en-cours/records"
+    ),
+    title_field="libelle",
+    promoter_field="declarant",
+    start_field="datedebut",
+    end_field="datefin",
+    road_field="voie",
+    status_field="circulation",
+    id_field="numero",
+    attribution="Toulouse Métropole",
+)
+
+RENNES_METROPOLE = DepartementFieldMap(
+    area="Rennes Métropole",
+    records_url=(
+        "https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/"
+        "travaux_30_jours/records"
+    ),
+    title_field="type",
+    start_field="date_deb",
+    end_field="date_fin",
+    road_field="localisation",
+    status_field="niv_perturbation",
+    id_field="id_evt",
+    licence="ODC Open Database License (ODbL)",
+    attribution="Rennes Métropole",
+)
+
 FIELD_MAPS: dict[str, DepartementFieldMap] = {
     "Sarthe": SARTHE,
     "Loire-Atlantique": LOIRE_ATLANTIQUE,
     "Hauts-de-Seine": HAUTS_DE_SEINE,
+    "Toulouse Métropole": TOULOUSE_METROPOLE,
+    "Rennes Métropole": RENNES_METROPOLE,
 }
 
 

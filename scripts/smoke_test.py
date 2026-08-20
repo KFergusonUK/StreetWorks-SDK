@@ -411,10 +411,10 @@ def check_dortmund() -> str:
 
 
 def check_france_departements() -> str:
-    """French département roadworks need no credentials - see
-    streetworks.opendatasoft.france_departements. This SDK's first
-    French département-level roadworks providers, covering Routes
-    Départementales (not in bisonfute at all)."""
+    """French département/métropole roadworks need no credentials - see
+    streetworks.opendatasoft.france_departements. Covers Routes
+    Départementales (not in bisonfute at all) plus a real municipal
+    tier (Toulouse, Rennes)."""
     from streetworks.common import from_departement_roadworks
     from streetworks.opendatasoft.france_departements import (
         FIELD_MAPS,

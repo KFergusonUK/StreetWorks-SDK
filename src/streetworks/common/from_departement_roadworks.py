@@ -138,7 +138,7 @@ def from_departement_roadworks(records: list[JSON], field_map: Any) -> list[Work
     into :class:`~streetworks.common.Works` using ``field_map`` - one
     ``Works`` per record, one ``WorksSite`` each (no genuine grouping key
     exists on any département checked so far).
-    ``field_map.departement`` becomes ``administrative_area`` -
+    ``field_map.area`` becomes ``administrative_area`` -
     endpoint provenance, not a record field, the same mechanism
     :mod:`.from_ogc_features` already uses for German states."""
     works_list = []
@@ -151,7 +151,7 @@ def from_departement_roadworks(records: list[JSON], field_map: Any) -> list[Work
                 coordinate=site.coordinate,
                 promoter=str(promoter) if promoter else None,
                 territory=_TERRITORY,
-                administrative_area=field_map.departement,
+                administrative_area=field_map.area,
                 source_grade=SourceGrade.OPERATOR,
                 sites=(site,),
                 raw=record,
