@@ -127,10 +127,85 @@ BY 4.0"*, publisher "Município de Lisboa") — the same page whose stale
 licence statement isn't dated the same way and is treated as still
 governing the live data, the same official CML dataset either way.
 
+## Toponímia de Lisboa (CML)
+
+Lisbon's own official street naming register, run by the same Câmara
+Municipal de Lisboa (CML) that publishes the roadworks feed above — but
+a genuinely separate real service (CML's Geodados ArcGIS Online
+organisation, not the Angular closures app). This SDK's first
+Portuguese streets/gazetteer coverage:
+
+```python
+from streetworks.arcgis.lisboa import LisboaStreetsClient
+from streetworks.common import from_lisboa_street
+
+with LisboaStreetsClient() as lisboa:
+    streets = [from_lisboa_street(f) for f in lisboa.iter_streets()]
+```
+
+**National streets were already ruled out** — Infraestruturas de
+Portugal's own promoted road-network service carries only
+route-classification codes (`roadnumber`/`road1`, e.g. `"A1"`/`"IC1"`),
+no name field at all (see
+[`docs/portugal-streets-investigation.md`](../portugal-streets-investigation.md)).
+Rather than stop there, this checks the capital itself — the same "try
+the capital/a city" fallback shape Germany's own state fan-out uses.
+
+**Found by walking CML's real Geodados ArcGIS Online organisation
+(`geodados_CML`, ~130 real items), not from documentation alone — and
+two other real candidates on that same organisation were checked and
+set aside first**, both genuinely real but the wrong shape:
+
+- `Topónimos` (on CML's `Cartografia_Base` service) — only 40 real
+  point features, but neighbourhood/district labels ("Belém", "Baixa",
+  "Alvalade"), not streets.
+- `Rede Viária` (same service) — 3,763 real named road segments, but
+  live grouping found only **375 distinct street names** across them —
+  Lisbon's structuring/backbone road network, plainly not exhaustive
+  for a city this size.
+
+**`Toponímia de Lisboa` (on CML's `Cultura_Toponimia` service) is the
+real, official register instead** — **3,671 real records, 100% carrying
+a real name**, and, unlike the structuring-network layer, already one
+row per street (confirmed live: a single `Avenida da Liberdade` record,
+not several segments sharing the name). Each record carries genuine
+municipal-decree provenance: real `DATA_DELIBERACAO_CAMARARIA`/
+`DATA_EDITAL`/`DATA_PUBLICACAO`/`DATA_EDITAL_GOVERNO_CIVIL` dates, real
+`DENOMINACOES_ANTERIORES` (former names — e.g. "Rua do Possolo" was
+previously "Rua da Boa-Morte"), and a real prose `HISTORIAL` essay on
+the name's origin, some running to several paragraphs — none of these
+has a home on this SDK's canonical `Street` model, so all three stay on
+`.raw` only.
+
+**Geometry is real, and genuinely WGS84 — confirmed live, not assumed
+from the service's own stated CRS.** The service's `spatialReference`
+states Web Mercator (`EPSG:3857`), but a live `f=geojson` request (no
+`outSR` requested) returns genuine WGS84 coordinates — the same
+"GeoJSON output reprojects regardless of the layer's stated native CRS"
+behaviour already documented for TIGERweb. A genuine `MultiLineString`
+is real here too (a real "Avenida Ucrânia" spans 7 discontinuous
+`paths` in one record) — carried via `Coordinate.parts`, GeoJSON's own
+`(lon, lat)` axis order preserved rather than flipped (the same choice
+`from_nrn`/`from_datavia` already make for their own GeoJSON-native
+sources).
+
+**`administrative_area` carries the real, verbatim `FREGUESIAS` string**
+— a street can genuinely cross a parish boundary, and CML states this
+as one comma-joined field (e.g. "Alcântara (Nova Freguesia), Belém
+(Nova Freguesia)"), not two separate fields, so relaying it verbatim is
+honest, not a fabricated join.
+
+**Licence: real, explicit CC0** (`"Aplica-se a licença Creative Commons
+CCZero"`, confirmed via the service's own `licenseInfo`), alongside a
+real non-legal-use cartography caveat also stated there
+(`"Cartografia não homologada, não podendo ser utilizada para fins
+legais"`).
+
 ## The rest of the Portuguese landscape
 
-Not built — the national IMT National Access Point remains
-credential-parked (access requested, not yet granted). Lisboa was
-chosen specifically because it sidesteps that wait entirely. Other
-Portuguese municipalities (Porto, and others) haven't been investigated
-this session.
+The national IMT National Access Point remains credential-parked
+(access requested, not yet granted) for roadworks. Streets is ruled out
+nationally (see above) but not exhaustively — the Área Metropolitana de
+Lisboa's other 17 municipalities, and other Portuguese cities (Porto and
+others), haven't been checked individually; a real, open next step in
+the same shape as Germany's state fan-out, if picked back up.

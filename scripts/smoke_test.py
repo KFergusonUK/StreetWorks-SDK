@@ -1897,6 +1897,24 @@ def check_geosn_streets() -> str:
     return f"{len(streets)} real street(s), e.g. {sample['str']!r} in {sample['gmd']!r}"
 
 
+def check_lisboa_streets() -> str:
+    """Toponímia de Lisboa (CML) needs no credentials. Only takes the
+    first 5 real streets from CML's own ArcGIS Feature Service, see
+    streetworks.arcgis.lisboa's module docstring."""
+    import itertools
+
+    from streetworks.arcgis.lisboa import LisboaStreetsClient
+    from streetworks.common import from_lisboa_street
+
+    with LisboaStreetsClient() as lisboa:
+        features = list(itertools.islice(lisboa.iter_streets(), 5))
+    if not features:
+        raise RuntimeError("query returned no real streets")
+    streets = [from_lisboa_street(f) for f in features]
+    sample = streets[0]
+    return f"{len(streets)} real street(s), e.g. {sample.name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -2095,6 +2113,7 @@ def main() -> int:
     reporter.check("WFS BB-BE Gazetteer (Brandenburg)", [], check_brandenburg_streets)
     # GeoSN Hauskoordinaten (Saxony) needs no credentials
     reporter.check("GeoSN Hauskoordinaten (Saxony)", [], check_geosn_streets)
+    reporter.check("Toponímia de Lisboa (CML)", [], check_lisboa_streets)
 
     print()
     if reporter.ran == 0:

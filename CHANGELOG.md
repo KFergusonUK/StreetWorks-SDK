@@ -2,6 +2,40 @@
 
 ## [Unreleased]
 
+### Added — Toponímia de Lisboa, this SDK's first Portuguese streets/gazetteer provider (2026-08-20)
+
+`streetworks.arcgis.lisboa.LisboaStreetsClient` / `streetworks.common.from_lisboa_street`
+- Lisbon's own official street naming register, run by Câmara Municipal de
+Lisboa (CML) - national streets were already ruled out (Infraestruturas de
+Portugal's own road network carries route-classification codes only), so
+this checks the capital itself, the same fallback shape Germany's state
+fan-out uses.
+
+```python
+from streetworks.arcgis.lisboa import LisboaStreetsClient
+from streetworks.common import from_lisboa_street
+
+with LisboaStreetsClient() as lisboa:
+    streets = [from_lisboa_street(f) for f in lisboa.iter_streets()]
+```
+
+- **Found by walking CML's real Geodados ArcGIS Online organisation**
+  (~130 real items), checking and setting aside two other real but
+  wrong-shape candidates first: a 40-record neighbourhood-label layer
+  (`Topónimos`) and a 3,763-segment/375-name structuring road network
+  (`Rede Viária`).
+- **3,671 real official street records, 100% carrying a real name** -
+  already one row per street, each with genuine municipal-decree
+  provenance (real deliberation/edict dates, former names, a prose
+  naming-history essay) - kept on `.raw` only, no canonical field exists.
+- **Geometry is real `LineString`/`MultiLineString`, confirmed genuine
+  WGS84 live** despite the service's own stated Web Mercator native CRS -
+  GeoJSON's `(lon, lat)` axis order preserved, not flipped.
+- **`administrative_area` carries the real, verbatim `FREGUESIAS`
+  string** - a street can genuinely cross a parish boundary, stated as
+  one comma-joined field by the source itself.
+- **Licence**: real, explicit Creative Commons CC Zero (CC0).
+
 ### Added — GeoSN Hauskoordinaten, this SDK's third German state-level streets provider (2026-08-20)
 
 `streetworks.geosn.GeoSNStreetsClient` / `streetworks.common.from_geosn_street`

@@ -6,7 +6,8 @@ roadworks- or gazetteer-specific - it only knows how to fetch/page GeoJSON
 out of an ArcGIS REST layer. :mod:`streetworks.arcgis.jersey` (roadworks
 and streets), :mod:`streetworks.arcgis.guernsey` (streets),
 :mod:`streetworks.arcgis.nrn` (streets, Canada),
-:mod:`streetworks.arcgis.monaghan` (segments, Ireland) and
+:mod:`streetworks.arcgis.monaghan` (segments, Ireland),
+:mod:`streetworks.arcgis.lisboa` (streets, Portugal) and
 :mod:`streetworks.arcgis.tigerweb` (streets) are its real consumers so
 far; keep new code here generic so a future ArcGIS source (e.g. a UK
 local authority's own roadworks service, published the same way West

@@ -1,0 +1,155 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 3272,
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -9.14231215876028,
+              38.7160083117221
+            ],
+            [
+              -9.14246542189244,
+              38.7161308443448
+            ],
+            [
+              -9.14261696259824,
+              38.7162615888084
+            ]
+          ],
+          [
+            [
+              -9.14345786563419,
+              38.7171480689228
+            ],
+            [
+              -9.14340921017673,
+              38.7170895787439
+            ]
+          ],
+          [
+            [
+              -9.14238386627884,
+              38.7166097724721
+            ],
+            [
+              -9.14299240881602,
+              38.717309280713
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 3272,
+        "DESIGNACAO": "Avenida da Liberdade",
+        "LEGENDA": null,
+        "FREGUESIAS": "Santa Maria Maior (Nova Freguesia), Santo António (Nova Freguesia)",
+        "INICIO": "Praça dos Restauradores",
+        "FIM": "Praça Marquês do Pombal",
+        "TEMAS": "Outros",
+        "DATA_DELIBERACAO_CAMARARIA": -2851891200000,
+        "DATA_EDITAL": null,
+        "DATA_PUBLICACAO": null,
+        "DATA_EDITAL_GOVERNO_CIVIL": null,
+        "DENOMINACOES_ANTERIORES": null,
+        "HISTORIAL": "A Avenida da Liberdade nasceu por iniciativa municipal, aberta e rasgada com expropriações e demolições, marcando a primeira e mais controversa fase do plano de extensão de Lisboa, de crescimento urbano para  norte, delineado no último quartel do XIX.\r\n\r\nEla era o grande sonho de José Gregório Rosa... [trimmed for fixture size, real verbatim prefix]",
+        "COD_LOCAL": "34187",
+        "TOP_ID": 2536,
+        "GlobalID": "f6cac8eb-bdcb-459b-a3ca-dfca46aba30d",
+        "Shape__Length": 6186.349601977398
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -9.16659242924482,
+            38.7112624773214
+          ],
+          [
+            -9.16646643732447,
+            38.7113829444239
+          ],
+          [
+            -9.16569666494751,
+            38.7122962035612
+          ],
+          [
+            -9.16553698902102,
+            38.7124489451054
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 3,
+        "DESIGNACAO": "Rua do Possolo",
+        "LEGENDA": null,
+        "FREGUESIAS": "Campo de Ourique (Nova Freguesia), Estrela (Nova Freguesia)",
+        "INICIO": "Calçada das Necessidades",
+        "FIM": "Rua de Sant' Ana  à Lapa",
+        "TEMAS": "Comércio e comerciantes, Morador/Proprietário do local",
+        "DATA_DELIBERACAO_CAMARARIA": -2748211200000,
+        "DATA_EDITAL": -2747865600000,
+        "DATA_PUBLICACAO": null,
+        "DATA_EDITAL_GOVERNO_CIVIL": null,
+        "DENOMINACOES_ANTERIORES": "Rua da Boa-Morte",
+        "HISTORIAL": "Os Possolo  eram uma família de mercadores italianos que segundo o olisipógrafo Norberto de Araújo ergueram o seu Palácio a meio da artéria que hoje conhecemos como Rua do Possolo, à esquina da antiga Travessa das Almas, dando azo a que no último quartel do séc. XIX a Câmara lisboeta renomeasse as ... [trimmed for fixture size, real verbatim prefix]",
+        "COD_LOCAL": "35146",
+        "TOP_ID": 1962,
+        "GlobalID": "6d63a010-826b-4389-aed6-e073cd878c64",
+        "Shape__Length": 263.631906601626
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -9.19117251750689,
+            38.6978817165557
+          ],
+          [
+            -9.19121332811637,
+            38.6979754778134
+          ],
+          [
+            -9.19126630512559,
+            38.6980602111515
+          ],
+          [
+            -9.1917662631545,
+            38.6986789282264
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2,
+        "DESIGNACAO": "Rua Pinto Ferreira",
+        "LEGENDA": "Engenheiro e Professor 1828 - 1894 ",
+        "FREGUESIAS": "Alcântara (Nova Freguesia), Belém (Nova Freguesia)",
+        "INICIO": "Rua da Junqueira",
+        "FIM": "Rua da Quinta do Almargem",
+        "TEMAS": "Engenheiro, Professor",
+        "DATA_DELIBERACAO_CAMARARIA": -1218672000000,
+        "DATA_EDITAL": -1218153600000,
+        "DATA_PUBLICACAO": null,
+        "DATA_EDITAL_GOVERNO_CIVIL": null,
+        "DENOMINACOES_ANTERIORES": null,
+        "HISTORIAL": "Por proposta da Associação de classe dos Maquinistas Portugueses  o engenheiro e professor da Escola de Desenho Industrial Marquês de Pombal, Carlos Augusto Pinto Ferreira, ficou perpetuado  na  Rua do Novo Bairro Industrial da Quinta do Almargem como Rua Pinto Ferreira, desde a publicação do... [trimmed for fixture size, real verbatim prefix]",
+        "COD_LOCAL": "1231",
+        "TOP_ID": 610,
+        "GlobalID": "35788d30-630e-4f38-89d2-3345f6a80d71",
+        "Shape__Length": 453.5020519670724
+      }
+    }
+  ]
+}

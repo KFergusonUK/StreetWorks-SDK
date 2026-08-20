@@ -45,6 +45,7 @@ from .from_jersey_streets import from_jersey_street
 from .from_kartverket import from_kartverket
 from .from_linz import from_linz_address, from_linz_road, from_linz_road_section
 from .from_lisboa import from_lisboa
+from .from_lisboa_streets import from_lisboa_street
 from .from_lmi import from_lmi_street
 from .from_madrid import from_madrid
 from .from_mallorca import from_mallorca
@@ -194,4 +195,5 @@ __all__ = [
     "from_hamburg_street",
     "from_brandenburg_street",
     "from_geosn_street",
+    "from_lisboa_street",
 ]

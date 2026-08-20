@@ -5,7 +5,8 @@ are from real, live requests made 2026-08-16, following up on a partial,
 older finding recorded in `docs/nap-survey.md` (the IMT NAP section)
 that never made it into `docs/providers/pending.md`. Status: **the real,
 live, queryable national road-network source is confirmed too coarse —
-same outcome as Germany — one real fallback path remains unchecked.**
+same outcome as Germany — the municipal fallback path started 2026-08-20,
+Lisboa built (`streetworks.arcgis.lisboa`).**
 
 ## Step 1 — the national NAP (IMT) — still unresolved
 
@@ -66,17 +67,37 @@ re-verified against the dataset's own stated native `PT-TM06`/`ETRS89`,
 since the schema question already settles this as unbuildable for a
 named-street gazetteer regardless of CRS.
 
-## Step 3 — municipal fallback (not yet checked)
+## Step 3 — municipal fallback (started 2026-08-20, Lisboa built)
 
-Whether Porto or any other Portuguese municipality publishes its own
-genuine named-street layer, the same fallback shape Lisboa's
-Condicionamentos already exists at for roadworks, has **not** been
-investigated. Real, open-ended per-municipality work, not started.
+**Lisboa — checked, built.** Câmara Municipal de Lisboa (CML) runs its
+own real Geodados ArcGIS Online organisation (`geodados_CML`, ~130 real
+items) — walked in full, not found from documentation. Two real
+candidates were checked and set aside first: `Topónimos` (on CML's
+`Cartografia_Base` service — only 40 real neighbourhood-label points,
+not streets) and `Rede Viária` (same service — 3,763 real named
+segments, but live grouping found only 375 distinct street names,
+Lisbon's structuring/backbone network, not exhaustive). **The real,
+official register is `Toponímia de Lisboa`** (on CML's
+`Cultura_Toponimia` service) — 3,671 real records, 100% named, already
+one row per street, each carrying genuine municipal-decree provenance
+(real deliberation/edict dates, former names, a prose naming-history
+essay). Geometry is real `LineString`/`MultiLineString`, confirmed
+genuine WGS84 live despite the service's own stated Web Mercator native
+CRS. Licence: real, explicit CC0. Shipped as
+`streetworks.arcgis.lisboa.LisboaStreetsClient` /
+`from_lisboa_street` — see
+`docs/providers/portugal.md#toponímia-de-lisboa-cml` for the full
+write-up.
+
+Whether Porto or any of the Área Metropolitana de Lisboa's other 17
+municipalities publish their own genuine named-street layer has **not**
+been investigated — real, open-ended per-municipality work, the same
+shape as Germany's state fan-out.
 
 ## Recommendation
 
-Same shape as Germany: park here. The obvious national source is real
-but carries no street identity, confirmed by content, not assumed from
-scale. If picked back up, start at step 3 (municipal fan-out) — steps 1
-and 2 are decisively closed and don't need re-checking unless IMT or IP
-change what they publish.
+Steps 1 and 2 are decisively closed and don't need re-checking unless
+IMT or IP change what they publish. Step 3 (municipal fan-out) is now
+started, with Lisboa done — Porto and the rest of the Área
+Metropolitana de Lisboa remain a real, open next step if picked back
+up.

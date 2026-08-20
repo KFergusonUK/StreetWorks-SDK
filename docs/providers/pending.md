@@ -35,9 +35,14 @@ Credentials-wanted, or Documented-unavailable; see
   `gestao`/`road1`) carries **no name field at all**; real sample values
   (`roadnumber="A1"`/`road1="IC1"`) are route-classification codes, not
   street names — the same "real geometry, no named-street identity"
-  outcome Germany's BKG landed on. Porto and other municipalities remain
-  genuinely unchecked/unbuilt — the same open, per-municipality fallback
-  shape as Germany's own state fan-out.
+  outcome Germany's BKG landed on. **The municipal fallback started
+  2026-08-20: Lisboa is now built** (`streetworks.arcgis.lisboa`,
+  3,671 real official street records, 100% named, over CML's own
+  Geodados ArcGIS deployment — see
+  [`docs/providers/portugal.md`](portugal.md#toponímia-de-lisboa-cml)).
+  Porto and the rest of the Área Metropolitana de Lisboa's other 17
+  municipalities remain genuinely unchecked/unbuilt — the same open,
+  per-municipality fallback shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
 - **Canada — roadworks partially built, streets now fully built
   nationally.** British Columbia (DriveBC, Open511) is a real, confirmed

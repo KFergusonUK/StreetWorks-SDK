@@ -2010,6 +2010,47 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.arcgis.guernsey import GuernseyStreetsClient",
     ),
     ProviderEntry(
+        key="lisboa_streets",
+        name="Toponímia de Lisboa (CML)",
+        description="Lisbon's own official street naming register, over CML's ArcGIS deployment.",
+        kind=Kind.STREETS,
+        territories=frozenset({"Portugal"}),
+        administrative_area="Câmara Municipal de Lisboa (CML)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. This SDK's "
+            "first Portuguese streets/gazetteer provider; national "
+            "streets were already ruled out (Infraestruturas de "
+            "Portugal's own road network carries route-classification "
+            "codes, no name field - see "
+            "docs/portugal-streets-investigation.md), so this checks "
+            "the capital itself, the same 'try the capital/a city' "
+            "fallback shape Germany's own state fan-out uses. Found by "
+            "walking CML's real Geodados ArcGIS Online organisation "
+            "(130 real items) - two other real candidates on the same "
+            "deployment were set aside first: a 'Topónimos' layer (only "
+            "40 real neighbourhood-label points, not streets) and a "
+            "'Rede Viária' layer (3,763 real segments but only 375 "
+            "distinct names - the city's structuring road network, not "
+            "exhaustive). The 'Toponímia de Lisboa' layer used here is "
+            "the real, official register instead - 3,671 real records, "
+            "100% named, already one row per street (not segmented), "
+            "each carrying genuine municipal-decree provenance (real "
+            "deliberation/edict/publication dates, former names, a "
+            "prose history of the name) - see the module docstring for "
+            "the full write-up. Geometry is a real LineString/"
+            "MultiLineString, confirmed genuine WGS84 via a live "
+            "f=geojson request despite the service's own stated native "
+            "CRS being Web Mercator. Licence: real, explicit CC0, "
+            "alongside a real non-legal-use cartography caveat."
+        ),
+        credentials=None,
+        licence="Creative Commons CC Zero (CC0)",
+        source_grade="register",
+        _module="streetworks.arcgis.lisboa",
+        _client_name="LisboaStreetsClient",
+        import_line="from streetworks.arcgis.lisboa import LisboaStreetsClient",
+    ),
+    ProviderEntry(
         key="tigerweb",
         name="TIGERweb (US Census Bureau)",
         description="The US national road-segment network, over the TIGERweb ArcGIS service.",
