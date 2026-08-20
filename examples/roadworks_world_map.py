@@ -112,12 +112,17 @@ CRED_ENV = {
 #: precedent for the same three large US/UK registers.
 _LIMIT = 50
 
-#: wzdx is registry-driven across dozens of independent state/city feeds
-#: (36 real rows at last count, 26 keyless) - almost all of the keyless
-#: ones are pulled for a real US-wide spread on the map, each still capped
-#: at _LIMIT records, so one bad/slow feed can't repeat today's original
-#: NYC DOT stall across a whole sweep of feeds.
-_WZDX_FEED_LIMIT = 25
+#: wzdx is registry-driven across dozens of independent state/city feeds -
+#: every real keyless one is pulled for a genuine US-wide spread on the
+#: map (see _fetch_works), each still capped at _LIMIT records, so one
+#: bad/slow feed can't repeat today's original NYC DOT stall across a
+#: whole sweep of feeds. No feed-*count* cap - an earlier fixed cap (25)
+#: silently dropped whichever feeds sorted last once the real registry
+#: grew past it (confirmed live: North Carolina and Mississippi never
+#: appeared on the live map at all, a real "gap in the USA" rather than
+#: a deliberate exclusion). Each feed is still independently
+#: try/excepted, so a single hanging feed can't stall the rest - that
+#: per-feed guard was always the real protection, not a feed-count cap.
 
 #: DATEX II providers share one converter (from_datex2), called once per
 #: Situation with kwargs that vary by source - collected here from the real,
@@ -210,9 +215,10 @@ def _fetch_works(key, client):
     roadworks filter).
 
     ``wzdx`` is registry-driven across dozens of independent feeds, so it's
-    handled separately from every single-client provider below: a handful
-    of real, confirmed keyless feeds are pulled (capped both in feed count
-    and per-feed records), not the whole registry.
+    handled separately from every single-client provider below: every real
+    keyless feed is pulled (each capped at :data:`_LIMIT` records - no
+    feed-*count* cap, see that constant's own docstring for why a fixed one
+    used to silently drop newly-added feeds).
 
     Returns ``None`` for providers with no converter wired below - not an
     error, just not yet covered. Not attempted at all: ``streetmanager``
@@ -225,7 +231,9 @@ def _fetch_works(key, client):
     import itertools
 
     from streetworks.common import (
+        from_amsterdam,
         from_au_act_ttm,
+        from_au_nt_roadreport,
         from_au_qld_qldtraffic,
         from_au_tas_roadworks,
         from_au_wa_mainroads,
@@ -291,7 +299,7 @@ def _fetch_works(key, client):
 
         works: list = []
         feeds = [f for f in list_feeds() if not f.needapikey]
-        for feed_entry in itertools.islice(feeds, _WZDX_FEED_LIMIT):
+        for feed_entry in feeds:
             try:
                 feed = client.fetch(feed_entry.url)
             except Exception:
@@ -350,6 +358,7 @@ def _fetch_works(key, client):
         "paris": from_paris, "chicagodot": from_chicagodot,
         "copenhagen": from_copenhagen, "tfl": from_tfl,
         "saarland": from_saarland, "dortmund": from_dortmund, "lyon": from_lyon,
+        "amsterdam": from_amsterdam, "nt": from_au_nt_roadreport,
         # oslo's, helsinki's, canton_zurich's and vienna's coordinates are
         # projected (EPSG:25832, EPSG:3879, EPSG:2056 and EPSG:31256
         # respectively), so _coord_lonlat's WGS84-only guard skips them on
