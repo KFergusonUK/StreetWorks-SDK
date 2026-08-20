@@ -2638,6 +2638,55 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.registrucentras import RegistruCentrasStreetsClient",
     ),
     ProviderEntry(
+        key="caclr",
+        name="CACLR (Registre national des localités et des rues, Luxembourg)",
+        description=(
+            "Luxembourg's national street register, run by the Administration du "
+            "Cadastre et de la Topographie."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Luxembourg"}),
+        administrative_area="ACT (Administration du Cadastre et de la Topographie)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "first Luxembourgish streets/gazetteer provider, a sibling "
+            "to the existing Luxembourg roadworks coverage (Ponts et "
+            "Chaussées, streetworks.datex2.luxembourg). Not a modern "
+            "WFS/REST feed - the live geoportail.lu WFS was checked "
+            "first and ruled out (MapServer-based, no working per-theme "
+            "map identifier found; its GeoNetwork catalogue search API "
+            "only returned real 400s). The real route is CACLR's own "
+            "bulk export on data.public.lu (a udata instance, same "
+            "software family as France's data.gouv.fr) - a real, fixed-"
+            "width flat-file format confirmed field-by-field from ACT's "
+            "own published PostgreSQL import script. 9,946 real "
+            "national street records, 100% carrying a real name, zero "
+            "duplicate street numbers. A real, stable 'current resource' "
+            "API (data.public.lu's own udata REST endpoint) is used to "
+            "resolve the real download URL each call, rather than "
+            "hardcoding the dataset page's own dated-snapshot link - "
+            "genuinely self-updating, unlike the workaround this SDK "
+            "used for Austria's BEV register. A real join trap found "
+            "and worked around before shipping: Luxembourg's commune "
+            "codes are only unique within their own canton, confirmed "
+            "live - joining on the bare code alone resolves a real "
+            "Luxembourg-City street to the wrong commune ('Burmerange', "
+            "~30km away); the real composite (canton, commune) key both "
+            "tables carry resolves it correctly. No geometry anywhere "
+            "in this resource - GeometryGrade.ABSENT on every Street, "
+            "the same shape ANNCSU/BEV already established. Licence: "
+            "Creative Commons Zero (CC0), confirmed live - the most "
+            "permissive licence any provider in this SDK carries. See "
+            "module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Zero (CC0)",
+        source_grade="register",
+        _module="streetworks.caclr",
+        _client_name="CaclrStreetsClient",
+        import_line="from streetworks.caclr import CaclrStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

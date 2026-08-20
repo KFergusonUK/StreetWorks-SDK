@@ -1828,6 +1828,24 @@ def check_registrucentras() -> str:
     return f"{len(streets)} real street(s), e.g. {streets[0]['pavadinimas']!r}"
 
 
+def check_caclr() -> str:
+    """CACLR (Luxembourg) needs no credentials. Resolves the real
+    current download URL via data.public.lu's own udata API, then
+    fetches the real national bulk export (not a small pull) - only
+    takes the first 5 parsed rows, see streetworks.caclr.client's
+    module docstring."""
+    import itertools
+
+    from streetworks.caclr import CaclrStreetsClient
+
+    with CaclrStreetsClient() as caclr:
+        streets = list(itertools.islice(caclr.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample = streets[0]
+    return f"{len(streets)} real street(s), e.g. {sample['NOM']!r} in {sample['COMMUNE_NOM']!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -2018,6 +2036,8 @@ def main() -> int:
     reporter.check("Straatnamenregister (Flanders, Belgium)", [], check_vlaanderen)
     # Registrų centras Adresų registras (Lithuania) needs no credentials
     reporter.check("Adresų registras (Lithuania)", [], check_registrucentras)
+    # CACLR (Luxembourg) needs no credentials
+    reporter.check("CACLR (Luxembourg)", [], check_caclr)
 
     print()
     if reporter.ran == 0:

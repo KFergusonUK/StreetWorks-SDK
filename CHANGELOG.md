@@ -2,6 +2,40 @@
 
 ## [Unreleased]
 
+### Added — CACLR, this SDK's first Luxembourgish streets provider (2026-08-20)
+
+`streetworks.caclr.CaclrStreetsClient` / `streetworks.common.from_caclr_street`
+- Luxembourg's national street register (Registre national des
+localités et des rues), run by ACT (Administration du Cadastre et de la
+Topographie).
+
+```python
+from streetworks.caclr import CaclrStreetsClient
+from streetworks.common import from_caclr_street
+
+with CaclrStreetsClient() as caclr:
+    streets = [from_caclr_street(r) for r in caclr.iter_streets()]
+```
+
+- **9,946 real national street records - 100% carrying a real name,
+  zero duplicate street numbers.** A real fixed-width legacy export
+  (field layout confirmed from ACT's own published PostgreSQL import
+  script, not guessed from column alignment).
+- **Resolves the current download URL from a real, stable udata API
+  each call** - genuinely self-updating, rather than hardcoding the
+  dataset page's own dated-snapshot download link.
+- **A real join trap found and worked around before shipping**:
+  Luxembourg's commune codes are only unique within their own canton -
+  confirmed live, a naive single-key join resolves a real
+  Luxembourg-City street to the wrong commune ("Burmerange", ~30 km
+  away). The real composite `(canton, commune)` key both tables carry
+  resolves it correctly.
+- **No geometry anywhere in this resource** - `GeometryGrade.ABSENT` on
+  every `Street`, the same shape ANNCSU (Italy)/BEV (Austria) already
+  established.
+- **Licence**: Creative Commons Zero (CC0) - the most permissive
+  licence any provider in this SDK carries.
+
 ### Added — Adresų registras (Registrų centras), this SDK's first Lithuanian streets provider (2026-08-20)
 
 `streetworks.registrucentras.RegistruCentrasStreetsClient` /

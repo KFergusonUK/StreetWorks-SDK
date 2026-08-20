@@ -416,6 +416,84 @@ any purpose with attribution as the only stated condition.
 **No credentials required** - every claim above came from a fully
 unauthenticated GET request.
 
+## CACLR (Registre national des localités et des rues, Luxembourg)
+
+Luxembourg's national street register, run by ACT (Administration du
+Cadastre et de la Topographie) under the law of 25 July 2002 - no
+credentials. This SDK's first Luxembourgish streets/gazetteer coverage,
+a sibling to the Luxembourg roadworks coverage above (Ponts et
+Chaussées):
+
+```python
+from streetworks.caclr import CaclrStreetsClient
+from streetworks.common import from_caclr_street
+
+with CaclrStreetsClient() as caclr:
+    streets = [from_caclr_street(r) for r in caclr.iter_streets()]
+```
+
+**Not a modern WFS/REST feed - the live government geoportal WFS was
+checked first and ruled out.** `ws.geoportail.lu` (Luxembourg's national
+geoportal WFS/WMS host) is real and live, but is MapServer-based with
+per-theme "map" identifiers this module never found a working one for;
+its GeoNetwork catalogue search API only returned real `400`s on every
+query shape tried. The real route instead is CACLR's own bulk export on
+`data.public.lu` (Luxembourg's national open-data portal, a udata
+instance, the same software family as France's data.gouv.fr).
+
+**A real, stable "current resource" API used instead of the dataset
+page's own promoted (dated-snapshot) download link.** The page's UI
+links directly to a real but dated URL
+(`.../20260817-023002/caclr.zip` - the same no-stable-latest-alias
+shape Austria's BEV and Lithuania's Registrų centras registers both
+have). udata's own REST API
+(`data.public.lu/api/1/datasets/registre-national-des-localites-et-des-rues/`,
+confirmed live) always reflects the *current* resource list, so this
+client resolves the real `caclr.zip` URL from there first - genuinely
+self-updating, unlike the hardcoded-snapshot workaround used for
+Austria's BEV.
+
+**A real, fixed-width flat-file format inside the ZIP, confirmed
+field-by-field from ACT's own published PostgreSQL import script**
+(`import-caclr.sql`, bundled as a sibling resource on the same dataset
+page) rather than guessed from column alignment. Three of the 13 real
+tables in the ZIP are used: `RUE` (9,946 real streets), `LOCALITE` (590
+real localities), and `COMMUALL` (132 real communes). Encoding is
+genuine ISO-8859-1 (Latin-1), confirmed live: 1,613/9,946 real street
+names contain a real accented character (French and Luxembourgish, e.g.
+"Rue Siggy vu Lëtzebuerg"), and UTF-8 decoding fails outright on this
+file.
+
+**A real join trap found and worked around before shipping, not
+reproduced.** `LOCALITE.FK_COMMU_CODE` and `COMMUALL.CODE` are *not*
+globally unique - Luxembourg's real commune codes are only unique
+**within their own canton**, confirmed live: joining on `FK_COMMU_CODE`
+alone resolves a real Luxembourg-City street to "Burmerange" (a
+different, real, but wrong commune roughly 30 km away). The correct
+join uses the composite `(FK_CANTO_CODE, FK_COMMU_CODE)` key both
+tables actually carry - confirmed live against the same street,
+correctly resolving to "Luxembourg".
+
+**No geometry anywhere in the `RUE` table - a real, defining
+characteristic of this specific resource, not a gap in this build.**
+The same pure name-registry shape ANNCSU (Italy) and BEV (Austria)
+already established. Real coordinates would need a join to a separate,
+much larger address-point-level resource (`IMMEUBLE`, ~14.6 MB) this
+build doesn't fetch.
+
+**Real per-row lifecycle flags kept, never used to filter.**
+`DATE_FIN_VALID` (a real end-validity date, populated on 573/9,946
+rows) and `INDIC_PROVISOIRE` (a real provisional-street flag, `O` on
+145/9,946 rows) are both genuine, live-confirmed states this client
+passes through rather than silently dropping.
+
+**Licence: Creative Commons Zero (CC0)**, confirmed live from the
+dataset's own page on data.public.lu - the most permissive licence any
+provider in this SDK carries, no attribution required at all.
+
+**No credentials required** - every claim above came from a fully
+unauthenticated GET request.
+
 ## Basque Country (Euskadi)
 
 The Basque Country's road incidents, credential-free, fill the *other*
