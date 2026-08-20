@@ -37,6 +37,39 @@ with VlaanderenStreetsClient() as vlaanderen:
   (free reuse, attribution required) - the government's stated
   default, not this API's own confirmed per-dataset licence field.
 
+### Added — Road Report NT, a real GetAll adapter (2026-08-19)
+
+`streetworks.au.nt` / `streetworks.common.from_au_nt_roadreport` - the
+Northern Territory graduates from a documented-unavailable scaffold to
+a working, credential-free adapter over the public JSON endpoint
+`GET https://roadreport.nt.gov.au/api/Obstruction/GetAll`.
+
+```python
+from streetworks.au.nt import RoadReportNtClient
+from streetworks.common import from_au_nt_roadreport
+
+with RoadReportNtClient() as nt:
+    works_list = from_au_nt_roadreport(nt.iter_roadworks())
+```
+
+- **Confirmed live 2026-08-19**: HTTP 200, envelope
+  `{success, message, response: [...]}`, 140 CURRENT records, 26 of
+  them official `Roadworks` (type-code 28). No pagination, no
+  credentials. Licence genuinely unconfirmed.
+- **Works-only iterator.** The feed is still a road-condition system
+  (weight limits, flooding, surface damage). `iter_roadworks()` returns
+  only records that are actually works per the site's own terminology
+  page. Conditions stay on `iter_obstructions()`.
+- **Geometry from `startPoint` / `endPoint`** (`[lat, lon]`); the live
+  `geometry` / `geometries` fields were empty on every record. Stored
+  as GeoJSON-style `(lon, lat)` under EPSG:4326 to match the AU
+  cluster. Identical start/end is a genuine point.
+- **SignalR is not consumed.** The reverse-engineered
+  `roadsReportingHub` / `GetAllMajorRoadObstructions` hub remains out
+  of scope.
+- Registry `verified=True`, `network_scope=STRATEGIC` (NT-Government
+  roads, councils excluded), smoke-test check, recorded-live fixture.
+
 ### Added — Österreichisches Adressregister (BEV), this SDK's first Austrian streets provider (2026-08-18)
 
 `streetworks.bev.BevStreetsClient` / `streetworks.common.from_bev_street`

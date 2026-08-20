@@ -82,10 +82,11 @@ skipped if its variables are absent.
     # query endpoint, a geo-restricted host) - see streetworks.au.sa.
     export SA_TRAFFICSA_TOKEN="..."
 
-    # ACT Temporary Traffic Management (Roads ACT) and Tasmania Roadworks
-    # - State Roads (Dept of State Growth) both need NO credentials at
-    # all - see streetworks.au.act / streetworks.au.tas. TAS ships with a
-    # genuinely unconfirmed licence (not blocked - see module docstring).
+    # ACT Temporary Traffic Management (Roads ACT), Tasmania Roadworks
+    # - State Roads (Dept of State Growth), and Road Report NT all need
+    # NO credentials at all - see streetworks.au.act / streetworks.au.tas
+    # / streetworks.au.nt. TAS and NT ship with a genuinely unconfirmed
+    # licence (not blocked - see each module docstring).
 
     # NZTA Highway Information - Road Events and LINZ NZ Addresses both
     # need NO credentials at all - see streetworks.nzta / streetworks.linz.
@@ -1272,6 +1273,46 @@ def check_tas_roadworks() -> str:
     return f"{len(features):,} roadworks (real line geometry, all coordinates plausible WGS84)"
 
 
+def check_nt_roadreport() -> str:
+    """Road Report NT needs no credentials - see streetworks.au.nt.
+    Confirmed live 2026-08-19 (140 CURRENT records, 26 official
+    Roadworks). Reports the real type split and fails loudly if a
+    start/end point is outside a plausible NT WGS84 range - source
+    arrays are [lat, lon], not GeoJSON."""
+    from streetworks.au.nt import RoadReportNtClient, is_roadworks
+
+    with RoadReportNtClient() as nt:
+        items = nt.iter_obstructions()
+        roadworks = [item for item in items if is_roadworks(item)]
+    if not items:
+        raise RuntimeError("GetAll returned no obstructions - real data may have changed")
+
+    types: dict[str, int] = {}
+    for item in items:
+        kind = item.get("obstructionType") or "unknown"
+        types[kind] = types.get(kind, 0) + 1
+
+    implausible = []
+    for item in items:
+        for label in ("startPoint", "endPoint"):
+            point = item.get(label)
+            if not isinstance(point, list) or len(point) < 2:
+                continue
+            lat, lon = point[0], point[1]
+            if not (-26 <= lat <= -10 and 128 <= lon <= 139):
+                implausible.append((item.get("obstructionId"), label, lat, lon))
+    if implausible:
+        raise RuntimeError(
+            f"{len(implausible)} coordinate(s) outside plausible NT WGS84 "
+            f"range (e.g. {implausible[0]}) - startPoint/endPoint may no "
+            "longer be [lat, lon]; see streetworks.au.nt's module docstring"
+        )
+    return (
+        f"{len(items):,} obstruction(s), {len(roadworks):,} Roadworks, "
+        f"type split: {types}"
+    )
+
+
 def check_nzta() -> str:
     """NZTA (Waka Kotahi) Highway Information - Road Events needs no
     credentials - see streetworks.nzta. Confirmed live 2026-08-02 (104
@@ -1867,6 +1908,7 @@ def main() -> int:
     # ACT TTM and TAS Roadworks both need no credentials
     reporter.check("ACT Temporary Traffic Management (Australia)", [], check_act_ttm)
     reporter.check("TAS Roadworks - State Roads (Australia)", [], check_tas_roadworks)
+    reporter.check("Road Report NT (Australia)", [], check_nt_roadreport)
     # NZTA Highway Information and LINZ NZ Addresses both need no credentials
     reporter.check("NZTA Highway Information (New Zealand)", [], check_nzta)
     reporter.check("LINZ NZ Addresses (New Zealand)", [], check_linz_addresses)

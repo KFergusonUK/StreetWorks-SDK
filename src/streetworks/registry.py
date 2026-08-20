@@ -1357,7 +1357,7 @@ _REGISTRY: list[ProviderEntry] = [
     ProviderEntry(
         key="tas",
         name="Roadworks - State Roads (Department of State Growth)",
-        description="Tasmania state-road roadworks feed (Australia), the only AU one with lines.",
+        description="Tasmania state-road roadworks feed (Australia), real multi-vertex linework.",
         kind=Kind.ROADWORKS,
         network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Australia", "Tasmania"}),
@@ -1389,32 +1389,26 @@ _REGISTRY: list[ProviderEntry] = [
     ProviderEntry(
         key="nt",
         name="Road Report NT",
-        description="NT road-conditions service (Australia) - no published API, documented only.",
+        description="NT road-conditions service (Australia) - public GetAll JSON.",
         kind=Kind.ROADWORKS,
-        network_scope=NetworkScope.UNKNOWN,
+        network_scope=NetworkScope.STRATEGIC,
         territories=frozenset({"Australia", "Northern Territory"}),
         administrative_area="Department of Infrastructure, Planning and Logistics",
         scope_note=(
-            "Investigated and registered honestly-unavailable, not "
-            "silently skipped - a different tier from Trafikverket/"
-            "Vejdirektoratet/SA, all of which are blocked on access to a "
-            "real, published interface. Road Report NT has no published "
-            "REST/GeoJSON API at all: its real backend is an undocumented "
-            "SignalR hub ('roadsReportingHub', confirmed live by "
-            "inspecting the site's own minified Angular bundle - not a "
-            "published spec). RoadReportNtClient() always raises "
-            "ProviderUnavailableError rather than encoding reverse-"
-            "engineered hub internals as a stable contract. Statewide "
-            "NT-Government roads (councils excluded); a road-condition "
-            "system (closures/flooding/weight restrictions) where "
-            "roadworks is a minor subset, the weakest real works-fit in "
-            "this SDK. See module docstring."
+            "Confirmed live (2026-08-19) against the public JSON endpoint "
+            "GET /api/Obstruction/GetAll - 140 CURRENT records, 26 of them "
+            "official Roadworks (type-code 28). Credential-free; licence "
+            "genuinely unconfirmed. Statewide NT-Government roads "
+            "(councils excluded) - NetworkScope.STRATEGIC. Still a "
+            "road-condition system: iter_roadworks() returns only records "
+            "that are actually works, not the weight/flooding/surface "
+            "majority. The reverse-engineered SignalR hub is not consumed. "
+            "See module docstring."
         ),
         credentials=None,
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.au",
         _client_name="RoadReportNtClient",
         import_line="from streetworks.au import RoadReportNtClient",
@@ -1431,8 +1425,8 @@ _REGISTRY: list[ProviderEntry] = [
             "Investigated and registered honestly-unavailable, not "
             "silently skipped - a different tier from Trafikverket/"
             "Vejdirektoratet/SA (blocked on access to a real, published "
-            "interface) and a different reason from NT (which has no "
-            "published API at all). MapRoad has a real, government-"
+            "interface) and a different reason from Greece (which has "
+            "no roadworks source at all). MapRoad has a real, government-"
             "catalogued API (datacatalogue.gov.ie: 'API Available: Yes') "
             "but the same listing states 'Open Data: No', 'Data Sharing: "
             "Yes', 'Personal Data: Yes' together - a formal, GDPR-gated "
@@ -1468,10 +1462,10 @@ _REGISTRY: list[ProviderEntry] = [
         territories=frozenset({"Greece"}),
         scope_note=(
             "Investigated and registered honestly-unavailable, not "
-            "silently skipped - the same tier as Road Report NT (no "
-            "roadworks source at all, as opposed to Trafikverket/"
-            "Vejdirektoratet/SA/MapRoad, all of which have a real "
-            "interface merely blocked). Greece's real NAP (nap.gov.gr, "
+            "silently skipped - the same tier as MapRoad (no usable "
+            "roadworks interface at all, as opposed to Trafikverket/"
+            "Vejdirektoratet/SA, all of which have a real interface "
+            "merely blocked). Greece's real NAP (nap.gov.gr, "
             "confirmed as the official MMTIS/RTTI/SRTI/SSTP NAP per the "
             "European Commission's own October 2025 NAP list) is a "
             "decentralised metadata catalogue of POI/sensor data (truck "

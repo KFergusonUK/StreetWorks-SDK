@@ -359,7 +359,16 @@ detail behind each claim above.
 
 ---
 
-## Issue: Road Report NT (Northern Territory) — is there a published REST API?
+## Issue: Road Report NT (Northern Territory) — RESOLVED 2026-08-19
+
+**Closed by:** a real adapter over `GET https://roadreport.nt.gov.au/api/Obstruction/GetAll`
+(see `src/streetworks/au/nt.py`). Live pull that day: HTTP 200, 140
+CURRENT records, 26 official `Roadworks`. The SignalR hub was not
+wrapped. Historical issue text kept below.
+
+---
+
+## Issue: Road Report NT (Northern Territory) — is there a published REST API? (historical)
 
 **Title:** `Help wanted: is there a documented REST/GeoJSON API behind Road Report NT?`
 

@@ -49,8 +49,8 @@ was found published anywhere**, unlike Trafikverket/Vejdirektoratet/
 Traffic SA, all of which have a real, live-probed or documented contract
 this SDK could describe even while blocked from using it. There is
 nothing here to build a client against without guessing a private
-contract, the same discipline Road Report NT (Australia) already
-established for this SDK - see :mod:`streetworks.au.nt`.
+contract, the same documented-unavailable-scaffold discipline this SDK
+already uses for Greece - see :mod:`streetworks.greece`.
 
 **The cleaner alternative for anyone who actually needs Irish roadworks
 data**: contact the RMO (``contact@rmo.ie``) directly to ask about a

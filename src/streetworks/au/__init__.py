@@ -26,27 +26,21 @@ services. NSW and Victoria are **Phase 2 confirmed** (2026-07-30, against
 real credentialed pulls - see each module's own docstring); WA, QLD, ACT,
 and TAS are **credential-free** (QLD via a real public API key, never a
 private one) and shipped live-verified with a real fixture from day one,
-never Credentials-wanted scaffolds - TAS ships with a genuinely
+never Credentials-wanted scaffolds - TAS and NT ship with a genuinely
 unconfirmed licence, the same basis :mod:`streetworks.arcgis.jersey` uses,
 distinct from being blocked; **South Australia is a Phase 1 scaffold,
 blocked on two access gates - a token-gated query endpoint and a
 geo-restricted host - see :mod:`streetworks.au.sa`'s own module
 docstring** and the README's Credentials wanted section.
 
-**The Northern Territory was investigated and is registered as a
-documented, honestly-unavailable scaffold** (see :mod:`streetworks.au.nt`)
-- not silently skipped, but not a working client either: Road Report NT's
-real backend is not a REST/GeoJSON API at all - it's a SignalR real-time
-hub (confirmed live, reverse-engineered from the site's own minified
-Angular bundle: a genuine ``roadsReportingHub`` connection invoking hub
-methods like ``GetAllMajorRoadObstructions``), a materially different,
-undocumented client protocol this SDK has never needed elsewhere, on top
-of the investigation brief's own already-flagged concerns (roadworks is a
-minor subset of a road-condition system dominated by closures/flooding,
-and the licence is unspecified). ``RoadReportNtClient()`` always raises
-:class:`~streetworks.exceptions.ProviderUnavailableError` rather than
-dressing that inference up as a stable contract - revisit if a documented
-REST equivalent ever surfaces.
+**The Northern Territory is a working, credential-free adapter** (see
+:mod:`streetworks.au.nt`) over the public JSON endpoint
+``GET /api/Obstruction/GetAll`` - confirmed live 2026-08-19 (140 CURRENT
+records, 26 of them official ``Roadworks``). Road Report NT is still a
+road-*condition* system; :meth:`~streetworks.au.nt.RoadReportNtClient.iter_roadworks`
+returns only records that are actually works. The reverse-engineered
+SignalR hub (``roadsReportingHub`` / ``GetAllMajorRoadObstructions``)
+is deliberately not consumed. Licence is genuinely unconfirmed.
 """
 
 from .act import BASE_URL as ACT_BASE_URL
@@ -56,6 +50,8 @@ from .nsw import BASE_URL as NSW_BASE_URL
 from .nsw import LAYERS as NSW_LAYERS
 from .nsw import NswLiveTrafficClient
 from .nsw import parse_features as parse_nsw_features
+from .nt import BASE_URL as NT_BASE_URL
+from .nt import GETALL_PATH as NT_GETALL_PATH
 from .nt import RoadReportNtClient
 from .qld import BASE_URL as QLD_BASE_URL
 from .qld import EVENT_TYPES as QLD_EVENT_TYPES
@@ -101,4 +97,6 @@ __all__ = [
     "TAS_BASE_URL",
     "TAS_ROADWORKS_LAYER",
     "RoadReportNtClient",
+    "NT_BASE_URL",
+    "NT_GETALL_PATH",
 ]

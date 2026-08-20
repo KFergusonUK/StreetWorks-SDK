@@ -1,0 +1,182 @@
+{
+  "$id": "1",
+  "success": true,
+  "message": null,
+  "response": [
+    {
+      "$id": "2",
+      "recordId": 662,
+      "obstructionId": 8785,
+      "status": "CURRENT",
+      "road": 98,
+      "roadName": "Dorat Road",
+      "lane": "I1",
+      "prpFrom": 1,
+      "distanceFrom": 0.0,
+      "prpTo": 10,
+      "distanceTo": 0.0,
+      "obstructionType": "Maximum 7 Axles",
+      "obstructionTypeCode": "80",
+      "restrictionType": "Weight And Or Vehicle Type Restriction",
+      "restrictionTypeCode": "66",
+      "dateFrom": "2018-06-20 08:30:00",
+      "dateTo": null,
+      "dateActive": "2018-06-20 08:34:47",
+      "startPoint": [
+        -13.24194761,
+        131.11082466
+      ],
+      "endPoint": [
+        -13.47992456,
+        131.18658979
+      ],
+      "comment": "No vehicles over 19 metres in length are permitted on this section of\nDorat Road.",
+      "locationComment": "Between Stuart Highway Intersection and Daly River Turn-Off",
+      "isDefaultLocationComment": "True",
+      "dateLastUpdated": "2018-06-20 08:34:48",
+      "geometry": null,
+      "geometries": [],
+      "reversed": false
+    },
+    {
+      "$id": "5",
+      "recordId": 7450,
+      "obstructionId": 13514,
+      "status": "CURRENT",
+      "road": 42,
+      "roadName": "Arnhem Highway",
+      "lane": "I1",
+      "prpFrom": 2,
+      "distanceFrom": 18.32,
+      "prpTo": 5,
+      "distanceTo": 4.82,
+      "obstructionType": "Roadworks",
+      "obstructionTypeCode": "28",
+      "restrictionType": "With Caution",
+      "restrictionTypeCode": "62",
+      "dateFrom": "2025-02-05 11:00:37",
+      "dateTo": null,
+      "dateActive": "2025-02-05 11:15:46",
+      "startPoint": [
+        -12.6576980147,
+        131.3174101844
+      ],
+      "endPoint": [
+        -12.6758609326,
+        131.3765599685
+      ],
+      "comment": "Speed reduction in place. Motorists are advised to comply with all traffic control.",
+      "locationComment": "At Adelaide River Floodplain",
+      "isDefaultLocationComment": "False",
+      "dateLastUpdated": "2026-04-16 11:38:15",
+      "geometry": null,
+      "geometries": [],
+      "reversed": false
+    },
+    {
+      "$id": "6",
+      "recordId": 7457,
+      "obstructionId": 13521,
+      "status": "CURRENT",
+      "road": 1564,
+      "roadName": "Linco Road",
+      "lane": "I1",
+      "prpFrom": 1,
+      "distanceFrom": 0.33,
+      "prpTo": 10,
+      "distanceTo": 0.0,
+      "obstructionType": "Roadworks",
+      "obstructionTypeCode": "28",
+      "restrictionType": "Road Closed",
+      "restrictionTypeCode": "50",
+      "dateFrom": "2025-02-07 08:00:00",
+      "dateTo": null,
+      "dateActive": "2025-02-10 11:12:42",
+      "startPoint": [
+        -12.474207309,
+        131.003505904
+      ],
+      "endPoint": [
+        -12.4752567217,
+        131.006433321
+      ],
+      "comment": "Motorists are advised to comply with all traffic control.",
+      "locationComment": "Between Palmerston Regional Hospital and End of Road",
+      "isDefaultLocationComment": "False",
+      "dateLastUpdated": "2025-02-10 11:23:18",
+      "geometry": null,
+      "geometries": [],
+      "reversed": false
+    },
+    {
+      "$id": "19",
+      "recordId": 8041,
+      "obstructionId": 14100,
+      "status": "CURRENT",
+      "road": 66,
+      "roadName": "Dorisvale Road",
+      "lane": "I1",
+      "prpFrom": 6,
+      "distanceFrom": 0.0,
+      "prpTo": 6,
+      "distanceTo": 0.0,
+      "obstructionType": "Flooding",
+      "obstructionTypeCode": "34",
+      "restrictionType": "Impassable",
+      "restrictionTypeCode": "58",
+      "dateFrom": "2025-08-15 11:35:41",
+      "dateTo": null,
+      "dateActive": "2025-08-15 11:34:31",
+      "startPoint": [
+        -14.3633918936,
+        131.5554313562
+      ],
+      "endPoint": [
+        -14.3633918936,
+        131.5554313562
+      ],
+      "comment": "-",
+      "locationComment": "Daly River Crossing",
+      "isDefaultLocationComment": "False",
+      "dateLastUpdated": "2025-08-15 13:03:39",
+      "geometry": null,
+      "geometries": [],
+      "reversed": false
+    },
+    {
+      "$id": "71",
+      "recordId": 8722,
+      "obstructionId": 14756,
+      "status": "CURRENT",
+      "road": 355,
+      "roadName": "Shady Camp Access",
+      "lane": "I1",
+      "prpFrom": 1,
+      "distanceFrom": 0.0,
+      "prpTo": 5,
+      "distanceTo": 0.0,
+      "obstructionType": "Roadworks",
+      "obstructionTypeCode": "28",
+      "restrictionType": "With Caution",
+      "restrictionTypeCode": "62",
+      "dateFrom": "2026-03-03 08:00:00",
+      "dateTo": null,
+      "dateActive": "2026-03-03 08:10:56",
+      "startPoint": [
+        -12.5213569999,
+        131.8057219999
+      ],
+      "endPoint": [
+        -12.5213569999,
+        131.8057219999
+      ],
+      "comment": "-",
+      "locationComment": "Between Harold Knowles Rd and Shady Camp Causeway",
+      "isDefaultLocationComment": "True",
+      "dateLastUpdated": "2026-03-03 08:10:57",
+      "geometry": null,
+      "geometries": [],
+      "reversed": false
+    }
+  ]
+}
