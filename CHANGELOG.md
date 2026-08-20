@@ -2,6 +2,42 @@
 
 ## [Unreleased]
 
+### Added — GeoSN Hauskoordinaten, this SDK's third German state-level streets provider (2026-08-20)
+
+`streetworks.geosn.GeoSNStreetsClient` / `streetworks.common.from_geosn_street`
+- Saxony's own street gazetteer, run by GeoSN (Staatsbetrieb Geobasisinformation
+und Vermessung Sachsen), continuing the "state fan-out" fallback path Germany's
+national streets investigation left open.
+
+```python
+from streetworks.geosn import GeoSNStreetsClient
+from streetworks.common import from_geosn_street
+
+with GeoSNStreetsClient() as geosn:
+    streets = [from_geosn_street(r) for r in geosn.iter_streets()]
+```
+
+- **No dedicated Gazetteer/DOG-style WFS exists for Saxony**, unlike
+  Hamburg and Brandenburg - five plausible endpoint guesses all
+  returned a genuine 404, and the live ALKIS WFS's own abstract
+  confirms it carries no street/address feature type at all
+  (`Flurstücke, Gebäude, Tatsächliche Nutzungen, Verwaltungseinheiten,
+  Katasterbezirke` only).
+- **The real path is a statewide bulk CSV export instead** - GeoSN's
+  own `Downloadbereich Hauskoordinaten`, a ~51 MB ZIP (the largest
+  single download in this SDK's German-state cluster), 990,090 real
+  address rows deduplicated client-side to **42,824 real distinct
+  streets, 100% carrying a real name**.
+- **Geometry is a real address point, reprojected client-side from
+  ETRS89/UTM zone 33N** (`EPSG:25833`, via a new closed-form transform,
+  `streetworks.common._utm33n` - no `pyproj`) - confirmed standard
+  `(Easting, Northing)` order, no axis swap needed, cross-validated
+  against a real Frohburg address.
+- **`administrative_area` uses the real `gmd` municipality name
+  directly** - already a resolved name, no reconstruction needed,
+  unlike Brandenburg's own two-field join.
+- **Licence**: Datenlizenz Deutschland - Namensnennung - 2.0.
+
 ### Added — WFS BB-BE Gazetteer, this SDK's second German state-level streets provider (2026-08-20)
 
 `streetworks.brandenburg.BrandenburgStreetsClient` / `streetworks.common.from_brandenburg_street`

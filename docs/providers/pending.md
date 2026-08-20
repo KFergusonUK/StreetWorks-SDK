@@ -129,7 +129,15 @@ Credentials-wanted, or Documented-unavailable; see
   new infrastructure — a real, reportable connectivity failure, not
   routed around; two real candidate datasets were found on
   `daten.berlin.de` before hitting the wall, worth a retry once the
-  host is back. Saxony remains genuinely unchecked.
+  host is back. **Saxony is now built too**: unlike Hamburg/Brandenburg,
+  Saxony runs no dedicated Gazetteer/DOG-style WFS at all (five
+  plausible endpoint guesses all `404`d, and the live ALKIS WFS's own
+  abstract confirms no street/address feature type exists) — the real
+  path is GeoSN's own statewide `Downloadbereich Hauskoordinaten` bulk
+  CSV export (990,090 real address rows, deduplicated client-side to
+  42,824 real distinct streets, 100% named), shipped as
+  `streetworks.geosn`. The state fan-out is now 3/4 done; only Berlin
+  remains blocked.
 - **Italy — ANNCSU's address/civic-number side (`accessi`), deliberately
   scoped out of the streets build, not blocked.** A different case from
   every other entry on this page: real, live, keyless, CC BY 4.0, and

@@ -4,9 +4,9 @@ Investigation only, per `germany-streets-brief.md`. Findings for steps
 1 and 2 below are from real, live requests made 2026-08-16. Status:
 **federal source ruled out, address layer ruled out, state fan-out
 started 2026-08-20 — Hamburg built (`streetworks.hamburg`), Brandenburg
-built (`streetworks.brandenburg`), Berlin genuinely blocked, Saxony not
-yet checked** — see `docs/providers/pending.md` for the current
-summary.
+built (`streetworks.brandenburg`), Saxony built (`streetworks.geosn`),
+Berlin genuinely blocked** — see `docs/providers/pending.md` for the
+current summary.
 
 ## Verify-first step 1 — BKG federal streets (ruled out)
 
@@ -131,13 +131,36 @@ provider. Shipped as `streetworks.brandenburg.BrandenburgStreetsClient`
 `docs/providers/europe.md#wfs-bb-be-gazetteer-brandenburg` for the full
 write-up.
 
-**Saxony — not yet checked.**
+**Saxony — checked, built.** Unlike Hamburg and Brandenburg, Saxony
+turns out not to run a dedicated Gazetteer/DOG-style WFS at all - five
+real, plausibly-named endpoint guesses
+(`geodienste.sachsen.de/aaa/public_gazetteer/wfs`, `public_dog/wfs`,
+`public_alkis_gazetteer/wfs`, `gazetteer/wfs`, `public_strassen/wfs`)
+all returned a genuine `404`, and Saxony's own live ALKIS WFS abstract
+text confirms its feature types are limited to
+`Flurstücke, Gebäude, Tatsächliche Nutzungen, Verwaltungseinheiten,
+Katasterbezirke` - no street or address feature type at all. The real
+working path instead is GeoSN's own `Downloadbereich Hauskoordinaten`
+bulk export - a real statewide address-point CSV (inside a ~51 MB ZIP,
+the largest single download in this SDK's German-state cluster),
+990,090 real address rows, deduplicated client-side in
+`GeoSNStreetsClient.iter_streets()` to 42,824 real distinct
+`(gmdschl, strschl)` street combinations, 100% carrying a real name.
+Geometry is a real address point, reprojected client-side from
+ETRS89/UTM zone 33N (`EPSG:25833`, confirmed standard `(Easting,
+Northing)` order, no swap needed - cross-validated against a real
+Frohburg address). `administrative_area` uses the real `gmd`
+municipality name directly - no reconstruction needed, unlike
+Brandenburg's own two-field join. Shipped as
+`streetworks.geosn.GeoSNStreetsClient` / `from_geosn_street` - see
+`docs/providers/europe.md#geosn-hauskoordinaten-saxony` for the full
+write-up.
 
 ## Recommendation
 
-Saxony remains open, a real next step if picked back up - steps 1 and 2
-are decisively closed and don't need re-checking unless BKG's own
-services change. Berlin is worth a real retry once `gdi.berlin.de`
-comes back from maintenance - note that Brandenburg's own WFS BB-BE
-Gazetteer already carries a real, if non-exhaustive, slice of Berlin
-street data in the meantime.
+Steps 1 and 2 are decisively closed and don't need re-checking unless
+BKG's own services change. The state fan-out is now 3/4 done (Hamburg,
+Brandenburg, Saxony); Berlin is worth a real retry once
+`gdi.berlin.de` comes back from maintenance - note that Brandenburg's
+own WFS BB-BE Gazetteer already carries a real, if non-exhaustive,
+slice of Berlin street data in the meantime.

@@ -1880,6 +1880,23 @@ def check_brandenburg_streets() -> str:
     return f"{len(streets)} real street(s), e.g. {sample_name!r}"
 
 
+def check_geosn_streets() -> str:
+    """GeoSN Hauskoordinaten (Saxony) needs no credentials. Exercises
+    the real statewide bulk ZIP download (~51 MB, not a small pull) -
+    only takes the first 5 deduplicated streets, see
+    streetworks.geosn.client's module docstring."""
+    import itertools
+
+    from streetworks.geosn import GeoSNStreetsClient
+
+    with GeoSNStreetsClient() as geosn:
+        streets = list(itertools.islice(geosn.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample = streets[0]
+    return f"{len(streets)} real street(s), e.g. {sample['str']!r} in {sample['gmd']!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -2076,6 +2093,8 @@ def main() -> int:
     reporter.check("Zentraler AdressService Hamburg (Germany)", [], check_hamburg_streets)
     # WFS BB-BE Gazetteer (Brandenburg) needs no credentials
     reporter.check("WFS BB-BE Gazetteer (Brandenburg)", [], check_brandenburg_streets)
+    # GeoSN Hauskoordinaten (Saxony) needs no credentials
+    reporter.check("GeoSN Hauskoordinaten (Saxony)", [], check_geosn_streets)
 
     print()
     if reporter.ran == 0:

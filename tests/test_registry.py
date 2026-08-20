@@ -96,7 +96,7 @@ def test_providers_kind_filter_streets():
         "idee", "osni", "dfi_roads", "anncsu", "jersey_streets", "guernsey_streets", "nrn",
         "gibraltar", "monaghan", "lmi", "digiroad", "marousi", "dar", "swisstopo", "bev",
         "vlaanderen", "registrucentras", "caclr", "hamburg_streets",
-        "brandenburg_streets",
+        "brandenburg_streets", "geosn_streets",
     }
     assert all(e.kind is Kind.STREETS for e in streets)
     # Enum and string both accepted.

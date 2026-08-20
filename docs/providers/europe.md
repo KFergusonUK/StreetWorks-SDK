@@ -1022,6 +1022,67 @@ dl-de/by-2-0, (Daten geändert)"*.
 **No credentials required** — every claim above came from a fully
 unauthenticated GET request.
 
+## GeoSN Hauskoordinaten (Saxony)
+
+Saxony's statewide address-point export, published by GeoSN
+(Staatsbetrieb Geobasisinformation und Vermessung Sachsen) — no
+credentials. This SDK's third German state-level streets/gazetteer
+provider, completing the "state fan-out" Germany's national streets
+investigation named (Hamburg, Brandenburg, Saxony, Berlin):
+
+```python
+from streetworks.geosn import GeoSNStreetsClient
+from streetworks.common import from_geosn_street
+
+with GeoSNStreetsClient() as geosn:
+    streets = [from_geosn_street(r) for r in geosn.iter_streets()]
+```
+
+**Not the shared Deutschland-Online-Gazetteer (DOG) WFS Hamburg and
+Brandenburg both use — checked and confirmed Saxony genuinely doesn't
+participate in it.** The DOG service's own real member states are
+Brandenburg and Berlin only (confirmed live via its own abstract);
+Saxony's own ALKIS WFS (`geodienste.sachsen.de/aaa/public_alkis/vereinf/wfs`,
+confirmed live) publishes only cadastral parcels, buildings, land use
+and administrative boundaries — no street or address feature type at
+all. Saxony instead publishes its own address-point data as a real
+statewide bulk CSV/text export.
+
+**A genuinely large real file — the largest single download this SDK's
+German-state cluster has needed (~206 MB uncompressed, ~51 MB
+zipped).** 990,090 real address-point rows, confirmed live, 100%
+carrying a real street name. This is address-point data, not a
+dedicated street register — one row per real address, not per street —
+so the client itself deduplicates by `(gmdschl, strschl)` (municipality
+code + street code), keeping the first real row's own coordinate as a
+representative point for the whole street, the same "one real,
+arbitrarily-chosen-but-genuinely-stated point stands for the whole
+entity" discipline `from_oslo`/`from_canton_zurich`/
+`from_brandenburg_street` already apply to their own polygon-first-
+vertex case. 42,824 real distinct (municipality, street) combinations,
+confirmed live.
+
+**CRS: real ETRS89 / UTM zone 33N (`EPSG:25833`), confirmed live —
+zone 33, not 32 (unlike Denmark's DAR).** The file's own `zone` column
+reads `33` on every row checked; reprojected client-side via a new
+closed-form Transverse Mercator inverse (`streetworks.common._utm33n`,
+no `pyproj`), cross-checked against a real address in Dolsenhain
+(Frohburg, near Leipzig) before shipping — the axis order is the
+standard `(Easting, Northing)`, confirmed by the same bounds check,
+unlike Lithuania's own UTM-family source, which needed a swap.
+
+**`administrative_area` carries the real `gmd` (municipality name)
+field directly** — already a resolved name, no lookup or
+reconstruction needed, unlike Brandenburg's own two-field
+reconstruction.
+
+**Licence: Datenlizenz Deutschland - Namensnennung - 2.0**, confirmed
+live from GeoSN's own open-geodata FAQ page — explicitly stated to
+permit commercial reuse.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
+
 ## Berlin (VIZ)
 
 The largest remaining German gap this cluster had — Berlin is a

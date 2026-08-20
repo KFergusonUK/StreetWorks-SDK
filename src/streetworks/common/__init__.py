@@ -33,6 +33,7 @@ from .from_datex2 import from_datex2
 from .from_dfi_roads import from_dfi_roads
 from .from_digiroad import from_digiroad_street
 from .from_drivebc import from_drivebc
+from .from_geosn import from_geosn_street
 from .from_gibraltar import from_gibraltar_street
 from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_guernsey_streets import from_guernsey_street
@@ -192,4 +193,5 @@ __all__ = [
     "from_caclr_street",
     "from_hamburg_street",
     "from_brandenburg_street",
+    "from_geosn_street",
 ]

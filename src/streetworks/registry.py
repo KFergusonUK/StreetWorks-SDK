@@ -2778,6 +2778,53 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.brandenburg import BrandenburgStreetsClient",
     ),
     ProviderEntry(
+        key="geosn_streets",
+        name="GeoSN Hauskoordinaten (Saxony)",
+        description=(
+            "Saxony's statewide address-point export, deduplicated to streets by the "
+            "state surveying agency."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Germany"}),
+        administrative_area="Freistaat Sachsen (GeoSN)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "third German state-level streets/gazetteer provider, "
+            "completing the 'state fan-out' Germany's national streets "
+            "investigation named (Hamburg, Brandenburg, Saxony, "
+            "Berlin). Not the shared Deutschland-Online-Gazetteer WFS "
+            "Hamburg and Brandenburg both use - confirmed live that "
+            "Saxony genuinely doesn't participate in it (that "
+            "service's own real member states are Brandenburg and "
+            "Berlin only), and Saxony's own ALKIS WFS carries no "
+            "street/address feature type at all. Saxony instead "
+            "publishes a real statewide address-point bulk export "
+            "(~206MB uncompressed, ~51MB zipped, the largest single "
+            "download this SDK's German-state cluster has needed) - "
+            "990,090 real address rows, 100% carrying a real street "
+            "name, deduplicated to 42,824 real distinct (municipality, "
+            "street) combinations by the client itself, since this is "
+            "address-point data, not a dedicated street register. "
+            "Geometry is a real address point, reprojected client-side "
+            "from ETRS89/UTM zone 33N (EPSG:25833, confirmed live via "
+            "the file's own zone column and cross-checked against a "
+            "real Frohburg address) - standard axis order, no swap "
+            "needed, unlike Lithuania's own UTM-family source. "
+            "administrative_area carries the real gmd (municipality "
+            "name) field directly - already resolved, unlike "
+            "Brandenburg's own two-field reconstruction. Licence: "
+            "Datenlizenz Deutschland - Namensnennung - 2.0, confirmed "
+            "live and explicitly stated to permit commercial reuse. "
+            "See module docstring."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Namensnennung - 2.0 (DL-DE-BY-2.0)",
+        source_grade="register",
+        _module="streetworks.geosn",
+        _client_name="GeoSNStreetsClient",
+        import_line="from streetworks.geosn import GeoSNStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",
