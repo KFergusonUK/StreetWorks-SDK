@@ -136,9 +136,21 @@ _DATEX_TERRITORY: dict[str, dict[str, str]] = {
     "bulgaria": {"territory": "Bulgaria"},
 }
 
-#: streetworks.ogc.germany.GermanRoadworksClient is shared by all three states
+#: streetworks.ogc.germany.GermanRoadworksClient is shared by all six states
 #: - .fetch(state) takes the real FIELD_MAPS key (German name for Saxony).
-_GERMAN_STATES = {"hamburg": "Hamburg", "brandenburg": "Brandenburg", "saxony": "Sachsen"}
+_GERMAN_STATES = {
+    "hamburg": "Hamburg", "brandenburg": "Brandenburg", "saxony": "Sachsen",
+    "baden_wuerttemberg": "Baden-Württemberg", "schleswig_holstein": "Schleswig-Holstein",
+    "rheinland_pfalz": "Rheinland-Pfalz",
+}
+
+#: streetworks.opendatasoft.france_departements.DepartementRoadworksClient is
+#: shared by all five areas - .fetch(area) takes the real FIELD_MAPS key.
+_FRANCE_AREAS = {
+    "sarthe": "Sarthe", "loire_atlantique": "Loire-Atlantique",
+    "hauts_de_seine": "Hauts-de-Seine", "toulouse": "Toulouse Métropole",
+    "rennes": "Rennes Métropole",
+}
 
 TIERS = {
     "keyless": dict(name="Live-capable (keyless)", color="#1b9e77", symbol="circle"),
@@ -224,6 +236,8 @@ def _fetch_works(key, client):
         from_chicagodot,
         from_copenhagen,
         from_datex2,
+        from_departement_roadworks,
+        from_dortmund,
         from_drivebc,
         from_helsinki,
         from_jersey,
@@ -238,6 +252,7 @@ def _fetch_works(key, client):
         from_oslo,
         from_paris,
         from_roma,
+        from_saarland,
         from_sct,
         from_tfl,
         from_trafficwales,
@@ -263,6 +278,11 @@ def _fetch_works(key, client):
 
         state = _GERMAN_STATES[key]
         return from_ogc_features(client.fetch(state), FIELD_MAPS[state])
+    if key in _FRANCE_AREAS:
+        from streetworks.opendatasoft.france_departements import FIELD_MAPS as FR_FIELD_MAPS
+
+        area = _FRANCE_AREAS[key]
+        return from_departement_roadworks(client.fetch(area), FR_FIELD_MAPS[area])
     if key == "vic":
         return from_vic_disruptions(client.iter_planned_disruptions())
     if key == "wzdx":
@@ -328,6 +348,7 @@ def _fetch_works(key, client):
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
         "copenhagen": from_copenhagen, "tfl": from_tfl,
+        "saarland": from_saarland, "dortmund": from_dortmund,
         # oslo's, helsinki's, canton_zurich's and vienna's coordinates are
         # projected (EPSG:25832, EPSG:3879, EPSG:2056 and EPSG:31256
         # respectively), so _coord_lonlat's WGS84-only guard skips them on
