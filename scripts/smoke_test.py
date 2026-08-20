@@ -1753,6 +1753,23 @@ def check_bev() -> str:
     )
 
 
+def check_vlaanderen() -> str:
+    """Straatnamenregister (Flanders, Belgium) needs no credentials.
+    Only takes a small page (page_size=5, real server-side pagination -
+    one HTTP request) rather than the full ~99.6k-record register - see
+    streetworks.vlaanderen.client's module docstring."""
+    import itertools
+
+    from streetworks.vlaanderen import VlaanderenStreetsClient
+
+    with VlaanderenStreetsClient(page_size=5) as vlaanderen:
+        streets = list(itertools.islice(vlaanderen.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    sample_name = streets[0]["straatnaam"]["geografischeNaam"]["spelling"]
+    return f"{len(streets)} real street(s), e.g. {sample_name!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1938,6 +1955,8 @@ def main() -> int:
     reporter.check("Amtliches Verzeichnis der Strassen (Switzerland)", [], check_swisstopo)
     # BEV Österreichisches Adressregister (Austria) needs no credentials
     reporter.check("Österreichisches Adressregister (Austria)", [], check_bev)
+    # Straatnamenregister (Flanders, Belgium) needs no credentials
+    reporter.check("Straatnamenregister (Flanders, Belgium)", [], check_vlaanderen)
 
     print()
     if reporter.ran == 0:

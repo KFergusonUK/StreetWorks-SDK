@@ -1,0 +1,36 @@
+[
+  {
+    "@type": "Straatnaam",
+    "identificator": {
+      "id": "https://data.vlaanderen.be/id/straatnaam/1",
+      "naamruimte": "https://data.vlaanderen.be/id/straatnaam",
+      "objectId": "1",
+      "versieId": "2023-11-01T08:18:40+01:00"
+    },
+    "detail": "https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+    "straatnaam": {
+      "geografischeNaam": {
+        "spelling": "Acacialaan",
+        "taal": "nl"
+      }
+    },
+    "straatnaamStatus": "inGebruik"
+  },
+  {
+    "@type": "Straatnaam",
+    "identificator": {
+      "id": "https://data.vlaanderen.be/id/straatnaam/141",
+      "naamruimte": "https://data.vlaanderen.be/id/straatnaam",
+      "objectId": "141",
+      "versieId": "2023-11-01T08:18:51+01:00"
+    },
+    "detail": "https://api.basisregisters.vlaanderen.be/v2/straatnamen/141",
+    "straatnaam": {
+      "geografischeNaam": {
+        "spelling": "Afzeliastraat",
+        "taal": "nl"
+      }
+    },
+    "straatnaamStatus": "gehistoreerd"
+  }
+]

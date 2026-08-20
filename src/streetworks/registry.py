@@ -2546,6 +2546,57 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.bev import BevStreetsClient",
     ),
     ProviderEntry(
+        key="vlaanderen",
+        name="Straatnamenregister (Flanders, Belgium)",
+        description=(
+            "Flanders' (not all-Belgium's) street-name register, part of "
+            "Basisregisters Vlaanderen."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Belgium"}),
+        administrative_area="Vlaamse overheid (Flanders)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "first Belgian streets/gazetteer provider, a sibling to the "
+            "existing Belgian roadworks coverage (Verkeerscentrum "
+            "Vlaanderen, streetworks.datex2.belgium) - both genuinely "
+            "Flanders-only, not all-Belgium (Wallonia publishes its own "
+            "separate feed, not wrapped here; Brussels wasn't checked). "
+            "Not the layer first checked - Informatie Vlaanderen's own "
+            "Wegenregister WFS carries real line geometry but street "
+            "identity there is a genuinely richer, two-sided shape "
+            "(linkerstraatnaam/rechterstraatnaam can differ) closer to "
+            "NWB's own segment-aggregation model than a queryable named "
+            "entity; the Basisregisters Vlaanderen REST API's own "
+            "Straatnaam resource was used instead. Roughly 99,600 real "
+            "street names (bounded live via offset bisection - no total "
+            "count field exists on the list response). No geometry on "
+            "this resource - GeometryGrade.ABSENT on every Street, the "
+            "same shape ANNCSU/BEV already established. A real, "
+            "confirmed API quirk: the documented gemeenteniscode filter "
+            "parameter is silently ignored (three requests - two "
+            "different codes and none at all - returned byte-identical "
+            "results); an undocumented gemeentenaam= text filter "
+            "genuinely works but would need an unattempted "
+            "~300-municipality fan-out, so administrative_area is left "
+            "unresolved. Licence: Flanders' standard "
+            "'Modellicentie Gratis Hergebruik' (free reuse, attribution "
+            "required) - the government's stated default, not this "
+            "API's own confirmed per-dataset licence field. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence=(
+            "Modellicentie Gratis Hergebruik (Flanders' standard free-reuse licence, "
+            "attribution required) - stated default, not per-dataset-confirmed"
+        ),
+        licence_confirmed=False,
+        source_grade="register",
+        _module="streetworks.vlaanderen",
+        _client_name="VlaanderenStreetsClient",
+        import_line="from streetworks.vlaanderen import VlaanderenStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

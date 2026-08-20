@@ -70,6 +70,7 @@ from .from_vegvesen import from_vegvesen
 from .from_vialietuva import from_vialietuva
 from .from_vic_disruptions import from_vic_disruptions
 from .from_vienna import from_vienna
+from .from_vlaanderen import from_vlaanderen_street
 from .from_wzdx import from_wzdx
 from .from_zurich import from_zurich
 from .gazetteer import (
@@ -180,4 +181,5 @@ __all__ = [
     "from_marousi_street",
     "from_swisstopo_street",
     "from_bev_street",
+    "from_vlaanderen_street",
 ]

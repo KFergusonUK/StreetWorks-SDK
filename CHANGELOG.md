@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+### Added — Straatnamenregister (Flanders, Belgium), this SDK's first Belgian streets provider (2026-08-20)
+
+`streetworks.vlaanderen.VlaanderenStreetsClient` / `streetworks.common
+.from_vlaanderen_street` - Flanders' own street-name register, part of
+Basisregisters Vlaanderen, Flanders-only like the existing Belgian
+roadworks coverage.
+
+```python
+from streetworks.vlaanderen import VlaanderenStreetsClient
+from streetworks.common import from_vlaanderen_street
+
+with VlaanderenStreetsClient() as vlaanderen:
+    streets = [from_vlaanderen_street(r) for r in vlaanderen.iter_streets()]
+```
+
+- **Not the layer first checked** - Informatie Vlaanderen's own
+  Wegenregister WFS has real line geometry, but a genuinely two-sided
+  street-name shape (`linkerstraatnaam`/`rechterstraatnaam` can differ)
+  closer to NWB's own segment-aggregation model than a queryable named
+  entity; the dedicated `Straatnaam` REST resource was used instead.
+- **Roughly 99,600 real street names**, bounded live by bisecting the
+  `offset` parameter (no total-count field exists on the list
+  response). No geometry on this resource - `GeometryGrade.ABSENT` on
+  every `Street`, the same shape ANNCSU (Italy)/BEV (Austria) already
+  established.
+- **A real, confirmed API quirk**: the documented `gemeenteniscode`
+  municipality filter is silently ignored (confirmed live with two
+  different codes and no filter at all, all returning byte-identical
+  results); an undocumented `gemeentenaam=` text filter genuinely
+  works but would need an unattempted ~300-municipality fan-out, so
+  `administrative_area` is left unresolved.
+- **Licence**: Flanders' standard "Modellicentie Gratis Hergebruik"
+  (free reuse, attribution required) - the government's stated
+  default, not this API's own confirmed per-dataset licence field.
+
 ### Added — Österreichisches Adressregister (BEV), this SDK's first Austrian streets provider (2026-08-18)
 
 `streetworks.bev.BevStreetsClient` / `streetworks.common.from_bev_street`

@@ -347,6 +347,75 @@ invented values) rather than trimmed from a live pull. See
 `streetworks/datex2/bulgaria.py`'s module docstring for the full
 field-by-field mapping.
 
+## Straatnamenregister (Flanders, Belgium)
+
+Flanders' own street-name register, part of Basisregisters Vlaanderen
+(the Flemish Base Registries suite) - no credentials. This SDK's first
+Belgian streets/gazetteer coverage, a sibling to the Belgium roadworks
+coverage above (Verkeerscentrum Vlaanderen) - both genuinely
+Flanders-only, not all-Belgium:
+
+```python
+from streetworks.vlaanderen import VlaanderenStreetsClient
+from streetworks.common import from_vlaanderen_street
+
+with VlaanderenStreetsClient() as vlaanderen:
+    streets = [from_vlaanderen_street(r) for r in vlaanderen.iter_streets()]
+```
+
+**Not the layer first checked - a road-segment WFS with embedded names
+was tried first, a dedicated name register was found instead.**
+Informatie Vlaanderen's own "Wegenregister" WFS
+(`geo.api.vlaanderen.be/Wegenregister/wfs`, confirmed live, keyless)
+carries a real `Wegsegment` layer with real line geometry, but street
+identity there is a genuinely richer shape than this SDK's single-name
+`Street` model cleanly supports: each segment states **two**
+independent street-name references (`linkerstraatnaam`/
+`rechterstraatnaam` - left/right side of the road can genuinely differ,
+a real Belgian addressing convention), both frequently blank on
+footpaths/cycleways - closer to NWB's own "street is an aggregation of
+segments" shape than a queryable named entity. Basisregisters
+Vlaanderen's own `Straatnaam` REST resource, found separately, publishes
+street identity directly instead.
+
+**Roughly 99,600 real street names, confirmed live 2026-08-20 by
+bisecting the `offset` parameter** - the list response states no total
+count field directly. **No geometry anywhere in this resource -
+`GeometryGrade.ABSENT` on every real `Street`, the same shape ANNCSU
+(Italy)/BEV (Austria) already established, not a gap in this build.**
+Real coordinates would need a separate join back to the Wegenregister
+WFS above - not attempted here, the same "streets built, richer join
+left for later" call already made for ANNCSU's own `accessi` sibling.
+
+**A real, confirmed API quirk: the documented municipality filter is
+silently ignored.** `gemeenteniscode` (the parameter this API's own
+schema suggests for filtering by municipality) makes no difference -
+confirmed live: two different real codes and no filter at all all
+return byte-identical first pages. An undocumented `gemeentenaam=<name>`
+text filter genuinely works (confirmed live: distinctly different,
+correctly-scoped results for "Antwerpen"), but using it to resolve every
+street's municipality would mean a real ~300-municipality fan-out this
+build doesn't attempt - `administrative_area` is therefore left
+unresolved, the same honest gap Denmark's DAR leaves for its own raw
+kommune code.
+
+**Pagination: real, confirmed live** - `offset`/`limit` parameters
+(capped at 500 server-side, confirmed live: a requested `limit=2000`
+silently returned only 500), with a real `volgende` ("next") field
+carrying the next page's full URL, confirmed live to be absent on the
+genuine last page.
+
+**Licence: Flanders' standard government open-data terms**, the
+"Modellicentie Gratis Hergebruik" (Model Licence for Free Reuse -
+confirmed live and reachable, though its own clause text sits behind a
+JS-rendered page this build couldn't extract directly) - the default
+licence for Flemish government open data per web search, not this
+specific API's own confirmed per-dataset licence field; free reuse for
+any purpose with attribution as the only stated condition.
+
+**No credentials required** - every claim above came from a fully
+unauthenticated GET request.
+
 ## Basque Country (Euskadi)
 
 The Basque Country's road incidents, credential-free, fill the *other*
