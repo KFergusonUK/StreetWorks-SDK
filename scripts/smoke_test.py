@@ -394,6 +394,22 @@ def check_saarland() -> str:
     return f"{len(features)} real feature(s), e.g. {label!r}"
 
 
+def check_dortmund() -> str:
+    """Dortmund (NRW) needs no credentials - see streetworks.dortmund.
+    This SDK's first German municipal roadworks provider, found via
+    GOVdata after NRW's own state-level route stayed gated."""
+    from streetworks.common import from_dortmund
+    from streetworks.dortmund import DortmundClient
+
+    with DortmundClient() as dortmund:
+        records = list(dortmund.iter_roadworks())
+    if not records:
+        raise RuntimeError("query returned no real records")
+    works = from_dortmund(records)
+    sample = works[0]
+    return f"{len(works)} real roadwork(s), e.g. {sample.sites[0].location_description!r}"
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -2076,6 +2092,7 @@ def main() -> int:
     reporter.check("German regional roadworks (OGC/WFS)", [], check_german_regional)
     reporter.check("Berlin VIZ Baustellen/Sperrungen", [], check_berlin)
     reporter.check("Saarland LfS roadworks", [], check_saarland)
+    reporter.check("Dortmund roadworks", [], check_dortmund)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)

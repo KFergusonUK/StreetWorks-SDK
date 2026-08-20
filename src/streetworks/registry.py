@@ -1731,6 +1731,45 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.saarland import SaarlandClient",
     ),
     ProviderEntry(
+        key="dortmund",
+        name="Dortmund",
+        description="The City of Dortmund's own roadworks register (NRW), over OpenDataSoft.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Germany"}),
+        administrative_area="Stadt Dortmund",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. This SDK's "
+            "first German *municipal* roadworks provider, a genuinely "
+            "different tier from the state-level cluster in "
+            "streetworks.ogc.germany - opened up because NRW's own "
+            "state-level route stays gated (Mobilithek/DATEX), but this "
+            "one real city's own feed isn't. Found via GOVdata, not "
+            "assumed: Cologne and Aachen were both checked live and "
+            "trace only to Mobilithek marketplace offers, no "
+            "independent open republish found for either - Dortmund is "
+            "a genuine exception, not representative of a wider open "
+            "NRW-municipal pattern. 172 real records at investigation "
+            "time (134 'tagesaktuell'/currently-active + 38 "
+            "'geplant'/planned, same real schema). Real promoter field "
+            "(auftraggeber, e.g. 'EB70 - Stadtentwässerung', "
+            "'Dortmunder Netz', 'Stadt Dortmund') and real city-district "
+            "field (stadtbezirk) - no clean separate street field, the "
+            "same honest gap NYC/Chicago/Paris's own permit registers "
+            "already carry. A real per-record identifier exists only "
+            "via the older v2 catalog API (record.id) - the newer v2.1 "
+            "Explore API's own flattened records carry no id at all, "
+            "confirmed live. Same OpenDataSoft platform family as "
+            "streetworks.paris's own 'Chantiers à Paris'."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Zero - Version 2.0 (dl-zero-de/2.0)",
+        source_grade="operator",
+        _module="streetworks.dortmund",
+        _client_name="DortmundClient",
+        import_line="from streetworks.dortmund import DortmundClient",
+    ),
+    ProviderEntry(
         key="berlin",
         name="Berlin (VIZ)",
         description="Berlin's city-wide traffic-information-centre Baustellen/Sperrungen feeds.",

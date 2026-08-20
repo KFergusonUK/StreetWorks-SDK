@@ -1064,6 +1064,76 @@ dataset specifically — confirmed by the same block on unrelated
 `saarland.de` pages, not routed around). The same honest tier Autobahn
 GmbH's own licence already sits at in this SDK.
 
+## Dortmund (municipal roadworks, NRW)
+
+The City of Dortmund's own roadworks register — no credentials. This
+SDK's first German *municipal* roadworks provider, a genuinely
+different tier from the state-level cluster above — opened up because
+NRW's own state-level route stays gated (Mobilithek/DATEX, already
+parked), but this one real city's own feed isn't:
+
+```python
+from streetworks.dortmund import DortmundClient
+from streetworks.common import from_dortmund
+
+with DortmundClient() as dortmund:
+    works = from_dortmund(list(dortmund.iter_roadworks()))
+```
+
+**Found via GOVdata, not assumed from NRW's own state-level gating —
+and checked against two other real NRW cities first, not generalised
+from one example.** Cologne and Aachen were both checked live and
+trace only to Mobilithek marketplace "offer" URLs, no independent open
+republish found for either — Dortmund is a genuine exception, not
+representative of a wider open NRW-municipal pattern. Its own real
+`open-data.dortmund.de` — the same **OpenDataSoft** platform family as
+`streetworks.paris`'s own "Chantiers à Paris" — publishes two real,
+live, keyless datasets directly, harvested onto Open.NRW/GOVdata but
+genuinely served from Dortmund's own infrastructure.
+
+**Two real datasets, not one** — "tagesaktuell" (134 real currently-
+active records) and "geplant" (38 real planned records) at
+investigation time, identical real schema on both.
+`DortmundClient.iter_roadworks` fetches and combines both.
+
+**A real per-record identifier exists — but only via the older, nested
+`/api/v2/catalog/...` endpoint, not the newer flat
+`/api/explore/v2.1/...` Explore API `streetworks.paris` uses.** Checked
+live: the v2.1 Explore API's own flattened records (matching Paris's
+own shape) carry no id field at all, the same real gap the plain
+`exports/geojson` shortcut has — only the v2 endpoint's `record.id` (a
+real, stable per-record hash) survives, so this module uses that
+endpoint specifically, not for consistency with Paris's own choice.
+
+**Real, specific fields — not placeholders.** `auftraggeber` (a real
+promoter — e.g. `"EB70 - Stadtentwässerung"`, the city's own sewage/
+drainage utility; `"Dortmunder Netz"`, the local gas/electricity
+network operator; `"Stadt Dortmund"`), `stadtbezirk` (a real Dortmund
+city district, e.g. `"Hörde"`, mapped to `location_description` — a
+coarser-than-street location fact, not endpoint-provenance
+`administrative_area`, which stays the constant `"Dortmund"`).
+`art_der_baumassnahme` combines street, works type and restriction in
+one real free-text field (e.g. `"Stiegenweg 12 - Kanalreparatur //
+Vollsperrung"`) — no clean separate street field exists, the same
+honest gap NYC/Chicago/Paris's own permit registers already carry.
+
+**Geometry is already WGS84** — `geografische_koordinate` states
+`{"lon": ..., "lat": ...}` degrees directly, no reprojection needed.
+
+**Dates are date-only** (`"2026-08-20"`) — localised to Europe/Berlin
+via `zoneinfo`, the same convention this SDK's other German date-only
+sources already use. `status` carries the real literal source value
+(`"tagesaktuell"`/`"geplant"`), used to decide `actual_start` (only
+genuinely current, not merely planned, records get one).
+
+**Licence: Datenlizenz Deutschland - Zero - Version 2.0
+(dl-zero-de/2.0), confirmed** directly from GOVdata's own harvested
+metadata for this exact dataset — effectively public domain, no
+attribution even required.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
+
 ## Zentraler AdressService Hamburg (GAGES)
 
 Hamburg's own street gazetteer, run jointly by the Statistisches Amt

@@ -1,0 +1,131 @@
+{
+  "total_count": 38,
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records?limit=3&offset=0&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "first",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records?limit=3&offset=0&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "last",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records?limit=3&offset=36&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "next",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records?limit=3&offset=3&include_app_metas=False&include_links=False"
+    }
+  ],
+  "records": [
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records/f22f3243c9cb93622486acb62d2c480a0d08ba3d"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant"
+        }
+      ],
+      "record": {
+        "id": "f22f3243c9cb93622486acb62d2c480a0d08ba3d",
+        "timestamp": "2026-08-20T01:00:12.365Z",
+        "size": 239,
+        "fields": {
+          "geo_point_2d": {
+            "lon": 7.431206398507422,
+            "lat": 51.53657893243222
+          },
+          "art_der_baumassnahme": "Deusener Str. 59 - Vesorgungsleitungen // halbseitige Sp. m.LSA",
+          "auftraggeber": "Stadt Dortmund",
+          "einschrankung": null,
+          "zeitraum": "31.08.2026 - 11.09.2026",
+          "von": "2026-08-31",
+          "bis": "2026-09-11",
+          "stadtbezirk": "Huckarde",
+          "status": "geplant",
+          "kommune": "Dortmund"
+        }
+      }
+    },
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records/b012cf926a5f2e434910ccebbcf2367bfceb8753"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant"
+        }
+      ],
+      "record": {
+        "id": "b012cf926a5f2e434910ccebbcf2367bfceb8753",
+        "timestamp": "2026-08-20T01:00:12.365Z",
+        "size": 245,
+        "fields": {
+          "geo_point_2d": {
+            "lon": 7.549835537837753,
+            "lat": 51.479747824969806
+          },
+          "art_der_baumassnahme": "Schewenort 3 - Sanierungsmaßnahmen /// Fahrbahneinengung",
+          "auftraggeber": "Privatmaßnahme",
+          "einschrankung": null,
+          "zeitraum": "27.08.2026 - 20.11.2026",
+          "von": "2026-08-27",
+          "bis": "2026-11-20",
+          "stadtbezirk": "Aplerbeck",
+          "status": "geplant",
+          "kommune": "Dortmund"
+        }
+      }
+    },
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant/records/f22e4ce9a6008e70e29377c766f02281b246b66f"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-geplant"
+        }
+      ],
+      "record": {
+        "id": "f22e4ce9a6008e70e29377c766f02281b246b66f",
+        "timestamp": "2026-08-20T01:00:12.365Z",
+        "size": 241,
+        "fields": {
+          "geo_point_2d": {
+            "lon": 7.394361575618731,
+            "lat": 51.52542258341281
+          },
+          "art_der_baumassnahme": "Rahmer Straße - Arbeiten am Bahnübergang // Vollsperrung",
+          "auftraggeber": "Deutsche Bahn",
+          "einschrankung": null,
+          "zeitraum": "31.08.2026 - 04.09.2026",
+          "von": "2026-08-31",
+          "bis": "2026-09-04",
+          "stadtbezirk": "Huckarde",
+          "status": "geplant",
+          "kommune": "Dortmund"
+        }
+      }
+    }
+  ]
+}

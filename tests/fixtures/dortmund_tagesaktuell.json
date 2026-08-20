@@ -1,0 +1,131 @@
+{
+  "total_count": 134,
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records?limit=3&offset=0&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "first",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records?limit=3&offset=0&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "last",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records?limit=3&offset=132&include_app_metas=False&include_links=False"
+    },
+    {
+      "rel": "next",
+      "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records?limit=3&offset=3&include_app_metas=False&include_links=False"
+    }
+  ],
+  "records": [
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records/e67a4fdab485cfafad87af19e1ad20645de48926"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell"
+        }
+      ],
+      "record": {
+        "id": "e67a4fdab485cfafad87af19e1ad20645de48926",
+        "timestamp": "2026-08-20T01:00:01.252Z",
+        "size": 265,
+        "fields": {
+          "geografische_koordinate": {
+            "lon": 7.499996660035197,
+            "lat": 51.48600974302601
+          },
+          "art_der_baumassnahme": "Virchowstraße - Kanalernerung // Vollsperrung in 3 Abschnitten",
+          "auftraggeber": "EB70 - Stadtentwässerung",
+          "einschrankung": null,
+          "zeitraum": "04.05.2026 - 02.10.2026",
+          "von": "2026-05-04",
+          "bis": "2026-10-02",
+          "stadtbezirk": "Hörde",
+          "status": "tagesaktuell",
+          "kommune": "Dortmund"
+        }
+      }
+    },
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records/991bff0bc9b123d255321e88276f7cd44f6f205a"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell"
+        }
+      ],
+      "record": {
+        "id": "991bff0bc9b123d255321e88276f7cd44f6f205a",
+        "timestamp": "2026-08-20T01:00:01.252Z",
+        "size": 237,
+        "fields": {
+          "geografische_koordinate": {
+            "lon": 7.443984927852881,
+            "lat": 51.51026003748058
+          },
+          "art_der_baumassnahme": "Lange Straße / Gasundichte // Vollsperrung",
+          "auftraggeber": "Dortmunder Netz",
+          "einschrankung": null,
+          "zeitraum": "21.07.2026 - 04.09.2026",
+          "von": "2026-07-21",
+          "bis": "2026-09-04",
+          "stadtbezirk": "Innenstadt-West",
+          "status": "tagesaktuell",
+          "kommune": "Dortmund"
+        }
+      }
+    },
+    {
+      "links": [
+        {
+          "rel": "self",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell/records/6677784ad37e96ef12f8842d7d8770ceb630b68f"
+        },
+        {
+          "rel": "datasets",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets"
+        },
+        {
+          "rel": "dataset",
+          "href": "https://open-data.dortmund.de/api/v2/catalog/datasets/fb66-baustellen-tagesaktuell"
+        }
+      ],
+      "record": {
+        "id": "6677784ad37e96ef12f8842d7d8770ceb630b68f",
+        "timestamp": "2026-08-20T01:00:01.252Z",
+        "size": 233,
+        "fields": {
+          "geografische_koordinate": {
+            "lon": 7.544046057456559,
+            "lat": 51.47799923880081
+          },
+          "art_der_baumassnahme": "Falterweg - Kanalbau // Vollsperrung",
+          "auftraggeber": "EB70 - Stadtentwässerung",
+          "einschrankung": null,
+          "zeitraum": "08.09.2025 - 21.08.2026",
+          "von": "2025-09-08",
+          "bis": "2026-08-21",
+          "stadtbezirk": "Aplerbeck",
+          "status": "tagesaktuell",
+          "kommune": "Dortmund"
+        }
+      }
+    }
+  ]
+}

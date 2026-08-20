@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+### Added — Dortmund, this SDK's first German municipal roadworks provider (2026-08-20)
+
+`streetworks.dortmund.DortmundClient` / `streetworks.common.from_dortmund`
+- With all 16 German states now checked at the state level, this opens
+a genuinely different tier: municipal feeds, real and open where a
+state's own route (here, NRW's) isn't.
+
+```python
+from streetworks.dortmund import DortmundClient
+from streetworks.common import from_dortmund
+
+with DortmundClient() as dortmund:
+    works = from_dortmund(list(dortmund.iter_roadworks()))
+```
+
+- **Found via GOVdata, checked against two other real NRW cities
+  first, not generalised from one example.** Cologne and Aachen both
+  trace only to gated Mobilithek marketplace offers - Dortmund's own
+  real `open-data.dortmund.de` (OpenDataSoft, the same platform family
+  as `streetworks.paris`) is a genuine exception.
+- **172 real records** across two datasets ("tagesaktuell"/currently-
+  active, 134; "geplant"/planned, 38), same real schema, combined by
+  `iter_roadworks()`.
+- **A real per-record identifier exists only via the older v2 catalog
+  API** - the newer v2.1 Explore API's own flattened records (the
+  shape `streetworks.paris` uses) carry no id at all, confirmed live.
+- Real promoter (`auftraggeber`) and city-district (`stadtbezirk`,
+  mapped to `location_description`) fields - no clean separate street
+  field exists, the same honest gap NYC/Chicago/Paris's own permit
+  registers already carry.
+- **Licence**: Datenlizenz Deutschland - Zero - 2.0 (effectively public
+  domain).
+
 ### Added — Rheinland-Pfalz and Saarland, this SDK's sixth and seventh German state roadworks feeds (2026-08-20)
 
 `streetworks.ogc.germany.GermanRoadworksClient` / `streetworks.saarland.SaarlandClient`
