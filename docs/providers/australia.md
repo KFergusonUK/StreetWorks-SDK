@@ -24,11 +24,13 @@ provider with real line geometry, no credentials, licence genuinely
 unconfirmed); Traffic SA / DIT Roadworks (South Australia, ArcGIS
 MapServer) is a **[Credentials wanted](index.md#credentials-wanted)**
 scaffold, blocked on a token-gated query endpoint behind a geo-restricted
-host. Road Report NT (Northern Territory) is registered as a documented,
-honestly-unavailable scaffold — investigated and found to have no
-published REST/GeoJSON API at all (its real backend is an undocumented
-SignalR hub), so `RoadReportNtClient()` always raises
-`ProviderUnavailableError` rather than pretending to work.
+host. Road Report NT (Northern Territory) is a working, credential-free
+adapter over the public JSON endpoint
+`GET /api/Obstruction/GetAll` — confirmed live 2026-08-19 (140 CURRENT
+records, 26 official `Roadworks`). The feed is still a road-condition
+system; `iter_roadworks()` returns only records that are actually
+works. Licence is genuinely unconfirmed. The reverse-engineered SignalR
+hub is not consumed.
 
 ## Main Roads WA (ArcGIS REST)
 
@@ -178,7 +180,7 @@ docstring for the full detail, including the real (`START_DATE`/
 still-open (coverage: metro-Adelaide vs. statewide; `LATITUDE`/
 `LONGITUDE` vs. the reprojected `SHAPE`) parts of the schema.
 
-## ACT & Tasmania — the AU tail, plus a documented Northern Territory
+## ACT, Tasmania, and Road Report NT — the AU tail
 
 Two more `streetworks.au` members, both confirmed live 2026-08-01,
 credential-free, closing out the cluster's smaller jurisdictions.
@@ -195,6 +197,12 @@ from streetworks.common import from_au_tas_roadworks
 
 with TasRoadworksClient() as tas:
     works_list = from_au_tas_roadworks(list(tas.iter_roadworks()))
+
+from streetworks.au.nt import RoadReportNtClient
+from streetworks.common import from_au_nt_roadreport
+
+with RoadReportNtClient() as nt:
+    works_list = from_au_nt_roadreport(nt.iter_roadworks())
 ```
 
 **ACT (Temporary Traffic Management, Roads ACT) is the standout** — the
@@ -218,8 +226,9 @@ on real, evidenced criteria, unlike South Australia's still-unconfirmed
 this AU cluster, distinct from everyone else's plain CC-BY.
 
 **Tasmania (Roadworks - State Roads, Department of State Growth) is the
-only AU provider with real line geometry** — every other member is
-points-only. Genuinely tiny (10 real total records) and confirmed
+only AU provider with real multi-vertex linework** — surveyed polylines
+of 5–152 vertices, not a start/end pair. NT's GetAll adapter (below)
+has two-point start/end lines; every other AU member is points-only. Genuinely tiny (10 real total records) and confirmed
 single-type (`EVENT_TYPE=='Roadworks'` on 10/10, no incident mix). Its
 native CRS, **GDA94/MGA zone 55**, is genuinely different from WA/SA's
 Web Mercator — `outSR=4326` is confirmed honoured live, but this module
@@ -236,22 +245,21 @@ portal). Shipped anyway on the same openly-queryable basis as
 `streetworks.arcgis.jersey` — real data, real fixture, honest licence
 caveat, not blocked the way SA is.
 
-**The Northern Territory (Road Report NT) is registered as a documented,
-honestly-unavailable scaffold** — `streetworks.au.nt`, `verified=False`,
-on the board rather than silently missing, but genuinely not a working
-client. Its real backend is not a REST/GeoJSON API at all:
-reverse-engineering the site's own minified Angular bundle found a
-genuine SignalR real-time hub connection (`roadsReportingHub`, invoking
-hub methods like `GetAllMajorRoadObstructions`) — an undocumented,
-materially different client protocol this SDK has never needed elsewhere,
-on top of already-flagged concerns from earlier investigation
-(roadworks is a minor subset of a road-condition system dominated by
-closures/flooding, and the licence is unspecified). Rather than encode
-that reverse-engineered hub as a stable contract, `RoadReportNtClient()`
-always raises `streetworks.exceptions.ProviderUnavailableError`
-immediately, with no network call — see
-[Credentials wanted](index.md#credentials-wanted) for the fuller writeup,
-and revisit if a documented REST equivalent ever surfaces.
+**The Northern Territory (Road Report NT) is a working adapter** —
+`streetworks.au.nt`, confirmed live 2026-08-19 against
+`GET https://roadreport.nt.gov.au/api/Obstruction/GetAll`. HTTP 200,
+envelope `{success, message, response: [...]}`, 140 CURRENT records, 26
+of them official `Roadworks` (type-code 28). The site's own terminology
+page defines Roadwork as construction, repair or maintenance in the
+road reserve; everything else in the feed is conditions (weight limits,
+flooding, surface damage). `iter_roadworks()` returns only the works
+slice. Geometry comes from `startPoint` / `endPoint` (`[lat, lon]`) —
+the live `geometry` / `geometries` fields were empty on every record.
+Dates are naive `YYYY-MM-DD HH:MM:SS` with no stated timezone.
+`dateTo` was unused on that pull (0/140). Licence is genuinely
+unconfirmed. The reverse-engineered SignalR hub
+(`roadsReportingHub` / `GetAllMajorRoadObstructions`) is still not
+consumed — this adapter talks only to the ordinary HTTP JSON endpoint.
 
 ## G-NAF & National Roads (Australia)
 

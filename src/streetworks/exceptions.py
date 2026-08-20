@@ -107,14 +107,15 @@ class ProviderUnavailableError(StreetworksError):
     Denmark, South Australia - all have a real, documented interface,
     just not one this project can currently authenticate to or reach):
     this is for a provider investigated and found to have **no published,
-    documented API at all** - e.g. Road Report NT
-    (:mod:`streetworks.au.nt`), whose only real backend is an undocumented
-    SignalR hub reverse-engineered from a minified JS bundle, not a
-    published contract. Building a client against inferred hub method
-    names/message shapes would dress that inference up as a stable
-    contract - the thing this project avoids everywhere else - so the
-    registered client raises this immediately instead of pretending to
-    work. The message states what was found and why it isn't built."""
+    documented API a caller can build against** - e.g. MapRoad
+    (:mod:`streetworks.maproad`), whose catalogue states a real API
+    exists but no published read-path contract was found, or Greece
+    (:mod:`streetworks.greece`), whose NAP carries no roadworks dataset.
+    Building a client against inferred internals would dress that
+    inference up as a stable contract - the thing this project avoids
+    everywhere else - so the registered client raises this immediately
+    instead of pretending to work. The message states what was found
+    and why it isn't built."""
 
 
 _STATUS_MAP: dict[int, type[APIError]] = {

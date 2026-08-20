@@ -317,12 +317,10 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     been exercised against a real response, only the layer *metadata* -
     see streetworks.au.sa's own module docstring.
 
-    The Northern Territory (`nt`) is unverified for a genuinely different
-    reason, a distinct tier of its own: not blocked on access to a
-    published interface at all, but investigated and found to have no
-    published REST/GeoJSON API whatsoever (its real backend is an
-    undocumented SignalR hub) - see streetworks.au.nt's own module
-    docstring and streetworks.exceptions.ProviderUnavailableError.
+    The Northern Territory (`nt`) graduated out on 2026-08-19 after a
+    real, credential-free pull of GET /api/Obstruction/GetAll confirmed
+    a public JSON envelope (140 CURRENT records, 26 official Roadworks).
+    See streetworks.au.nt's own module docstring.
 
     LINZ Roads/Road Sections (`linz_roads`) is back in Trafikverket's own
     tier: schema and a real attribute sample confirmed live from LINZ's
@@ -332,7 +330,8 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     same LinzClient, genuinely different verification tier per capability,
     see streetworks.linz.client's own module docstring.
 
-    MapRoad (`maproad`, Ireland) joins NT's tier, not Trafikverket's -
+    MapRoad (`maproad`, Ireland) is a documented-unavailable scaffold,
+    not Trafikverket's credentials-wanted tier -
     it has a real, government-catalogued API, but the catalogue's own
     metadata (API Available: Yes, Open Data: No, Data Sharing: Yes,
     Personal Data: Yes) describes a formal, GDPR-gated data-sharing
@@ -340,7 +339,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     read path is published anywhere - see streetworks.maproad.client's
     own module docstring and streetworks.exceptions.ProviderUnavailableError.
 
-    Greece (`greece`) is squarely NT's own tier - not a real interface
+    Greece (`greece`) is squarely MapRoad's own tier - not a real interface
     blocked, but investigated and found to have no roadworks source at
     all: its real NAP (nap.gov.gr) carries only POI/sensor data, and the
     portal itself is currently unreachable besides (a real live 502) -
@@ -370,7 +369,6 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "trafikverket",
         "vejdirektoratet",
         "sa",
-        "nt",
         "linz_roads",
         "maproad",
         "greece",
