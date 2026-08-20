@@ -2591,6 +2591,53 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.vlaanderen import VlaanderenStreetsClient",
     ),
     ProviderEntry(
+        key="registrucentras",
+        name="Adresų registras (Registrų centras, Lithuania)",
+        description=(
+            "Lithuania's national street-centerline register, run by the State "
+            "Enterprise Centre of Registers."
+        ),
+        kind=Kind.STREETS,
+        territories=frozenset({"Lithuania"}),
+        administrative_area="Registrų centras (State Enterprise Centre of Registers)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, this SDK's "
+            "first Lithuanian streets/gazetteer provider, a sibling to "
+            "the existing Lithuanian roadworks coverage (Via Lietuva, "
+            "streetworks.vialietuva). 22,547 real national street "
+            "records, 100% carrying a real name and real geometry, zero "
+            "duplicate street codes. Found via data.gov.lt's own DCAT "
+            "dataset page; its promoted download link bakes a version "
+            "number into the URL (the same no-stable-latest-alias shape "
+            "Austria's BEV register has), but a shorter distribution "
+            "link on the same page was followed and found to redirect "
+            "to a real, stable, version-less route "
+            "(get.data.gov.lt/datasets/gov/rc/ar/gragatve/GraGatve, "
+            "confirmed byte-identical to the versioned URL) - used "
+            "instead. A real, confirmed axis-order quirk found live: "
+            "the source's own WKT geometry states coordinate pairs as "
+            "(Northing, Easting), not the standard WKT/GeoJSON (X, Y) "
+            "order - confirmed by bounds-checking a real sample point "
+            "against LKS-94's own real Lithuanian easting/northing "
+            "ranges, both ways. Reprojected client-side from LKS-94 "
+            "(EPSG:3346) via a new closed-form Transverse Mercator "
+            "inverse (streetworks.common._lks94), no server-side "
+            "reprojection option existing on this plain REST/JSON "
+            "resource. administrative_area is left unresolved - the "
+            "real settlement reference on each row would need a "
+            "disproportionate 127MB separate national dataset just to "
+            "label one field, unlike Austria's BEV, whose own "
+            "municipality lookup was a cheap 51KB bundled table. "
+            "Licence: CC BY 4.0, confirmed live. See module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        source_grade="register",
+        _module="streetworks.registrucentras",
+        _client_name="RegistruCentrasStreetsClient",
+        import_line="from streetworks.registrucentras import RegistruCentrasStreetsClient",
+    ),
+    ProviderEntry(
         key="osni",
         name="OSNI Open Data - Gazetteer - Streetnames",
         description="Northern Ireland's street-name gazetteer - name plus one point.",

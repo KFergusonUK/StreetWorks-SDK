@@ -640,6 +640,69 @@ similar), structurally identical to a real row otherwise and not filtered
 by the source. See `streetworks/vialietuva/models.py`'s module docstring
 for the full field-by-field mapping.
 
+## Adresų registras (Registrų centras, Lithuania streets)
+
+Lithuania's national street-centerline register, run by Registrų
+centras (State Enterprise Centre of Registers) — no credentials. This
+SDK's first Lithuanian streets/gazetteer coverage, a sibling to the
+roadworks coverage above (Via Lietuva):
+
+```python
+from streetworks.registrucentras import RegistruCentrasStreetsClient
+from streetworks.common import from_registrucentras_street
+
+with RegistruCentrasStreetsClient() as rc:
+    streets = [from_registrucentras_street(r) for r in rc.iter_streets()]
+```
+
+**22,547 real national street records, confirmed live 2026-08-20 — 100%
+carrying a real name and real geometry, zero duplicate street codes.**
+Found via data.gov.lt's own DCAT catalogue; the dataset's own promoted
+download link bakes a version number into the URL
+(`.../versions/116/dynamic-resource/gragatve/json/download/` — the same
+no-stable-latest-alias shape Austria's BEV register has), but a
+shorter, undated link on the same page was followed and found to
+redirect to a real, stable, version-less route
+(`get.data.gov.lt/datasets/gov/rc/ar/gragatve/GraGatve`, confirmed
+byte-identical to the versioned URL) — used instead. The whole real
+dataset (~15.5 MB) comes back in one response, no pagination needed.
+
+**The same real axis-order quirk this SDK's own Via Lietuva roadworks
+provider already documented, confirmed independently here rather than
+assumed to carry over.** The `gatves` field's WKT `LINESTRING`/
+`MULTILINESTRING` geometry states coordinate pairs as `(Northing,
+Easting)`, not the standard WKT/GeoJSON `(X, Y)` order — confirmed the
+same way Via Lietuva's own finding was: a real sample point's first
+ordinate (~6,107,030) only ever falls inside LKS-94's real Lithuanian
+*northing* range (~5,990,000–6,265,000), never its real easting range
+(~300,000–720,000), and reprojecting with the ordinates swapped lands
+the point inside Lithuania's real extent (~22.7°E, ~55.1°N) while the
+literal order lands near Sri Lanka. Unlike Via Lietuva (which carries
+LKS-94 through unconverted, since DATEX-style consumers expect a stated
+projected CRS), this streets build reprojects client-side to WGS84 via
+a new closed-form Transverse Mercator inverse
+(`streetworks.common._lks94`, no `pyproj`) — matching the `(lat, lon)`
+convention every other streets provider in this SDK uses.
+
+**Genuinely multi-part `MULTILINESTRING` on a real minority of rows**
+(21/22,547) — parsed into `Coordinate.parts`, never a first-part-only
+shortcut.
+
+**`administrative_area` is left unresolved — a real, disclosed gap.**
+Each row's `gyvenamoji_vietove` (settlement) reference is a bare
+`{"_id": ...}` pointer; resolving it to a real name would mean fetching
+a separate 127 MB national dataset (20,880 real residential areas) just
+to label one field — disproportionate next to Austria's BEV register,
+whose own municipality lookup was a 51 KB table bundled in the same
+download. Kept on `.raw` for any caller who wants to resolve it
+themselves.
+
+**Licence: Creative Commons Attribution 4.0 International**, confirmed
+live directly from the dataset's own page on data.gov.lt.
+
+**No credentials required** — every claim above came from a fully
+unauthenticated GET request.
+
 ## German state roadworks (OGC WFS)
 
 Germany's individual *states* (Bundesländer) each publish their own

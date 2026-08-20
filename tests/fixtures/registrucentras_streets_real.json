@@ -1,0 +1,30 @@
+[
+  {
+    "_type": "datasets/gov/rc/ar/gragatve/GraGatve",
+    "_id": "de7816ab-110b-445c-b091-4ee4225aa105",
+    "_revision": "caa9ce7b-e095-449e-87c5-09696012dce3",
+    "gat_kodas": 16036,
+    "pavadinimas": "Smukučių g.",
+    "gat_r": null,
+    "gat_ilgis": 1623.0,
+    "gyvenamoji_vietove": {
+      "_id": "9d749b46-d228-4a51-b318-0f80c33303fe"
+    },
+    "formavimo_data": "2025-10-21",
+    "gatves": "LINESTRING (6107030.078125 418729.756125, 6107022.994375 418696.9515, 6107021.6075 418670.183125, 6107030.45375 418626.5165, 6107035.602625 418606.910875)"
+  },
+  {
+    "_type": "datasets/gov/rc/ar/gragatve/GraGatve",
+    "_id": "eb72d8d3-c7bd-4d8a-bf38-1a9c865354af",
+    "_revision": "0c47bb51-b838-4cb2-bfe9-7301d07f0179",
+    "gat_kodas": 16490,
+    "pavadinimas": "Maironio g.",
+    "gat_r": null,
+    "gat_ilgis": 859.0,
+    "gyvenamoji_vietove": {
+      "_id": "8f2ee16e-14fe-4588-810d-d709b7a0722c"
+    },
+    "formavimo_data": "2025-10-21",
+    "gatves": "MULTILINESTRING ((6125053.11175 466222.332125, 6125079.040875 466204.8695, 6125101.265875 466190.582, 6125122.432625 466179.998625),(6126049.995375 465689.43125, 6125989.67025 465733.352125, 6125962.1535 465750.814625, 6125941.516 465755.048))"
+  }
+]

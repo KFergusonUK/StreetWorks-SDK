@@ -1811,6 +1811,23 @@ def check_vlaanderen() -> str:
     return f"{len(streets)} real street(s), e.g. {sample_name!r}"
 
 
+def check_registrucentras() -> str:
+    """Registrų centras Adresų registras (Lithuania) needs no
+    credentials. Exercises the real national bulk JSON download - not a
+    small pull, the full ~22.5k-record national dataset is fetched in
+    one response (no pagination exists), see
+    streetworks.registrucentras.client's module docstring."""
+    import itertools
+
+    from streetworks.registrucentras import RegistruCentrasStreetsClient
+
+    with RegistruCentrasStreetsClient() as rc:
+        streets = list(itertools.islice(rc.iter_streets(), 5))
+    if not streets:
+        raise RuntimeError("query returned no real streets")
+    return f"{len(streets)} real street(s), e.g. {streets[0]['pavadinimas']!r}"
+
+
 def main() -> int:
     allow_prod = "--allow-production" in sys.argv
 
@@ -1999,6 +2016,8 @@ def main() -> int:
     reporter.check("Österreichisches Adressregister (Austria)", [], check_bev)
     # Straatnamenregister (Flanders, Belgium) needs no credentials
     reporter.check("Straatnamenregister (Flanders, Belgium)", [], check_vlaanderen)
+    # Registrų centras Adresų registras (Lithuania) needs no credentials
+    reporter.check("Adresų registras (Lithuania)", [], check_registrucentras)
 
     print()
     if reporter.ran == 0:

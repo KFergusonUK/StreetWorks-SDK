@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — Adresų registras (Registrų centras), this SDK's first Lithuanian streets provider (2026-08-20)
+
+`streetworks.registrucentras.RegistruCentrasStreetsClient` /
+`streetworks.common.from_registrucentras_street` - Lithuania's national
+street-centerline register, run by Registrų centras (State Enterprise
+Centre of Registers).
+
+```python
+from streetworks.registrucentras import RegistruCentrasStreetsClient
+from streetworks.common import from_registrucentras_street
+
+with RegistruCentrasStreetsClient() as rc:
+    streets = [from_registrucentras_street(r) for r in rc.iter_streets()]
+```
+
+- **22,547 real national street records - 100% carrying a real name and
+  real geometry, zero duplicate street codes.** The full dataset
+  (~15.5 MB) returns in one response, no pagination needed.
+- **A real, stable, version-less URL found after the dataset's own
+  promoted download link turned out to bake in a version number** - the
+  same no-stable-latest-alias shape Austria's BEV register has. A
+  shorter, undated link on the same catalogue page was followed and
+  found to redirect to a real, stable route, used instead.
+- **The same real axis-order quirk this SDK's own Via Lietuva roadworks
+  provider already documented, confirmed independently rather than
+  assumed to carry over.** The source's own WKT geometry states
+  coordinate pairs as `(Northing, Easting)`, not the standard `(X, Y)`
+  order - confirmed by bounds-checking a real sample point against
+  LKS-94's real Lithuanian easting/northing ranges. Reprojected
+  client-side to WGS84 via a new closed-form Transverse Mercator
+  inverse (`streetworks.common._lks94`, no `pyproj`).
+- **`administrative_area` left unresolved** - the real settlement
+  reference on each row would need a disproportionate separate 127 MB
+  national dataset just to label one field, unlike Austria's BEV, whose
+  own municipality lookup was a cheap 51 KB bundled table.
+- **Licence**: Creative Commons Attribution 4.0 International, confirmed
+  live from the dataset's own page.
+
 ### Added — `examples/works_near`, a UK-first works-near-here join pattern (2026-08-20)
 
 `examples.works_near.query` (`v1_providers`, `works_near`,
