@@ -1,0 +1,156 @@
+{
+  "total_count": 122,
+  "results": [
+    {
+      "objectid": 1290,
+      "communes": [
+        "Asnières-sur-Seine",
+        "Colombes"
+      ],
+      "voie": "RD 13, RD 97, RD 98, RD 106, RD 909, RD986, RD 992",
+      "delimitation": "entre la station de tramway \"Asnières - Quatre Routes\" et la station de tramway \"Petit-Colombes\"",
+      "avancement": "Travaux en cours",
+      "date_travaux": "Travaux d'assainissement début 2026 et travaux concessionnaires jusqu'à fin 2029",
+      "type_travaux": [
+        "Tramway"
+      ],
+      "description_travaux": "Prolongement Tramway T1 Colombes (démolition de bâtiments et adaptation des réseaux d’assainissement)",
+      "operateur": "CD92 / Direction des Mobilités",
+      "lien": "https://www.hauts-de-seine.fr/mon-departement/les-hauts-de-seine/les-grands-projets/les-infrastructures-de-transport/tramways/le-prolongement-du-t1-vers-asnieres-colombes",
+      "contact": "0 806 00 00 92 (service gratuit + prix appel)\r\nhttps://contact.hauts-de-seine.fr/",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              [
+                2.2276037118805427,
+                48.913879253740106
+              ],
+              [
+                2.2279329875729035,
+                48.91403336049386
+              ],
+              [
+                2.2280874393568726,
+                48.91410720071082
+              ],
+              [
+                2.228201270451362,
+                48.91416009455262
+              ]
+            ]
+          ],
+          "type": "MultiLineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 2.2462909382879657,
+        "lat": 48.925932958913286
+      }
+    },
+    {
+      "objectid": 1296,
+      "communes": [
+        "Courbevoie",
+        "Neuilly-sur-Seine"
+      ],
+      "voie": "RD 908 - pont de Courbevoie",
+      "delimitation": "entre le quai du Maréchal Joffre (RD 7) et le boulevard Bourdon (RD 1)",
+      "avancement": "Travaux programmés",
+      "date_travaux": "2026 - 2027 (abattage en janvier 2025)",
+      "type_travaux": [
+        "Aménagements cyclables"
+      ],
+      "description_travaux": "Aménagements cyclables (coupure urbaine du Plan Vélo)",
+      "operateur": "CD92 / Direction des Mobilités",
+      "lien": null,
+      "contact": "0 806 00 00 92 (service gratuit + prix appel)\r\nhttps://contact.hauts-de-seine.fr/",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              2.267411402518825,
+              48.893624777951054
+            ],
+            [
+              2.2672965626931223,
+              48.89374098865299
+            ],
+            [
+              2.267035107461871,
+              48.894001992459664
+            ],
+            [
+              2.2669797449509277,
+              48.89405921095356
+            ],
+            [
+              2.2668909932004144,
+              48.89416298946025
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 2.2659320770048907,
+        "lat": 48.895121876184525
+      }
+    },
+    {
+      "objectid": 1310,
+      "communes": [
+        "Saint-Cloud",
+        "Sèvres"
+      ],
+      "voie": "RD 7 - quai du Maréchal Juin, rue de Saint-Cloud",
+      "delimitation": "entre le pont de Sèvres (RD910) et le pont de Saint-Cloud (RD 907)",
+      "avancement": "Projet à l'étude",
+      "date_travaux": null,
+      "type_travaux": [
+        "Aménagements cyclables"
+      ],
+      "description_travaux": "Aménagements cyclables (structurant du Plan Vélo)",
+      "operateur": "CD92 / Direction des Mobilités",
+      "lien": null,
+      "contact": "0 806 00 00 92 (service gratuit + prix appel)\r\nhttps://contact.hauts-de-seine.fr/",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              2.2245222384159207,
+              48.82783716804563
+            ],
+            [
+              2.2245404083150038,
+              48.827989282274906
+            ],
+            [
+              2.224550807316116,
+              48.8281143645358
+            ],
+            [
+              2.2245529270573203,
+              48.82824658844072
+            ],
+            [
+              2.2245373935188284,
+              48.828375099486784
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 2.222448798227444,
+        "lat": 48.83390379737771
+      }
+    }
+  ]
+}

@@ -787,12 +787,120 @@ _REGISTRY: list[ProviderEntry] = [
         credentials=None,
         licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
         source_grade="operator",
-        # No "france" alias: France now has three providers (this one,
-        # ban, and bdtopo) - get_provider("france") resolves through
-        # the territory-ambiguity path instead, same as "germany".
+        # No "france" alias: France now has several providers (this
+        # one, ban, bdtopo, paris, and the départements below) -
+        # get_provider("france") resolves through the territory-
+        # ambiguity path instead, same as "germany".
         _module="streetworks.datex2",
         _client_name="BisonFuteClient",
         import_line="from streetworks.datex2 import BisonFuteClient",
+    ),
+    ProviderEntry(
+        key="sarthe",
+        name="Sarthe (Conseil départemental)",
+        description="Sarthe's own département roadworks feed (Routes Départementales).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"France"}),
+        administrative_area="Conseil départemental de la Sarthe",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. This SDK's "
+            "first French *département*-level roadworks provider - the "
+            "majority of the French road network by length (Routes "
+            "Départementales) is each département's own responsibility "
+            "and isn't in Bison Futé at all, the same real gap Germany's "
+            "own state fan-out closed relative to Autobahn GmbH. 9 real "
+            "features, real Point-de-Repère road/kilometre-marker "
+            "referencing (loc_txt, e.g. 'RD 0316 : Du 0+100 au 1+700'), "
+            "structured ISO datetimes with an explicit UTC offset - the "
+            "only département checked so far with real structured "
+            "dates. Over the same real OpenDataSoft Explore API v2.1 "
+            "platform streetworks.paris already established - a second "
+            "and third real consumer (this one, Loire-Atlantique, "
+            "Hauts-de-Seine) justified extracting a small shared "
+            "streetworks.opendatasoft client, Paris's own code left "
+            "untouched. See streetworks.opendatasoft.france_departements's "
+            "module docstring for the full write-up, including a real "
+            "GML-only département (Corrèze) and a real non-OpenDataSoft "
+            "one (Côtes d'Armor, 5,292 features on a Koumoul/data-fair "
+            "REST API) found but not built this round."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        source_grade="operator",
+        _module="streetworks.opendatasoft.france_departements",
+        _client_name="DepartementRoadworksClient",
+        import_line=(
+            "from streetworks.opendatasoft.france_departements import "
+            'DepartementRoadworksClient # .fetch("Sarthe")'
+        ),
+    ),
+    ProviderEntry(
+        key="loire_atlantique",
+        name="Loire-Atlantique (Département)",
+        description="Loire-Atlantique's own département roadworks feed (Routes Départementales).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"France"}),
+        administrative_area="Département de Loire-Atlantique",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, described "
+            "by its own publisher as real-time. 21 real Point-geometry "
+            "features. No structured dates at all - a real French "
+            "free-text date range only (ligne4, e.g. 'Du 18/08/2026 au "
+            "20/08/2026'), never parsed, so every record carries "
+            "DateConfidence.UNKNOWN honestly. No real per-record "
+            "identifier either - Works.reference is genuinely an empty "
+            "string. Real point field is named 'localisation', not "
+            "'geo_point_2d' like its siblings - a real per-dataset "
+            "choice, not an OpenDataSoft platform standard, confirmed "
+            "live. See streetworks.opendatasoft.france_departements's "
+            "module docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        source_grade="operator",
+        _module="streetworks.opendatasoft.france_departements",
+        _client_name="DepartementRoadworksClient",
+        import_line=(
+            "from streetworks.opendatasoft.france_departements import "
+            'DepartementRoadworksClient # .fetch("Loire-Atlantique")'
+        ),
+    ),
+    ProviderEntry(
+        key="hauts_de_seine",
+        name="Hauts-de-Seine (Département)",
+        description="Hauts-de-Seine's own département infrastructure-works register.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"France"}),
+        administrative_area="Département des Hauts-de-Seine",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 122 real "
+            "features - but a genuinely different register from its "
+            "siblings: a capital-works/infrastructure-project register "
+            "(tramway extensions, cycle-lane programmes; real "
+            "'avancement' project-phase field - "
+            "'Travaux en cours'/'Travaux programmés'/'Projet à "
+            "l'étude'), not a day-to-day closures feed - no structured "
+            "dates exist here either (date_travaux is real free text, "
+            "often spanning years, or None outright), so "
+            "DateConfidence.UNKNOWN throughout, the same honest gap "
+            "Loire-Atlantique has. Real 'voie' field genuinely lists "
+            "several route numbers per record (comma-separated) since "
+            "one project can span several routes. See "
+            "streetworks.opendatasoft.france_departements's module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Licence Ouverte / Open Licence 2.0 (Etalab)",
+        source_grade="operator",
+        _module="streetworks.opendatasoft.france_departements",
+        _client_name="DepartementRoadworksClient",
+        import_line=(
+            "from streetworks.opendatasoft.france_departements import "
+            'DepartementRoadworksClient # .fetch("Hauts-de-Seine")'
+        ),
     ),
     ProviderEntry(
         key="dgt",

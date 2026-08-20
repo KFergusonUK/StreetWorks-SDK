@@ -2287,6 +2287,96 @@ database must itself be released under ODbL (or a compatible licence) —
 the same nuance `streetworks.au.act`'s CC BY-SA carries relative to its
 plain-CC-BY siblings. Attribution: "Ville de Paris".
 
+## French département roadworks (Routes Départementales)
+
+Individual French *départements* each publish their own Routes
+Départementales (RD) roadworks — the majority of the French road
+network by length, and genuinely separate from Bison Futé's own
+non-concessionary national network. `streetworks.opendatasoft` is a
+generic OpenDataSoft Explore API v2.1 client, plus a declarative
+per-département field-map registry
+(`streetworks.opendatasoft.france_departements`) — the same shape
+`streetworks.ogc.germany` already established for German state
+roadworks, adding a département is writing a new field-map entry, not
+a new converter.
+
+```python
+from streetworks.common import from_departement_roadworks
+from streetworks.opendatasoft.france_departements import SARTHE, DepartementRoadworksClient
+
+with DepartementRoadworksClient() as france:
+    records = france.fetch("Sarthe")
+
+works = from_departement_roadworks(records, SARTHE)
+```
+
+**Extracted now, not from day one — the same sequence that produced
+`SodaClient`.** `streetworks.paris`'s own module docstring already
+named the threshold: "bespoke first, extracted only when a second
+OpenDataSoft-backed provider needs the identical shape." That threshold
+is now real — Sarthe, Loire-Atlantique and Hauts-de-Seine's own real
+département feeds all independently turned out to be genuine
+`/api/explore/v2.1/catalog/datasets/{dataset}/records` deployments,
+confirmed live to share byte-for-byte the same pagination shape
+(`results`/`total_count`, `limit`/`offset`) and even the same real
+geometry field-naming convention (`geo_shape`/`geo_point_2d`) Paris's
+own dataset uses. Paris's own `ParisClient` is left exactly as it was —
+not retrofitted, since it already works and retrofitting it would
+carry real regression risk for no functional gain.
+
+Three départements are live, all verified against real data
+(2026-08-20): **Sarthe** (9 real features, `LineString`, structured ISO
+datetimes with an explicit UTC offset — the only département checked
+so far with real structured dates), **Loire-Atlantique** (21 real
+features, `Point` only, described by its own publisher as real-time),
+and **Hauts-de-Seine** (122 real features, `LineString`/
+`MultiLineString`).
+
+**A real fourth département was found and set aside, not built.**
+Corrèze's own WFS (`ogc.geo-ide.developpement-durable.gouv.fr`, a real
+national DREAL geo-infrastructure) is genuinely GML-only — its
+`GetCapabilities` states only GML output formats, the same real shape
+already handled for Schleswig-Holstein in `streetworks.ogc.germany` —
+not out of scope in principle, just not built this round. **Côtes
+d'Armor is real, live, and by far the richest département found (5,292
+real features) but doesn't fit this OpenDataSoft-specific field map at
+all** — a genuine REST API over the Koumoul/`data-fair` platform
+(`datarmor.cotesdarmor.fr/data-fair/api/v1/datasets/...`), with its own
+real rich fields (`ROUTE`, `PRDEBUT`/`PRFIN`/`ABSCISSEDEBUT`/
+`ABSCISSEFIN` — real French *Point de Repère* kilometre-marker
+referencing, `CIRCULATION`, `COMMUNE`, `NUMDOSSIER` — a real per-record
+case reference) — tracked separately, a real next step, not built this
+round.
+
+**No structured dates on two of three départements — a genuine finding,
+not a converter gap.** Loire-Atlantique's real date range is French
+free text only (`ligne4`, e.g. `"Du 18/08/2026 au 20/08/2026"`);
+Hauts-de-Seine's own `date_travaux` is similarly free text, often
+spanning years (e.g. `"Travaux d'assainissement début 2026 et travaux
+concessionnaires jusqu'à fin 2029"`) or `None` outright — Hauts-de-
+Seine's real register turns out to be a capital-works/infrastructure-
+project index (tramway extensions, cycle-lane programmes; its own real
+`avancement` field states a project phase — `"Travaux en
+cours"`/`"Travaux programmés"`/`"Projet à l'étude"`), not a day-to-day
+closures feed. Per this SDK's "never extract structured data from free
+text" discipline, both carry `DateConfidence.UNKNOWN` throughout —
+honest, not a bug.
+
+**`value`/`points` are two independently real, stated facts, not one
+derived from the other** — the same shape `from_berlin`'s own real
+`GeometryCollection` (`Point` + `LineString`) handling already
+establishes: `Coordinate.value` is the département's own real
+representative point field (`geo_point_2d` for Sarthe/Hauts-de-Seine;
+`localisation` for Loire-Atlantique — a real per-dataset name, not an
+OpenDataSoft platform standard, confirmed live), and `.points` (when a
+real `geo_shape` line exists) is the separately real line geometry —
+`points[0]` is never asserted to equal `value`.
+
+**Licence: Licence Ouverte / Open Licence 2.0 (Etalab), confirmed for
+all three** — France's own standard open licence, the same one already
+confirmed for Bison Futé, directly from each dataset's own catalogue
+metadata on `data.gouv.fr`.
+
 ## Trafikverket (Sweden roadworks) — Credentials wanted
 
 Sweden's national roadworks source — the Swedish Transport

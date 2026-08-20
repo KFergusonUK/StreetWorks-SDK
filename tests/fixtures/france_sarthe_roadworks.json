@@ -1,0 +1,133 @@
+{
+  "total_count": 9,
+  "results": [
+    {
+      "objectid": 275,
+      "longueur": 1600,
+      "loc_txt": "RD 0316 : Du 0+100 au 1+700",
+      "commentaires": null,
+      "maitre_ouvrage": "Télélec Réseaux",
+      "date_fin": "2026-08-31T02:00:00+00:00",
+      "nature_trvx": "Travaux extension réseau gaz",
+      "mode_exp": "Alternat",
+      "date_debut": "2026-07-01T02:00:00+00:00",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              0.627938564031717,
+              48.19175111825047
+            ],
+            [
+              0.6276937869408411,
+              48.19144229226771
+            ],
+            [
+              0.6274532858438774,
+              48.19113885828562
+            ],
+            [
+              0.6273848183623352,
+              48.19105633347239
+            ],
+            [
+              0.627310455969111,
+              48.19096670275635
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 0.62383980606274,
+        "lat": 48.18558325460359
+      }
+    },
+    {
+      "objectid": 289,
+      "longueur": 60,
+      "loc_txt": "RD 0279 : Du 4+820 au 4+880",
+      "commentaires": null,
+      "maitre_ouvrage": "AXIMUM",
+      "date_fin": "2026-09-04T02:00:00+00:00",
+      "nature_trvx": "Travaux sur ouvrage d'art",
+      "mode_exp": "Route barrée avec déviation",
+      "date_debut": "2026-08-03T02:00:00+00:00",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              0.3283263801622145,
+              47.73308077679597
+            ],
+            [
+              0.3282009375546609,
+              47.73293202478077
+            ],
+            [
+              0.32812649485666195,
+              47.732843747787726
+            ],
+            [
+              0.3279288376423624,
+              47.73260935748571
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 0.32812760835775523,
+        "lat": 47.73284506760003
+      }
+    },
+    {
+      "objectid": 276,
+      "longueur": 4896,
+      "loc_txt": "RD 0316 : Du 2+930 au 7+700",
+      "commentaires": null,
+      "maitre_ouvrage": "Télélec Réseaux",
+      "date_fin": "2026-08-31T02:00:00+00:00",
+      "nature_trvx": "Travaux extension réseau gaz",
+      "mode_exp": "Alternat",
+      "date_debut": "2026-07-01T02:00:00+00:00",
+      "geo_shape": {
+        "type": "Feature",
+        "geometry": {
+          "coordinates": [
+            [
+              0.6258332003958051,
+              48.16959077643093
+            ],
+            [
+              0.6259219482271235,
+              48.1695552127769
+            ],
+            [
+              0.6268105819422262,
+              48.169193810191416
+            ],
+            [
+              0.6268506958887984,
+              48.16917749566937
+            ],
+            [
+              0.6281153354583847,
+              48.16866315106004
+            ]
+          ],
+          "type": "LineString"
+        },
+        "properties": {}
+      },
+      "geo_point_2d": {
+        "lon": 0.648267877521247,
+        "lat": 48.15520894128054
+      }
+    }
+  ]
+}

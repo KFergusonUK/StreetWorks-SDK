@@ -410,6 +410,29 @@ def check_dortmund() -> str:
     return f"{len(works)} real roadwork(s), e.g. {sample.sites[0].location_description!r}"
 
 
+def check_france_departements() -> str:
+    """French département roadworks need no credentials - see
+    streetworks.opendatasoft.france_departements. This SDK's first
+    French département-level roadworks providers, covering Routes
+    Départementales (not in bisonfute at all)."""
+    from streetworks.common import from_departement_roadworks
+    from streetworks.opendatasoft.france_departements import (
+        FIELD_MAPS,
+        DepartementRoadworksClient,
+    )
+
+    with DepartementRoadworksClient() as france:
+        counts = {}
+        for departement, field_map in FIELD_MAPS.items():
+            records = france.fetch(departement)
+            works = from_departement_roadworks(records, field_map)
+            with_coord = sum(1 for w in works if w.coordinate is not None)
+            counts[departement] = (len(works), with_coord)
+    return ", ".join(
+        f"{departement}: {n} ({c} with coordinates)" for departement, (n, c) in counts.items()
+    )
+
+
 def check_dgt() -> str:
     """DGT (Spain, DATEX II v3) needs no credentials - confirmed live and
     reliably reachable (see streetworks.datex2.dgt). Coverage excludes
@@ -2093,6 +2116,7 @@ def main() -> int:
     reporter.check("Berlin VIZ Baustellen/Sperrungen", [], check_berlin)
     reporter.check("Saarland LfS roadworks", [], check_saarland)
     reporter.check("Dortmund roadworks", [], check_dortmund)
+    reporter.check("French département roadworks", [], check_france_departements)
     # WZDx (US Work Zone Data Exchange) needs no credentials
     reporter.check("WZDx", [], check_wzdx)
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)

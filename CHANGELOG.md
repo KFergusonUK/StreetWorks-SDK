@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — Sarthe, Loire-Atlantique and Hauts-de-Seine, this SDK's first French département roadworks providers (2026-08-20)
+
+`streetworks.opendatasoft.OpenDataSoftClient` / `streetworks.opendatasoft.france_departements.DepartementRoadworksClient`
+- France's Routes Départementales (RD) - the majority of the French
+road network by length - aren't in Bison Futé at all, the same real
+gap Germany's own state fan-out closed relative to Autobahn GmbH.
+
+```python
+from streetworks.common import from_departement_roadworks
+from streetworks.opendatasoft.france_departements import SARTHE, DepartementRoadworksClient
+
+with DepartementRoadworksClient() as france:
+    records = france.fetch("Sarthe")
+
+works = from_departement_roadworks(records, SARTHE)
+```
+
+- **A new shared `streetworks.opendatasoft` client, extracted now that
+  the threshold `streetworks.paris`'s own docstring already named is
+  real** - Sarthe, Loire-Atlantique and Hauts-de-Seine's own real feeds
+  all independently turned out to be genuine OpenDataSoft Explore API
+  v2.1 deployments, confirmed live to share the identical pagination
+  and geometry-field shape Paris's own dataset uses. Paris's own
+  existing code is untouched - no regression risk taken for it.
+- **Sarthe**: 9 real features, the only département with real
+  structured ISO dates. **Loire-Atlantique**: 21 real features,
+  described as real-time, no structured dates (French free text only).
+  **Hauts-de-Seine**: 122 real features - a genuinely different
+  register (capital-works/infrastructure projects, not day-to-day
+  closures), also no structured dates.
+- **Found and set aside, not built**: Corrèze's own WFS is genuinely
+  GML-only (the same shape already handled for Schleswig-Holstein);
+  Côtes d'Armor is real and by far the richest (5,292 features, a real
+  REST API over the Koumoul/data-fair platform) but doesn't fit this
+  OpenDataSoft-specific field map - tracked separately.
+- **Licence**: Licence Ouverte / Open Licence 2.0 (Etalab) for all
+  three, the same one already confirmed for Bison Futé.
+
 ### Added — Dortmund, this SDK's first German municipal roadworks provider (2026-08-20)
 
 `streetworks.dortmund.DortmundClient` / `streetworks.common.from_dortmund`
