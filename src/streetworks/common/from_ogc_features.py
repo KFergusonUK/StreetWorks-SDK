@@ -38,11 +38,13 @@ never silently reprojected, per this SDK's standing policy.
 
 **Dates**: every state states real, structured start/end dates (never
 free-text extraction, unlike Autobahn) - Hamburg and Saxony both
-``DD.MM.YYYY``, Brandenburg alone bare ISO - every one date-only (no time
-component in any state's real data). Represented as midnight
-Europe/Berlin via :mod:`zoneinfo`, same convention as Autobahn's
-date-only fields, so every datetime in this SDK stays comparable (never a
-naive one mixed in).
+``DD.MM.YYYY``, Brandenburg bare ISO, both date-only (no time component
+in either's real data). **Baden-Württemberg is the one real exception**:
+its ``starttime``/``endtime`` carry a genuine time-of-day and UTC offset
+(``"iso_datetime"`` format, parsed via ``datetime.fromisoformat``) -
+every other state's dates are represented as midnight Europe/Berlin via
+:mod:`zoneinfo`, same convention as Autobahn's date-only fields, so every
+datetime in this SDK stays comparable (never a naive one mixed in).
 
 **``date_confidence`` is a judgement call, documented rather than
 asserted**: neither state has anything like DATEX's ``validityStatus`` or
@@ -88,9 +90,19 @@ def _parse_date(value: str | None, date_format: str) -> datetime | None:
     """Date-only fields, both formats - represented as midnight
     Europe/Berlin unless a real hour is stated (see
     :data:`_DE_DATE_WITH_HOUR`), never a naive datetime (see module
-    docstring)."""
+    docstring). ``"iso_datetime"`` is the one genuinely time-of-day-bearing
+    format in this cluster - Baden-Württemberg's real ``starttime``/
+    ``endtime`` fields state a full ISO 8601 datetime with an explicit UTC
+    offset (e.g. ``"2015-06-01T00:00:00.000+02:00"``), parsed via
+    :meth:`datetime.fromisoformat` rather than forced through the
+    date-only path every other state in this cluster uses."""
     if not value:
         return None
+    if date_format == "iso_datetime":
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError:
+            return None
     if date_format == "de":
         if m := _DE_DATE_WITH_HOUR.match(value):
             day, month, year, hour = (int(g) for g in m.groups())
@@ -169,7 +181,13 @@ def _to_works(feature: JSON, field_map: StateFieldMap) -> Works:
     # "baustelleninfo_1199") - falling back to the latter only when no
     # `ID` property exists at all (Hamburg, whose feature `id` - e.g.
     # "DE.HH.UP_BAUSTELLE_916925" - is itself the meaningful identifier).
-    reference = str(properties.get("ID") or feature.get("id") or "")
+    # `field_map.id_field` overrides both when a state's own real
+    # identifier lives somewhere neither of those checks - Baden-
+    # Württemberg's own lowercase `id` property (see StateFieldMap).
+    if field_map.id_field:
+        reference = str(properties.get(field_map.id_field) or "")
+    else:
+        reference = str(properties.get("ID") or feature.get("id") or "")
 
     site = WorksSite(
         reference=reference,

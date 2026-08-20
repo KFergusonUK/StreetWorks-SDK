@@ -1,0 +1,114 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.110721,
+            47.606249
+          ],
+          [
+            8.110684,
+            47.60628
+          ],
+          [
+            8.110603,
+            47.606339
+          ],
+          [
+            8.110557,
+            47.606373
+          ],
+          [
+            8.110479,
+            47.606428
+          ]
+        ]
+      },
+      "properties": {
+        "id": "1487640-1487641-1487644-3508083-sperrung.001",
+        "type": "ROAD_CLOSED",
+        "subtype": "ROAD_CLOSED_CONSTRUCTION",
+        "description": "L154 Albtalsperrung",
+        "reference": "MobiData BW",
+        "street": "L154 Albbruck-St. Blasien",
+        "direction": "BOTH_DIRECTIONS",
+        "starttime": "2015-06-01T00:00:00.000+02:00",
+        "endtime": "2026-12-31T23:59:00.000+01:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961428,
+            48.665755
+          ],
+          [
+            8.961231,
+            48.665646
+          ],
+          [
+            8.961146,
+            48.6656
+          ]
+        ]
+      },
+      "properties": {
+        "id": "2454613-14973690-14973691-14973706.001",
+        "type": "CONSTRUCTION",
+        "subtype": "",
+        "description": "K1077 Erdlager DEGES",
+        "reference": "MobiData BW",
+        "street": "K1077 Böblingen-Gärtringen",
+        "direction": "ONE_DIRECTION",
+        "starttime": "2024-07-14T00:00:00.000+02:00",
+        "endtime": "2026-12-31T23:59:00.000+01:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.037699,
+            48.702835
+          ],
+          [
+            9.03757,
+            48.70282
+          ],
+          [
+            9.037442,
+            48.702805
+          ],
+          [
+            9.037297,
+            48.702783
+          ],
+          [
+            9.037151,
+            48.702758
+          ]
+        ]
+      },
+      "properties": {
+        "id": "2454613-17098412-17098413-17098423.001",
+        "type": "CONSTRUCTION",
+        "subtype": "",
+        "description": "K1055 Straßenneubau Baustellenausfahrt",
+        "reference": "MobiData BW",
+        "street": "K1055 Sindelfingen-Böblingen",
+        "direction": "ONE_DIRECTION",
+        "starttime": "2024-07-30T00:00:00.000+02:00",
+        "endtime": "2026-12-31T23:59:00.000+01:00"
+      }
+    }
+  ]
+}

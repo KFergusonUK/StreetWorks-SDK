@@ -11,6 +11,16 @@ live feed), and Saxony (6 features - three real segments of one closure
 sharing `ID` "LRABZ2026B00285", a real past-dated closure, a real
 `"DD.MM.YYYY HH Uhr"`-formatted record, and one missing optional
 properties).
+
+Baden-Württemberg (2026-08-20, `tests/fixtures/ogc_bw_roadworks.json`) -
+3 real trimmed GeoJSON features from MobiData BW's direct download: a
+real `ROAD_CLOSED`/`L154`, and two real `CONSTRUCTION`/`ONE_DIRECTION`
+records on `K1077`/`K1055`. Schleswig-Holstein
+(`tests/fixtures/ogc_sh_baustellen.xml`) - 3 real trimmed GML `wfs:member`
+elements off LBV.SH's own WFS (posList trimmed to 5 coordinate pairs
+each): a real `L281`, a real `B5`, and a real `G`-prefixed record (a
+genuine, if uninformative, real value - see
+:mod:`streetworks.ogc.germany`'s module docstring for what "G" means).
 """
 
 import io
@@ -23,6 +33,7 @@ import respx
 
 from streetworks.ogc import OGCFeaturesClient
 from streetworks.ogc.germany import (
+    BADEN_WUERTTEMBERG,
     BRANDENBURG,
     GERMANY_LAT_RANGE,
     GERMANY_LON_RANGE,
@@ -30,6 +41,7 @@ from streetworks.ogc.germany import (
     SAXONY,
     SAXONY_EASTING_RANGE,
     SAXONY_NORTHING_RANGE,
+    SCHLESWIG_HOLSTEIN,
     GermanRoadworksClient,
 )
 
@@ -39,6 +51,8 @@ BRANDENBURG_PAYLOAD = json.loads(
     (FIXTURES / "ogc_brandenburg_baustelleninfo.json").read_text()
 )
 SAXONY_PAYLOAD = json.loads((FIXTURES / "ogc_saxony_sperrungen.json").read_text())
+BW_PAYLOAD = json.loads((FIXTURES / "ogc_bw_roadworks.json").read_text())
+SH_XML = (FIXTURES / "ogc_sh_baustellen.xml").read_bytes()
 
 
 def _zipped(payload: dict, member: str) -> bytes:
@@ -152,3 +166,61 @@ def test_german_roadworks_client_fetch_saxony_via_zip():
         features = germany.fetch("Sachsen")
     assert len(features) == 6
     assert features[0]["properties"]["Sperrung_Art_Klartext"]
+
+
+def test_bw_field_map_uses_direct_geojson_and_iso_datetime():
+    assert BADEN_WUERTTEMBERG.access_mode == "direct_geojson"
+    assert BADEN_WUERTTEMBERG.start.format == "iso_datetime"
+    assert BADEN_WUERTTEMBERG.crs == "EPSG:4326"
+
+
+def test_bw_fixture_is_within_germany_bounds():
+    for feature in BW_PAYLOAD["features"]:
+        for lon, lat in feature["geometry"]["coordinates"]:
+            assert GERMANY_LON_RANGE[0] <= lon <= GERMANY_LON_RANGE[1], (lon, lat)
+            assert GERMANY_LAT_RANGE[0] <= lat <= GERMANY_LAT_RANGE[1], (lon, lat)
+
+
+@respx.mock
+def test_german_roadworks_client_fetch_baden_wuerttemberg():
+    respx.get(BADEN_WUERTTEMBERG.base_url).mock(
+        return_value=httpx.Response(200, json=BW_PAYLOAD)
+    )
+    with GermanRoadworksClient() as germany:
+        features = germany.fetch("Baden-Württemberg")
+    assert len(features) == 3
+    assert features[0]["properties"]["street"] == "L154 Albbruck-St. Blasien"
+
+
+def test_sh_field_map_uses_gml_wfs_and_split_date_fields():
+    assert SCHLESWIG_HOLSTEIN.access_mode == "gml_wfs"
+    assert SCHLESWIG_HOLSTEIN.start.field == "_start_iso"
+    assert SCHLESWIG_HOLSTEIN.end.field == "_end_iso"
+    # Already reprojected client-side from the service's real EPSG:25832 -
+    # see streetworks.ogc.germany's module docstring.
+    assert SCHLESWIG_HOLSTEIN.crs == "EPSG:4326"
+
+
+@respx.mock
+def test_german_roadworks_client_fetch_schleswig_holstein_parses_gml():
+    respx.get(SCHLESWIG_HOLSTEIN.base_url).mock(
+        return_value=httpx.Response(200, content=SH_XML)
+    )
+    with GermanRoadworksClient() as germany:
+        features = germany.fetch("Schleswig-Holstein")
+    assert len(features) == 3
+    names = {f["properties"]["Straßenname"] for f in features}
+    assert names == {"L281", "B5", "G"}
+    # Real GML MultiCurve/curveMember/LineString, reprojected to genuine
+    # WGS84 (EPSG:25832 -> 4326) and within Germany's own bounds.
+    l281 = next(f for f in features if f["properties"]["Straßenname"] == "L281")
+    assert l281["geometry"]["type"] == "LineString"
+    for lon, lat in l281["geometry"]["coordinates"]:
+        assert GERMANY_LON_RANGE[0] <= lon <= GERMANY_LON_RANGE[1], (lon, lat)
+        assert GERMANY_LAT_RANGE[0] <= lat <= GERMANY_LAT_RANGE[1], (lon, lat)
+    # The real combined "X bis Y" field, split into synthetic properties.
+    assert l281["properties"]["_start_iso"] == "2026-08-03T23:00:00+02:00"
+    assert l281["properties"]["_end_iso"] == "2026-09-11T22:59:00+02:00"
+    assert l281["properties"]["Dauer_der_Bauphase"] == (
+        "2026-08-03 23:00:00 bis 2026-09-11 22:59:00"
+    )

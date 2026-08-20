@@ -338,11 +338,15 @@ def check_vialietuva() -> str:
 
 def check_german_regional() -> str:
     """German state (Bundesland) roadworks needs no credentials - confirmed
-    live for Hamburg (Point, WFS), Brandenburg (LineString, WFS), and
-    Saxony (LineString, direct GeoJSON download, UTM33N not WGS84).
-    Mecklenburg-Vorpommern and Saxony-Anhalt were checked and parked
-    (GML-only; Saxony-Anhalt's licence is also explicitly non-commercial)
-    - see streetworks.ogc.germany's module docstring."""
+    live for Hamburg (Point, WFS), Brandenburg (LineString, WFS), Saxony
+    (LineString, direct GeoJSON download, UTM33N not WGS84),
+    Baden-Württemberg (LineString, direct GeoJSON, real time-of-day dates)
+    and Schleswig-Holstein (LineString, GML-only WFS parsed client-side,
+    UTM32N reprojected to WGS84). Mecklenburg-Vorpommern, Saxony-Anhalt,
+    and (via Schleswig-Holstein's own shared WFS) Niedersachsen were
+    checked and parked (GML-only and/or unconfirmed licence - Saxony-
+    Anhalt's is also explicitly non-commercial) - see
+    streetworks.ogc.germany's module docstring."""
     from streetworks.common import from_ogc_features
     from streetworks.ogc.germany import FIELD_MAPS, GermanRoadworksClient
 

@@ -3,8 +3,8 @@ over :class:`~streetworks.ogc.client.OGCFeaturesClient`.
 
 Adding a new state is writing a new :class:`StateFieldMap` entry, not a new
 converter - :func:`streetworks.common.from_ogc_features` reads the map
-generically. Three states are live, all verified against real data,
-2026-07:
+generically. Five states are live, all verified against real data - the
+first three 2026-07, Baden-Württemberg and Schleswig-Holstein 2026-08-20:
 
 - **Hamburg** (``de.hh.up:baustelle``, WFS 2.0.0/1.1.0): 130 real features,
   ``Point`` geometry, dates ``DD.MM.YYYY`` (``baubeginn``/``bauende``).
@@ -87,14 +87,91 @@ generically. Three states are live, all verified against real data,
   same reason: a real pattern worth knowing about, not evidence strong
   enough (or checked thoroughly enough here) to build grouping logic on.
 
+- **Baden-Württemberg**: 928 real features, ``LineString`` geometry, a
+  real direct GeoJSON download - no WFS query needed at all (MobiData BW,
+  ``api.mobidata-bw.de``, the state's own real transport-data platform,
+  run by Verkehrsministerium Baden-Württemberg - confirmed via the
+  platform's own CKAN API, ``dl-de/by-2-0``). Covers Bundesstraßen,
+  Landesstraßen and Kreisstraßen (federal/state/county roads) - never
+  municipal streets, a real ``MULTI_AUTHORITY_INTERURBAN`` scope, not
+  comprehensive. **The one state in this cluster with a genuine
+  time-of-day, not just a date** - ``starttime``/``endtime`` state a full
+  ISO 8601 datetime with an explicit UTC offset (e.g.
+  ``"2015-06-01T00:00:00.000+02:00"``), parsed via
+  ``datetime.fromisoformat`` (the new ``"iso_datetime"``
+  :class:`DateField` format) rather than the date-only path every other
+  state uses. **A third real per-feature-identifier shape**: neither a
+  meaningful ``ID`` property (Brandenburg's shape) nor the GeoJSON
+  feature's own ``id`` (Hamburg's shape) - the real identifier lives in a
+  lowercase ``id`` *property* instead, handled via the new
+  :attr:`StateFieldMap.id_field` override. ``type``/``subtype`` split
+  cleanly into a real binary (``"ROAD_CLOSED"``, 505; ``"CONSTRUCTION"``,
+  423) - used as ``status_field``.
+- **Schleswig-Holstein**: 1,116 real features, genuinely GML-only -
+  confirmed live via a real ``OUTPUTFORMAT=application/json`` request
+  rejected outright (the same shape Mecklenburg-Vorpommern's and
+  Saxony-Anhalt's own dedicated WFS already reject), parsed client-side
+  via the standard library's own ``xml.etree.ElementTree`` (see
+  :func:`_fetch_lbv_sh_gml`/:func:`_parse_lbv_sh_gml`) rather than routed
+  around - the real host is LBV.SH's own ``dienste.gdi-sh.de``
+  deployment, licence ``CC BY 4.0``, confirmed directly on Schleswig-
+  Holstein's own open-data portal (``opendata.schleswig-holstein.de``),
+  not just the aggregator ``govdata.de``, which had lost the field
+  entirely. Geometry is real ``gml:MultiCurve``/``curveMember``/
+  ``LineString`` in the service's own stated native EPSG:25832
+  (ETRS89/UTM32N) - reprojected client-side via
+  :mod:`streetworks.common._utm32n`, the same standard (not
+  country-specific) transform already verified for Denmark. **Every real
+  MultiCurve wraps exactly one curveMember** (1,114/1,116 real features
+  carry one; the other 2 carry none at all - none has ever carried more
+  than one), so only the first is read, unwrapped to a plain
+  ``LineString``. **One real combined start/end field, not two separate
+  ones** - ``Dauer_der_Bauphase`` states e.g. ``"2026-08-03 23:00:00 bis
+  2026-09-11 22:59:00"`` (German "bis" = "until") - split client-side
+  into synthetic ``_start_iso``/``_end_iso`` properties (see
+  :func:`_split_dauer_der_bauphase`) so :func:`streetworks.common.from_ogc_features`
+  can read them like any other state's real separate fields, with the
+  original field left untouched for raw fidelity. Real road-class
+  prefixes span ``B``/``L``/``K`` (Bundesstraße/Landesstraße/Kreisstraße)
+  and a bare ``"G"`` (Gemeindestraße/municipal - **466/1,116 real
+  records, the single largest group** - a real but low-information
+  value, since the field states only the class letter, not an actual
+  road name/number, for these rows) - genuinely comprehensive, reaching
+  down to municipal roads by classification, unlike Baden-Württemberg's
+  interurban-only scope.
+
+  **This same WFS deployment also carries Niedersachsen and
+  Mecklenburg-Vorpommern feature types - found, checked, deliberately not
+  built.** ``Baustellen_Niedersachsen`` (142 real features) and
+  ``Baustellen_MV`` (77 real features) are both genuinely reachable,
+  unauthenticated, off the identical endpoint. Neither has its own
+  confirmed open licence, though: Niedersachsen's own real AlD
+  (Arbeitsstellen längerer Dauer) dataset traces to a Mobilithek
+  marketplace "offer" URL with no stated licence and no separate open
+  republish found on any Niedersachsen state portal - the same gated-at-
+  origin shape already parked for NRW's own roadworks route elsewhere in
+  this SDK; reachability via a neighbouring state's operational mirror
+  doesn't establish a licence the origin state itself hasn't granted.
+  Mecklenburg-Vorpommern's inclusion here doesn't resolve its own
+  pre-existing parking reason below either, for the same reason. **Not
+  routed around** - Schleswig-Holstein's own real, separately-confirmed
+  CC BY 4.0 licence covers only its own state's layer.
+
 **Parked, not built:**
 
-- **Mecklenburg-Vorpommern** - confirmed live GML-only
-  (``application/geo+json`` explicitly rejected by the WFS with an
+- **Mecklenburg-Vorpommern** - confirmed live GML-only on its own
+  dedicated WFS (``application/geo+json`` explicitly rejected with an
   ``InvalidParameterValue`` exception) and its licence is only vaguely
   stated ("Urheberrecht", no specific Datenlizenz Deutschland citation
   unlike Hamburg/Brandenburg/Saxony's explicit CC BY/dl-de/by-2-0). Two
-  independent reasons to park, not one.
+  independent reasons to park, not one - also reachable (same two
+  problems, effectively) via Schleswig-Holstein's shared WFS, see above.
+- **Niedersachsen** - reachable, unauthenticated, via Schleswig-
+  Holstein's own shared WFS (142 real features) - but its own real AlD
+  dataset traces to a Mobilithek marketplace offer with no stated
+  licence and no independent open republish found on any Niedersachsen
+  state portal. The same gated-at-origin shape already parked for NRW;
+  see above for the full reasoning.
 - **Saxony-Anhalt** - confirmed live GML-only (tested
   ``OUTPUTFORMAT=application/json`` directly against the real WFS; it
   raises an ``msPostGISLayer`` exception - no JSON output exists) *and*
@@ -131,9 +208,12 @@ Exact attribution text is on each :class:`StateFieldMap` entry below.
 
 from __future__ import annotations
 
+import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Literal
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -168,7 +248,11 @@ class DateField:
     stays comparable."""
 
     field: str
-    format: Literal["iso", "de"] = "iso"  #: "iso" = YYYY-MM-DD, "de" = DD.MM.YYYY
+    #: "iso" = YYYY-MM-DD, "de" = DD.MM.YYYY, "iso_datetime" = a full ISO
+    #: 8601 datetime with UTC offset (Baden-Württemberg's real
+    #: starttime/endtime - the one state in this cluster with a genuine
+    #: time-of-day component, not just a date).
+    format: Literal["iso", "de", "iso_datetime"] = "iso"
 
 
 @dataclass(frozen=True)
@@ -198,17 +282,23 @@ class StateFieldMap:
     module's docstring.
 
     ``access_mode`` picks how :class:`GermanRoadworksClient` fetches this
-    state: ``"wfs"`` (the default - a WFS ``GetFeature`` request) or
+    state: ``"wfs"`` (the default - a WFS ``GetFeature`` request),
     ``"zipped_geojson"`` (a direct-download ZIP archive containing a
     GeoJSON file - Saxony's only option, since it has no queryable
-    service at all). ``zip_member`` is the filename inside the archive to
-    read, required only for ``"zipped_geojson"``.
+    service at all), ``"direct_geojson"`` (a plain unauthenticated GET
+    that already returns a full GeoJSON ``FeatureCollection`` - no query
+    params, no archive; Baden-Württemberg's own MobiData BW platform)
+    or ``"gml_wfs"`` (a GML-only WFS, parsed client-side via
+    :func:`_fetch_lbv_sh_gml` - Schleswig-Holstein's own real shape,
+    genuinely GML-only, confirmed live to reject
+    ``application/geo+json`` outright). ``zip_member`` is the filename
+    inside the archive to read, required only for ``"zipped_geojson"``.
     """
 
     state: str
     base_url: str
     type_name: str = ""
-    access_mode: Literal["wfs", "zipped_geojson"] = "wfs"
+    access_mode: Literal["wfs", "zipped_geojson", "direct_geojson", "gml_wfs"] = "wfs"
     zip_member: str | None = None
     crs: str = "EPSG:4326"
     title_field: str | None = None
@@ -217,6 +307,13 @@ class StateFieldMap:
     end: DateField | None = None
     road_field: str | None = None
     status_field: str | None = None
+    #: Overrides the default reference resolution (a real `ID` property,
+    #: then the GeoJSON feature's own `id`) - needed for Baden-Württemberg,
+    #: whose real per-feature identifier lives in a lowercase `id`
+    #: *property* (`"1487640-...-sperrung.001"`), a third real shape none
+    #: of Hamburg/Brandenburg/Saxony's own identifiers use. See
+    #: :func:`streetworks.common.from_ogc_features._to_works`.
+    id_field: str | None = None
     licence: str = ""
     attribution: str = ""
     version: str = "2.0.0"
@@ -267,10 +364,185 @@ SAXONY = StateFieldMap(
     attribution="Baustelleninformationssystem Sachsen",
 )
 
+BADEN_WUERTTEMBERG = StateFieldMap(
+    state="Baden-Württemberg",
+    base_url="https://api.mobidata-bw.de/datasets/traffic/roadworks/roadworks_geojson.json",
+    access_mode="direct_geojson",
+    title_field="description",
+    # "reference" is a static "MobiData BW" platform label, not a real promoter
+    promoter_field=None,
+    start=DateField("starttime", "iso_datetime"),
+    end=DateField("endtime", "iso_datetime"),
+    road_field="street",
+    status_field="type",  # real, clean binary: "ROAD_CLOSED" (505) / "CONSTRUCTION" (423)
+    id_field="id",  # a real lowercase "id" property - see StateFieldMap.id_field
+    licence="Datenlizenz Deutschland - Namensnennung - Version 2.0 (dl-de/by-2-0)",
+    attribution="MobiData BW, Verkehrsministerium Baden-Württemberg, dl-de/by-2-0",
+)
+
+#: LBV.SH's own real ArcGIS-backed WFS namespace and feature-element
+#: namespaces - confirmed live off its own GetCapabilities/GetFeature
+#: responses, not guessed.
+_LBV_SH_NS = "http://watkipw023.dpaorinp.de:6080/arcgis/admin/services/Baustelleninformationen/MapServer/WFSServer"
+_WFS_NS = "http://www.opengis.net/wfs/2.0"
+_GML_NS = "http://www.opengis.net/gml/3.2"
+
+_BERLIN_TZ = ZoneInfo("Europe/Berlin")
+
+#: Baustellen_SH's own real "Dauer_der_Bauphase" field states one
+#: combined start/end string ("2026-08-03 23:00:00 bis 2026-09-11
+#: 22:59:00"), not two separate fields like every other state in this
+#: cluster - split here into synthetic `_start_iso`/`_end_iso`
+#: properties so :class:`StateFieldMap` can read them the same way as
+#: any other state's real separate fields. The original field is left
+#: untouched in the parsed properties dict, for raw fidelity.
+_DAUER_SEPARATOR = " bis "
+
+
+def _split_dauer_der_bauphase(properties: JSON) -> None:
+    value = properties.get("Dauer_der_Bauphase")
+    if not value or _DAUER_SEPARATOR not in value:
+        return
+    start_text, end_text = value.split(_DAUER_SEPARATOR, 1)
+    for key, text in (("_start_iso", start_text), ("_end_iso", end_text)):
+        try:
+            naive = datetime.strptime(text.strip(), "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            continue
+        properties[key] = naive.replace(tzinfo=_BERLIN_TZ).isoformat()
+
+
+def _gml_point_to_geojson(point: ET.Element) -> JSON | None:
+    from ..common._utm32n import utm32n_to_wgs84  # deferred: see module docstring
+
+    pos = point.find(f"{{{_GML_NS}}}pos")
+    if pos is None or not pos.text:
+        return None
+    easting, northing = (float(v) for v in pos.text.split())
+    lon, lat = utm32n_to_wgs84(easting, northing)
+    return {"type": "Point", "coordinates": [lon, lat]}
+
+
+def _gml_multicurve_to_geojson(multicurve: ET.Element) -> JSON | None:
+    from ..common._utm32n import utm32n_to_wgs84  # deferred: see module docstring
+
+    # Confirmed live (2026-08-20): every real Baustellen_SH MultiCurve
+    # wraps exactly one curveMember/LineString (1,114/1,116 real
+    # features carry one, the other 2 carry none at all - none has ever
+    # carried more than one). Only the first curveMember is read; a
+    # genuine second one would be silently dropped, but none has been
+    # observed - see module docstring.
+    pos_list = multicurve.find(
+        f"{{{_GML_NS}}}curveMember/{{{_GML_NS}}}LineString/{{{_GML_NS}}}posList"
+    )
+    if pos_list is None or not pos_list.text:
+        return None
+    values = [float(v) for v in pos_list.text.split()]
+    pairs = list(zip(values[0::2], values[1::2], strict=True))
+    coordinates = [list(utm32n_to_wgs84(easting, northing)) for easting, northing in pairs]
+    if not coordinates:
+        return None
+    return {"type": "LineString", "coordinates": coordinates}
+
+
+def _gml_geometry_to_geojson(shape: ET.Element | None) -> JSON | None:
+    if shape is None:
+        return None
+    point = shape.find(f"{{{_GML_NS}}}Point")
+    if point is not None:
+        return _gml_point_to_geojson(point)
+    multicurve = shape.find(f"{{{_GML_NS}}}MultiCurve")
+    if multicurve is not None:
+        return _gml_multicurve_to_geojson(multicurve)
+    return None
+
+
+def _fetch_lbv_sh_gml(ogc: OGCFeaturesClient, base_url: str, type_name: str) -> list[JSON]:
+    """Fetch and parse one real feature type off LBV.SH's shared
+    ArcGIS-backed WFS (``dienste.gdi-sh.de``) - genuinely GML-only,
+    confirmed live to reject ``OUTPUTFORMAT=application/json`` outright
+    (a real ``InvalidParameterValue`` exception, the same shape
+    Mecklenburg-Vorpommern's and Saxony-Anhalt's own dedicated WFS
+    already rule out for :meth:`OGCFeaturesClient.get_wfs_features`).
+    Returns GeoJSON-shaped ``Feature`` dicts, geometry already
+    reprojected client-side from the service's real native EPSG:25832
+    (ETRS89/UTM32N) to WGS84 via :mod:`streetworks.common._utm32n` - the
+    same closed-form transform already verified for Denmark, a standard
+    UTM zone, not a country-specific one.
+
+    1,116 real ``Baustellen_SH`` features confirmed to fit one
+    un-paginated request (``COUNT=2000``, live-confirmed
+    ``numberMatched == numberReturned``) at investigation time - revisit
+    with real WFS 2.0 paging (``STARTINDEX``/``COUNT``) if the feed ever
+    grows past that."""
+    xml_bytes = ogc.get_xml(
+        base_url,
+        params={
+            "SERVICE": "WFS",
+            "VERSION": "2.0.0",
+            "REQUEST": "GetFeature",
+            "TYPENAMES": type_name,
+            "COUNT": "2000",
+        },
+    )
+    return _parse_lbv_sh_gml(xml_bytes, type_name)
+
+
+def _parse_lbv_sh_gml(xml_bytes: bytes, type_name: str) -> list[JSON]:
+    """The pure parsing half of :func:`_fetch_lbv_sh_gml`, split out so
+    it can run against a real captured fixture with no HTTP involved -
+    see ``tests/test_common_ogc_features.py``."""
+    root = ET.fromstring(xml_bytes)  # noqa: S314 - a trusted government WFS endpoint
+    local_type = type_name.split(":", 1)[-1]
+    features: list[JSON] = []
+    for member in root.findall(f"{{{_WFS_NS}}}member"):
+        element = member.find(f"{{{_LBV_SH_NS}}}{local_type}")
+        if element is None:
+            continue
+        properties: JSON = {}
+        geometry: JSON | None = None
+        for child in element:
+            local_name = child.tag.split("}", 1)[-1]
+            if local_name == "SHAPE":
+                geometry = _gml_geometry_to_geojson(child)
+            else:
+                properties[local_name] = child.text
+        _split_dauer_der_bauphase(properties)
+        features.append(
+            {
+                "type": "Feature",
+                "id": element.get(f"{{{_GML_NS}}}id"),
+                "properties": properties,
+                "geometry": geometry,
+            }
+        )
+    return features
+
+
+SCHLESWIG_HOLSTEIN = StateFieldMap(
+    state="Schleswig-Holstein",
+    base_url="https://dienste.gdi-sh.de/WFS_SH_Baustelleninformationen",
+    type_name="Baustelleninformationen:Baustellen_SH",
+    access_mode="gml_wfs",
+    title_field="Art_der_Maßnahme",
+    promoter_field=None,
+    # Baustellen_SH states one real combined field, not separate
+    # start/end - _fetch_lbv_sh_gml splits it into these two synthetic
+    # properties before this map ever sees it. See module docstring.
+    start=DateField("_start_iso", "iso_datetime"),
+    end=DateField("_end_iso", "iso_datetime"),
+    road_field="Straßenname",
+    status_field="Verkehrseinschränkung",
+    licence="Creative Commons Namensnennung - 4.0 International (CC BY 4.0)",
+    attribution="Landesbetrieb Straßenbau und Verkehr Schleswig-Holstein (LBV.SH)",
+)
+
 FIELD_MAPS: dict[str, StateFieldMap] = {
     "Hamburg": HAMBURG,
     "Brandenburg": BRANDENBURG,
     "Sachsen": SAXONY,
+    "Baden-Württemberg": BADEN_WUERTTEMBERG,
+    "Schleswig-Holstein": SCHLESWIG_HOLSTEIN,
 }
 
 
@@ -298,13 +570,18 @@ class GermanRoadworksClient:
         if field_map.access_mode == "zipped_geojson":
             assert field_map.zip_member is not None  # required for this access mode
             payload = self._ogc.get_zipped_geojson(field_map.base_url, member=field_map.zip_member)
-        else:
-            payload = self._ogc.get_wfs_features(
-                field_map.base_url,
-                type_name=field_map.type_name,
-                version=field_map.version,
-                srs_name=field_map.crs,
-            )
+            return list(payload.get("features") or ())
+        if field_map.access_mode == "direct_geojson":
+            payload = self._ogc.get(field_map.base_url)
+            return list(payload.get("features") or ())
+        if field_map.access_mode == "gml_wfs":
+            return _fetch_lbv_sh_gml(self._ogc, field_map.base_url, field_map.type_name)
+        payload = self._ogc.get_wfs_features(
+            field_map.base_url,
+            type_name=field_map.type_name,
+            version=field_map.version,
+            srs_name=field_map.crs,
+        )
         return list(payload.get("features") or ())
 
     def iter_all(self, states: list[str] | None = None) -> Iterator[tuple[str, JSON]]:

@@ -2,6 +2,52 @@
 
 ## [Unreleased]
 
+### Added — Baden-Württemberg and Schleswig-Holstein, this SDK's fourth and fifth German state roadworks feeds (2026-08-20)
+
+`streetworks.ogc.germany.GermanRoadworksClient` / `streetworks.common.from_ogc_features`
+- Two more German state roadworks feeds, continuing the state fan-out
+Hamburg/Brandenburg/Saxony already established.
+
+```python
+from streetworks.common import from_ogc_features
+from streetworks.ogc.germany import BADEN_WUERTTEMBERG, GermanRoadworksClient
+
+with GermanRoadworksClient() as germany:
+    features = germany.fetch("Baden-Württemberg")
+
+works = from_ogc_features(features, BADEN_WUERTTEMBERG)
+```
+
+- **Baden-Württemberg**: 928 real features, a real direct GeoJSON
+  download (MobiData BW) - no WFS query needed. Covers Bundesstraßen/
+  Landesstraßen/Kreisstraßen, never municipal roads
+  (`NetworkScope.MULTI_AUTHORITY_INTERURBAN`). **The one state in this
+  cluster with a genuine time-of-day**, not just a date - a new
+  `"iso_datetime"` `DateField` format, parsed via
+  `datetime.fromisoformat`, DST-aware UTC offset included. A third real
+  per-feature-identifier shape (a lowercase `id` *property*, neither
+  Brandenburg's `ID` nor Hamburg's feature `id`) - handled via a new
+  `StateFieldMap.id_field` override.
+- **Schleswig-Holstein**: 1,116 real features, genuinely GML-only (a
+  real `OUTPUTFORMAT=application/json` request rejected outright) -
+  parsed client-side via the standard library's own
+  `xml.etree.ElementTree`, geometry reprojected from the service's real
+  native EPSG:25832 (ETRS89/UTM32N) to WGS84 via the same UTM32N
+  transform already verified for Denmark. One real combined start/end
+  field (`Dauer_der_Bauphase`, e.g. `"... bis ..."`), split client-side
+  into synthetic properties before conversion. Comprehensive, reaching
+  down to municipal roads by classification (a real but
+  low-information bare `"G"` road-name value, 466/1,116 records).
+- **Found, checked, deliberately not built**: the same WFS also serves
+  Niedersachsen (142 features) and Mecklenburg-Vorpommern (77 features)
+  - both reachable unauthenticated, neither with a confirmed open
+  licence at its own origin (both trace to gated Mobilithek marketplace
+  offers) - not built, matching the precedent already set for NRW.
+- **Licences**: Baden-Württemberg, Datenlizenz Deutschland -
+  Namensnennung - 2.0; Schleswig-Holstein, Creative Commons Attribution
+  4.0 International - both confirmed directly from each state's own
+  authoritative open-data portal.
+
 ### Added — Toponímia de Lisboa, this SDK's first Portuguese streets/gazetteer provider (2026-08-20)
 
 `streetworks.arcgis.lisboa.LisboaStreetsClient` / `streetworks.common.from_lisboa_street`

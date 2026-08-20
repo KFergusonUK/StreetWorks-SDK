@@ -806,17 +806,59 @@ for w in works:
     print(w.administrative_area, w.sites[0].works_type, w.sites[0].location_description)
 ```
 
-Three states are live, all verified against real data (2026-07):
-**Hamburg** (130 features, `Point` geometry, dates `DD.MM.YYYY`, via WFS),
-**Brandenburg** (487 features, `LineString`, dates ISO, via WFS), and
-**Saxony** (1,531 real closures + 813 diversions, `LineString`, dates
-`DD.MM.YYYY` with an occasional real hour suffix, via a direct GeoJSON
-download — Saxony has no queryable service at all). Hamburg and
-Brandenburg publish under **Datenlizenz Deutschland — Namensnennung —
-Version 2.0** (dl-de/by-2-0); Saxony under **Creative Commons Attribution
-4.0 International**. All three confirmed directly from each service's
-own `GetCapabilities`/catalogue metadata, with exact attribution wording
+Five states are live, all verified against real data — the first three
+2026-07, the last two 2026-08-20: **Hamburg** (130 features, `Point`
+geometry, dates `DD.MM.YYYY`, via WFS), **Brandenburg** (487 features,
+`LineString`, dates ISO, via WFS), **Saxony** (1,531 real closures + 813
+diversions, `LineString`, dates `DD.MM.YYYY` with an occasional real hour
+suffix, via a direct GeoJSON download — Saxony has no queryable service
+at all), **Baden-Württemberg** (928 features, `LineString`, real
+time-of-day ISO 8601 dates with a UTC offset — the one state in this
+cluster with a genuine time component — via a real direct GeoJSON
+download, MobiData BW), and **Schleswig-Holstein** (1,116 features,
+`LineString`, via a genuinely GML-only WFS parsed client-side — see
+below). Hamburg, Brandenburg and Baden-Württemberg publish under
+**Datenlizenz Deutschland — Namensnennung — Version 2.0** (dl-de/by-2-0);
+Saxony and Schleswig-Holstein under **Creative Commons Attribution 4.0
+International**. All five confirmed directly from each service's own
+`GetCapabilities`/catalogue metadata, with exact attribution wording
 baked into each state's field-map entry.
+
+**Schleswig-Holstein is genuinely GML-only — parsed anyway, not routed
+around.** Its real WFS (`dienste.gdi-sh.de`, run by LBV.SH) rejects
+`OUTPUTFORMAT=application/json` outright, the same shape Mecklenburg-
+Vorpommern's and Saxony-Anhalt's own dedicated WFS already reject (see
+below) — but unlike those two, Schleswig-Holstein has a real, confirmed
+open licence, so this SDK parses its real GML directly via the standard
+library's own `xml.etree.ElementTree` (`streetworks.ogc.germany`'s own
+`_fetch_lbv_sh_gml`/`_parse_lbv_sh_gml`) instead of parking it. Geometry
+is real `gml:MultiCurve`/`curveMember`/`LineString` in the service's own
+stated native EPSG:25832 (ETRS89/UTM32N), reprojected client-side via
+the same standard UTM32N transform already verified for Denmark. Every
+real MultiCurve wraps exactly one curveMember (1,114/1,116 real features
+carry one; the other 2 carry none). One real field states a combined
+start/end range, not two separate fields — `Dauer_der_Bauphase`
+(e.g. `"2026-08-03 23:00:00 bis 2026-09-11 22:59:00"`, German "bis" =
+"until") — split client-side into synthetic start/end properties before
+the shared converter ever sees them. Real road-class prefixes span
+`B`/`L`/`K` (federal/state/county) and a bare `"G"` (Gemeindestraße,
+municipal — 466/1,116 real records, the largest single group, a real
+but low-information value since only the class letter is stated, not an
+actual road name) — genuinely comprehensive, reaching down to municipal
+roads by classification.
+
+**This same WFS also carries Niedersachsen and Mecklenburg-Vorpommern
+feature types — found, checked, deliberately not built.** Both are
+genuinely reachable unauthenticated off the identical endpoint (142 and
+77 real features respectively), but neither has its own confirmed open
+licence: Niedersachsen's own real roadworks dataset traces to a
+Mobilithek marketplace "offer" with no stated licence and no
+independent open republish found on any Niedersachsen state portal —
+the same gated-at-origin shape already parked for NRW's own roadworks
+route. Reachability via a neighbouring state's operational mirror
+doesn't establish a licence the origin state itself hasn't granted, so
+neither is built — Schleswig-Holstein's own real CC BY 4.0 licence
+covers only its own state's layer.
 
 **GeoJSON-primary, no GML — but not every state is EPSG:4326.**
 `OGCFeaturesClient` always requests `application/geo+json` over WFS,
@@ -874,11 +916,20 @@ checked as thoroughly as Brandenburg's. Both ship 1:1 like every other
 provider without a genuine grouping signal, per this SDK's record-identity
 rule: raise an observed pattern, never act on it without real evidence.
 `territory="Germany"`, `administrative_area` (`"Hamburg"`/`"Brandenburg"`/
-`"Sachsen"`) is **endpoint provenance, not a record field** — there is no
-`bundesland` property on any state's features; the state is known because
-each field map is bound to one state's own endpoint, the same mechanism
-National Highways' `administrative_area="National Highways"` uses, not
-Spain's `provinces()` reading a real per-record field.
+`"Sachsen"`/`"Baden-Württemberg"`/`"Schleswig-Holstein"`) is **endpoint
+provenance, not a record field** — there is no `bundesland` property on
+any state's features; the state is known because each field map is
+bound to one state's own endpoint, the same mechanism National
+Highways' `administrative_area="National Highways"` uses, not Spain's
+`provinces()` reading a real per-record field.
+
+**A third real per-feature-identifier shape, Baden-Württemberg's own.**
+Neither a meaningful `ID` property (Brandenburg's shape) nor the GeoJSON
+feature's own `id` (Hamburg's shape) — Baden-Württemberg's real
+identifier lives in a lowercase `id` *property* instead
+(`"1487640-1487641-1487644-3508083-sperrung.001"`), handled via a new
+`StateFieldMap.id_field` override rather than stretching the existing
+two-shape fallback further.
 
 Field names are UTF-8 throughout, umlauts and `ß` included — one real
 Brandenburg field name is `Straßenummner` (double "n", a typo in the

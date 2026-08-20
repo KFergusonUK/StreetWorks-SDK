@@ -1577,6 +1577,78 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.ogc.germany import GermanRoadworksClient # .fetch("Sachsen")',
     ),
     ProviderEntry(
+        key="baden_wuerttemberg",
+        name="Baden-Württemberg",
+        description="Baden-Württemberg's state roadworks feed (Baustelleninformationen).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.MULTI_AUTHORITY_INTERURBAN,
+        territories=frozenset({"Germany"}),
+        administrative_area="Verkehrsministerium Baden-Württemberg",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free, a real direct "
+            "GeoJSON download off the state's own MobiData BW platform, no "
+            "WFS query needed. 928 real features covering Bundesstraßen, "
+            "Landesstraßen and Kreisstraßen (federal/state/county roads) - "
+            "never municipal streets, hence multi_authority_interurban, "
+            "not comprehensive. The one state in this cluster with a real "
+            "time-of-day (not just a date) on its start/end fields, with a "
+            "genuine DST-aware UTC offset. Real per-feature identifier "
+            "lives in a lowercase `id` property, a third shape alongside "
+            "Hamburg's/Brandenburg's own conventions - see "
+            "StateFieldMap.id_field."
+        ),
+        credentials=None,
+        licence="Datenlizenz Deutschland - Namensnennung - Version 2.0 (dl-de/by-2-0)",
+        source_grade="operator",
+        aliases=frozenset({"bw"}),
+        _module="streetworks.ogc.germany",
+        _client_name="GermanRoadworksClient",
+        import_line=(
+            'from streetworks.ogc.germany import GermanRoadworksClient '
+            '# .fetch("Baden-Württemberg")'
+        ),
+    ),
+    ProviderEntry(
+        key="schleswig_holstein",
+        name="Schleswig-Holstein",
+        description="Schleswig-Holstein's state roadworks feed (Baustelleninformationen).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Germany"}),
+        administrative_area="Landesbetrieb Straßenbau und Verkehr Schleswig-Holstein (LBV.SH)",
+        scope_note=(
+            "Confirmed live (2026-08-20) - credential-free. 1,116 real "
+            "features, genuinely GML-only (a real OUTPUTFORMAT=application/"
+            "json request is rejected outright) - parsed client-side via "
+            "the standard library's own xml.etree.ElementTree, geometry "
+            "reprojected from the service's real native EPSG:25832 "
+            "(ETRS89/UTM32N) to WGS84. Real road-class prefixes span B "
+            "(Bundesstraße), L (Landesstraße), K (Kreisstraße) and a bare "
+            "'G' (Gemeindestraße/municipal, 466/1,116 real records - the "
+            "single largest group, a real but low-information value, "
+            "carried through as-is) - comprehensive, reaching down to "
+            "municipal roads by classification, unlike Baden-Württemberg's "
+            "own interurban-only scope. This same WFS deployment "
+            "(dienste.gdi-sh.de, run by LBV.SH) also carries Niedersachsen "
+            "and Mecklenburg-Vorpommern feature types - deliberately not "
+            "built: neither has its own confirmed open licence (both trace "
+            "to gated Mobilithek marketplace offers, the same shape "
+            "already parked for NRW), unlike Schleswig-Holstein's own real "
+            "CC BY 4.0, confirmed directly on the state's own open-data "
+            "portal. See the module docstring for the full write-up."
+        ),
+        credentials=None,
+        licence="Creative Commons Namensnennung - 4.0 International (CC BY 4.0)",
+        source_grade="operator",
+        aliases=frozenset({"sh"}),
+        _module="streetworks.ogc.germany",
+        _client_name="GermanRoadworksClient",
+        import_line=(
+            'from streetworks.ogc.germany import GermanRoadworksClient '
+            '# .fetch("Schleswig-Holstein")'
+        ),
+    ),
+    ProviderEntry(
         key="berlin",
         name="Berlin (VIZ)",
         description="Berlin's city-wide traffic-information-centre Baustellen/Sperrungen feeds.",

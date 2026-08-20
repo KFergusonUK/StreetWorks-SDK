@@ -8,13 +8,17 @@ the roadworks case. Kept this generic on purpose so a future gazetteer
 source (also commonly published as German-state WFS) can reuse it rather
 than needing its own fetch layer.
 
-**GeoJSON-primary, no GML parsing.** :meth:`OGCFeaturesClient.get_wfs_features`
-always requests ``application/geo+json`` - if a server doesn't offer that
-output format (confirmed live for Mecklenburg-Vorpommern's and
-Saxony-Anhalt's WFS: both GML-only, both explicitly reject
-``application/geo+json``/``application/json`` with an exception), that
-source is out of scope for this client, not something to work around with
-a GML parser.
+**GeoJSON-primary; GML is an explicit opt-in, not a fallback.**
+:meth:`OGCFeaturesClient.get_wfs_features` always requests
+``application/geo+json`` - if a server doesn't offer that output format
+(confirmed live for Mecklenburg-Vorpommern's and Saxony-Anhalt's WFS:
+both GML-only, both explicitly reject ``application/geo+json``/
+``application/json`` with an exception), that source is out of scope for
+this method. :meth:`get_xml` exists for the real case where GML parsing
+is worth doing anyway (Schleswig-Holstein's own WFS, GML-only but with
+data worth the extra work - see :mod:`streetworks.ogc.germany`) - it
+returns the raw response body and leaves parsing entirely to the caller,
+never silently attempted here.
 
 **CRS is stated, never assumed - and not always WGS84.** Most sources here
 request/produce EPSG:4326; Saxony's direct-download GeoJSON is genuinely
@@ -81,6 +85,19 @@ class OGCFeaturesClient:
         serves."""
         response = self._transport.request("GET", url, params=params)
         return response.json()
+
+    def get_xml(self, url: str, params: dict[str, str] | None = None) -> bytes:
+        """``GET url`` (with optional query params) and return the raw
+        response body - for a WFS that only offers GML (never
+        ``application/geo+json``), e.g. Schleswig-Holstein's own
+        ``dienste.gdi-sh.de`` deployment - confirmed live to reject
+        ``OUTPUTFORMAT=application/json`` outright, the same shape
+        Mecklenburg-Vorpommern's and Saxony-Anhalt's own WFS already
+        rule out for this client's GeoJSON-only :meth:`get_wfs_features`.
+        Parsing the returned GML is the caller's job - see
+        :mod:`streetworks.ogc.germany` for the real consumer."""
+        response = self._transport.request("GET", url, params=params)
+        return response.content
 
     def get_zipped_geojson(self, url: str, *, member: str) -> JSON:
         """``GET url`` (a ZIP archive) and return the parsed JSON of
