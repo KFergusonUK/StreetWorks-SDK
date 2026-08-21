@@ -150,17 +150,17 @@ confirmed live via Données Québec's own dataset metadata.
 ## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by **seven** independent government agencies —
-Ontario 511, 511 Alberta, Saskatchewan's Highway Hotline, New Brunswick
-511, 511 Newfoundland and Labrador, Nova Scotia 511 and 511 Yukon all
-publish the exact same `/api/v2/get/event` endpoint (every one answers
-the identical URL path with either real data or the identical structured
-"Invalid Key" rejection), same field names, same `EventType` enum.
-Nevada's own US 511 API shares the identical `/developers/doc`
-documentation URL convention too (see [`docs/providers/us.md`](us.md)),
-though it wasn't independently confirmed to be the same platform.
-Manitoba, Prince Edward Island, the Northwest Territories and Nunavut
-were checked and found to have no matching site.
+byte-for-byte identically by **eight** independent government agencies
+in two countries — Ontario 511, 511 Alberta, Saskatchewan's Highway
+Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova Scotia
+511, 511 Yukon (Canada) and **Nevada 511** (USA — found separately while
+surveying US roadworks coverage, not in the WZDx/CWZ US registry at all;
+see [`docs/providers/us.md`](us.md#nevada-511) for the US-side writeup)
+all publish the exact same `/api/v2/get/event` endpoint (every one
+answers the identical URL path with either real data or the identical
+structured "Invalid Key" rejection), same field names, same `EventType`
+enum. Manitoba, Prince Edward Island, the Northwest Territories and
+Nunavut were checked and found to have no matching site.
 
 ```python
 from streetworks.na511 import NA511Client

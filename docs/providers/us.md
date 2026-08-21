@@ -300,3 +300,38 @@ epoch-millisecond integers even under `f=geojson` — not converted to ISO
 
 **Licence: Creative Commons Attribution 4.0 International**, confirmed
 live via `opendata.dc.gov`'s own dataset `licenseInfo` metadata.
+
+## Nevada 511
+
+Found while surveying the states with no WZDx/CWZ coverage (Nevada has
+no row in the WZDx registry at all — confirmed live). Nevada 511 turned
+out to be this SDK's first US jurisdiction on the North American 511
+platform — the same commercial API shape already built out for Ontario/
+Alberta/Saskatchewan/New Brunswick/Newfoundland and Labrador/Nova
+Scotia/Yukon, documented in full in
+[`docs/providers/canada.md`](canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon):
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import NEVADA
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("nevada"),
+        territory=NEVADA.territory,
+        administrative_area=NEVADA.administrative_area,
+    )
+```
+
+**Confirmed live to be the identical platform**, not just a name
+coincidence: the same `/api/v2/get/event` endpoint, the same structured
+`{"Error":{"Message":"Invalid Key"}}` rejection with no key supplied,
+and a real, working `/developers/doc` page whose own field-by-field
+documentation matches Ontario's/Alberta's exactly. Requires a real
+developer key — not obtained on this SDK's behalf, the same standing
+rule as Massachusetts's CWZ feed above. Free self-service registration:
+`https://www.nvroads.com/developers/doc`; set `NEVADA_511_API_KEY` (see
+`.env.example`) and run `scripts/smoke_test.py` to confirm the last
+open question — that Nevada's own authenticated response round-trips
+through the identical parsing unchanged.

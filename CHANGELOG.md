@@ -2,6 +2,40 @@
 
 ## [Unreleased]
 
+### Added — Nevada 511, this SDK's first US jurisdiction on the North American 511 platform (2026-08-21)
+
+`streetworks.na511.jurisdictions.NEVADA`
+- Found while reviewing what's left uncovered on the US side - Nevada
+  has no row in the WZDx/CWZ registry at all, but turned out to be the
+  exact same commercial platform already built for Ontario/Alberta/
+  Saskatchewan/New Brunswick/Newfoundland and Labrador/Nova Scotia/Yukon.
+  Confirmed live: the identical `/api/v2/get/event` endpoint, the
+  identical structured `{"Error":{"Message":"Invalid Key"}}` rejection,
+  and a real, working `/developers/doc` page whose field-by-field
+  documentation matches exactly - no new client code needed, just a
+  new `Jurisdiction` entry.
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import NEVADA
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:
+    works_list = from_na511(
+        client.fetch("nevada"),
+        territory=NEVADA.territory,
+        administrative_area=NEVADA.administrative_area,
+    )
+```
+
+- Requires a real developer key not obtained on this SDK's behalf (the
+  same standing rule as Massachusetts's CWZ feed) - free self-service
+  registration confirmed live at `nvroads.com/developers/doc`. Set
+  `NEVADA_511_API_KEY` (see `.env.example`) and run
+  `scripts/smoke_test.py` to confirm the last open question.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Toronto Road Restrictions/Closures, this SDK's second Canadian municipal roadworks provider (2026-08-21)
 
 `streetworks.toronto.TorontoClient` / `streetworks.common.from_toronto`

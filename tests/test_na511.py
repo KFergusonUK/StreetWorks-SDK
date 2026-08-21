@@ -86,6 +86,13 @@ def test_ontario_is_the_only_keyless_jurisdiction():
         jurisdictions.NEWFOUNDLAND_AND_LABRADOR,
         jurisdictions.NOVA_SCOTIA,
         jurisdictions.YUKON,
+        jurisdictions.NEVADA,
     ]
     assert all(j.needs_key for j in keyed)
-    assert len(jurisdictions.JURISDICTIONS) == 7
+    assert len(jurisdictions.JURISDICTIONS) == 8
+
+
+def test_nevada_is_the_first_us_jurisdiction_on_this_platform():
+    assert jurisdictions.NEVADA.territory == "USA"
+    assert jurisdictions.NEVADA.needs_key is True
+    assert jurisdictions.NEVADA.base_url == "https://www.nvroads.com"

@@ -3,8 +3,12 @@ American 511 platform - the same shape
 :data:`streetworks.ogc.germany.FIELD_MAPS`/
 :data:`streetworks.opendatasoft.france_departements.FIELD_MAPS` already
 use for one shared client serving several distinct real authorities.
-See :mod:`streetworks.na511.client`'s own module docstring for how each
-entry here was confirmed.
+Despite the module's own Canadian origin (found while surveying
+Canadian provinces beyond British Columbia), this platform is genuinely
+North American, not Canada-only - Nevada is this SDK's first confirmed
+US jurisdiction on it, found separately while surveying US roadworks
+coverage. See :mod:`streetworks.na511.client`'s own module docstring
+for how each entry here was confirmed.
 """
 
 from __future__ import annotations
@@ -20,6 +24,7 @@ __all__ = [
     "NEWFOUNDLAND_AND_LABRADOR",
     "NOVA_SCOTIA",
     "YUKON",
+    "NEVADA",
     "JURISDICTIONS",
 ]
 
@@ -100,6 +105,20 @@ YUKON = Jurisdiction(
     administrative_area="Yukon Department of Highways and Public Works",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Not in the WZDx/CWZ US registry at all (confirmed live, no
+#: Nevada row of any kind) - a genuinely separate real route, not a
+#: duplicate of anything streetworks.wzdx already covers. This SDK's
+#: first US jurisdiction on this platform - confirmed the identical
+#: shape to every Canadian one, including a real, working
+#: /developers/doc page (https://www.nvroads.com/developers/doc).
+NEVADA = Jurisdiction(
+    base_url="https://www.nvroads.com",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Nevada Department of Transportation (NDOT)",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -108,4 +127,5 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "newfoundland_and_labrador": NEWFOUNDLAND_AND_LABRADOR,
     "nova_scotia": NOVA_SCOTIA,
     "yukon": YUKON,
+    "nevada": NEVADA,
 }

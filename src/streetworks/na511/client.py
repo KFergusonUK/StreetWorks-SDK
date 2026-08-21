@@ -1,23 +1,27 @@
 """North American "511" REST platform - one commercial API shape reused,
-byte-for-byte identically, by multiple independent government agencies.
-Found while surveying the Canadian provinces beyond British Columbia
-(see :mod:`streetworks.drivebc`) for roadworks coverage: Ontario 511,
-511 Alberta, Saskatchewan's Highway Hotline, New Brunswick 511,
-Newfoundland and Labrador 511, Nova Scotia 511 and 511 Yukon **all**
-publish the exact same ``/api/v2/get/event`` endpoint (confirmed live,
-2026-08-21 - every one answers the identical URL path with either real
-data or the identical structured "Invalid Key" rejection), and the field
-shape itself is confirmed live by comparing Ontario's real,
-unauthenticated response against Alberta's own published field-by-field
-API documentation - every field name, type and the ``EventType`` enum
-(``"roadwork"``/``"closures"``/``"accidentsAndIncidents"``) match
-exactly. Nevada's own US 511 API (see the WZDx-adjacent US survey in
-``docs/providers/us.md``) shares the identical ``/developers/doc`` URL
-convention too, though not independently confirmed to be the same
-platform. Manitoba, Prince Edward Island, the Northwest Territories and
+byte-for-byte identically, by multiple independent government agencies
+in both Canada and the US. Found while surveying the Canadian provinces
+beyond British Columbia (see :mod:`streetworks.drivebc`) for roadworks
+coverage: Ontario 511, 511 Alberta, Saskatchewan's Highway Hotline, New
+Brunswick 511, Newfoundland and Labrador 511, Nova Scotia 511 and 511
+Yukon **all** publish the exact same ``/api/v2/get/event`` endpoint
+(confirmed live, 2026-08-21 - every one answers the identical URL path
+with either real data or the identical structured "Invalid Key"
+rejection), and the field shape itself is confirmed live by comparing
+Ontario's real, unauthenticated response against Alberta's own published
+field-by-field API documentation - every field name, type and the
+``EventType`` enum (``"roadwork"``/``"closures"``/
+``"accidentsAndIncidents"``) match exactly. **Nevada 511 turned out to
+be the identical platform too** - found separately while surveying US
+roadworks coverage (not in the WZDx/CWZ US registry at all, confirmed
+live, no Nevada row of any kind), then confirmed live here the same way
+as every Canadian jurisdiction: the identical ``/api/v2/get/event``
+path, the identical "Invalid Key" rejection, and a real, working
+``/developers/doc`` page whose own field-by-field documentation matches
+exactly. Manitoba, Prince Edward Island, the Northwest Territories and
 Nunavut were checked and found to have no matching site (no DNS record
 for the guessable ``511<jurisdiction>.ca`` pattern this platform's other
-real deployments use).
+real Canadian deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
 ``GET https://511on.ca/api/v2/get/event`` returns real data with **no**
