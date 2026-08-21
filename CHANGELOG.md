@@ -2,6 +2,45 @@
 
 ## [Unreleased]
 
+### Added — Québec (MTQ Travaux routiers), this SDK's first Canadian provincial roadworks provider (2026-08-21)
+
+`streetworks.quebec.QuebecClient` / `streetworks.common.from_quebec`
+- Found while surveying the Canadian provinces for roadworks coverage
+  beyond British Columbia (DriveBC) - Québec's Ministère des Transports
+  et de la Mobilité durable (MTQ) publishes a real "Travaux routiers"
+  feed via Données Québec, the provincial open-data portal.
+
+```python
+from streetworks.quebec import QuebecClient
+from streetworks.common import from_quebec
+
+with QuebecClient() as quebec:
+    works_list = from_quebec(list(quebec.iter_roadworks()))
+```
+
+- Built over MTQ's own plain WFS 2.0.0 (MapServer) deployment, reusing
+  the existing generic `streetworks.ogc.client.OGCFeaturesClient`
+  (the same client `streetworks.lyon` and the German state cluster
+  already use) - no new fetch/pagination code needed.
+- **526 real features**, confirmed live via the WFS's own
+  `numberMatched`. `identifiantChantier` genuinely groups multiple real
+  entraves into one project (391 distinct chantiers, 71 with 2-5 real
+  entraves each) - the same shape Jersey's `PROJID`/`JOBID` gives.
+- **A genuinely bilingual official source** - French and English
+  descriptions are both real, separately MTQ-published fields.
+- Not the same thing as Quebec City's own separate WZDx feed (already
+  covered via `streetworks.wzdx`) - a distinct real municipal authority,
+  never deduplicated against this provincial one.
+- Also checked live this session: Ontario 511, Alberta 511 and
+  Saskatchewan Highway Hotline all share an identical commercial
+  511-platform shape (the same family Nevada's own US 511 API uses) -
+  none publish WZDx, and all three need a real account/key not obtained
+  on the user's behalf. See `docs/providers/canada.md` for the full
+  survey.
+- **Licence**: Creative Commons Attribution 4.0 International (CC BY 4.0).
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Washington DC DDOT Construction Permits, this SDK's third US city permit register (2026-08-21)
 
 `streetworks.arcgis.dc.DCConstructionPermitsClient` / `streetworks.common.from_dc`

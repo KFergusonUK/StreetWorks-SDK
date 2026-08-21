@@ -1,0 +1,953 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 135768,
+      "properties": {
+        "identifiant": "135768",
+        "identifiantChantier": "250648",
+        "routeAutoroute": "136",
+        "entraveType": "Majeure (semaine et fin de semaine)",
+        "debut": "2022/10/08 05:00:00",
+        "fin": "2026/12/31 05:00:00",
+        "miseAJour": "2026/04/22 17:38:00",
+        "identificationDesTravaux": "Réfection du pont d'étagement rue Saint-Urbain",
+        "urlFrancais": "https://www.quebec.ca/nouvelles/actualites/details/refection-majeure-des-tunnels-ville-marie-et-viger-une-nouvelle-phase-de-travaux-samorce-avec-la-refection-des-ponts-detagement-du-boulevard-saint-laurent-et-de-la-rue-saint-urbain-45424",
+        "texteUrlFrancais": "Communiqué, 30 janvier 2023",
+        "detoursEtItinerairesFacultatifs": "",
+        "entrave": "Fermeture de 2 voies sur 4, en tout temps",
+        "entravesLieesAuxChargesEtDimensions": "",
+        "localisation": "À Montréal, dans le tunnel Viger, entre la rue Panet et la sortie 5 (boulevard Robert-Bourassa)",
+        "direction": "Ouest",
+        "descriptionFrancais": "Réfection du pont d'étagement rue Saint-Urbain\nÀ Montréal, dans le tunnel Viger, entre la rue Panet et la sortie 5 (boulevard Robert-Bourassa)\nEn direction OUEST\nFermeture de 2 voies sur 4, en tout temps",
+        "descriptionAnglais": "Repair of the overpass on Saint-Urbain Street\nIn Montreal, in the Viger Tunnel, between Panet Street and Exit 5 (Robert-Bourassa Boulevard)\nWESTBOUND\nClosure of 2 out of 4 lanes, at all times",
+        "couleurLigne": "#FF0000",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -73.560671,
+        45.50461,
+        -73.550397,
+        45.517124
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.550397,
+            45.517124
+          ],
+          [
+            -73.550593,
+            45.516872
+          ],
+          [
+            -73.550645,
+            45.516809
+          ],
+          [
+            -73.550758,
+            45.516674
+          ],
+          [
+            -73.550835,
+            45.516585
+          ],
+          [
+            -73.550938,
+            45.516462
+          ],
+          [
+            -73.551072,
+            45.516316
+          ],
+          [
+            -73.551173,
+            45.516206
+          ],
+          [
+            -73.551511,
+            45.515875
+          ],
+          [
+            -73.551644,
+            45.51574
+          ],
+          [
+            -73.551766,
+            45.515621
+          ],
+          [
+            -73.551912,
+            45.515478
+          ],
+          [
+            -73.55209,
+            45.5153
+          ],
+          [
+            -73.552249,
+            45.515134
+          ],
+          [
+            -73.552362,
+            45.515012
+          ],
+          [
+            -73.552544,
+            45.514814
+          ],
+          [
+            -73.552674,
+            45.514666
+          ],
+          [
+            -73.552932,
+            45.514357
+          ],
+          [
+            -73.553244,
+            45.51395
+          ],
+          [
+            -73.553473,
+            45.51364
+          ],
+          [
+            -73.553673,
+            45.513343
+          ],
+          [
+            -73.553819,
+            45.513127
+          ],
+          [
+            -73.554087,
+            45.512725
+          ],
+          [
+            -73.554316,
+            45.512389
+          ],
+          [
+            -73.554614,
+            45.511942
+          ],
+          [
+            -73.554719,
+            45.511801
+          ],
+          [
+            -73.554929,
+            45.511519
+          ],
+          [
+            -73.555251,
+            45.511108
+          ],
+          [
+            -73.555536,
+            45.510756
+          ],
+          [
+            -73.555845,
+            45.510358
+          ],
+          [
+            -73.555915,
+            45.510267
+          ],
+          [
+            -73.555981,
+            45.51019
+          ],
+          [
+            -73.556203,
+            45.509922
+          ],
+          [
+            -73.556611,
+            45.509428
+          ],
+          [
+            -73.556892,
+            45.509088
+          ],
+          [
+            -73.557101,
+            45.508834
+          ],
+          [
+            -73.55787,
+            45.507905
+          ],
+          [
+            -73.558103,
+            45.507624
+          ],
+          [
+            -73.558221,
+            45.507481
+          ],
+          [
+            -73.558272,
+            45.50742
+          ],
+          [
+            -73.558361,
+            45.507318
+          ],
+          [
+            -73.558549,
+            45.507083
+          ],
+          [
+            -73.558919,
+            45.506687
+          ],
+          [
+            -73.559103,
+            45.506464
+          ],
+          [
+            -73.559209,
+            45.506335
+          ],
+          [
+            -73.559399,
+            45.506103
+          ],
+          [
+            -73.559674,
+            45.505789
+          ],
+          [
+            -73.559961,
+            45.505451
+          ],
+          [
+            -73.560315,
+            45.505045
+          ],
+          [
+            -73.560671,
+            45.50461
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 165258,
+      "properties": {
+        "identifiant": "165258",
+        "identifiantChantier": "250648",
+        "routeAutoroute": "136",
+        "entraveType": "Majeure (semaine et fin de semaine)",
+        "debut": "2026/03/26 05:00:00",
+        "fin": "2026/12/31 05:00:00",
+        "miseAJour": "2026/04/23 10:44:00",
+        "identificationDesTravaux": "Réfection du pont d'étagement rue Saint-Urbain",
+        "urlFrancais": "",
+        "texteUrlFrancais": "",
+        "detoursEtItinerairesFacultatifs": "",
+        "entrave": "Fermeture de 2 voies sur 4, en tout temps",
+        "entravesLieesAuxChargesEtDimensions": "",
+        "localisation": "À Montréal, dans le tunnel Ville-Marie, entre les boulevards Robert-Bourassa et Saint-Laurent",
+        "direction": "Est",
+        "descriptionFrancais": "Réfection du pont d'étagement rue Saint-Urbain\nÀ Montréal, dans le tunnel Ville-Marie, entre les boulevards Robert-Bourassa et Saint-Laurent\nEn direction EST\nFermeture de 2 voies sur 4, en tout temps",
+        "descriptionAnglais": "Repair of the overpass on Saint-Urbain Street\nIn Montreal, in the Ville-Marie tunnel, between Robert-Bourassa and Saint-Laurent Boulevards\nEASTBOUND\nClosure of 2 out of 4 lanes, at all times",
+        "couleurLigne": "#FF0000",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -73.563255,
+        45.501031,
+        -73.557131,
+        45.508477
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.563255,
+            45.501031
+          ],
+          [
+            -73.563175,
+            45.501178
+          ],
+          [
+            -73.563121,
+            45.501275
+          ],
+          [
+            -73.563075,
+            45.501357
+          ],
+          [
+            -73.562896,
+            45.501643
+          ],
+          [
+            -73.562766,
+            45.501834
+          ],
+          [
+            -73.562658,
+            45.501982
+          ],
+          [
+            -73.56253,
+            45.502147
+          ],
+          [
+            -73.562485,
+            45.502205
+          ],
+          [
+            -73.562165,
+            45.502563
+          ],
+          [
+            -73.561807,
+            45.502942
+          ],
+          [
+            -73.561564,
+            45.503219
+          ],
+          [
+            -73.561478,
+            45.503321
+          ],
+          [
+            -73.56115,
+            45.503701
+          ],
+          [
+            -73.56102,
+            45.503849
+          ],
+          [
+            -73.560244,
+            45.504748
+          ],
+          [
+            -73.560121,
+            45.50489
+          ],
+          [
+            -73.55963,
+            45.505458
+          ],
+          [
+            -73.559404,
+            45.505718
+          ],
+          [
+            -73.559291,
+            45.505847
+          ],
+          [
+            -73.559156,
+            45.506004
+          ],
+          [
+            -73.559033,
+            45.506147
+          ],
+          [
+            -73.558942,
+            45.506254
+          ],
+          [
+            -73.558926,
+            45.506274
+          ],
+          [
+            -73.558707,
+            45.506534
+          ],
+          [
+            -73.558521,
+            45.506791
+          ],
+          [
+            -73.5584,
+            45.506938
+          ],
+          [
+            -73.558069,
+            45.50734
+          ],
+          [
+            -73.557668,
+            45.507825
+          ],
+          [
+            -73.55735,
+            45.50821
+          ],
+          [
+            -73.557205,
+            45.508386
+          ],
+          [
+            -73.557131,
+            45.508477
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 165685,
+      "properties": {
+        "identifiant": "165685",
+        "identifiantChantier": "250648",
+        "routeAutoroute": "",
+        "entraveType": "Majeure (semaine et fin de semaine)",
+        "debut": "2024/09/08 22:00:00",
+        "fin": "2026/12/31 05:00:00",
+        "miseAJour": "2026/04/22 17:22:00",
+        "identificationDesTravaux": "Réfection du pont d'étagement rue Saint-Urbain",
+        "urlFrancais": "",
+        "texteUrlFrancais": "",
+        "detoursEtItinerairesFacultatifs": "Boulevard Saint-Laurent ou Place Jean-Paul-Riopelle",
+        "entrave": "Route fermée, en tout temps",
+        "entravesLieesAuxChargesEtDimensions": "",
+        "localisation": "À Montréal, rue Saint-Urbain, au-dessus de la R-136 (autoroute Ville-Marie)",
+        "direction": "Sud et nord",
+        "descriptionFrancais": "Réfection du pont d'étagement rue Saint-Urbain\nÀ Montréal, rue Saint-Urbain, au-dessus de la R-136 (autoroute Ville-Marie)\nDans les deux directions\nRoute fermée, en tout temps\nDétour Boulevard Saint-Laurent ou Place Jean-Paul-Riopelle",
+        "descriptionAnglais": "Refurbishment of the overpass on Saint-Urbain Street\nIn Montreal, on Saint-Urbain Street, above Route 136 (Ville-Marie Highway)\nIn both directions\nRoad closed at all times\nDetour via Boulevard Saint-Laurent or Place Jean-Paul-Riopelle",
+        "couleurLigne": "#FF0000",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -73.559373,
+        45.506061,
+        -73.558959,
+        45.506323
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.558959,
+            45.506061
+          ],
+          [
+            -73.559237,
+            45.506189
+          ],
+          [
+            -73.559317,
+            45.506298
+          ],
+          [
+            -73.559373,
+            45.506323
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 164507,
+      "properties": {
+        "identifiant": "164507",
+        "identifiantChantier": "311996",
+        "routeAutoroute": "323",
+        "entraveType": "Mineure (semaine et fin de semaine)",
+        "debut": "2026/02/09 06:30:00",
+        "fin": "2026/09/18 17:30:00",
+        "miseAJour": "2026/02/19 13:51:00",
+        "identificationDesTravaux": "Construction pont temporaire",
+        "urlFrancais": "",
+        "texteUrlFrancais": "",
+        "detoursEtItinerairesFacultatifs": "",
+        "entrave": "Circulation en alternance, tous les jours entre 6 h 30 et 17 h 30",
+        "entravesLieesAuxChargesEtDimensions": "Largeur de la voie réduite à 4,5 mètres",
+        "localisation": "À Saint-Émile-de-Suffolk, entre rang des Pruniers et chemin des Pins",
+        "direction": "Sud et nord",
+        "descriptionFrancais": "Construction pont temporaire\nÀ Saint-Émile-de-Suffolk, entre rang des Pruniers et chemin des Pins\nCirculation en alternance, tous les jours entre 6 h 30 et 17 h 30\nLargeur de la voie réduite à 4,5 mètres",
+        "descriptionAnglais": "Temporary bridge construction\nIn Saint-Émile-de-Suffolk, between Rang des Pruniers and Chemin des Pins\nAlternating traffic, every day between 6:30 a.m. and 5:30 p.m.\nLane width reduced to 4.5 meters",
+        "couleurLigne": "#FF6A33",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -74.90943,
+        45.946154,
+        -74.907643,
+        45.947964
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.907643,
+            45.947964
+          ],
+          [
+            -74.907853,
+            45.947756
+          ],
+          [
+            -74.907905,
+            45.947705
+          ],
+          [
+            -74.907964,
+            45.947647
+          ],
+          [
+            -74.908126,
+            45.947484
+          ],
+          [
+            -74.908306,
+            45.947304
+          ],
+          [
+            -74.908451,
+            45.94716
+          ],
+          [
+            -74.908629,
+            45.946986
+          ],
+          [
+            -74.908829,
+            45.946788
+          ],
+          [
+            -74.908984,
+            45.946632
+          ],
+          [
+            -74.90912,
+            45.946493
+          ],
+          [
+            -74.909327,
+            45.946275
+          ],
+          [
+            -74.909416,
+            45.94617
+          ],
+          [
+            -74.90943,
+            45.946154
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 149555,
+      "properties": {
+        "identifiant": "149555",
+        "identifiantChantier": "247978",
+        "routeAutoroute": "25",
+        "entraveType": "Majeure (semaine et fin de semaine)",
+        "debut": "2025/05/05 05:00:00",
+        "fin": "2026/12/31 23:59:00",
+        "miseAJour": "2026/04/01 11:59:00",
+        "identificationDesTravaux": "Réfection des structures",
+        "urlFrancais": "https://tempslafontaine.transnomis.com",
+        "texteUrlFrancais": "Temps de parcours -- page web du projet",
+        "detoursEtItinerairesFacultatifs": "",
+        "entrave": "Tunnel fermé en direction NORD, circulation à contresens dans le tunnel SUD, en tout temps\n",
+        "entravesLieesAuxChargesEtDimensions": "Hauteur libre : 4,3 mètres",
+        "localisation": "Entre Longueuil et Montréal, le tunnel Louis-Hippolyte-La Fontaine",
+        "direction": "Sud et nord",
+        "descriptionFrancais": "Réfection des structures\nEntre Longueuil et Montréal, le tunnel Louis-Hippolyte-La Fontaine\nDans les deux directions\nTunnel fermé en direction NORD, circulation à contresens dans le tunnel SUD, en tout temps\nHauteur libre : 4,3 mètres",
+        "descriptionAnglais": "Refurbishment of structures\nBetween Longueuil and Montreal, the Louis-Hippolyte-La Fontaine Tunnel\nIn both directions\nNORTHBOUND tunnel closed, contraflow traffic in the SOUTHBOUND tunnel, at all times\nClearance height: 4.3 meters",
+        "couleurLigne": "#FF0000",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -73.510112,
+        45.578583,
+        -73.47642,
+        45.585879
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.510112,
+            45.585879
+          ],
+          [
+            -73.509631,
+            45.585777
+          ],
+          [
+            -73.509087,
+            45.585662
+          ],
+          [
+            -73.508597,
+            45.585558
+          ],
+          [
+            -73.507859,
+            45.585401
+          ],
+          [
+            -73.506982,
+            45.585214
+          ],
+          [
+            -73.505882,
+            45.58498
+          ],
+          [
+            -73.504998,
+            45.584794
+          ],
+          [
+            -73.504098,
+            45.584602
+          ],
+          [
+            -73.50341,
+            45.584456
+          ],
+          [
+            -73.502801,
+            45.584326
+          ],
+          [
+            -73.502317,
+            45.584223
+          ],
+          [
+            -73.501343,
+            45.584015
+          ],
+          [
+            -73.500408,
+            45.583816
+          ],
+          [
+            -73.499764,
+            45.583678
+          ],
+          [
+            -73.498514,
+            45.583412
+          ],
+          [
+            -73.497676,
+            45.583233
+          ],
+          [
+            -73.497276,
+            45.583148
+          ],
+          [
+            -73.496051,
+            45.582887
+          ],
+          [
+            -73.49507,
+            45.582677
+          ],
+          [
+            -73.494035,
+            45.582456
+          ],
+          [
+            -73.492742,
+            45.582181
+          ],
+          [
+            -73.492041,
+            45.582032
+          ],
+          [
+            -73.491275,
+            45.581869
+          ],
+          [
+            -73.490529,
+            45.58171
+          ],
+          [
+            -73.490132,
+            45.581625
+          ],
+          [
+            -73.489746,
+            45.581543
+          ],
+          [
+            -73.489233,
+            45.581434
+          ],
+          [
+            -73.488726,
+            45.581326
+          ],
+          [
+            -73.488314,
+            45.581238
+          ],
+          [
+            -73.487938,
+            45.581158
+          ],
+          [
+            -73.487493,
+            45.581066
+          ],
+          [
+            -73.486989,
+            45.580962
+          ],
+          [
+            -73.486332,
+            45.580827
+          ],
+          [
+            -73.485969,
+            45.58075
+          ],
+          [
+            -73.48563,
+            45.580676
+          ],
+          [
+            -73.485293,
+            45.580602
+          ],
+          [
+            -73.484559,
+            45.580441
+          ],
+          [
+            -73.484126,
+            45.580346
+          ],
+          [
+            -73.483585,
+            45.580228
+          ],
+          [
+            -73.483227,
+            45.580149
+          ],
+          [
+            -73.48277,
+            45.580048
+          ],
+          [
+            -73.482457,
+            45.579976
+          ],
+          [
+            -73.482162,
+            45.579909
+          ],
+          [
+            -73.481922,
+            45.579856
+          ],
+          [
+            -73.48159,
+            45.579781
+          ],
+          [
+            -73.481216,
+            45.579697
+          ],
+          [
+            -73.480635,
+            45.579564
+          ],
+          [
+            -73.480338,
+            45.579489
+          ],
+          [
+            -73.480091,
+            45.579426
+          ],
+          [
+            -73.479818,
+            45.579357
+          ],
+          [
+            -73.479554,
+            45.579286
+          ],
+          [
+            -73.479277,
+            45.579219
+          ],
+          [
+            -73.479003,
+            45.579152
+          ],
+          [
+            -73.478649,
+            45.579071
+          ],
+          [
+            -73.478079,
+            45.578945
+          ],
+          [
+            -73.477511,
+            45.578822
+          ],
+          [
+            -73.477109,
+            45.578735
+          ],
+          [
+            -73.476851,
+            45.578678
+          ],
+          [
+            -73.476794,
+            45.578665
+          ],
+          [
+            -73.476659,
+            45.578636
+          ],
+          [
+            -73.47642,
+            45.578583
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 153549,
+      "properties": {
+        "identifiant": "153549",
+        "identifiantChantier": "287276",
+        "routeAutoroute": "",
+        "entraveType": "Majeure (semaine)",
+        "debut": "2026/08/24 09:00:00",
+        "fin": "2026/08/24 15:00:00",
+        "miseAJour": "2026/08/17 05:42:00",
+        "identificationDesTravaux": "Inspection de structure",
+        "urlFrancais": "",
+        "texteUrlFrancais": "",
+        "detoursEtItinerairesFacultatifs": "A-35",
+        "entrave": "Pont fermé",
+        "entravesLieesAuxChargesEtDimensions": "",
+        "localisation": "À Saint-Jean-sur-Richelieu, rue Saint-Jacques, 5e Avenue, sur le pont Gouin",
+        "direction": "Ouest et est",
+        "descriptionFrancais": "Inspection de structure\nÀ Saint-Jean-sur-Richelieu, rue Saint-Jacques, 5e Avenue, sur le pont Gouin\nDans les deux directions\nPont fermé\nDétour A-35",
+        "descriptionAnglais": "Structural inspection\nIn Saint-Jean-sur-Richelieu, Saint-Jacques Steet, 5th Avenue, on the Gouin Bridge\nIn both directions\nBridge closed\nDetour A-35",
+        "couleurLigne": "#FF0000",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -73.250488,
+        45.306186,
+        -73.242275,
+        45.306398
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.250488,
+            45.306186
+          ],
+          [
+            -73.249657,
+            45.306312
+          ],
+          [
+            -73.249428,
+            45.306344
+          ],
+          [
+            -73.248984,
+            45.306398
+          ],
+          [
+            -73.243778,
+            45.306342
+          ],
+          [
+            -73.242572,
+            45.306297
+          ],
+          [
+            -73.242275,
+            45.306309
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 170970,
+      "properties": {
+        "identifiant": "170970",
+        "identifiantChantier": "321116",
+        "routeAutoroute": "138",
+        "entraveType": "Mineure (semaine)",
+        "debut": "2026/08/20 07:00:00",
+        "fin": "2026/08/21 17:30:00",
+        "miseAJour": "2026/08/19 16:19:00",
+        "identificationDesTravaux": "Réfection d'un pont",
+        "urlFrancais": "",
+        "texteUrlFrancais": "",
+        "detoursEtItinerairesFacultatifs": "",
+        "entrave": "Fermeture de 1 voie sur 2, jeudi et vendredi entre 7 h et 17 h 30",
+        "entravesLieesAuxChargesEtDimensions": "",
+        "localisation": "À Québec, boulevard Sainte-Anne, à la hauteur du boulevard des Chutes",
+        "direction": "Dans une direction à la fois",
+        "descriptionFrancais": "Réfection d'un pont\nÀ Québec, boulevard Sainte-Anne, à la hauteur du boulevard des Chutes\nDans une direction à la fois\nFermeture de 1 voie sur 2, jeudi et vendredi entre 7 h et 17 h 30",
+        "descriptionAnglais": "Bridge repair\nIn Quebec City, boulevard Sainte-Anne, at boulevard des Chutes\nIn one direction at a time\nClosure of 1 lane out of 2, Thursday and Friday between 7 am and 5:30 pm",
+        "couleurLigne": "#FF6A33",
+        "source": "https://www.quebec511.info"
+      },
+      "bbox": [
+        -71.182816,
+        46.856514,
+        -71.181673,
+        46.856749
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -71.182816,
+            46.856514
+          ],
+          [
+            -71.182585,
+            46.856556
+          ],
+          [
+            -71.182296,
+            46.856617
+          ],
+          [
+            -71.182154,
+            46.856648
+          ],
+          [
+            -71.181673,
+            46.856749
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -44,12 +44,16 @@ Credentials-wanted, or Documented-unavailable; see
   municipalities remain genuinely unchecked/unbuilt — the same open,
   per-municipality fallback shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
-- **Canada — roadworks partially built, streets now fully built
-  nationally.** British Columbia (DriveBC, Open511) is a real, confirmed
-  roadworks provider, and Quebec City's WZDx feed was already covered —
-  see [`docs/providers/canada.md`](canada.md). Ontario 511 was checked
-  live (confirmed not to publish WZDx) but not built; other provinces
-  and municipal roadworks portals (Toronto, Montreal, Vancouver) remain
+- **Canada — roadworks now built in two provinces, streets fully built
+  nationally.** British Columbia (DriveBC, Open511) and Québec (MTQ
+  Travaux routiers, this SDK's first *provincial* build, found
+  2026-08-21) are real, confirmed roadworks providers, and Quebec City's
+  WZDx feed was already covered — see
+  [`docs/providers/canada.md`](canada.md). Ontario 511, Alberta 511 and
+  Saskatchewan Highway Hotline were all checked live (2026-08-21,
+  confirmed not to publish WZDx, all three needing a real account/key
+  not obtained on the user's behalf); other provinces/territories and
+  municipal roadworks portals (Toronto, Montreal, Vancouver) remain
   genuinely unchecked. **Streets is no longer pending at all** — the
   National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
   is real, live, keyless, and covers all 13 provinces/territories

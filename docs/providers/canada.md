@@ -94,6 +94,59 @@ path) is dead — confirmed to 404-redirect to a generic catalogue landing
 page — so this cites the real, live OGL-BC text instead, not that stale
 pointer.
 
+## Québec (MTQ Travaux routiers)
+
+This SDK's first Canadian **provincial** roadworks provider — the
+Ministère des Transports et de la Mobilité durable's (MTQ) own "Travaux
+routiers" feed, found via Données Québec (the provincial open-data
+portal), over a plain WFS 2.0.0 (MapServer) deployment:
+
+```python
+from streetworks.quebec import QuebecClient
+from streetworks.common import from_quebec
+
+with QuebecClient() as quebec:
+    works_list = from_quebec(list(quebec.iter_roadworks()))
+```
+
+**Not the same thing as Quebec City's own separate WZDx feed** — that's
+a distinct real municipal authority/platform, already covered via
+`streetworks.wzdx`'s registry-driven discovery, never deduplicated
+against this provincial one. Both are real, both stay separate.
+
+**Built over the exact same generic `streetworks.ogc.client.OGCFeaturesClient`
+this SDK's German state cluster and `streetworks.lyon` already use** — no
+new fetch/pagination code needed. **526 real features**, confirmed live
+via the WFS's own `numberMatched`. `identifiantChantier` genuinely groups
+multiple real entraves (obstructions) into one project — 391 distinct
+chantiers across the 526 records, 71 with 2–5 real entraves each — the
+same shape Jersey's own `PROJID`/`JOBID` gives; `from_quebec` groups
+into one `Works` per chantier, one `WorksSite` per entrave.
+
+**A genuinely bilingual official source** — `descriptionFrancais` and
+`descriptionAnglais` are both real, separately MTQ-published fields, not
+one derived from the other. French is used as the canonical
+`location_description`/`traffic_management` text; the English pair stays
+on `.raw` only, not dropped.
+
+**No independent verified/status flag exists**, so `date_confidence` is
+uniformly `ESTIMATED` — the same reasoning `streetworks.drivebc` already
+documents for its own comparable live "currently causing disruption"
+feed. `works_type`/`status` come from `identificationDesTravaux` (the
+real work title, e.g. *"Construction pont temporaire"*) and `entraveType`
+(a real, clean 6-value severity/schedule enum) respectively — the same
+role split `from_lyon` gives its own `nomchantier`/`typeperturbation`
+pair.
+
+**Geometry is real `LineString`, genuine WGS84** — the client's default
+WFS request shape (`TYPENAMES`/`OUTPUTFORMAT=application/geo+json`)
+works unchanged against this service, even though the dataset's own
+published example URL uses the older `outputformat=geojson` bare-name
+form instead.
+
+**Licence: Creative Commons Attribution 4.0 International (CC BY 4.0)**,
+confirmed live via Données Québec's own dataset metadata.
+
 ## National Road Network (NRN, streets gazetteer)
 
 This SDK's first Canadian streets/gazetteer provider — Statistics
@@ -155,11 +208,25 @@ confirmed versus still unchecked:
   `territory`/`administrative_area` per feed rather than assuming
   `"USA"`, specifically because of this entry). See
   [`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange).
-- **Ontario 511** (`511on.ca`) — a different vendor-511 REST platform,
-  not Open511. Checked live against the WZDx feed registry specifically
-  to see whether it publishes WZDx (the near-free route, if so) — it
-  doesn't appear in the registry at all, so a real WZDx feed for Ontario
-  wasn't found. A bespoke build against its own REST API remains
-  possible, not attempted this session.
-- **Other provinces, and municipal portals** (Toronto, Montreal,
+- **Ontario 511** (`511on.ca`), **Alberta 511** (`511.alberta.ca`) and
+  **Saskatchewan Highway Hotline** (`hotline.gov.sk.ca`) — all three
+  share the identical `<host>/developers/doc` documentation shape
+  (confirmed live 2026-08-21), the same commercial 511-platform family
+  Nevada's own US 511 API uses — a real "Construction" resource is
+  explicitly listed among Ontario's own API endpoints. None appear in
+  the WZDx feed registry, and all three require signing up for an
+  account to get a key (a real self-service "Sign up for an account"
+  flow found on Ontario's own site, not confirmed keyless) - not
+  registered for, matching this SDK's standing rule against creating
+  accounts on a user's behalf (see the Massachusetts CWZ case in
+  [`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange)). A
+  bespoke build against any of the three remains possible once a real
+  key is supplied.
+- **Manitoba** — Manitoba Transportation and Infrastructure's own Road
+  Network is open data (ArcGIS REST), but no public real-time
+  construction/closure API endpoint was found live this session — only
+  an email-notification signup (`roadinfo@gov.mb.ca`).
+- **Other provinces/territories** (Nova Scotia, New Brunswick,
+  Newfoundland and Labrador, Prince Edward Island, Yukon, Northwest
+  Territories, Nunavut) and municipal portals (Toronto, Montreal,
   Vancouver) — not checked this session.

@@ -563,6 +563,23 @@ def check_drivebc() -> str:
     )
 
 
+def check_quebec() -> str:
+    """Québec (MTQ Travaux routiers) needs no credentials - see
+    streetworks.quebec. Confirmed live 2026-08-21 (526 real features) -
+    this SDK's first Canadian provincial roadworks provider. Reports the
+    real chantier-grouping ratio for visibility that identifiantChantier
+    is still genuinely grouping multiple entraves."""
+    from streetworks.common import from_quebec
+    from streetworks.quebec import QuebecClient
+
+    with QuebecClient() as quebec:
+        features = list(quebec.iter_roadworks())
+    if not features:
+        raise RuntimeError("query returned no features - real data may have changed")
+    works_list = from_quebec(features)
+    return f"{len(features):,} real entrave(s) grouped into {len(works_list):,} chantier(s)"
+
+
 def check_lisboa() -> str:
     """Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no
     credentials - confirmed live (see streetworks.lisboa). Filters on
@@ -2172,6 +2189,7 @@ def main() -> int:
     reporter.check("Paris Chantiers", [], check_paris)
     # DriveBC (British Columbia, Open511) needs no credentials
     reporter.check("DriveBC (British Columbia, Open511)", [], check_drivebc)
+    reporter.check("Québec (MTQ Travaux routiers)", [], check_quebec)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

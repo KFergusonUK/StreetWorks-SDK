@@ -3515,6 +3515,46 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.drivebc import DriveBCClient",
     ),
     ProviderEntry(
+        key="quebec",
+        name="Québec (MTQ Travaux routiers)",
+        description="Québec province's own roadworks feed, from the Ministère des Transports.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Canada"}),
+        administrative_area="Ministère des Transports et de la Mobilité durable (MTQ)",
+        scope_note=(
+            "Confirmed live (2026-08-21, 526 real features) - "
+            "credential-free, never a Credentials-wanted scaffold. This "
+            "SDK's first Canadian *provincial* roadworks provider "
+            "(DriveBC/British Columbia is regional-authority-scoped, not "
+            "province-wide the same way; Quebec City's own separate WZDx "
+            "feed remains a distinct real municipal authority, never "
+            "deduplicated against this one). Found via Données Québec "
+            "(the provincial open-data portal), over MTQ's own plain WFS "
+            "2.0.0 (MapServer) deployment - the same generic "
+            "streetworks.ogc.client.OGCFeaturesClient this SDK's German "
+            "state cluster and streetworks.lyon already use, no new "
+            "fetch code needed. identifiantChantier genuinely groups "
+            "multiple real entraves into one project (391 distinct "
+            "chantiers across 526 records, 71 with 2-5 real entraves "
+            "each) - the same shape Jersey's own PROJID/JOBID gives. No "
+            "independent verified/status flag exists, so date_confidence "
+            "is uniformly ESTIMATED, the same reasoning drivebc's own "
+            "comparable live feed already documents. A genuinely "
+            "bilingual official source - descriptionFrancais/"
+            "descriptionAnglais are both real, MTQ-published fields, not "
+            "one derived from the other; French is used as the canonical "
+            "text, English stays in .raw. See module docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        licence_confirmed=True,
+        source_grade="operator",
+        _module="streetworks.quebec",
+        _client_name="QuebecClient",
+        import_line="from streetworks.quebec import QuebecClient",
+    ),
+    ProviderEntry(
         key="lisboa",
         name="Câmara Municipal de Lisboa (Condicionamentos de Trânsito)",
         description="Lisbon's municipal traffic-conditioning feed.",

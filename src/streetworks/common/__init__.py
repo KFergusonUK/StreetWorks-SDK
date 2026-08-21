@@ -67,6 +67,7 @@ from .from_openusrn import from_openusrn
 from .from_oslo import from_oslo
 from .from_osni import from_osni
 from .from_paris import from_paris
+from .from_quebec import from_quebec
 from .from_registrucentras import from_registrucentras_street
 from .from_roma import from_roma
 from .from_saarland import from_saarland
@@ -206,4 +207,5 @@ __all__ = [
     "from_lyon",
     "from_departement_roadworks",
     "from_dc",
+    "from_quebec",
 ]
