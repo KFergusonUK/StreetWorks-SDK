@@ -249,3 +249,54 @@ no segment/street identifier, only free-text `streetname`/`direction`/
 `suffix`/`streetnumberfrom`/`streetnumberto`. **Licence unconfirmed** —
 the dataset states only `"See Terms of Use"`, the same honest-gap tier
 as NYC.
+
+## Washington DC DDOT Construction Permits
+
+This SDK's third US city permit register, and its first over a plain
+ArcGIS REST `MapServer` rather than Socrata — built on the same generic
+`streetworks.arcgis.ArcGISFeatureClient` Jersey/TIGERweb already use. Not
+in the WZDx/CWZ US registry at all — DC has no row there.
+
+```python
+from streetworks.arcgis.dc import DCConstructionPermitsClient
+from streetworks.common import from_dc
+
+with DCConstructionPermitsClient() as dc:
+    works_list = from_dc(list(dc.iter_roadworks()))
+```
+
+**Confirmed to be genuinely street/right-of-way work, not general
+building permits, by reading real sample records — not by name matching.**
+A generically-named `Construction_Permits` ArcGIS table found first this
+session, via DC's own Hub search, turned out on inspection to be
+unrelated Boulder, Colorado building-permit data (real addresses in
+Boulder, CO, `BOCOPIN`/`COBPIN` Boulder parcel identifiers) — Hub search
+can surface content from other organizations. This module instead points
+at DDOT's own real service (`maps2.dcgis.dc.gov/dcgis/rest/services/FEEDS/DDOT/MapServer`),
+found via `opendata.dc.gov`'s own dataset metadata, and confirmed with a
+real sample: `ISEXCAVATION` true on ~80% of a 1,000-record sample of the
+`Construction Permit - Last 30 Days` layer used here.
+
+**Six real boolean work-type flags, confirmed not mutually exclusive** —
+`ISEXCAVATION`/`ISPAVING`/`ISLANDSCAPING`/`ISPROJECTIONS`/`ISFIXTURE`/
+`ISPSRENTAL` (public-space rental) can be true together (a real sample:
+five of six true on one record) or all false at once (60/1,000 real
+records sampled) — `from_dc` joins every true flag into `works_type`,
+`None` rather than an empty string when none are.
+
+**A related but distinct real layer, Occupancy Permit, on the same
+service also covers non-construction public-space use** (a real sampled
+record: a music festival, `EVENTTYPESCODEDESC="Other Special Events"`) —
+not consumed here, the same "related but distinct, noted not consumed"
+treatment Jersey's own `Projects` layer gets.
+
+**Real WGS84 geometry under `f=geojson`, confirmed live** (a real returned
+pair, `[-77.09..., 38.95...]`, correct for DC), despite this layer's own
+stated native `spatialReference` being EPSG:26985 (NAD83 meters) — the
+GeoJSON export can be trusted here, the same "check per-service, don't
+assume" discipline TIGERweb's own docs establish. Dates stay real Esri
+epoch-millisecond integers even under `f=geojson` — not converted to ISO
+8601 by this service's export.
+
+**Licence: Creative Commons Attribution 4.0 International**, confirmed
+live via `opendata.dc.gov`'s own dataset `licenseInfo` metadata.

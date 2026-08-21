@@ -2,6 +2,47 @@
 
 ## [Unreleased]
 
+### Added — Washington DC DDOT Construction Permits, this SDK's third US city permit register (2026-08-21)
+
+`streetworks.arcgis.dc.DCConstructionPermitsClient` / `streetworks.common.from_dc`
+- Found while surveying the 15 US states + DC with no WZDx/CWZ registry
+  coverage - DC's real DDOT permit feed isn't in that registry at all. A
+  generically-named `Construction_Permits` ArcGIS dataset found first via
+  DC's own Open Data Hub search turned out on inspection to be unrelated
+  Boulder, Colorado building-permit data (Hub search can surface content
+  from other organizations) - the real feed instead lives directly on
+  DDOT's own ArcGIS deployment
+  (`maps2.dcgis.dc.gov/dcgis/rest/services/FEEDS/DDOT/MapServer`), found
+  via `opendata.dc.gov`'s own dataset metadata.
+
+```python
+from streetworks.arcgis.dc import DCConstructionPermitsClient
+from streetworks.common import from_dc
+
+with DCConstructionPermitsClient() as dc:
+    works_list = from_dc(list(dc.iter_roadworks()))
+```
+
+- This SDK's first Washington DC coverage, and its first city permit
+  register built over a plain ArcGIS REST `MapServer` rather than
+  Socrata - reuses the same generic `streetworks.arcgis.ArcGISFeatureClient`
+  Jersey/TIGERweb already use, no new fetch/pagination code needed.
+- **3,453 real records** in the "Construction Permit - Last 30 Days"
+  rolling layer, confirmed genuinely street/right-of-way work
+  (`ISEXCAVATION` true on ~80% of a 1,000-record sample), real WGS84
+  point geometry under `f=geojson` despite the layer's own native CRS
+  being EPSG:26985.
+- **Six real boolean work-type flags** (`ISEXCAVATION`/`ISPAVING`/
+  `ISLANDSCAPING`/`ISPROJECTIONS`/`ISFIXTURE`/`ISPSRENTAL`), confirmed
+  live not mutually exclusive - every true flag joins into `works_type`.
+- A related but distinct Occupancy Permit layer on the same service also
+  covers non-construction public-space use (a real sampled record: a
+  music festival) - not consumed here, noted not consumed, the same
+  treatment Jersey's own `Projects` layer gets.
+- **Licence**: Creative Commons Attribution 4.0 International (CC BY 4.0).
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — CWZ 1.0 (Connected Work Zone) support in `streetworks.wzdx`, unlocking Massachusetts DOT's real feed (2026-08-21)
 
 `streetworks.wzdx.parser` / `streetworks.wzdx.client` / `streetworks.wzdx.registry`

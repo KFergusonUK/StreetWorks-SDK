@@ -1619,6 +1619,24 @@ def check_chicagodot() -> str:
     return f"{len(permits)} roadworks permit(s) sampled, {with_geometry} with real Point geometry"
 
 
+def check_dc() -> str:
+    """Washington DC DDOT Construction Permits needs no credentials - see
+    streetworks.arcgis.dc. Confirmed live 2026-08-21 (3,453 real rows in
+    the Construction Permit - Last 30 Days layer) - this SDK's third US
+    city permit register, and its first over a plain ArcGIS REST
+    MapServer rather than Socrata."""
+    from streetworks.arcgis.dc import DCConstructionPermitsClient
+    from streetworks.common import from_dc
+
+    with DCConstructionPermitsClient() as dc:
+        permits = list(dc.iter_roadworks())
+    if not permits:
+        raise RuntimeError("query returned no permits - real data may have changed")
+    works_list = from_dc(permits)
+    with_geometry = sum(1 for w in works_list if w.coordinate)
+    return f"{len(works_list)} real permit(s), {with_geometry} with real Point geometry"
+
+
 def check_paris() -> str:
     """Paris Chantiers needs no credentials - see streetworks.paris.
     Confirmed live 2026-08-06 (4,707 real records total) - only takes
@@ -2150,6 +2168,7 @@ def main() -> int:
     reporter.check("WZDx feed registry (511NY end-to-end)", [], check_wzdx_registry)
     reporter.check("NYC DOT Street Construction Permits", [], check_nycdot)
     reporter.check("Chicago CDOT Street Closures", [], check_chicagodot)
+    reporter.check("Washington DC DDOT Construction Permits", [], check_dc)
     reporter.check("Paris Chantiers", [], check_paris)
     # DriveBC (British Columbia, Open511) needs no credentials
     reporter.check("DriveBC (British Columbia, Open511)", [], check_drivebc)

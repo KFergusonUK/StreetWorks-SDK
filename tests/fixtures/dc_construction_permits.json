@@ -1,0 +1,313 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 418245313,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.09026993519073,
+          38.95230917202083
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1773152235000,
+        "ISEXCAVATION": "T",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "490385",
+        "PERMITNUMBER": "PA490385",
+        "INTAKEDATE": 1773152235000,
+        "ISSUEDATE": 1782841367000,
+        "EFFECTIVEDATE": 1785729600000,
+        "EXPIRATIONDATE": 1801198800000,
+        "STATUS": "Issued",
+        "WLFULLADDRESS": "4529 DAVENPORT STREET NW",
+        "PERMITTEENAME": "DCWater/CIP",
+        "OWNERNAME": "DCWater/CIP",
+        "CONTRACTORNAME": null,
+        "WORKDETAIL": "DC Water, Lead Free DC Program - Test pit and replacement of existing water service laterals for 4500 BL DAVENPORT ST NW (CBB25_23.33B).",
+        "READYFORREVIEWDATE": 1773152360000,
+        "APPLICANTCOMPANYNAME": "DCWater/CIP",
+        "XCOORD": 392175.58,
+        "YCOORD": 142715.07,
+        "LATITUDE": 38.95230138,
+        "LONGITUDE": -77.09026762,
+        "GLOBALID": "{597A7CAB-EDE9-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418245313
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418245405,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.97442082202598,
+          38.93132767610188
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1771600367000,
+        "ISEXCAVATION": "T",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "489174",
+        "PERMITNUMBER": "PA489174",
+        "INTAKEDATE": 1771600367000,
+        "ISSUEDATE": 1785335603000,
+        "EFFECTIVEDATE": 1786334400000,
+        "EXPIRATIONDATE": 1801803600000,
+        "STATUS": "Issued",
+        "WLFULLADDRESS": "3300 22ND STREET NE",
+        "PERMITTEENAME": "DCWater/CIP",
+        "OWNERNAME": "DCWater/CIP",
+        "CONTRACTORNAME": null,
+        "WORKDETAIL": "DC Water, Lead Free DC Program - Test pit and replacement of existing water service laterals for 3300 BL 22ND ST NE (CBB25_22.113B).",
+        "READYFORREVIEWDATE": 1771600464000,
+        "APPLICANTCOMPANYNAME": "DCWater/CIP",
+        "XCOORD": 402218.06,
+        "YCOORD": 140382.38,
+        "LATITUDE": 38.93131988,
+        "LONGITUDE": -76.97441854,
+        "GLOBALID": "{597A7CAB-EE45-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418245405
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418511418,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.0034227959179,
+          38.96444702295163
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1781792509000,
+        "ISEXCAVATION": "F",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "497428",
+        "PERMITNUMBER": null,
+        "INTAKEDATE": 1781792509000,
+        "ISSUEDATE": null,
+        "EFFECTIVEDATE": 1785556800000,
+        "EXPIRATIONDATE": 1790827200000,
+        "STATUS": "Pending Assignment",
+        "WLFULLADDRESS": "6100 - 6199 BLOCK OF NEW HAMPSHIRE AVENUE NE",
+        "PERMITTEENAME": "ROGER WETTAINEN",
+        "OWNERNAME": "ROGER WETTAINEN",
+        "CONTRACTORNAME": "Roger Wettainen",
+        "WORKDETAIL": "This project will consist of the installation of 96SM ADSS Fiber Optic Cable from the riser pole outside Substation 190 (5900 North Dakota Ave., NW, Washington, DC)  to the riser pole at the Substation 027(6601 New Hampshire Ave., Takoma Park, MD) Including a bore shot with UG conduit (4-Way 18/14) under the WMATA railroad located between Peabody street & Sligo Mill road. Removal & Installation of a single pole in existing location",
+        "READYFORREVIEWDATE": 1781792711000,
+        "APPLICANTCOMPANYNAME": "N/A",
+        "XCOORD": 399703.56,
+        "YCOORD": 144058.62,
+        "LATITUDE": 38.96443922,
+        "LONGITUDE": -77.00342051,
+        "GLOBALID": "{597A7CAF-FD62-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418511418
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418511426,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.00271078381068,
+          38.96539588058605
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1781794722000,
+        "ISEXCAVATION": "F",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "497433",
+        "PERMITNUMBER": null,
+        "INTAKEDATE": 1781794722000,
+        "ISSUEDATE": null,
+        "EFFECTIVEDATE": 1785556800000,
+        "EXPIRATIONDATE": 1790827200000,
+        "STATUS": "Pending Assignment",
+        "WLFULLADDRESS": "6200 - 6299 BLOCK OF NEW HAMPSHIRE AVENUE NE",
+        "PERMITTEENAME": "ROGER WETTAINEN",
+        "OWNERNAME": "ROGER WETTAINEN",
+        "CONTRACTORNAME": "Roger Wettainen",
+        "WORKDETAIL": "This project will consist of the installation of 96SM ADSS Fiber Optic Cable from the riser pole outside Substation 190 (5900 North Dakota Ave., NW, Washington, DC)  to the riser pole at the Substation 027(6601 New Hampshire Ave., Takoma Park, MD) Including a bore shot with UG conduit (4-Way 18/14) under the WMATA railroad located between Peabody street & Sligo Mill road. \r\n\r\nInstallation of a single pole on the North corner of Rittenhouse street NE & New Hampshire Avenue NE Intersection.",
+        "READYFORREVIEWDATE": 1781796694000,
+        "APPLICANTCOMPANYNAME": "N/A",
+        "XCOORD": 399765.27,
+        "YCOORD": 144163.95,
+        "LATITUDE": 38.96538808,
+        "LONGITUDE": -77.0027085,
+        "GLOBALID": "{597A7CAF-FD6A-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418511426
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418273163,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.02786516833399,
+          38.90896460982194
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1764949844000,
+        "ISEXCAVATION": "T",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "484342",
+        "PERMITNUMBER": null,
+        "INTAKEDATE": 1764949844000,
+        "ISSUEDATE": null,
+        "EFFECTIVEDATE": 1785556800000,
+        "EXPIRATIONDATE": 1801371600000,
+        "STATUS": "Denied",
+        "WLFULLADDRESS": "1403 12TH STREET NW",
+        "PERMITTEENAME": "DCWater/CIP",
+        "OWNERNAME": "DCWater/CIP",
+        "CONTRACTORNAME": null,
+        "WORKDETAIL": "DC Water: Lead Free DC Program, Block by Block Program - test pit and replacement of existing water service laterals for 1400 BL 12TH ST NW (CBB25_22.09D).",
+        "READYFORREVIEWDATE": 1764950094000,
+        "APPLICANTCOMPANYNAME": "DCWater/CIP",
+        "XCOORD": 397583.37,
+        "YCOORD": 137899.95,
+        "LATITUDE": 38.90895682,
+        "LONGITUDE": -77.02786288,
+        "GLOBALID": "{597A7CAC-5AB3-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418273163
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418262188,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.01248000930764,
+          38.9517796195018
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1760011845000,
+        "ISEXCAVATION": "F",
+        "ISFIXTURE": "F",
+        "ISPAVING": "F",
+        "ISLANDSCAPING": "F",
+        "ISPROJECTIONS": "F",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "480897",
+        "PERMITNUMBER": "PA480897",
+        "INTAKEDATE": 1760011845000,
+        "ISSUEDATE": 1785157981000,
+        "EFFECTIVEDATE": 1784779200000,
+        "EXPIRATIONDATE": 1789876800000,
+        "STATUS": "Issued",
+        "WLFULLADDRESS": "5051 NEW HAMPSHIRE AVENUE NW",
+        "PERMITTEENAME": "Potomac Electric Power Company",
+        "OWNERNAME": "Potomac Electric Power Company",
+        "CONTRACTORNAME": null,
+        "WORKDETAIL": "WO#20244898 PEPCO TO INSTALL (1) 1\u00d8 LATERAL FUSE, INSTALL 1\u00d8 PRIMARY CABLE, INSTALL (1) 100KVA OH XFMR, REMOVE & REPLACE OH SECONDARY CABLE",
+        "READYFORREVIEWDATE": 1760011907000,
+        "APPLICANTCOMPANYNAME": "Potomac Electric Power Company",
+        "XCOORD": 398918.42,
+        "YCOORD": 142652.49,
+        "LATITUDE": 38.95177182,
+        "LONGITUDE": -77.01247772,
+        "GLOBALID": "{597A7CAC-2FD4-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418262188
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 418264387,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.01138714099444,
+          38.95677697807708
+        ]
+      },
+      "properties": {
+        "APPLICATIONDATE": 1666634766000,
+        "ISEXCAVATION": "T",
+        "ISFIXTURE": "T",
+        "ISPAVING": "T",
+        "ISLANDSCAPING": "T",
+        "ISPROJECTIONS": "T",
+        "ISPSRENTAL": "F",
+        "TRACKINGNUMBER": "407319",
+        "PERMITNUMBER": null,
+        "INTAKEDATE": 1666634766000,
+        "ISSUEDATE": null,
+        "EFFECTIVEDATE": 1786334400000,
+        "EXPIRATIONDATE": 1817784000000,
+        "STATUS": "Approved (Pending Payment)",
+        "WLFULLADDRESS": "5501 1ST STREET NW",
+        "PERMITTEENAME": "Mel Negussie",
+        "OWNERNAME": "Mel Negussie",
+        "CONTRACTORNAME": null,
+        "WORKDETAIL": "NEW 4 STORY WITH PENTHOUSE 47 UNIT RESIDENTIAL CONDOMINIUM BUILDING 1st STREET NW, KENNEDY STREET AND PUBLIC ALLEY TO INCLUDE UNDERGROUND PARKING SPACES AND CURBSIDE SIGNAGE.",
+        "READYFORREVIEWDATE": 1670949676000,
+        "APPLICANTCOMPANYNAME": "N/A",
+        "XCOORD": 399013.22000000003,
+        "YCOORD": 143207.23,
+        "LATITUDE": 38.95676918,
+        "LONGITUDE": -77.01138485,
+        "GLOBALID": "{597A7CAC-386B-40DD-E063-792F520A79A9}",
+        "CREATOR": null,
+        "CREATED": null,
+        "EDITOR": null,
+        "EDITED": null,
+        "OBJECTID": 418264387
+      }
+    }
+  ]
+}

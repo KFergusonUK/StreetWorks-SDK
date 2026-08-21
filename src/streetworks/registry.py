@@ -2148,6 +2148,52 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.chicagodot import ChicagoDotClient",
     ),
     ProviderEntry(
+        key="dc",
+        name="Washington DC DDOT Construction Permits",
+        description="DC's public-space construction permit register, over DDOT's ArcGIS feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        # Both "USA" and "Washington DC" (this provider's real reach is
+        # city/district-scoped) - see providers(territory="Washington DC")
+        # and examples/roadworks_world_map.py's own city centroid, the
+        # same pattern nycdot/chicagodot/paris already established. Not
+        # in the WZDx/CWZ US registry at all - DC has no row there.
+        territories=frozenset({"USA", "Washington DC"}),
+        administrative_area="District Department of Transportation (DDOT)",
+        scope_note=(
+            "Confirmed live (2026-08-21, 3,453 real rows in the "
+            "Construction Permit - Last 30 Days layer) - credential-free, "
+            "never a Credentials-wanted scaffold. This SDK's third US "
+            "city permit register after nycdot/chicagodot, "
+            "source_grade=register, and its first over a plain ArcGIS "
+            "REST MapServer rather than Socrata - built on the same "
+            "generic streetworks.arcgis.ArcGISFeatureClient Jersey/"
+            "TIGERweb already use. Confirmed to be genuinely street/"
+            "right-of-way work, not general building permits, by reading "
+            "real sample records (ISEXCAVATION true on ~80% of a 1,000-"
+            "record sample) - a generically-named 'Construction_Permits' "
+            "dataset found first this session turned out on inspection "
+            "to be unrelated Boulder, Colorado building-permit data, not "
+            "DC's at all; this entry points at the real DDOT service "
+            "instead. A related Occupancy Permit layer on the same "
+            "service also covers non-construction public-space use (a "
+            "real sampled record: a music festival) - not consumed here, "
+            "the same 'related but distinct, noted not consumed' "
+            "treatment Jersey's own Projects layer gets. Real WGS84 "
+            "point geometry under f=geojson, confirmed live. Licence: "
+            "Creative Commons Attribution 4.0 International, confirmed "
+            "live via opendata.dc.gov's own dataset metadata. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        licence_confirmed=True,
+        source_grade="register",
+        _module="streetworks.arcgis.dc",
+        _client_name="DCConstructionPermitsClient",
+        import_line="from streetworks.arcgis.dc import DCConstructionPermitsClient",
+    ),
+    ProviderEntry(
         key="paris",
         name="Paris Chantiers (Ville de Paris)",
         description="Paris's own occupation-permit register for street/public-space worksites.",

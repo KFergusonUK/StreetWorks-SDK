@@ -30,6 +30,7 @@ from .from_copenhagen import from_copenhagen
 from .from_dar import from_dar_street
 from .from_datavia import from_datavia
 from .from_datex2 import from_datex2
+from .from_dc import from_dc
 from .from_departement_roadworks import from_departement_roadworks
 from .from_dfi_roads import from_dfi_roads
 from .from_digiroad import from_digiroad_street
@@ -204,4 +205,5 @@ __all__ = [
     "from_dortmund",
     "from_lyon",
     "from_departement_roadworks",
+    "from_dc",
 ]
