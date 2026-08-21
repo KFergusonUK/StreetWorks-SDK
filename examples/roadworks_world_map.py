@@ -295,6 +295,7 @@ def _fetch_works(key, client):
         from_tfl,
         from_trafficwales,
         from_trafficwatchni,
+        from_vancouver,
         from_vegvesen,
         from_vialietuva,
         from_vic_disruptions,
@@ -330,6 +331,33 @@ def _fetch_works(key, client):
             territory=jurisdiction.territory,
             administrative_area=jurisdiction.administrative_area,
         )
+    if key == "vancouver":
+        from streetworks.common import DateConfidence
+
+        per_layer = _LIMIT // 3 or 1
+        works: list = []
+        works.extend(
+            from_vancouver(
+                list(itertools.islice(client.iter_current_closures(), per_layer)),
+                status="Current closure",
+                date_confidence=DateConfidence.VERIFIED,
+            )
+        )
+        works.extend(
+            from_vancouver(
+                list(itertools.islice(client.iter_under_construction(), per_layer)),
+                status="Under construction",
+                date_confidence=DateConfidence.VERIFIED,
+            )
+        )
+        works.extend(
+            from_vancouver(
+                list(itertools.islice(client.iter_upcoming(), per_layer)),
+                status="Upcoming",
+                date_confidence=DateConfidence.ESTIMATED,
+            )
+        )
+        return works
     if key == "vic":
         return from_vic_disruptions(client.iter_planned_disruptions())
     if key == "wzdx":

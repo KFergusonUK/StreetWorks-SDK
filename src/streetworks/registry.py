@@ -3770,6 +3770,46 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("yukon")',
     ),
     ProviderEntry(
+        key="vancouver",
+        name="Vancouver Road Ahead",
+        description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Canada"}),
+        administrative_area="City of Vancouver",
+        scope_note=(
+            "Confirmed live (2026-08-21, 27/80/228 real records across "
+            "three real datasets) - credential-free, never a "
+            "Credentials-wanted scaffold. Found while surveying Canadian "
+            "municipal portals (Toronto, Montreal also checked - see "
+            "docs/providers/canada.md; Montreal's own real resources are "
+            "currently broken, Toronto's real feed has a genuine JSON "
+            "defect not yet worked around). Reuses "
+            "streetworks.opendatasoft.OpenDataSoftClient directly - the "
+            "same platform streetworks.paris and the French département "
+            "cluster already use - no new fetch code. Three real "
+            "datasets (current closures/under construction/upcoming), "
+            "none stating its own tier as a per-record field - "
+            "from_vancouver takes status/date_confidence as explicit "
+            "caller-supplied arguments per call, the same design "
+            "from_wzdx already uses for territory/administrative_area. "
+            "geo_point_2d is the one reliably-populated coordinate; a "
+            "real GeometryCollection shape (LineStrings mixed with "
+            "Polygons) is deliberately not decomposed. See module "
+            "docstring."
+        ),
+        credentials=None,
+        licence="Open Government Licence - Vancouver",
+        licence_confirmed=True,
+        source_grade="operator",
+        _module="streetworks.vancouver",
+        _client_name="VancouverClient",
+        import_line=(
+            "from streetworks.vancouver import VancouverClient  "
+            "# .iter_current_closures()/.iter_under_construction()/.iter_upcoming()"
+        ),
+    ),
+    ProviderEntry(
         key="lisboa",
         name="Câmara Municipal de Lisboa (Condicionamentos de Trânsito)",
         description="Lisbon's municipal traffic-conditioning feed.",

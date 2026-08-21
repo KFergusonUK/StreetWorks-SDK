@@ -720,6 +720,39 @@ def check_yt511() -> str:
     return f"{len(works_list):,} real roadwork event(s) - first real authenticated Yukon pull"
 
 
+def check_vancouver() -> str:
+    """Vancouver Road Ahead needs no credentials - see
+    streetworks.vancouver. Confirmed live 2026-08-21 (three real
+    datasets: current closures/under construction/upcoming) - this SDK's
+    first Canadian municipal roadworks provider. Only takes the first
+    real page of each layer via iter_*()'s own pagination, converting a
+    representative sample of each rather than the whole register."""
+    import itertools
+
+    from streetworks.common import DateConfidence, from_vancouver
+    from streetworks.vancouver import VancouverClient
+
+    with VancouverClient() as vancouver:
+        current = list(itertools.islice(vancouver.iter_current_closures(), 50))
+        construction = list(itertools.islice(vancouver.iter_under_construction(), 50))
+        upcoming = list(itertools.islice(vancouver.iter_upcoming(), 50))
+    if not (current or construction or upcoming):
+        raise RuntimeError("all three layers returned no records - real data may have changed")
+    works_list = from_vancouver(
+        current, status="Current closure", date_confidence=DateConfidence.VERIFIED
+    )
+    works_list += from_vancouver(
+        construction, status="Under construction", date_confidence=DateConfidence.VERIFIED
+    )
+    works_list += from_vancouver(
+        upcoming, status="Upcoming", date_confidence=DateConfidence.ESTIMATED
+    )
+    return (
+        f"{len(current):,} current closure(s), {len(construction):,} under construction, "
+        f"{len(upcoming):,} upcoming - {len(works_list):,} total real Works"
+    )
+
+
 def check_lisboa() -> str:
     """Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no
     credentials - confirmed live (see streetworks.lisboa). Filters on
@@ -2337,6 +2370,7 @@ def main() -> int:
     reporter.check("Newfoundland and Labrador 511", ["NEWFOUNDLAND_511_API_KEY"], check_nl511)
     reporter.check("Nova Scotia 511", ["NOVA_SCOTIA_511_API_KEY"], check_ns511)
     reporter.check("511 Yukon", ["YUKON_511_API_KEY"], check_yt511)
+    reporter.check("Vancouver Road Ahead", [], check_vancouver)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

@@ -80,6 +80,7 @@ from .from_tfl import from_tfl
 from .from_tigerweb import from_tigerweb
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
+from .from_vancouver import from_vancouver
 from .from_vegvesen import from_vegvesen
 from .from_vialietuva import from_vialietuva
 from .from_vic_disruptions import from_vic_disruptions
@@ -210,4 +211,5 @@ __all__ = [
     "from_dc",
     "from_quebec",
     "from_na511",
+    "from_vancouver",
 ]

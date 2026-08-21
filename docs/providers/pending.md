@@ -62,9 +62,15 @@ Credentials-wanted, or Documented-unavailable; see
   have since been taken down (no known current route to a key for
   either). Prince Edward Island, the Northwest Territories and Nunavut
   were checked and have no matching site; Manitoba has open road-network
-  data but no real-time API; municipal roadworks portals (Toronto,
-  Montreal, Vancouver) remain genuinely unchecked. **Streets is no
-  longer pending at all** — the
+  data but no real-time API. Of the three Canadian municipal portals
+  checked (2026-08-21): Vancouver (Road Ahead, OpenDataSoft) is now
+  built too — this SDK's first Canadian *municipal* roadworks provider,
+  reusing `streetworks.opendatasoft.OpenDataSoftClient` with no new
+  fetch code; Toronto has a real, rich, keyless feed found but not built
+  (one confirmed real JSON defect in the source needs a defensive
+  parsing workaround first); Montreal's own real resources are all
+  currently broken (403s and dead routes) — a genuine dead end right
+  now, not an unchecked gap. **Streets is no longer pending at all** — the
   National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
   is real, live, keyless, and covers all 13 provinces/territories
   nationally in one build (Segment only, the same TIGERweb/NWB

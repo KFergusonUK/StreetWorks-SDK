@@ -2,6 +2,53 @@
 
 ## [Unreleased]
 
+### Added — Vancouver Road Ahead, this SDK's first Canadian municipal roadworks provider (2026-08-21)
+
+`streetworks.vancouver.VancouverClient` / `streetworks.common.from_vancouver`
+- Found while surveying Canada's three largest municipal portals
+  (Toronto, Montreal, Vancouver) beyond the provincial/511 coverage
+  above. Vancouver runs OpenDataSoft, the same platform `streetworks.paris`
+  and the French département cluster already use -
+  `streetworks.opendatasoft.OpenDataSoftClient` is reused directly, no
+  new fetch/pagination code needed.
+
+```python
+from streetworks.vancouver import VancouverClient
+from streetworks.common import from_vancouver, DateConfidence
+
+with VancouverClient() as vancouver:
+    works_list = from_vancouver(
+        list(vancouver.iter_current_closures()),
+        status="Current closure",
+        date_confidence=DateConfidence.VERIFIED,
+    )
+```
+
+- **Three real, distinct datasets** - current road closures (27 real
+  records), projects under construction (80), upcoming projects (228).
+  None states its own tier as a per-record field, so `from_vancouver`
+  takes `status`/`date_confidence` as explicit caller arguments per
+  call - the same design `from_wzdx` already uses for `territory`/
+  `administrative_area`.
+- `project`/`location` confirmed live to always be identical (only
+  `location` used); `street` confirmed always null; `comp_date`
+  (completion date) is the only date field this source states at all -
+  no start date exists.
+- Real representative point (`geo_point_2d`) always present; real
+  `LineString`/`MultiLineString` geometry additionally carried when
+  present. A real `GeometryCollection` shape (LineStrings mixed with
+  Polygons) is deliberately not decomposed.
+- **Licence**: Open Government Licence - Vancouver.
+- Also checked this session: **Toronto** has a real, rich, keyless feed
+  (contractor names, permit-style fields) but one genuine record breaks
+  strict JSON parsing (a stray un-escaped backslash in free text) - not
+  built yet, needs a defensive parsing workaround. **Montreal**'s own
+  real resources are all currently broken (403s / dead API route) - a
+  confirmed dead end right now, not an unchecked gap. See
+  `docs/providers/canada.md`.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — North American 511 platform: Ontario 511 shipped, six more jurisdictions ready for a real key (2026-08-21)
 
 `streetworks.na511.NA511Client` / `streetworks.common.from_na511`

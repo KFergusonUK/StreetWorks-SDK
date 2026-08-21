@@ -223,6 +223,56 @@ by checking a real sample's first/last points against that same record's
 own separately-stated `Latitude`/`Longitude`/`LatitudeSecondary`/
 `LongitudeSecondary` fields.
 
+## Vancouver Road Ahead
+
+This SDK's first Canadian *municipal* roadworks provider — found while
+surveying Toronto, Montreal and Vancouver's own portals (Toronto and
+Montreal are documented under "The rest of the Canadian landscape"
+below). The City of Vancouver's own real "Road Ahead" datasets run on
+OpenDataSoft, the same platform `streetworks.paris` and the French
+département cluster already use — `streetworks.opendatasoft.OpenDataSoftClient`
+is reused directly, no new fetch code needed:
+
+```python
+from streetworks.vancouver import VancouverClient
+from streetworks.common import from_vancouver, DateConfidence
+
+with VancouverClient() as vancouver:
+    works_list = from_vancouver(
+        list(vancouver.iter_current_closures()),
+        status="Current closure",
+        date_confidence=DateConfidence.VERIFIED,
+    )
+```
+
+**Three real, distinct datasets, confirmed live 2026-08-21** — current
+road closures (27 real records), projects under construction (80) and
+upcoming projects (228). None states its own tier as a per-record field
+(the tier is real, but only stated at the dataset level), so
+`from_vancouver` takes `status`/`date_confidence` as explicit
+caller-supplied arguments per call — the same design `from_wzdx` already
+uses for `territory`/`administrative_area`.
+
+**`project` and `location` are confirmed live to always be identical**
+(0 real differences found across every record sampled) — only
+`location` is used, `project` is redundant. **`street` is real but
+confirmed always null** on every record sampled across all three
+datasets. **`comp_date` (completion date) is the only date field this
+source states at all** — there is no start-date field, a genuine,
+confirmed gap, not an oversight.
+
+**Geometry always has a real representative point** (`geo_point_2d`,
+confirmed live to never be absent) used as `Coordinate.value`; real
+`LineString`/`MultiLineString` geometry is additionally carried as
+`.points` when present. A real but structurally mixed `GeometryCollection`
+shape (LineStrings mixed with real Polygons, found live on an "under
+construction" record) is deliberately not decomposed — too varied to
+handle generically without guessing — those records still get their
+real point, just no `.points`.
+
+**Licence: Open Government Licence - Vancouver**, confirmed live via the
+Explore API's own dataset metadata.
+
 ## National Road Network (NRN, streets gazetteer)
 
 This SDK's first Canadian streets/gazetteer provider — Statistics
@@ -303,5 +353,29 @@ confirmed versus still unchecked:
   this session, no matching 511-platform site found (no DNS record for
   any plausible domain); PEI has a general open-data portal but nothing
   road-closure-specific confirmed.
-- **Municipal portals** (Toronto, Montreal, Vancouver) — not checked
-  this session.
+- **Vancouver** — already covered, not a new build: see
+  [Vancouver Road Ahead](#vancouver-road-ahead) above.
+- **Toronto** — a real, rich, live, keyless feed found
+  (`secure.toronto.ca/opendata/cart/road_restrictions/v3`, explicitly
+  self-described by the city as "a live feed of current road
+  restrictions/closures", real lat/lon, contractor names, permit-style
+  schedule fields, real `type: "CONSTRUCTION"` filter) — not built yet.
+  One real, confirmed defect blocks a naive build: a single real record
+  (of thousands) has a stray, un-escaped backslash in a free-text
+  description field (`"WATER \ SEWER"`), which breaks strict JSON
+  parsing - a live bug in Toronto's own feed, not a fetch error, and
+  isolated (one occurrence found in the whole 3.3 MB response). A
+  defensive repair step (escaping stray backslashes before parsing)
+  would work but wasn't written this session, since the user chose
+  Vancouver first. Licence unspecified on the CKAN catalogue entry (the
+  same honest-gap tier as NYC DOT/Jersey). A secondary dataset, Utility
+  Cut Permits, also exists (real CKAN datastore, permit-shaped) but has
+  no coordinates, only address text - not a build target on its own.
+- **Montreal** — checked, a genuine dead end right now, not a gap in the
+  search. Both real candidate datasets
+  (`donnees.montreal.ca/dataset/info-travaux`,
+  `.../dataset/entraves-circulation`) have broken resources: the CSV
+  downloads return `RBAC: access denied` (403), and the JSON/XML API URL
+  the catalogue itself lists 404s with `"no Route matched with those
+  values"`. No other dataset in Montreal's own catalogue covers the same
+  ground. Worth revisiting if Montreal fixes these.
