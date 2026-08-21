@@ -78,6 +78,7 @@ from .from_streetmanager import from_streetmanager
 from .from_swisstopo import from_swisstopo_street
 from .from_tfl import from_tfl
 from .from_tigerweb import from_tigerweb
+from .from_toronto import from_toronto
 from .from_trafficwales import from_trafficwales
 from .from_trafficwatchni import from_trafficwatchni
 from .from_vancouver import from_vancouver
@@ -212,4 +213,5 @@ __all__ = [
     "from_quebec",
     "from_na511",
     "from_vancouver",
+    "from_toronto",
 ]

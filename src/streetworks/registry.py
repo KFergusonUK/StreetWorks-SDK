@@ -3810,6 +3810,45 @@ _REGISTRY: list[ProviderEntry] = [
         ),
     ),
     ProviderEntry(
+        key="toronto",
+        name="Toronto Road Restrictions/Closures",
+        description="Toronto's own real-time roadwork/closures feed - contractor, permit fields",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Canada"}),
+        administrative_area="City of Toronto",
+        scope_note=(
+            "Confirmed live (2026-08-21, 2,274 real records) - "
+            "credential-free, never a Credentials-wanted scaffold. "
+            "This SDK's second Canadian municipal roadworks provider "
+            "after Vancouver ('vancouver'). Every real record is "
+            "roadworks-relevant - type is 'CONSTRUCTION' (1,823) or "
+            "'ROAD_CLOSED' (451, every one carrying subType == "
+            "'ROAD_CLOSED_CONSTRUCTION'), no non-roadworks value ever "
+            "observed, so no filter is applied. A real, confirmed JSON "
+            "defect in the source (one stray, un-escaped backslash "
+            "inside a free-text description, found live, not a fetch "
+            "error) is repaired defensively before parsing - see "
+            "streetworks.toronto.client's own module docstring. "
+            "contractor is real and populated on 2,214/2,274 records - "
+            "richer than most roadworks sources this SDK has. "
+            "source/workEventType/permitType are confirmed identical "
+            "to each other on every record, but a genuine export "
+            "defect leaves 950/2,274 (42%) holding an identical literal "
+            "placeholder string instead of real text - carried through "
+            "as-is, not filtered. Real bespoke geoPolyline geometry "
+            "(comma-joined [lon,lat] pairs, not JSON array syntax or a "
+            "Google Encoded Polyline) parsed via a dedicated regex."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.toronto",
+        _client_name="TorontoClient",
+        import_line="from streetworks.toronto import TorontoClient",
+    ),
+    ProviderEntry(
         key="lisboa",
         name="Câmara Municipal de Lisboa (Condicionamentos de Trânsito)",
         description="Lisbon's municipal traffic-conditioning feed.",

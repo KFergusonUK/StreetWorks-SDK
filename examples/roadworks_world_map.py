@@ -293,6 +293,7 @@ def _fetch_works(key, client):
         from_saarland,
         from_sct,
         from_tfl,
+        from_toronto,
         from_trafficwales,
         from_trafficwatchni,
         from_vancouver,
@@ -426,6 +427,7 @@ def _fetch_works(key, client):
         "saarland": from_saarland, "dortmund": from_dortmund, "lyon": from_lyon,
         "amsterdam": from_amsterdam, "nt": from_au_nt_roadreport, "dc": from_dc,
         "quebec": from_quebec,
+        "toronto": from_toronto,
         # oslo's, helsinki's, canton_zurich's and vienna's coordinates are
         # projected (EPSG:25832, EPSG:3879, EPSG:2056 and EPSG:31256
         # respectively), so _coord_lonlat's WGS84-only guard skips them on

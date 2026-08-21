@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — Toronto Road Restrictions/Closures, this SDK's second Canadian municipal roadworks provider (2026-08-21)
+
+`streetworks.toronto.TorontoClient` / `streetworks.common.from_toronto`
+- Found alongside Vancouver while surveying Toronto/Montreal/Vancouver's
+  own municipal portals - a real, rich, keyless feed
+  (`secure.toronto.ca/opendata/cart/road_restrictions/v3`), 2,274 real
+  records.
+
+```python
+from streetworks.toronto import TorontoClient
+from streetworks.common import from_toronto
+
+with TorontoClient() as toronto:
+    works_list = from_toronto(list(toronto.iter_roadworks()))
+```
+
+- **Every real record is roadworks-relevant** - `type` is
+  `"CONSTRUCTION"` (1,823) or `"ROAD_CLOSED"` (451, every one carrying
+  `subType == "ROAD_CLOSED_CONSTRUCTION"`) - no filter needed.
+- **A real, confirmed JSON defect in the live source, worked around, not
+  ignored** - one record (of 2,274) has a stray, un-escaped backslash in
+  a free-text description, breaking strict JSON parsing. A defensive
+  repair step fixes it before parsing. Writing the repair correctly took
+  two attempts - the first regex mis-handled a genuinely-valid `\\`
+  pair, caught by a dedicated no-op test before it shipped, not found
+  live.
+- `contractor` is real and populated on 2,214/2,274 records - richer
+  than most roadworks sources this SDK has. `source`/`workEventType`/
+  `permitType` are identical to each other on every record but a
+  genuine export defect leaves 42% holding a known garbled placeholder
+  string instead of real text - carried through as-is.
+- Real bespoke `geoPolyline` geometry (comma-joined `[lon,lat]` pairs,
+  neither JSON array syntax nor a Google Encoded Polyline) parsed via a
+  dedicated regex.
+- **Licence**: not specified (the same honest-gap tier as Jersey/NYC DOT).
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Vancouver Road Ahead, this SDK's first Canadian municipal roadworks provider (2026-08-21)
 
 `streetworks.vancouver.VancouverClient` / `streetworks.common.from_vancouver`

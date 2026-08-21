@@ -753,6 +753,34 @@ def check_vancouver() -> str:
     )
 
 
+def check_toronto() -> str:
+    """Toronto Road Restrictions/Closures needs no credentials - see
+    streetworks.toronto. Confirmed live 2026-08-21 (2,274 real records)
+    - this SDK's second Canadian municipal roadworks provider. Fetches
+    the real feed whole (one request) and reports the real
+    CONSTRUCTION/ROAD_CLOSED split, plus how many records still carry
+    the known garbled workEventType placeholder - so a change in either
+    real proportion is visible here rather than silently."""
+    from collections import Counter
+
+    from streetworks.common import from_toronto
+    from streetworks.toronto import TorontoClient
+
+    with TorontoClient() as toronto:
+        records = list(toronto.iter_roadworks())
+    if not records:
+        raise RuntimeError("query returned no records - real data may have changed")
+    works_list = from_toronto(records)
+    type_counts = Counter(w.sites[0].status for w in works_list)
+    garbled = sum(
+        1 for w in works_list if (w.sites[0].works_type or "").startswith('{"tabledata"')
+    )
+    return (
+        f"{len(works_list):,} real record(s), type split: {dict(type_counts)}, "
+        f"{garbled:,} with the known garbled workEventType placeholder"
+    )
+
+
 def check_lisboa() -> str:
     """Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no
     credentials - confirmed live (see streetworks.lisboa). Filters on
@@ -2371,6 +2399,7 @@ def main() -> int:
     reporter.check("Nova Scotia 511", ["NOVA_SCOTIA_511_API_KEY"], check_ns511)
     reporter.check("511 Yukon", ["YUKON_511_API_KEY"], check_yt511)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
+    reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

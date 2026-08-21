@@ -273,6 +273,61 @@ real point, just no `.points`.
 **Licence: Open Government Licence - Vancouver**, confirmed live via the
 Explore API's own dataset metadata.
 
+## Toronto Road Restrictions/Closures
+
+This SDK's second Canadian municipal roadworks provider — a real, rich,
+keyless feed found alongside Vancouver's:
+
+```python
+from streetworks.toronto import TorontoClient
+from streetworks.common import from_toronto
+
+with TorontoClient() as toronto:
+    works_list = from_toronto(list(toronto.iter_roadworks()))
+```
+
+**Every real record is roadworks-relevant — no filter needed.** `type`
+has exactly two real values confirmed live: `"CONSTRUCTION"` (1,823
+records) and `"ROAD_CLOSED"` (451) — and every real `ROAD_CLOSED` record
+carries `subType == "ROAD_CLOSED_CONSTRUCTION"` (451/451, an exact
+match), confirming both are genuinely construction-caused, not e.g. an
+event closure.
+
+**A real, confirmed JSON defect in the live source, worked around, not
+silently ignored.** One real record (of 2,274) has a stray, un-escaped
+backslash inside a free-text `description` value (`"WATER \ SEWER"`,
+evidently meant as `"WATER / SEWER"`) — a genuine live bug in Toronto's
+own export, confirmed narrow (a full scan of the raw 3.3 MB response
+found exactly one such occurrence), not systemic. `TorontoClient`
+escapes any stray backslash defensively before parsing — a no-op on a
+response without this defect. Writing this repair step correctly took
+a real second attempt: a naive backslash-scanning regex first shipped
+here mis-handled a genuinely-valid `\\` (escaped-backslash) pair,
+treating its second character as if it started its own stray escape —
+caught by a dedicated no-op test before this was committed, not found
+live.
+
+**`contractor` is real and populated on 2,214/2,274 records** — richer
+than most roadworks sources this SDK has. **`source`/`workEventType`/
+`permitType` are confirmed identical to each other on every record**
+(only `workEventType` is used) **— real and often rich (organisation
+names like "Waterfront Toronto", "Metrolinx", "TTC"; activity
+descriptions like "Storage of materials and equipment") on 1,324/2,274
+records, but a genuine, confirmed export defect leaves the other
+950/2,274 (42%) holding an identical literal placeholder string**
+(`'{"tabledata":[{"Option":"Transportation Services"'`) **instead of
+real text** — carried through as-is, not filtered or guessed at.
+
+**Geometry: a real bespoke string format, not JSON array syntax or a
+Google Encoded Polyline.** `geoPolyline` is comma-joined `[lon,lat]`
+bracket pairs (e.g. `"[-79.382090,43.727320],[-79.382070,43.727240]"`)
+— parsed via a dedicated regex, preferred over the plain `latitude`/
+`longitude` pair (also always populated, 0/2,274 missing) when present.
+
+**Licence: not specified** — the CKAN catalogue entry states
+`license_id: "notspecified"`, the same honest-gap tier this SDK already
+gives Jersey RoadWorkx and NYC DOT.
+
 ## National Road Network (NRN, streets gazetteer)
 
 This SDK's first Canadian streets/gazetteer provider — Statistics
@@ -353,24 +408,12 @@ confirmed versus still unchecked:
   this session, no matching 511-platform site found (no DNS record for
   any plausible domain); PEI has a general open-data portal but nothing
   road-closure-specific confirmed.
-- **Vancouver** — already covered, not a new build: see
-  [Vancouver Road Ahead](#vancouver-road-ahead) above.
-- **Toronto** — a real, rich, live, keyless feed found
-  (`secure.toronto.ca/opendata/cart/road_restrictions/v3`, explicitly
-  self-described by the city as "a live feed of current road
-  restrictions/closures", real lat/lon, contractor names, permit-style
-  schedule fields, real `type: "CONSTRUCTION"` filter) — not built yet.
-  One real, confirmed defect blocks a naive build: a single real record
-  (of thousands) has a stray, un-escaped backslash in a free-text
-  description field (`"WATER \ SEWER"`), which breaks strict JSON
-  parsing - a live bug in Toronto's own feed, not a fetch error, and
-  isolated (one occurrence found in the whole 3.3 MB response). A
-  defensive repair step (escaping stray backslashes before parsing)
-  would work but wasn't written this session, since the user chose
-  Vancouver first. Licence unspecified on the CKAN catalogue entry (the
-  same honest-gap tier as NYC DOT/Jersey). A secondary dataset, Utility
-  Cut Permits, also exists (real CKAN datastore, permit-shaped) but has
-  no coordinates, only address text - not a build target on its own.
+- **Vancouver, Toronto** — already covered, not a new build: see
+  [Vancouver Road Ahead](#vancouver-road-ahead) and
+  [Toronto Road Restrictions/Closures](#toronto-road-restrictionsclosures)
+  above. Toronto's secondary dataset, Utility Cut Permits, also exists
+  (real CKAN datastore, permit-shaped) but has no coordinates, only
+  address text — not built, not a strong build target on its own.
 - **Montreal** — checked, a genuine dead end right now, not a gap in the
   search. Both real candidate datasets
   (`donnees.montreal.ca/dataset/info-travaux`,
