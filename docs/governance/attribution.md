@@ -24,3 +24,10 @@ testing of, the Section 58 support and Street Manager v6 model work,
 via a merged pull request. Recorded here because a contribution like
 that deserves a named credit somewhere in the repository, not because
 any specific commit or file needed re-attribution.
+
+**Jamie Atkinson** contributed the UK-wide works-near-here join over the
+common model (PR #4, merged as
+[`examples/works_near`](../../examples/works_near) rather than exposed
+as a top-level SDK function) and the Road Report NT (Northern Territory,
+Australia) adapter (PR #14, `streetworks.au.nt`), both via merged pull
+requests.

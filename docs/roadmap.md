@@ -113,9 +113,13 @@ here.)
 
 ### New territories / continents to extend
 - **Singapore** — not yet investigated (LTA DataMall the likely route).
-- **Canada** — National Road Network (streets) done; roadworks: Québec (511)
-  live-not-built, other provinces + municipal (Toronto / Montréal / Vancouver)
-  open.
+- **Canada** — National Road Network (streets), Québec (MTQ Travaux routiers),
+  7 of 10 provinces plus Yukon (North American 511 platform), and Vancouver
+  and Toronto (municipal) are all live. Remaining: Manitoba, Prince Edward
+  Island, Northwest Territories, Nunavut (no matching feed found this
+  session); Montréal (real datasets, currently broken — see
+  [`docs/providers/canada.md`](providers/canada.md)); Atlantic provinces'
+  municipal portals unchecked.
 
 ## Examples & derived layers *(not coverage)*
 - **Roadworks-aware routing example** — OS Open Roads (keyless OGL, strategic
@@ -598,6 +602,47 @@ here.)
 - [x] **WZDx (US Work Zone Data Exchange)** parser (`streetworks.wzdx`,
       v3.1–v4.2), a generic feed client, and a USDOT registry helper —
       verified against 12 live agency feeds, not one sample
+- [x] **CWZ (Connected Work Zone) 1.0** parsing support added to
+      `streetworks.wzdx` — unlocked a real, live, keyless feed (PurposeBuilt
+      Systems) immediately; Massachusetts DOT/Colorado DOT/Illinois DOT's
+      own real CWZ feeds also parse, credential-gated pending a real key
+      none were obtained for. See
+      [docs/providers/us.md](providers/us.md#wzdx-us-work-zone-data-exchange)
+- [x] Washington DC DDOT Construction Permits (`streetworks.arcgis.dc`) —
+      this SDK's third US city permit register, and its first over a plain
+      ArcGIS REST `MapServer` rather than Socrata. See
+      [docs/providers/us.md](providers/us.md#washington-dc-ddot-construction-permits)
+- [x] Québec (MTQ Travaux routiers, `streetworks.quebec`) — this SDK's first
+      Canadian provincial roadworks provider, built over the existing
+      generic `OGCFeaturesClient`. See
+      [docs/providers/canada.md](providers/canada.md#québec-mtq-travaux-routiers)
+- [x] **North American 511 platform** (`streetworks.na511`) — one commercial
+      REST API shape confirmed, live, reused byte-for-byte across 9
+      government agencies in two countries: Ontario (keyless, fully
+      shipped), Alberta, Saskatchewan, New Brunswick, Newfoundland and
+      Labrador, Nova Scotia, Yukon (Canada), plus Nevada and Georgia (USA —
+      found independently of the WZDx/CWZ US registry, which has no row for
+      either). See
+      [docs/providers/canada.md](providers/canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon)
+- [x] Vancouver Road Ahead (`streetworks.vancouver`) — this SDK's first
+      Canadian municipal roadworks provider, reusing
+      `streetworks.opendatasoft.OpenDataSoftClient` directly, no new fetch
+      code needed. See
+      [docs/providers/canada.md](providers/canada.md#vancouver-road-ahead)
+- [x] Toronto Road Restrictions/Closures (`streetworks.toronto`) — this
+      SDK's second Canadian municipal roadworks provider. Surfaced and
+      fixed a real, live JSON defect (a stray un-escaped backslash in a
+      free-text field) via a dedicated repair step, caught and corrected by
+      a dedicated no-op test before shipping. See
+      [docs/providers/canada.md](providers/canada.md#toronto-road-restrictionsclosures)
+- [x] USA WZDx/CWZ coverage-gap survey — every US state + DC with zero row
+      in the WZDx/CWZ registry checked for an alternative feed, the same
+      way NYC DOT/Chicago DOT were originally found outside that registry.
+      Real leads found for North Dakota (a licence decision needed, not
+      more investigation) and South Carolina/Tennessee (both blocked on
+      transient state — an empty feed and a dead host, respectively — not
+      unwritten code); the rest confirmed genuine dead ends. See
+      [docs/providers/pending.md](providers/pending.md)
 - [ ] Ordnance Survey NGD / Linked Identifiers?
 
 See [`docs/providers/europe.md`](providers/europe.md#european--crown-dependency-roadworks--separate-strand)
