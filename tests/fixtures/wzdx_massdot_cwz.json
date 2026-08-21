@@ -1,0 +1,64 @@
+{
+  "feedInfo": {
+    "publisher": "Massachusetts Department of Transportation",
+    "version": "1.0",
+    "updateDate": "2026-08-21T06:00:00Z",
+    "updateFrequency": 60,
+    "contactName": "MassDOT Highway Division",
+    "contactEmail": "traffic.operations@dot.state.ma.us",
+    "dataSources": [
+      {
+        "dataSourceId": "0b9a2e2e-6b1a-4b3a-9b1a-6b1a4b3a9b1a",
+        "organizationName": "MassDOT Highway Division",
+        "updateDate": "2026-08-21T06:00:00Z",
+        "updateFrequency": 60,
+        "contactName": "MassDOT Highway Division",
+        "contactEmail": "traffic.operations@dot.state.ma.us"
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "3f1c9a2e-8b7d-4e6a-9c3a-1f2e3d4c5b6a",
+      "type": "Feature",
+      "properties": {
+        "type": "workzone",
+        "coreDetails": {
+          "eventType": "work-zone",
+          "dataSourceId": "0b9a2e2e-6b1a-4b3a-9b1a-6b1a4b3a9b1a",
+          "roadNames": ["I-90", "Massachusetts Turnpike"],
+          "direction": "westbound",
+          "name": "I-90 westbound bridge deck repair",
+          "description": "Right lane closed for bridge deck repair.",
+          "creationDate": "2026-08-01T12:00:00Z",
+          "updateDate": "2026-08-21T05:55:00Z"
+        },
+        "startDate": "2026-08-05T06:00:00Z",
+        "endDate": "2026-09-15T18:00:00Z",
+        "locationMethod": "channel-device-method",
+        "vehicleImpact": "some-lanes-closed",
+        "isStartDateVerified": true,
+        "isEndDateVerified": false,
+        "isStartPositionVerified": true,
+        "isEndPositionVerified": true,
+        "workZoneType": "static",
+        "reducedSpeedLimitKph": 89,
+        "typesOfWork": [
+          {"typeName": "surface-work", "isArchitecturalChange": false}
+        ],
+        "lanes": [
+          {"order": 1, "type": "general", "status": "closed"}
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-71.10498, 42.35866],
+          [-71.10842, 42.35921]
+        ]
+      }
+    }
+  ],
+  "bbox": [-71.10842, 42.35866, -71.10498, 42.35921]
+}

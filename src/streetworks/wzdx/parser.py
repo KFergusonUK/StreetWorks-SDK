@@ -23,10 +23,27 @@ schedules embedded in (sometimes non-English) description prose, and
 pervasive empty arrays. Nothing here raises on a malformed record - it
 degrades to ``None``/``()`` and the original Feature is always kept on
 ``RoadEvent.raw``.
+
+**CWZ (Connected Work Zone) 1.0 support**: CWZ is explicitly built on WZDx
+v4.2 as its own base (per the CWZ standard's own Annex F), and a real, live,
+keyless CWZ 1.0 feed (PurposeBuilt Systems, confirmed 2026-08-21) uses the
+identical snake_case field names WZDx does - ``core_details``,
+``event_type``, ``is_start_date_verified``, etc. - so this parser already
+handles a standards-conformant CWZ feed with no changes. Massachusetts
+DOT's own real CWZ feed, however, serializes every key in camelCase
+(``coreDetails``, ``eventType``, ``isStartDateVerified``...) - a vendor
+(Arcadis) implementation quirk, not the spec's own convention, confirmed
+against its live OpenAPI schema. Rather than special-case one vendor,
+every properties dict is walked through :func:`_normalize_keys`, converting
+any camelCase key to snake_case (a no-op on keys already snake_case, since
+none contain an uppercase letter) - so both conventions read through the
+exact same field lookups below. ``RoadEvent.raw`` still keeps the feature
+exactly as received, un-normalized.
 """
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .._dt import parse_iso8601 as _dt
@@ -36,12 +53,30 @@ __all__ = ["parse_road_events"]
 
 JSON = dict[str, Any]
 
+_CAMEL_BOUNDARY = re.compile(r"(?<!^)(?=[A-Z])")
+
+
+def _to_snake_case(key: str) -> str:
+    return _CAMEL_BOUNDARY.sub("_", key).lower()
+
+
+def _normalize_keys(value: Any) -> Any:
+    """Recursively converts camelCase dict keys to snake_case - see the
+    CWZ paragraph in this module's docstring. Idempotent on already
+    snake_case input."""
+    if isinstance(value, dict):
+        return {_to_snake_case(k): _normalize_keys(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_normalize_keys(v) for v in value]
+    return value
+
 
 def _merged_properties(feature: JSON) -> JSON:
     """v4 nests identity/description fields under ``core_details``; v3 has
     them flat on ``properties`` directly. Merge so field reads don't care
-    which layout the source used."""
-    properties = feature.get("properties") or {}
+    which layout the source used. Normalized (see module docstring) so a
+    camelCase ``coreDetails`` wrapper is found the same way."""
+    properties = _normalize_keys(feature.get("properties") or {})
     core_details = properties.get("core_details") or {}
     return {**properties, **core_details}
 

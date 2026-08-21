@@ -7,7 +7,10 @@ parsing), a real Quebec City (Canada, non-US) row, a real
 ``needapikey: true`` row (Colorado DOT's WZDx feed), and its real CWZ
 sibling (``cdot_cwz``, ``version == "CWZ 1.0"``) - the real WZDx/CWZ
 discriminator, confirmed live to NOT be the ``format`` field (see
-``streetworks.wzdx.registry``'s own module docstring).
+``streetworks.wzdx.registry``'s own module docstring). CWZ 1.0 is now a
+supported version too (streetworks.wzdx.parser parses it) - so
+``cdot_cwz`` is included by default like any other entry, still gated on
+``needapikey`` the same as every credentialed WZDx feed.
 """
 
 import json
@@ -16,24 +19,23 @@ from pathlib import Path
 import httpx
 import respx
 
-from streetworks.wzdx.registry import REGISTRY_URL, list_feeds
+from streetworks.wzdx.registry import REGISTRY_URL, RegistryEntry, list_feeds
 
 FIXTURE = json.loads(
-    (Path(__file__).parent / "fixtures" / "wzdx_registry_sample.json").read_text(
-        encoding="utf-8"
-    )
+    (Path(__file__).parent / "fixtures" / "wzdx_registry_sample.json").read_text(encoding="utf-8")
 )
 
 
 @respx.mock
-def test_list_feeds_defaults_to_active_and_wzdx_only():
+def test_list_feeds_defaults_to_active_and_supported_version():
     respx.get(REGISTRY_URL).mock(return_value=httpx.Response(200, json=FIXTURE))
     entries = list_feeds()
-    # Active: 6/7. WZDx-only additionally drops the real CWZ sibling: 5.
-    assert len(entries) == 5
+    # Active: 6/7 (michigandot is inactive). All 6 have a supported
+    # version - CWZ 1.0 (cdot_cwz) is supported too, so nothing else drops.
+    assert len(entries) == 6
     assert all(e.active for e in entries)
     assert all(e.is_supported_wzdx for e in entries)
-    assert "cdot_cwz" not in {e.feed_name for e in entries}
+    assert "cdot_cwz" in {e.feed_name for e in entries}
     wsdot = next(e for e in entries if e.feed_name == "wsdot")
     assert wsdot.url == "https://wzdx.wsdot.wa.gov/api/v4/WorkZoneFeed"
     assert wsdot.version == "4.2"
@@ -52,12 +54,32 @@ def test_list_feeds_active_only_false_includes_inactive():
 
 
 @respx.mock
-def test_wzdx_only_false_includes_cwz():
+def test_cwz_entry_needs_a_key_like_its_wzdx_sibling():
     respx.get(REGISTRY_URL).mock(return_value=httpx.Response(200, json=FIXTURE))
-    entries = list_feeds(wzdx_only=False)
+    entries = list_feeds()
     cwz = next(e for e in entries if e.feed_name == "cdot_cwz")
     assert cwz.version == "CWZ 1.0"
-    assert cwz.is_supported_wzdx is False
+    assert cwz.is_supported_wzdx is True
+    assert cwz.needapikey is True
+    assert cwz.apikeyurl == "https://manage-api.cotrip.org/subscriber/subscription"
+
+
+def test_unparseable_non_cwz_version_is_not_supported():
+    """A garbage version string that also isn't the one recognised CWZ
+    value - distinct from the CWZ-inclusion case above."""
+    entry = RegistryEntry(
+        state="test",
+        organization="Test",
+        feed_name="garbage",
+        url="https://example.test/feed",
+        format="geojson",
+        version="not-a-version",
+        active=True,
+        needapikey=False,
+        apikeyurl=None,
+        raw={},
+    )
+    assert entry.is_supported_wzdx is False
 
 
 @respx.mock

@@ -1548,7 +1548,10 @@ def check_wzdx_registry() -> str:
     streetworks.wzdx.registry. Confirmed live 2026-08-02 (41 real rows).
     Exercises the full registry-to-feed pipeline against 511NY (NYSDOT),
     the first concrete verified US feed - list_feeds() -> find the NY row
-    -> fetch its real URL, no key needed. Also reports the real CWZ/
+    -> fetch its real URL, no key needed. Also confirms PurposeBuilt
+    Systems' real CWZ 1.0 feed (the one genuinely keyless CWZ row,
+    confirmed live 2026-08-21) still parses - CWZ is now a supported
+    version, not excluded like it was before that date. Reports the
     needs-key split among the credential-free candidates, so a change in
     those real proportions is visible here rather than silently."""
     from streetworks.wzdx import WZDxClient
@@ -1565,11 +1568,19 @@ def check_wzdx_registry() -> str:
     if nysdot.needapikey:
         raise RuntimeError("511NY now states needapikey=true - it was confirmed key-free")
 
+    pbs = next((f for f in feeds if f.feed_name == "pbs"), None)
+    if pbs is None:
+        raise RuntimeError("PurposeBuilt Systems' CWZ feed is no longer in the registry")
+    if pbs.needapikey:
+        raise RuntimeError("PurposeBuilt Systems now states needapikey=true - was key-free")
+
     with WZDxClient() as wzdx:
         feed = wzdx.fetch(nysdot.url)
+        cwz_feed = wzdx.fetch(pbs.url)
     return (
-        f"registry: {len(feeds)} active WZDx feed(s) ({needs_key} need a key) - "
-        f"511NY: {feed.publisher} (v{feed.version}), {len(feed.road_events)} road events"
+        f"registry: {len(feeds)} active WZDx/CWZ feed(s) ({needs_key} need a key) - "
+        f"511NY: {feed.publisher} (v{feed.version}), {len(feed.road_events)} road events - "
+        f"CWZ/{pbs.organization}: {len(cwz_feed.road_events)} road event(s)"
     )
 
 

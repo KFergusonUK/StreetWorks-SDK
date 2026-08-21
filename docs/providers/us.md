@@ -40,12 +40,29 @@ Use `streetworks.wzdx.list_feeds()` to discover feed URLs from the [USDOT
 feed registry](https://datahub.transportation.gov/Roadways-and-Bridges/Work-Zone-Data-Feed-Registry/69qe-yiui/about_data)
 rather than hardcoding one — **confirmed live 2026-08-02, 41 real
 registered feeds.** `list_feeds()` defaults to `active_only=True,
-wzdx_only=True`: it drops feeds the registry itself flags inactive, and
-excludes CWZ (Connected Work Zone, a different ITE schema this SDK
-doesn't parse — the real discriminator is `version == "CWZ 1.0"`, *not*
-the `format` column, which is always just `"geojson"`/`"json"` and never
-states spec family) plus any sub-3.1/unparseable version, a documented
-skip rather than a mis-parse:
+wzdx_only=True`: it drops feeds the registry itself flags inactive, plus
+any sub-3.1/unparseable version, a documented skip rather than a
+mis-parse — the real version discriminator is `version`, *not* the
+`format` column, which is always just `"geojson"`/`"json"` and never
+states spec family.
+
+**CWZ (Connected Work Zone, `version == "CWZ 1.0"`) is parsed too** —
+a related AASHTO/ITE/NEMA/SAE standard built on WZDx v4.2 as its own
+base (4/41 real registry rows: Massachusetts DOT, Colorado DOT, Illinois
+DOT, and PurposeBuilt Systems). A real, live, genuinely keyless CWZ feed
+(PurposeBuilt Systems) confirmed the standard's own field-naming
+convention is identical to WZDx's, needing no changes at all; Massachusetts
+DOT's own real implementation instead serializes every key in camelCase
+(`coreDetails`, `eventType`...) — a vendor quirk, not the spec's own
+convention, confirmed against its live OpenAPI schema — so every feed's
+properties are normalized (camelCase → snake_case, a no-op on feeds
+already snake_case) before field extraction. Massachusetts DOT, Colorado
+DOT and Illinois DOT's own real CWZ feeds all require a credential this
+SDK does not obtain on a caller's behalf — `entry.needapikey`/
+`entry.apikeyurl` surface the same way as any other keyed WZDx feed (see
+below), and `WZDxClient.fetch(url, headers=...)` accepts a caller's own
+Bearer token or (for feeds preferring it) a pre-templated query-param key
+already in the registry's `url`:
 
 ```python
 from streetworks.wzdx import WZDxClient

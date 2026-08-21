@@ -2,6 +2,48 @@
 
 ## [Unreleased]
 
+### Added — CWZ 1.0 (Connected Work Zone) support in `streetworks.wzdx`, unlocking Massachusetts DOT's real feed (2026-08-21)
+
+`streetworks.wzdx.parser` / `streetworks.wzdx.client` / `streetworks.wzdx.registry`
+- CWZ is a joint AASHTO/ITE/NEMA/SAE standard built on WZDx v4.2 as its
+  own base (confirmed via the standard's own Annex F, which lists the
+  handful of real differences - mostly renames/required-flag changes).
+  `streetworks.wzdx.registry.list_feeds()` previously excluded every
+  `version == "CWZ 1.0"` row on the (until now correct) assumption this
+  SDK's parser didn't handle the schema - it now does, so
+  `RegistryEntry.is_supported_wzdx` includes CWZ 1.0 too.
+- **A real, live, genuinely keyless CWZ 1.0 feed** (PurposeBuilt Systems,
+  `feeds.purposebuilt.systems/cwz`) confirmed the standard's own
+  field-naming convention is identical to WZDx's (`core_details`,
+  `event_type`, `is_start_date_verified`...) - the existing parser needed
+  zero changes to read it correctly.
+- **Massachusetts DOT's own real CWZ feed instead serializes every key in
+  camelCase** (`coreDetails`, `eventType`...) - a vendor (Arcadis)
+  implementation quirk confirmed against the feed's own live OpenAPI
+  schema, not the CWZ standard's own convention. Rather than special-case
+  one vendor, every feature's properties are now walked through a small
+  recursive camelCase-to-snake_case key normalizer before any field is
+  read - a no-op on feeds already snake_case, so every existing WZDx feed
+  (and PurposeBuilt Systems' CWZ feed) parses identically to before.
+  `RoadEvent.raw` still keeps each feature exactly as received.
+- `WZDxClient.fetch()` gained an optional `headers` argument so a caller
+  can supply a credential a feed needs (e.g. a Bearer token) - the client
+  itself still obtains none on a caller's behalf. Massachusetts DOT's own
+  real feed (`api.massdot-swzm.com`) was confirmed live to require one -
+  a genuine `401` with `WWW-Authenticate: Bearer`, and its own OpenAPI
+  schema documents a real, self-service-looking `POST Account/Register`
+  flow (email/password/company, no organisational or government-identity
+  verification found) at a separate developer portal. This SDK does not
+  register an account on a caller's behalf - see the project's own
+  standing collaboration norms - so Massachusetts's specific feed remains
+  credential-gated exactly like its Colorado DOT and Illinois DOT CWZ
+  siblings (`entry.needapikey`/`entry.apikeyurl` surface it the same way
+  as any other keyed WZDx feed); the parsing/auth plumbing to consume it
+  is now fully in place the moment a caller supplies a real key.
+- `scripts/smoke_test.py`'s `check_wzdx_registry` now also fetches
+  PurposeBuilt Systems' real CWZ feed end-to-end, alongside its existing
+  511NY (NYSDOT) check.
+
 ### Added — Lyon (Métropole de Lyon), this SDK's third French roadworks platform shape (2026-08-20)
 
 `streetworks.lyon.LyonClient` / `streetworks.common.from_lyon`

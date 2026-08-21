@@ -1,0 +1,174 @@
+{
+  "feed_info": {
+    "update_date": "2026-08-21T05:50:01.264Z",
+    "publisher": "PurposeBuilt Systems - Digital Traffic Control Diary",
+    "version": "1.0",
+    "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "update_frequency": 60,
+    "contact_name": "PurposeBuilt Systems",
+    "contact_email": "matthew@purposebuilt.systems",
+    "data_sources": [
+      {
+        "data_source_id": "dtcd-cwz-1",
+        "organization_name": "Digital Traffic Control Diary",
+        "update_date": "2026-08-21T05:50:01.264Z",
+        "update_frequency": 60,
+        "contact_name": "PurposeBuilt Systems",
+        "contact_email": "matthew@purposebuilt.systems"
+      }
+    ]
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "5e289944-03b7-4694-9e30-116e9f0dd62d",
+      "type": "Feature",
+      "properties": {
+        "core_details": {
+          "event_type": "work-zone",
+          "data_source_id": "dtcd-cwz-1",
+          "road_names": [
+            "US-30 E"
+          ],
+          "direction": "eastbound",
+          "name": "US-30 E eastbound",
+          "description": "Overhead work on US-30 E eastbound; all lanes closed; reduced speed limit 55 mph.",
+          "creation_date": "2026-07-27T18:39:16.566657+00:00",
+          "update_date": "2026-08-21T05:50:01.110Z"
+        },
+        "start_date": "2026-07-27T18:37:19.977+00:00",
+        "end_date": "2026-08-28T23:00:00+00:00",
+        "is_start_date_verified": true,
+        "is_end_date_verified": true,
+        "is_start_position_verified": true,
+        "is_end_position_verified": true,
+        "location_method": "channel-device-method",
+        "work_zone_type": "static",
+        "is_moving": false,
+        "vehicle_impact": "all-lanes-closed",
+        "reduced_speed_limit_kph": 89,
+        "types_of_work": [
+          {
+            "type_name": "overhead-work",
+            "is_architectural_change": false
+          }
+        ],
+        "lanes": [
+          {
+            "order": 1,
+            "type": "general",
+            "status": "shift-left"
+          },
+          {
+            "order": 2,
+            "type": "general",
+            "status": "shift-left"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -93.6106973,
+            42.0037225
+          ],
+          [
+            -93.6109081,
+            42.0036311
+          ],
+          [
+            -93.6112162,
+            42.0035721
+          ],
+          [
+            -93.611573,
+            42.0035775
+          ],
+          [
+            -93.6117872,
+            42.0036386
+          ],
+          [
+            -93.6119558,
+            42.0037497
+          ],
+          [
+            -93.6120601,
+            42.0038945
+          ],
+          [
+            -93.6120839,
+            42.0040843
+          ],
+          [
+            -93.6120591,
+            42.0041705
+          ],
+          [
+            -93.6119605,
+            42.004324
+          ],
+          [
+            -93.6118747,
+            42.0044069
+          ],
+          [
+            -93.6117047,
+            42.0045293
+          ],
+          [
+            -93.6114855,
+            42.0046262
+          ],
+          [
+            -93.6112276,
+            42.004694
+          ],
+          [
+            -93.6109671,
+            42.0047358
+          ],
+          [
+            -93.6108441,
+            42.0047816
+          ],
+          [
+            -93.6107401,
+            42.0048023
+          ],
+          [
+            -93.6082618,
+            42.0049767
+          ],
+          [
+            -93.6051752,
+            42.005193
+          ],
+          [
+            -93.6032846,
+            42.0053268
+          ],
+          [
+            -93.5951109,
+            42.005903
+          ],
+          [
+            -93.5816462,
+            42.0068492
+          ],
+          [
+            -93.5811435,
+            42.0068674
+          ]
+        ]
+      }
+    }
+  ],
+  "bbox": [
+    -93.6120839,
+    42.0035721,
+    -93.5811435,
+    42.0068674
+  ]
+}

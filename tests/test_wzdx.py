@@ -12,6 +12,15 @@ placeholder end_date of 2028-12-30, and a 7-digit fractional-second
 timestamp that breaks naive datetime.fromisoformat on Python < 3.11),
 and NY511/TRANSCOM via Arcadis (v4.1, MultiPoint geometry,
 core_details.related_road_events).
+
+Two CWZ 1.0 fixtures added 2026-08-21: ``purposebuilt_cwz`` is a real,
+live-pulled, genuinely keyless CWZ feed (PurposeBuilt Systems) confirming
+the CWZ standard's own snake_case field convention parses with zero
+changes. ``massdot_cwz`` is schema-derived (not live-pulled - Massachusetts
+DOT's real feed requires a credential this SDK doesn't obtain on its own,
+see streetworks.wzdx.registry) from that agency's own public OpenAPI
+schema, confirming the camelCase field-naming quirk that one real vendor
+(Arcadis, MassDOT's implementer) uses is normalized correctly.
 """
 
 import json
@@ -123,3 +132,82 @@ def test_client_fetches_and_reports_feed_version():
     assert feed.version == "4.2"
     assert feed.publisher == "Washington State DOT IT"
     assert len(feed.road_events) == 2
+
+
+def test_purposebuilt_cwz_standard_snake_case_parses_unchanged():
+    """A real, live, keyless CWZ 1.0 feed - confirms the CWZ standard's
+    own field-naming convention (identical to WZDx's) needs no special
+    handling at all."""
+    events = parse_road_events(_fixture("purposebuilt_cwz"))
+    assert len(events) == 1
+    e = events[0]
+    assert e.event_type == "work-zone"
+    assert e.is_work_zone is True
+    assert e.road_names == ("US-30 E",)
+    assert e.direction == "eastbound"
+    assert e.vehicle_impact == "all-lanes-closed"
+    assert e.is_start_date_verified is True
+    assert e.geometry.kind == "LineString"
+    assert len(e.geometry.points) == 23
+
+
+@respx.mock
+def test_purposebuilt_cwz_client_reports_feed_info():
+    respx.get("https://example.test/cwz").mock(
+        return_value=httpx.Response(200, json=_fixture("purposebuilt_cwz"))
+    )
+    with WZDxClient() as client:
+        feed = client.fetch("https://example.test/cwz")
+    assert feed.publisher == "PurposeBuilt Systems - Digital Traffic Control Diary"
+    assert len(feed.road_events) == 1
+
+
+def test_massdot_cwz_camelcase_fields_normalize_to_snake_case():
+    """Schema-derived fixture (see module docstring) - confirms a feed
+    whose every key is camelCase (Massachusetts DOT's real, confirmed-live
+    implementation quirk) reads through the exact same field lookups as a
+    snake_case feed."""
+    events = parse_road_events(_fixture("massdot_cwz"))
+    assert len(events) == 1
+    e = events[0]
+    assert e.id == "3f1c9a2e-8b7d-4e6a-9c3a-1f2e3d4c5b6a"
+    assert e.event_type == "work-zone"
+    assert e.is_work_zone is True
+    assert e.road_names == ("I-90", "Massachusetts Turnpike")
+    assert e.direction == "westbound"
+    assert e.vehicle_impact == "some-lanes-closed"
+    assert e.location_method == "channel-device-method"
+    assert e.is_start_date_verified is True
+    assert e.is_end_date_verified is False
+    assert e.types_of_work == ("surface-work",)
+    assert e.start_date == datetime(2026, 8, 5, 6, 0, tzinfo=timezone.utc)
+    assert e.geometry.kind == "LineString"
+    assert e.geometry.points == ((-71.10498, 42.35866), (-71.10842, 42.35921))
+    # raw stays exactly as received - camelCase, not normalized.
+    assert "coreDetails" in e.raw["properties"]
+    assert "core_details" not in e.raw["properties"]
+
+
+@respx.mock
+def test_massdot_cwz_client_normalizes_camelcase_feed_info():
+    respx.get("https://example.test/cwz").mock(
+        return_value=httpx.Response(200, json=_fixture("massdot_cwz"))
+    )
+    with WZDxClient() as client:
+        feed = client.fetch("https://example.test/cwz")
+    assert feed.publisher == "Massachusetts Department of Transportation"
+    assert feed.version == "1.0"
+    assert len(feed.road_events) == 1
+
+
+@respx.mock
+def test_client_fetch_passes_through_caller_headers():
+    """headers is how a caller supplies a credential a feed needs - e.g.
+    a Bearer token for Massachusetts DOT's real CWZ feed. The client
+    itself never sources one."""
+    route = respx.get("https://example.test/cwz").mock(
+        return_value=httpx.Response(200, json=_fixture("massdot_cwz"))
+    )
+    with WZDxClient() as client:
+        client.fetch("https://example.test/cwz", headers={"Authorization": "Bearer secret"})
+    assert route.calls.last.request.headers["Authorization"] == "Bearer secret"

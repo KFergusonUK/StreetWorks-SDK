@@ -10,10 +10,16 @@ credentials required to read the registry itself. Confirmed live
 ``format`` is only ever the literal string ``"geojson"`` or ``"json"`` on
 every real row checked - it never distinguishes spec family, despite
 being the field an earlier design assumed would. CWZ (Connected Work
-Zone, a different ITE schema this SDK does not parse) rows instead state
-the real, exact value ``version == "CWZ 1.0"`` (4/41 real rows) - so
-:func:`list_feeds`'s ``wzdx_only`` filter checks ``version``, via
-:attr:`RegistryEntry.is_supported_wzdx`, never ``format``.
+Zone, a joint AASHTO/ITE/NEMA/SAE schema built on WZDx v4.2 as its own
+base) rows instead state the real, exact value ``version == "CWZ 1.0"``
+(4/41 real rows). :mod:`streetworks.wzdx.parser` parses CWZ 1.0 too (see
+its own module docstring for how the camelCase variant one real vendor
+emits is handled) - so :attr:`RegistryEntry.is_supported_wzdx` now
+includes it, and ``wzdx_only`` no longer drops it. Check
+``entry.needapikey`` regardless: 3 of the 4 real CWZ rows found live
+(Massachusetts DOT, Colorado DOT, Illinois DOT) require a credential this
+SDK does not obtain on a caller's behalf - only PurposeBuilt Systems'
+real CWZ feed is genuinely keyless.
 
 **Real WZDx version strings are inconsistently formatted** - ``"4"``
 appears alongside ``"4.1"``/``"4.2"`` (not ``"4.0"``), so version parsing
@@ -59,9 +65,14 @@ REGISTRY_URL = "https://datahub.transportation.gov/resource/69qe-yiui.json"
 #: The lowest WZDx spec version this SDK's parser is confirmed against -
 #: see :mod:`streetworks.wzdx.client`'s own module docstring for the
 #: version-tolerant field handling. A real version below this, or an
-#: unparseable one (including the real ``"CWZ 1.0"`` value), is excluded
-#: by :attr:`RegistryEntry.is_supported_wzdx`.
+#: unparseable one, is excluded by :attr:`RegistryEntry.is_supported_wzdx`.
 _MIN_WZDX_VERSION = (3, 1)
+
+#: Real, exact CWZ ``version`` values this SDK's parser handles (see
+#: :mod:`streetworks.wzdx.parser`'s own module docstring) - checked
+#: separately from :data:`_MIN_WZDX_VERSION` since ``"CWZ 1.0"`` fails the
+#: plain numeric parse :func:`_parse_version` does for WZDx versions.
+_SUPPORTED_CWZ_VERSIONS = frozenset({"CWZ 1.0"})
 
 
 @dataclass(frozen=True)
@@ -81,10 +92,12 @@ class RegistryEntry:
 
     @property
     def is_supported_wzdx(self) -> bool:
-        """Whether ``version`` is a real WZDx spec version this SDK's
-        parser handles - ``False`` for CWZ (a different schema, real
-        value ``"CWZ 1.0"``), a missing version, or anything below
-        :data:`_MIN_WZDX_VERSION`. See module docstring."""
+        """Whether ``version`` is a real WZDx or CWZ spec version this
+        SDK's parser handles - ``False`` for a missing version or anything
+        below :data:`_MIN_WZDX_VERSION` that isn't a recognised CWZ
+        version. See module docstring."""
+        if self.version in _SUPPORTED_CWZ_VERSIONS:
+            return True
         parsed = _parse_version(self.version)
         return parsed is not None and parsed >= _MIN_WZDX_VERSION
 
@@ -152,10 +165,12 @@ def list_feeds(
     """Fetch and parse the WZDx feed registry. ``active_only`` (default)
     drops entries the registry itself has flagged inactive - it does not
     verify the feed is actually reachable right now. ``wzdx_only``
-    (default) drops CWZ feeds and any entry whose version this SDK's
-    parser can't handle (see :attr:`RegistryEntry.is_supported_wzdx`) -
-    a documented skip, never a crash, and never a silent mis-parse of a
-    CWZ feed through the WZDx parser. Check ``entry.needapikey`` before
+    (default) drops any entry whose version this SDK's parser can't
+    handle (see :attr:`RegistryEntry.is_supported_wzdx`) - a documented
+    skip, never a crash. This now includes real CWZ 1.0 feeds (the
+    parser handles those too - see :mod:`streetworks.wzdx.parser`); the
+    name is kept for compatibility rather than renamed to something like
+    ``supported_only``. Check ``entry.needapikey`` before
     calling :meth:`~streetworks.wzdx.WZDxClient.fetch` on a returned
     entry's ``url`` - about a third of real feeds need a key the caller
     must supply themselves (``entry.apikeyurl`` points at signup). Reads
