@@ -103,6 +103,12 @@ CRED_ENV = {
     "vic": lambda: (
         {"api_key": os.environ["VIC_DISRUPTIONS_API_KEY"]}
         if os.environ.get("VIC_DISRUPTIONS_API_KEY") else None),
+    "ab511": lambda: (
+        {"api_key": os.environ["ALBERTA_511_API_KEY"]}
+        if os.environ.get("ALBERTA_511_API_KEY") else None),
+    "sk511": lambda: (
+        {"api_key": os.environ["SASKATCHEWAN_511_API_KEY"]}
+        if os.environ.get("SASKATCHEWAN_511_API_KEY") else None),
 }
 
 #: Cap on raw records pulled per provider before conversion - a coverage map
@@ -155,6 +161,12 @@ _FRANCE_AREAS = {
     "sarthe": "Sarthe", "loire_atlantique": "Loire-Atlantique",
     "hauts_de_seine": "Hauts-de-Seine", "toulouse": "Toulouse Métropole",
     "rennes": "Rennes Métropole",
+}
+
+#: streetworks.na511.NA511Client is shared by all three jurisdictions -
+#: .fetch(jurisdiction) takes the real streetworks.na511.jurisdictions key.
+_NA511_JURISDICTIONS = {
+    "on511": "ontario", "ab511": "alberta", "sk511": "saskatchewan",
 }
 
 TIERS = {
@@ -255,6 +267,7 @@ def _fetch_works(key, client):
         from_madrid,
         from_mallorca,
         from_milano,
+        from_na511,
         from_nsw_livetraffic,
         from_nycdot,
         from_nzta,
@@ -294,6 +307,15 @@ def _fetch_works(key, client):
 
         area = _FRANCE_AREAS[key]
         return from_departement_roadworks(client.fetch(area), FR_FIELD_MAPS[area])
+    if key in _NA511_JURISDICTIONS:
+        from streetworks.na511.jurisdictions import JURISDICTIONS as NA511_JURISDICTIONS
+
+        jurisdiction = NA511_JURISDICTIONS[_NA511_JURISDICTIONS[key]]
+        return from_na511(
+            client.fetch(_NA511_JURISDICTIONS[key]),
+            territory=jurisdiction.territory,
+            administrative_area=jurisdiction.administrative_area,
+        )
     if key == "vic":
         return from_vic_disruptions(client.iter_planned_disruptions())
     if key == "wzdx":

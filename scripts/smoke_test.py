@@ -580,6 +580,68 @@ def check_quebec() -> str:
     return f"{len(features):,} real entrave(s) grouped into {len(works_list):,} chantier(s)"
 
 
+def check_on511() -> str:
+    """Ontario 511 needs no credentials - see streetworks.na511. Confirmed
+    live 2026-08-21 (590 real roadwork events of 595 total) - genuinely
+    keyless despite the site's own account signup prompt, which gates
+    only human-facing personalisation, not the API. The same commercial
+    511 platform Alberta/Saskatchewan run (see check_ab511/check_sk511),
+    so a real live pull here is also the evidence base for those two."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import ONTARIO
+
+    with NA511Client() as client:
+        roadworks = client.fetch("ontario")
+    if not roadworks:
+        raise RuntimeError("query returned no roadwork events - real data may have changed")
+    works_list = from_na511(
+        roadworks, territory=ONTARIO.territory, administrative_area=ONTARIO.administrative_area
+    )
+    with_polyline = sum(
+        1 for w in works_list if w.sites[0].coordinate and w.sites[0].coordinate.points
+    )
+    return f"{len(works_list):,} real roadwork event(s), {with_polyline:,} with a decoded polyline"
+
+
+def check_ab511() -> str:
+    """511 Alberta - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (ALBERTA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511) - if you run this, it confirms the last
+    open question: that Alberta's own authenticated response round-trips
+    through the shared parsing unchanged."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import ALBERTA
+
+    with NA511Client(api_key=os.environ["ALBERTA_511_API_KEY"]) as client:
+        roadworks = client.fetch("alberta")
+    works_list = from_na511(
+        roadworks, territory=ALBERTA.territory, administrative_area=ALBERTA.administrative_area
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Alberta pull"
+
+
+def check_sk511() -> str:
+    """Saskatchewan Highway Hotline - PENDING LIVE VERIFICATION, see
+    streetworks.na511. Requires an API key (SASKATCHEWAN_511_API_KEY,
+    free self-service registration). Same platform/schema as Ontario 511
+    (keyless, already verified - see check_on511)."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import SASKATCHEWAN
+
+    with NA511Client(api_key=os.environ["SASKATCHEWAN_511_API_KEY"]) as client:
+        roadworks = client.fetch("saskatchewan")
+    works_list = from_na511(
+        roadworks,
+        territory=SASKATCHEWAN.territory,
+        administrative_area=SASKATCHEWAN.administrative_area,
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated SK pull"
+
+
 def check_lisboa() -> str:
     """Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no
     credentials - confirmed live (see streetworks.lisboa). Filters on
@@ -2190,6 +2252,9 @@ def main() -> int:
     # DriveBC (British Columbia, Open511) needs no credentials
     reporter.check("DriveBC (British Columbia, Open511)", [], check_drivebc)
     reporter.check("Québec (MTQ Travaux routiers)", [], check_quebec)
+    reporter.check("Ontario 511", [], check_on511)
+    reporter.check("511 Alberta", ["ALBERTA_511_API_KEY"], check_ab511)
+    reporter.check("Saskatchewan Highway Hotline", ["SASKATCHEWAN_511_API_KEY"], check_sk511)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

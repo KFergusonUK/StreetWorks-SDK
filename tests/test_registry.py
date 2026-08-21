@@ -365,6 +365,17 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     value, is unknown - see streetworks.datex2.austria's own module
     docstring.
 
+    511 Alberta (`ab511`) and Saskatchewan Highway Hotline (`sk511`) are
+    better-off than every other entry in this tier: both need a real
+    developer key this build doesn't have, but the field schema itself
+    isn't a guess or documentation-only claim - it's drawn from a real,
+    live, unauthenticated pull against the identical commercial platform
+    (Ontario 511, `on511`, verified) plus Alberta's own published docs
+    matching field-for-field. What's unconfirmed is narrower than any
+    other entry here: only whether Alberta/Saskatchewan's own
+    authenticated response round-trips through this exact parsing
+    unchanged - see streetworks.na511.client's own module docstring.
+
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
     assert {e.key for e in unverified} == {
@@ -376,6 +387,8 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "greece",
         "stockholm",
         "austria",
+        "ab511",
+        "sk511",
     }
 
 

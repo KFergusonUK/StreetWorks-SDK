@@ -147,6 +147,64 @@ form instead.
 **Licence: Creative Commons Attribution 4.0 International (CC BY 4.0)**,
 confirmed live via Données Québec's own dataset metadata.
 
+## North American 511 platform (Ontario 511, 511 Alberta, Saskatchewan Highway Hotline)
+
+One commercial REST API shape, confirmed live to be reused
+byte-for-byte identically by three independent government agencies —
+Ontario 511, 511 Alberta and Saskatchewan's Highway Hotline all publish
+the exact same `/api/v2/get/event` endpoint, same field names, same
+`EventType` enum. Nevada's own US 511 API shares the identical
+`/developers/doc` documentation URL convention too (see
+[`docs/providers/us.md`](us.md)), though it wasn't independently
+confirmed to be the same platform.
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import ONTARIO
+from streetworks.common import from_na511
+
+with NA511Client() as client:
+    works_list = from_na511(
+        client.fetch("ontario"),
+        territory=ONTARIO.territory,
+        administrative_area=ONTARIO.administrative_area,
+    )
+```
+
+**Ontario 511 is real, live, keyless, and fully shipped** — confirmed
+live 2026-08-21 (590 real roadwork events of 595 total), despite the
+site's own "Sign up for an account" prompt, which turns out to gate only
+human-facing My511 personalisation, not the API itself. A plain `GET`
+with no `key` parameter at all returns real data.
+
+**Alberta and Saskatchewan both require a real developer key** —
+confirmed live via each host's own structured rejection
+(`{"Error":{"Message":"Invalid Key"}}`) on the identical endpoint with no
+key supplied, and Alberta's own docs explicitly state `key: Developer
+Key, Required`. This SDK does not register for that key on a caller's
+behalf (the same standing rule as Massachusetts's CWZ feed — see
+[`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange)) — but
+unlike a typical "Credentials wanted" scaffold, the schema itself isn't
+a guess: it's proven correct by Ontario's own real, live, unauthenticated
+response, cross-checked field-for-field against Alberta's own published
+docs. `ab511`/`sk511` just need `ALBERTA_511_API_KEY`/
+`SASKATCHEWAN_511_API_KEY` (see `.env.example`) to confirm the last open
+question — that their own authenticated response round-trips through the
+identical parsing unchanged.
+
+**One shared `NA511Client`, keyed by jurisdiction per call**
+(`.fetch("ontario")`/`"alberta"`/`"saskatchewan"`) — the same shape
+`streetworks.ogc.germany.GermanRoadworksClient` already gives its own
+`.fetch(state)`, since the real endpoint is identical across all three.
+
+**`EventType == "roadwork"` is the real roadworks filter** (590/595 real
+Ontario events; `"closures"` and `"accidentsAndIncidents"` are the other
+two documented values). Real **Google Encoded Polyline** geometry is
+present on ~50% of real roadwork events — decoded and confirmed correct
+by checking a real sample's first/last points against that same record's
+own separately-stated `Latitude`/`Longitude`/`LatitudeSecondary`/
+`LongitudeSecondary` fields.
+
 ## National Road Network (NRN, streets gazetteer)
 
 This SDK's first Canadian streets/gazetteer provider — Statistics
@@ -208,20 +266,12 @@ confirmed versus still unchecked:
   `territory`/`administrative_area` per feed rather than assuming
   `"USA"`, specifically because of this entry). See
   [`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange).
-- **Ontario 511** (`511on.ca`), **Alberta 511** (`511.alberta.ca`) and
-  **Saskatchewan Highway Hotline** (`hotline.gov.sk.ca`) — all three
-  share the identical `<host>/developers/doc` documentation shape
-  (confirmed live 2026-08-21), the same commercial 511-platform family
-  Nevada's own US 511 API uses — a real "Construction" resource is
-  explicitly listed among Ontario's own API endpoints. None appear in
-  the WZDx feed registry, and all three require signing up for an
-  account to get a key (a real self-service "Sign up for an account"
-  flow found on Ontario's own site, not confirmed keyless) - not
-  registered for, matching this SDK's standing rule against creating
-  accounts on a user's behalf (see the Massachusetts CWZ case in
-  [`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange)). A
-  bespoke build against any of the three remains possible once a real
-  key is supplied.
+- **Ontario 511, Alberta 511, Saskatchewan Highway Hotline** — already
+  covered, not a new build: see
+  [`streetworks.na511`](#north-american-511-platform-ontario-511-511-alberta-saskatchewan-highway-hotline)
+  above. Ontario is fully shipped and keyless; Alberta/Saskatchewan are
+  built and ready, waiting only on a real developer key someone with an
+  account can supply.
 - **Manitoba** — Manitoba Transportation and Infrastructure's own Road
   Network is open data (ArcGIS REST), but no public real-time
   construction/closure API endpoint was found live this session — only

@@ -44,17 +44,20 @@ Credentials-wanted, or Documented-unavailable; see
   municipalities remain genuinely unchecked/unbuilt — the same open,
   per-municipality fallback shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
-- **Canada — roadworks now built in two provinces, streets fully built
-  nationally.** British Columbia (DriveBC, Open511) and Québec (MTQ
-  Travaux routiers, this SDK's first *provincial* build, found
-  2026-08-21) are real, confirmed roadworks providers, and Quebec City's
-  WZDx feed was already covered — see
-  [`docs/providers/canada.md`](canada.md). Ontario 511, Alberta 511 and
-  Saskatchewan Highway Hotline were all checked live (2026-08-21,
-  confirmed not to publish WZDx, all three needing a real account/key
-  not obtained on the user's behalf); other provinces/territories and
-  municipal roadworks portals (Toronto, Montreal, Vancouver) remain
-  genuinely unchecked. **Streets is no longer pending at all** — the
+- **Canada — roadworks now built in two provinces plus one shared
+  multi-jurisdiction platform, streets fully built nationally.** British
+  Columbia (DriveBC, Open511) and Québec (MTQ Travaux routiers, this
+  SDK's first *provincial* build, found 2026-08-21) are real, confirmed
+  roadworks providers, and Quebec City's WZDx feed was already covered —
+  see [`docs/providers/canada.md`](canada.md). Ontario 511 (found
+  2026-08-21) is also real, live and keyless, shipped as
+  `streetworks.na511`; Alberta 511 and Saskatchewan Highway Hotline run
+  the identical platform but need a real developer key not obtained on
+  the user's behalf — built and ready for whoever supplies one (see
+  `.env.example`). Other provinces/territories (the four Atlantic
+  provinces, the three territories) and municipal roadworks portals
+  (Toronto, Montreal, Vancouver) remain genuinely unchecked. **Streets
+  is no longer pending at all** — the
   National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
   is real, live, keyless, and covers all 13 provinces/territories
   nationally in one build (Segment only, the same TIGERweb/NWB
