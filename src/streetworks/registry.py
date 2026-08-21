@@ -3802,6 +3802,38 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("nevada")',
     ),
     ProviderEntry(
+        key="ga511",
+        name="Georgia 511",
+        description="Georgia's own real-time roadwork/incident feed (North American 511 platform).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"USA"}),
+        administrative_area="Georgia Department of Transportation (GDOT)",
+        scope_note=(
+            "Found while investigating GDOT's own ArcGIS Hub "
+            "'TrafficImpacts' pages - a real dead end, those turned out "
+            "to be per-project public-information pages (e.g. 'I-285 & "
+            "SR 400 Improvements'), not a live data feed. Checking "
+            "Georgia's own 511 site (511ga.org) directly against the "
+            "same platform as Ontario 511 ('on511') confirmed it "
+            "immediately: the identical /api/v2/get/event endpoint, the "
+            "identical structured 'Invalid Key' rejection, and a real, "
+            "working /developers/doc page matching field-for-field. Not "
+            "obtained on a caller's behalf, same standing rule as "
+            "Alberta/Massachusetts CWZ. The field schema is not a "
+            "guess: proven by Ontario's own real, unauthenticated "
+            "response on the identical platform."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("georgia")',
+    ),
+    ProviderEntry(
         key="vancouver",
         name="Vancouver Road Ahead",
         description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",

@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added — Georgia 511, a second US jurisdiction on the North American 511 platform (2026-08-21)
+
+`streetworks.na511.jurisdictions.GEORGIA`
+- Found while investigating GDOT's own ArcGIS Hub "TrafficImpacts"
+  pages, a real lead from the earlier US gap-states survey - those
+  turned out to be a dead end (per-project public-information pages,
+  not a live feed). Checking Georgia's own 511 site directly against
+  the platform already built for Nevada/seven Canadian jurisdictions
+  confirmed it immediately - no new client code needed, just a new
+  `Jurisdiction` entry.
+- Requires a real developer key not obtained on this SDK's behalf - free
+  self-service registration confirmed live at `511ga.org/developers/doc`.
+  Set `GEORGIA_511_API_KEY` (see `.env.example`) and run
+  `scripts/smoke_test.py` to confirm.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Nevada 511, this SDK's first US jurisdiction on the North American 511 platform (2026-08-21)
 
 `streetworks.na511.jurisdictions.NEVADA`

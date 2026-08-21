@@ -124,6 +124,9 @@ CRED_ENV = {
     "nv511": lambda: (
         {"api_key": os.environ["NEVADA_511_API_KEY"]}
         if os.environ.get("NEVADA_511_API_KEY") else None),
+    "ga511": lambda: (
+        {"api_key": os.environ["GEORGIA_511_API_KEY"]}
+        if os.environ.get("GEORGIA_511_API_KEY") else None),
 }
 
 #: Cap on raw records pulled per provider before conversion - a coverage map
@@ -184,6 +187,7 @@ _NA511_JURISDICTIONS = {
     "on511": "ontario", "ab511": "alberta", "sk511": "saskatchewan",
     "nb511": "new_brunswick", "nl511": "newfoundland_and_labrador",
     "ns511": "nova_scotia", "yt511": "yukon", "nv511": "nevada",
+    "ga511": "georgia",
 }
 
 TIERS = {

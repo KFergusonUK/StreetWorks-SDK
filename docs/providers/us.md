@@ -335,3 +335,38 @@ rule as Massachusetts's CWZ feed above. Free self-service registration:
 `.env.example`) and run `scripts/smoke_test.py` to confirm the last
 open question — that Nevada's own authenticated response round-trips
 through the identical parsing unchanged.
+
+## Georgia 511
+
+Found while investigating GDOT's own ArcGIS Hub "TrafficImpacts"
+pages — a real, live, keyless-to-browse resource, but a dead end for
+data: those pages turned out to be per-project public-information pages
+(e.g. "I-285 & SR 400 Improvements", with a Mailchimp newsletter
+archive link), not a live roadworks feed. Checking Georgia's own 511
+site directly against the North American 511 platform (see
+[`docs/providers/canada.md`](canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon))
+confirmed it immediately — this SDK's second US jurisdiction on this
+platform after Nevada:
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import GEORGIA
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("georgia"),
+        territory=GEORGIA.territory,
+        administrative_area=GEORGIA.administrative_area,
+    )
+```
+
+**Confirmed live to be the identical platform**: the same
+`/api/v2/get/event` endpoint, the same structured
+`{"Error":{"Message":"Invalid Key"}}` rejection with no key supplied,
+and a real, working `/developers/doc` page whose own field-by-field
+documentation matches exactly. Requires a real developer key — not
+obtained on this SDK's behalf. Free self-service registration:
+`https://511ga.org/developers/doc`; set `GEORGIA_511_API_KEY` (see
+`.env.example`) and run `scripts/smoke_test.py` to confirm the last
+open question.

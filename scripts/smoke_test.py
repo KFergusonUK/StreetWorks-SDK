@@ -739,6 +739,25 @@ def check_nv511() -> str:
     return f"{len(works_list):,} real roadwork event(s) - first real authenticated Nevada pull"
 
 
+def check_ga511() -> str:
+    """Georgia 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (GEORGIA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511) - found separately from GDOT's own
+    ArcGIS Hub 'TrafficImpacts' pages, which turned out to be per-project
+    public-information pages, not a live feed."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import GEORGIA
+
+    with NA511Client(api_key=os.environ["GEORGIA_511_API_KEY"]) as client:
+        roadworks = client.fetch("georgia")
+    works_list = from_na511(
+        roadworks, territory=GEORGIA.territory, administrative_area=GEORGIA.administrative_area
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Georgia pull"
+
+
 def check_vancouver() -> str:
     """Vancouver Road Ahead needs no credentials - see
     streetworks.vancouver. Confirmed live 2026-08-21 (three real
@@ -2418,6 +2437,7 @@ def main() -> int:
     reporter.check("Nova Scotia 511", ["NOVA_SCOTIA_511_API_KEY"], check_ns511)
     reporter.check("511 Yukon", ["YUKON_511_API_KEY"], check_yt511)
     reporter.check("Nevada 511", ["NEVADA_511_API_KEY"], check_nv511)
+    reporter.check("Georgia 511", ["GEORGIA_511_API_KEY"], check_ga511)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials

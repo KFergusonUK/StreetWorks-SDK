@@ -25,6 +25,7 @@ __all__ = [
     "NOVA_SCOTIA",
     "YUKON",
     "NEVADA",
+    "GEORGIA",
     "JURISDICTIONS",
 ]
 
@@ -119,6 +120,21 @@ NEVADA = Jurisdiction(
     administrative_area="Nevada Department of Transportation (NDOT)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found while investigating Georgia's own ArcGIS Hub
+#: "TrafficImpacts" pages (a real dead end - those turned out to be
+#: per-project public-information pages, not a live data feed) - checking
+#: Georgia's own 511 site (511ga.org) directly against this platform's
+#: real endpoint shape confirmed it immediately: the identical
+#: /api/v2/get/event path, the identical "Invalid Key" rejection, and a
+#: real, working /developers/doc page matching field-for-field.
+GEORGIA = Jurisdiction(
+    base_url="https://511ga.org",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Georgia Department of Transportation (GDOT)",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -128,4 +144,5 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "nova_scotia": NOVA_SCOTIA,
     "yukon": YUKON,
     "nevada": NEVADA,
+    "georgia": GEORGIA,
 }

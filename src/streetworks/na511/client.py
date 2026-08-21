@@ -11,17 +11,22 @@ rejection), and the field shape itself is confirmed live by comparing
 Ontario's real, unauthenticated response against Alberta's own published
 field-by-field API documentation - every field name, type and the
 ``EventType`` enum (``"roadwork"``/``"closures"``/
-``"accidentsAndIncidents"``) match exactly. **Nevada 511 turned out to
-be the identical platform too** - found separately while surveying US
-roadworks coverage (not in the WZDx/CWZ US registry at all, confirmed
-live, no Nevada row of any kind), then confirmed live here the same way
-as every Canadian jurisdiction: the identical ``/api/v2/get/event``
-path, the identical "Invalid Key" rejection, and a real, working
-``/developers/doc`` page whose own field-by-field documentation matches
-exactly. Manitoba, Prince Edward Island, the Northwest Territories and
-Nunavut were checked and found to have no matching site (no DNS record
-for the guessable ``511<jurisdiction>.ca`` pattern this platform's other
-real Canadian deployments use).
+``"accidentsAndIncidents"``) match exactly. **Nevada 511 and Georgia
+511 turned out to be the identical platform too** - both found
+separately while surveying US roadworks coverage (neither is in the
+WZDx/CWZ US registry at all, confirmed live), then confirmed live here
+the same way as every Canadian jurisdiction: the identical
+``/api/v2/get/event`` path, the identical "Invalid Key" rejection, and a
+real, working ``/developers/doc`` page whose own field-by-field
+documentation matches exactly. Georgia's own real "TrafficImpacts"
+ArcGIS Hub pages, checked first, turned out to be a real dead end -
+per-project public-information pages (e.g. "I-285 & SR 400
+Improvements"), not a live data feed; checking Georgia's own 511 site
+directly against this platform's shape was the real find. Manitoba,
+Prince Edward Island, the Northwest Territories and Nunavut were checked
+and found to have no matching site (no DNS record for the guessable
+``511<jurisdiction>.ca`` pattern this platform's other real Canadian
+deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
 ``GET https://511on.ca/api/v2/get/event`` returns real data with **no**

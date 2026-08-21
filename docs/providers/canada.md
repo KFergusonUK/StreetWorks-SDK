@@ -150,12 +150,14 @@ confirmed live via Données Québec's own dataset metadata.
 ## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by **eight** independent government agencies
+byte-for-byte identically by **nine** independent government agencies
 in two countries — Ontario 511, 511 Alberta, Saskatchewan's Highway
 Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova Scotia
-511, 511 Yukon (Canada) and **Nevada 511** (USA — found separately while
-surveying US roadworks coverage, not in the WZDx/CWZ US registry at all;
-see [`docs/providers/us.md`](us.md#nevada-511) for the US-side writeup)
+511, 511 Yukon (Canada), **Nevada 511** and **Georgia 511** (USA — both
+found separately while surveying US roadworks coverage, neither is in
+the WZDx/CWZ US registry at all; see
+[`docs/providers/us.md`](us.md#nevada-511) and
+[`docs/providers/us.md`](us.md#georgia-511) for the US-side writeups)
 all publish the exact same `/api/v2/get/event` endpoint (every one
 answers the identical URL path with either real data or the identical
 structured "Invalid Key" rejection), same field names, same `EventType`
