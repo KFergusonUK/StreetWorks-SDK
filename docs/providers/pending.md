@@ -45,19 +45,26 @@ Credentials-wanted, or Documented-unavailable; see
   per-municipality fallback shape as Germany's own state fan-out.
 - **Singapore** — no source investigated at all.
 - **Canada — roadworks now built in two provinces plus one shared
-  multi-jurisdiction platform, streets fully built nationally.** British
-  Columbia (DriveBC, Open511) and Québec (MTQ Travaux routiers, this
-  SDK's first *provincial* build, found 2026-08-21) are real, confirmed
-  roadworks providers, and Quebec City's WZDx feed was already covered —
-  see [`docs/providers/canada.md`](canada.md). Ontario 511 (found
+  multi-jurisdiction platform covering seven agencies, streets fully
+  built nationally.** British Columbia (DriveBC, Open511) and Québec
+  (MTQ Travaux routiers, this SDK's first *provincial* build, found
+  2026-08-21) are real, confirmed roadworks providers, and Quebec City's
+  WZDx feed was already covered — see
+  [`docs/providers/canada.md`](canada.md). Ontario 511 (found
   2026-08-21) is also real, live and keyless, shipped as
-  `streetworks.na511`; Alberta 511 and Saskatchewan Highway Hotline run
-  the identical platform but need a real developer key not obtained on
-  the user's behalf — built and ready for whoever supplies one (see
-  `.env.example`). Other provinces/territories (the four Atlantic
-  provinces, the three territories) and municipal roadworks portals
-  (Toronto, Montreal, Vancouver) remain genuinely unchecked. **Streets
-  is no longer pending at all** — the
+  `streetworks.na511` - the same platform turned out to be run
+  identically by Alberta, Saskatchewan, New Brunswick, Newfoundland and
+  Labrador, Nova Scotia and Yukon too (7 of 10 provinces plus 1 of 3
+  territories total). All six need a real developer key not obtained on
+  the user's behalf; Alberta/New Brunswick/Newfoundland and Labrador
+  have working self-service signup pages (built and ready, see
+  `.env.example`), while Saskatchewan/Nova Scotia's own signup pages
+  have since been taken down (no known current route to a key for
+  either). Prince Edward Island, the Northwest Territories and Nunavut
+  were checked and have no matching site; Manitoba has open road-network
+  data but no real-time API; municipal roadworks portals (Toronto,
+  Montreal, Vancouver) remain genuinely unchecked. **Streets is no
+  longer pending at all** — the
   National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
   is real, live, keyless, and covers all 13 provinces/territories
   nationally in one build (Segment only, the same TIGERweb/NWB

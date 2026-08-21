@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-### Added — Ontario 511, plus 511 Alberta/Saskatchewan Highway Hotline ready for a real key (2026-08-21)
+### Added — North American 511 platform: Ontario 511 shipped, six more jurisdictions ready for a real key (2026-08-21)
 
 `streetworks.na511.NA511Client` / `streetworks.common.from_na511`
 - Found while investigating Ontario 511, Alberta 511 and Saskatchewan
@@ -10,7 +10,10 @@
   turned out to be the exact same commercial REST API shape
   (`/api/v2/get/event`, identical field names, identical `EventType`
   enum), confirmed field-for-field by comparing Ontario's real response
-  against Alberta's own published API docs.
+  against Alberta's own published API docs. A follow-up check found the
+  identical platform run by four more agencies: New Brunswick,
+  Newfoundland and Labrador, Nova Scotia and Yukon - **7 of Canada's 10
+  provinces plus 1 of 3 territories**, all through one shared client.
 
 ```python
 from streetworks.na511 import NA511Client
@@ -29,29 +32,33 @@ with NA511Client() as client:
   roadwork events of 595 total), despite the site's own account-signup
   prompt, which gates only human-facing personalisation, not the API.
   Shipped as a real, verified provider (`on511`).
-- **Alberta (`ab511`) and Saskatchewan (`sk511`) both require a real
-  developer key** - confirmed live via each host's own structured
-  "Invalid Key" rejection. This SDK does not register for that key on a
-  caller's behalf (the same rule already applied to Massachusetts's CWZ
-  feed) - but unlike a typical "Credentials wanted" scaffold, the schema
-  isn't a guess: it's proven correct via Ontario's own real,
-  unauthenticated response. Both are lined up and ready -
-  `ALBERTA_511_API_KEY`/`SASKATCHEWAN_511_API_KEY` (see `.env.example`)
-  is all that's needed for someone with an account to confirm the last
-  open question (that their own authenticated response round-trips
-  through the identical parsing unchanged) and run
-  `scripts/smoke_test.py`.
-- One shared `NA511Client`, keyed by jurisdiction per call
-  (`.fetch("ontario"|"alberta"|"saskatchewan")`) - the same shape
-  `streetworks.ogc.germany.GermanRoadworksClient` already gives its own
-  `.fetch(state)`.
+- **Every other jurisdiction requires a real developer key** - confirmed
+  live via each host's own structured "Invalid Key" rejection. This SDK
+  does not register for that key on a caller's behalf (the same rule
+  already applied to Massachusetts's CWZ feed) - but unlike a typical
+  "Credentials wanted" scaffold, the schema isn't a guess: it's proven
+  correct via Ontario's own real, unauthenticated response.
+  Alberta/New Brunswick/Newfoundland and Labrador (`ab511`/`nb511`/
+  `nl511`) have real, working self-service signup pages, confirmed live
+  - set `ALBERTA_511_API_KEY`/`NEW_BRUNSWICK_511_API_KEY`/
+  `NEWFOUNDLAND_511_API_KEY` (see `.env.example`) and run
+  `scripts/smoke_test.py` to confirm the last open question. Saskatchewan
+  and Nova Scotia (`sk511`/`ns511`) are also built and wired in, but
+  their own signup pages have since been taken down - no currently-known
+  route to a key for either, flagged honestly rather than assumed still
+  reachable.
+- Prince Edward Island, the Northwest Territories and Nunavut were
+  checked and found to have no matching site on this platform.
+- One shared `NA511Client`, keyed by jurisdiction per call, the same
+  shape `streetworks.ogc.germany.GermanRoadworksClient` already gives
+  its own `.fetch(state)`.
 - Real Google Encoded Polyline geometry, decoded and confirmed correct
   against each record's own separately-stated lat/lon fields, used when
   present (~50% of real Ontario roadwork events); falls back to a plain
   point otherwise.
 - **World map example**: wired into `examples/roadworks_world_map.py`'s
-  `--live` dispatch table (Ontario lights up immediately; Alberta/
-  Saskatchewan light up once their env vars are set).
+  `--live` dispatch table (Ontario lights up immediately; the other six
+  light up once their env vars are set).
 
 ### Added — Québec (MTQ Travaux routiers), this SDK's first Canadian provincial roadworks provider (2026-08-21)
 

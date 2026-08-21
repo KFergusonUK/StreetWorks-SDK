@@ -147,16 +147,20 @@ form instead.
 **Licence: Creative Commons Attribution 4.0 International (CC BY 4.0)**,
 confirmed live via Données Québec's own dataset metadata.
 
-## North American 511 platform (Ontario 511, 511 Alberta, Saskatchewan Highway Hotline)
+## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by three independent government agencies —
-Ontario 511, 511 Alberta and Saskatchewan's Highway Hotline all publish
-the exact same `/api/v2/get/event` endpoint, same field names, same
-`EventType` enum. Nevada's own US 511 API shares the identical
-`/developers/doc` documentation URL convention too (see
-[`docs/providers/us.md`](us.md)), though it wasn't independently
-confirmed to be the same platform.
+byte-for-byte identically by **seven** independent government agencies —
+Ontario 511, 511 Alberta, Saskatchewan's Highway Hotline, New Brunswick
+511, 511 Newfoundland and Labrador, Nova Scotia 511 and 511 Yukon all
+publish the exact same `/api/v2/get/event` endpoint (every one answers
+the identical URL path with either real data or the identical structured
+"Invalid Key" rejection), same field names, same `EventType` enum.
+Nevada's own US 511 API shares the identical `/developers/doc`
+documentation URL convention too (see [`docs/providers/us.md`](us.md)),
+though it wasn't independently confirmed to be the same platform.
+Manitoba, Prince Edward Island, the Northwest Territories and Nunavut
+were checked and found to have no matching site.
 
 ```python
 from streetworks.na511 import NA511Client
@@ -177,8 +181,8 @@ site's own "Sign up for an account" prompt, which turns out to gate only
 human-facing My511 personalisation, not the API itself. A plain `GET`
 with no `key` parameter at all returns real data.
 
-**Alberta and Saskatchewan both require a real developer key** —
-confirmed live via each host's own structured rejection
+**Every other jurisdiction confirmed here requires a real developer
+key** — confirmed live via each host's own structured rejection
 (`{"Error":{"Message":"Invalid Key"}}`) on the identical endpoint with no
 key supplied, and Alberta's own docs explicitly state `key: Developer
 Key, Required`. This SDK does not register for that key on a caller's
@@ -187,15 +191,29 @@ behalf (the same standing rule as Massachusetts's CWZ feed — see
 unlike a typical "Credentials wanted" scaffold, the schema itself isn't
 a guess: it's proven correct by Ontario's own real, live, unauthenticated
 response, cross-checked field-for-field against Alberta's own published
-docs. `ab511`/`sk511` just need `ALBERTA_511_API_KEY`/
-`SASKATCHEWAN_511_API_KEY` (see `.env.example`) to confirm the last open
-question — that their own authenticated response round-trips through the
-identical parsing unchanged.
+docs. `ab511`/`nb511`/`nl511` have real, working self-service signup
+pages confirmed live (`ALBERTA_511_API_KEY`/`NEW_BRUNSWICK_511_API_KEY`/
+`NEWFOUNDLAND_511_API_KEY` — see `.env.example`) — set one to confirm
+the last open question, that the jurisdiction's own authenticated
+response round-trips through the identical parsing unchanged.
+
+**Saskatchewan's and Nova Scotia's own public signup paths have since
+been taken down** — confirmed live 2026-08-21 (a few days after the
+Saskatchewan endpoint itself was first confirmed key-gated):
+`/developers/doc` 404s and `/developers` redirects to `/notfound` on
+both sites, with no developer/API link found anywhere else on either.
+The real API endpoints themselves are unaffected and still answer the
+identical `Invalid Key` rejection, so `sk511`/`ns511` stay wired in
+exactly as before — there's just no currently-known self-service route
+to a real key for either, a genuine regression worth flagging rather
+than leaving stale.
 
 **One shared `NA511Client`, keyed by jurisdiction per call**
-(`.fetch("ontario")`/`"alberta"`/`"saskatchewan"`) — the same shape
-`streetworks.ogc.germany.GermanRoadworksClient` already gives its own
-`.fetch(state)`, since the real endpoint is identical across all three.
+(`.fetch("ontario")`/`"alberta"`/`"saskatchewan"`/`"new_brunswick"`/
+`"newfoundland_and_labrador"`/`"nova_scotia"`/`"yukon"`) — the same
+shape `streetworks.ogc.germany.GermanRoadworksClient` already gives its
+own `.fetch(state)`, since the real endpoint is identical across all
+seven.
 
 **`EventType == "roadwork"` is the real roadworks filter** (590/595 real
 Ontario events; `"closures"` and `"accidentsAndIncidents"` are the other
@@ -266,17 +284,24 @@ confirmed versus still unchecked:
   `territory`/`administrative_area` per feed rather than assuming
   `"USA"`, specifically because of this entry). See
   [`docs/providers/us.md`](us.md#wzdx-us-work-zone-data-exchange).
-- **Ontario 511, Alberta 511, Saskatchewan Highway Hotline** — already
-  covered, not a new build: see
-  [`streetworks.na511`](#north-american-511-platform-ontario-511-511-alberta-saskatchewan-highway-hotline)
-  above. Ontario is fully shipped and keyless; Alberta/Saskatchewan are
-  built and ready, waiting only on a real developer key someone with an
-  account can supply.
+- **Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and
+  Labrador, Nova Scotia, Yukon** — already covered, not a new build: see
+  [`streetworks.na511`](#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon)
+  above. That's 7 of Canada's 10 provinces plus 1 of 3 territories.
+  Ontario is fully shipped and keyless; Alberta/New Brunswick/
+  Newfoundland and Labrador are built and ready, waiting only on a real
+  developer key someone with an account can supply;
+  Saskatchewan/Nova Scotia are also built and ready but have no
+  currently-known self-service route to a key at all (their own signup
+  pages were taken down).
 - **Manitoba** — Manitoba Transportation and Infrastructure's own Road
   Network is open data (ArcGIS REST), but no public real-time
   construction/closure API endpoint was found live this session — only
-  an email-notification signup (`roadinfo@gov.mb.ca`).
-- **Other provinces/territories** (Nova Scotia, New Brunswick,
-  Newfoundland and Labrador, Prince Edward Island, Yukon, Northwest
-  Territories, Nunavut) and municipal portals (Toronto, Montreal,
-  Vancouver) — not checked this session.
+  an email-notification signup (`roadinfo@gov.mb.ca`). Not on the 511
+  platform (no matching site found).
+- **Prince Edward Island, Northwest Territories, Nunavut** — checked
+  this session, no matching 511-platform site found (no DNS record for
+  any plausible domain); PEI has a general open-data portal but nothing
+  road-closure-specific confirmed.
+- **Municipal portals** (Toronto, Montreal, Vancouver) — not checked
+  this session.

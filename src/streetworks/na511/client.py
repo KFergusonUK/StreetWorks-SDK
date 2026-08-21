@@ -2,37 +2,48 @@
 byte-for-byte identically, by multiple independent government agencies.
 Found while surveying the Canadian provinces beyond British Columbia
 (see :mod:`streetworks.drivebc`) for roadworks coverage: Ontario 511,
-511 Alberta and Saskatchewan's Highway Hotline all publish the exact
-same ``/api/v2/get/event`` endpoint shape, confirmed live by comparing
-Ontario's real, unauthenticated response against Alberta's own published
-field-by-field API documentation - every field name, type and the
-``EventType`` enum (``"roadwork"``/``"closures"``/``"accidentsAndIncidents"``)
-match exactly. Nevada's own US 511 API (see the WZDx-adjacent US survey
-in ``docs/providers/us.md``) shares the identical ``/developers/doc`` URL
+511 Alberta, Saskatchewan's Highway Hotline, New Brunswick 511,
+Newfoundland and Labrador 511, Nova Scotia 511 and 511 Yukon **all**
+publish the exact same ``/api/v2/get/event`` endpoint (confirmed live,
+2026-08-21 - every one answers the identical URL path with either real
+data or the identical structured "Invalid Key" rejection), and the field
+shape itself is confirmed live by comparing Ontario's real,
+unauthenticated response against Alberta's own published field-by-field
+API documentation - every field name, type and the ``EventType`` enum
+(``"roadwork"``/``"closures"``/``"accidentsAndIncidents"``) match
+exactly. Nevada's own US 511 API (see the WZDx-adjacent US survey in
+``docs/providers/us.md``) shares the identical ``/developers/doc`` URL
 convention too, though not independently confirmed to be the same
-platform.
+platform. Manitoba, Prince Edward Island, the Northwest Territories and
+Nunavut were checked and found to have no matching site (no DNS record
+for the guessable ``511<jurisdiction>.ca`` pattern this platform's other
+real deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
 ``GET https://511on.ca/api/v2/get/event`` returns real data with **no**
 ``key`` parameter at all (confirmed live, 595 real events, 2026-08-21) -
 despite the site's own "Sign up for an account" prompt, which turns out
 to gate only the human-facing My511 personalisation features, not the
-API itself. **Alberta and Saskatchewan both require one** - confirmed
-live via each host's own real, structured rejection
+API itself. **Every other jurisdiction confirmed here requires one** -
+confirmed live via each host's own real, structured rejection
 (``{"Error":{"Message":"Invalid Key"}}``) on the identical endpoint with
 no ``key`` supplied, and Alberta's own API docs explicitly state
 ``key: Developer Key, Required``. This SDK does not obtain that key on a
 caller's behalf - see :mod:`streetworks.wzdx.client`'s own module
 docstring for the identical Massachusetts CWZ situation and reasoning.
+Saskatchewan's own public signup page has since been taken down
+(confirmed live 2026-08-21, a few days after the endpoint itself was
+first confirmed key-gated) - the real endpoint is otherwise unaffected;
+see :mod:`streetworks.na511.jurisdictions`'s own ``SASKATCHEWAN`` entry.
 
 **Because Ontario's real, keyless response already proves this exact
-schema correct, Alberta/Saskatchewan aren't a guess the way this SDK's
-DATEX "Credentials-wanted scaffold" adapters are** (e.g.
+schema correct, the other key-gated jurisdictions aren't a guess the way
+this SDK's DATEX "Credentials-wanted scaffold" adapters are** (e.g.
 :mod:`streetworks.datex2.trafikverket`) - the field names, types and the
 ``EventType`` roadworks discriminator are drawn from a real, live,
 unauthenticated pull against the identical platform, not documentation
-alone. What's still genuinely unconfirmed for Alberta/Saskatchewan
-specifically is only whether their own authenticated response round-trips
+alone. What's still genuinely unconfirmed for each key-gated jurisdiction
+specifically is only whether its own authenticated response round-trips
 through this exact parsing unchanged - everything else is as confirmed as
 this SDK's fully shipped providers.
 
@@ -89,10 +100,10 @@ EVENT_PATH = "api/v2/get/event"
 
 class NA511Client:
     """Fetch real-time events from any jurisdiction on the North American
-    511 REST platform. ``api_key`` is required for jurisdictions that
-    gate the endpoint (Alberta, Saskatchewan - confirmed live); Ontario's
-    own real deployment needs none at all - see module docstring. This
-    client stays generic, keyed by a jurisdiction from
+    511 REST platform. ``api_key`` is required for every jurisdiction
+    except Ontario, whose own real deployment needs none at all - see
+    module docstring. This client stays generic, keyed by a jurisdiction
+    from
     :data:`streetworks.na511.jurisdictions.JURISDICTIONS` per call rather
     than one class per jurisdiction, since the real endpoint shape is
     identical - the same shape :class:`streetworks.ogc.germany.GermanRoadworksClient`

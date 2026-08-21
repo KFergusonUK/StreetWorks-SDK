@@ -109,6 +109,18 @@ CRED_ENV = {
     "sk511": lambda: (
         {"api_key": os.environ["SASKATCHEWAN_511_API_KEY"]}
         if os.environ.get("SASKATCHEWAN_511_API_KEY") else None),
+    "nb511": lambda: (
+        {"api_key": os.environ["NEW_BRUNSWICK_511_API_KEY"]}
+        if os.environ.get("NEW_BRUNSWICK_511_API_KEY") else None),
+    "nl511": lambda: (
+        {"api_key": os.environ["NEWFOUNDLAND_511_API_KEY"]}
+        if os.environ.get("NEWFOUNDLAND_511_API_KEY") else None),
+    "ns511": lambda: (
+        {"api_key": os.environ["NOVA_SCOTIA_511_API_KEY"]}
+        if os.environ.get("NOVA_SCOTIA_511_API_KEY") else None),
+    "yt511": lambda: (
+        {"api_key": os.environ["YUKON_511_API_KEY"]}
+        if os.environ.get("YUKON_511_API_KEY") else None),
 }
 
 #: Cap on raw records pulled per provider before conversion - a coverage map
@@ -167,6 +179,8 @@ _FRANCE_AREAS = {
 #: .fetch(jurisdiction) takes the real streetworks.na511.jurisdictions key.
 _NA511_JURISDICTIONS = {
     "on511": "ontario", "ab511": "alberta", "sk511": "saskatchewan",
+    "nb511": "new_brunswick", "nl511": "newfoundland_and_labrador",
+    "ns511": "nova_scotia", "yt511": "yukon",
 }
 
 TIERS = {

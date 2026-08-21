@@ -625,9 +625,11 @@ def check_ab511() -> str:
 
 def check_sk511() -> str:
     """Saskatchewan Highway Hotline - PENDING LIVE VERIFICATION, see
-    streetworks.na511. Requires an API key (SASKATCHEWAN_511_API_KEY,
-    free self-service registration). Same platform/schema as Ontario 511
-    (keyless, already verified - see check_on511)."""
+    streetworks.na511. Requires an API key (SASKATCHEWAN_511_API_KEY) -
+    the public self-service signup page has been taken down, so this is
+    only runnable if you obtained a key some other way. Same platform/
+    schema as Ontario 511 (keyless, already verified - see
+    check_on511)."""
     from streetworks.common import from_na511
     from streetworks.na511 import NA511Client
     from streetworks.na511.jurisdictions import SASKATCHEWAN
@@ -640,6 +642,82 @@ def check_sk511() -> str:
         administrative_area=SASKATCHEWAN.administrative_area,
     )
     return f"{len(works_list):,} real roadwork event(s) - first real authenticated SK pull"
+
+
+def check_nb511() -> str:
+    """New Brunswick 511 - PENDING LIVE VERIFICATION, see
+    streetworks.na511. Requires an API key (NEW_BRUNSWICK_511_API_KEY,
+    free self-service registration). Same platform/schema as Ontario 511
+    (keyless, already verified - see check_on511)."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import NEW_BRUNSWICK
+
+    with NA511Client(api_key=os.environ["NEW_BRUNSWICK_511_API_KEY"]) as client:
+        roadworks = client.fetch("new_brunswick")
+    works_list = from_na511(
+        roadworks,
+        territory=NEW_BRUNSWICK.territory,
+        administrative_area=NEW_BRUNSWICK.administrative_area,
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated NB pull"
+
+
+def check_nl511() -> str:
+    """Newfoundland and Labrador 511 - PENDING LIVE VERIFICATION, see
+    streetworks.na511. Requires an API key (NEWFOUNDLAND_511_API_KEY,
+    free self-service registration). Same platform/schema as Ontario 511
+    (keyless, already verified - see check_on511)."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import NEWFOUNDLAND_AND_LABRADOR
+
+    with NA511Client(api_key=os.environ["NEWFOUNDLAND_511_API_KEY"]) as client:
+        roadworks = client.fetch("newfoundland_and_labrador")
+    works_list = from_na511(
+        roadworks,
+        territory=NEWFOUNDLAND_AND_LABRADOR.territory,
+        administrative_area=NEWFOUNDLAND_AND_LABRADOR.administrative_area,
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated NL pull"
+
+
+def check_ns511() -> str:
+    """Nova Scotia 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (NOVA_SCOTIA_511_API_KEY) - the public
+    self-service signup page has been taken down, so this is only
+    runnable if you obtained a key some other way. Same platform/schema
+    as Ontario 511 (keyless, already verified - see check_on511)."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import NOVA_SCOTIA
+
+    with NA511Client(api_key=os.environ["NOVA_SCOTIA_511_API_KEY"]) as client:
+        roadworks = client.fetch("nova_scotia")
+    works_list = from_na511(
+        roadworks,
+        territory=NOVA_SCOTIA.territory,
+        administrative_area=NOVA_SCOTIA.administrative_area,
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated NS pull"
+
+
+def check_yt511() -> str:
+    """511 Yukon - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (YUKON_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511). This SDK's first Canadian *territorial*
+    roadworks coverage, if confirmed."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import YUKON
+
+    with NA511Client(api_key=os.environ["YUKON_511_API_KEY"]) as client:
+        roadworks = client.fetch("yukon")
+    works_list = from_na511(
+        roadworks, territory=YUKON.territory, administrative_area=YUKON.administrative_area
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Yukon pull"
 
 
 def check_lisboa() -> str:
@@ -2255,6 +2333,10 @@ def main() -> int:
     reporter.check("Ontario 511", [], check_on511)
     reporter.check("511 Alberta", ["ALBERTA_511_API_KEY"], check_ab511)
     reporter.check("Saskatchewan Highway Hotline", ["SASKATCHEWAN_511_API_KEY"], check_sk511)
+    reporter.check("New Brunswick 511", ["NEW_BRUNSWICK_511_API_KEY"], check_nb511)
+    reporter.check("Newfoundland and Labrador 511", ["NEWFOUNDLAND_511_API_KEY"], check_nl511)
+    reporter.check("Nova Scotia 511", ["NOVA_SCOTIA_511_API_KEY"], check_ns511)
+    reporter.check("511 Yukon", ["YUKON_511_API_KEY"], check_yt511)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials

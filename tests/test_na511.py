@@ -77,7 +77,15 @@ def test_fetch_returns_a_plain_list_of_roadworks():
     assert len(roadworks) == 4
 
 
-def test_alberta_and_saskatchewan_are_registered_as_needing_a_key():
+def test_ontario_is_the_only_keyless_jurisdiction():
     assert jurisdictions.ONTARIO.needs_key is False
-    assert jurisdictions.ALBERTA.needs_key is True
-    assert jurisdictions.SASKATCHEWAN.needs_key is True
+    keyed = [
+        jurisdictions.ALBERTA,
+        jurisdictions.SASKATCHEWAN,
+        jurisdictions.NEW_BRUNSWICK,
+        jurisdictions.NEWFOUNDLAND_AND_LABRADOR,
+        jurisdictions.NOVA_SCOTIA,
+        jurisdictions.YUKON,
+    ]
+    assert all(j.needs_key for j in keyed)
+    assert len(jurisdictions.JURISDICTIONS) == 7

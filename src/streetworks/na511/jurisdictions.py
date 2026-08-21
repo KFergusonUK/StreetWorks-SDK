@@ -11,7 +11,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-__all__ = ["Jurisdiction", "ONTARIO", "ALBERTA", "SASKATCHEWAN", "JURISDICTIONS"]
+__all__ = [
+    "Jurisdiction",
+    "ONTARIO",
+    "ALBERTA",
+    "SASKATCHEWAN",
+    "NEW_BRUNSWICK",
+    "NEWFOUNDLAND_AND_LABRADOR",
+    "NOVA_SCOTIA",
+    "YUKON",
+    "JURISDICTIONS",
+]
 
 
 @dataclass(frozen=True)
@@ -40,7 +50,10 @@ ALBERTA = Jurisdiction(
 )
 
 #: Confirmed live to require a real developer key - see client module
-#: docstring.
+#: docstring. The public self-service signup page for this one has since
+#: been taken down (confirmed live 2026-08-21, days after the endpoint
+#: itself was first confirmed key-gated) - the real API endpoint is
+#: otherwise unaffected and still answers the identical rejection.
 SASKATCHEWAN = Jurisdiction(
     base_url="https://hotline.gov.sk.ca",
     needs_key=True,
@@ -48,8 +61,51 @@ SASKATCHEWAN = Jurisdiction(
     administrative_area="Saskatchewan Highway Hotline (Ministry of Highways)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring.
+NEW_BRUNSWICK = Jurisdiction(
+    base_url="https://511.gnb.ca",
+    needs_key=True,
+    territory="Canada",
+    administrative_area="New Brunswick Department of Transportation and Infrastructure",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring.
+NEWFOUNDLAND_AND_LABRADOR = Jurisdiction(
+    base_url="https://511nl.ca",
+    needs_key=True,
+    territory="Canada",
+    administrative_area="Newfoundland and Labrador Department of Transportation and Infrastructure",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Like Saskatchewan, the public self-service signup page has
+#: since been taken down (confirmed live 2026-08-21: /developers/doc
+#: 404s, /developers redirects to /notfound) - the real API endpoint is
+#: otherwise unaffected.
+NOVA_SCOTIA = Jurisdiction(
+    base_url="https://511.novascotia.ca",
+    needs_key=True,
+    territory="Canada",
+    administrative_area="Nova Scotia Public Works",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring.
+YUKON = Jurisdiction(
+    base_url="https://511yukon.ca",
+    needs_key=True,
+    territory="Canada",
+    administrative_area="Yukon Department of Highways and Public Works",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
     "saskatchewan": SASKATCHEWAN,
+    "new_brunswick": NEW_BRUNSWICK,
+    "newfoundland_and_labrador": NEWFOUNDLAND_AND_LABRADOR,
+    "nova_scotia": NOVA_SCOTIA,
+    "yukon": YUKON,
 }

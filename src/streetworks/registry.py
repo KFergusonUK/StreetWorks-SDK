@@ -3630,11 +3630,45 @@ _REGISTRY: list[ProviderEntry] = [
         scope_note=(
             "Same real platform as Ontario 511 ('on511') and 511 "
             "Alberta ('ab511') - see those entries and "
-            "streetworks.na511.client's own module docstring. Confirmed "
-            "live to require a real developer key (the identical "
-            "structured 'Invalid Key' rejection) - not obtained on a "
-            "caller's behalf, same standing rule as Alberta/"
-            "Massachusetts CWZ."
+            "streetworks.na511.client's own module docstring. The real "
+            "API endpoint is still live and requires a key (the "
+            "identical structured 'Invalid Key' rejection, confirmed "
+            "2026-08-21) - not obtained on a caller's behalf, same "
+            "standing rule as Alberta/Massachusetts CWZ. But the public "
+            "self-service developer signup path itself has since been "
+            "taken down (confirmed live 2026-08-21: /developers/doc "
+            "404s, /developers redirects to /notfound, no dev/API link "
+            "found anywhere on the current site) - a real regression "
+            "from when this was found days earlier, not assumed still "
+            "there. No known current route to a key; flagged honestly "
+            "rather than left silently stale."
+        ),
+        credentials="511 API developer key (self-service path no longer found - see scope_note)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("saskatchewan")',
+    ),
+    ProviderEntry(
+        key="nb511",
+        name="New Brunswick 511",
+        description="New Brunswick's own real-time roadwork/incident feed (North American 511).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Canada"}),
+        administrative_area="New Brunswick Department of Transportation and Infrastructure",
+        scope_note=(
+            "Same real platform as Ontario 511 ('on511') - see that "
+            "entry and streetworks.na511.client's own module docstring. "
+            "Confirmed live (2026-08-21) to require a real developer "
+            "key (the identical structured 'Invalid Key' rejection) - "
+            "not obtained on a caller's behalf, same standing rule as "
+            "Alberta/Massachusetts CWZ. The field schema is not a "
+            "guess: proven by Ontario's own real, unauthenticated "
+            "response on the identical platform."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
@@ -3643,7 +3677,97 @@ _REGISTRY: list[ProviderEntry] = [
         verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
-        import_line='from streetworks.na511 import NA511Client  # .fetch("saskatchewan")',
+        import_line='from streetworks.na511 import NA511Client  # .fetch("new_brunswick")',
+    ),
+    ProviderEntry(
+        key="nl511",
+        name="Newfoundland and Labrador 511",
+        description="NL's own real-time roadwork/incident feed (North American 511 platform).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Canada"}),
+        administrative_area=(
+            "Newfoundland and Labrador Department of Transportation and Infrastructure"
+        ),
+        scope_note=(
+            "Same real platform as Ontario 511 ('on511') - see that "
+            "entry and streetworks.na511.client's own module docstring. "
+            "Confirmed live (2026-08-21) to require a real developer "
+            "key (the identical structured 'Invalid Key' rejection) - "
+            "not obtained on a caller's behalf, same standing rule as "
+            "Alberta/Massachusetts CWZ. The field schema is not a "
+            "guess: proven by Ontario's own real, unauthenticated "
+            "response on the identical platform."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line=(
+            'from streetworks.na511 import NA511Client  '
+            '# .fetch("newfoundland_and_labrador")'
+        ),
+    ),
+    ProviderEntry(
+        key="ns511",
+        name="Nova Scotia 511",
+        description="Nova Scotia's own real-time roadwork/incident feed (North American 511).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Canada"}),
+        administrative_area="Nova Scotia Public Works",
+        scope_note=(
+            "Same real platform as Ontario 511 ('on511') - see that "
+            "entry and streetworks.na511.client's own module docstring. "
+            "The real API endpoint still requires a key (the identical "
+            "structured 'Invalid Key' rejection, confirmed 2026-08-21) - "
+            "not obtained on a caller's behalf, same standing rule as "
+            "Alberta/Massachusetts CWZ. Like Saskatchewan ('sk511'), the "
+            "public self-service signup page has since been taken down "
+            "(/developers/doc 404s, /developers redirects to /notfound) "
+            "- no known current route to a key. The field schema is not "
+            "a guess either way: proven by Ontario's own real, "
+            "unauthenticated response on the identical platform."
+        ),
+        credentials="511 API developer key (self-service path no longer found - see scope_note)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("nova_scotia")',
+    ),
+    ProviderEntry(
+        key="yt511",
+        name="511 Yukon",
+        description="Yukon's own real-time roadwork/incident feed (North American 511 platform).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Canada"}),
+        administrative_area="Yukon Department of Highways and Public Works",
+        scope_note=(
+            "Same real platform as Ontario 511 ('on511') - see that "
+            "entry and streetworks.na511.client's own module docstring. "
+            "Confirmed live (2026-08-21) to require a real developer "
+            "key (the identical structured 'Invalid Key' rejection) - "
+            "not obtained on a caller's behalf, same standing rule as "
+            "Alberta/Massachusetts CWZ. The field schema is not a "
+            "guess: proven by Ontario's own real, unauthenticated "
+            "response on the identical platform. This SDK's first "
+            "Canadian *territorial* roadworks coverage."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("yukon")',
     ),
     ProviderEntry(
         key="lisboa",
