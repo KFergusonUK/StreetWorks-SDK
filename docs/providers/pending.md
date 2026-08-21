@@ -76,6 +76,47 @@ Credentials-wanted, or Documented-unavailable; see
   is real, live, keyless, and covers all 13 provinces/territories
   nationally in one build (Segment only, the same TIGERweb/NWB
   outcome — see `docs/providers/canada.md`).
+- **USA — the 15-state/DC WZDx/CWZ coverage gap, surveyed 2026-08-21.**
+  Every state + DC with zero row in the WZDx/CWZ registry
+  (`streetworks.wzdx.registry`) was checked for an alternative feed, the
+  same way NYC DOT/Chicago DOT were originally found outside that
+  registry — see [`docs/providers/us.md`](us.md) for what's built.
+  **Built**: Washington DC (DDOT Construction Permits,
+  `streetworks.arcgis.dc`); CWZ 1.0 parsing support in
+  `streetworks.wzdx` unlocked PurposeBuilt Systems' feed immediately
+  (keyless) and left Massachusetts/Colorado/Illinois's own real CWZ
+  feeds fully wired, pending a real key none were obtained for; Nevada
+  511 and Georgia 511 (`streetworks.na511`) turned out to be the same
+  commercial platform already built for seven Canadian jurisdictions —
+  both wired, pending a real key.
+  **Real leads found, not resolved**: North Dakota has real "Work
+  Zones" ArcGIS layers but the source's own terms restrict
+  "individual non-commercial" use and prohibit "systematic retrieval" —
+  needs a licence decision from the project owner, not more
+  investigation. South Carolina has a real, live, keyless
+  `ris.scdot.org/roadconditions/kml` endpoint (confirmed genuine
+  ASP.NET MVC routing, matches the site's own documented 10-minute
+  cache) but every real request currently returns completely empty
+  content — no active conditions posted right now, so the real KML tag
+  structure has never been observed. Tennessee's real, current
+  "TDOT Projects Public View"/"Tennessee STIP Projects" feature
+  services were traced out of TDOT's own live app config
+  (`spatial.tdot.tn.gov`), but that host (and `smartway.tn.gov`) is
+  unreachable — TLS connections hang and time out, confirmed dead from
+  more than one vantage point, not just this SDK's own sandbox.
+  **Checked and confirmed no live feed**: Connecticut, Montana, Alaska
+  (real ArcGIS Open Data portals, but their own DCAT/`data.json`
+  catalogs have no live closures dataset); Wyoming (a real system, SDX,
+  but a navigation-partner exchange, not self-service); Rhode Island,
+  West Virginia, South Dakota, Nebraska (none run the North American
+  511 platform, each checked directly against its real endpoint shape);
+  Arkansas (IDrive Arkansas's own static asset pipeline is currently
+  broken — even jQuery 404s to the SPA fallback shell — and ArDOT's
+  real public ArcGIS portal has only a schema-only "Road Closures"
+  Layer Template, no populated feed, plus two real feature services
+  that turned out unrelated: a hypothetical multi-year budget/needs
+  model with every coordinate at `POINT (0 0)`, and a road-classification/
+  pavement-survey reference layer).
 - **NUAR (National Underground Asset Register, UK) — a different case
   from every other entry on this page: the model is scoped, only the
   transport is still pending.** A new data class, not roadworks — buried
