@@ -150,17 +150,21 @@ confirmed live via Données Québec's own dataset metadata.
 ## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by **ten** independent government agencies
+byte-for-byte identically by **eleven** independent government agencies
 in two countries — Ontario 511, 511 Alberta, Saskatchewan's Highway
 Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova Scotia
-511, 511 Yukon (Canada), **Nevada 511**, **Georgia 511** and **Alaska
-511** (USA — Nevada/Georgia found while surveying US roadworks
-coverage, neither in the WZDx/CWZ US registry at all; Alaska found on a
-direct re-check of the earlier gap-state survey, which had only tested
-its ArcGIS Open Data catalogue, not this platform's own endpoint shape;
-see [`docs/providers/us.md`](us.md#nevada-511),
-[`docs/providers/us.md`](us.md#georgia-511) and
-[`docs/providers/us.md`](us.md#alaska-511) for the US-side writeups)
+511, 511 Yukon (Canada), **Nevada 511**, **Georgia 511**, **Alaska
+511** and **Louisiana 511** (USA — Nevada/Georgia found while surveying
+US roadworks coverage, neither in the WZDx/CWZ US registry at all;
+Alaska found on a direct re-check of the earlier gap-state survey,
+which had only tested its ArcGIS Open Data catalogue, not this
+platform's own endpoint shape; Louisiana a genuinely new find, surfaced
+while searching for real Open511 adopters among the same gap states -
+none were found, but 511LA turned out to be this platform instead; see
+[`docs/providers/us.md`](us.md#nevada-511),
+[`docs/providers/us.md`](us.md#georgia-511),
+[`docs/providers/us.md`](us.md#alaska-511) and
+[`docs/providers/us.md`](us.md#louisiana-511) for the US-side writeups)
 all publish the exact same `/api/v2/get/event` endpoint (every one
 answers the identical URL path with either real data or the identical
 structured "Invalid Key" rejection), same field names, same `EventType`

@@ -2,12 +2,35 @@
 
 ## [Unreleased]
 
+### Added — Louisiana 511, a fourth US jurisdiction on the North American 511 platform (2026-08-22)
+
+`streetworks.na511.jurisdictions.LOUISIANA`
+- A genuinely new find, not a re-check of anything - surfaced while
+  searching for real [Open511](https://www.open511.org/) (a different,
+  unrelated standard) adopters among this SDK's remaining USA gap
+  states. None were found - Open511's own site/API is currently
+  unreachable, and nothing surfaced for North Dakota, South Carolina,
+  Tennessee, Connecticut, Montana, Wyoming, Rhode Island, West
+  Virginia, South Dakota, Nebraska or Arkansas specifically; DriveBC
+  remains this SDK's only confirmed real Open511 implementation - but a
+  real `511LA` `/help/endpoint/event` page surfaced instead, the same
+  URL shape Ontario/Nevada/Georgia already publish on the North
+  American 511 platform. Confirmed live: the identical
+  `/api/v2/get/event` endpoint, the identical structured "Invalid Key"
+  rejection, and a real, working `/developers/doc` page. No new client
+  code needed, just a new `Jurisdiction` entry.
+- Requires a real developer key not obtained on this SDK's behalf. Free
+  self-service registration: `511la.org/developers/doc`. Set
+  `LOUISIANA_511_API_KEY` (see `.env.example`) and run
+  `scripts/smoke_test.py` to confirm.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added & confirmed — Alaska 511, a third US jurisdiction on the North American 511 platform, surfacing two real converter bugs (2026-08-22)
 
 `streetworks.na511.jurisdictions.ALASKA`
 - A real correction to the earlier USA WZDx/CWZ gap-state survey, not a
-  fresh discovery - prompted by the user asking "did we try Alaska?"
-  while reviewing the world map. Alaska had only ever been checked
+  fresh discovery. Alaska had only ever been checked
   against its ArcGIS Open Data catalogue (`data.json`, genuinely no
   live closures dataset there), never directly against this platform's
   own endpoint shape the way Rhode Island/West Virginia/South

@@ -3888,6 +3888,38 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("alaska")',
     ),
     ProviderEntry(
+        key="la511",
+        name="Louisiana 511",
+        description="Louisiana's own real-time roadwork/incident feed (North American 511).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"USA"}),
+        administrative_area="Louisiana Department of Transportation and Development (DOTD)",
+        scope_note=(
+            "A genuinely new find, not a re-check of anything - found "
+            "while searching for real Open511 (a different, unrelated "
+            "standard) adopters among this SDK's remaining USA gap "
+            "states. None were found, but a real 511LA "
+            "/help/endpoint/event page surfaced instead, the same URL "
+            "shape Ontario/Nevada/Georgia already publish on this "
+            "platform. Confirmed live: the identical /api/v2/get/event "
+            "endpoint, the identical structured 'Invalid Key' rejection, "
+            "and a real, working /developers/doc page. Not obtained on a "
+            "caller's behalf, same standing rule as Alberta/Massachusetts "
+            "CWZ. The field schema is not a guess: proven by Ontario's "
+            "own real, unauthenticated response on the identical "
+            "platform."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("louisiana")',
+    ),
+    ProviderEntry(
         key="vancouver",
         name="Vancouver Road Ahead",
         description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",

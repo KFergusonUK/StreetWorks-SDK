@@ -367,9 +367,9 @@ def test_credentials_wanted_is_the_only_unverified_tier():
 
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
     Newfoundland and Labrador 511 (`nl511`), Nova Scotia 511 (`ns511`),
-    511 Yukon (`yt511`) and Georgia 511 (`ga511`) are all better-off
-    than every other entry in this tier: each needs a
-    real developer key this
+    511 Yukon (`yt511`), Georgia 511 (`ga511`) and Louisiana 511
+    (`la511`) are all better-off than every other entry in this tier:
+    each needs a real developer key this
     build doesn't have, but the field schema itself isn't a guess or
     documentation-only claim - it's drawn from a real, live,
     unauthenticated pull against the identical commercial platform
@@ -402,6 +402,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "ns511",
         "yt511",
         "ga511",
+        "la511",
     }
 
 

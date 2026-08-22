@@ -784,6 +784,25 @@ def check_ak511() -> str:
     return f"{len(works_list):,} real roadwork event(s) - first real authenticated Alaska pull"
 
 
+def check_la511() -> str:
+    """Louisiana 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (LOUISIANA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511). A genuinely new find, not a re-check -
+    surfaced while searching for real Open511 adopters among the USA gap
+    states."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import LOUISIANA
+
+    with NA511Client(api_key=os.environ["LOUISIANA_511_API_KEY"]) as client:
+        roadworks = client.fetch("louisiana")
+    works_list = from_na511(
+        roadworks, territory=LOUISIANA.territory, administrative_area=LOUISIANA.administrative_area
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Louisiana pull"
+
+
 def check_vancouver() -> str:
     """Vancouver Road Ahead needs no credentials - see
     streetworks.vancouver. Confirmed live 2026-08-21 (three real
@@ -2484,6 +2503,7 @@ def main() -> int:
     reporter.check("Nevada 511", ["NEVADA_511_API_KEY"], check_nv511)
     reporter.check("Georgia 511", ["GEORGIA_511_API_KEY"], check_ga511)
     reporter.check("Alaska 511", ["ALASKA_511_API_KEY"], check_ak511)
+    reporter.check("Louisiana 511", ["LOUISIANA_511_API_KEY"], check_la511)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials

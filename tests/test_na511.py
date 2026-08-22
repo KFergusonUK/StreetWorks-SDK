@@ -104,9 +104,10 @@ def test_ontario_is_the_only_keyless_jurisdiction():
         jurisdictions.NEVADA,
         jurisdictions.GEORGIA,
         jurisdictions.ALASKA,
+        jurisdictions.LOUISIANA,
     ]
     assert all(j.needs_key for j in keyed)
-    assert len(jurisdictions.JURISDICTIONS) == 10
+    assert len(jurisdictions.JURISDICTIONS) == 11
 
 
 def test_nevada_is_the_first_us_jurisdiction_on_this_platform():
@@ -125,6 +126,12 @@ def test_alaska_is_a_third_us_jurisdiction_on_this_platform():
     assert jurisdictions.ALASKA.territory == "USA"
     assert jurisdictions.ALASKA.needs_key is True
     assert jurisdictions.ALASKA.base_url == "https://511.alaska.gov"
+
+
+def test_louisiana_is_a_fourth_us_jurisdiction_on_this_platform():
+    assert jurisdictions.LOUISIANA.territory == "USA"
+    assert jurisdictions.LOUISIANA.needs_key is True
+    assert jurisdictions.LOUISIANA.base_url == "https://www.511la.org"
 
 
 @respx.mock

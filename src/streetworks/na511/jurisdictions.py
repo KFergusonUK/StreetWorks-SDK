@@ -27,6 +27,7 @@ __all__ = [
     "NEVADA",
     "GEORGIA",
     "ALASKA",
+    "LOUISIANA",
     "JURISDICTIONS",
 ]
 
@@ -152,6 +153,22 @@ ALASKA = Jurisdiction(
     administrative_area="Alaska Department of Transportation & Public Facilities (DOT&PF)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found while searching for real Open511 (a different,
+#: unrelated standard) adopters among this SDK's remaining USA gap
+#: states - none were found, but a real `/help/endpoint/event` page for
+#: "511LA" surfaced instead, the same URL shape 511NY/511GA already
+#: publish on this platform. Confirmed the identical `/api/v2/get/event`
+#: path, the identical "Invalid Key" rejection, and a real, working
+#: `/developers/doc` page. Not previously on any gap-state list - a
+#: genuinely new find, not a re-check.
+LOUISIANA = Jurisdiction(
+    base_url="https://www.511la.org",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Louisiana Department of Transportation and Development (DOTD)",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -163,4 +180,5 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "nevada": NEVADA,
     "georgia": GEORGIA,
     "alaska": ALASKA,
+    "louisiana": LOUISIANA,
 }

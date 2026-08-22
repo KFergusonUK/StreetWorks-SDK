@@ -432,3 +432,44 @@ already excludes for Arkansas's own `OneBillionContructionPlanDTIMs`
 dataset. Neither had ever been surfaced on Ontario's/Alberta's/Nevada's
 own real samples — genuinely per-jurisdiction, not a universal shape.
 See `streetworks.common.from_na511`'s own module docstring.
+
+## Louisiana 511
+
+A genuinely new find, not a re-check of anything. Found while searching
+for real [Open511](https://www.open511.org/) (a different, unrelated
+standard from the North American 511 platform this section otherwise
+covers) adopters among this SDK's remaining USA gap states — none were
+found (Open511's own site/API is currently unreachable, and nothing
+surfaced for North Dakota, South Carolina, Tennessee, Connecticut,
+Montana, Wyoming, Rhode Island, West Virginia, South Dakota, Nebraska
+or Arkansas specifically; DriveBC remains this SDK's only confirmed
+real Open511 roadworks-events implementation, see
+[`docs/providers/canada.md`](canada.md#drivebc-british-columbia-open511)) —
+but a real `511LA` `/help/endpoint/event` page surfaced instead, the
+same URL shape Ontario/Nevada/Georgia already publish. Checking it
+directly against the North American 511 platform (see
+[`docs/providers/canada.md`](canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon))
+confirmed it immediately — this SDK's fourth US jurisdiction on this
+platform:
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import LOUISIANA
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("louisiana"),
+        territory=LOUISIANA.territory,
+        administrative_area=LOUISIANA.administrative_area,
+    )
+```
+
+**Confirmed live to be the identical platform**: the same
+`/api/v2/get/event` endpoint, the same structured `"Invalid Key"`
+rejection with no key supplied, and a real, working `/developers/doc`
+page. Requires a real developer key — not obtained on this SDK's
+behalf. Free self-service registration:
+`https://www.511la.org/developers/doc`; set `LOUISIANA_511_API_KEY`
+(see `.env.example`) and run `scripts/smoke_test.py` to confirm the
+last open question.
