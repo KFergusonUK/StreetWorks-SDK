@@ -117,11 +117,11 @@ def test_from_au_nt_roadreport_maps_a_real_line_work():
         "Department of Infrastructure, Planning and Logistics"
     )
     assert arnhem.coordinate.crs == "EPSG:4326"
-    # Source [lat, lon] flipped to GeoJSON (lon, lat).
-    assert arnhem.coordinate.value == (131.3174101844, -12.6576980147)
+    # Source is already [lat, lon] - this SDK's stated Coordinate convention.
+    assert arnhem.coordinate.value == (-12.6576980147, 131.3174101844)
     assert arnhem.coordinate.points == (
-        (131.3174101844, -12.6576980147),
-        (131.3765599685, -12.6758609326),
+        (-12.6576980147, 131.3174101844),
+        (-12.6758609326, 131.3765599685),
     )
 
     site = arnhem.sites[0]
@@ -141,7 +141,7 @@ def test_identical_start_and_end_is_a_point_not_a_line():
     startPoint equals endPoint - a genuine point, not a synthetic line."""
     works = from_au_nt_roadreport([_record(14756)])[0]
     assert works.coordinate.points is None
-    assert works.coordinate.value == (131.8057219999, -12.5213569999)
+    assert works.coordinate.value == (-12.5213569999, 131.8057219999)
 
 
 def test_converter_skips_condition_records():

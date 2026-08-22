@@ -26,12 +26,19 @@ describe the worksite, so both go into ``location_description``.
 
 **Geometry comes from ``startPoint`` / ``endPoint`` only.** The live
 ``geometry`` / ``geometries`` fields were empty on every record. Source
-arrays are ``[lat, lon]``; :class:`~streetworks.common.Coordinate` stores
-GeoJSON-style ``(lon, lat)`` under ``EPSG:4326`` so this converter
-matches the rest of the AU cluster (TAS/ACT/QLD/WA). The flip is
-documented, not silent. Identical start and end (1/26 real Roadworks
-records) is a genuine point - ``points`` stays ``None``, never a
-synthetic one-vertex line.
+arrays are ``[lat, lon]`` already - :class:`~streetworks.common.Coordinate`
+stores ``value``/``points`` as ``(lat, lon)``, this SDK's stated
+convention for every EPSG:4326 point (confirmed in
+``from_au_tas_roadworks``/``from_au_act_ttm``/``from_au_wa_mainroads``/
+``from_nzta``'s own docstrings, and enforced at the source in every one
+of them - the same fix this module needed too, found live: an earlier
+version of this converter flipped to GeoJSON ``(lon, lat)`` order by
+mistake, silently dropping every real NT point off the world-map example
+(a latitude field carrying a real longitude value like 131 is out of
+range and simply doesn't plot). No flip is needed here since the source
+is already ``[lat, lon]`` - it's passed straight through as a 2-tuple.
+Identical start and end (1/26 real Roadworks records) is a genuine
+point - ``points`` stays ``None``, never a synthetic one-vertex line.
 
 See :mod:`streetworks.au.nt`'s own module docstring for the full set of
 real findings this mapping is built from (the 26/140 works split, naive
@@ -93,12 +100,11 @@ def _coordinate(record: JSON) -> Coordinate | None:
     if start is None:
         start = end
     assert start is not None
-    # Flip source [lat, lon] to GeoJSON (lon, lat) for the AU cluster.
-    start_lonlat = (start[1], start[0])
+    # Source is already [lat, lon] - this SDK's stated (lat, lon)
+    # convention for EPSG:4326, no flip needed. See module docstring.
     if end is None or end == start:
-        return Coordinate(value=start_lonlat, crs=_CRS)
-    end_lonlat = (end[1], end[0])
-    points = (start_lonlat, end_lonlat)
+        return Coordinate(value=start, crs=_CRS)
+    points = (start, end)
     return Coordinate(value=points[0], crs=_CRS, points=points)
 
 
