@@ -12,9 +12,9 @@ Ontario's real, unauthenticated response against Alberta's own published
 field-by-field API documentation - every field name, type and the
 ``EventType`` roadworks discriminator match exactly (see below for the
 full real ``EventType`` value set, corrected after Alberta's own real
-authenticated pull). **Nevada 511 and Georgia
-511 turned out to be the identical platform too** - both found
-separately while surveying US roadworks coverage (neither is in the
+authenticated pull). **Nevada 511, Georgia 511 and Alaska 511 turned out
+to be the identical platform too** - all three found separately while
+surveying US roadworks coverage (neither Nevada nor Georgia is in the
 WZDx/CWZ US registry at all, confirmed live), then confirmed live here
 the same way as every Canadian jurisdiction: the identical
 ``/api/v2/get/event`` path, the identical "Invalid Key" rejection, and a
@@ -23,11 +23,17 @@ documentation matches exactly. Georgia's own real "TrafficImpacts"
 ArcGIS Hub pages, checked first, turned out to be a real dead end -
 per-project public-information pages (e.g. "I-285 & SR 400
 Improvements"), not a live data feed; checking Georgia's own 511 site
-directly against this platform's shape was the real find. Manitoba,
-Prince Edward Island, the Northwest Territories and Nunavut were checked
-and found to have no matching site (no DNS record for the guessable
-``511<jurisdiction>.ca`` pattern this platform's other real Canadian
-deployments use).
+directly against this platform's shape was the real find. Alaska is a
+real correction to the earlier USA gap-state survey, not a new
+discovery from scratch: it had only been checked against its ArcGIS
+Open Data catalogue (no live closures dataset there), never directly
+against this platform's own endpoint shape the way Rhode Island/West
+Virginia/South Dakota/Nebraska were - a direct re-check found it
+immediately, ``/developers/doc`` explicitly naming "Temporary
+Workzones" as a real event resource. Manitoba, Prince Edward Island,
+the Northwest Territories and Nunavut were checked and found to have no
+matching site (no DNS record for the guessable ``511<jurisdiction>.ca``
+pattern this platform's other real Canadian deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
 ``GET https://511on.ca/api/v2/get/event`` returns real data with **no**
@@ -81,9 +87,25 @@ of the ``EventType`` correction above: Nevada's pull also carried real
 this time - real per-jurisdiction variation, not a contradiction), the
 roadworks filter itself staying exactly correct a third time. ``ab511``
 and ``nv511`` are both verified in the registry accordingly;
-``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511`` remain in the
-same "schema proven, own key untested" position Alberta and Nevada
+``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511`` remain in
+the same "schema proven, own key untested" position Alberta and Nevada
 themselves were in until now.
+
+**Alaska's own real authenticated response confirmed the same thing a
+third time, and surfaced two genuine converter bugs Ontario's/Alberta's/
+Nevada's own real samples never triggered.** A real developer key
+round-tripped 57 real events (50 real roadwork, 45 with a real decoded
+polyline) through the exact same parsing - but two real fields needed a
+fix, not just confirmation: ``StartDate``/``Reported`` carry .NET's
+``DateTime.MinValue`` (serialised as Unix epoch seconds,
+``-62135596800``) on 47/57 (82%) of all real Alaska events - the
+majority shape there, not an edge case - which ``datetime.fromtimestamp``
+parsed without error into a nonsensical "0001-01-01" date; and one real
+record states ``Latitude``/``Longitude`` as exactly ``(0.0, 0.0)`` with
+no polyline fallback, a real "Null Island" placeholder. Both are fixed
+in :func:`streetworks.common.from_na511._epoch_seconds_to_dt`/
+``_coordinate`` - see that module's own docstring. ``ab511``, ``nv511``
+and ``ak511`` are all verified in the registry accordingly.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,
@@ -132,11 +154,11 @@ change, just an honest correction to "every jurisdiction returns the
 same shape."
 
 **Roadworks filter: ``EventType == "roadwork"``** - confirmed live on
-three independent jurisdictions: 590/595 real Ontario events, 161/302
-real Alberta events, and 74/92 real Nevada events (the rest of each
-genuinely split across the other real ``EventType`` values - see above),
-the same clean filter holding on materially less roadwork-skewed real
-populations each time.
+four independent jurisdictions: 590/595 real Ontario events, 161/302
+real Alberta events, 74/92 real Nevada events, and 50/57 real Alaska
+events (the rest of each genuinely split across the other real
+``EventType`` values - see above), the same clean filter holding on
+materially less roadwork-skewed real populations each time.
 """
 
 from __future__ import annotations

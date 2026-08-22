@@ -86,9 +86,17 @@ Credentials-wanted, or Documented-unavailable; see
   `streetworks.wzdx` unlocked PurposeBuilt Systems' feed immediately
   (keyless) and left Massachusetts/Colorado/Illinois's own real CWZ
   feeds fully wired, pending a real key none were obtained for; Nevada
-  511 and Georgia 511 (`streetworks.na511`) turned out to be the same
-  commercial platform already built for seven Canadian jurisdictions —
-  both wired, pending a real key.
+  511, Georgia 511 and Alaska 511 (`streetworks.na511`) turned out to be
+  the same commercial platform already built for seven Canadian
+  jurisdictions — all three wired (Nevada confirmed live with a real
+  key, 2026-08-22; Georgia/Alaska pending one). Alaska specifically is a
+  real correction, not a fresh find — the state had already been marked
+  "checked and confirmed no live feed" below via its ArcGIS Open Data
+  catalogue alone, but a later direct re-check against this platform's
+  own endpoint shape (the way Rhode Island/West Virginia/South
+  Dakota/Nebraska were checked) found it immediately — the catalogue
+  check and the platform check are genuinely different tests, and only
+  the platform one was ever run for the others in that list.
   **Real leads found, not resolved**: North Dakota has real "Work
   Zones" ArcGIS layers but the source's own terms restrict
   "individual non-commercial" use and prohibit "systematic retrieval" —
@@ -104,9 +112,11 @@ Credentials-wanted, or Documented-unavailable; see
   (`spatial.tdot.tn.gov`), but that host (and `smartway.tn.gov`) is
   unreachable — TLS connections hang and time out, confirmed dead from
   more than one vantage point, not just this SDK's own sandbox.
-  **Checked and confirmed no live feed**: Connecticut, Montana, Alaska
-  (real ArcGIS Open Data portals, but their own DCAT/`data.json`
-  catalogs have no live closures dataset); Wyoming (a real system, SDX,
+  **Checked and confirmed no live feed**: Connecticut, Montana (real
+  ArcGIS Open Data portals, but their own DCAT/`data.json` catalogs have
+  no live closures dataset — Alaska had the same catalogue result, but
+  turned out to have a real feed anyway via a different, direct check;
+  see "Built" above); Wyoming (a real system, SDX,
   but a navigation-partner exchange, not self-service); Rhode Island,
   West Virginia, South Dakota, Nebraska (none run the North American
   511 platform, each checked directly against its real endpoint shape);

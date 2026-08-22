@@ -150,14 +150,17 @@ confirmed live via Données Québec's own dataset metadata.
 ## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by **nine** independent government agencies
+byte-for-byte identically by **ten** independent government agencies
 in two countries — Ontario 511, 511 Alberta, Saskatchewan's Highway
 Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova Scotia
-511, 511 Yukon (Canada), **Nevada 511** and **Georgia 511** (USA — both
-found separately while surveying US roadworks coverage, neither is in
-the WZDx/CWZ US registry at all; see
-[`docs/providers/us.md`](us.md#nevada-511) and
-[`docs/providers/us.md`](us.md#georgia-511) for the US-side writeups)
+511, 511 Yukon (Canada), **Nevada 511**, **Georgia 511** and **Alaska
+511** (USA — Nevada/Georgia found while surveying US roadworks
+coverage, neither in the WZDx/CWZ US registry at all; Alaska found on a
+direct re-check of the earlier gap-state survey, which had only tested
+its ArcGIS Open Data catalogue, not this platform's own endpoint shape;
+see [`docs/providers/us.md`](us.md#nevada-511),
+[`docs/providers/us.md`](us.md#georgia-511) and
+[`docs/providers/us.md`](us.md#alaska-511) for the US-side writeups)
 all publish the exact same `/api/v2/get/event` endpoint (every one
 answers the identical URL path with either real data or the identical
 structured "Invalid Key" rejection), same field names, same `EventType`
@@ -201,10 +204,16 @@ no code changes needed. It also surfaced a real correction: the live
 showed (`restrictionClass`/`generalInfo`/`specialEvents` are real too) —
 the roadworks filter itself stayed exactly correct on this second,
 materially less roadwork-skewed jurisdiction. **Nevada 511 (`nv511`,
-USA) was confirmed the same way the same day** — see
-[`docs/providers/us.md`](us.md#nevada-511) for the US-side writeup;
-between them, Alberta and Nevada now cross-confirm the `EventType`
-correction on two independent jurisdictions. `nb511`/`nl511` have real,
+USA) and Alaska 511 (`ak511`, USA) were both confirmed the same way the
+same day** — see [`docs/providers/us.md`](us.md#nevada-511) and
+[`docs/providers/us.md`](us.md#alaska-511) for the US-side writeups.
+Alaska's own real data went further than confirming the schema — it
+surfaced two genuine bugs in the shared `from_na511` converter (a real
+.NET `DateTime.MinValue` date placeholder on 82% of all real events, and
+a real "Null Island" `(0.0, 0.0)` coordinate placeholder), both fixed
+the same day and never seen on Ontario's/Alberta's/Nevada's own real
+samples. Between all three, Alberta/Nevada/Alaska now cross-confirm the
+`EventType` correction on three independent jurisdictions. `nb511`/`nl511` have real,
 working self-service signup pages confirmed live
 (`NEW_BRUNSWICK_511_API_KEY`/`NEWFOUNDLAND_511_API_KEY` — see
 `.env.example`) — set one to confirm the same open question for that

@@ -32,6 +32,11 @@ NEVADA_FIXTURE = json.loads(
         encoding="utf-8"
     )
 )
+ALASKA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_alaska_events.json").read_text(
+        encoding="utf-8"
+    )
+)
 
 
 @respx.mock
@@ -98,9 +103,10 @@ def test_ontario_is_the_only_keyless_jurisdiction():
         jurisdictions.YUKON,
         jurisdictions.NEVADA,
         jurisdictions.GEORGIA,
+        jurisdictions.ALASKA,
     ]
     assert all(j.needs_key for j in keyed)
-    assert len(jurisdictions.JURISDICTIONS) == 9
+    assert len(jurisdictions.JURISDICTIONS) == 10
 
 
 def test_nevada_is_the_first_us_jurisdiction_on_this_platform():
@@ -113,6 +119,12 @@ def test_georgia_is_a_second_us_jurisdiction_on_this_platform():
     assert jurisdictions.GEORGIA.territory == "USA"
     assert jurisdictions.GEORGIA.needs_key is True
     assert jurisdictions.GEORGIA.base_url == "https://511ga.org"
+
+
+def test_alaska_is_a_third_us_jurisdiction_on_this_platform():
+    assert jurisdictions.ALASKA.territory == "USA"
+    assert jurisdictions.ALASKA.needs_key is True
+    assert jurisdictions.ALASKA.base_url == "https://511.alaska.gov"
 
 
 @respx.mock
@@ -153,4 +165,25 @@ def test_nevada_authenticated_response_parses_identically_to_ontario():
         roadworks = list(client.iter_roadworks("nevada"))
     assert len(roadworks) == 2
     assert {e["ID"] for e in roadworks} == {125464, 75}
+    assert all(e["EventType"] == "roadwork" for e in roadworks)
+
+
+@respx.mock
+def test_alaska_authenticated_response_parses_identically_to_ontario():
+    """Real, trimmed Alaska 511 events (tests/fixtures/na511_alaska_events.json),
+    captured live 2026-08-22 from a real authenticated pull against
+    https://511.alaska.gov/api/v2/get/event - the third key-gated
+    jurisdiction on this platform confirmed with a real key. Also the
+    real source of two genuine converter bugs found and fixed the same
+    day: a .NET DateTime.MinValue placeholder on StartDate/Reported
+    (47/57 real Alaska events, the majority shape) and a real "Null
+    Island" (0.0, 0.0) placeholder coordinate with no polyline fallback -
+    see streetworks.common.from_na511's own module docstring."""
+    respx.get(f"{jurisdictions.ALASKA.base_url}/{EVENT_PATH}").mock(
+        return_value=httpx.Response(200, json=ALASKA_FIXTURE)
+    )
+    with NA511Client(api_key="real-key") as client:
+        roadworks = list(client.iter_roadworks("alaska"))
+    assert len(roadworks) == 2
+    assert {e["ID"] for e in roadworks} == {32138, 36958}
     assert all(e["EventType"] == "roadwork" for e in roadworks)

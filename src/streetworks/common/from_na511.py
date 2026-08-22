@@ -24,6 +24,25 @@ confirmed, the same reasoning :mod:`.from_drivebc`/:mod:`.from_quebec`
 already document for their own comparable live feeds. Dates are real
 Unix epoch **seconds** (confirmed by magnitude, not milliseconds).
 
+**A real "no date stated" placeholder, confirmed live on a third
+jurisdiction, not assumed universal.** Alaska's own real authenticated
+pull surfaced a genuine bug: ``StartDate``/``Reported`` carry .NET's
+``DateTime.MinValue`` (0001-01-01, serialised as Unix epoch seconds,
+``-62135596800``) on 47/57 (82%) of all real events - the majority
+shape there, not an edge case. ``datetime.fromtimestamp`` parses this
+without raising (Python's date range starts at year 1), so it silently
+produced a nonsensical "0001-01-01" ``proposed_start`` before this was
+caught - see :data:`_NULL_DATETIME_SENTINEL`. Never seen on Ontario's
+or Alberta's own real samples, nor on Alaska's own ``PlannedEndDate`` -
+genuinely per-field, not a whole-feed pattern.
+
+**A real "no location stated" placeholder, same discovery.** One real
+Alaska event (of 57) states ``Latitude``/``Longitude`` as exactly
+``0.0``/``0.0`` with no ``EncodedPolyline`` to fall back on - the same
+"Null Island" placeholder pattern this SDK already excludes for
+Arkansas's own real `OneBillionContructionPlanDTIMs` dataset. Never
+promoted to a real ``Coordinate``.
+
 **Geometry prefers the real decoded ``EncodedPolyline`` (Google's
 Encoded Polyline Algorithm Format) when present** - real and populated
 on ~50% of real Ontario roadwork events sampled, confirmed correct by
@@ -32,7 +51,8 @@ own stated ``Latitude``/``Longitude``/``LatitudeSecondary``/
 ``LongitudeSecondary`` within the real rounding gap between the
 polyline's 5 decimal digits and the plain fields' 6. Falls back to the
 plain ``Latitude``/``Longitude`` point pair otherwise - never absent
-when either shape is present.
+when either shape is present and real (see the Null Island exclusion
+above).
 
 ``territory``/``administrative_area`` are passed in explicitly, not
 derived - one client serves several distinct real jurisdictions (see
@@ -54,9 +74,20 @@ JSON = dict[str, Any]
 
 _CRS = "EPSG:4326"
 
+#: A real, confirmed placeholder - .NET's ``DateTime.MinValue``
+#: (0001-01-01 00:00:00 UTC) serialised as Unix epoch seconds. Found via
+#: Alaska's real authenticated pull: 47/57 (82%) of all real events carry
+#: this exact value on ``StartDate``/``Reported`` - the majority shape,
+#: not an edge case. ``datetime.fromtimestamp`` parses it without error
+#: (Python's date range starts at year 1), so it silently produced a
+#: nonsensical "0001-01-01" ``proposed_start`` before this was found -
+#: the same class of finding WZDx's own placeholder-date handling
+#: already documents for this SDK. Never seen on ``PlannedEndDate``.
+_NULL_DATETIME_SENTINEL = -62135596800
+
 
 def _epoch_seconds_to_dt(value: int | None) -> datetime | None:
-    if not value:
+    if not value or value == _NULL_DATETIME_SENTINEL:
         return None
     return datetime.fromtimestamp(value, tz=timezone.utc)
 
@@ -102,7 +133,12 @@ def _coordinate(event: JSON) -> Coordinate | None:
             return Coordinate(value=points[0], crs=_CRS, points=points)
     if lat is None or lon is None:
         return None
-    return Coordinate(value=(float(lat), float(lon)), crs=_CRS)
+    lat, lon = float(lat), float(lon)
+    if lat == 0.0 and lon == 0.0:
+        # A real, confirmed "no location stated" placeholder, not a
+        # genuine Gulf of Guinea roadwork - see module docstring.
+        return None
+    return Coordinate(value=(lat, lon), crs=_CRS)
 
 
 def _location_description(event: JSON) -> str | None:

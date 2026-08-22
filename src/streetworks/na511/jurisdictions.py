@@ -26,6 +26,7 @@ __all__ = [
     "YUKON",
     "NEVADA",
     "GEORGIA",
+    "ALASKA",
     "JURISDICTIONS",
 ]
 
@@ -135,6 +136,22 @@ GEORGIA = Jurisdiction(
     administrative_area="Georgia Department of Transportation (GDOT)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. A real gap in the earlier USA gap-state survey: Alaska had
+#: only been checked against its ArcGIS Open Data catalogue
+#: (`data.json`, no live closures dataset there), never directly against
+#: this platform's own endpoint shape the way Rhode Island/West
+#: Virginia/South Dakota/Nebraska were - found on a direct re-check,
+#: confirming the identical `/api/v2/get/event` path, the identical
+#: "Invalid Key" rejection, and a real, working `/developers/doc` page
+#: explicitly naming "Temporary Workzones" as a real event resource.
+ALASKA = Jurisdiction(
+    base_url="https://511.alaska.gov",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Alaska Department of Transportation & Public Facilities (DOT&PF)",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -145,4 +162,5 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "yukon": YUKON,
     "nevada": NEVADA,
     "georgia": GEORGIA,
+    "alaska": ALASKA,
 }

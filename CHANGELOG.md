@@ -2,6 +2,50 @@
 
 ## [Unreleased]
 
+### Added & confirmed — Alaska 511, a third US jurisdiction on the North American 511 platform, surfacing two real converter bugs (2026-08-22)
+
+`streetworks.na511.jurisdictions.ALASKA`
+- A real correction to the earlier USA WZDx/CWZ gap-state survey, not a
+  fresh discovery - prompted by the user asking "did we try Alaska?"
+  while reviewing the world map. Alaska had only ever been checked
+  against its ArcGIS Open Data catalogue (`data.json`, genuinely no
+  live closures dataset there), never directly against this platform's
+  own endpoint shape the way Rhode Island/West Virginia/South
+  Dakota/Nebraska were - a direct re-check found `511.alaska.gov`
+  immediately: the identical `/api/v2/get/event` endpoint, the
+  identical structured "Invalid Key" rejection, and a real, working
+  `/developers/doc` page explicitly naming "Temporary Workzones" as a
+  real event resource. No new client code needed, just a new
+  `Jurisdiction` entry.
+- Confirmed live with a real developer key the same day: 57 real events
+  (50 real roadwork, 45 with a real decoded polyline) round-tripped
+  through the identical parsing Ontario's/Alberta's/Nevada's own
+  responses already proved. Registry entry (`ak511`) is now
+  `verified=True`.
+- **Surfaced and fixed two genuine bugs in the shared `from_na511`
+  converter**, not previously visible on Ontario's/Alberta's/Nevada's
+  own real samples: `StartDate`/`Reported` carry .NET's
+  `DateTime.MinValue` (serialised as Unix epoch seconds,
+  `-62135596800`) on 47/57 (82%) of all real Alaska events - the
+  majority shape there, not an edge case - which
+  `datetime.fromtimestamp` parsed without error into a nonsensical
+  "0001-01-01" date; and one real record states `Latitude`/`Longitude`
+  as exactly `(0.0, 0.0)` with no polyline fallback, a real "Null
+  Island" placeholder, the same pattern already excluded for Arkansas's
+  own `OneBillionContructionPlanDTIMs` dataset. Both fixed in
+  `from_na511._epoch_seconds_to_dt`/`_coordinate` - a shared-code fix
+  that benefits every jurisdiction on this platform, not Alaska-specific.
+- Also corrected two stale `.env.example` comments found along the way:
+  Alberta and Nevada were both still marked "PENDING LIVE
+  VERIFICATION" despite being confirmed live with real authenticated
+  keys the same day this session - see the two "Confirmed" changelog
+  entries above.
+- New real trimmed fixture, `tests/fixtures/na511_alaska_events.json`,
+  plus wiring and converter tests confirming the real Alaska records
+  parse correctly, including both new bug-fix regression tests.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Infraestruturas de Portugal (Condicionamentos), this SDK's first Portugal national roadworks provider (2026-08-22)
 
 `streetworks.arcgis.ip.IPRoadworksClient` / `streetworks.common.from_ip`

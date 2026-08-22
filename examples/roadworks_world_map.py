@@ -141,6 +141,9 @@ CRED_ENV = {
     "ga511": lambda: (
         {"api_key": os.environ["GEORGIA_511_API_KEY"]}
         if os.environ.get("GEORGIA_511_API_KEY") else None),
+    "ak511": lambda: (
+        {"api_key": os.environ["ALASKA_511_API_KEY"]}
+        if os.environ.get("ALASKA_511_API_KEY") else None),
 }
 
 #: Cap on raw records pulled per provider before conversion - a coverage map
@@ -195,13 +198,13 @@ _FRANCE_AREAS = {
     "rennes": "Rennes Métropole",
 }
 
-#: streetworks.na511.NA511Client is shared by all three jurisdictions -
+#: streetworks.na511.NA511Client is shared by every jurisdiction -
 #: .fetch(jurisdiction) takes the real streetworks.na511.jurisdictions key.
 _NA511_JURISDICTIONS = {
     "on511": "ontario", "ab511": "alberta", "sk511": "saskatchewan",
     "nb511": "new_brunswick", "nl511": "newfoundland_and_labrador",
     "ns511": "nova_scotia", "yt511": "yukon", "nv511": "nevada",
-    "ga511": "georgia",
+    "ga511": "georgia", "ak511": "alaska",
 }
 
 TIERS = {

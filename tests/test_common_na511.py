@@ -35,6 +35,13 @@ NEVADA_FIXTURE = json.loads(
 )
 NEVADA_ROADWORK = [e for e in NEVADA_FIXTURE if e["EventType"] == "roadwork"]
 
+ALASKA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_alaska_events.json").read_text(
+        encoding="utf-8"
+    )
+)
+ALASKA_ROADWORK = [e for e in ALASKA_FIXTURE if e["EventType"] == "roadwork"]
+
 
 def _by_id(works_list):
     return {w.reference: w for w in works_list}
@@ -134,3 +141,41 @@ def test_nevada_real_authenticated_records_convert_cleanly():
     lat, lon = without_poly.value
     assert abs(lat - 39.6041810890692) < 0.001
     assert abs(lon - (-119.331262871408)) < 0.001
+
+
+def test_null_datetime_sentinel_is_never_surfaced_as_a_real_date():
+    """A real, confirmed .NET DateTime.MinValue placeholder
+    (-62135596800, 0001-01-01 UTC) on StartDate - 47/57 (82%) of all real
+    Alaska events carry it, the majority shape, not an edge case. Must
+    never appear as a real proposed_start - see module docstring."""
+    works = _by_id(
+        from_na511(ALASKA_ROADWORK, territory="USA", administrative_area="Alaska DOT&PF")
+    )
+    assert works["32138"].sites[0].proposed_start is None
+
+
+def test_null_island_coordinate_is_never_surfaced_as_a_real_location():
+    """A real (0.0, 0.0) placeholder with no EncodedPolyline fallback -
+    the same 'no location stated' pattern this SDK already excludes for
+    Arkansas's own OneBillionContructionPlanDTIMs dataset. Must never
+    appear as a real Coordinate - see module docstring."""
+    works = _by_id(
+        from_na511(ALASKA_ROADWORK, territory="USA", administrative_area="Alaska DOT&PF")
+    )
+    assert works["36958"].coordinate is None
+
+
+def test_alaska_real_record_with_a_genuine_start_date_and_polyline():
+    """Not every real Alaska record is a placeholder - ID 32138 has a
+    real EncodedPolyline (LastUpdated is real; StartDate/Reported happen
+    to be the sentinel on this specific record, confirmed None above,
+    while the polyline geometry is real and populated)."""
+    works = _by_id(
+        from_na511(ALASKA_ROADWORK, territory="USA", administrative_area="Alaska DOT&PF")
+    )
+    coordinate = works["32138"].coordinate
+    assert coordinate is not None
+    assert coordinate.points is not None
+    lat, lon = coordinate.points[0]
+    assert abs(lat - 59.4566093333751) < 0.001
+    assert abs(lon - (-135.31558117922)) < 0.001

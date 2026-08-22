@@ -3843,6 +3843,51 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("georgia")',
     ),
     ProviderEntry(
+        key="ak511",
+        name="Alaska 511",
+        description="Alaska's own real-time roadwork/incident feed (North American 511 platform).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"USA"}),
+        administrative_area="Alaska Department of Transportation & Public Facilities (DOT&PF)",
+        scope_note=(
+            "A real correction to the earlier USA WZDx/CWZ gap-state "
+            "survey, not a new discovery from scratch: Alaska had only "
+            "been checked against its ArcGIS Open Data catalogue "
+            "(data.json, no live closures dataset there), never directly "
+            "against this platform's own endpoint shape the way Rhode "
+            "Island/West Virginia/South Dakota/Nebraska were. A direct "
+            "re-check found it immediately: the identical "
+            "/api/v2/get/event endpoint, the identical structured "
+            "'Invalid Key' rejection, and a real, working "
+            "/developers/doc page explicitly naming 'Temporary "
+            "Workzones' as a real event resource. Not obtained on a "
+            "caller's behalf, same standing rule as Alberta/Massachusetts "
+            "CWZ. The field schema is not a guess: proven by Ontario's "
+            "own real, unauthenticated response on the identical "
+            "platform. Confirmed live with a real developer key "
+            "(2026-08-22): 57 real events round-tripped through the "
+            "exact same parsing Ontario's/Alberta's/Nevada's own "
+            "responses already proved - 50 real roadwork events, 45 "
+            "with a real decoded polyline. Surfaced two genuine bugs in "
+            "the shared from_na511 converter, fixed the same day: a "
+            ".NET DateTime.MinValue placeholder on StartDate/Reported "
+            "(47/57, 82% of all real events - the majority shape, not "
+            "an edge case) and a real 'Null Island' (0.0, 0.0) "
+            "placeholder coordinate with no polyline fallback (1/57) - "
+            "neither had ever been surfaced on Ontario's or Alberta's "
+            "own real samples. See streetworks.common.from_na511's own "
+            "module docstring."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("alaska")',
+    ),
+    ProviderEntry(
         key="vancouver",
         name="Vancouver Road Ahead",
         description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",

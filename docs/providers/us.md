@@ -380,3 +380,55 @@ obtained on this SDK's behalf. Free self-service registration:
 `https://511ga.org/developers/doc`; set `GEORGIA_511_API_KEY` (see
 `.env.example`) and run `scripts/smoke_test.py` to confirm the last
 open question.
+
+## Alaska 511
+
+A real correction to the earlier USA WZDx/CWZ gap-state survey, not a
+new discovery from scratch. That survey had only checked Alaska's real
+ArcGIS Open Data catalogue (`data.json`) — genuinely no live closures
+dataset there — but never tested this state directly against the North
+American 511 platform's own endpoint shape, the way Rhode Island/West
+Virginia/South Dakota/Nebraska were. A direct re-check found it
+immediately — this SDK's third US jurisdiction on this platform:
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import ALASKA
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("alaska"),
+        territory=ALASKA.territory,
+        administrative_area=ALASKA.administrative_area,
+    )
+```
+
+**Confirmed live to be the identical platform**: the same
+`/api/v2/get/event` endpoint, the same structured `"Invalid Key"`
+rejection with no key supplied, and a real, working `/developers/doc`
+page explicitly naming **"Temporary Workzones"** as one of its real
+event resources, alongside Cameras, Message Signs, Alerts, Road
+Conditions, Airports, Electric Vehicle Charging Stations, Weather
+Stations, Bridges and Wildfire Perimeters/Incidents — a genuinely
+richer resource list than Ontario's/Alberta's own documented set,
+confirmed from the page's own real API documentation table, not
+guessed. Requires a real developer key — not obtained on this SDK's
+behalf. Free self-service registration: `https://511.alaska.gov/developers/doc`.
+
+**Confirmed with a real key, 2026-08-22** — 57 real events (50 real
+roadwork, 45 with a real decoded polyline) round-tripped through the
+identical parsing Ontario's/Alberta's/Nevada's own responses already
+proved. Along the way, Alaska's real data surfaced two genuine bugs in
+the shared `from_na511` converter, not just confirming it — fixed the
+same day: **`StartDate`/`Reported` carry .NET's `DateTime.MinValue`**
+(0001-01-01, serialised as Unix epoch seconds) on 47/57 (82%) of all
+real events — the majority shape there, not an edge case — which
+`datetime.fromtimestamp` parsed without raising into a nonsensical
+"0001-01-01" date before this was caught; and **one real record states
+`Latitude`/`Longitude` as exactly `(0.0, 0.0)`** with no polyline
+fallback, a real "Null Island" placeholder, the same pattern this SDK
+already excludes for Arkansas's own `OneBillionContructionPlanDTIMs`
+dataset. Neither had ever been surfaced on Ontario's/Alberta's/Nevada's
+own real samples — genuinely per-jurisdiction, not a universal shape.
+See `streetworks.common.from_na511`'s own module docstring.
