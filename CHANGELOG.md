@@ -2,6 +2,42 @@
 
 ## [Unreleased]
 
+### Fixed — Road Report NT (Northern Territory) coordinate order was reversed (2026-08-22)
+
+`streetworks.common.from_au_nt_roadreport`
+- Found regenerating `examples/roadworks_world_map.py`'s live picture: every real NT point was
+  plotting nowhere on the map. `_coordinate()` stored `Coordinate.value`/`.points` as GeoJSON-style
+  `(lon, lat)` - its own docstring even claimed this matched the rest of the AU cluster
+  (TAS/ACT/QLD/WA) and NZTA, when in fact every one of those stores `(lat, lon)`, this SDK's
+  stated convention for every EPSG:4326 point. A real NT latitude value (e.g. `131.3`) landed in
+  the longitude slot expected downstream, silently dropping every point (an out-of-range latitude
+  simply doesn't render).
+- Source `startPoint`/`endPoint` arrays are already `[lat, lon]` - no flip was ever needed here,
+  unlike the rest of the cluster. Fixed by passing the source pair straight through.
+- Docstring and inline comment corrected to state the real convention; `tests/test_nt_roadreport.py`'s
+  two coordinate assertions (which encoded the same reversed order as "expected") corrected too.
+
+### Fixed — world map example: Canada's centroid skewed west, Queensland was invisible (2026-08-22)
+
+`examples/roadworks_world_map.py`
+- **Canada's coverage bubble was still pinned to Vancouver/BC** `(-123.1, 49.25)` from when
+  DriveBC was the only Canadian provider - all 11 now share the literal territory `"Canada"`
+  (DriveBC, Québec, the 7 North American 511 provinces, Vancouver, Toronto), so a BC-only point
+  skewed the bubble west of most of the real coverage. Moved to a genuine national centroid
+  `(-90.0, 53.0)`, the same "one national marker" precedent `"USA"` already sets.
+- **Queensland was plotting zero points despite 50/50 real records having valid coordinates** -
+  its real data is correctly stated in GDA2020 (`EPSG:7844`, confirmed live via
+  `from_au_qld_qldtraffic`'s own docstring), not WGS84, and the script's WGS84-only filter silently
+  skipped every one. GDA2020 and WGS84 agree to within ~1.8m globally, so `WGS84` (this script's
+  own local "safe to plot directly" set, not a general SDK claim) now includes `EPSG:7844` -
+  visual-only, never reprojected or relabelled in the SDK's own stored data.
+- Also added 13 missing `TERRITORY_CENTROIDS` entries found while regenerating the map (Amsterdam,
+  Australia, Austria, Copenhagen, Helsinki, London, Milan, Oslo, Stockholm, Switzerland, Vienna,
+  Washington DC, Zürich) - real territories with real providers that were never shown on the
+  coverage bubble layer at all, only ever caught by the script's own "not shown" printout.
+- Regenerated `examples/roadworks_world_map/map.html`/`map_live.html` and both screenshots -
+  8410 live points across 50 providers, up from 2337/26 (2026-08-10).
+
 ### Confirmed — 511 Alberta, the first key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
 
 `streetworks.na511.jurisdictions.ALBERTA`

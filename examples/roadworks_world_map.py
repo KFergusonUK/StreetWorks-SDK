@@ -64,27 +64,41 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     # Europe
     "Netherlands": (5.3, 52.2), "Belgium": (4.5, 50.6), "Luxembourg": (6.1, 49.8),
     "France": (2.4, 46.6), "Spain": (-3.7, 40.2), "Germany": (10.4, 51.2),
-    "Portugal": (-9.14, 38.72),
+    "Portugal": (-9.14, 38.72), "Austria": (14.5, 47.5), "Switzerland": (8.23, 46.82),
     "Finland": (25.7, 62.5), "Iceland": (-18.6, 64.9), "Bulgaria": (25.3, 42.7),
     "Lithuania": (23.9, 55.2), "Norway": (9.0, 61.0), "Sweden": (15.6, 62.2),
     "Denmark": (9.5, 56.1), "Ireland": (-8.0, 53.2), "Italy": (12.6, 42.5),
     "Greece": (23.7, 39.1),
-    "Paris": (2.35, 48.86),
+    "Paris": (2.35, 48.86), "London": (-0.13, 51.51), "Amsterdam": (4.90, 52.37),
+    "Vienna": (16.37, 48.21), "Zürich": (8.54, 47.37), "Milan": (9.19, 45.46),
+    "Copenhagen": (12.57, 55.68), "Oslo": (10.75, 59.91), "Helsinki": (24.94, 60.17),
+    "Stockholm": (18.07, 59.33),
     # USA (federated WZDx — one national marker; per-state on live pull)
     "USA": (-98.5, 39.8), "New York City": (-74.0, 40.7), "Chicago": (-87.6, 41.9),
-    # Canada (DriveBC/British Columbia; territory-scoped like Spain/Germany,
-    # not province-scoped — see docs/providers/canada.md)
-    "Canada": (-123.1, 49.25),
+    "Washington DC": (-77.04, 38.91),
+    # Canada — one national marker like USA/Spain/Germany, not BC-scoped.
+    # Was pinned to Vancouver/BC (-123.1, 49.25) from when DriveBC was the
+    # only Canadian provider; all 11 (DriveBC, Québec, the 7 NA511
+    # provinces, Vancouver, Toronto) share the literal territory "Canada"
+    # now, so a west-coast-only point skewed the bubble - see
+    # docs/providers/canada.md.
+    "Canada": (-90.0, 53.0),
     # Australia (per-state) + New Zealand
     "New South Wales": (147.0, -32.0), "Victoria": (144.5, -37.0),
     "Queensland": (146.0, -22.5), "Western Australia": (122.0, -25.0),
     "South Australia": (135.0, -30.0), "Tasmania": (146.6, -42.0),
     "Australian Capital Territory": (149.1, -35.3), "Northern Territory": (133.4, -19.5),
-    "New Zealand": (172.5, -41.0),
+    "Australia": (134.0, -25.0), "New Zealand": (172.5, -41.0),
 }
 
 WGS84 = {"EPSG:4326", "CRS:84", "urn:ogc:def:crs:EPSG::4326",
-         "urn:ogc:def:crs:OGC:1.3:CRS84", "4326"}
+         "urn:ogc:def:crs:OGC:1.3:CRS84", "4326",
+         # GDA2020 (Queensland's real, correctly-labelled CRS - see
+         # from_au_qld_qldtraffic's own docstring) is not WGS84, but the
+         # two frames agree to within ~1.8m globally - plotted here as
+         # visually equivalent for this demo map only, never reprojected
+         # or relabelled in the SDK's own stored data.
+         "EPSG:7844"}
 
 # Worked example of pulling a credential-gated provider when its key is present.
 # Extend as you wire more logins; each entry returns constructor kwargs or None.

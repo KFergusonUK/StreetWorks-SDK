@@ -54,21 +54,33 @@ missing.
   viewer that blocks external requests — open the generated HTML directly in a normal browser.
 - **[`roadworks_world_map.py`](../examples/roadworks_world_map.py)** — plots SDK coverage on a world map, registry-driven so new providers appear automatically. Default mode is offline (coverage only, coloured by access tier); `--live` also pulls current roadworks from keyless providers and from credential-gated ones with a key in the environment. Marker size is provider count, not live roadworks count — a reach demonstration, not an operational feed.
 
-  <img src="../examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 09 Aug 2026.">
+  <img src="../examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 22 Aug 2026.">
 
-  Real output from this example — coverage map only, not actual works sites — 09 Aug 2026. The
+  Real output from this example — coverage map only, not actual works sites — 22 Aug 2026. The
   generated HTML view (`roadworks_world_map/map.html`) isn't linked here: GitHub serves `.html`
   files in this repo as raw source, not a rendered page (the same reason the terrain-drape
-  example's own HTML output isn't linked below). Generate it locally instead.
+  example's own HTML output isn't linked below). Generate it locally instead. Canada's marker is a
+  genuine national centroid, not Vancouver's — a real fix, not cosmetic: all 11 Canadian roadworks
+  providers (DriveBC, Québec, the 7 North American 511 provinces, Vancouver, Toronto) share the
+  literal territory `"Canada"`, but the display point was still pinned to Vancouver/BC from when
+  DriveBC was the only one there, skewing the bubble west of most of the real coverage.
 
-  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 2337 points across 26 providers, as of 10 Aug 2026.">
+  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 8410 points across 50 providers, as of 22 Aug 2026.">
 
-  `--live` output from the same example — 2337 real roadworks, 10 Aug 2026. A partial run, not
-  full coverage: each provider is capped (`_LIMIT = 50` raw records; WZDx sweeps up to 25 of its
-  ~26 keyless US/regional feeds, each still capped) so the map stays a representative sample
-  rather than a full pull of registers running past a million rows. A few providers didn't appear
-  in this particular run for real, one-off reasons — a rate-limited shared API key (Queensland)
-  and an expired credential (Victoria) — not anything wrong with the SDK. Scotland (SRWR) is
+  `--live` output from the same example — 8410 real roadworks, 22 Aug 2026. A partial run, not
+  full coverage: each provider is capped (`_LIMIT = 50` raw records; WZDx sweeps every keyless feed
+  in the registry, each still capped) so the map stays a representative sample rather than a full
+  pull of registers running past a million rows. Two real, live-verified findings from generating
+  this particular run: the Northern Territory (`streetworks.au.nt`) was plotting nothing at all — a
+  real coordinate-order bug, not a data gap (its converter stored `(lon, lat)` while every other
+  point on this map is `(lat, lon)`, this SDK's stated convention — fixed in
+  `from_au_nt_roadreport`, NT's real points show now). Queensland was also plotting nothing — its
+  real data is correctly stated in GDA2020 (`EPSG:7844`), not WGS84, and this script's WGS84-only
+  filter skipped every point; the two frames agree to within ~1.8m globally, so this example now
+  treats them as visually equivalent for display purposes only (never reprojected or relabelled in
+  the SDK's own stored data). One provider still doesn't appear in this run for a real, one-off
+  reason — Victoria returns a genuine `401` on the credential in `.env` (confirmed live, not
+  guessed) — not anything wrong with the SDK. Scotland (SRWR) is
   absent from the live points on principle, not omission: its real Open Data extract carries no
   coordinates at all, only a USRN per record, and resolving that to a real point would mean
   joining against [OS Open USRN](providers/uk.md#os-open-usrn)'s own ~300MB national geometry
