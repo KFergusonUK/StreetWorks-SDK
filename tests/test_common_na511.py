@@ -28,6 +28,13 @@ ALBERTA_FIXTURE = json.loads(
 )
 ALBERTA_ROADWORK = [e for e in ALBERTA_FIXTURE if e["EventType"] == "roadwork"]
 
+NEVADA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_nevada_events.json").read_text(
+        encoding="utf-8"
+    )
+)
+NEVADA_ROADWORK = [e for e in NEVADA_FIXTURE if e["EventType"] == "roadwork"]
+
 
 def _by_id(works_list):
     return {w.reference: w for w in works_list}
@@ -102,3 +109,28 @@ def test_alberta_real_authenticated_records_convert_cleanly():
     lat, lon = coordinate.points[0]
     assert abs(lat - 51.0158203605235) < 0.001
     assert abs(lon - (-114.257041270883)) < 0.001
+
+
+def test_nevada_real_authenticated_records_convert_cleanly():
+    """A real, live, authenticated pull (tests/fixtures/na511_nevada_events.json,
+    2026-08-22) round-trips through this exact converter unchanged - the
+    second key-gated jurisdiction on this platform confirmed, same day as
+    Alberta. Covers a real Nevada record with a decoded polyline, and one
+    without (ID 75, falling back to the plain Latitude/Longitude pair)."""
+    works_list = from_na511(
+        NEVADA_ROADWORK, territory="USA", administrative_area="Nevada DOT"
+    )
+    works = _by_id(works_list)
+
+    with_poly = works["125464"].coordinate
+    assert with_poly.crs == "EPSG:4326"
+    assert with_poly.points is not None
+    lat, lon = with_poly.points[0]
+    assert abs(lat - 39.1127414584917) < 0.001
+    assert abs(lon - (-119.923125438322)) < 0.001
+
+    without_poly = works["75"].coordinate
+    assert without_poly.points is None
+    lat, lon = without_poly.value
+    assert abs(lat - 39.6041810890692) < 0.001
+    assert abs(lon - (-119.331262871408)) < 0.001

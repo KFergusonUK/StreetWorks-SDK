@@ -722,12 +722,16 @@ def check_yt511() -> str:
 
 
 def check_nv511() -> str:
-    """Nevada 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """Nevada 511 - CONFIRMED LIVE 2026-08-22, see streetworks.na511.
     Requires an API key (NEVADA_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
-    verified - see check_on511). This SDK's first US jurisdiction on
-    this platform, if confirmed - found separately from the WZDx/CWZ US
-    registry, which has no Nevada row at all."""
+    verified - see check_on511) and 511 Alberta (see check_ab511); a real
+    authenticated pull round-tripped 92 real events through the shared
+    parsing unchanged, a third-jurisdiction cross-check of the
+    EventType-enum correction found via Alberta - see
+    streetworks.na511.client's own module docstring. This SDK's first US
+    jurisdiction on this platform - found separately from the WZDx/CWZ
+    US registry, which has no Nevada row at all."""
     from streetworks.common import from_na511
     from streetworks.na511 import NA511Client
     from streetworks.na511.jurisdictions import NEVADA

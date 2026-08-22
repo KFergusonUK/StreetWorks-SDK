@@ -367,21 +367,22 @@ def test_credentials_wanted_is_the_only_unverified_tier():
 
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
     Newfoundland and Labrador 511 (`nl511`), Nova Scotia 511 (`ns511`),
-    511 Yukon (`yt511`), Nevada 511 (`nv511`) and Georgia 511 (`ga511`)
-    are all better-off than every other entry in this tier: each needs a
-    real developer key this build doesn't have, but the field schema
-    itself isn't a guess or documentation-only claim - it's drawn from a
-    real, live, unauthenticated pull against the identical commercial
-    platform (Ontario 511, `on511`, verified) plus Alberta's own
-    published docs matching field-for-field, and every one of them
-    answers the identical structured "Invalid Key" rejection live. What's
-    unconfirmed is narrower than any other entry here: only whether each
+    511 Yukon (`yt511`) and Georgia 511 (`ga511`) are all better-off than
+    every other entry in this tier: each needs a real developer key this
+    build doesn't have, but the field schema itself isn't a guess or
+    documentation-only claim - it's drawn from a real, live,
+    unauthenticated pull against the identical commercial platform
+    (Ontario 511, `on511`, verified) plus Alberta's own published docs
+    matching field-for-field, and every one of them answers the
+    identical structured "Invalid Key" rejection live. What's unconfirmed
+    is narrower than any other entry here: only whether each
     jurisdiction's own authenticated response round-trips through this
     exact parsing unchanged - see streetworks.na511.client's own module
-    docstring. 511 Alberta (`ab511`) was in this same tier until a real
-    developer key confirmed exactly that live (2026-08-22, 302 real
-    events, no code changes needed) - it's verified now, the first
-    key-gated jurisdiction on this platform to graduate out of this tier.
+    docstring. 511 Alberta (`ab511`) and Nevada 511 (`nv511`) were in
+    this same tier until a real developer key confirmed exactly that
+    live for each (2026-08-22) - they're verified now, the first two
+    key-gated jurisdictions on this platform to graduate out of this
+    tier.
 
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
@@ -399,7 +400,6 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "nl511",
         "ns511",
         "yt511",
-        "nv511",
         "ga511",
     }
 

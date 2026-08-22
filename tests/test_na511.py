@@ -27,6 +27,11 @@ ALBERTA_FIXTURE = json.loads(
         encoding="utf-8"
     )
 )
+NEVADA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_nevada_events.json").read_text(
+        encoding="utf-8"
+    )
+)
 
 
 @respx.mock
@@ -128,4 +133,24 @@ def test_alberta_authenticated_response_parses_identically_to_ontario():
         roadworks = list(client.iter_roadworks("alberta"))
     assert len(roadworks) == 2
     assert {e["ID"] for e in roadworks} == {18, 30}
+    assert all(e["EventType"] == "roadwork" for e in roadworks)
+
+
+@respx.mock
+def test_nevada_authenticated_response_parses_identically_to_ontario():
+    """Real, trimmed Nevada 511 events (tests/fixtures/na511_nevada_events.json),
+    captured live 2026-08-22 from a real authenticated pull against
+    https://www.nvroads.com/api/v2/get/event - the second key-gated
+    jurisdiction on this platform confirmed with a real key, same day as
+    Alberta. Also a real cross-check that Alberta's own EventType/field-set
+    findings aren't one-jurisdiction flukes: this fixture's own non-roadwork
+    record is "accidentsAndIncidents", not one of Alberta's extra values -
+    genuine per-jurisdiction variation, not a contradiction."""
+    respx.get(f"{jurisdictions.NEVADA.base_url}/{EVENT_PATH}").mock(
+        return_value=httpx.Response(200, json=NEVADA_FIXTURE)
+    )
+    with NA511Client(api_key="real-key") as client:
+        roadworks = list(client.iter_roadworks("nevada"))
+    assert len(roadworks) == 2
+    assert {e["ID"] for e in roadworks} == {125464, 75}
     assert all(e["EventType"] == "roadwork" for e in roadworks)

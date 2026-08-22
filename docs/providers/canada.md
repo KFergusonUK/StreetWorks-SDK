@@ -200,7 +200,11 @@ no code changes needed. It also surfaced a real correction: the live
 `EventType` enum has six values, not the three Ontario's own sample
 showed (`restrictionClass`/`generalInfo`/`specialEvents` are real too) —
 the roadworks filter itself stayed exactly correct on this second,
-materially less roadwork-skewed jurisdiction. `nb511`/`nl511` have real,
+materially less roadwork-skewed jurisdiction. **Nevada 511 (`nv511`,
+USA) was confirmed the same way the same day** — see
+[`docs/providers/us.md`](us.md#nevada-511) for the US-side writeup;
+between them, Alberta and Nevada now cross-confirm the `EventType`
+correction on two independent jurisdictions. `nb511`/`nl511` have real,
 working self-service signup pages confirmed live
 (`NEW_BRUNSWICK_511_API_KEY`/`NEWFOUNDLAND_511_API_KEY` — see
 `.env.example`) — set one to confirm the same open question for that

@@ -1,0 +1,144 @@
+[
+  {
+    "ID": 125464,
+    "SourceId": "21942",
+    "Organization": "ERS",
+    "RoadwayName": "SR-28",
+    "DirectionOfTravel": "Both",
+    "Description": "Minor Flagging Operations in effect on SR-28 Both Directions from Slaughterhouse Canyon to N Canyon Rd. 1 Lane Closed. Start time: 10/1/2025 8:51 AM.  Public Details: Reduced lanes with flaggers in place. Expect minor delays. . ",
+    "Reported": 1759333860,
+    "LastUpdated": 1759333985,
+    "StartDate": 1759333860,
+    "PlannedEndDate": null,
+    "LanesAffected": "1 Lane Closed",
+    "Latitude": 39.1127414584917,
+    "Longitude": -119.923125438322,
+    "LatitudeSecondary": 39.1326024374229,
+    "LongitudeSecondary": -119.931419379062,
+    "EventType": "roadwork",
+    "EventSubType": "singleLineTraffic",
+    "IsFullClosure": false,
+    "Severity": "Minor",
+    "Comment": "Reduced lanes with flaggers in place. Expect minor delays. ",
+    "EncodedPolyline": "sevmFpn}zUo@\\c@VwAz@y@j@w@t@Y`@Qf@Kf@SpBSx@c@x@[^a@ZWJi@L}@DuBD_CD}BFuADkAL{@PuA\\eA`@cAd@s@f@cDzBiCzAgD`BwBv@qBr@aEbAmAT{@NsAJeA?w@DgANmCn@w@To@V]Xi@`@oAdAULk@Rq@Ra@HcAJsA?_CAiA?qAEkAKoAQc@M",
+    "Restrictions": {
+      "Width": null,
+      "Height": null,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "<b>Mon, Tue, Wed, Thu, Fri, Sat, Sun:</b><br/>Active all day<br/><br/>",
+    "RecurrenceSchedules": [
+      {
+        "StartDate": "10/1/2025 8:51:00 AM-07:00:00",
+        "EndDate": null,
+        "Times": [
+          {
+            "StartTime": "00:00:00-07:00:00",
+            "EndTime": "23:59:59-07:00:00"
+          }
+        ],
+        "DaysOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 75,
+    "SourceId": "12277",
+    "Organization": "ERS",
+    "RoadwayName": "I-80",
+    "DirectionOfTravel": "West",
+    "Description": "Minor Emergency maintenance on I-80 Westbound near Wadsworth Rest Area. All Ramps Closed. ",
+    "Reported": 1726698120,
+    "LastUpdated": 1726698186,
+    "StartDate": 1726698120,
+    "PlannedEndDate": null,
+    "LanesAffected": "All Ramps Closed",
+    "Latitude": 39.6041810890692,
+    "Longitude": -119.331262871408,
+    "LatitudeSecondary": null,
+    "LongitudeSecondary": null,
+    "EventType": "roadwork",
+    "EventSubType": "emergencyMaintenance",
+    "IsFullClosure": false,
+    "Severity": "Minor",
+    "Comment": "Wadsworth Rest Area closed for emergency maintenance until further notice.",
+    "EncodedPolyline": null,
+    "Restrictions": {
+      "Width": null,
+      "Height": null,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "<b>Mon, Tue, Wed, Thu, Fri, Sat, Sun:</b><br/>Active all day<br/><br/>",
+    "RecurrenceSchedules": [
+      {
+        "StartDate": "9/18/2024 3:22:00 PM-07:00:00",
+        "EndDate": null,
+        "Times": [
+          {
+            "StartTime": "00:00:00-07:00:00",
+            "EndTime": "23:59:59-07:00:00"
+          }
+        ],
+        "DaysOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 43,
+    "SourceId": "4823",
+    "Organization": "ERS",
+    "RoadwayName": "NV-267",
+    "DirectionOfTravel": "Unknown",
+    "Description": "Traffic advisory on NV-267 near California Nevada Border. Start time: 8/25/2023 12:16 PM.  Public Details: Death Valley National Park Closed in California. ",
+    "Reported": 1692990960,
+    "LastUpdated": 1786038873,
+    "StartDate": 1692990960,
+    "PlannedEndDate": null,
+    "LanesAffected": "No Data",
+    "Latitude": 37.0605259945462,
+    "Longitude": -117.285811107129,
+    "LatitudeSecondary": null,
+    "LongitudeSecondary": null,
+    "EventType": "accidentsAndIncidents",
+    "EventSubType": "trafficAdvisory",
+    "IsFullClosure": false,
+    "Severity": "None",
+    "Comment": "Death Valley National Park Closed in California",
+    "EncodedPolyline": null,
+    "Restrictions": {
+      "Width": null,
+      "Height": null,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "",
+    "RecurrenceSchedules": ""
+  }
+]

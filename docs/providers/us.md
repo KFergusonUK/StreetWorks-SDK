@@ -331,10 +331,20 @@ and a real, working `/developers/doc` page whose own field-by-field
 documentation matches Ontario's/Alberta's exactly. Requires a real
 developer key — not obtained on this SDK's behalf, the same standing
 rule as Massachusetts's CWZ feed above. Free self-service registration:
-`https://www.nvroads.com/developers/doc`; set `NEVADA_511_API_KEY` (see
-`.env.example`) and run `scripts/smoke_test.py` to confirm the last
-open question — that Nevada's own authenticated response round-trips
-through the identical parsing unchanged.
+`https://www.nvroads.com/developers/doc`.
+
+**Confirmed with a real key, 2026-08-22** — 92 real events (74 real
+roadwork, 61 with a real decoded polyline) round-tripped through the
+identical parsing Ontario's and Alberta's own responses already proved,
+no code changes needed. A third-jurisdiction cross-check of Alberta's
+own `EventType`-enum correction (see
+[`docs/providers/canada.md`](canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon)):
+Nevada's pull also carried real non-`"roadwork"` values beyond Ontario's
+original three, and the roadworks filter itself stayed exactly correct.
+Nevada's real field set also differs slightly from Alberta's — it never
+carries the `Details` field Alberta's records always did — a genuine,
+confirmed per-jurisdiction variation this SDK's field access already
+handles (`.get()`, never a required key).
 
 ## Georgia 511
 

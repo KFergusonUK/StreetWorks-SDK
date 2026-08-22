@@ -3789,13 +3789,23 @@ _REGISTRY: list[ProviderEntry] = [
             "standing rule as Alberta/Massachusetts CWZ. The field "
             "schema is not a guess: proven by Ontario's own real, "
             "unauthenticated response on the identical platform. This "
-            "SDK's first US jurisdiction on this platform."
+            "SDK's first US jurisdiction on this platform. Confirmed "
+            "live with a real developer key (2026-08-22): 92 real "
+            "events round-tripped through the exact same parsing "
+            "Ontario's and Alberta's own responses already proved, no "
+            "code changes needed - 74 real roadwork events, 61 with a "
+            "real decoded polyline. A second real EventType-enum "
+            "cross-check: this pull also carried restrictionClass/"
+            "specialEvents records (the same non-roadwork values "
+            "Alberta's own pull first surfaced), further confirming the "
+            "enum has more than the three values Ontario's sample alone "
+            "showed - the roadworks filter itself stayed exactly "
+            "correct on a third jurisdiction."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("nevada")',

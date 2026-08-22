@@ -70,10 +70,20 @@ values, not three** - Ontario's own 595-event sample only ever showed
 change the roadworks filter itself - ``EventType == "roadwork"`` stays
 exactly correct, cross-confirmed on a second jurisdiction - but the
 enum's full membership was a real gap in the original claim, corrected
-here rather than left stated too narrowly. ``ab511`` is verified in the
-registry accordingly; ``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/
-``nv511``/``ga511`` remain in the same "schema proven, own key untested"
-position Alberta itself was in until now.
+here rather than left stated too narrowly.
+
+**Nevada's own real authenticated response confirmed the same thing
+again, same day** - a real developer key round-tripped 92 real events
+(74 real roadwork, 61 with a real decoded polyline) through the exact
+same parsing, no code changes needed. A third-jurisdiction cross-check
+of the ``EventType`` correction above: Nevada's pull also carried real
+``"restrictionClass"``/``"specialEvents"`` records (not ``"generalInfo"``
+this time - real per-jurisdiction variation, not a contradiction), the
+roadworks filter itself staying exactly correct a third time. ``ab511``
+and ``nv511`` are both verified in the registry accordingly;
+``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511`` remain in the
+same "schema proven, own key untested" position Alberta and Nevada
+themselves were in until now.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,
@@ -112,13 +122,21 @@ populated) and ``Details`` (a real, often richer free-text field than
 ``Description``, e.g. naming the specific load restriction by class) -
 noted here, not yet consumed by :func:`streetworks.common.from_na511`,
 the same "related but distinct, flagged not consumed" treatment this SDK
-gives comparable optional extensions elsewhere.
+gives comparable optional extensions elsewhere. **The field set genuinely
+varies per jurisdiction, confirmed by a third real pull, not assumed
+uniform**: Nevada's real records carry ``DetourPolyline``/
+``DetourInstructions`` too (also always empty) but never ``Details`` at
+all - present-but-empty and absent-entirely are both handled the same
+way already (``.get()``, never a required key), so this needed no code
+change, just an honest correction to "every jurisdiction returns the
+same shape."
 
-**Roadworks filter: ``EventType == "roadwork"``** - confirmed live on two
-independent jurisdictions: 590/595 real Ontario events, and separately
-161/302 real Alberta events (the other 141 genuinely split across five
-other real ``EventType`` values - see above), the same clean filter
-holding on a materially less roadwork-skewed real population.
+**Roadworks filter: ``EventType == "roadwork"``** - confirmed live on
+three independent jurisdictions: 590/595 real Ontario events, 161/302
+real Alberta events, and 74/92 real Nevada events (the rest of each
+genuinely split across the other real ``EventType`` values - see above),
+the same clean filter holding on materially less roadwork-skewed real
+populations each time.
 """
 
 from __future__ import annotations

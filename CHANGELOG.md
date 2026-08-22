@@ -2,6 +2,30 @@
 
 ## [Unreleased]
 
+### Confirmed — Nevada 511, the second key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
+
+`streetworks.na511.jurisdictions.NEVADA`
+- A real developer key round-tripped 92 real live events (74 real
+  roadwork, 61 with a real decoded polyline) through the exact same
+  parsing Ontario's and Alberta's own responses already proved - no code
+  changes needed. Registry entry (`nv511`) is now `verified=True`.
+- A third-jurisdiction cross-check of the `EventType`-enum correction
+  Alberta first surfaced: Nevada's real pull also carried
+  `restrictionClass`/`specialEvents` records beyond Ontario's original
+  three values (not `generalInfo` this time - genuine per-jurisdiction
+  variation), the roadworks filter itself staying exactly correct.
+- A genuine, confirmed field-set difference from Alberta: Nevada's real
+  records carry `DetourPolyline`/`DetourInstructions` too (always empty)
+  but never `Details` at all - handled already (`.get()`, never a
+  required key), no code change needed, just a corrected claim that
+  every jurisdiction returns the same field set.
+- New real trimmed fixture, `tests/fixtures/na511_nevada_events.json`,
+  plus wiring and converter tests confirming the real Nevada records
+  parse identically to Ontario's/Alberta's.
+- `sk511`/`nb511`/`nl511`/`ns511`/`yt511`/`ga511` remain in the "schema
+  proven, own key untested" position Alberta and Nevada themselves were
+  in until now.
+
 ### Fixed — Road Report NT (Northern Territory) coordinate order was reversed (2026-08-22)
 
 `streetworks.common.from_au_nt_roadreport`
