@@ -85,18 +85,26 @@ extending to the next tier of authorities — not adding the layer from scratch.
 ### Partial-national — fill the remaining regions
 - **Belgium** — Flanders live; add Wallonia (SPW) and Brussels (published
   separately, not yet wrapped).
-- **Germany** — Autobahn + Hamburg / Brandenburg / Saxony / Berlin live; add the
-  remaining states.
+- **Germany** — Autobahn + 7 states live (Hamburg, Brandenburg, Saxony,
+  Baden-Württemberg, Schleswig-Holstein, Rheinland-Pfalz, Saarland) plus
+  Berlin and Dortmund at municipal level. Bavaria, NRW,
+  Mecklenburg-Vorpommern and Saxony-Anhalt checked and parked (GML-only /
+  no Baustellen layer / non-commercial licence — see
+  [`docs/providers/europe.md`](providers/europe.md)); Bremen found and
+  ruled out on licence (CC BY-NC-ND); Hesse, Lower Saxony and Thuringia
+  not yet investigated at all.
 
 ### National / strategic gaps
 - **France** — Bison Futé (non-concessionary national) live; add the
   concessionary motorway networks (APRR / Vinci / Sanef).
 
 ### Credentials wanted — need a tester, not new investigation
-The national motorway feeds behind several already-live cities sit here:
-Austria (ASFINAG) · Denmark (Vejdirektoratet) · Sweden (Trafikverket) ·
-Switzerland (ASTRA) · Stockholm (Trafikkontoret) · Portugal (IMT NAP) ·
-South Australia (Traffic SA) · New Zealand (LINZ Roads).
+Already scaffolded and waiting only on a real key: Austria (ASFINAG) ·
+Denmark (Vejdirektoratet) · Sweden (Trafikverket) · Stockholm
+(Trafikkontoret) · South Australia (Traffic SA). Switzerland (ASTRA) and
+Portugal (IMT NAP) are a step earlier — real national motorway feeds
+named as targets, but not yet scaffolded in the registry at all, unlike
+the entries above.
 
 ### Sub-national / local-authority feeds — the next tier
 Cities usually surface first — they have the GIS teams and open-data portals —
@@ -104,8 +112,10 @@ but the target is *any* sub-national permit-holding authority: county, unitary
 authority, Land, canton, province, région, autonomous community, wherever one
 publishes an open excavation / permit register. Investigate-first; an open
 register is still the exception, so expect declines. Candidates: secondary
-cities (Barcelona, Munich / Frankfurt / Cologne, Rotterdam / Amsterdam,
-Marseille, Naples, Sofia, Vilnius) and non-city authorities in countries without
+cities (Barcelona, Munich / Frankfurt, Rotterdam, Marseille, Naples,
+Sofia, Vilnius — Amsterdam and Dortmund/Cologne/Aachen already checked,
+see [`docs/providers/index.md`](providers/index.md)) and non-city
+authorities in countries without
 a national register — remaining German Länder, other Swiss cantons, further
 Spanish autonomous communities, Italian regioni / province. (UK authorities are
 already covered nationally by Street Manager / SRWR, so they aren't targets
