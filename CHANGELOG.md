@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 
+### Confirmed — 511 Alberta, the first key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
+
+`streetworks.na511.jurisdictions.ALBERTA`
+- A real developer key round-tripped 302 real live events (161 real
+  roadwork, 54 with a real decoded polyline) through the exact same
+  parsing Ontario's own keyless response already proved - no code
+  changes needed. Registry entry (`ab511`) is now `verified=True`.
+- Surfaced a genuine correction: the real `EventType` enum has at least
+  six values, not the three Ontario's own 595-event sample ever showed -
+  Alberta's real pull also carries `restrictionClass` (65),
+  `generalInfo` (26) and `specialEvents` (13) records. The roadworks
+  filter itself (`EventType == "roadwork"`) stayed exactly correct on
+  this second, materially less roadwork-skewed real population.
+- Also surfaced three real fields never seen on Ontario at all
+  (`DetourPolyline`, `DetourInstructions`, `Details`), and confirmed
+  `EventSubType`/`Restrictions`/`Recurrence`/`RecurrenceSchedules` are
+  genuinely populated on real records (all were empty/null in Ontario's
+  own sample) - noted in `streetworks.na511.client`'s module docstring,
+  not yet consumed by `from_na511`.
+- New real trimmed fixture, `tests/fixtures/na511_alberta_events.json`,
+  plus wiring and converter tests confirming the real Alberta records
+  parse identically to Ontario's.
+- `sk511`/`nb511`/`nl511`/`ns511`/`yt511`/`nv511`/`ga511` remain in the
+  "schema proven, own key untested" position Alberta itself was in until
+  now.
+
 ### Added — Georgia 511, a second US jurisdiction on the North American 511 platform (2026-08-21)
 
 `streetworks.na511.jurisdictions.GEORGIA`

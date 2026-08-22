@@ -10,8 +10,9 @@ with either real data or the identical structured "Invalid Key"
 rejection), and the field shape itself is confirmed live by comparing
 Ontario's real, unauthenticated response against Alberta's own published
 field-by-field API documentation - every field name, type and the
-``EventType`` enum (``"roadwork"``/``"closures"``/
-``"accidentsAndIncidents"``) match exactly. **Nevada 511 and Georgia
+``EventType`` roadworks discriminator match exactly (see below for the
+full real ``EventType`` value set, corrected after Alberta's own real
+authenticated pull). **Nevada 511 and Georgia
 511 turned out to be the identical platform too** - both found
 separately while surveying US roadworks coverage (neither is in the
 WZDx/CWZ US registry at all, confirmed live), then confirmed live here
@@ -51,10 +52,28 @@ this SDK's DATEX "Credentials-wanted scaffold" adapters are** (e.g.
 :mod:`streetworks.datex2.trafikverket`) - the field names, types and the
 ``EventType`` roadworks discriminator are drawn from a real, live,
 unauthenticated pull against the identical platform, not documentation
-alone. What's still genuinely unconfirmed for each key-gated jurisdiction
-specifically is only whether its own authenticated response round-trips
+alone. What's still genuinely unconfirmed for each remaining key-gated
+jurisdiction is only whether its own authenticated response round-trips
 through this exact parsing unchanged - everything else is as confirmed as
 this SDK's fully shipped providers.
+
+**Alberta's own real authenticated response confirmed exactly that,
+2026-08-22** - a real developer key round-tripped 302 real events (161
+real roadwork, 54 with a real decoded polyline) through this exact
+parsing unchanged, no code changes needed. One genuine correction
+surfaced by having a second jurisdiction's full real event population to
+compare against Ontario's: **the real ``EventType`` enum has at least six
+values, not three** - Ontario's own 595-event sample only ever showed
+``"roadwork"``/``"accidentsAndIncidents"``/``"closures"``, but Alberta's
+302-event pull also carries real ``"restrictionClass"`` (65),
+``"generalInfo"`` (26) and ``"specialEvents"`` (13) records. This doesn't
+change the roadworks filter itself - ``EventType == "roadwork"`` stays
+exactly correct, cross-confirmed on a second jurisdiction - but the
+enum's full membership was a real gap in the original claim, corrected
+here rather than left stated too narrowly. ``ab511`` is verified in the
+registry accordingly; ``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/
+``nv511``/``ga511`` remain in the same "schema proven, own key untested"
+position Alberta itself was in until now.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,
@@ -64,9 +83,11 @@ field-for-field against Alberta's own published docs): ``ID``,
 milliseconds, unlike this SDK's ArcGIS-sourced epoch fields elsewhere),
 ``LanesAffected``, ``Latitude``/``Longitude`` (plain WGS84 decimal
 fields, not GeoJSON - already ``(lat, lon)`` order, no flip needed),
-``EventType``, ``EventSubType`` (real but 0/590 populated in the sample
-pulled), ``IsFullClosure``, ``Severity`` (real but uniformly
-``"Unknown"`` in the sample, the same "real field, currently
+``EventType``, ``EventSubType`` (real but 0/590 populated in Ontario's
+sample - Alberta's real pull shows it's a genuine, richer sub-category
+when present, e.g. ``"constructionWork"``/``"bridgeConstruction"``),
+``IsFullClosure``, ``Severity`` (real but uniformly ``"Unknown"``/
+``"None"`` in every sample pulled so far, the same "real field, currently
 uninformative" honesty this SDK already gives Lyon's own ``intervenant``),
 ``Comment`` (real but 0/590 populated), ``EncodedPolyline`` (Google's
 Encoded Polyline Algorithm Format - real and populated on ~50% of real
@@ -77,14 +98,27 @@ respectively, within the real rounding gap between the polyline's 5
 decimal digits and the plain fields' 6 - ``LatitudeSecondary``/
 ``LongitudeSecondary`` were never seen populated without
 ``EncodedPolyline`` also present, so they add nothing a decoded polyline
-doesn't already give and aren't promoted separately), ``Restrictions`` (a real
-but, in this sample, entirely-null object: ``Width``/``Height``/
-``Length``/``Weight``/``Speed``), ``Recurrence``/``RecurrenceSchedules``,
-``LinkId``, ``Impact``.
+doesn't already give and aren't promoted separately), ``Restrictions``
+(real - null in Ontario's sample, but Alberta's real records populate
+``Width``/``Height``/``Speed`` with genuine values, e.g. a real 5.7m
+width / 5.4m height restriction), ``Recurrence``/``RecurrenceSchedules``
+(real - empty strings in Ontario's sample, but genuinely populated on
+Alberta with real HTML-ish day/time text and a structured
+day-of-week/time-window schedule object respectively), ``LinkId``,
+``Impact``. **Alberta's real pull also surfaced three fields never seen
+on Ontario at all**: ``DetourPolyline``/``DetourInstructions`` (empty
+strings on every real Alberta record sampled - real fields, not yet seen
+populated) and ``Details`` (a real, often richer free-text field than
+``Description``, e.g. naming the specific load restriction by class) -
+noted here, not yet consumed by :func:`streetworks.common.from_na511`,
+the same "related but distinct, flagged not consumed" treatment this SDK
+gives comparable optional extensions elsewhere.
 
-**Roadworks filter: ``EventType == "roadwork"``** - confirmed live,
-590/595 real Ontario events (5 ``accidentsAndIncidents``, 0
-``closures`` in the sample pulled, though real per the documented enum).
+**Roadworks filter: ``EventType == "roadwork"``** - confirmed live on two
+independent jurisdictions: 590/595 real Ontario events, and separately
+161/302 real Alberta events (the other 141 genuinely split across five
+other real ``EventType`` values - see above), the same clean filter
+holding on a materially less roadwork-skewed real population.
 """
 
 from __future__ import annotations

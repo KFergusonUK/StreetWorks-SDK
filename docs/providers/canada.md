@@ -193,11 +193,18 @@ behalf (the same standing rule as Massachusetts's CWZ feed — see
 unlike a typical "Credentials wanted" scaffold, the schema itself isn't
 a guess: it's proven correct by Ontario's own real, live, unauthenticated
 response, cross-checked field-for-field against Alberta's own published
-docs. `ab511`/`nb511`/`nl511` have real, working self-service signup
-pages confirmed live (`ALBERTA_511_API_KEY`/`NEW_BRUNSWICK_511_API_KEY`/
-`NEWFOUNDLAND_511_API_KEY` — see `.env.example`) — set one to confirm
-the last open question, that the jurisdiction's own authenticated
-response round-trips through the identical parsing unchanged.
+docs. **`ab511` (Alberta) is now fully confirmed** — a real authenticated
+pull (2026-08-22, 302 real events, 161 real roadwork, 54 with a real
+decoded polyline) round-tripped through the identical parsing unchanged,
+no code changes needed. It also surfaced a real correction: the live
+`EventType` enum has six values, not the three Ontario's own sample
+showed (`restrictionClass`/`generalInfo`/`specialEvents` are real too) —
+the roadworks filter itself stayed exactly correct on this second,
+materially less roadwork-skewed jurisdiction. `nb511`/`nl511` have real,
+working self-service signup pages confirmed live
+(`NEW_BRUNSWICK_511_API_KEY`/`NEWFOUNDLAND_511_API_KEY` — see
+`.env.example`) — set one to confirm the same open question for that
+jurisdiction.
 
 **Saskatchewan's and Nova Scotia's own public signup paths have since
 been taken down** — confirmed live 2026-08-21 (a few days after the

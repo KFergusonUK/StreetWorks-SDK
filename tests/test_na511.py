@@ -22,6 +22,11 @@ FIXTURE = json.loads(
         encoding="utf-8"
     )
 )
+ALBERTA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_alberta_events.json").read_text(
+        encoding="utf-8"
+    )
+)
 
 
 @respx.mock
@@ -103,3 +108,24 @@ def test_georgia_is_a_second_us_jurisdiction_on_this_platform():
     assert jurisdictions.GEORGIA.territory == "USA"
     assert jurisdictions.GEORGIA.needs_key is True
     assert jurisdictions.GEORGIA.base_url == "https://511ga.org"
+
+
+@respx.mock
+def test_alberta_authenticated_response_parses_identically_to_ontario():
+    """Real, trimmed Alberta 511 events (tests/fixtures/na511_alberta_events.json),
+    captured live 2026-08-22 from a real authenticated pull against
+    https://511.alberta.ca/api/v2/get/event - the first key-gated
+    jurisdiction on this platform confirmed to round-trip through the
+    exact same parsing Ontario's own keyless response already proved.
+    Also the real source of the EventType enum correction documented in
+    streetworks.na511.client's own module docstring: this fixture
+    includes a real "closures" event (Alberta's own real population has
+    EventType values Ontario's sample never showed)."""
+    respx.get(f"{jurisdictions.ALBERTA.base_url}/{EVENT_PATH}").mock(
+        return_value=httpx.Response(200, json=ALBERTA_FIXTURE)
+    )
+    with NA511Client(api_key="real-key") as client:
+        roadworks = list(client.iter_roadworks("alberta"))
+    assert len(roadworks) == 2
+    assert {e["ID"] for e in roadworks} == {18, 30}
+    assert all(e["EventType"] == "roadwork" for e in roadworks)

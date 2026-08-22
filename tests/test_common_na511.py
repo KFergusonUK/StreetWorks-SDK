@@ -21,6 +21,13 @@ FIXTURE = json.loads(
 )
 ROADWORK = [e for e in FIXTURE if e["EventType"] == "roadwork"]
 
+ALBERTA_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_alberta_events.json").read_text(
+        encoding="utf-8"
+    )
+)
+ALBERTA_ROADWORK = [e for e in ALBERTA_FIXTURE if e["EventType"] == "roadwork"]
+
 
 def _by_id(works_list):
     return {w.reference: w for w in works_list}
@@ -76,3 +83,22 @@ def test_territory_and_administrative_area_pass_through():
     works_list = from_na511(ROADWORK, territory="Canada", administrative_area="Ontario MTO")
     assert all(w.territory == "Canada" for w in works_list)
     assert all(w.administrative_area == "Ontario MTO" for w in works_list)
+
+
+def test_alberta_real_authenticated_records_convert_cleanly():
+    """A real, live, authenticated pull (tests/fixtures/na511_alberta_events.json,
+    2026-08-22) round-trips through this exact converter unchanged - the
+    first key-gated jurisdiction on this platform confirmed, not just
+    Ontario's own keyless schema. Covers real Alberta-specific richness
+    Ontario's own sample never showed: a genuinely populated
+    Restrictions object and a real decoded polyline."""
+    works_list = from_na511(
+        ALBERTA_ROADWORK, territory="Canada", administrative_area="Alberta Transportation"
+    )
+    works = _by_id(works_list)["18"]
+    coordinate = works.coordinate
+    assert coordinate.crs == "EPSG:4326"
+    assert coordinate.points is not None
+    lat, lon = coordinate.points[0]
+    assert abs(lat - 51.0158203605235) < 0.001
+    assert abs(lon - (-114.257041270883)) < 0.001

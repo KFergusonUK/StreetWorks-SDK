@@ -3599,22 +3599,21 @@ _REGISTRY: list[ProviderEntry] = [
         scope_note=(
             "Same real platform as Ontario 511 ('on511') - see that "
             "entry and streetworks.na511.client's own module docstring. "
-            "Confirmed live to require a real developer key (a "
-            "structured 'Invalid Key' rejection on the identical "
-            "endpoint with none supplied, and Alberta's own API docs "
-            "state key: Developer Key, Required) - not obtained on a "
-            "caller's behalf, the same standing rule "
-            "streetworks.wzdx.client's own module docstring applies to "
-            "Massachusetts's CWZ feed. Unlike a typical Credentials-"
-            "wanted scaffold, the field schema itself is not a guess: "
-            "it's drawn from a real, live, unauthenticated pull against "
-            "the identical platform (Ontario), not documentation alone."
+            "Confirmed live with a real developer key (2026-08-22): 302 "
+            "real events round-tripped through the exact same parsing "
+            "Ontario's keyless response already proved, no code changes "
+            "needed - 161 real roadwork events, 54 with a real decoded "
+            "polyline. Surfaced a genuine correction along the way: the "
+            "real EventType enum has six values, not three - Ontario's "
+            "own sample never showed restrictionClass/generalInfo/"
+            "specialEvents, but the roadwork filter itself stayed exactly "
+            "correct on this materially less roadwork-skewed real "
+            "population."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("alberta")',

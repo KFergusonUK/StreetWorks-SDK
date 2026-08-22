@@ -605,12 +605,13 @@ def check_on511() -> str:
 
 
 def check_ab511() -> str:
-    """511 Alberta - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """511 Alberta - CONFIRMED LIVE 2026-08-22, see streetworks.na511.
     Requires an API key (ALBERTA_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
-    verified - see check_on511) - if you run this, it confirms the last
-    open question: that Alberta's own authenticated response round-trips
-    through the shared parsing unchanged."""
+    verified - see check_on511); a real authenticated pull round-tripped
+    302 real events through the shared parsing unchanged, and surfaced a
+    real EventType-enum correction (six real values, not three) - see
+    streetworks.na511.client's own module docstring."""
     from streetworks.common import from_na511
     from streetworks.na511 import NA511Client
     from streetworks.na511.jurisdictions import ALBERTA

@@ -1,0 +1,144 @@
+[
+  {
+    "ID": 18,
+    "SourceId": "18692",
+    "Organization": "ERS",
+    "RoadwayName": "HWY-8",
+    "DirectionOfTravel": "East",
+    "Description": "Construction Work on HWY-8 Eastbound from Range Road 25 to Lott Creek Blvd . Width Restriction: 5.7m Height Restriction: 5.4m  Activities: Height restriction, Width restriction   ",
+    "Reported": 1633543200,
+    "LastUpdated": 1786857716,
+    "StartDate": 1633543200,
+    "PlannedEndDate": 1796090400,
+    "LanesAffected": "No Data",
+    "Latitude": 51.0158203605235,
+    "Longitude": -114.257041270883,
+    "LatitudeSecondary": 51.0215700000001,
+    "LongitudeSecondary": -114.21912,
+    "EventType": "roadwork",
+    "EventSubType": "constructionWork",
+    "IsFullClosure": false,
+    "Severity": "None",
+    "EncodedPolyline": "{_kvHnyjxT?_PA}QSwGUqFg@cG{@cG{B_Rq@mEe@kB_BoJ}AuGeAoDuBcHg@qAeDeLi@eBIS{@aC]eAg@cB}@yGUmBW_CQaCOgBMgBKiBEaBEmBAmB?_BX}E~B}X",
+    "Restrictions": {
+      "Width": 5.7,
+      "Height": 5.4,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "<b>Mon, Tue, Wed, Thu, Fri, Sat, Sun:</b><br/>Active 24 hours a day<br/><br/>",
+    "RecurrenceSchedules": [
+      {
+        "StartDate": "10/6/2021 12:00:00 PM-06:00:00",
+        "EndDate": "11/30/2026 7:00:00 PM-06:00:00",
+        "Times": [
+          {
+            "StartTime": "00:00:00-06:00:00",
+            "EndTime": "23:59:59-06:00:00"
+          }
+        ],
+        "DaysOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
+      }
+    ],
+    "Details": "Eastbound Highway 8 between Lott Creek Boulevard/Range Road 25 and 69 Street SW, Calgary - construction work until November 30, 2026. Max width: 5.7m. Max height: 5.4m."
+  },
+  {
+    "ID": 30,
+    "SourceId": "27151",
+    "Organization": "ERS",
+    "RoadwayName": "HWY-813",
+    "DirectionOfTravel": "All",
+    "Description": "Bridge construction on HWY-813 All Directions Near Athabasca River. Width Restriction: 3.7m Height Restriction: 5.5m Speed Restriction: 30km/hr  Activities: Lane closure, One - lane alt traffic, No passing, Speed reduction, No wide loads, Be prepared to stop, Expect traffic delays, Weight restriction    Additional Restrictions: No Oversized Loads",
+    "Reported": 1660593060,
+    "LastUpdated": 1786857517,
+    "StartDate": 1660593060,
+    "PlannedEndDate": 1790895600,
+    "LanesAffected": "No Data",
+    "Latitude": 54.7281706899172,
+    "Longitude": -113.274515864115,
+    "LatitudeSecondary": null,
+    "LongitudeSecondary": null,
+    "EventType": "roadwork",
+    "EventSubType": "bridgeConstruction",
+    "IsFullClosure": false,
+    "Severity": "None",
+    "EncodedPolyline": null,
+    "Restrictions": {
+      "Width": 3.7,
+      "Height": 5.5,
+      "Length": null,
+      "Weight": null,
+      "Speed": 30.0
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "<b>Mon, Tue, Wed, Thu, Fri, Sat, Sun:</b><br/>Active 24 hours a day<br/><br/>",
+    "RecurrenceSchedules": [
+      {
+        "StartDate": "8/15/2022 1:51:00 PM-06:00:00",
+        "EndDate": "10/1/2026 5:00:00 PM-06:00:00",
+        "Times": [
+          {
+            "StartTime": "00:00:00-06:00:00",
+            "EndTime": "23:59:59-06:00:00"
+          }
+        ],
+        "DaysOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
+      }
+    ],
+    "Details": "Highway 813 at the Athabasca River, Athabasca - bridge replacement and highway realignment, ongoing until October of 2026.  Speed reduced to 30 km/h. No passing through construction zone. Reduced vertical clearance of 5.5 m. Single-lane alternating traffic with a maximum lane width of 3.7 meters in place until fall of 2026. No wide loads permitted. The following load restriction is in place on the bridge: CS1: 24t, CS2: 34t, CS3: 44t."
+  },
+  {
+    "ID": 7,
+    "SourceId": "57604",
+    "Organization": "ERS",
+    "RoadwayName": "Moraine Lake Rd",
+    "DirectionOfTravel": "All",
+    "Description": "General Information on Moraine Lake Rd All Directions Near Tramline. All lanes closed.  Activities: Road Closed   ",
+    "Reported": 1723917420,
+    "LastUpdated": 1786857850,
+    "StartDate": 1723917420,
+    "PlannedEndDate": null,
+    "LanesAffected": "All lanes closed",
+    "Latitude": 51.412392403534,
+    "Longitude": -116.190464125937,
+    "LatitudeSecondary": null,
+    "LongitudeSecondary": null,
+    "EventType": "closures",
+    "EventSubType": "general",
+    "IsFullClosure": true,
+    "Severity": "None",
+    "EncodedPolyline": null,
+    "Restrictions": {
+      "Width": null,
+      "Height": null,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "DetourPolyline": "",
+    "DetourInstructions": "",
+    "Recurrence": "",
+    "RecurrenceSchedules": "",
+    "Details": "Moraine Lake Road is CLOSED. For more information about this closure, visit the Parks Canada \"Visiting Lake Louise and Moraine Lake\" webpage link: https://parks.canada.ca/pn-np/ab/banff/visit/parkbus/louise"
+  }
+]

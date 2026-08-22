@@ -622,7 +622,10 @@ here.)
       shipped), Alberta, Saskatchewan, New Brunswick, Newfoundland and
       Labrador, Nova Scotia, Yukon (Canada), plus Nevada and Georgia (USA —
       found independently of the WZDx/CWZ US registry, which has no row for
-      either). See
+      either). **Alberta confirmed with a real authenticated key
+      (2026-08-22)** — 302 real events round-tripped through the identical
+      parsing, surfacing a real correction (the `EventType` enum has six
+      values, not three). See
       [docs/providers/canada.md](providers/canada.md#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon)
 - [x] Vancouver Road Ahead (`streetworks.vancouver`) — this SDK's first
       Canadian municipal roadworks provider, reusing
