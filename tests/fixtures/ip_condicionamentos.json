@@ -1,0 +1,182 @@
+[
+  {
+    "type": "Feature",
+    "id": 22959042,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -7.589197423377445,
+        38.55437799654135
+      ]
+    },
+    "properties": {
+      "objectid": 22959042,
+      "tipo": "MaintenanceWorks",
+      "estado": "ativo",
+      "datainicio": 1743973200000,
+      "dataobservacao": 1743973200000,
+      "datafim": 1790695800000,
+      "commentsummary": "Trabalhos na via derivados a execução da empreitada \"ER381, Km 036+100, Ponte da Sapatoa na Barragem da Vigia. ER381, Km 37+300, Ponte Sobre a Ribeira do Vale das Moitas. Reabilitação da Obra de Arte\"",
+      "description": "ER381",
+      "pkbegin": 0,
+      "direction": "Ambos",
+      "distrito": "Évora",
+      "concelho": "Redondo",
+      "latitude": 38.554378,
+      "longitude": -7.5891974200000005,
+      "datainicio_str": "2025-04-06 22:00",
+      "dataobservacao_str": "2025-04-06 22:00",
+      "datafim_str": "2026-09-29 16:30"
+    }
+  },
+  {
+    "type": "Feature",
+    "id": 22959037,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -8.172485366371895,
+        41.116181588307484
+      ]
+    },
+    "properties": {
+      "objectid": 22959037,
+      "tipo": "MaintenanceWorks",
+      "estado": "ativo",
+      "datainicio": 1722845640000,
+      "dataobservacao": 1722845640000,
+      "datafim": null,
+      "commentsummary": "Semaforos inop",
+      "description": "EN108",
+      "pkbegin": 22,
+      "direction": "Ambos",
+      "distrito": "Porto",
+      "concelho": "Marco de Canaveses",
+      "latitude": 41.116181590000004,
+      "longitude": -8.17248537,
+      "datainicio_str": "2024-08-05 09:14",
+      "dataobservacao_str": "2024-08-05 09:14",
+      "datafim_str": ""
+    }
+  },
+  {
+    "type": "Feature",
+    "id": 22959036,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -8.17564018137777,
+        41.20782825711039
+      ]
+    },
+    "properties": {
+      "objectid": 22959036,
+      "tipo": "MaintenanceWorks",
+      "estado": "ativo",
+      "datainicio": 1712005200000,
+      "dataobservacao": 1712005200000,
+      "datafim": 2556143999000,
+      "commentsummary": "Devido a anomalias na Junta de Dilatação, à saída da obra, foi necessário sinalizar a berma direita.",
+      "description": "EN211",
+      "pkbegin": 0,
+      "direction": "Crescente",
+      "distrito": "Porto",
+      "concelho": "Marco de Canaveses",
+      "latitude": 41.20782826,
+      "longitude": -8.175640179999998,
+      "datainicio_str": "2024-04-01 22:00",
+      "dataobservacao_str": "2024-04-01 22:00",
+      "datafim_str": "2050-12-31 23:59"
+    }
+  },
+  {
+    "type": "Feature",
+    "id": 22959159,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -8.566800341109937,
+        40.75660624462112
+      ]
+    },
+    "properties": {
+      "objectid": 22959159,
+      "tipo": "ConstructionWorks",
+      "estado": "ativo",
+      "datainicio": 1784039700000,
+      "dataobservacao": 1784039700000,
+      "datafim": null,
+      "commentsummary": "Pardilhó, Estarreja, Aveiro",
+      "description": "EN224",
+      "pkbegin": 0,
+      "direction": "Ambos",
+      "distrito": "Aveiro",
+      "concelho": "Estarreja",
+      "latitude": 40.756606239999996,
+      "longitude": -8.56680034,
+      "datainicio_str": "2026-07-14 15:35",
+      "dataobservacao_str": "2026-07-14 15:35",
+      "datafim_str": ""
+    }
+  },
+  {
+    "type": "Feature",
+    "id": 22959126,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -7.84173334408342,
+        41.279646836812574
+      ]
+    },
+    "properties": {
+      "objectid": 22959126,
+      "tipo": "PoorRoadInfrastructure",
+      "estado": "ativo",
+      "datainicio": 1779640440000,
+      "dataobservacao": 1779640440000,
+      "datafim": null,
+      "commentsummary": "Guradas danificadas no sentido Vila Real - Amarante",
+      "description": "A4",
+      "pkbegin": 81,
+      "direction": "Decrescente",
+      "distrito": "Vila Real",
+      "concelho": "Vila Real",
+      "latitude": 41.279646840000005,
+      "longitude": -7.84173334,
+      "datainicio_str": "2026-05-24 17:34",
+      "dataobservacao_str": "2026-05-24 17:34",
+      "datafim_str": ""
+    }
+  },
+  {
+    "type": "Feature",
+    "id": 22959035,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -9.07626894086592,
+        39.604739614461785
+      ]
+    },
+    "properties": {
+      "objectid": 22959035,
+      "tipo": "GenericIncident",
+      "estado": "ativo",
+      "datainicio": 1598605560000,
+      "dataobservacao": 1598605500000,
+      "datafim": null,
+      "commentsummary": "A IP informa que o trânsito rodoviário encontra-se cortado ao KM1+200 da EN242-5 no acesso ao Farol da Nazaré, exceto a viaturas de proteção civil e emergência e viaturas autorizadas, neste último apenas viaturas motorizadas de apoio à atividade do Forte de São Miguel Arcanjo, acesso às propriedades privadas e serviços da Câmara Municipal da Nazaré.",
+      "description": "M242-5",
+      "pkbegin": 1,
+      "direction": "Ambos",
+      "distrito": "Leiria",
+      "concelho": "Nazaré",
+      "latitude": 39.60473961,
+      "longitude": -9.07626894,
+      "datainicio_str": "2020-08-28 10:06",
+      "dataobservacao_str": "2020-08-28 10:05",
+      "datafim_str": ""
+    }
+  }
+]

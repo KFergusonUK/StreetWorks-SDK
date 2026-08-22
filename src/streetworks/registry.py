@@ -3974,6 +3974,51 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.lisboa import LisboaClient",
     ),
     ProviderEntry(
+        key="ip",
+        name="Infraestruturas de Portugal (Condicionamentos)",
+        description="Portugal's national real-time road restrictions/roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Portugal"}),
+        administrative_area="Infraestruturas de Portugal (IP)",
+        scope_note=(
+            "This SDK's first Portugal *national* roadworks provider - "
+            "Lisboa ('lisboa') is municipal. Found by tracing IP's own "
+            "live public 'Trânsito em Tempo Real' page, the same "
+            "technique that found Lisboa's and Road Report NT's real "
+            "backends: the page embeds a real ArcGIS Instant App, "
+            "resolved via the sharing REST API to a real webmap naming "
+            "four operational layers on one shared ArcGIS MapServer - "
+            "Condicionamentos (this entry), Outras Ocorrências, "
+            "Acidentes, and a Serra da Estrela driving-conditions layer, "
+            "none of the other three consumed here. Confirmed live "
+            "2026-08-22: 93 real active records, tipo=='MaintenanceWorks' "
+            "(86) or 'ConstructionWorks' (2) are genuine roadworks - "
+            "88/93. The other two real values are confirmed, not "
+            "assumed, to be something else: PoorRoadInfrastructure (4, "
+            "a real defect report, not active repair work) and "
+            "GenericIncident (1). The two sibling layers, checked live "
+            "rather than trusted by name, are genuinely not roadworks "
+            "either. This directly supersedes the earlier NAP-survey "
+            "finding that the national NAP (nap-portugal.imt-ip.pt) "
+            "carries no roadworks content - genuinely true (confirmed "
+            "again by reading its own JS bundle end to end: zero "
+            "roadworks vocabulary anywhere), but IP publishes this feed "
+            "entirely separately from the NAP registration/catalogue "
+            "system. A real 'no defined end' placeholder in datafim "
+            "(2050-12-31 23:59:59 UTC, 3/34 real non-null values) is "
+            "never surfaced as a real date. See "
+            "streetworks.arcgis.ip's own module docstring."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.arcgis.ip",
+        _client_name="IPRoadworksClient",
+        import_line="from streetworks.arcgis.ip import IPRoadworksClient",
+    ),
+    ProviderEntry(
         key="roma",
         name="Roma Capitale (Roma si trasforma)",
         description="Rome's civic-interventions tracker, filtered to street/infrastructure works.",

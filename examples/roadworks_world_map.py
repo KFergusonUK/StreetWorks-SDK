@@ -296,6 +296,7 @@ def _fetch_works(key, client):
         from_dortmund,
         from_drivebc,
         from_helsinki,
+        from_ip,
         from_jersey,
         from_lisboa,
         from_lyon,
@@ -438,6 +439,7 @@ def _fetch_works(key, client):
 
     simple = {
         "madrid": from_madrid, "drivebc": from_drivebc, "lisboa": from_lisboa,
+        "ip": from_ip,
         "roma": from_roma, "berlin": from_berlin, "sct": from_sct, "milano": from_milano,
         "jersey": from_jersey, "nzta": from_nzta,
         "wa": from_au_wa_mainroads,

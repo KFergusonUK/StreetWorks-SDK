@@ -846,6 +846,25 @@ def check_lisboa() -> str:
     )
 
 
+def check_ip() -> str:
+    """Infraestruturas de Portugal (Condicionamentos) needs no credentials
+    - confirmed live (see streetworks.arcgis.ip), this SDK's first
+    Portugal *national* roadworks provider. Filters server-side to the
+    real MaintenanceWorks/ConstructionWorks tipo values and reports how
+    many real records carry the confirmed 'no defined end' datafim
+    sentinel (2050-12-31 23:59:59 UTC), never surfaced as a real date."""
+    from streetworks.arcgis.ip import IPRoadworksClient
+    from streetworks.common import from_ip
+
+    with IPRoadworksClient() as ip:
+        records = list(ip.iter_roadworks())
+    works_list = from_ip(records)
+    sentinel = sum(
+        1 for r in records if r["properties"].get("datafim") == 2556143999000
+    )
+    return f"{len(works_list):,} real roadworks record(s), {sentinel} with the no-end sentinel"
+
+
 def check_roma() -> str:
     """Roma Capitale (Roma si trasforma) needs no credentials - confirmed
     live (see streetworks.roma). Filters to Strade e infrastrutture +
@@ -2447,6 +2466,8 @@ def main() -> int:
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials
     reporter.check("Lisboa (Condicionamentos de Trânsito)", [], check_lisboa)
+    # Infraestruturas de Portugal (Condicionamentos) needs no credentials
+    reporter.check("Infraestruturas de Portugal (Condicionamentos)", [], check_ip)
     # TrafficWatchNI (Northern Ireland) and Traffic Wales RSS need no credentials
     reporter.check("TrafficWatchNI", [], check_trafficwatchni)
     reporter.check("Traffic Wales", [], check_trafficwales)

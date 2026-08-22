@@ -43,6 +43,7 @@ from .from_guernsey_streets import from_guernsey_street
 from .from_hamburg import from_hamburg_street
 from .from_helsinki import from_helsinki
 from .from_idee import from_idee
+from .from_ip import from_ip
 from .from_jersey import from_jersey
 from .from_jersey_streets import from_jersey_street
 from .from_kartverket import from_kartverket
@@ -214,4 +215,5 @@ __all__ = [
     "from_na511",
     "from_vancouver",
     "from_toronto",
+    "from_ip",
 ]

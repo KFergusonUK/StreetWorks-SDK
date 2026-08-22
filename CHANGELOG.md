@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — Infraestruturas de Portugal (Condicionamentos), this SDK's first Portugal national roadworks provider (2026-08-22)
+
+`streetworks.arcgis.ip.IPRoadworksClient` / `streetworks.common.from_ip`
+- Found by tracing IP's own live public "Trânsito em Tempo Real" page to
+  a real embedded ArcGIS Instant App, the same technique that found
+  Lisboa's/Road Report NT's real backends - resolved via the sharing
+  REST API to a real webmap naming four operational layers on one
+  shared ArcGIS MapServer. No new client shape needed - reuses
+  `streetworks.arcgis.ArcGISFeatureClient` directly.
+- Confirmed live: 93 real active records, `tipo ==
+  "MaintenanceWorks"`/`"ConstructionWorks"` filtered server-side to 88
+  genuine roadworks - the other two real values
+  (`PoorRoadInfrastructure`, `GenericIncident`) confirmed not roadworks
+  by reading their actual content, not assumed from the name. The two
+  sibling layers on the same service (Outras Ocorrências, Acidentes)
+  checked live too and confirmed genuinely not roadworks.
+- A real "no defined end" placeholder in `datafim` (2050-12-31 23:59:59
+  UTC, 3/34 real non-null values) is never surfaced as `proposed_end` -
+  the same class of finding WZDx's own placeholder-date handling
+  already documents for this SDK.
+- Directly supersedes the earlier finding that the national NAP
+  (`nap-portugal.imt-ip.pt`) carries no roadworks content - confirmed
+  again this session by reading its entire JS bundle: it's a real
+  registration/access-management portal (users, suppliers, access
+  requests, contracts), not a data host. A real sign-in flow was traced
+  and confirmed technically correct (POST `.../api/authentication/signin`
+  with a custom `Auth: Basic` header, verified via a matching CORS
+  preflight), but a real registered account got a clean `404` -
+  consistent with the account still being under IMT's own review, not a
+  fault on either side. IP's own feed doesn't depend on that approval.
+- Licence unconfirmed - no `licenseInfo` on the real ArcGIS item; ships
+  anyway, flagged prominently, the same honest-gap tier as Autobahn
+  GmbH/Jersey/NYC DOT.
+- New real trimmed fixture, `tests/fixtures/ip_condicionamentos.json`,
+  plus wiring and converter tests.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Confirmed — Nevada 511, the second key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
 
 `streetworks.na511.jurisdictions.NEVADA`

@@ -3,9 +3,82 @@
 > New content, not a migration — Portugal wasn't a built provider at the
 > time of the phase-one docs migration (see `docs/providers/pending.md`,
 > which this section now supersedes for Lisboa specifically). The
-> national IMT National Access Point remains credential-parked and
-> unbuilt; this is Portugal's first coverage at any level, reached by
-> sidestepping that entirely via a separate keyless municipal feed.
+> national IMT National Access Point (NAP) itself remains a real
+> registration/catalogue portal, not a data host — see
+> [Infraestruturas de Portugal](#infraestruturas-de-portugal-condicionamentos)
+> below for how national coverage was reached anyway.
+
+## Infraestruturas de Portugal (Condicionamentos)
+
+Portugal's national real-time road restrictions/roadworks feed, run by
+IP (Infraestruturas de Portugal) — this SDK's first Portugal *national*
+roadworks provider; Lisboa (below) is municipal:
+
+```python
+from streetworks.arcgis.ip import IPRoadworksClient
+from streetworks.common import from_ip
+
+with IPRoadworksClient() as ip:
+    works_list = from_ip(list(ip.iter_roadworks()))
+```
+
+**Found by tracing IP's own live public "Trânsito em Tempo Real" page**
+(`servicos.infraestruturasdeportugal.pt/pt-pt/viajar-na-estrada/transito-em-tempo-real`),
+the same technique that found Lisboa's and Road Report NT's real
+backends: the page embeds a real ArcGIS Instant App
+(`infraestruturas.maps.arcgis.com/apps/instant/basic/...`), resolved via
+the sharing REST API to its real webmap
+(`webmap_viajar_na_estrada_sem_cameras_featurelayer`), which names four
+real operational layers on one shared `utility.arcgis.com` MapServer
+(`webapps/viajar_na_estrada2024`): Condicionamentos (this module),
+Outras Ocorrências, Acidentes, and a Serra da Estrela driving-conditions
+layer — none of the other three consumed here.
+
+**This directly supersedes the earlier NAP-survey finding** that the
+national NAP itself (`nap-portugal.imt-ip.pt`) carries no roadworks
+content — genuinely true, confirmed again this session by reading its
+own JS bundle end to end (zero roadworks vocabulary anywhere: it's a
+real registration/access-management portal — users, suppliers, access
+requests, contracts — not a data host). A real sign-in flow was traced
+and confirmed working technically (a genuine `POST
+.../api/authentication/signin` with a custom `Auth: Basic` header,
+confirmed via a matching CORS preflight), but a real registered account
+returned a clean `404` — consistent with the account still being under
+IMT's own review ("in analysis"), not a technical fault on either side.
+IP publishes this Condicionamentos feed entirely separately from the
+NAP system, so national coverage doesn't depend on that approval at all.
+
+**93 real active records, confirmed live 2026-08-22.** `tipo ==
+"MaintenanceWorks"` (86) or `"ConstructionWorks"` (2) are genuine
+roadworks — 88/93. The other two real values are confirmed, not
+assumed, to be something else: `PoorRoadInfrastructure` (4, a real
+defect *report* — a damaged guardrail, a fallen sign — not active
+repair work) and `GenericIncident` (1, a real event-driven closure).
+The two sibling layers on the same service, checked live rather than
+trusted by name, are genuinely not roadworks either — Outras
+Ocorrências (77 real records: `EnvironmentalObstruction`/
+`VehicleObstruction`/`GeneralObstruction`/`EquipmentDamageObstruction`/
+`AnimalPresenceObstruction`) and Acidentes — so `Condicionamentos`
+alone is the right, sufficient layer.
+
+**A real "no defined end" placeholder in `datafim`, confirmed live —
+not assumed.** 3 of 34 real non-null `datafim` values are the exact
+same sentinel, `2556143999000` (2050-12-31 23:59:59 UTC) — a fabricated
+far-future date meaning "no end stated," the same class of finding
+WZDx's own placeholder-date handling already documents for this SDK.
+Never surfaced as a real date.
+
+**Geometry: real `f=geojson` output is genuine WGS84**, confirmed live
+by comparing a real decoded point against that same record's own
+separately-stated `latitude`/`longitude` attribute fields (identical to
+six decimal places) — despite the layer's native `shape` geometry being
+Web Mercator (`wkid 102100`/`3857`), the same "check per-service, don't
+assume" discipline TIGERweb's and DC's own docs establish.
+
+**Licence: unconfirmed** — no `licenseInfo`/`accessInformation` on the
+real ArcGIS item, and no terms found specific to this dataset. Ships
+anyway, flagged prominently, the same honest-gap tier as Autobahn
+GmbH/Jersey/NYC DOT in this SDK.
 
 ## Lisboa (Condicionamentos de Trânsito)
 
@@ -203,8 +276,9 @@ legais"`).
 
 ## The rest of the Portuguese landscape
 
-The national IMT National Access Point remains credential-parked
-(access requested, not yet granted) for roadworks. Streets is ruled out
+National roadworks coverage is now live via IP directly (above) — the
+NAP registration itself is a separate, still-pending track (account
+under IMT's review), not a blocker for coverage. Streets is ruled out
 nationally (see above) but not exhaustively — the Área Metropolitana de
 Lisboa's other 17 municipalities, and other Portuguese cities (Porto and
 others), haven't been checked individually; a real, open next step in
