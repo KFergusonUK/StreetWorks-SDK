@@ -105,9 +105,10 @@ def test_ontario_is_the_only_keyless_jurisdiction():
         jurisdictions.GEORGIA,
         jurisdictions.ALASKA,
         jurisdictions.LOUISIANA,
+        jurisdictions.CONNECTICUT,
     ]
     assert all(j.needs_key for j in keyed)
-    assert len(jurisdictions.JURISDICTIONS) == 11
+    assert len(jurisdictions.JURISDICTIONS) == 12
 
 
 def test_nevada_is_the_first_us_jurisdiction_on_this_platform():
@@ -132,6 +133,12 @@ def test_louisiana_is_a_fourth_us_jurisdiction_on_this_platform():
     assert jurisdictions.LOUISIANA.territory == "USA"
     assert jurisdictions.LOUISIANA.needs_key is True
     assert jurisdictions.LOUISIANA.base_url == "https://www.511la.org"
+
+
+def test_connecticut_is_a_fifth_us_jurisdiction_on_this_platform():
+    assert jurisdictions.CONNECTICUT.territory == "USA"
+    assert jurisdictions.CONNECTICUT.needs_key is True
+    assert jurisdictions.CONNECTICUT.base_url == "https://ctroads.org"
 
 
 @respx.mock

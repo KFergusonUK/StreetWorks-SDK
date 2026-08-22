@@ -86,17 +86,25 @@ Credentials-wanted, or Documented-unavailable; see
   `streetworks.wzdx` unlocked PurposeBuilt Systems' feed immediately
   (keyless) and left Massachusetts/Colorado/Illinois's own real CWZ
   feeds fully wired, pending a real key none were obtained for; Nevada
-  511, Georgia 511 and Alaska 511 (`streetworks.na511`) turned out to be
-  the same commercial platform already built for seven Canadian
-  jurisdictions — all three wired (Nevada confirmed live with a real
-  key, 2026-08-22; Georgia/Alaska pending one). Alaska specifically is a
-  real correction, not a fresh find — the state had already been marked
-  "checked and confirmed no live feed" below via its ArcGIS Open Data
-  catalogue alone, but a later direct re-check against this platform's
-  own endpoint shape (the way Rhode Island/West Virginia/South
-  Dakota/Nebraska were checked) found it immediately — the catalogue
-  check and the platform check are genuinely different tests, and only
-  the platform one was ever run for the others in that list.
+  511, Georgia 511, Alaska 511, Louisiana 511 and Connecticut 511
+  (`streetworks.na511`) turned out to be the same commercial platform
+  already built for seven Canadian jurisdictions — all five wired
+  (Nevada/Alberta/Alaska confirmed live with a real key, 2026-08-22;
+  Georgia/Louisiana/Connecticut pending one). Alaska and Connecticut are
+  both real corrections, not fresh finds — both states had already been
+  marked "checked and confirmed no live feed" below via their real
+  ArcGIS Open Data catalogues alone, but a later direct re-check against
+  this platform's own endpoint shape (the way Rhode Island/West
+  Virginia/South Dakota/Nebraska were checked) found both immediately —
+  the catalogue check and the platform check are genuinely different
+  tests, and only the platform one was ever run for the others in that
+  list. Louisiana is a genuinely new find, surfaced while searching for
+  real Open511 (a different, unrelated standard - a resource-oriented
+  API with snake_case fields, confirmed structurally distinct from this
+  platform's RPC-style `/api/v2/get/event` PascalCase shape) adopters
+  among the remaining gap states; none of North Dakota, South Carolina,
+  Tennessee, Montana, Wyoming or Arkansas run Open511 either, each
+  checked directly.
   **Real leads found, not resolved**: North Dakota has real "Work
   Zones" ArcGIS layers but the source's own terms restrict
   "individual non-commercial" use and prohibit "systematic retrieval" —
@@ -112,14 +120,17 @@ Credentials-wanted, or Documented-unavailable; see
   (`spatial.tdot.tn.gov`), but that host (and `smartway.tn.gov`) is
   unreachable — TLS connections hang and time out, confirmed dead from
   more than one vantage point, not just this SDK's own sandbox.
-  **Checked and confirmed no live feed**: Connecticut, Montana (real
-  ArcGIS Open Data portals, but their own DCAT/`data.json` catalogs have
-  no live closures dataset — Alaska had the same catalogue result, but
-  turned out to have a real feed anyway via a different, direct check;
-  see "Built" above); Wyoming (a real system, SDX,
+  **Checked and confirmed no live feed**: Montana (a real ArcGIS Open
+  Data portal, but its own DCAT/`data.json` catalog has no live closures
+  dataset — Alaska and Connecticut both had the same catalogue result,
+  but turned out to have a real feed anyway via a different, direct
+  check; see "Built" above); Wyoming (a real system, SDX,
   but a navigation-partner exchange, not self-service); Rhode Island,
   West Virginia, South Dakota, Nebraska (none run the North American
-  511 platform, each checked directly against its real endpoint shape);
+  511 platform, each checked directly against its real endpoint shape;
+  South Carolina and Montana were also re-checked directly against this
+  same platform while searching for Louisiana's neighbours and
+  confirmed not on it either);
   Arkansas (IDrive Arkansas's own static asset pipeline is currently
   broken — even jQuery 404s to the SPA fallback shell — and ArDOT's
   real public ArcGIS portal has only a schema-only "Road Closures"

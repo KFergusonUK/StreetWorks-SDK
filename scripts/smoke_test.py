@@ -803,6 +803,28 @@ def check_la511() -> str:
     return f"{len(works_list):,} real roadwork event(s) - first real authenticated Louisiana pull"
 
 
+def check_ct511() -> str:
+    """Connecticut 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (CONNECTICUT_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511). A real correction to the earlier
+    gap-state survey, not a new discovery - Connecticut had only been
+    checked against its ArcGIS Open Data catalogue, never this
+    platform's own endpoint shape directly."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import CONNECTICUT
+
+    with NA511Client(api_key=os.environ["CONNECTICUT_511_API_KEY"]) as client:
+        roadworks = client.fetch("connecticut")
+    works_list = from_na511(
+        roadworks,
+        territory=CONNECTICUT.territory,
+        administrative_area=CONNECTICUT.administrative_area,
+    )
+    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Connecticut pull"
+
+
 def check_vancouver() -> str:
     """Vancouver Road Ahead needs no credentials - see
     streetworks.vancouver. Confirmed live 2026-08-21 (three real
@@ -2504,6 +2526,7 @@ def main() -> int:
     reporter.check("Georgia 511", ["GEORGIA_511_API_KEY"], check_ga511)
     reporter.check("Alaska 511", ["ALASKA_511_API_KEY"], check_ak511)
     reporter.check("Louisiana 511", ["LOUISIANA_511_API_KEY"], check_la511)
+    reporter.check("Connecticut 511", ["CONNECTICUT_511_API_KEY"], check_ct511)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials

@@ -3920,6 +3920,39 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("louisiana")',
     ),
     ProviderEntry(
+        key="ct511",
+        name="Connecticut 511",
+        description="Connecticut's own real-time roadwork/incident feed (North American 511).",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"USA"}),
+        administrative_area="Connecticut Department of Transportation (CTDOT)",
+        scope_note=(
+            "A real correction to the earlier USA WZDx/CWZ gap-state "
+            "survey, not a new discovery from scratch: Connecticut had "
+            "only been checked against its ArcGIS Open Data catalogue "
+            "(no live closures dataset there), never directly against "
+            "this platform's own endpoint shape - found by testing every "
+            "remaining gap state directly (the same technique that found "
+            "Alaska), confirming the identical /api/v2/get/event "
+            "endpoint, the identical structured 'Invalid Key' rejection, "
+            "and a real, working /developers/doc page ('CT roads API... "
+            "Message Signs, Events, Advisories'). Not obtained on a "
+            "caller's behalf, same standing rule as Alberta/Massachusetts "
+            "CWZ. The field schema is not a guess: proven by Ontario's "
+            "own real, unauthenticated response on the identical "
+            "platform."
+        ),
+        credentials="511 API developer key (self-service registration - see module docstring)",
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.na511",
+        _client_name="NA511Client",
+        import_line='from streetworks.na511 import NA511Client  # .fetch("connecticut")',
+    ),
+    ProviderEntry(
         key="vancouver",
         name="Vancouver Road Ahead",
         description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",

@@ -473,3 +473,38 @@ behalf. Free self-service registration:
 `https://www.511la.org/developers/doc`; set `LOUISIANA_511_API_KEY`
 (see `.env.example`) and run `scripts/smoke_test.py` to confirm the
 last open question.
+
+## Connecticut 511
+
+A real correction to the earlier USA WZDx/CWZ gap-state survey, not a
+new discovery from scratch — the same class of miss as Alaska.
+Connecticut had only ever been checked against its real ArcGIS Open
+Data catalogue (`data.json`, genuinely no live closures dataset there —
+its only "work zone" hits were crash/safety statistics), never directly
+against the North American 511 platform's own endpoint shape. Found by
+testing every remaining USA gap state directly against that shape (the
+same sweep that surfaced Louisiana) — this SDK's fifth US jurisdiction
+on this platform:
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import CONNECTICUT
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("connecticut"),
+        territory=CONNECTICUT.territory,
+        administrative_area=CONNECTICUT.administrative_area,
+    )
+```
+
+**Confirmed live to be the identical platform**: the same
+`/api/v2/get/event` endpoint (at `ctroads.org`, CTDOT's real traveller-
+information site), the same structured `"Invalid Key"` rejection with
+no key supplied, and a real, working `/developers/doc` page ("CT roads
+API... Message Signs, Events, Advisories"). Requires a real developer
+key — not obtained on this SDK's behalf. Free self-service
+registration: `https://ctroads.org/developers/doc`; set
+`CONNECTICUT_511_API_KEY` (see `.env.example`) and run
+`scripts/smoke_test.py` to confirm the last open question.

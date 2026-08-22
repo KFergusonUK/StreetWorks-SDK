@@ -12,32 +12,37 @@ Ontario's real, unauthenticated response against Alberta's own published
 field-by-field API documentation - every field name, type and the
 ``EventType`` roadworks discriminator match exactly (see below for the
 full real ``EventType`` value set, corrected after Alberta's own real
-authenticated pull). **Nevada 511, Georgia 511, Alaska 511 and Louisiana
-511 turned out to be the identical platform too** - all four found
-separately while surveying US roadworks coverage (none of Nevada,
-Georgia or Louisiana is in the WZDx/CWZ US registry at all, confirmed
-live), then confirmed live here the same way as every Canadian
-jurisdiction: the identical ``/api/v2/get/event`` path, the identical
-"Invalid Key" rejection, and a real, working ``/developers/doc`` page
-whose own field-by-field documentation matches exactly. Georgia's own
-real "TrafficImpacts" ArcGIS Hub pages, checked first, turned out to be
-a real dead end - per-project public-information pages (e.g. "I-285 &
-SR 400 Improvements"), not a live data feed; checking Georgia's own 511
-site directly against this platform's shape was the real find. Alaska
-is a real correction to the earlier USA gap-state survey, not a new
-discovery from scratch: it had only been checked against its ArcGIS
-Open Data catalogue (no live closures dataset there), never directly
-against this platform's own endpoint shape the way Rhode Island/West
-Virginia/South Dakota/Nebraska were - a direct re-check found it
-immediately, ``/developers/doc`` explicitly naming "Temporary
-Workzones" as a real event resource. Louisiana is a genuinely new find,
-not a re-check of anything: found while searching for real Open511 (a
-different, unrelated standard) adopters among the remaining USA gap
-states - none were found, but a real ``511LA`` ``/help/endpoint/event``
-page surfaced instead, the same URL shape Ontario/Nevada/Georgia
-already publish on this platform. Manitoba, Prince Edward Island,
-the Northwest Territories and Nunavut were checked and found to have no
-matching site (no DNS record for the guessable ``511<jurisdiction>.ca``
+authenticated pull). **Nevada 511, Georgia 511, Alaska 511, Louisiana
+511 and Connecticut (``ctroads.org``) turned out to be the identical
+platform too** - all five found separately while surveying US roadworks
+coverage (none of Nevada, Georgia or Louisiana is in the WZDx/CWZ US
+registry at all, confirmed live), then confirmed live here the same way
+as every Canadian jurisdiction: the identical ``/api/v2/get/event``
+path, the identical "Invalid Key" rejection, and a real, working
+``/developers/doc`` page whose own field-by-field documentation matches
+exactly. Georgia's own real "TrafficImpacts" ArcGIS Hub pages, checked
+first, turned out to be a real dead end - per-project
+public-information pages (e.g. "I-285 & SR 400 Improvements"), not a
+live data feed; checking Georgia's own 511 site directly against this
+platform's shape was the real find. Alaska and Connecticut are both
+real corrections to the earlier USA gap-state survey, not new
+discoveries from scratch: both had only been checked against their real
+ArcGIS Open Data catalogues (no live closures dataset there), never
+directly against this platform's own endpoint shape the way Rhode
+Island/West Virginia/South Dakota/Nebraska were - direct re-checks
+found both immediately (Alaska's own ``/developers/doc`` explicitly
+names "Temporary Workzones" as a real event resource). Louisiana is a
+genuinely new find, not a re-check of anything: found while searching
+for real Open511 (a different, unrelated standard) adopters among the
+remaining USA gap states - none were found, but a real ``511LA``
+``/help/endpoint/event`` page surfaced instead, the same URL shape
+Ontario/Nevada/Georgia already publish on this platform; checking every
+other remaining gap state directly against this platform's own endpoint
+shape the same way (South Carolina/Montana/Wyoming/Arkansas) confirmed
+none of them are on it, only Connecticut. Manitoba, Prince Edward
+Island, the Northwest Territories and Nunavut were checked and found to
+have no matching site (no DNS record for the guessable
+``511<jurisdiction>.ca``
 pattern this platform's other real Canadian deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
@@ -92,9 +97,9 @@ of the ``EventType`` correction above: Nevada's pull also carried real
 this time - real per-jurisdiction variation, not a contradiction), the
 roadworks filter itself staying exactly correct a third time. ``ab511``
 and ``nv511`` are both verified in the registry accordingly;
-``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``
-remain in the same "schema proven, own key untested" position Alberta
-and Nevada themselves were in until now.
+``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``/
+``ct511`` remain in the same "schema proven, own key untested" position
+Alberta and Nevada themselves were in until now.
 
 **Alaska's own real authenticated response confirmed the same thing a
 third time, and surfaced two genuine converter bugs Ontario's/Alberta's/

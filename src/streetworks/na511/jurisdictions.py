@@ -28,6 +28,7 @@ __all__ = [
     "GEORGIA",
     "ALASKA",
     "LOUISIANA",
+    "CONNECTICUT",
     "JURISDICTIONS",
 ]
 
@@ -169,6 +170,21 @@ LOUISIANA = Jurisdiction(
     administrative_area="Louisiana Department of Transportation and Development (DOTD)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. A real correction to the earlier USA gap-state survey,
+#: found directly testing every remaining gap state's own real domain
+#: against this platform's endpoint shape (the same technique that
+#: found Alaska) - `ctroads.org` had only ever been marked a dead end
+#: via its ArcGIS Open Data catalogue. Confirmed the identical
+#: `/api/v2/get/event` path, the identical "Invalid Key" rejection, and
+#: a real, working `/developers/doc` page.
+CONNECTICUT = Jurisdiction(
+    base_url="https://ctroads.org",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Connecticut Department of Transportation (CTDOT)",
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -181,4 +197,5 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "georgia": GEORGIA,
     "alaska": ALASKA,
     "louisiana": LOUISIANA,
+    "connecticut": CONNECTICUT,
 }

@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+### Added — Connecticut 511, a fifth US jurisdiction on the North American 511 platform (2026-08-22)
+
+`streetworks.na511.jurisdictions.CONNECTICUT`
+- A real correction to the earlier USA WZDx/CWZ gap-state survey, the
+  same class of miss as Alaska - Connecticut had only ever been checked
+  against its real ArcGIS Open Data catalogue (no live closures dataset
+  there), never directly against the North American 511 platform's own
+  endpoint shape. Found by testing every remaining USA gap state
+  directly against that shape (prompted by asking whether the American
+  511 platform is an Open511 implementation - it isn't, confirmed by
+  comparing the two real, structurally distinct shapes - and whether
+  any more states were missing): `ctroads.org` (CTDOT's real traveller-
+  information site) answers the identical `/api/v2/get/event` endpoint,
+  the identical structured "Invalid Key" rejection, and a real, working
+  `/developers/doc` page ("CT roads API... Message Signs, Events,
+  Advisories"). South Carolina and Montana were also re-checked the
+  same way and confirmed genuinely not on this platform. No new client
+  code needed, just a new `Jurisdiction` entry.
+- Requires a real developer key not obtained on this SDK's behalf. Free
+  self-service registration: `ctroads.org/developers/doc`. Set
+  `CONNECTICUT_511_API_KEY` (see `.env.example`) and run
+  `scripts/smoke_test.py` to confirm.
+- **World map example**: wired into `examples/roadworks_world_map.py`'s
+  `--live` dispatch table.
+
 ### Added — Louisiana 511, a fourth US jurisdiction on the North American 511 platform (2026-08-22)
 
 `streetworks.na511.jurisdictions.LOUISIANA`
