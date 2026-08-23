@@ -1512,6 +1512,40 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2 import AsfinagClient",
     ),
     ProviderEntry(
+        key="singapore",
+        name="LTA DataMall",
+        description="Singapore's national roadworks/road-openings/traffic-incidents feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.UNKNOWN,
+        territories=frozenset({"Singapore"}),
+        administrative_area="Land Transport Authority (LTA)",
+        scope_note=(
+            "Credentials-wanted scaffold, better-confirmed than most at "
+            "this tier - built from LTA's own current official API User "
+            "Guide (Version 6.9, 3 Aug 2026), and the auth mechanism "
+            "itself confirmed live (a placeholder AccountKey header "
+            "returns a real 401, not a 404, on both real endpoints). "
+            "Three real, differently-shaped datasets: RoadWorks/"
+            "RoadOpenings (EventID/StartDate/EndDate/SvcDept/RoadName/"
+            "Other, no coordinates) and TrafficIncidents (a real 13-value "
+            "Type enum including 'Roadwork', with Latitude/Longitude but "
+            "no id and no dates - the confirmed real roadworks filter). "
+            "No real authenticated response has been seen - registration "
+            "is free self-service (not a formal contract), not pursued "
+            "on the user's behalf."
+        ),
+        credentials=(
+            "Free self-service 'Request for API Access' at "
+            "datamall.lta.gov.sg - issues a single AccountKey header value"
+        ),
+        licence="Singapore Open Data Licence v1.0 - commercial use explicitly permitted",
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.singapore",
+        _client_name="SingaporeClient",
+        import_line="from streetworks.singapore import SingaporeClient",
+    ),
+    ProviderEntry(
         key="nsw",
         name="Transport for NSW - Live Traffic Hazards",
         description="New South Wales roadwork hazards feed (Australia).",

@@ -1379,6 +1379,32 @@ def check_asfinag() -> str:
     )
 
 
+def check_singapore() -> str:
+    """LTA DataMall (Singapore) - PENDING LIVE VERIFICATION, see
+    streetworks.singapore. Requires SINGAPORE_LTA_ACCOUNT_KEY (free
+    self-service "Request for API Access" registration). The auth header
+    name and both real endpoint paths are confirmed live (a placeholder
+    key returns a real 401, not a 404) - this would be the first real
+    Singapore data seen; please report back per-dataset record counts and
+    whether the $skip pagination end-condition (an empty/short page) is
+    correct in practice."""
+    from streetworks.common import from_singapore
+    from streetworks.singapore import SingaporeClient
+
+    with SingaporeClient(account_key=os.environ["SINGAPORE_LTA_ACCOUNT_KEY"]) as client:
+        road_works = list(client.iter_road_works())
+        road_openings = list(client.iter_road_openings())
+        incidents = list(client.iter_traffic_incidents())
+        roadwork_incidents = [r for r in incidents if r.get("Type") == "Roadwork"]
+    works_list = from_singapore(road_works + road_openings + roadwork_incidents)
+    return (
+        f"{len(works_list):,} real roadworks record(s) - {len(road_works)} RoadWorks, "
+        f"{len(road_openings)} RoadOpenings, {len(roadwork_incidents)}/{len(incidents)} "
+        "TrafficIncidents typed 'Roadwork' - first real Singapore data seen, compare "
+        "against module docstring's open questions"
+    )
+
+
 def check_nsw_livetraffic() -> str:
     """TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED
     (2026-07-30), see streetworks.au.nsw. Requires an API Gateway key
@@ -2602,6 +2628,7 @@ def main() -> int:
         check_vejdirektoratet,
     )
     reporter.check("DATEX II (ASFINAG/Austria)", ["ASFINAG_BASE_URL"], check_asfinag)
+    reporter.check("LTA DataMall (Singapore)", ["SINGAPORE_LTA_ACCOUNT_KEY"], check_singapore)
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
     )

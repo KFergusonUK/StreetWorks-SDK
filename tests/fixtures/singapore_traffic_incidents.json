@@ -1,0 +1,18 @@
+{
+  "_note": "SYNTHETIC fixture, not real data - see streetworks.singapore.client module docstring. The 'Vehicle breakdown' record uses LTA's own documented sample values (API User Guide, Version 6.9); the 'Roadwork' record is constructed to exercise the Type=='Roadwork' filter, since the guide's own sample happened to show a different Type value.",
+  "odata.metadata": "https://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents",
+  "value": [
+    {
+      "Type": "Vehicle breakdown",
+      "Latitude": "1.30398068448214",
+      "Longitude": "103.919182834377",
+      "Message": "(29/3)18:22 Vehicle breakdown on ECP (towards Changi Airport) after Still Rd Sth Exit. Avoid lane 3."
+    },
+    {
+      "Type": "Roadwork",
+      "Latitude": "1.32993",
+      "Longitude": "103.78521",
+      "Message": "(23/8)09:15 Roadwork on PIE (towards Tuas) after Clementi Ave 6. Avoid lane 2."
+    }
+  ]
+}

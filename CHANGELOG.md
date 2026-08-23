@@ -2,6 +2,37 @@
 
 ## [Unreleased]
 
+### Added — LTA DataMall (Singapore), this SDK's first Asian territory, Credentials-wanted (2026-08-23)
+
+`streetworks.singapore.SingaporeClient`, `streetworks.common.from_singapore`
+- Prompted directly: "why dont we build singapore next? They never sent
+  credentials however" - built as a proper Credentials-wanted scaffold,
+  the same tier as Trafikverket/Vejdirektoratet/ASFINAG, not live-tested.
+- Better-confirmed than most scaffolds at this tier: built entirely from
+  LTA's own current, official "API User Guide & Documentation" (Version
+  6.9, 3 Aug 2026, fetched live), and the auth mechanism itself was
+  confirmed live - a placeholder `AccountKey` header returns a real
+  `401`, not a `404`, on both real endpoints.
+- Three real, genuinely different-shaped datasets: `RoadWorks`/
+  `RoadOpenings` (`EventID`/`StartDate`/`EndDate`/`SvcDept`/`RoadName`/
+  `Other`, no coordinates at all) and `TrafficIncidents` (a real 13-value
+  `Type` enum including `"Roadwork"` - the confirmed real filter - with
+  real `Latitude`/`Longitude` but no id and no dates). `SvcDept` maps to
+  `Works.promoter`, the same applicant-style role Vienna's/NYC DOT's own
+  fields already play.
+- Real OData pagination (`?$skip=500` increments, `{"value": [...]}`
+  envelope) implemented and tested against a synthetic two-page fixture.
+- Licence: Singapore Open Data Licence v1.0, commercial use explicitly
+  permitted.
+- New tests: `tests/test_singapore.py`, `tests/test_common_singapore.py`,
+  against three synthetic fixtures built from LTA's own documented
+  sample values, not real pulled data.
+- New registry entry `key="singapore"` (`verified=False`); new
+  `docs/providers/asia.md`; removed from `docs/providers/pending.md`'s
+  "no source investigated" list now that it's properly scoped; wired
+  into `scripts/smoke_test.py`, `.env.example`
+  (`SINGAPORE_LTA_ACCOUNT_KEY`).
+
 ### Added — CNAIR, Romania's first national roadworks provider, this SDK's first HTML-scraped source (2026-08-23)
 
 `streetworks.romania.RomaniaClient`, `streetworks.common.from_romania`

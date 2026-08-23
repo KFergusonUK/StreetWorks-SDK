@@ -1,0 +1,14 @@
+{
+  "_note": "SYNTHETIC fixture, not real data - see streetworks.singapore.client module docstring. LTA's own documented sample values from the official API User Guide, Version 6.9 (3 Aug 2026).",
+  "odata.metadata": "https://datamall2.mytransport.sg/ltaodataservice/RoadOpenings",
+  "value": [
+    {
+      "EventID": "RMAPP-201603-0900",
+      "StartDate": "2016-03-31",
+      "EndDate": "2016-09-30",
+      "SvcDept": "SP POWERGRID LTD - CUSTOMER PROJ (EAST)",
+      "RoadName": "AH SOO GARDEN",
+      "Other": "For details, please call 62409237"
+    }
+  ]
+}

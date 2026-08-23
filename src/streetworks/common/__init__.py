@@ -78,6 +78,7 @@ from .from_roma import from_roma
 from .from_romania import from_romania
 from .from_saarland import from_saarland
 from .from_sct import from_sct
+from .from_singapore import from_singapore
 from .from_srwr import from_srwr
 from .from_streetmanager import from_streetmanager
 from .from_swisstopo import from_swisstopo_street
@@ -145,6 +146,7 @@ __all__ = [
     "from_ogc_features",
     "from_mallorca",
     "from_sct",
+    "from_singapore",
     "from_datavia",
     "from_openusrn",
     "from_bdtopo",

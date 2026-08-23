@@ -1,0 +1,14 @@
+{
+  "_note": "SYNTHETIC fixture, not real data - see streetworks.singapore.client module docstring. No real authenticated LTA DataMall response has ever been seen. Field values are LTA's own documented sample values from the official API User Guide, Version 6.9 (3 Aug 2026), not invented from scratch - wrapped in the documented OData 'value' envelope.",
+  "odata.metadata": "https://datamall2.mytransport.sg/ltaodataservice/RoadWorks",
+  "value": [
+    {
+      "EventID": "RMAPP-201512-0217",
+      "StartDate": "2015-12-14",
+      "EndDate": "2016-07-31",
+      "SvcDept": "SP POWERGRID LTD - REGIONAL NETWORK CENTRAL",
+      "RoadName": "ADAM DRIVE",
+      "Other": "For details, please call 67273085"
+    }
+  ]
+}

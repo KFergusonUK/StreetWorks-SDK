@@ -43,7 +43,6 @@ Credentials-wanted, or Documented-unavailable; see
   Porto and the rest of the Área Metropolitana de Lisboa's other 17
   municipalities remain genuinely unchecked/unbuilt — the same open,
   per-municipality fallback shape as Germany's own state fan-out.
-- **Singapore** — no source investigated at all.
 - **Canada — roadworks now built in two provinces plus one shared
   multi-jurisdiction platform covering seven agencies, streets fully
   built nationally.** British Columbia (DriveBC, Open511) and Québec

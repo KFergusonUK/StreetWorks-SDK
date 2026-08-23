@@ -365,6 +365,15 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     value, is unknown - see streetworks.datex2.austria's own module
     docstring.
 
+    LTA DataMall (`singapore`) is better-confirmed than Austria at this
+    tier, close to Vejdirektoratet: built from LTA's own current official
+    API User Guide (not secondhand claims), and the auth mechanism itself
+    (a single AccountKey header) is confirmed live - a placeholder key
+    returns a real 401, not a 404, on both RoadWorks and TrafficIncidents.
+    What's unconfirmed is the response schema/pagination end-condition
+    against real authenticated data - see streetworks.singapore.client's
+    own module docstring.
+
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
     Newfoundland and Labrador 511 (`nl511`), Nova Scotia 511 (`ns511`),
     511 Yukon (`yt511`), Georgia 511 (`ga511`), Louisiana 511 (`la511`),
@@ -399,6 +408,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "greece",
         "stockholm",
         "austria",
+        "singapore",
         "sk511",
         "nb511",
         "nl511",
