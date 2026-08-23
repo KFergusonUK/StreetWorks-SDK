@@ -1189,6 +1189,31 @@ def check_bulgaria() -> str:
     return f"{len(situations):,} roadworks situations ({works:,} works records)"
 
 
+def check_poland() -> str:
+    """GDDKiA (Poland) needs no credentials - see streetworks.poland.
+    Confirmed live 2026-08-23 (383 real records, typ split U/I/W) - a
+    genuinely keyless national feed found while surveying Europe for
+    more missing country feeds. Reports the real typ split and how
+    many roadworks records are missing a coordinate."""
+    from collections import Counter
+
+    from streetworks.common import from_poland
+    from streetworks.poland import PolandClient
+
+    with PolandClient() as client:
+        events = list(client.iter_events())
+        records = list(client.iter_roadworks())
+    if not events:
+        raise RuntimeError("query returned no records - real data may have changed")
+    works_list = from_poland(records)
+    typ_counts = Counter(e["typ"] for e in events)
+    no_coord = sum(1 for w in works_list if w.coordinate is None)
+    return (
+        f"{len(works_list):,} real roadworks record(s) (typ split: {dict(typ_counts)}), "
+        f"{no_coord}/{len(works_list)} missing a coordinate"
+    )
+
+
 #: Real diagnostic pass (2026-07-30, see streetworks.datex2.vegvesen module
 #: docstring) found zero contradictions across 2,636 real coordinate
 #: elements - srsName is a clean, trustworthy declaration for this feed,
@@ -2627,6 +2652,7 @@ def main() -> int:
     reporter.check("DATEX II (Luxembourg)", [], check_luxembourg)
     # Road Infrastructure Agency/LIMA (Bulgaria) needs no credentials
     reporter.check("DATEX II (Bulgaria)", [], check_bulgaria)
+    reporter.check("GDDKiA (Poland)", [], check_poland)
     # Autobahn GmbH (Germany) needs no credentials
     reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
     # Via Lietuva (Lithuania) needs no credentials

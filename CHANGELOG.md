@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+### Added — GDDKiA, Poland's first national roadworks provider (2026-08-23)
+
+`streetworks.poland.PolandClient`, `streetworks.common.from_poland`
+- Found while surveying Europe for more missing national feeds
+  (prompted by asking "any more country feeds we're missing, Poland
+  for example?"). GDDKiA's own gov.pl page ("Dane XML i XSD") names a
+  real, keyless disruptions feed - confirmed live 2026-08-23, 383 real
+  current records, on an `archiwum.` (archive) subdomain despite
+  serving genuinely current data.
+- `typ="U"` (Utrudnienie) is the confirmed real roadworks
+  discriminator (354/383), checked by reading real sample description
+  text (resurfacing, bridge maintenance, construction lane closures),
+  not assumed from the code - but genuinely broader than "planned
+  works" alone, since at least one real record is an emergency
+  flood-damage closure, stated honestly not filtered out. `typ="I"`/
+  `"W"` (incidents/accidents) are confirmed genuinely not roadworks.
+- No native id field exists anywhere in this schema - `reference`
+  stays `None`, the same honest choice this SDK's own Vancouver/Québec
+  converters already make, rather than inventing an unreliable
+  composite key (a road/km/date composite is 380/383 distinct, not
+  proven unique).
+- Real coordinates are already true lat/lon (not swapped, unlike
+  Roma), missing on 38/383 (10%) of real records - a genuine, confirmed
+  gap. Real dates use a non-colon UTC offset, rejected by
+  `datetime.fromisoformat` on this SDK's minimum-supported Python 3.10
+  - a colon is inserted before parsing.
+- Licence genuinely unconfirmed - the gov.pl page's own CC BY-SA 4.0
+  statement covers page text generally, not confirmed to extend to
+  this specific XML dataset.
+- New tests: `tests/test_poland.py`, `tests/test_common_poland.py`,
+  against a real trimmed fixture.
+- New registry entry `key="poland"`; new `docs/providers/europe.md`
+  section; wired into `examples/roadworks_world_map.py` and
+  `scripts/smoke_test.py`.
+
 ### Added — Brussels Road Events, this SDK's first Belgian city-level roadworks provider (2026-08-23)
 
 `streetworks.brussels.BrusselsClient`, `streetworks.common.from_brussels`

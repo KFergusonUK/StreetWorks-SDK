@@ -539,6 +539,57 @@ provider in this SDK carries, no attribution required at all.
 **No credentials required** - every claim above came from a fully
 unauthenticated GET request.
 
+## GDDKiA (Poland)
+
+Poland's national roads and motorways authority (Generalna Dyrekcja
+Dróg Krajowych i Autostrad), found while surveying Europe for missing
+national feeds - the same technique that found Brussels Road Events.
+GDDKiA's own gov.pl page ("Dane XML i XSD") names a real, keyless
+disruptions feed:
+
+```python
+from streetworks.poland import PolandClient
+from streetworks.common import from_poland
+
+with PolandClient() as client:
+    works_list = from_poland(list(client.iter_roadworks()))
+```
+
+**Confirmed live 2026-08-23**: a single `GET` on `utrdane.xml` (~400 KB)
+returns 383 real current records - the root element's own `gen`
+attribute states a generation timestamp matching real time, not a stale
+cache. **The URL lives on an `archiwum.` (archive) subdomain despite
+serving live, current data** - confirmed genuinely current, not a
+naming leftover to be wary of.
+
+**`typ` is the real, closest-available roadworks discriminator** -
+`U` (Utrudnienie, "disruption/hindrance", 354/383) is overwhelmingly
+real roadworks (resurfacing, bridge maintenance, construction lane
+closures), confirmed by reading real sample description text, not
+assumed from the code. `I` (Incydent, 25/383) and `W` (an
+accident/police-response category, 4/383) are confirmed genuinely not
+roadworks. **`typ == "U"` is genuinely broader than "planned works"
+alone, though** - at least one real record is an emergency closure from
+flood damage (a road embankment washout), not scheduled construction -
+stated honestly, not filtered out, since no finer-grained field
+separates the two.
+
+**No native id field exists anywhere in this schema** - checked and
+confirmed absent. A composite of road number/kilometre/creation-date is
+close to unique but not proven so (380/383 distinct on a real live
+pull) - not used as a synthetic key; `reference` stays `None`, the same
+honest choice this SDK's own Vancouver/Québec converters already make.
+Real coordinates are already true lat/lon (not swapped, unlike Roma),
+missing on 38/383 (10%) of real records - a genuine, confirmed gap, not
+a parsing failure.
+
+Real dates use a non-colon UTC offset (`"...+0200"`), rejected by
+`datetime.fromisoformat` on this SDK's minimum-supported Python 3.10 -
+a colon is inserted before parsing. **Licence genuinely unconfirmed** -
+the gov.pl page's own CC BY-SA 4.0 statement covers the page's text
+content generally, not confirmed to extend to this specific XML
+dataset, so nothing is claimed either way.
+
 ## Basque Country (Euskadi)
 
 The Basque Country's road incidents, credential-free, fill the *other*

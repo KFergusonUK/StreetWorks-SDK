@@ -1318,6 +1318,41 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2.bulgaria import BulgariaClient",
     ),
     ProviderEntry(
+        key="poland",
+        name="GDDKiA",
+        description="Poland's national roads and motorways authority's real-time disruptions feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Poland"}),
+        administrative_area="Generalna Dyrekcja Dróg Krajowych i Autostrad (GDDKiA)",
+        scope_note=(
+            "Found surveying Europe for missing national feeds. GDDKiA's "
+            "own gov.pl page ('Dane XML i XSD') names a real, keyless "
+            "'utrdane.xml' feed - confirmed live 2026-08-23 (383 real "
+            "records), on an 'archiwum.' (archive) subdomain despite "
+            "serving genuinely current data (own gen= timestamp matches "
+            "real time). typ='U' (Utrudnienie) is the real roadworks "
+            "discriminator, confirmed by reading real sample text "
+            "(resurfacing, bridge maintenance, construction lane "
+            "closures) - but genuinely broader than 'planned works' "
+            "alone, since at least one real record is an emergency "
+            "flood-damage closure, stated honestly not filtered out. "
+            "typ='I'/'W' (incidents/accidents) are confirmed not "
+            "roadworks. No native id field exists anywhere in this "
+            "schema - reference is always None, the same honest choice "
+            "vancouver/quebec already make. Coordinates already true "
+            "lat/lon (not swapped, unlike Roma), missing on ~10% of "
+            "real records."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.poland",
+        _client_name="PolandClient",
+        import_line="from streetworks.poland import PolandClient",
+    ),
+    ProviderEntry(
         key="vegvesen",
         name="Statens vegvesen",
         description="Norway's national roadworks feed.",
