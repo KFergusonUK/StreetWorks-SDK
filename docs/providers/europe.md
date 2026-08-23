@@ -590,6 +590,62 @@ the gov.pl page's own CC BY-SA 4.0 statement covers the page's text
 content generally, not confirmed to extend to this specific XML
 dataset, so nothing is claimed either way.
 
+## CNAIR (Romania)
+
+Romania's national roads/motorways authority, found in the same survey
+that found Poland's GDDKiA. Genuinely keyless, but a **materially
+different technical shape from every other provider in this SDK**:
+
+```python
+from streetworks.romania import RomaniaClient
+from streetworks.common import from_romania
+
+with RomaniaClient() as client:
+    works_list = from_romania(list(client.iter_roadworks()))
+```
+
+**There is no separate JSON/XML/GeoJSON API.** CNAIR's own "Dispecerat
+Online" (`dispecerat.andnet.ro`) was checked directly - its bundled JS
+(`js/custom.js`) does nothing but a full `location.reload()` every ~8
+hours; real current data is server-rendered straight into the page's
+own HTML `<table>` elements. This client parses that HTML with the
+standard library's own `html.parser` - **no third-party HTML-parsing
+dependency added**, keeping the extra cost confined to callers who
+actually fetch this one real source, not every user of this SDK.
+
+**Expect a materially higher failure rate than this SDK's JSON/XML
+adapters.** A markup change on CNAIR's own site (a class name, a
+section title's exact wording) can silently break parsing in a way a
+schema change to a real API typically can't. `iter_events()`/
+`iter_roadworks()` degrade to an empty result on a structural mismatch
+rather than raising, the same defensive-parsing discipline this SDK's
+JSON/XML adapters already follow - but that same discipline means real
+breakage can look identical to "no events today." Treat a persistent
+zero-length result as a signal to check the source by hand.
+
+**Confirmed live 2026-08-23**: the page declares nine real numbered
+sections (road events, weather closures/restrictions, short-duration
+works, ongoing closures, ongoing restrictions, rehabilitation works,
+carriageway condition, weather, temperatures). **Two are unambiguous
+roadworks by their own real section titles, not guessed from content**:
+`"1.1. Lucrări de scurtă durată:"` (short-duration works, 5 real rows)
+and `"6. ... lucrări de reabilitare, modernizări, întretinere și
+reparații:"` (rehabilitation/modernization/maintenance/repair works, 45
+real rows) - 50 combined. Two more sections (ongoing closures/
+restrictions) do carry some real works-caused records too (a real
+sample reads "lucrari de racordare cu noul sector al autostrazii A7" -
+connection works for a new motorway sector) but aren't roadworks-
+exclusive by their own title - deliberately excluded from
+`iter_roadworks()`, available raw via `iter_events()`.
+
+**No coordinates exist anywhere in this schema** - a genuine, confirmed
+gap, not a parsing failure. Real fields are a road indicator, a
+from/to kilometre-point pair, real dates, a real "between localities"
+free-text range, and cause/work-type + remediation-measures free text.
+`"NR. CRT."` (e.g. `"6.15"`) is a real but positional row number,
+renumbered on every re-render - not used as a reference. Licence
+genuinely unconfirmed.
+
 ## Basque Country (Euskadi)
 
 The Basque Country's road incidents, credential-free, fill the *other*

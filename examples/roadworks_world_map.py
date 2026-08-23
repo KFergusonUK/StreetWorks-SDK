@@ -349,6 +349,7 @@ def _fetch_works(key, client):
         from_poland,
         from_quebec,
         from_roma,
+        from_romania,
         from_saarland,
         from_sct,
         from_tfl,
@@ -489,6 +490,11 @@ def _fetch_works(key, client):
         "ip": from_ip,
         "roma": from_roma, "berlin": from_berlin, "sct": from_sct, "milano": from_milano,
         "brussels": from_brussels, "poland": from_poland,
+        # romania's own schema has no coordinate field at all - wired in
+        # anyway so it's fetched/counted honestly rather than silently
+        # omitted, the same choice already made for oslo/helsinki/
+        # canton_zurich/zurich/vienna's own non-plotting CRS cases.
+        "romania": from_romania,
         "jersey": from_jersey, "nzta": from_nzta,
         "wa": from_au_wa_mainroads,
         "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,

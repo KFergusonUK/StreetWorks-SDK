@@ -1214,6 +1214,30 @@ def check_poland() -> str:
     )
 
 
+def check_romania() -> str:
+    """CNAIR (Romania) needs no credentials - see streetworks.romania.
+    Confirmed live 2026-08-23 (50 real roadworks records across two
+    real source sections) - HTML-scraped, this SDK's first source of
+    this shape, expect a materially higher failure rate than the
+    JSON/XML adapters. A persistent zero-length result here is worth
+    checking by hand, not just retrying."""
+    from collections import Counter
+
+    from streetworks.common import from_romania
+    from streetworks.romania import RomaniaClient
+
+    with RomaniaClient() as client:
+        records = list(client.iter_roadworks())
+    if not records:
+        raise RuntimeError(
+            "query returned no records - either genuinely no events right "
+            "now, or the source's own HTML markup changed; check by hand"
+        )
+    works_list = from_romania(records)
+    section_counts = Counter(r["section"] for r in records)
+    return f"{len(works_list):,} real roadworks record(s) across {len(section_counts)} section(s)"
+
+
 #: Real diagnostic pass (2026-07-30, see streetworks.datex2.vegvesen module
 #: docstring) found zero contradictions across 2,636 real coordinate
 #: elements - srsName is a clean, trustworthy declaration for this feed,
@@ -2653,6 +2677,7 @@ def main() -> int:
     # Road Infrastructure Agency/LIMA (Bulgaria) needs no credentials
     reporter.check("DATEX II (Bulgaria)", [], check_bulgaria)
     reporter.check("GDDKiA (Poland)", [], check_poland)
+    reporter.check("CNAIR (Romania)", [], check_romania)
     # Autobahn GmbH (Germany) needs no credentials
     reporter.check("Autobahn GmbH (Germany)", [], check_autobahn)
     # Via Lietuva (Lithuania) needs no credentials

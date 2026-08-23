@@ -75,6 +75,7 @@ from .from_poland import from_poland
 from .from_quebec import from_quebec
 from .from_registrucentras import from_registrucentras_street
 from .from_roma import from_roma
+from .from_romania import from_romania
 from .from_saarland import from_saarland
 from .from_sct import from_sct
 from .from_srwr import from_srwr
@@ -180,6 +181,7 @@ __all__ = [
     "from_drivebc",
     "from_lisboa",
     "from_roma",
+    "from_romania",
     "from_copenhagen",
     "from_dar_street",
     "from_oslo",

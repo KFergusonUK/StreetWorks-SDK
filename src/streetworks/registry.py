@@ -1353,6 +1353,50 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.poland import PolandClient",
     ),
     ProviderEntry(
+        key="romania",
+        name="CNAIR",
+        description="Romania's national roads/motorways real-time dispatch board.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Romania"}),
+        administrative_area=(
+            "Compania Națională de Administrare a Infrastructurii Rutiere (CNAIR)"
+        ),
+        scope_note=(
+            "Found surveying Europe for missing national feeds, alongside "
+            "Poland. Genuinely keyless, but a materially different "
+            "technical shape from every other provider here - CNAIR's own "
+            "'Dispecerat Online' (dispecerat.andnet.ro) has no separate "
+            "JSON/XML API at all (its own bundled JS just does a full "
+            "page reload every ~8 hours); real current data is "
+            "server-rendered directly into HTML <table> elements, parsed "
+            "with the standard library's html.parser (no third-party HTML "
+            "dependency added). Expect a materially higher failure rate "
+            "than this SDK's JSON/XML adapters - a markup change on "
+            "CNAIR's own site can silently break parsing; both "
+            "iter_events()/iter_roadworks() degrade to empty rather than "
+            "raising, so a persistent zero-length result should be "
+            "checked by hand, not trusted as 'no events today'. Two of "
+            "the page's own nine real numbered sections are roadworks-"
+            "exclusive by their own titles ('Lucrări de scurtă durată'/"
+            "short-duration works, 'reabilitare, modernizări, "
+            "întretinere și reparații'/rehabilitation-modernization-"
+            "maintenance-repair works, 50 real records combined "
+            "2026-08-23) - two more (ongoing closures/restrictions) carry "
+            "some real works-caused records too but aren't roadworks-"
+            "exclusive by title, deliberately excluded from "
+            "iter_roadworks(). No coordinates exist anywhere in this "
+            "schema - a genuine, confirmed gap, not a parsing failure."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.romania",
+        _client_name="RomaniaClient",
+        import_line="from streetworks.romania import RomaniaClient",
+    ),
+    ProviderEntry(
         key="vegvesen",
         name="Statens vegvesen",
         description="Norway's national roadworks feed.",

@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+### Added — CNAIR, Romania's first national roadworks provider, this SDK's first HTML-scraped source (2026-08-23)
+
+`streetworks.romania.RomaniaClient`, `streetworks.common.from_romania`
+- Found alongside Poland's GDDKiA in the same "any more missing
+  country feeds" survey. Genuinely keyless, but a materially different
+  technical shape from every other provider in this SDK: CNAIR's own
+  "Dispecerat Online" (`dispecerat.andnet.ro`) has no separate JSON/
+  XML/GeoJSON API - its own bundled JS does nothing but a full page
+  reload every ~8 hours, so real current data is server-rendered
+  straight into HTML `<table>` elements.
+- Parsed with the standard library's own `html.parser`
+  (`html.parser.HTMLParser`) - **no third-party HTML-parsing
+  dependency added**, per explicit direction to keep any extra cost
+  confined to callers who actually fetch this one real source, not
+  every user of this SDK.
+- Expect a materially higher failure rate than this SDK's JSON/XML
+  adapters - a markup change on CNAIR's own site can silently break
+  parsing. `iter_events()`/`iter_roadworks()` degrade to an empty
+  result on a structural mismatch rather than raising, documented
+  explicitly as a real caveat (a persistent zero-length result should
+  be checked by hand, not trusted as "no events today").
+- Two of the page's own nine real numbered sections are roadworks-
+  exclusive by their own titles ("Lucrări de scurtă durată"/short-
+  duration works, "reabilitare, modernizări, întretinere și
+  reparații"/rehabilitation-modernization-maintenance-repair works,
+  50 real records combined 2026-08-23) - two more (ongoing closures/
+  restrictions) carry some real works-caused records too but aren't
+  roadworks-exclusive by title, deliberately excluded.
+- No coordinates exist anywhere in this schema - a genuine, confirmed
+  gap. Licence genuinely unconfirmed.
+- New tests: `tests/test_romania.py`, `tests/test_common_romania.py`,
+  against a real trimmed HTML fixture, including a parser-degrades-
+  gracefully test on unrecognised markup.
+- New registry entry `key="romania"`; new `docs/providers/europe.md`
+  section; wired into `examples/roadworks_world_map.py` and
+  `scripts/smoke_test.py`.
+
 ### Added — GDDKiA, Poland's first national roadworks provider (2026-08-23)
 
 `streetworks.poland.PolandClient`, `streetworks.common.from_poland`
