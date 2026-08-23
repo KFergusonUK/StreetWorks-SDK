@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+### Added — New England Compass (NEC), a genuinely separate keyless C2C feed for Maine/New Hampshire/Vermont (2026-08-23)
+
+`streetworks.necompass.NECompassClient`, `streetworks.common.from_necompass`
+- Prompted by a correction: `newengland511.org`'s own sign-up page
+  links to a real developer portal
+  (`nec-por.ne-compass.com/DeveloperPortal`) that turned out not to be
+  the dead page originally assumed. That portal fronts a completely
+  different, genuinely keyless real system from the na511-platform
+  `NEW_ENGLAND` entry above - a real national ITS Center-to-Center
+  (C2C) XML feed (`http://its.gov/c2c_icd` namespace), confirmed live
+  2026-08-23 with zero credentials.
+- Two real, differently-shaped resources - `laneClosureData` (states
+  full start/end dates) and `incidentData` (states only a confirmed
+  date, no end date at all) - with real `id`s that never overlap
+  between them; both are consumed for complete coverage.
+  `type IN ('Construction','RoadMaintenance','BridgeMaintenance','BridgeOut')`
+  is the confirmed real roadworks filter (321 real records across all
+  three states and both resources), checked by reading real sample
+  descriptions rather than assumed from the name.
+- Real LineString geometry from `startLocation`/`midpoints`/
+  `endLocation` - one real Maine record has 25 real midpoint vertices,
+  richer geometry than almost any other provider in this SDK.
+  Coordinates are real WGS84 degrees times 1,000,000, confirmed
+  against a known real place (Leeds, Maine).
+- No formal licence found, but a real, live "Data Sharing Relationship
+  Principles" page commits to keeping the data open, asking only for
+  citation.
+- New tests: `tests/test_necompass.py`, `tests/test_common_necompass.py`,
+  against two trimmed real XML fixtures.
+- New registry entry `key="necompass"`; new `docs/providers/us.md`
+  section; wired into `examples/roadworks_world_map.py` and
+  `scripts/smoke_test.py`.
+
 ### Added — six more US 511 deployments found in a broader sweep, plus a shared three-state jurisdiction (2026-08-23)
 
 `streetworks.na511.jurisdictions.{NEW_YORK,ARIZONA,FLORIDA,IDAHO,PENNSYLVANIA,NORTH_CAROLINA,NEW_ENGLAND}`

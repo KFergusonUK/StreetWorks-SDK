@@ -4166,6 +4166,50 @@ _REGISTRY: list[ProviderEntry] = [
         import_line='from streetworks.na511 import NA511Client  # .fetch("new_england")',
     ),
     ProviderEntry(
+        key="necompass",
+        name="New England Compass (NEC)",
+        description="Maine/New Hampshire/Vermont's real, keyless shared ITS C2C XML feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"USA"}),
+        administrative_area=(
+            "Maine DOT / New Hampshire DOT / Vermont Agency of Transportation "
+            "(New England Compass ATMS)"
+        ),
+        scope_note=(
+            "A genuinely different, real system from na511's own "
+            "NEW_ENGLAND entry ('newengland511.org', key-gated) - found "
+            "by tracing the real developer-portal link "
+            "newengland511.org's own signup page actually points at "
+            "(nec-por.ne-compass.com/DeveloperPortal), not the dead page "
+            "first assumed. Confirmed live, credential-free: a real ITS "
+            "Center-to-Center (C2C) XML feed, national standard schema "
+            "(the its.gov/c2c_icd namespace), not bespoke. Two real, "
+            "differently-shaped resources - laneClosureData (states "
+            "startDate/startTime/endDate/endTime) and incidentData "
+            "(states only confirmedDate/confirmedTime, no end date at "
+            "all) - real ids never overlap between them, both consumed "
+            "for complete coverage. type IN "
+            "('Construction','RoadMaintenance','BridgeMaintenance',"
+            "'BridgeOut') is the confirmed real roadworks filter (321 "
+            "real records across all three states, 2026-08-23) - "
+            "checked by reading real sample descriptions, not assumed "
+            "from the name (a real BridgeOut record reads 'Rehabilitation "
+            "of bridge... a temporary bridge is being installed', "
+            "genuine construction). Real LineString geometry from "
+            "start/midpoints/end - one real record has 25 real midpoint "
+            "vertices, richer than almost any other provider in this "
+            "SDK."
+        ),
+        credentials=None,
+        licence=None,
+        licence_confirmed=False,
+        source_grade="operator",
+        _module="streetworks.necompass",
+        _client_name="NECompassClient",
+        import_line="from streetworks.necompass import NECompassClient",
+    ),
+    ProviderEntry(
         key="vancouver",
         name="Vancouver Road Ahead",
         description="Vancouver's own real-time/planned roadworks feed, over OpenDataSoft",

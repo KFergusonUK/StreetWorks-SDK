@@ -594,3 +594,57 @@ behalf. Free self-service registration:
 `https://newengland511.org/developers`; set the matching
 `*_511_API_KEY` variable (see `.env.example`) and run
 `scripts/smoke_test.py` to confirm any of them.
+
+## New England Compass (NEC)
+
+A genuinely separate, real system from the `New England 511` entry
+above — not a duplicate, not a rename. `newengland511.org`'s own
+sign-up page links to a real developer portal
+(`nec-por.ne-compass.com/DeveloperPortal`) that turned out not to be
+the dead page originally assumed; that portal fronts a completely
+different, **genuinely keyless** feed, confirmed live 2026-08-23:
+
+```python
+from streetworks.necompass import NECompassClient
+from streetworks.common import from_necompass
+
+with NECompassClient() as client:  # doctest: +SKIP
+    works_list = from_necompass(list(client.iter_roadworks("Maine")))
+```
+
+- **No key or account of any kind required** — a real, unauthenticated
+  `GET` against `https://nec-por.ne-compass.com/NEC.XmlDataPortal/api/c2c`
+  returns genuine current XML, better than the na511 entry's key-gated
+  access.
+- **A real national ITS Center-to-Center (C2C) standard**, not
+  bespoke — the `http://its.gov/c2c_icd` XML namespace.
+- **Two real, differently-shaped resources, not one** —
+  `laneClosureData` (175/118/54 real records for Maine/New
+  Hampshire/Vermont, 2026-08-23) states `startDate`/`startTime`/
+  `endDate`/`endTime`; `incidentData` (1/1/2 real records the same
+  day) states only `confirmedDate`/`confirmedTime`, with no end date
+  at all. Real `id` values never overlap between the two resources —
+  both are consumed for complete coverage.
+- **`type IN ('Construction','RoadMaintenance','BridgeMaintenance','BridgeOut')`**
+  is the confirmed real roadworks filter (321 real records across all
+  three states and both resources) — checked by reading real sample
+  descriptions, not assumed from the name alone (a real `BridgeOut`
+  record reads "Rehabilitation of bridge on VT-31... A temporary
+  bridge is being installed", genuine construction). `SpecialEvent`,
+  `OversizedVehicle`, `PSA`, and `Other` are confirmed genuinely not
+  roadworks.
+- **Real LineString geometry** from `startLocation`/`midpoints`/
+  `endLocation`, in that order — one real Maine record has 25 real
+  midpoint vertices, richer geometry than almost any other provider in
+  this SDK. Falls back to a single point when `endLocation` is absent.
+- **Coordinates are real WGS84 degrees times 1,000,000**, stored as
+  plain integers — confirmed against a known real place (Leeds,
+  Maine: `lat=44345313`/`lon=-70145120` → 44.345313, -70.145120).
+- **Licence**: no formal statement found, but a real, live "Data
+  Sharing Relationship Principles" page
+  (`nec-por.ne-compass.com/DeveloperPortal/Home/DataSharing`)
+  explicitly commits to keeping the data open ("Maine, New Hampshire,
+  and Vermont will make all efforts to keep data open once it's been
+  released"), asking only that data sources be cited.
+
+No credentials needed — confirm any time with `scripts/smoke_test.py`.

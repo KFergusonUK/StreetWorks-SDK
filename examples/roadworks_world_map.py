@@ -338,6 +338,7 @@ def _fetch_works(key, client):
         from_mallorca,
         from_milano,
         from_na511,
+        from_necompass,
         from_nsw_livetraffic,
         from_nycdot,
         from_nzta,
@@ -414,6 +415,16 @@ def _fetch_works(key, client):
                 date_confidence=DateConfidence.ESTIMATED,
             )
         )
+        return works
+    if key == "necompass":
+        from streetworks.necompass import NETWORKS
+
+        per_network = _LIMIT // len(NETWORKS) or 1
+        works: list = []
+        for network in NETWORKS:
+            works.extend(
+                from_necompass(list(itertools.islice(client.iter_roadworks(network), per_network)))
+            )
         return works
     if key == "vic":
         return from_vic_disruptions(client.iter_planned_disruptions())

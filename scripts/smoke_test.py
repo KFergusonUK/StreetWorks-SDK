@@ -914,6 +914,29 @@ def check_newengland511() -> str:
     return _check_na511("NEW_ENGLAND_511_API_KEY", "new_england", "New England")
 
 
+def check_necompass() -> str:
+    """New England Compass (NEC) needs no credentials - see
+    streetworks.necompass. Confirmed live 2026-08-23 (321 real roadworks
+    records across all three states) - a genuinely separate, keyless
+    system from check_newengland511 above, found by tracing the real
+    developer-portal link newengland511.org's own signup page actually
+    points at. Pulls all three real networks (Maine/New
+    Hampshire/Vermont) and reports the per-network split."""
+    from streetworks.common import from_necompass
+    from streetworks.necompass import NETWORKS, NECompassClient
+
+    counts: dict[str, int] = {}
+    with NECompassClient() as client:
+        works_list = []
+        for network in NETWORKS:
+            records = list(client.iter_roadworks(network))
+            counts[network] = len(records)
+            works_list += from_necompass(records)
+    if not works_list:
+        raise RuntimeError("all three networks returned no records - real data may have changed")
+    return f"{len(works_list):,} real roadworks record(s) across three networks: {counts}"
+
+
 def check_vancouver() -> str:
     """Vancouver Road Ahead needs no credentials - see
     streetworks.vancouver. Confirmed live 2026-08-21 (three real
@@ -2623,6 +2646,8 @@ def main() -> int:
     reporter.check("Pennsylvania 511", ["PENNSYLVANIA_511_API_KEY"], check_pa511)
     reporter.check("North Carolina 511", ["NORTH_CAROLINA_511_API_KEY"], check_nc511)
     reporter.check("New England 511", ["NEW_ENGLAND_511_API_KEY"], check_newengland511)
+    # New England Compass (NEC) needs no credentials
+    reporter.check("New England Compass (NEC)", [], check_necompass)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials

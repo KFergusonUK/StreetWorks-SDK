@@ -58,6 +58,7 @@ from .from_marousi import from_marousi_street
 from .from_milano import from_milano
 from .from_monaghan import from_monaghan_road
 from .from_na511 import from_na511
+from .from_necompass import from_necompass
 from .from_nrn import from_nrn
 from .from_nsw_livetraffic import from_nsw_livetraffic
 from .from_nvdb import from_nvdb
@@ -216,4 +217,5 @@ __all__ = [
     "from_vancouver",
     "from_toronto",
     "from_ip",
+    "from_necompass",
 ]
