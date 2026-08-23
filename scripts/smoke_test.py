@@ -1142,6 +1142,26 @@ def check_belgium() -> str:
     )
 
 
+def check_brussels() -> str:
+    """Brussels Road Events needs no credentials - see
+    streetworks.brussels. Confirmed live 2026-08-23 (287 real features,
+    all datex_codes="RWK") - a genuinely different, keyless CC0 feed
+    from check_belgium above (Flanders only, key-free but non-permissive
+    licence). Reports the real Street/Ring road_type split."""
+    from collections import Counter
+
+    from streetworks.brussels import BrusselsClient
+    from streetworks.common import from_brussels
+
+    with BrusselsClient() as client:
+        records = list(client.iter_roadworks())
+    if not records:
+        raise RuntimeError("query returned no records - real data may have changed")
+    works_list = from_brussels(records)
+    road_types = Counter(r["properties"].get("road_type_fr") for r in records)
+    return f"{len(works_list):,} real roadworks record(s), road_type split: {dict(road_types)}"
+
+
 def check_luxembourg() -> str:
     """Ponts et Chaussées/CITA (Luxembourg, DATEX II v2.3) needs no
     credentials - confirmed live and reliably reachable (see
@@ -2602,6 +2622,7 @@ def main() -> int:
     reporter.check("Ayuntamiento de Madrid (INFORMO)", [], check_madrid)
     # Verkeerscentrum Vlaanderen (Belgium/Flanders) needs no credentials
     reporter.check("DATEX II (Belgium/Flanders)", [], check_belgium)
+    reporter.check("Brussels Road Events", [], check_brussels)
     # Ponts et Chaussées/CITA (Luxembourg) needs no credentials
     reporter.check("DATEX II (Luxembourg)", [], check_luxembourg)
     # Road Infrastructure Agency/LIMA (Bulgaria) needs no credentials

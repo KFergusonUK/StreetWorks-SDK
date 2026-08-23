@@ -22,6 +22,7 @@ from .from_bdtopo import from_bdtopo
 from .from_berlin import from_berlin
 from .from_bev import from_bev_street
 from .from_brandenburg import from_brandenburg_street
+from .from_brussels import from_brussels
 from .from_caclr import from_caclr_street
 from .from_canton_zurich import from_canton_zurich
 from .from_cciss import from_cciss
@@ -172,6 +173,7 @@ __all__ = [
     "from_cciss",
     "from_paris",
     "from_berlin",
+    "from_brussels",
     "from_madrid",
     "from_drivebc",
     "from_lisboa",

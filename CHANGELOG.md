@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+### Added — Brussels Road Events, this SDK's first Belgian city-level roadworks provider (2026-08-23)
+
+`streetworks.brussels.BrusselsClient`, `streetworks.common.from_brussels`
+- Prompted by asking whether Belgium's other regions had equivalents to
+  Flanders' own DATEX II feed (`streetworks.datex2.belgium`). Wallonia's
+  own "Événements routiers en Wallonie" (transportdata.be) turned out
+  genuinely credential-gated - its own listing states access requires
+  emailing SPW Mobilité for a username/password, usage under a
+  contractual arrangement, not an open licence - parked, not built.
+- Brussels Mobility's own "Brussels Road Events" dataset is different:
+  genuinely keyless and licensed **CC0**, confirmed independently from
+  both transportdata.be's own resource metadata and Brussels Mobility's
+  own documentation page. Confirmed live 2026-08-23 - the catalogued
+  URL resolves through a real multi-hop redirect to a plain
+  unauthenticated JSON endpoint, a real GeoJSON `FeatureCollection`
+  (287 real features). A separate, newer OGC API on
+  `api.mobility.brussels` does ask for a bearer token for some
+  datasets - not this one.
+- Every real feature observed was `datex_codes="RWK"` ("Travaux"/works)
+  - the dataset's own scope also names incidents/traffic jams, none
+  were live in this pull, stated honestly rather than assumed proven
+  against a mixed sample. `iter_roadworks()` filters on this regardless.
+- Genuinely bilingual (FR/NL) like Flanders' own feed - French read as
+  canonical. Real `Point` geometry, CRS84 (WGS84, standard GeoJSON
+  lon/lat order, no reprojection needed unlike Flanders' Lambert 72).
+  `road_type_fr` spans `Street` (285/287) and `Ring` (2/287, Brussels'
+  own R0 orbital) - comprehensive, not motorway-only.
+- A real source-encoding quirk found and corrected: some text embeds
+  literal HTML entities (e.g. `"d&apos;arrêt"`), unescaped before use;
+  every real `type_fr` value also carries a trailing space, stripped.
+- New tests: `tests/test_brussels.py`, `tests/test_common_brussels.py`,
+  against a real trimmed fixture (plus one synthetic non-roadworks
+  record to exercise the filter, since every live record was RWK).
+- New registry entry `key="brussels"`; new `docs/providers/europe.md`
+  section; wired into `examples/roadworks_world_map.py` and
+  `scripts/smoke_test.py`.
+
 ### Added — New England Compass (NEC), a genuinely separate keyless C2C feed for Maine/New Hampshire/Vermont (2026-08-23)
 
 `streetworks.necompass.NECompassClient`, `streetworks.common.from_necompass`

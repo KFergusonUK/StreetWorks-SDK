@@ -274,6 +274,51 @@ licence. See `streetworks/datex2/belgium.py`'s module docstring for the
 full verbatim licence text (French original + English translation) and
 field-by-field mapping.
 
+## Brussels Road Events (Brussels-Capital Region)
+
+Found while checking whether Belgium's other regions had equivalents to
+Flanders' own DATEX II feed above. Wallonia's own "Événements routiers en
+Wallonie" (also catalogued on transportdata.be) turned out
+credential-gated — its own listing states access requires emailing SPW
+Mobilité directly for a username/password, and usage sits under a
+contractual arrangement, not an open licence — parked, not built. Brussels
+Mobility's own "Brussels Road Events" dataset is different: genuinely
+keyless, and licensed **CC0** — confirmed independently from both
+transportdata.be's own resource metadata and Brussels Mobility's own
+documentation page:
+
+```python
+from streetworks.brussels import BrusselsClient
+from streetworks.common import from_brussels
+
+with BrusselsClient() as client:
+    works_list = from_brussels(list(client.iter_roadworks()))
+```
+
+**Confirmed live 2026-08-23**: the catalogued resource URL resolves
+(via a real multi-hop redirect — `data-mobility.brussels` →
+`data.mobility.brussels` → `api-mobility.irisnetlab.be`) to a plain
+unauthenticated JSON endpoint, a real GeoJSON `FeatureCollection`, 287
+real features. A separate, newer OGC API Features service on
+`api.mobility.brussels` does ask for a bearer token for some datasets —
+but this is not that service.
+
+Every real feature observed was `datex_codes="RWK"`/`type_fr="Travaux "`
+(French: "works") — the dataset's own description also names incidents
+and traffic jams as in scope, but none were live in this particular
+pull, stated honestly rather than assumed proven against a mixed sample.
+`iter_roadworks()` filters on `datex_codes == "RWK"` regardless, so it
+stays correct if other event types do appear. Genuinely bilingual
+(French/Dutch) like Flanders' own feed — French is read as the canonical
+text field. Real geometry is `Point`, stated CRS is CRS84 (WGS84,
+standard GeoJSON lon/lat order — no reprojection needed, unlike
+Flanders' Lambert 72). `road_type_fr` distinguishes `Street` (285/287)
+from `Ring` (2/287, Brussels' own R0 orbital) — comprehensive, not
+motorway-only. A real source-encoding quirk was found and corrected, not
+reproduced: some text embeds literal HTML entities
+(e.g. `"d&apos;arrêt"`), unescaped before use; every real `type_fr` value
+also carries a trailing space, stripped alongside it.
+
 **Luxembourg's Ponts et Chaussées** (via CITA) publishes current roadworks
 on the national road network credential-free, as genuine DATEX II **v2.3**
 — the same version France uses:

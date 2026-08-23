@@ -1224,9 +1224,13 @@ _REGISTRY: list[ProviderEntry] = [
             "Flanders only - confirmed live (supplierIdentification/"
             "nationalIdentifier states \"BETICV\", Belgium Traffic Information "
             "Centre Vlaanderen). Wallonia publishes its own separate feed, not "
-            "wrapped here; Brussels wasn't checked. Coordinates are real "
-            "EPSG:31370 (Belgian Lambert 72), not WGS84 - pass "
-            "streetworks.datex2.belgium.CRS to from_datex2()."
+            "wrapped here - genuinely credential-gated (SPW's own portal "
+            "listing requires emailing for a username/password, usage under "
+            "a contractual arrangement, not an open licence), not just "
+            "unchecked. Brussels is covered separately - see the 'brussels' "
+            "entry below, a genuinely different, keyless, CC0 feed. "
+            "Coordinates are real EPSG:31370 (Belgian Lambert 72), not "
+            "WGS84 - pass streetworks.datex2.belgium.CRS to from_datex2()."
         ),
         credentials=None,
         licence=(
@@ -1238,6 +1242,41 @@ _REGISTRY: list[ProviderEntry] = [
         _module="streetworks.datex2",
         _client_name="BelgiumClient",
         import_line="from streetworks.datex2.belgium import BelgiumClient",
+    ),
+    ProviderEntry(
+        key="brussels",
+        name="Brussels Road Events",
+        description="Brussels-Capital Region's real-time roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"Belgium"}),
+        administrative_area="Brussels-Capital Region",
+        scope_note=(
+            "Found while checking whether Belgium's other regions had "
+            "equivalents to Flanders' own DATEX II feed above - Wallonia's "
+            "turned out credential-gated (see the 'belgium' entry), but "
+            "Brussels Mobility's own 'Brussels Road Events' dataset "
+            "(catalogued on transportdata.be) is genuinely keyless and "
+            "CC0, confirmed live 2026-08-23 (287 real features). A "
+            "separate, newer OGC API on api.mobility.brussels does ask "
+            "for a bearer token for some datasets, but this is not that "
+            "service - the real catalogued URL resolves through a "
+            "multi-hop redirect to a plain unauthenticated JSON endpoint. "
+            "Every live record was datex_codes='RWK' ('Travaux'/works) - "
+            "the dataset's own scope also names incidents/traffic jams, "
+            "none were live in this pull, stated honestly not assumed. "
+            "Genuinely bilingual (FR/NL); French read as canonical. "
+            "road_type_fr distinguishes Street (285/287) from Ring "
+            "(2/287, Brussels' own R0 orbital) - comprehensive, not "
+            "motorway-only."
+        ),
+        credentials=None,
+        licence="Creative Commons Zero (CC0) - confirmed live",
+        licence_confirmed=True,
+        source_grade="operator",
+        _module="streetworks.brussels",
+        _client_name="BrusselsClient",
+        import_line="from streetworks.brussels import BrusselsClient",
     ),
     ProviderEntry(
         key="luxembourg",
