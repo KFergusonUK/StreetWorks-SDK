@@ -19,7 +19,7 @@ run their own regional traffic authorities and publish separately - the
 DGT feed states this itself (it's a national, not all-Spain, publication).
 
 **Not state-roads-only, despite the name - confirmed live via a network-
-scope audit (``docs/network-scope-audit.md``), not assumed from "national"
+scope audit (``docs/findings/network-scope-audit.md``), not assumed from "national"
 in the description.** Real road-number prefixes reach several regional/
 provincial/insular road authorities too, not just the state's own network
 (``A-``/``N-``/``AP-``): ``CV-`` (Comunidad Valenciana, 16 records checked

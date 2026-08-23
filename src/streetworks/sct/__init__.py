@@ -2,7 +2,7 @@
 
 Fills the larger of DGT's two documented exclusions (DGT explicitly omits
 Catalonia and the Basque Country - see :mod:`streetworks.datex2.dgt`).
-See ``docs/catalonia-sct-investigation.md`` for the recon this build is
+See ``docs/findings/catalonia-sct-investigation.md`` for the recon this build is
 based on.
 
 The feed (``incidenciesGML.xml``) is genuine WFS/GML - real ``gml:Point``
@@ -40,7 +40,7 @@ Departament d'Interior") - the cleanest licence of any Spanish source
 checked this session. Real trimmed fixture used here, not synthetic.
 
 **Network scope**: ``multi_authority_interurban`` - the same shape as
-DGT's own real data (see ``docs/network-scope-audit.md``). Real road-
+DGT's own real data (see ``docs/findings/network-scope-audit.md``). Real road-
 number prefixes span the Generalitat's own network (``C-``) *and* all
 four provincial councils' networks (``B-``/``BV-``/``BP-``,
 ``GI-``/``GIV-``/``GIP-``, ``T-``/``TV-``/``TP-``, ``L-``/``LV-``) *and*

@@ -34,7 +34,7 @@ exactly on road, kilometre range, and validity dates:
 
 This is the **same real-world incident published in both feeds** —
 genuine duplication for at least these two, not the "genuinely additive,
-not a duplicate" picture `docs/idemallorca-investigation.md` and the
+not a duplicate" picture `docs/findings/idemallorca-investigation.md` and the
 Mallorca README section currently state. That framing needs revising: DGT
 and Consell de Mallorca are *mostly* complementary (DGT: state + most
 other Spanish road authorities' works; Consell: Mallorca's own island
@@ -123,7 +123,7 @@ class NetworkScope(str, Enum):
     actually reaches - checked against real records, never assumed from
     a provider's stated remit alone (DGT's real data reaches several
     regional/insular networks beyond its own, not just the state network
-    its name implies - see docs/network-scope-audit.md)."""
+    its name implies - see docs/findings/network-scope-audit.md)."""
 
     COMPREHENSIVE = "comprehensive"                  #: all roads, all promoters (Street Manager, SRWR, Jersey)
     MULTI_AUTHORITY_INTERURBAN = "multi_authority_interurban"  #: several road authorities' interurban networks aggregated, no municipal streets (DGT)

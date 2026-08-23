@@ -255,7 +255,7 @@ combined), `T-`/`TV-`/`TP-` (Tarragona provincial, 11 combined), `L-`/
 `LV-` (Lleida provincial, 3 combined), plus real state-network entries
 (`N-`/`NII-`, 14; `A-`/`AP-`, 18) still appearing within Catalan
 territory. This is the same shape of finding the network-scope audit
-already made for DGT (`docs/network-scope-audit.md`) - a multi-authority
+already made for DGT (`docs/findings/network-scope-audit.md`) - a multi-authority
 *interurban* aggregator (the Generalitat's own network plus all four
 provincial deputació networks plus some state roads within the region),
 not a single authority's network and not confirmed to reach municipal
@@ -329,7 +329,7 @@ same discipline as Menorca/Eivissa were left for the Mallorca work.
 3. Once built, Spain's picture is genuinely four-way:  DGT (national,
    multi-authority interurban, ex-Catalonia/Basque) + Consell de Mallorca
    (insular, overlapping with DGT at the edges - see
-   `docs/network-scope-audit.md`) + SCT (Catalonia, multi-authority
+   `docs/findings/network-scope-audit.md`) + SCT (Catalonia, multi-authority
    interurban within the region) + a credible-but-unbuilt Basque Country
    feed - a genuine, concrete illustration of Spain's real regional
    fragmentation, not a tidy national/regional split.

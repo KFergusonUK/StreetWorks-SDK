@@ -7,7 +7,7 @@ SCT), a genuinely different agency and data class from all three.
 
 .. attention::
    **Confirmed live (2026-08-15)** against real, unauthenticated requests
-   directly re-verifying ``docs/inspire-gml-investigation.md``'s own
+   directly re-verifying ``docs/findings/inspire-gml-investigation.md``'s own
    findings - the mechanism below still matches that investigation
    exactly, live, before this build acted on it.
 

@@ -24,7 +24,7 @@ Durham, USRN `11713561` — is not recoverable from that source at any
 level (confirmed live via `DescribeFeatureType`; see the module
 docstring of
 [`src/streetworks/common/from_datavia.py`](../../src/streetworks/common/from_datavia.py)
-and [`docs/gazetteer-field-dump.md`](../gazetteer-field-dump.md)). That
+and [`docs/findings/gazetteer-field-dump.md`](../findings/gazetteer-field-dump.md)). That
 finding is about gazetteer naming coverage for one provider, not a
 general statement of Street Manager's permitting statute — the two are
 related (both turn on USRNs being the unit of reference) but shouldn't

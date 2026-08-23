@@ -3,7 +3,7 @@ Brandenburg/Berlin gazetteer WFS run by LGB (Landesvermessung und
 Geobasisinformation Brandenburg). This SDK's second German state-level
 streets/gazetteer provider (after Hamburg's own GAGES), continuing the
 "state fan-out" fallback path Germany's national streets investigation
-left open - see `docs/germany-streets-investigation.md`.
+left open - see `docs/findings/germany-streets-investigation.md`.
 
 **Real, live, keyless WFS - found via Brandenburg's own geoportal
 metadata record, not guessed.** `geoportal.brandenburg.de`'s own

@@ -10,7 +10,7 @@ than silently misrepresenting one of those as an ``Address``.
 the Locatieserver's real sampled responses carry ``huisnummer`` (int) and a
 combined ``huis_nlt`` display string, but no separate ``huisletter``/
 ``toevoeging`` field was observed in any sample checked this session (see
-``docs/gazetteer-field-dump.md``, B1), and neither is modelled on
+``docs/findings/gazetteer-field-dump.md``, B1), and neither is modelled on
 :class:`.BAGLocation`. So ``suffix`` is always ``None`` here - not because
 Dutch addresses never have a letter/addition, but because this SDK cannot
 currently state one; do not read the constant ``None`` as "BAG has no

@@ -220,7 +220,7 @@ with LisboaStreetsClient() as lisboa:
 Portugal's own promoted road-network service carries only
 route-classification codes (`roadnumber`/`road1`, e.g. `"A1"`/`"IC1"`),
 no name field at all (see
-[`docs/portugal-streets-investigation.md`](../portugal-streets-investigation.md)).
+[`docs/findings/portugal-streets-investigation.md`](../findings/portugal-streets-investigation.md)).
 Rather than stop there, this checks the capital itself — the same "try
 the capital/a city" fallback shape Germany's own state fan-out uses.
 

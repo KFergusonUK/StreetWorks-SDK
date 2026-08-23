@@ -276,7 +276,7 @@ Confirmed island-only, as the brief expected: every real `carretera` value
 checked is `Ma-`-prefixed (Consell de Mallorca's own road numbering) —
 no DGT national-network roads appear here.
 
-> **Correction (see `docs/network-scope-audit.md`, 2026-07):** the line
+> **Correction (see `docs/findings/network-scope-audit.md`, 2026-07):** the line
 > above — "genuinely additive coverage, not a DGT duplicate" — is wrong,
 > stated plainly rather than quietly edited. A later audit found DGT's
 > own real data does reach Mallorca (`Ma-`/`Me-` prefixed records, ~4-5 at
@@ -289,7 +289,7 @@ no DGT national-network roads appear here.
 > Spanish regional/provincial/insular authorities too, not just its own
 > state network — so this is a genuine, useful, additional source, just
 > not a disjoint one from DGT. Never deduplicate matches across the two —
-> see the README's standing note on this and `docs/network-scope-audit.md`
+> see the README's standing note on this and `docs/findings/network-scope-audit.md`
 > for the full evidence.
 
 **The cluster is real, not hypothetical** — checked, not assumed:

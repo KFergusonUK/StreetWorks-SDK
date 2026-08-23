@@ -2,7 +2,7 @@
 
 Investigation only. No module, no client, no tests. All findings below
 are from real, live requests made 2026-08-16, following up on a partial,
-older finding recorded in `docs/nap-survey.md` (the IMT NAP section)
+older finding recorded in `docs/findings/nap-survey.md` (the IMT NAP section)
 that never made it into `docs/providers/pending.md`. Status: **the real,
 live, queryable national road-network source is confirmed too coarse —
 same outcome as Germany — the municipal fallback path started 2026-08-20,
@@ -12,7 +12,7 @@ Lisboa built (`streetworks.arcgis.lisboa`).**
 
 `nap-portugal.imt-ip.pt`, Portugal's listed RTTI NAP (operated by IMT,
 Instituto da Mobilidade e dos Transportes), remains exactly as
-`docs/nap-survey.md` found it: an Angular single-page app with no
+`docs/findings/nap-survey.md` found it: an Angular single-page app with no
 server-rendered content and no discoverable backend API. The only
 concretely findable route is `/nap/multimodalsupply`, which covers MMTIS
 (schedules/network topology/NeTEx-SIRI) — a different EU regulation from
@@ -21,7 +21,7 @@ nothing has changed; genuinely unresolved, not ruled out.
 
 ## Step 2 — Infraestruturas de Portugal (IP)'s real road network (ruled out)
 
-`docs/nap-survey.md` had already noted IP (Infraestruturas de Portugal,
+`docs/findings/nap-survey.md` had already noted IP (Infraestruturas de Portugal,
 the actual national road authority) publishes real national road-network
 geometry, and described it loosely as "as WFS" — worth checking properly
 rather than trusting that summary.

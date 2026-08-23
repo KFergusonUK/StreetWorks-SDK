@@ -213,7 +213,7 @@ separately — documented honestly, like France's non-concessionary-network
 scope.
 
 **Not state-roads-only, despite the name** — a later network-scope audit
-(`docs/network-scope-audit.md`) found real road-number prefixes reach
+(`docs/findings/network-scope-audit.md`) found real road-number prefixes reach
 several regional/provincial/insular authorities too (`CV-`/Comunidad
 Valenciana, `M-`/Madrid, `Ma-`/`Me-`/the Balearic insular councils, ~10
 checked live), never municipal streets — a genuine multi-authority
@@ -1293,7 +1293,7 @@ für Hamburg und Schleswig-Holstein (StA-Nord) and the Landesbetrieb
 Geoinformation und Vermessung (LGV) — no credentials. This SDK's first
 German state-level streets/gazetteer coverage, picking up the "state
 fan-out" fallback path Germany's own national investigation left open
-(see [`docs/germany-streets-investigation.md`](../germany-streets-investigation.md)):
+(see [`docs/findings/germany-streets-investigation.md`](../findings/germany-streets-investigation.md)):
 
 ```python
 from streetworks.hamburg import HamburgStreetsClient
@@ -1559,7 +1559,7 @@ Mallorca island-road works via the IDEmallorca GeoServer WFS — credential
 German states use. This is the *insular* layer beneath DGT — but
 **overlapping, not disjoint, corrected from an earlier "genuinely
 additive, not a duplicate" claim** (see
-[`docs/network-scope-audit.md`](../network-scope-audit.md), the audit
+[`docs/findings/network-scope-audit.md`](../findings/network-scope-audit.md), the audit
 that found this): DGT's own real data does reach Mallorca (`Ma-`/`Me-`
 prefixed records, confirmed via a live road-number check, not assumed),
 and 2 of DGT's Balearic records were checked directly against Consell de
@@ -1587,7 +1587,7 @@ with MallorcaClient() as mallorca:
 works = from_mallorca(icons, trams)
 ```
 
-Built from a dedicated recon pass (`docs/idemallorca-investigation.md`),
+Built from a dedicated recon pass (`docs/findings/idemallorca-investigation.md`),
 then verified again while building. Two layers, joined by a shared `codi`:
 `incidencies_icon` (one point per incident — type, dates, description,
 road, direction) is the spine; `incidencies_tram` supplies the affected
@@ -1655,7 +1655,7 @@ with SCTClient() as sct:
 works = from_sct(incidents)
 ```
 
-Built from a dedicated recon pass (`docs/catalonia-sct-investigation.md`),
+Built from a dedicated recon pass (`docs/findings/catalonia-sct-investigation.md`),
 then verified again while building. The real feed
 (`incidenciesGML.xml`) is genuine WFS/GML — a `wfs:FeatureCollection`
 with real `gml:Point` geometry — but flat and simple (one geometry plus a
@@ -1688,7 +1688,7 @@ any Spanish adapter in this SDK, no reprojection question at all. 100%
 coordinate coverage confirmed (165/165 real records checked).
 
 **Network scope: `multi_authority_interurban`**, the same shape as DGT's
-own real data (see `docs/network-scope-audit.md`) — real road-number
+own real data (see `docs/findings/network-scope-audit.md`) — real road-number
 prefixes span the Generalitat's own network (`C-`) and all four
 provincial councils' networks (`B-`/`GI-`/`T-`/`L-` and their variants)
 and some state roads within Catalan territory, never confirmed to reach
@@ -2854,7 +2854,7 @@ street = from_idee(roads[0])
 ```
 
 **Built directly from a prior, dedicated investigation
-(`docs/inspire-gml-investigation.md`) that had found the real shape but
+(`docs/findings/inspire-gml-investigation.md`) that had found the real shape but
 never shipped it — re-verified live before writing any new code, and
 everything it found still held.** That investigation's real, decisive
 finding: `RoadLink` — the feature type carrying real geometry — states

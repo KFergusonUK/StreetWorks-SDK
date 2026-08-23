@@ -3,7 +3,7 @@ GeoServer WFS.
 
 The *insular* layer beneath DGT - but **overlapping, not disjoint**,
 corrected from an earlier "genuinely additive, not a duplicate" claim
-(see ``docs/network-scope-audit.md``, the audit that found this): DGT's
+(see ``docs/findings/network-scope-audit.md``, the audit that found this): DGT's
 own real data does reach Mallorca (``Ma-``/``Me-`` prefixed records,
 ~4-5 at any time, confirmed via a live road-number check), and 2 of
 those were checked directly against this feed and matched almost
@@ -16,8 +16,8 @@ for the island (16-17 current records vs. DGT's ~4-5) - genuinely
 useful, just not a clean disjoint layer. **Callers combining both must
 never deduplicate matches between them** - see the README's "Never
 deduplicate across providers" note. See
-``docs/idemallorca-investigation.md`` for the original recon this build
-is based on, and ``docs/network-scope-audit.md`` for the overlap
+``docs/findings/idemallorca-investigation.md`` for the original recon this build
+is based on, and ``docs/findings/network-scope-audit.md`` for the overlap
 correction.
 
 **Only HTTP works, not HTTPS - confirmed live, contrary to the original

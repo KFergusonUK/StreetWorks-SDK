@@ -135,7 +135,7 @@ changelog. Two steps diverge by data class; both paths are spelled out.
    `kind` (`roadworks` / `streets` / `addresses` / `context`). Then, by
    class:
    - **roadworks** — a real, audited `network_scope`
-     (`docs/network-scope-audit.md`) plus a `source_grade`
+     (`docs/findings/network-scope-audit.md`) plus a `source_grade`
      (`REGISTER`/`OPERATOR`/`TRAVELLER_INFO`) and date-confidence that
      reflect the source honestly, never left at the bare default.
    - **streets / addresses** — no `network_scope` or `source_grade`

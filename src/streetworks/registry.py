@@ -115,7 +115,7 @@ class NetworkScope(str, Enum):
     :class:`Kind`, roadworks-only (``None`` on every gazetteer/address/
     street/context entry - see :attr:`ProviderEntry.network_scope`).
 
-    Added from a dedicated audit (``docs/network-scope-audit.md``) after
+    Added from a dedicated audit (``docs/findings/network-scope-audit.md``) after
     a real, live-confirmed surprise: DGT (Spain)'s own real data reaches
     several regional/provincial/insular road authorities' works besides
     the state network its name implies (``CV-``/Comunidad Valenciana,
@@ -2597,7 +2597,7 @@ _REGISTRY: list[ProviderEntry] = [
             "streets were already ruled out (Infraestruturas de "
             "Portugal's own road network carries route-classification "
             "codes, no name field - see "
-            "docs/portugal-streets-investigation.md), so this checks "
+            "docs/findings/portugal-streets-investigation.md), so this checks "
             "the capital itself, the same 'try the capital/a city' "
             "fallback shape Germany's own state fan-out uses. Found by "
             "walking CML's real Geodados ArcGIS Online organisation "
@@ -2897,7 +2897,7 @@ _REGISTRY: list[ProviderEntry] = [
             "Credentials-wanted scaffold. A different agency and data "
             "class from this SDK's existing Spanish roadworks coverage "
             "(DGT, Consell de Mallorca, SCT) - do not conflate. Resolves "
-            "docs/inspire-gml-investigation.md's own real problem: a "
+            "docs/findings/inspire-gml-investigation.md's own real problem: a "
             "RoadLink carries geometry but no name, so this client "
             "fetches Road (name/codes plus a list of RoadLink "
             "references) and batch-resolves its RoadLinks in one "

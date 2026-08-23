@@ -6,7 +6,7 @@ from streetworks.openusrn.reader import UsrnStreet
 
 def test_real_street_converts_with_published_geometry():
     # usrn=33909869 is real - Carr Street, Spennymoor, Durham - verified
-    # live against DataVIA this session (see docs/gazetteer-field-dump.md).
+    # live against DataVIA this session (see docs/findings/gazetteer-field-dump.md).
     street = from_openusrn(
         UsrnStreet(usrn=33909869, geometry="LINESTRING (-1.611 54.702, -1.612 54.703)"),
         territory="England",

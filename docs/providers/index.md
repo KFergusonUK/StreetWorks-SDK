@@ -95,7 +95,7 @@ Every roadworks entry also carries a `network_scope` (`comprehensive` /
 `multi_authority_interurban` / `strategic` / `motorway` / `regional` /
 `varies_by_feed` / `not_applicable` / `unknown`) — what tier of the road
 network its real data actually reaches, checked live rather than assumed
-from a provider's stated remit (`docs/network-scope-audit.md`). This is
+from a provider's stated remit (`docs/findings/network-scope-audit.md`). This is
 the field that stops "DGT covers Spain" from being misread as "DGT covers
 every street in Valencia" — shown in `providers()`'s own rendering (see
 `Network scope:` above), not just stored.
@@ -262,7 +262,7 @@ LINZ's gate is per-method instead (`iter_roads()`/`iter_road_sections()`
 raise a clear `ValueError` without a key — the sibling `iter_addresses()`
 on the same client is already verified). Excluded from the
 verified-providers claim above until confirmed. Drafted issue text lives
-in [docs/credentials-wanted-issues.md](../credentials-wanted-issues.md).
+in [docs/findings/credentials-wanted-issues.md](../findings/credentials-wanted-issues.md).
 
 | Provider | Confirmed | Pending | Credential | How to get it | Issue |
 |---|---|---|---|---|---|

@@ -16,7 +16,7 @@ Outras Ocorrências, Acidentes, and a Serra da Estrela driving-conditions
 layer - none of the other three consumed here, see below.
 
 This directly supersedes the earlier NAP-survey finding
-(``docs/nap-survey.md``) that the national NAP itself
+(``docs/findings/nap-survey.md``) that the national NAP itself
 (``nap-portugal.imt-ip.pt``) carries no roadworks content - genuinely
 true (confirmed again this session by reading its own JS bundle end to
 end: zero roadworks vocabulary anywhere), but IP publishes its own live

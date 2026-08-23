@@ -128,8 +128,8 @@ point is the shared canonical shape, not the numbers.
 
 A live-verified real case, not a hypothetical: DGT and Consell de
 Mallorca were first documented as "genuinely additive, not a duplicate"
-(`docs/idemallorca-investigation.md`'s original framing) — a later audit
-(`docs/network-scope-audit.md`) found this wrong. 2 of DGT's Balearic
+(`docs/findings/idemallorca-investigation.md`'s original framing) — a later audit
+(`docs/findings/network-scope-audit.md`) found this wrong. 2 of DGT's Balearic
 records match Consell de Mallorca's own records almost exactly on road,
 km-range and end-date — the same real works republished in both feeds,
 confirmed by checking the actual geometry and dates, not assumed from

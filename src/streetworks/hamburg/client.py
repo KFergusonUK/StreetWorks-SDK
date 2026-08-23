@@ -5,7 +5,7 @@ statistical office) and the Landesbetrieb Geoinformation und Vermessung
 (LGV, Hamburg's state geoinformation/surveying agency). This SDK's
 first German state-level streets/gazetteer coverage - the federal
 BKG source and the address layer were both found too coarse or gated
-(see `docs/germany-streets-investigation.md`), so this module checks
+(see `docs/findings/germany-streets-investigation.md`), so this module checks
 one of the states already touched for roadworks instead, the same
 per-state fallback shape that investigation left open.
 

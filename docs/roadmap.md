@@ -99,24 +99,25 @@ extending to the next tier of authorities — not adding the layer from scratch.
 - **France** — Bison Futé (non-concessionary national) live; add the
   concessionary motorway networks (APRR / Vinci / Sanef).
 - **Poland** — GDDKiA live (`streetworks.poland`, keyless, 2026-08-23).
-  Found in a broader survey for missing European national feeds,
-  prompted by asking whether any more country-level gaps existed
-  (the same "did we miss any more?" pattern that grew the North
-  American 511 platform's footprint). Real leads found but not yet
-  confirmed to the same live-endpoint depth: **Czech Republic**
-  (a real national traffic-data registry exists,
-  `registr.dopravniinfo.cz`, but the whole `dopravniinfo.cz` cluster
-  was unreachable from this session's environment — connection
-  timeouts, not a block — genuinely unresolved, worth a retry, not
-  ruled out), **Hungary** (Magyar Közút's own real NAP portal,
-  `napportal.kozut.hu`, is live and explicitly names "current work
-  activities" among its datasets — the actual API/endpoint shape not
-  yet traced), **Romania** (CNAIR's "Dispecerat Online",
-  `dispecerat.andnet.ro`, is live and mentions road events/short-term
-  works — same story, endpoint not yet traced), **Slovakia** (a
-  national open-data catalogue exists, `data.slovensko.sk`, no
-  specific road-closures dataset confirmed yet), **Croatia** (no clear
-  lead found yet).
+- **Romania** — CNAIR live (`streetworks.romania`, keyless, 2026-08-23) —
+  this SDK's first HTML-scraped source (no separate API exists), built
+  with the standard library's `html.parser`, no third-party dependency
+  added.
+- Both found in a broader survey for missing European national feeds,
+  prompted by asking whether any more country-level gaps existed (the
+  same "did we miss any more?" pattern that grew the North American 511
+  platform's footprint) — full working notes, including everything
+  below, in [`docs/findings/europe-gaps.md`](findings/europe-gaps.md).
+  Real leads checked but not built: **Hungary** (a real DATEX II NAP,
+  but requires a formal data-consumer contract — parked, not pursued),
+  **Czech Republic** (a real national traffic-data registry exists but
+  the whole domain cluster was unreachable from this session's
+  environment — genuinely unresolved, worth a retry, not ruled out),
+  **Slovakia** (a real SPARQL-queryable national catalogue found two
+  candidates — a CC0 Ministry-of-Interior feed blocked behind a legacy
+  WebSphere Portal integration, and a clean CC BY 4.0 ArcGIS Hub layer
+  from one region, Trnava, that may be stale — neither built),
+  **Croatia** (no clear lead found yet).
 
 ### Credentials wanted — need a tester, not new investigation
 Already scaffolded and waiting only on a real key: Austria (ASFINAG) ·
@@ -146,6 +147,15 @@ here.)
 
 ### New territories / continents to extend
 - **Singapore** — not yet investigated (LTA DataMall the likely route).
+- **Japan** — investigated live, not built; a real, keyless, live
+  construction-schedule feed exists (MLIT's own "Road Information
+  Provision System") but is genuinely more complex than any single
+  provider built so far — geographic mesh-tiling, a rotating snapshot
+  base path requiring a live discovery step, and a fully-coded schema
+  with no complete published legend. Explicitly parked for a dedicated
+  session rather than scoped down. Full notes, including two real
+  wrong-category dead ends (JARTIC's own open data; NEXCO's summary-only
+  API) in [`docs/findings/japan.md`](findings/japan.md).
 - **Canada** — National Road Network (streets), Québec (MTQ Travaux routiers),
   7 of 10 provinces plus Yukon (North American 511 platform), and Vancouver
   and Toronto (municipal) are all live. Remaining: Manitoba, Prince Edward
@@ -341,9 +351,9 @@ here.)
       yet — separate design session pending
 - [x] Consell de Mallorca (island roadworks) adapter (`streetworks.ogc.mallorca`,
       `streetworks.common.from_mallorca`) — built from a dedicated recon
-      pass (`docs/idemallorca-investigation.md`), which first (wrongly)
+      pass (`docs/findings/idemallorca-investigation.md`), which first (wrongly)
       framed this as "genuinely additive to DGT, not a duplicate." A
-      later audit (`docs/network-scope-audit.md`) corrected this: DGT's
+      later audit (`docs/findings/network-scope-audit.md`) corrected this: DGT's
       own data does reach Mallorca, and overlaps with Consell de Mallorca
       for at least some higher-impact works (same road/km-range/end-date,
       confirmed live) — see
@@ -368,7 +378,7 @@ here.)
       and Eivissa were checked and don't publish the same way, so this
       isn't the head of a committed Balearic cluster
 - [x] **Network-scope audit + `network_scope` registry field**
-      (`docs/network-scope-audit.md`) — audited every roadworks provider's
+      (`docs/findings/network-scope-audit.md`) — audited every roadworks provider's
       *real* network reach (not its stated remit) and wired the result
       into `streetworks.registry` as a new `NetworkScope` enum
       (`comprehensive` / `multi_authority_interurban` / `strategic` /
@@ -395,7 +405,7 @@ here.)
       be genuinely correct
 - [x] Servei Català de Trànsit (Catalonia) roadworks adapter
       (`streetworks.sct`, `streetworks.common.from_sct`) — built from a
-      dedicated recon pass (`docs/catalonia-sct-investigation.md`),
+      dedicated recon pass (`docs/findings/catalonia-sct-investigation.md`),
       filling the larger of DGT's two documented exclusions. The real
       feed is genuine WFS/GML (a `wfs:FeatureCollection` with real
       `gml:Point` geometry) but flat and simple - one geometry plus a
@@ -427,7 +437,7 @@ here.)
       `get_provider("spain")` now names all three (`dgt`, `mallorca`,
       `sct`) via the territory-ambiguity path. The Basque Country (DGT's
       other exclusion) was investigated alongside this, not built - see
-      `docs/catalonia-sct-investigation.md` for a genuinely promising
+      `docs/findings/catalonia-sct-investigation.md` for a genuinely promising
       finding (a real, live DATEX II feed this SDK's existing shared
       parser already reads with zero code changes)
 - [x] Basque Country (Euskadi) DATEX adapter (`streetworks.datex2.euskadi`)

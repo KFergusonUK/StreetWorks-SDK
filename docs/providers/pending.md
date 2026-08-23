@@ -25,7 +25,7 @@ Credentials-wanted, or Documented-unavailable; see
   backend, genuinely unresolved not ruled out) entirely — see
   [`docs/providers/portugal.md`](portugal.md). **Streets** is a separate
   question, investigated 2026-08-16 — full findings in
-  [`docs/portugal-streets-investigation.md`](../portugal-streets-investigation.md).
+  [`docs/findings/portugal-streets-investigation.md`](../findings/portugal-streets-investigation.md).
   Infraestruturas de Portugal (IP)'s promoted national road-network
   distribution is shapefile-only (its own ATOM feed's WFS-link element
   is a literal unfilled template placeholder, never wired up), but a
@@ -189,7 +189,7 @@ Credentials-wanted, or Documented-unavailable; see
   independent cadastral offices.
 - **Germany — streets gazetteer, a two-part national ruling plus a
   state fan-out now in progress.** Full findings in
-  [`docs/germany-streets-investigation.md`](../germany-streets-investigation.md)
+  [`docs/findings/germany-streets-investigation.md`](../findings/germany-streets-investigation.md)
   (national rulings investigated 2026-08-16, state fan-out started
   2026-08-20). BKG's federal ATKIS DLM250-based INSPIRE Transport
   Networks WFS (`sg.geodatenzentrum.de/wfs_dlm250_inspire`, confirmed

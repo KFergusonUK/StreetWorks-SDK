@@ -2,7 +2,7 @@
 
 ``datavia_streetlines_durham.json`` and ``datavia_esustreets_durham.json``
 are real DataVIA responses (Basic-auth, Durham-scoped credentials, captured
-live this session - see docs/gazetteer-field-dump.md). Real fixture values
+live this session - see docs/findings/gazetteer-field-dump.md). Real fixture values
 are local to Durham; field *shapes* are national (confirmed via WFS
 ``DescribeFeatureType``, not authority-specific).
 ``datavia_streetlines_bilingual_synthetic.json`` is hand-constructed

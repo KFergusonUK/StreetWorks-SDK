@@ -3,7 +3,7 @@ und Vermessung Sachsen) statewide "Hauskoordinaten" (house coordinates)
 bulk export. This SDK's third German state-level streets/gazetteer
 provider, completing the "state fan-out" fallback path Germany's
 national streets investigation named (Hamburg, Brandenburg, Saxony,
-Berlin) - see `docs/germany-streets-investigation.md`.
+Berlin) - see `docs/findings/germany-streets-investigation.md`.
 
 **Not the shared Deutschland-Online-Gazetteer (DOG) WFS Hamburg and
 Brandenburg both use - checked and confirmed Saxony genuinely doesn't

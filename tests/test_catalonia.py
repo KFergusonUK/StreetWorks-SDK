@@ -2,7 +2,7 @@
 
 The fixture (``sct_incidenciesGML.xml``) is real, trimmed from a live pull,
 2026-07 - licensed under Catalonia's own "Llicència oberta d'ús
-d'informació" (confirmed genuinely open, see ``docs/catalonia-sct-
+d'informació" (confirmed genuinely open, see ``docs/findings/catalonia-sct-
 investigation.md``), so real data is used directly, unlike the several
 unconfirmed-licence sources elsewhere in this SDK. Four real records:
 one ``Cons`` (excluded), one ``Retenció`` whose free-text ``causa`` says

@@ -3,7 +3,7 @@ naming register, run by Câmara Municipal de Lisboa (CML). This SDK's first
 Portuguese streets/gazetteer coverage - streets was previously ruled out at
 the national level (Infraestruturas de Portugal's own road-network service
 carries route-classification codes, no name field at all - see
-``docs/portugal-streets-investigation.md``); found instead the same way
+``docs/findings/portugal-streets-investigation.md``); found instead the same way
 Germany's state fan-out works, by checking whether the capital itself
 publishes its own open register.
 

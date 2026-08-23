@@ -86,7 +86,7 @@ the same key without a separate Trafikverket account. Issues an **API key**
 ``TRAFIKVERKET_API_KEY`` (see ``.env.example``, ``scripts/smoke_test.py``).
 
 **Licence**: **CC0 1.0 Universal (Public Domain Dedication)** - confirmed
-in the NAP survey (``docs/nap-survey.md``) via the registration flow's own
+in the NAP survey (``docs/findings/nap-survey.md``) via the registration flow's own
 licence link and the catalogue's per-dataset licence facet (43/49 datasets,
 including the roadworks one, shown as CC0). The least restricted licence
 tier - no attribution required even - but the test fixture here is still

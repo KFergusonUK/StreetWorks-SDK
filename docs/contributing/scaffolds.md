@@ -41,4 +41,4 @@ Norway/NSW/Victoria on 2026-07-30 (see
 for the record of what changed when that happened). Every roadworks
 module also warns at import time (`UserWarning`) with the same pointer.
 Drafted issue text for each scaffold lives in
-[docs/credentials-wanted-issues.md](../credentials-wanted-issues.md).
+[docs/findings/credentials-wanted-issues.md](../findings/credentials-wanted-issues.md).

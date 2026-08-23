@@ -11,7 +11,7 @@ registration, no API key.
 consistently, on both HTTP and HTTPS). The working host is
 ``datasheet.api.bg``, a separate public download front for the same LIMA
 platform. This is now a recurring pattern across this survey (see
-``docs/nap-survey.md``) - the listed NAP is not always the real door.
+``docs/findings/nap-survey.md``) - the listed NAP is not always the real door.
 
 **The file URL is date-stamped, not fixed - so this adapter is a two-step
 fetch.** ``datasheet.api.bg`` doesn't serve roadworks at a stable URL; each

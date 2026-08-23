@@ -1,7 +1,7 @@
 """Spain: national road-transport network - IGN's (Instituto Geográfico
 Nacional) own native model over IDEE's INSPIRE WFS. See
 :mod:`streetworks.idee.client` for the full investigation this build acts
-on, and ``docs/inspire-gml-investigation.md`` for the original live
+on, and ``docs/findings/inspire-gml-investigation.md`` for the original live
 association-chasing findings.
 """
 
@@ -19,7 +19,7 @@ __all__ = ["Road"]
 class Road:
     """One real ``tn-ro:Road`` feature, with its constituent
     ``tn-ro:RoadLink`` geometry already resolved and aggregated - the
-    two-hop join ``docs/inspire-gml-investigation.md`` found necessary,
+    two-hop join ``docs/findings/inspire-gml-investigation.md`` found necessary,
     hidden behind this one object so callers never see ``RoadLink`` (or
     the ``xlink:href`` association chasing it takes) at all.
 

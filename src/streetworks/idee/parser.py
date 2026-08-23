@@ -1,7 +1,7 @@
 """GML 3.2 parsing for IDEE's Spain transport-network WFS - a small,
 contained reader for exactly the ``tn-ro:Road``/``tn-ro:RoadLink`` shape
 this SDK uses, not a general INSPIRE GML reader (that was explicitly
-parked - see ``docs/inspire-gml-investigation.md``). Matches elements by
+parked - see ``docs/findings/inspire-gml-investigation.md``). Matches elements by
 local name only, namespace-tolerant, the same approach
 :mod:`streetworks.sct.parser`/:mod:`streetworks.datex2.parser` already
 take, since binding rigidly to this service's declared ``tn-ro:``/``net:``/

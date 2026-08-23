@@ -21,7 +21,7 @@ schema - so ``Segment.names`` is always empty for DataVIA, and a real named
 sub-part of a street sharing a USRN (e.g. "Anchorage Terrace", a real local
 name for part of Church Street, USRN 11713561) is not recoverable from this
 source at any level. Investigated live, not assumed - see
-``docs/gazetteer-field-dump.md``.
+``docs/findings/gazetteer-field-dump.md``.
 """
 
 from __future__ import annotations
