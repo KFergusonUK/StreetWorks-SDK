@@ -17,13 +17,25 @@ its API shape has been confirmed one way or another (live-verified,
 Credentials-wanted, or Documented-unavailable; see
 [`docs/contributing/scaffolds.md`](../contributing/scaffolds.md)).
 
-- **Portugal — roadworks partially built; streets gazetteer checked and
-  ruled out at the national level, the same outcome as Germany.** Lisboa
-  (Condicionamentos de Trânsito) is a real, confirmed roadworks provider,
-  sidestepping the still-credential-parked national IMT National Access
-  Point (`nap-portugal.imt-ip.pt`, an Angular SPA with no discoverable
-  backend, genuinely unresolved not ruled out) entirely — see
-  [`docs/providers/portugal.md`](portugal.md). **Streets** is a separate
+- **Portugal — roadworks now built both nationally and municipally;
+  streets gazetteer checked and ruled out at the national level, the
+  same outcome as Germany.** Lisboa (Condicionamentos de Trânsito) is a
+  real, confirmed municipal roadworks provider, sidestepping the still-
+  credential-parked national IMT National Access Point
+  (`nap-portugal.imt-ip.pt`, an Angular SPA with no discoverable
+  backend, genuinely unresolved not ruled out) entirely. **Infraestruturas
+  de Portugal (IP)'s own Condicionamentos feed** (`streetworks.arcgis.ip`)
+  is a genuinely separate, real, live, keyless *national* roadworks
+  provider — found by tracing IP's own live map viewer, the same
+  technique that found Lisboa's backend; this directly supersedes the
+  earlier finding that the national IMT NAP itself carries no roadworks
+  content (genuinely true — it's a registration/catalogue portal, not a
+  data host — but IP's own feed is published entirely separately from
+  that NAP) — see [`docs/providers/portugal.md`](portugal.md). Note
+  this is a different real IP dataset from its road-network/streets
+  shapefile service discussed just below — Condicionamentos (roadworks)
+  and the road network (streets) are two separate feeds IP publishes.
+  **Streets** is a separate
   question, investigated 2026-08-16 — full findings in
   [`docs/findings/portugal-streets-investigation.md`](../findings/portugal-streets-investigation.md).
   Infraestruturas de Portugal (IP)'s promoted national road-network
@@ -43,38 +55,24 @@ Credentials-wanted, or Documented-unavailable; see
   Porto and the rest of the Área Metropolitana de Lisboa's other 17
   municipalities remain genuinely unchecked/unbuilt — the same open,
   per-municipality fallback shape as Germany's own state fan-out.
-- **Canada — roadworks now built in two provinces plus one shared
-  multi-jurisdiction platform covering seven agencies, streets fully
-  built nationally.** British Columbia (DriveBC, Open511) and Québec
-  (MTQ Travaux routiers, this SDK's first *provincial* build, found
-  2026-08-21) are real, confirmed roadworks providers, and Quebec City's
-  WZDx feed was already covered — see
-  [`docs/providers/canada.md`](canada.md). Ontario 511 (found
-  2026-08-21) is also real, live and keyless, shipped as
-  `streetworks.na511` - the same platform turned out to be run
-  identically by Alberta, Saskatchewan, New Brunswick, Newfoundland and
-  Labrador, Nova Scotia and Yukon too (7 of 10 provinces plus 1 of 3
-  territories total). All six need a real developer key not obtained on
-  the user's behalf; Alberta/New Brunswick/Newfoundland and Labrador
-  have working self-service signup pages (built and ready, see
-  `.env.example`), while Saskatchewan/Nova Scotia's own signup pages
-  have since been taken down (no known current route to a key for
-  either). Prince Edward Island, the Northwest Territories and Nunavut
-  were checked and have no matching site; Manitoba has open road-network
-  data but no real-time API. Of the three Canadian municipal portals
-  checked (2026-08-21): Vancouver (Road Ahead, OpenDataSoft) and Toronto
-  (Road Restrictions/Closures) are both now built — this SDK's first and
-  second Canadian *municipal* roadworks providers. Vancouver reuses
-  `streetworks.opendatasoft.OpenDataSoftClient` with no new fetch code;
-  Toronto required a defensive JSON-repair step to work around one real,
-  confirmed defect in the live source (a stray un-escaped backslash).
+- **Canada — mostly graduated to built/verified, see
+  [`docs/providers/canada.md`](canada.md) for the full picture.** BC
+  (DriveBC), Québec, Ontario, Vancouver, Toronto, and the National Road
+  Network (streets, all 13 provinces/territories nationally) are all
+  live and keyless. Of the North American 511 platform's six other
+  key-gated Canadian jurisdictions, **Alberta is now confirmed live with
+  a real key** (2026-08-22) — genuinely no longer pending. Real,
+  still-open gaps: New Brunswick/Newfoundland and Labrador/Yukon have
+  working self-service signup pages (built and ready, see
+  `.env.example`) but no key obtained yet; Saskatchewan/Nova Scotia's
+  own signup pages have since been taken down, no known current route to
+  a key for either. Manitoba has open road-network data but no
+  real-time roadworks API; Prince Edward Island, the Northwest
+  Territories and Nunavut were checked and have no matching site;
   Montreal's own real resources are all currently broken (403s and dead
-  routes) — a genuine dead end right now, not an unchecked gap.
-  **Streets is no longer pending at all** — the
-  National Road Network (`streetworks.arcgis.nrn`), found 2026-08-16,
-  is real, live, keyless, and covers all 13 provinces/territories
-  nationally in one build (Segment only, the same TIGERweb/NWB
-  outcome — see `docs/providers/canada.md`).
+  routes) — none of these five are a live signup gap, just genuine dead
+  ends or unchecked-for-now, worth a periodic retry rather than a key
+  request.
 - **USA — the 15-state/DC WZDx/CWZ coverage gap, surveyed 2026-08-21.**
   Every state + DC with zero row in the WZDx/CWZ registry
   (`streetworks.wzdx.registry`) was checked for an alternative feed, the
@@ -85,14 +83,24 @@ Credentials-wanted, or Documented-unavailable; see
   `streetworks.wzdx` unlocked PurposeBuilt Systems' feed immediately
   (keyless) and left Massachusetts/Colorado/Illinois's own real CWZ
   feeds fully wired, pending a real key none were obtained for; Nevada
-  511, Georgia 511, Alaska 511, Louisiana 511 and Connecticut 511
+  511, Georgia 511, Alaska 511 and Louisiana 511
   (`streetworks.na511`) turned out to be the same commercial platform
-  already built for seven Canadian jurisdictions — all five wired
-  (Nevada/Alberta/Alaska confirmed live with a real key, 2026-08-22;
-  Georgia/Louisiana/Connecticut pending one). Alaska and Connecticut are
-  both real corrections, not fresh finds — both states had already been
-  marked "checked and confirmed no live feed" below via their real
-  ArcGIS Open Data catalogues alone, but a later direct re-check against
+  already built for seven Canadian jurisdictions — a much broader sweep
+  (2026-08-23, prompted by asking whether any more 511 states were
+  missing) found six more: New York, Arizona, Florida, Idaho,
+  Pennsylvania, North Carolina, and New England (one shared platform for
+  Maine/New Hampshire/Vermont) — twelve US jurisdictions total, nineteen
+  across both countries. Nevada/Alberta/Alaska/Connecticut are confirmed
+  live with a real key (2026-08-22); the other eight need one not
+  obtained on the user's behalf. **New England Compass**
+  (`streetworks.necompass`, 2026-08-23) is a completely separate,
+  genuinely keyless system from the na511-platform New England entry
+  above — found by tracing `newengland511.org`'s own real developer-
+  portal link to a live ITS Center-to-Center (C2C) XML feed, no
+  credentials at all — see [`docs/providers/us.md`](us.md). Alaska and
+  Connecticut are both real corrections, not fresh finds — both states
+  had already been marked "checked and confirmed no live feed" below via
+  their real ArcGIS Open Data catalogues alone, but a later direct re-check against
   this platform's own endpoint shape (the way Rhode Island/West
   Virginia/South Dakota/Nebraska were checked) found both immediately —
   the catalogue check and the platform check are genuinely different
