@@ -83,8 +83,9 @@ unresolved). Forward work is filling regions, finishing partial nationals, and
 extending to the next tier of authorities — not adding the layer from scratch.
 
 ### Partial-national — fill the remaining regions
-- **Belgium** — Flanders live; add Wallonia (SPW) and Brussels (published
-  separately, not yet wrapped).
+- **Belgium** — Flanders and Brussels live. Wallonia (SPW) checked and
+  parked: its own feed is genuinely credential-gated (email SPW for a
+  username/password), not self-service.
 - **Germany** — Autobahn + 7 states live (Hamburg, Brandenburg, Saxony,
   Baden-Württemberg, Schleswig-Holstein, Rheinland-Pfalz, Saarland) plus
   Berlin and Dortmund at municipal level. Bavaria, NRW,
@@ -97,14 +98,36 @@ extending to the next tier of authorities — not adding the layer from scratch.
 ### National / strategic gaps
 - **France** — Bison Futé (non-concessionary national) live; add the
   concessionary motorway networks (APRR / Vinci / Sanef).
+- **Poland** — GDDKiA live (`streetworks.poland`, keyless, 2026-08-23).
+  Found in a broader survey for missing European national feeds,
+  prompted by asking whether any more country-level gaps existed
+  (the same "did we miss any more?" pattern that grew the North
+  American 511 platform's footprint). Real leads found but not yet
+  confirmed to the same live-endpoint depth: **Czech Republic**
+  (a real national traffic-data registry exists,
+  `registr.dopravniinfo.cz`, but the whole `dopravniinfo.cz` cluster
+  was unreachable from this session's environment — connection
+  timeouts, not a block — genuinely unresolved, worth a retry, not
+  ruled out), **Hungary** (Magyar Közút's own real NAP portal,
+  `napportal.kozut.hu`, is live and explicitly names "current work
+  activities" among its datasets — the actual API/endpoint shape not
+  yet traced), **Romania** (CNAIR's "Dispecerat Online",
+  `dispecerat.andnet.ro`, is live and mentions road events/short-term
+  works — same story, endpoint not yet traced), **Slovakia** (a
+  national open-data catalogue exists, `data.slovensko.sk`, no
+  specific road-closures dataset confirmed yet), **Croatia** (no clear
+  lead found yet).
 
 ### Credentials wanted — need a tester, not new investigation
 Already scaffolded and waiting only on a real key: Austria (ASFINAG) ·
 Denmark (Vejdirektoratet) · Sweden (Trafikverket) · Stockholm
-(Trafikkontoret) · South Australia (Traffic SA). Switzerland (ASTRA) and
-Portugal (IMT NAP) are a step earlier — real national motorway feeds
-named as targets, but not yet scaffolded in the registry at all, unlike
-the entries above.
+(Trafikkontoret) · South Australia (Traffic SA). Switzerland (ASTRA) is
+a step earlier — a real national motorway feed named as a target, but
+not yet scaffolded in the registry at all, unlike the entries above.
+(Portugal's own national target, IMT NAP, turned out to be a
+registration/catalogue portal, not a data host — Infraestruturas de
+Portugal's own Condicionamentos feed, published separately, now covers
+this — see [`docs/providers/portugal.md`](providers/portugal.md).)
 
 ### Sub-national / local-authority feeds — the next tier
 Cities usually surface first — they have the GIS teams and open-data portals —
