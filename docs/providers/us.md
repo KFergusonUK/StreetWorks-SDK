@@ -517,3 +517,80 @@ own proven shape byte-for-byte, so the schema confirmation doesn't
 depend on a same-day roadwork example — four other jurisdictions'
 (Ontario/Alberta/Nevada/Alaska) own real roadwork samples already prove
 that part.
+
+## New York 511, Arizona 511, Florida 511, Idaho 511, Pennsylvania 511, North Carolina 511, New England 511
+
+A much broader sweep found six more US jurisdictions on the North
+American 511 platform, and one shared three-state deployment — none of
+these were on the original 15-state WZDx/CWZ gap list at all (unlike
+Nevada/Georgia/Alaska/Connecticut above), prompted by asking whether
+any more 511 states were missing after Connecticut. Every remaining US
+state was tested directly against the platform's real endpoint shape:
+
+```python
+from streetworks.na511 import NA511Client
+from streetworks.na511.jurisdictions import NEW_YORK
+from streetworks.common import from_na511
+
+with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
+    works_list = from_na511(
+        client.fetch("new_york"),
+        territory=NEW_YORK.territory,
+        administrative_area=NEW_YORK.administrative_area,
+    )
+```
+
+**All seven confirmed live to be the identical platform**, the same
+`/api/v2/get/event` endpoint and the same structured `"Invalid Key"`
+rejection with no key supplied, plus a real self-service `/developers`
+signup flow (a plain `/developers/doc` page on some deployments — New
+York, Arizona, Idaho, North Carolina — a redirect on others — Florida,
+Pennsylvania, New England — both real, just a small per-deployment URL
+difference):
+
+- **New York** (`511ny.org`, NYSDOT) — genuinely separate from
+  `streetworks.wzdx`'s own registry-driven 511NY WZDx feed; a different
+  real API that happens to live on the same domain.
+- **Arizona** (`az511.gov`, ADOT).
+- **Florida** (`fl511.com`, FDOT).
+- **Idaho** (`511.idaho.gov`, ITD).
+- **Pennsylvania** (`511pa.com`, PennDOT).
+- **North Carolina** (`www.drivenc.gov`, NCDOT) — a real false negative
+  at first: a `HEAD` request through the real `drivenc.gov` →
+  `www.drivenc.gov` redirect chain returned `405` (only `GET` is
+  allowed at the final URL), corrected by testing with a plain `GET`
+  directly, which returns the identical rejection every other
+  deployment gives.
+- **New England 511** (`newengland511.org`) — a genuinely different
+  shape from every other entry on this platform: one shared deployment
+  run jointly for **three** real states (Maine, New Hampshire, Vermont),
+  not a single state's own site. `administrative_area` names all three
+  real agencies rather than picking one.
+
+Every other remaining untested US state in this sweep was checked and
+confirmed genuinely not on this platform: Colorado (`cotrip.org`, a
+real Vite/React SPA), Ohio (`ohgo.com`, redirects to a real `/not-found`
+page), Oregon, Illinois, Texas, Utah, New Mexico, Oklahoma, Mississippi,
+Indiana, Kentucky, Michigan, Missouri, Kansas, Delaware, North Dakota,
+Washington DC, Hawaii, and Virginia (`511virginia.org` redirects to a
+real, different Angular app at `511.vdot.virginia.gov`) — South
+Carolina and Montana were also re-tested this way alongside Louisiana's
+own search and confirmed genuinely not on it either. Three more —
+**New Jersey, Wisconsin, Alabama** — sit behind a real WAF/firewall
+block (`403`, an explicit "blocked by the network firewall" message on
+New Jersey; a CloudFront error page on Wisconsin) and were left alone
+rather than worked around, consistent with this SDK's standing rule
+against bypassing bot/WAF protection — genuinely unresolved, not ruled
+out.
+
+Requires a real developer key for each — not obtained on this SDK's
+behalf. Free self-service registration:
+`https://511ny.org/developers/doc`,
+`https://az511.gov/developers/doc`,
+`https://fl511.com/developers`,
+`https://511.idaho.gov/developers/doc`,
+`https://511pa.com/developers`,
+`https://www.drivenc.gov/developers/doc`, and
+`https://newengland511.org/developers`; set the matching
+`*_511_API_KEY` variable (see `.env.example`) and run
+`scripts/smoke_test.py` to confirm any of them.

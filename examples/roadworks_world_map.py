@@ -150,6 +150,27 @@ CRED_ENV = {
     "ct511": lambda: (
         {"api_key": os.environ["CONNECTICUT_511_API_KEY"]}
         if os.environ.get("CONNECTICUT_511_API_KEY") else None),
+    "ny511": lambda: (
+        {"api_key": os.environ["NEW_YORK_511_API_KEY"]}
+        if os.environ.get("NEW_YORK_511_API_KEY") else None),
+    "az511": lambda: (
+        {"api_key": os.environ["ARIZONA_511_API_KEY"]}
+        if os.environ.get("ARIZONA_511_API_KEY") else None),
+    "fl511": lambda: (
+        {"api_key": os.environ["FLORIDA_511_API_KEY"]}
+        if os.environ.get("FLORIDA_511_API_KEY") else None),
+    "id511": lambda: (
+        {"api_key": os.environ["IDAHO_511_API_KEY"]}
+        if os.environ.get("IDAHO_511_API_KEY") else None),
+    "pa511": lambda: (
+        {"api_key": os.environ["PENNSYLVANIA_511_API_KEY"]}
+        if os.environ.get("PENNSYLVANIA_511_API_KEY") else None),
+    "nc511": lambda: (
+        {"api_key": os.environ["NORTH_CAROLINA_511_API_KEY"]}
+        if os.environ.get("NORTH_CAROLINA_511_API_KEY") else None),
+    "newengland511": lambda: (
+        {"api_key": os.environ["NEW_ENGLAND_511_API_KEY"]}
+        if os.environ.get("NEW_ENGLAND_511_API_KEY") else None),
 }
 
 #: Cap on raw records pulled per provider before conversion - a coverage map
@@ -212,6 +233,9 @@ _NA511_JURISDICTIONS = {
     "ns511": "nova_scotia", "yt511": "yukon", "nv511": "nevada",
     "ga511": "georgia", "ak511": "alaska", "la511": "louisiana",
     "ct511": "connecticut",
+    "ny511": "new_york", "az511": "arizona", "fl511": "florida",
+    "id511": "idaho", "pa511": "pennsylvania", "nc511": "north_carolina",
+    "newengland511": "new_england",
 }
 
 TIERS = {

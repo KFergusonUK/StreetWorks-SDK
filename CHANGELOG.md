@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+### Added — six more US 511 deployments found in a broader sweep, plus a shared three-state jurisdiction (2026-08-23)
+
+`streetworks.na511.jurisdictions.{NEW_YORK,ARIZONA,FLORIDA,IDAHO,PENNSYLVANIA,NORTH_CAROLINA,NEW_ENGLAND}`
+- Prompted by asking whether any more 511 states were missing beyond
+  the original 15-state WZDx/CWZ gap survey. Tested every remaining US
+  state directly against the North American 511 platform's real
+  endpoint shape - found seven new deployments, none previously on any
+  gap-state list:
+  - **New York** (`511ny.org`, NYSDOT) - genuinely separate from
+    `streetworks.wzdx`'s own registry-driven 511NY WZDx feed, a
+    different real API on the same domain.
+  - **Arizona** (`az511.gov`, ADOT), **Florida** (`fl511.com`, FDOT),
+    **Idaho** (`511.idaho.gov`, ITD), **Pennsylvania** (`511pa.com`,
+    PennDOT).
+  - **North Carolina** (`www.drivenc.gov`, NCDOT) - a real HEAD-vs-GET
+    false negative first (a HEAD request through the real redirect
+    chain returned 405), corrected by testing with a plain GET.
+  - **New England 511** (`newengland511.org`) - a genuinely different
+    shape from every other entry on this platform: one shared
+    deployment run jointly for Maine, New Hampshire and Vermont, not a
+    single state's own site - `administrative_area` names all three
+    real agencies.
+- Every other remaining untested US state was checked and confirmed
+  genuinely not on this platform (Colorado, Ohio, Oregon, Illinois,
+  Texas, Utah, New Mexico, Oklahoma, Mississippi, Indiana, Kentucky,
+  Michigan, Missouri, Kansas, Delaware, North Dakota, Washington DC,
+  Hawaii, Virginia, South Carolina, Montana), or left genuinely
+  unresolved behind a real WAF/firewall block this SDK does not attempt
+  to bypass (New Jersey, Wisconsin, Alabama).
+- No new client code needed for any of the seven - just new
+  `Jurisdiction` entries. This platform now covers nineteen government
+  deployments across two countries.
+- Requires a real developer key for each, not obtained on this SDK's
+  behalf. See `.env.example` for the seven new `*_511_API_KEY`
+  variables and free self-service registration links.
+- **World map example**: all seven wired into
+  `examples/roadworks_world_map.py`'s `--live` dispatch table.
+
 ### Confirmed — Connecticut 511, the fourth key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
 
 `streetworks.na511.jurisdictions.CONNECTICUT`

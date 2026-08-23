@@ -13,15 +13,19 @@ field-by-field API documentation - every field name, type and the
 ``EventType`` roadworks discriminator match exactly (see below for the
 full real ``EventType`` value set, corrected after Alberta's own real
 authenticated pull). **Nevada 511, Georgia 511, Alaska 511, Louisiana
-511 and Connecticut (``ctroads.org``) turned out to be the identical
-platform too** - all five found separately while surveying US roadworks
-coverage (none of Nevada, Georgia or Louisiana is in the WZDx/CWZ US
-registry at all, confirmed live), then confirmed live here the same way
-as every Canadian jurisdiction: the identical ``/api/v2/get/event``
-path, the identical "Invalid Key" rejection, and a real, working
-``/developers/doc`` page whose own field-by-field documentation matches
-exactly. Georgia's own real "TrafficImpacts" ArcGIS Hub pages, checked
-first, turned out to be a real dead end - per-project
+511, Connecticut 511, New York 511, Arizona 511, Florida 511, Idaho
+511, Pennsylvania 511, North Carolina 511 and New England 511 turned
+out to be the identical platform too** - twelve US deployments found
+separately while surveying US roadworks coverage (none of Nevada,
+Georgia or Louisiana is in the WZDx/CWZ US registry at all, confirmed
+live - New York's own separate WZDx feed, by contrast, genuinely
+coexists with this different real API on the same domain), then
+confirmed live here the same way as every Canadian jurisdiction: the
+identical ``/api/v2/get/event`` path, the identical "Invalid Key"
+rejection, and a real, working ``/developers`` self-service signup flow
+(a plain ``/developers/doc`` page on some deployments, a redirect on
+others - both real). Georgia's own real "TrafficImpacts" ArcGIS Hub
+pages, checked first, turned out to be a real dead end - per-project
 public-information pages (e.g. "I-285 & SR 400 Improvements"), not a
 live data feed; checking Georgia's own 511 site directly against this
 platform's shape was the real find. Alaska and Connecticut are both
@@ -36,14 +40,33 @@ genuinely new find, not a re-check of anything: found while searching
 for real Open511 (a different, unrelated standard) adopters among the
 remaining USA gap states - none were found, but a real ``511LA``
 ``/help/endpoint/event`` page surfaced instead, the same URL shape
-Ontario/Nevada/Georgia already publish on this platform; checking every
-other remaining gap state directly against this platform's own endpoint
-shape the same way (South Carolina/Montana/Wyoming/Arkansas) confirmed
-none of them are on it, only Connecticut. Manitoba, Prince Edward
-Island, the Northwest Territories and Nunavut were checked and found to
-have no matching site (no DNS record for the guessable
-``511<jurisdiction>.ca``
-pattern this platform's other real Canadian deployments use).
+Ontario/Nevada/Georgia already publish on this platform.
+
+**A much broader sweep found six more** (prompted by asking whether any
+more 511 states were missing, beyond the original 15-state gap
+survey): New York, Arizona, Florida, Idaho, Pennsylvania and North
+Carolina each answer this platform's real endpoint shape directly on
+their own real 511 domain - none previously checked against it at all,
+since none were in the original WZDx/CWZ gap list this platform was
+first found through. North Carolina was a real false negative at
+first - a ``HEAD`` request through its real redirect chain
+(``drivenc.gov`` -> ``www.drivenc.gov``) returned ``405`` (only
+``GET`` is allowed there), corrected by testing with a plain ``GET``
+directly. **New England 511 is a genuinely different shape from every
+other entry here**: one shared platform (``newengland511.org``) run
+jointly for three states - Maine, New Hampshire and Vermont - not a
+single state's own deployment; see :data:`streetworks.na511.jurisdictions.NEW_ENGLAND`.
+Every other remaining untested US state in this sweep was checked and
+confirmed genuinely not on this platform (Colorado, Ohio, Oregon,
+Illinois, Texas, Utah, New Mexico, Oklahoma, Mississippi, Indiana,
+Kentucky, Michigan, Missouri, Kansas, Delaware, North Dakota,
+Washington DC, Hawaii, Virginia, South Carolina, Montana and Wyoming),
+or left genuinely unresolved behind a real WAF/firewall block this SDK
+does not attempt to bypass (New Jersey, Wisconsin, Alabama). Manitoba,
+Prince Edward Island, the Northwest Territories and Nunavut were
+checked and found to have no matching site (no DNS record for the
+guessable ``511<jurisdiction>.ca`` pattern this platform's other real
+Canadian deployments use).
 
 **Ontario is a genuine, confirmed exception: keyless.** A plain
 ``GET https://511on.ca/api/v2/get/event`` returns real data with **no**
@@ -97,9 +120,10 @@ of the ``EventType`` correction above: Nevada's pull also carried real
 this time - real per-jurisdiction variation, not a contradiction), the
 roadworks filter itself staying exactly correct a third time. ``ab511``
 and ``nv511`` are both verified in the registry accordingly;
-``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``
-remain in the same "schema proven, own key untested" position Alberta
-and Nevada themselves were in until now.
+``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``/
+``ny511``/``az511``/``fl511``/``id511``/``pa511``/``nc511``/
+``newengland511`` remain in the same "schema proven, own key untested"
+position Alberta and Nevada themselves were in until now.
 
 **Alaska's own real authenticated response confirmed the same thing a
 third time, and surfaced two genuine converter bugs Ontario's/Alberta's/

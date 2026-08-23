@@ -111,9 +111,16 @@ def test_ontario_is_the_only_keyless_jurisdiction():
         jurisdictions.ALASKA,
         jurisdictions.LOUISIANA,
         jurisdictions.CONNECTICUT,
+        jurisdictions.NEW_YORK,
+        jurisdictions.ARIZONA,
+        jurisdictions.FLORIDA,
+        jurisdictions.IDAHO,
+        jurisdictions.PENNSYLVANIA,
+        jurisdictions.NORTH_CAROLINA,
+        jurisdictions.NEW_ENGLAND,
     ]
     assert all(j.needs_key for j in keyed)
-    assert len(jurisdictions.JURISDICTIONS) == 12
+    assert len(jurisdictions.JURISDICTIONS) == 19
 
 
 def test_nevada_is_the_first_us_jurisdiction_on_this_platform():
@@ -144,6 +151,40 @@ def test_connecticut_is_a_fifth_us_jurisdiction_on_this_platform():
     assert jurisdictions.CONNECTICUT.territory == "USA"
     assert jurisdictions.CONNECTICUT.needs_key is True
     assert jurisdictions.CONNECTICUT.base_url == "https://ctroads.org"
+
+
+def test_a_broader_sweep_found_six_more_us_jurisdictions():
+    """New York, Arizona, Florida, Idaho, Pennsylvania, North Carolina and
+    New England (a single shared platform for Maine/New Hampshire/Vermont)
+    - all found in one broader sweep of every remaining US state, not
+    individually re-checked earlier gap-state leads."""
+    found = [
+        jurisdictions.NEW_YORK,
+        jurisdictions.ARIZONA,
+        jurisdictions.FLORIDA,
+        jurisdictions.IDAHO,
+        jurisdictions.PENNSYLVANIA,
+        jurisdictions.NORTH_CAROLINA,
+        jurisdictions.NEW_ENGLAND,
+    ]
+    assert all(j.territory == "USA" for j in found)
+    assert all(j.needs_key for j in found)
+    assert jurisdictions.NEW_YORK.base_url == "https://511ny.org"
+    assert jurisdictions.ARIZONA.base_url == "https://az511.gov"
+    assert jurisdictions.FLORIDA.base_url == "https://fl511.com"
+    assert jurisdictions.IDAHO.base_url == "https://511.idaho.gov"
+    assert jurisdictions.PENNSYLVANIA.base_url == "https://511pa.com"
+    assert jurisdictions.NORTH_CAROLINA.base_url == "https://www.drivenc.gov"
+    assert jurisdictions.NEW_ENGLAND.base_url == "https://newengland511.org"
+
+
+def test_new_england_names_all_three_real_agencies_not_just_one():
+    """New England 511 is a genuinely different shape - one shared
+    deployment for three states, not a single state's own site."""
+    area = jurisdictions.NEW_ENGLAND.administrative_area
+    assert "Maine" in area
+    assert "New Hampshire" in area
+    assert "Vermont" in area
 
 
 @respx.mock

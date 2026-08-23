@@ -150,25 +150,22 @@ confirmed live via Données Québec's own dataset metadata.
 ## North American 511 platform (Ontario, Alberta, Saskatchewan, New Brunswick, Newfoundland and Labrador, Nova Scotia, Yukon)
 
 One commercial REST API shape, confirmed live to be reused
-byte-for-byte identically by **twelve** independent government agencies
-in two countries — Ontario 511, 511 Alberta, Saskatchewan's Highway
-Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova Scotia
-511, 511 Yukon (Canada), **Nevada 511**, **Georgia 511**, **Alaska
-511**, **Louisiana 511** and **Connecticut 511** (USA — Nevada/Georgia
-found while surveying US roadworks coverage, neither in the WZDx/CWZ US
-registry at all; Alaska and Connecticut both found on a direct
-re-check of the earlier gap-state survey, which had only tested their
-real ArcGIS Open Data catalogues, not this platform's own endpoint
-shape; Louisiana a genuinely new find, surfaced while searching for
-real Open511 adopters among the same gap states - none were found, but
-511LA turned out to be this platform instead; see
-[`docs/providers/us.md`](us.md#nevada-511),
-[`docs/providers/us.md`](us.md#georgia-511),
-[`docs/providers/us.md`](us.md#alaska-511),
-[`docs/providers/us.md`](us.md#louisiana-511) and
-[`docs/providers/us.md`](us.md#connecticut-511) for the US-side
-writeups) all publish the exact same `/api/v2/get/event` endpoint
-(every one answers the identical URL path with either real data or the
+byte-for-byte identically by **nineteen** independent government
+deployments in two countries — Ontario 511, 511 Alberta, Saskatchewan's
+Highway Hotline, New Brunswick 511, 511 Newfoundland and Labrador, Nova
+Scotia 511, 511 Yukon (Canada, 7), and twelve real US deployments:
+**Nevada 511**, **Georgia 511**, **Alaska 511**, **Louisiana 511**,
+**Connecticut 511**, **New York 511**, **Arizona 511**, **Florida
+511**, **Idaho 511**, **Pennsylvania 511**, **North Carolina 511** and
+**New England 511** (a single shared deployment for Maine/New
+Hampshire/Vermont, not a twelfth state) — see
+[`docs/providers/us.md`](us.md) for the full US-side writeups,
+including which of the twelve were found re-checking the original
+15-state WZDx/CWZ gap survey (Nevada/Georgia/Alaska/Connecticut) versus
+a much broader sweep of every remaining US state (Louisiana and the
+final six). All nineteen publish the exact same `/api/v2/get/event`
+endpoint (every one answers the identical URL path with either real
+data or the
 identical
 structured "Invalid Key" rejection), same field names, same `EventType`
 enum. Manitoba, Prince Edward Island, the Northwest Territories and

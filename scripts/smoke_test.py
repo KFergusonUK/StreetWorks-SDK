@@ -830,6 +830,90 @@ def check_ct511() -> str:
     )
 
 
+def _check_na511(env_var: str, jurisdiction_key: str, jurisdiction_name: str) -> str:
+    """Shared body for the six PENDING LIVE VERIFICATION checks below -
+    all found in one broader USA sweep, see streetworks.na511.client's
+    own module docstring."""
+    from streetworks.common import from_na511
+    from streetworks.na511 import NA511Client
+    from streetworks.na511.jurisdictions import JURISDICTIONS
+
+    jurisdiction = JURISDICTIONS[jurisdiction_key]
+    with NA511Client(api_key=os.environ[env_var]) as client:
+        roadworks = client.fetch(jurisdiction_key)
+    works_list = from_na511(
+        roadworks,
+        territory=jurisdiction.territory,
+        administrative_area=jurisdiction.administrative_area,
+    )
+    return (
+        f"{len(works_list):,} real roadwork event(s) - "
+        f"first real authenticated {jurisdiction_name} pull"
+    )
+
+
+def check_ny511() -> str:
+    """New York 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (NEW_YORK_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511). Genuinely separate from
+    streetworks.wzdx's own registry-driven 511NY WZDx feed."""
+    return _check_na511("NEW_YORK_511_API_KEY", "new_york", "New York")
+
+
+def check_az511() -> str:
+    """Arizona 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (ARIZONA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511)."""
+    return _check_na511("ARIZONA_511_API_KEY", "arizona", "Arizona")
+
+
+def check_fl511() -> str:
+    """Florida 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (FLORIDA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511)."""
+    return _check_na511("FLORIDA_511_API_KEY", "florida", "Florida")
+
+
+def check_id511() -> str:
+    """Idaho 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (IDAHO_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511)."""
+    return _check_na511("IDAHO_511_API_KEY", "idaho", "Idaho")
+
+
+def check_pa511() -> str:
+    """Pennsylvania 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (PENNSYLVANIA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511)."""
+    return _check_na511("PENNSYLVANIA_511_API_KEY", "pennsylvania", "Pennsylvania")
+
+
+def check_nc511() -> str:
+    """North Carolina 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    Requires an API key (NORTH_CAROLINA_511_API_KEY, free self-service
+    registration). Same platform/schema as Ontario 511 (keyless, already
+    verified - see check_on511). A real HEAD-vs-GET false negative was
+    corrected while confirming this endpoint shape - see module
+    docstring."""
+    return _check_na511("NORTH_CAROLINA_511_API_KEY", "north_carolina", "North Carolina")
+
+
+def check_newengland511() -> str:
+    """New England 511 (Maine/New Hampshire/Vermont, shared platform) -
+    PENDING LIVE VERIFICATION, see streetworks.na511. Requires an API key
+    (NEW_ENGLAND_511_API_KEY, free self-service registration). Same
+    platform/schema as Ontario 511 (keyless, already verified - see
+    check_on511). Genuinely different from every other check here - one
+    real deployment run jointly for three states, not a single state's
+    own site."""
+    return _check_na511("NEW_ENGLAND_511_API_KEY", "new_england", "New England")
+
+
 def check_vancouver() -> str:
     """Vancouver Road Ahead needs no credentials - see
     streetworks.vancouver. Confirmed live 2026-08-21 (three real
@@ -2532,6 +2616,13 @@ def main() -> int:
     reporter.check("Alaska 511", ["ALASKA_511_API_KEY"], check_ak511)
     reporter.check("Louisiana 511", ["LOUISIANA_511_API_KEY"], check_la511)
     reporter.check("Connecticut 511", ["CONNECTICUT_511_API_KEY"], check_ct511)
+    reporter.check("New York 511", ["NEW_YORK_511_API_KEY"], check_ny511)
+    reporter.check("Arizona 511", ["ARIZONA_511_API_KEY"], check_az511)
+    reporter.check("Florida 511", ["FLORIDA_511_API_KEY"], check_fl511)
+    reporter.check("Idaho 511", ["IDAHO_511_API_KEY"], check_id511)
+    reporter.check("Pennsylvania 511", ["PENNSYLVANIA_511_API_KEY"], check_pa511)
+    reporter.check("North Carolina 511", ["NORTH_CAROLINA_511_API_KEY"], check_nc511)
+    reporter.check("New England 511", ["NEW_ENGLAND_511_API_KEY"], check_newengland511)
     reporter.check("Vancouver Road Ahead", [], check_vancouver)
     reporter.check("Toronto Road Restrictions/Closures", [], check_toronto)
     # Câmara Municipal de Lisboa (Condicionamentos de Trânsito) needs no credentials

@@ -29,6 +29,13 @@ __all__ = [
     "ALASKA",
     "LOUISIANA",
     "CONNECTICUT",
+    "NEW_YORK",
+    "ARIZONA",
+    "FLORIDA",
+    "IDAHO",
+    "PENNSYLVANIA",
+    "NORTH_CAROLINA",
+    "NEW_ENGLAND",
     "JURISDICTIONS",
 ]
 
@@ -185,6 +192,81 @@ CONNECTICUT = Jurisdiction(
     administrative_area="Connecticut Department of Transportation (CTDOT)",
 )
 
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in a broader sweep of every remaining US state
+#: (prompted by asking whether any more 511 states were missing),
+#: separate from `streetworks.wzdx`'s own registry-driven 511NY WZDx
+#: feed - a genuinely different real API on the same domain.
+NEW_YORK = Jurisdiction(
+    base_url="https://511ny.org",
+    needs_key=True,
+    territory="USA",
+    administrative_area="New York State Department of Transportation (NYSDOT)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in the same broader USA sweep as New York.
+ARIZONA = Jurisdiction(
+    base_url="https://az511.gov",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Arizona Department of Transportation (ADOT)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in the same broader USA sweep as New York.
+FLORIDA = Jurisdiction(
+    base_url="https://fl511.com",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Florida Department of Transportation (FDOT)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in the same broader USA sweep as New York.
+IDAHO = Jurisdiction(
+    base_url="https://511.idaho.gov",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Idaho Transportation Department (ITD)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in the same broader USA sweep as New York.
+PENNSYLVANIA = Jurisdiction(
+    base_url="https://511pa.com",
+    needs_key=True,
+    territory="USA",
+    administrative_area="Pennsylvania Department of Transportation (PennDOT)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. Found in the same broader USA sweep as New York - a real
+#: HEAD-vs-GET false negative first (a HEAD request through the
+#: redirect chain returned 405), corrected by testing with a plain GET.
+NORTH_CAROLINA = Jurisdiction(
+    base_url="https://www.drivenc.gov",
+    needs_key=True,
+    territory="USA",
+    administrative_area="North Carolina Department of Transportation (NCDOT)",
+)
+
+#: Confirmed live to require a real developer key - see client module
+#: docstring. A genuinely different shape from every other entry here:
+#: one shared platform run jointly for three states (Maine, New
+#: Hampshire, Vermont), not a single state's own deployment -
+#: ``administrative_area`` names all three real agencies rather than
+#: picking one.
+NEW_ENGLAND = Jurisdiction(
+    base_url="https://newengland511.org",
+    needs_key=True,
+    territory="USA",
+    administrative_area=(
+        "Maine DOT / New Hampshire DOT / Vermont Agency of Transportation "
+        "(shared New England 511 platform)"
+    ),
+)
+
 JURISDICTIONS: dict[str, Jurisdiction] = {
     "ontario": ONTARIO,
     "alberta": ALBERTA,
@@ -198,4 +280,11 @@ JURISDICTIONS: dict[str, Jurisdiction] = {
     "alaska": ALASKA,
     "louisiana": LOUISIANA,
     "connecticut": CONNECTICUT,
+    "new_york": NEW_YORK,
+    "arizona": ARIZONA,
+    "florida": FLORIDA,
+    "idaho": IDAHO,
+    "pennsylvania": PENNSYLVANIA,
+    "north_carolina": NORTH_CAROLINA,
+    "new_england": NEW_ENGLAND,
 }
