@@ -42,6 +42,12 @@ ALASKA_FIXTURE = json.loads(
 )
 ALASKA_ROADWORK = [e for e in ALASKA_FIXTURE if e["EventType"] == "roadwork"]
 
+CONNECTICUT_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_connecticut_events.json").read_text(
+        encoding="utf-8"
+    )
+)
+
 
 def _by_id(works_list):
     return {w.reference: w for w in works_list}
@@ -179,3 +185,24 @@ def test_alaska_real_record_with_a_genuine_start_date_and_polyline():
     lat, lon = coordinate.points[0]
     assert abs(lat - 59.4566093333751) < 0.001
     assert abs(lon - (-135.31558117922)) < 0.001
+
+
+def test_connecticut_real_record_converts_cleanly_despite_not_being_roadwork():
+    """Connecticut's real live feed had exactly one active event at pull
+    time (2026-08-22), a real 'accidentsAndIncidents' record, not
+    roadwork - from_na511 doesn't discriminate by EventType itself (that
+    filter lives in NA511Client.iter_roadworks), so this confirms the
+    identical schema round-trips even on Connecticut's own real data,
+    without needing a same-day roadwork example to prove it."""
+    works_list = from_na511(
+        CONNECTICUT_FIXTURE, territory="USA", administrative_area="Connecticut DOT"
+    )
+    works = _by_id(works_list)["57007"]
+    assert works.sites[0].works_type == "Incident"
+    assert works.sites[0].status == "major"
+    coordinate = works.coordinate
+    assert coordinate is not None
+    assert coordinate.points is None
+    lat, lon = coordinate.value
+    assert abs(lat - 41.306123) < 0.001
+    assert abs(lon - (-72.952756)) < 0.001

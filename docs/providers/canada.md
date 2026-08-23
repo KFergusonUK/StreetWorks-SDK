@@ -211,16 +211,23 @@ no code changes needed. It also surfaced a real correction: the live
 showed (`restrictionClass`/`generalInfo`/`specialEvents` are real too) —
 the roadworks filter itself stayed exactly correct on this second,
 materially less roadwork-skewed jurisdiction. **Nevada 511 (`nv511`,
-USA) and Alaska 511 (`ak511`, USA) were both confirmed the same way the
-same day** — see [`docs/providers/us.md`](us.md#nevada-511) and
-[`docs/providers/us.md`](us.md#alaska-511) for the US-side writeups.
-Alaska's own real data went further than confirming the schema — it
-surfaced two genuine bugs in the shared `from_na511` converter (a real
-.NET `DateTime.MinValue` date placeholder on 82% of all real events, and
-a real "Null Island" `(0.0, 0.0)` coordinate placeholder), both fixed
-the same day and never seen on Ontario's/Alberta's/Nevada's own real
-samples. Between all three, Alberta/Nevada/Alaska now cross-confirm the
-`EventType` correction on three independent jurisdictions. `nb511`/`nl511` have real,
+USA), Alaska 511 (`ak511`, USA) and Connecticut 511 (`ct511`, USA) were
+all confirmed the same way the same day** — see
+[`docs/providers/us.md`](us.md#nevada-511),
+[`docs/providers/us.md`](us.md#alaska-511) and
+[`docs/providers/us.md`](us.md#connecticut-511) for the US-side
+writeups. Alaska's own real data went further than confirming the
+schema — it surfaced two genuine bugs in the shared `from_na511`
+converter (a real .NET `DateTime.MinValue` date placeholder on 82% of
+all real events, and a real "Null Island" `(0.0, 0.0)` coordinate
+placeholder), both fixed the same day and never seen on Ontario's/
+Alberta's/Nevada's own real samples. Connecticut's real data was
+genuinely sparse — exactly one real active event statewide at pull
+time, not roadwork — an honest finding, not a fixture gap; the schema
+match held anyway, since it's already proven via the other four
+jurisdictions' own real roadwork samples. Between Alberta/Nevada/Alaska,
+this platform's `EventType` correction is now cross-confirmed on three
+independent jurisdictions. `nb511`/`nl511` have real,
 working self-service signup pages confirmed live
 (`NEW_BRUNSWICK_511_API_KEY`/`NEWFOUNDLAND_511_API_KEY` — see
 `.env.example`) — set one to confirm the same open question for that

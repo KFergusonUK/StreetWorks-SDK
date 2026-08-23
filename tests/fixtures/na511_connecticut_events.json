@@ -1,0 +1,34 @@
+[
+  {
+    "ID": 57007,
+    "SourceId": "72126035",
+    "Organization": "ConnDOT",
+    "RoadwayName": "OTHER",
+    "DirectionOfTravel": "Northbound",
+    "Description": "NEW HAVEN - Route 10 Northbound between Legion Ave & MLK Blvd has the right lane closed for a sink hole. Reported Tuesday, July 21 at 4:22 pm.",
+    "Reported": 1784665485,
+    "LastUpdated": 1787403368,
+    "StartDate": 1784665485,
+    "PlannedEndDate": null,
+    "LanesAffected": "No Data",
+    "Latitude": 41.306123,
+    "Longitude": -72.952756,
+    "LatitudeSecondary": null,
+    "LongitudeSecondary": null,
+    "EventType": "accidentsAndIncidents",
+    "EventSubType": "Incident",
+    "IsFullClosure": false,
+    "Severity": "major",
+    "Comment": null,
+    "EncodedPolyline": null,
+    "Restrictions": {
+      "Width": null,
+      "Height": null,
+      "Length": null,
+      "Weight": null,
+      "Speed": null
+    },
+    "Recurrence": "",
+    "RecurrenceSchedules": ""
+  }
+]

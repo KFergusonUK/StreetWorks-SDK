@@ -97,9 +97,9 @@ of the ``EventType`` correction above: Nevada's pull also carried real
 this time - real per-jurisdiction variation, not a contradiction), the
 roadworks filter itself staying exactly correct a third time. ``ab511``
 and ``nv511`` are both verified in the registry accordingly;
-``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``/
-``ct511`` remain in the same "schema proven, own key untested" position
-Alberta and Nevada themselves were in until now.
+``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``
+remain in the same "schema proven, own key untested" position Alberta
+and Nevada themselves were in until now.
 
 **Alaska's own real authenticated response confirmed the same thing a
 third time, and surfaced two genuine converter bugs Ontario's/Alberta's/
@@ -116,6 +116,19 @@ no polyline fallback, a real "Null Island" placeholder. Both are fixed
 in :func:`streetworks.common.from_na511._epoch_seconds_to_dt`/
 ``_coordinate`` - see that module's own docstring. ``ab511``, ``nv511``
 and ``ak511`` are all verified in the registry accordingly.
+
+**Connecticut's own real authenticated response confirmed the schema a
+fourth time, with a genuinely sparse real result - an honest finding,
+not a fixture gap.** A real developer key round-tripped successfully,
+but Connecticut's real live feed had exactly **one** active event
+statewide at pull time (2026-08-22), and it was a real
+``"accidentsAndIncidents"`` record (a Route 10 sinkhole lane closure in
+New Haven), not roadwork - 0 real roadwork events live there at that
+moment. That one record's field set still matches Ontario's own proven
+shape byte-for-byte, so the schema confirmation doesn't depend on a
+same-day roadwork example - four other jurisdictions' own real roadwork
+samples already prove that part. ``ct511`` is verified in the registry
+accordingly.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,

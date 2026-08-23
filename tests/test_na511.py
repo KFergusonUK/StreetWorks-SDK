@@ -37,6 +37,11 @@ ALASKA_FIXTURE = json.loads(
         encoding="utf-8"
     )
 )
+CONNECTICUT_FIXTURE = json.loads(
+    (Path(__file__).parent / "fixtures" / "na511_connecticut_events.json").read_text(
+        encoding="utf-8"
+    )
+)
 
 
 @respx.mock
@@ -201,3 +206,28 @@ def test_alaska_authenticated_response_parses_identically_to_ontario():
     assert len(roadworks) == 2
     assert {e["ID"] for e in roadworks} == {32138, 36958}
     assert all(e["EventType"] == "roadwork" for e in roadworks)
+
+
+@respx.mock
+def test_connecticut_authenticated_response_parses_identically_to_ontario():
+    """Real Connecticut 511 event data (tests/fixtures/na511_connecticut_events.json),
+    captured live 2026-08-22 from a real authenticated pull against
+    https://ctroads.org/api/v2/get/event - the fourth key-gated
+    jurisdiction on this platform confirmed with a real key. Connecticut's
+    real live feed had exactly one active event at pull time, and it was
+    a real "accidentsAndIncidents" record (a Route 10 sinkhole lane
+    closure), not roadwork - a genuine, honestly-recorded finding, not a
+    fixture gap. The schema itself doesn't need a Connecticut-specific
+    roadwork sample to be confirmed: this one record's field set is
+    already byte-for-byte identical to Ontario's own proven shape, and
+    iter_roadworks() correctly filters it out (0 real roadwork events
+    live in Connecticut at pull time)."""
+    respx.get(f"{jurisdictions.CONNECTICUT.base_url}/{EVENT_PATH}").mock(
+        return_value=httpx.Response(200, json=CONNECTICUT_FIXTURE)
+    )
+    with NA511Client(api_key="real-key") as client:
+        events = list(client.iter_events("connecticut"))
+        roadworks = list(client.iter_roadworks("connecticut"))
+    assert len(events) == 1
+    assert events[0]["EventType"] == "accidentsAndIncidents"
+    assert roadworks == []

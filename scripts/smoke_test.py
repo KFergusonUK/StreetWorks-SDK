@@ -804,25 +804,30 @@ def check_la511() -> str:
 
 
 def check_ct511() -> str:
-    """Connecticut 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """Connecticut 511 - CONFIRMED LIVE 2026-08-22, see streetworks.na511.
     Requires an API key (CONNECTICUT_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
-    verified - see check_on511). A real correction to the earlier
-    gap-state survey, not a new discovery - Connecticut had only been
-    checked against its ArcGIS Open Data catalogue, never this
-    platform's own endpoint shape directly."""
+    verified - see check_on511). Connecticut's real live feed can be
+    genuinely sparse - 0 real roadwork events at the confirmation pull
+    time, 1 real accidentsAndIncidents record - so this may legitimately
+    report 0 roadwork events even though the real authenticated pull
+    itself succeeded."""
     from streetworks.common import from_na511
     from streetworks.na511 import NA511Client
     from streetworks.na511.jurisdictions import CONNECTICUT
 
     with NA511Client(api_key=os.environ["CONNECTICUT_511_API_KEY"]) as client:
+        all_events = list(client.iter_events("connecticut"))
         roadworks = client.fetch("connecticut")
     works_list = from_na511(
         roadworks,
         territory=CONNECTICUT.territory,
         administrative_area=CONNECTICUT.administrative_area,
     )
-    return f"{len(works_list):,} real roadwork event(s) - first real authenticated Connecticut pull"
+    return (
+        f"{len(works_list):,} real roadwork event(s) (of {len(all_events):,} total) - "
+        "first real authenticated Connecticut pull"
+    )
 
 
 def check_vancouver() -> str:

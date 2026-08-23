@@ -3941,13 +3941,21 @@ _REGISTRY: list[ProviderEntry] = [
             "caller's behalf, same standing rule as Alberta/Massachusetts "
             "CWZ. The field schema is not a guess: proven by Ontario's "
             "own real, unauthenticated response on the identical "
-            "platform."
+            "platform. Confirmed live with a real developer key "
+            "(2026-08-22): the real authenticated response's field set "
+            "matches Ontario's own proven shape byte-for-byte. "
+            "Connecticut's real live feed had exactly one active event "
+            "at pull time, and it was a real 'accidentsAndIncidents' "
+            "record (a Route 10 sinkhole lane closure), not roadwork - "
+            "an honest, recorded finding, not a fixture gap; the schema "
+            "confirmation doesn't depend on a same-day roadwork example "
+            "since the field shape is already proven via four other "
+            "jurisdictions' own real roadwork samples."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("connecticut")',

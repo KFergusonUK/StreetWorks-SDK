@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+### Confirmed — Connecticut 511, the fourth key-gated North American 511 jurisdiction verified with a real key (2026-08-22)
+
+`streetworks.na511.jurisdictions.CONNECTICUT`
+- A real developer key round-tripped successfully, but Connecticut's
+  real live feed had exactly one active event statewide at pull time,
+  and it was a real `"accidentsAndIncidents"` record (a Route 10
+  sinkhole lane closure in New Haven), not roadwork - 0 real roadwork
+  events live there at that moment, an honest finding, not a fixture
+  gap. That one record's field set still matches Ontario's own proven
+  shape byte-for-byte, so the schema confirmation doesn't depend on a
+  same-day roadwork example - four other jurisdictions'
+  (Ontario/Alberta/Nevada/Alaska) own real roadwork samples already
+  prove that part. Registry entry (`ct511`) is now `verified=True`.
+- New real fixture, `tests/fixtures/na511_connecticut_events.json`,
+  plus wiring and converter tests confirming the real Connecticut
+  record parses correctly and `iter_roadworks()` correctly returns
+  nothing for it.
+- `sk511`/`nb511`/`nl511`/`ns511`/`yt511`/`ga511`/`la511` remain in the
+  "schema proven, own key untested" position Alberta/Nevada/Alaska/
+  Connecticut themselves were in until now.
+
 ### Added — Connecticut 511, a fifth US jurisdiction on the North American 511 platform (2026-08-22)
 
 `streetworks.na511.jurisdictions.CONNECTICUT`

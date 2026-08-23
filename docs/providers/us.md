@@ -505,6 +505,15 @@ information site), the same structured `"Invalid Key"` rejection with
 no key supplied, and a real, working `/developers/doc` page ("CT roads
 API... Message Signs, Events, Advisories"). Requires a real developer
 key — not obtained on this SDK's behalf. Free self-service
-registration: `https://ctroads.org/developers/doc`; set
-`CONNECTICUT_511_API_KEY` (see `.env.example`) and run
-`scripts/smoke_test.py` to confirm the last open question.
+registration: `https://ctroads.org/developers/doc`.
+
+**Confirmed with a real key, 2026-08-22** — the authenticated pull
+succeeded, but Connecticut's real live feed had exactly **one** active
+event statewide at pull time, and it was a real `"accidentsAndIncidents"`
+record (a Route 10 sinkhole lane closure in New Haven), not roadwork —
+0 real roadwork events live there at that moment, an honest finding,
+not a fixture gap. That one record's field set still matches Ontario's
+own proven shape byte-for-byte, so the schema confirmation doesn't
+depend on a same-day roadwork example — four other jurisdictions'
+(Ontario/Alberta/Nevada/Alaska) own real roadwork samples already prove
+that part.
