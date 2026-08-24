@@ -1,0 +1,40 @@
+{
+  "_fixture_note": "SYNTHETIC - built around the standard data.go.kr response envelope (response > body > items > item, numOfRows/pageNo/totalCount), NOT a real captured response. No real authenticated pull of dataset 15076874 has ever been made - see streetworks.korea.client's module docstring. Field keys here are inferred guesses, not confirmed real API parameter names.",
+  "response": {
+    "header": {
+      "resultCode": "00",
+      "resultMsg": "NORMAL SERVICE."
+    },
+    "body": {
+      "items": {
+        "item": [
+          {
+            "routeNm": "경부고속도로",
+            "sectionNm": "서울JC~수원IC",
+            "projectNm": "서울외곽순환 확장공사",
+            "constructionLength": "3.2km",
+            "constructionPeriod": "2026-01-05~2026-12-20",
+            "completionDate": "20261220",
+            "startPointAddr": "서울특별시 서초구",
+            "endPointAddr": "경기도 수원시",
+            "completionType": "공사중"
+          },
+          {
+            "routeNm": "영동고속도로",
+            "sectionNm": "인천~강릉",
+            "projectNm": "포장보수공사",
+            "constructionLength": "1.1km",
+            "constructionPeriod": "2026-06-01~2026-09-30",
+            "completionDate": "20260930",
+            "startPointAddr": "인천광역시",
+            "endPointAddr": "강원도 강릉시",
+            "completionType": "공사중"
+          }
+        ]
+      },
+      "numOfRows": 100,
+      "pageNo": 1,
+      "totalCount": 2
+    }
+  }
+}

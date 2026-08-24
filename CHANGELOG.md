@@ -2,6 +2,48 @@
 
 ## [Unreleased]
 
+### Added — Korea Expressway Corporation (South Korea), Credentials-wanted, this SDK's second Asian territory (2026-08-24)
+
+`streetworks.korea.KoreaClient`
+- Prompted by "OK, what about South Korea roadworks?" following the
+  Singapore build. South Korea's national Public Data Portal
+  (`data.go.kr`) hosts a real Korea Expressway Corporation
+  (한국도로공사) dataset, "고속도로 공사현황" ("Expressway Construction
+  Status", id `15076874`) - confirmed live from the dataset's own
+  public listing page (Korean and English mirror) and its embedded
+  schema.org JSON-LD metadata.
+- Least-confirmed scaffold in this SDK yet, at or below ASFINAG's own
+  tier: unlike Croatia (public pull URL) or even Vejdirektoratet (URL
+  issued at registration alongside a stated auth scheme), data.go.kr
+  only reveals a dataset's real request URL once a service key is
+  actually approved - genuinely unknown, not just unbuilt.
+- Real field key names are also unconfirmed - only human-readable
+  Korean field descriptions are public, not the actual JSON/XML
+  parameter keys - so, unlike every other scaffold here, **no
+  `from_korea` converter was built**; `KoreaClient.iter_items()` only
+  gets a caller as far as raw response items, read against the
+  standard data.go.kr envelope (`response > body > items > item`)
+  defensively, explicitly caveated as unconfirmed for this specific
+  dataset.
+- Real negative findings, not just gaps: Korea Expressway Corporation's
+  own documentation portal (`data.ex.co.kr`), which would likely state
+  the real path, is unreachable from this build environment (DNS
+  resolves, TCP times out - not a dead site); three plausible
+  `apis.data.go.kr` paths were tried directly and each returned a real
+  `NO_OPENAPI_SERVICE_ERROR`, confirming the gateway and its
+  `serviceKey` convention are real without confirming this dataset's
+  own path.
+- Licence: `이용허락범위 제한 없음` (no restriction on scope of use) -
+  confirmed identically on the listing page and its JSON-LD. Free
+  self-service registration, development-tier auto-approved.
+- New tests: `tests/test_korea.py`, against a synthetic fixture built
+  around the assumed platform-wide envelope shape, explicitly marked
+  as not a real captured response.
+- New registry entry `key="korea"` (`verified=False`); new
+  `## Korea Expressway Corporation` section in `docs/providers/asia.md`;
+  wired into `scripts/smoke_test.py` and `.env.example`
+  (`KOREA_BASE_URL`/`KOREA_SERVICE_KEY`).
+
 ### Added — Croatia (Hrvatske ceste / NPT), Credentials-wanted, better-confirmed than Vejdirektoratet (2026-08-24)
 
 `streetworks.datex2.croatia.CroatiaClient`

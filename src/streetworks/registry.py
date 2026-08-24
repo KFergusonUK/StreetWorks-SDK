@@ -1587,6 +1587,53 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.singapore import SingaporeClient",
     ),
     ProviderEntry(
+        key="korea",
+        name="Korea Expressway Corporation (data.go.kr)",
+        description="South Korea's national expressway construction-status feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"South Korea"}),
+        administrative_area="Korea Expressway Corporation (한국도로공사)",
+        scope_note=(
+            "Phase 0 scaffold - less confirmed than most Credentials-wanted "
+            "entries in this SDK, at or below ASFINAG's own tier. The "
+            "dataset ('한국도로공사_고속도로 공사현황', id 15076874) is real - "
+            "confirmed live on data.go.kr's own public listing (both the "
+            "Korean page and its English mirror), with real field "
+            "descriptions, a real open licence, and a real self-service "
+            "registration flow (auto-approved at development tier). But "
+            "unlike ASFINAG, whose real dataset naming at least matches "
+            "its NAP - and unlike Croatia, whose real pull URL is public - "
+            "data.go.kr issues the real request URL only once a service "
+            "key is approved, so the URL here is genuinely unknown, not "
+            "just unbuilt. Real field names are known only as human-"
+            "readable Korean descriptions, not real API keys, so no "
+            "from_korea converter exists yet. Korea Expressway Corporation's "
+            "own documentation portal (data.ex.co.kr), which would likely "
+            "state the real path, was unreachable from this build "
+            "environment (DNS resolved, TCP timed out - not a 403/block). "
+            "Three plausible apis.data.go.kr paths were tried directly and "
+            "confirmed wrong (a real NO_OPENAPI_SERVICE_ERROR response), "
+            "which at least confirms the gateway host and its serviceKey "
+            "query parameter convention are real."
+        ),
+        credentials=(
+            "Free self-service 'Apply for Use' at data.go.kr (dataset "
+            "15076874) - development-tier keys auto-approved; issues both "
+            "the real pull URL and a serviceKey together"
+        ),
+        licence=(
+            "이용허락범위 제한 없음 (no restriction on scope of use) - "
+            "confirmed on both the public listing page and its embedded "
+            "schema.org licence field"
+        ),
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.korea",
+        _client_name="KoreaClient",
+        import_line="from streetworks.korea import KoreaClient",
+    ),
+    ProviderEntry(
         key="nsw",
         name="Transport for NSW - Live Traffic Hazards",
         description="New South Wales roadwork hazards feed (Australia).",

@@ -385,6 +385,18 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     against real authenticated data - see streetworks.singapore.client's
     own module docstring.
 
+    Korea Expressway Corporation (`korea`) is at or below Austria's own
+    tier - the least-confirmed entry in this group. The dataset itself
+    is real (data.go.kr id 15076874, real Korean field descriptions, a
+    real open licence, real self-service auto-approved registration),
+    but unlike every other entry above, data.go.kr issues the real pull
+    URL only once a service key is approved, so the URL is genuinely
+    unknown rather than merely unbuilt - the same gap Austria has. Worse
+    than Austria: the real field key names are unconfirmed too (only
+    human-readable descriptions are public), so no from_korea converter
+    exists yet, only a raw-item client method - see
+    streetworks.korea.client's own module docstring.
+
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
     Newfoundland and Labrador 511 (`nl511`), Nova Scotia 511 (`ns511`),
     511 Yukon (`yt511`), Georgia 511 (`ga511`), Louisiana 511 (`la511`),
@@ -421,6 +433,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "austria",
         "croatia",
         "singapore",
+        "korea",
         "sk511",
         "nb511",
         "nl511",

@@ -1430,6 +1430,30 @@ def check_singapore() -> str:
     )
 
 
+def check_korea() -> str:
+    """Korea Expressway Corporation (South Korea) - PENDING LIVE
+    VERIFICATION, less confirmed than most scaffolds, see
+    streetworks.korea. Requires KOREA_BASE_URL (the real pull URL - only
+    issued once a data.go.kr service key for dataset 15076874 is
+    approved, genuinely unconfirmed by this project) and
+    KOREA_SERVICE_KEY. This would be the first real Korean data seen -
+    please report back the real base_url, one real trimmed record, and
+    the real field key names (only human-readable Korean descriptions
+    are public today, see module docstring) so a from_korea converter
+    can finally be written."""
+    from streetworks.korea import KoreaClient
+
+    with KoreaClient(
+        base_url=os.environ["KOREA_BASE_URL"],
+        service_key=os.environ["KOREA_SERVICE_KEY"],
+    ) as client:
+        items = list(client.iter_items())
+    return (
+        f"{len(items):,} real item(s) - first real Korean data seen, compare against "
+        "module docstring's open questions"
+    )
+
+
 def check_nsw_livetraffic() -> str:
     """TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED
     (2026-07-30), see streetworks.au.nsw. Requires an API Gateway key
@@ -2657,6 +2681,11 @@ def main() -> int:
         "DATEX II (Croatia)", ["CROATIA_USERNAME", "CROATIA_PASSWORD"], check_croatia
     )
     reporter.check("LTA DataMall (Singapore)", ["SINGAPORE_LTA_ACCOUNT_KEY"], check_singapore)
+    reporter.check(
+        "Korea Expressway Corporation (South Korea)",
+        ["KOREA_BASE_URL", "KOREA_SERVICE_KEY"],
+        check_korea,
+    )
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
     )
