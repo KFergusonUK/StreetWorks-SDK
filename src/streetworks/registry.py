@@ -2573,6 +2573,43 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.tfl import TflClient",
     ),
     ProviderEntry(
+        key="hongkong",
+        name="Hong Kong (Transport Department / Highways Department)",
+        description="Hong Kong's real-time strategic-network roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Hong Kong"}),
+        administrative_area="Highways Department",
+        scope_note=(
+            "Confirmed live (2026-08-24, 8 real records) - genuinely "
+            "keyless, no app key even as an optional courtesy (unlike "
+            "TfL/Socrata), matching the Transport Department's own "
+            "published data specification (roadworks_location_data_"
+            "specification.pdf, v1.02, May 2026) field-for-field. Real "
+            "scope, stated explicitly: Highways Department's own "
+            "roadworks 'involving lane closure on public roads with a "
+            "speed limit of 70km/hr or above' - strategic/expressway-"
+            "grade only, not comprehensive. worksstatus has exactly two "
+            "real documented values (Under Preparation / In Progress); "
+            "every one of the 8 real live records checked was In "
+            "Progress, driving real VERIFIED date-confidence grading, "
+            "checked explicitly not assumed constant. Every text field "
+            "is real and trilingual (English/Traditional Chinese/"
+            "Simplified Chinese); only English is promoted into the "
+            "common model."
+        ),
+        credentials=None,
+        licence=(
+            "DATA.GOV.HK portal-wide terms, confirmed live - free for "
+            "commercial and non-commercial use, attribution to the "
+            "Government and DATA.GOV.HK required"
+        ),
+        source_grade="operator",
+        _module="streetworks.hongkong",
+        _client_name="HongKongClient",
+        import_line="from streetworks.hongkong import HongKongClient",
+    ),
+    ProviderEntry(
         key="cciss",
         name="CCISS (Centro di Coordinamento Informazioni sulla Sicurezza Stradale)",
         description="Italy's real-time traffic bulletin RSS, from Italy's own confirmed RTTI NAP.",

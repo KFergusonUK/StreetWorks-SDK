@@ -1454,6 +1454,27 @@ def check_korea() -> str:
     )
 
 
+def check_hongkong() -> str:
+    """Hong Kong Roadworks Location (Transport Department / Highways
+    Department) needs no credentials at all, not even an optional
+    courtesy key - see streetworks.hongkong. Confirmed live 2026-08-24
+    (8 real records, all worksstatus="In Progress"). Reports the real
+    worksstatus split, so a future "Under Preparation" sighting - never
+    observed live yet - shows up here."""
+    from collections import Counter
+
+    from streetworks.common import from_hongkong
+    from streetworks.hongkong import HongKongClient
+
+    with HongKongClient() as client:
+        records = list(client.iter_roadworks())
+    if not records:
+        raise RuntimeError("query returned no records - real data may have changed")
+    works_list = from_hongkong(records)
+    status_split = Counter(r.get("worksstatus") for r in records)
+    return f"{len(works_list):,} real roadworks record(s), worksstatus split: {dict(status_split)}"
+
+
 def check_nsw_livetraffic() -> str:
     """TfNSW Live Traffic (New South Wales, Australia) - PHASE 2 CONFIRMED
     (2026-07-30), see streetworks.au.nsw. Requires an API Gateway key
@@ -2686,6 +2707,7 @@ def main() -> int:
         ["KOREA_BASE_URL", "KOREA_SERVICE_KEY"],
         check_korea,
     )
+    reporter.check("Hong Kong Roadworks Location", [], check_hongkong)
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
     )

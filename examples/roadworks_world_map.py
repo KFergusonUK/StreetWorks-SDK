@@ -91,6 +91,7 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     "Australia": (134.0, -25.0), "New Zealand": (172.5, -41.0),
     # Asia
     "Singapore": (103.8, 1.35),
+    "Hong Kong": (114.15, 22.35),
 }
 
 WGS84 = {"EPSG:4326", "CRS:84", "urn:ogc:def:crs:EPSG::4326",
@@ -333,6 +334,7 @@ def _fetch_works(key, client):
         from_dortmund,
         from_drivebc,
         from_helsinki,
+        from_hongkong,
         from_ip,
         from_jersey,
         from_lisboa,
@@ -502,7 +504,7 @@ def _fetch_works(key, client):
         "qld": from_au_qld_qldtraffic, "act": from_au_act_ttm,
         "tas": from_au_tas_roadworks, "nsw": from_nsw_livetraffic,
         "paris": from_paris, "chicagodot": from_chicagodot,
-        "copenhagen": from_copenhagen, "tfl": from_tfl,
+        "copenhagen": from_copenhagen, "tfl": from_tfl, "hongkong": from_hongkong,
         "saarland": from_saarland, "dortmund": from_dortmund, "lyon": from_lyon,
         "amsterdam": from_amsterdam, "nt": from_au_nt_roadreport, "dc": from_dc,
         "quebec": from_quebec,

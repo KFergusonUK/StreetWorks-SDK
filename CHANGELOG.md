@@ -2,6 +2,40 @@
 
 ## [Unreleased]
 
+### Added — Hong Kong (Transport Department / Highways Department), confirmed live, this SDK's first verified Asian territory (2026-08-24)
+
+`streetworks.hongkong.HongKongClient`, `streetworks.common.from_hongkong`
+- Prompted by "What about Hong Kong next?" following the Korea build.
+  Hong Kong's Transport Department, cooperating with Highways
+  Department, publishes a genuinely keyless JSON/GeoJSON roadworks feed
+  - confirmed live 2026-08-24 (8 real records) against the Transport
+  Department's own published data specification, field-for-field.
+- **Genuinely keyless - no app key at all**, not even an optional
+  rate-limit courtesy like TfL's or Socrata's `X-App-Token`.
+- Real scope, stated explicitly: Highways Department's roadworks
+  "involving lane closure on public roads with a speed limit of
+  70km/hr or above" - strategic/expressway-grade only, not
+  comprehensive, the same honest-scope shape as ASFINAG/TfL.
+- `worksstatus` has exactly two real documented values (Under
+  Preparation / In Progress); every one of the 8 real live records
+  checked was In Progress, driving real `DateConfidence.VERIFIED`
+  grading, checked explicitly rather than assumed constant.
+- Every text field is real and trilingual (English/Traditional
+  Chinese/Simplified Chinese); only English is promoted into the
+  common model, matching `from_brussels`'s French-canonical precedent.
+- Real WGS84 `latitude`/`longitude` fields directly on each record - no
+  GeoJSON unwrapping or coordinate-order flip needed.
+- Licence: DATA.GOV.HK's portal-wide terms, confirmed live - free
+  commercial/non-commercial use, attribution to the Government and
+  DATA.GOV.HK required.
+- New tests: `tests/test_hongkong.py`, against 3 REAL trimmed records
+  from a real live pull (`hongkong_roadworks_live_pull.json`), not
+  synthetic.
+- New registry entry `key="hongkong"` (verified, no credentials); new
+  `## Hong Kong` section in `docs/providers/asia.md`; wired into
+  `scripts/smoke_test.py` (unconditional, no credentials needed) and
+  `examples/roadworks_world_map.py`.
+
 ### Added — Korea Expressway Corporation (South Korea), Credentials-wanted, this SDK's second Asian territory (2026-08-24)
 
 `streetworks.korea.KoreaClient`

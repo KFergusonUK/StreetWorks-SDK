@@ -43,6 +43,7 @@ from .from_gnaf import from_gnaf_address, from_gnaf_road
 from .from_guernsey_streets import from_guernsey_street
 from .from_hamburg import from_hamburg_street
 from .from_helsinki import from_helsinki
+from .from_hongkong import from_hongkong
 from .from_idee import from_idee
 from .from_ip import from_ip
 from .from_jersey import from_jersey
@@ -193,6 +194,7 @@ __all__ = [
     "from_zurich",
     "from_vienna",
     "from_tfl",
+    "from_hongkong",
     "from_idee",
     "from_osni",
     "from_dfi_roads",

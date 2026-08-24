@@ -7,7 +7,7 @@ roster — update there first, not here)
 **Europe**  ✓ Austria · Belgium · Bulgaria · Denmark · Finland · France · Germany · Gibraltar · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Portugal · Spain · Switzerland · Greece · Ireland · UK   ~ Sweden
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand
-**Asia**  ~ Singapore
+**Asia**  ✓ Hong Kong   ~ Singapore · South Korea
 **Ruled out**  ✗ China · Russia
 
 *Several territories carry multiple data-owning authorities (Catalonia, Basque Country, Mallorca, Madrid; the four UK nations) — and "in progress" collapses two genuinely different states (credentials-wanted vs. documented-but-unavailable) for scannability — see the [full matrix](providers/index.md) for both.*

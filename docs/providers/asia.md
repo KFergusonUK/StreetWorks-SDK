@@ -1,10 +1,84 @@
 # Asia
 
-This SDK's first Asian territory. See [`docs/providers/index.md`](index.md)
-for the authoritative live/verified status table.
+Singapore was this SDK's first Asian territory (Credentials wanted); Hong
+Kong is its first *confirmed live* one. See
+[`docs/providers/index.md`](index.md) for the authoritative
+live/verified status table.
 
+- [Hong Kong (Transport Department / Highways Department) — Confirmed live](#hong-kong-transport-department--highways-department--confirmed-live)
 - [LTA DataMall (Singapore) — Credentials wanted](#lta-datamall-singapore--credentials-wanted)
 - [Korea Expressway Corporation (South Korea) — Credentials wanted](#korea-expressway-corporation-south-korea--credentials-wanted)
+
+## Hong Kong (Transport Department / Highways Department) — Confirmed live
+
+Hong Kong's Transport Department, in cooperation with Highways Department,
+publishes a genuinely keyless JSON/GeoJSON feed of real-time roadworks
+information — this SDK's first *confirmed live* Asian territory (Singapore
+and South Korea are both still Credentials wanted, below). Found while
+checking whether more Asian roadworks gaps existed beyond Singapore and
+Korea.
+
+```python
+from streetworks.hongkong import HongKongClient
+from streetworks.common import from_hongkong
+
+with HongKongClient() as client:  # doctest: +SKIP
+    works = from_hongkong(list(client.iter_roadworks()))
+```
+
+**Confirmed live 2026-08-24** against a real, unauthenticated pull (8 real
+records at time of writing), matching the Transport Department's own
+published data specification (`roadworks_location_data_specification.pdf`,
+version 1.02, May 2026) field-for-field.
+
+**Genuinely keyless — no app key, no registration, nothing.** Unlike most
+feeds in this SDK, there isn't even an optional rate-limit-courtesy key
+like TfL's or Socrata's — the resource URL is a plain public JSON file:
+`https://resource.data.one.gov.hk/td/roadworks-location/get_all_the_roadworks.json`
+(a sibling GeoJSON resource carries the identical fields wrapped in `Point`
+features).
+
+**Real scope, stated explicitly, not inferred**: Highways Department's own
+roadworks "involving lane closure on public roads with a speed limit of
+70km/hr or above" — Hong Kong's strategic/expressway-grade network, the
+same honestly-narrower-than-comprehensive shape as ASFINAG/TfL in this
+SDK. The feed only ever holds roadworks that are genuinely in progress or
+"under preparation" (due to start within 12 hours) — not a forward-looking
+schedule.
+
+**`worksstatus` has exactly two real documented values** — `"Under
+Preparation"` and `"In Progress"` — confirmed by the spec, not just
+observed. Every one of the 8 real live records checked was `"In
+Progress"`; `"Under Preparation"` is real and documented but wasn't
+observed live in this pull, checked explicitly rather than assumed
+absent. `"In Progress"` drives real `VERIFIED` date-confidence grading
+(`actual_start`/`actual_end` populated); the not-yet-observed
+`"Under Preparation"` would grade `ESTIMATED` (`proposed_start`/
+`proposed_end` only).
+
+**Every text field is real and trilingual** — English (bare field name),
+Traditional Chinese (`_tc`), and Simplified Chinese (`_sc`) variants of
+`datasource`/`workstype`/`district`/`roadname`/`locdesc`/`bound`/`lane`/
+`remark`/`worksstatus`/`disclaimer` are all populated on every real
+record. Only English is promoted by `from_hongkong`; the Chinese variants
+stay on `.raw`.
+
+**Geometry**: real WGS84 `latitude`/`longitude` fields directly on each
+record (the spec states this explicitly) — no GeoJSON unwrapping or
+coordinate-order flip needed, unlike Brussels/TfL.
+
+**Licence: DATA.GOV.HK's portal-wide terms**, confirmed live (no
+per-dataset licence is stated on the dataset's own catalogue page) — free
+for commercial and non-commercial use, but **attribution is required**:
+*"you shall identify clearly the source of the Data and acknowledge the
+Government and the Relevant Organisations' ownership of the intellectual
+property rights in the Data."*
+
+**What's still open**: whether `"Under Preparation"` ever actually
+appears live (worth re-checking); whether `remark` is ever populated in
+practice (empty on every real record checked so far); real record volumes
+over time (only 8 seen at time of writing, "ad hoc" update frequency
+stated in the spec).
 
 ## LTA DataMall (Singapore) — Credentials wanted
 
