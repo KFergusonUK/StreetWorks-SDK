@@ -177,6 +177,48 @@ further (may need a different path, or the real operator name — Hrvatske
 ceste for state roads, Hrvatske autoceste/HAC or Autocesta Rijeka-Zagreb/ARZ
 for motorways). Needs a fresh search pass, not just a URL to retry.
 
+## Albania — checked and ruled out, not just unfound
+
+Prompted by a direct question ("does Albania have a roadworks feed?") after
+a detour into whether Albania is in Europe at all (it is - Southeastern
+Europe, Balkan Peninsula). Checked live, not guessed - three real pages
+found on ARRSH's (Autoriteti Rrugor Shqiptar, the Albanian Road Authority,
+`arrsh.gov.al`) own site, none of them a real structured feed:
+
+- **"Informacion i Gjendjeve te Rrugeve"** ("Road Conditions Information",
+  `arrsh.gov.al/informacion-i-gjendjeve-te-rrugeve.html`) - a real, currently
+  updated WordPress category archive (most recent post dated 17 Aug 2026),
+  but unstructured news/press-release posts (e.g. "Në aksin Tiranë-Durrës
+  vijon puna për zgjerimin e autostradës" - "Work continues on widening the
+  Tirana-Durrës highway") - no coordinates, no start/end dates, no
+  extractable fields at all, just prose. Genuinely thinner than even
+  Romania's HTML dispatch board (see above), which at least has real
+  `<table>` rows with per-record fields.
+- **"Open Data"** (`arrsh.gov.al/open-data`) - a real page, but its own
+  stated content ("LISTA E TË DHËNAVE TË HAPURA TË ARRSH" - "LIST OF
+  ARRSH'S OPEN DATA") is a legally-mandated transparency-law disclosure
+  list (legal texts, budget/financial data, procurement procedures,
+  complaints mechanisms) - the same "real label, wrong content" pattern
+  Greece's own NAP already established in this SDK. No CSV/JSON/XML link
+  anywhere on the page.
+- **"Rruga Dixhitale"** ("Digital Road", `arrsh.gov.al/rruga-dixhitale`) -
+  turned out to be a citizen-complaints/reporting-tracker platform
+  ("Statistika përfundimtare mbi ankimimet e zgjidhura" - "final statistics
+  on resolved complaints"), not a public roadworks data feed.
+- Albania's own national open data portal (`opendata.gov.al`) is
+  **WAF-blocked from this environment entirely** - every path tried,
+  including the bare homepage, returned a real F5/BIG-IP ASM "Request
+  Rejected" response - left alone, not bypassed, consistent with this
+  SDK's standing rule.
+
+**How to apply**: a genuine dead end for a structured feed at the national
+road-authority level, not an unfound one - the same tier as Greece
+(real NAP, wrong content) rather than Czech Republic (real lead,
+environment-blocked) or Croatia (no lead traced yet). Worth revisiting only
+if a differently-named source surfaces (e.g. a municipal Tirana portal, or
+retrying `opendata.gov.al` from a network the WAF doesn't block), not by
+re-checking ARRSH's own site again.
+
 ## Related: an earlier, separate NAP survey
 
 [`docs/findings/nap-survey.md`](nap-survey.md) is a different, earlier pass over

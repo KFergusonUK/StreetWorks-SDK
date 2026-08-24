@@ -117,7 +117,11 @@ extending to the next tier of authorities — not adding the layer from scratch.
   candidates — a CC0 Ministry-of-Interior feed blocked behind a legacy
   WebSphere Portal integration, and a clean CC BY 4.0 ArcGIS Hub layer
   from one region, Trnava, that may be stale — neither built),
-  **Croatia** (no clear lead found yet).
+  **Croatia** (no clear lead found yet), **Albania** (checked and ruled
+  out — the road authority's own "Open Data" and "Road Conditions"
+  pages are real but not roadworks data: an unstructured news blog and
+  a generic transparency-law disclosure list respectively; the national
+  open data portal is WAF-blocked from this environment entirely).
 
 ### Credentials wanted — need a tester, not new investigation
 Already scaffolded and waiting only on a real key: Austria (ASFINAG) ·
