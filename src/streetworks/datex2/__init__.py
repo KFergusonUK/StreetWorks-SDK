@@ -28,16 +28,20 @@ this SDK and a real, additive parser fix it needed). Statens vegvesen for
 Norway (see :mod:`streetworks.datex2.vegvesen`) graduated to verified on
 2026-07-30 after a real credentialed pull.
 
-Three further **Credentials wanted** scaffolds remain - built to a
+Four further **Credentials wanted** scaffolds remain - built to a
 confirmed API/schema shape but not yet verified against real
 authenticated data, pending a tester with credentials: Trafikverket for
 Sweden (its own bespoke XML-request/JSON-response API, not DATEX - see
 :mod:`streetworks.datex2.trafikverket`), Vejdirektoratet for Denmark
 (genuine DATEX II 3.2 - see :mod:`streetworks.datex2.vejdirektoratet`),
-and ASFINAG for Austria (genuine DATEX II, and even less confirmed than
+ASFINAG for Austria (genuine DATEX II, and even less confirmed than
 Vejdirektoratet - the real pull URL *and* auth mechanism are both
 unknown, not just the credential value - see
-:mod:`streetworks.datex2.austria`).
+:mod:`streetworks.datex2.austria`), and Croatia's own National Access
+Point (genuine DATEX II v3, and better-confirmed than Vejdirektoratet -
+the real pull URL is public and confirmed live with a genuine 401, and a
+real self-service registration form was found - only the actual
+credential is missing, see :mod:`streetworks.datex2.croatia`).
 """
 
 from .austria import AsfinagClient
@@ -52,6 +56,9 @@ from .bisonfute import dir_regions as bisonfute_dir_regions
 from .bulgaria import BASE_URL as BULGARIA_BASE_URL
 from .bulgaria import CATALOGUE_PATH as BULGARIA_CATALOGUE_PATH
 from .bulgaria import BulgariaClient
+from .croatia import BASE_URL as CROATIA_BASE_URL
+from .croatia import LEGACY_BASE_URL as CROATIA_LEGACY_BASE_URL
+from .croatia import CroatiaClient
 from .dgt import BASE_URL as DGT_BASE_URL
 from .dgt import SITUATION_PUBLICATION_PATH as DGT_SITUATION_PUBLICATION_PATH
 from .dgt import DGTClient
@@ -139,4 +146,7 @@ __all__ = [
     "parse_trafikverket_situations",
     "VejdirektoratetClient",
     "AsfinagClient",
+    "CroatiaClient",
+    "CROATIA_BASE_URL",
+    "CROATIA_LEGACY_BASE_URL",
 ]

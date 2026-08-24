@@ -1512,6 +1512,47 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.datex2 import AsfinagClient",
     ),
     ProviderEntry(
+        key="croatia",
+        name="Hrvatske ceste (NPT)",
+        description="Croatia's national state-road roadworks feed.",
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.STRATEGIC,
+        territories=frozenset({"Croatia"}),
+        administrative_area="Hrvatske ceste",
+        scope_note=(
+            "Credentials-wanted scaffold, better-confirmed than "
+            "Vejdirektoratet at the same stage. Croatia's own National "
+            "Access Point (promet-info.hr, a Realis ITS NAP platform) "
+            "states the real pull URL directly in its public dataset "
+            "metadata - confirmed live with a genuine 401 on an "
+            "unauthenticated request, unlike Vejdirektoratet (URL only "
+            "issued at registration) or ASFINAG (URL unknown). Genuine "
+            "DATEX II v3, real WGS84 georeferencing, up to 1-minute "
+            "update frequency - all confirmed from the NAP's own public "
+            "metadata page, not secondhand. Auth: the NAP states both "
+            "Basic and Bearer authentication as real mechanisms for this "
+            "dataset; which one this specific feed requires is "
+            "unconfirmed. A real self-service registration form was "
+            "found and inspected live (email/name/organisation/"
+            "password, no visible approval gate before submission)."
+        ),
+        credentials=(
+            "Free self-service registration at promet-info.hr/hr/registration - "
+            "issues Basic Auth or Bearer credentials, which one this dataset "
+            "requires is unconfirmed"
+        ),
+        licence=(
+            "Otvorena dozvola (Croatia's national Open Licence) - commercial "
+            "and non-commercial use explicitly permitted, attribution only - "
+            "confirmed by reading the real published PDF"
+        ),
+        source_grade="operator",
+        verified=False,
+        _module="streetworks.datex2",
+        _client_name="CroatiaClient",
+        import_line="from streetworks.datex2 import CroatiaClient",
+    ),
+    ProviderEntry(
         key="singapore",
         name="LTA DataMall",
         description="Singapore's national roadworks/road-openings/traffic-incidents feed.",

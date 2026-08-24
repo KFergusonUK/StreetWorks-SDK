@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+### Added — Croatia (Hrvatske ceste / NPT), Credentials-wanted, better-confirmed than Vejdirektoratet (2026-08-24)
+
+`streetworks.datex2.croatia.CroatiaClient`
+- Prompted by "shall we try croatia next" after Albania turned out a
+  genuine dead end. Croatia's own National Access Point
+  (`promet-info.hr`, a Realis ITS NAP platform run for Hrvatske ceste)
+  publishes two real, sibling DATEX II roadworks datasets - "HC Radovi
+  DatexII" (legacy) and "HC Radovi DatexII v3" (targeted here, the
+  newer schema, matching this SDK's own D-TRO version preference).
+- Better-confirmed than Vejdirektoratet at the same stage: the real
+  pull URL (`https://b2b.promet-info.hr/dc/b2b.hc.roadworks.datex3`) is
+  stated directly in the NAP's own public metadata, not issued only at
+  registration, and confirmed live with a genuine `401` (not a `404`)
+  on an unauthenticated request.
+- Real WGS84 georeferencing and up to 1-minute update frequency
+  confirmed from the NAP's own metadata. Auth: the NAP states both
+  Basic and Bearer as real mechanisms for this dataset - which one is
+  actually required is unconfirmed, so `CroatiaClient` accepts either
+  shape (`username`/`password` or `bearer_token`).
+- A real, live self-service registration form was found and inspected
+  (`promet-info.hr/hr/registration`) - a plain sign-up form, no visible
+  approval gate before submission.
+- Licence: Croatia's own national "Otvorena dozvola" (Open Licence) -
+  confirmed by reading the real published PDF, commercial and
+  non-commercial use explicitly permitted, attribution only.
+- New tests: `tests/test_croatia.py`, against a synthetic DATEX II v3
+  fixture built from the NAP's own confirmed real record-type/
+  georeferencing shape.
+- New registry entry `key="croatia"` (`verified=False`); new
+  `docs/providers/croatia.md`; wired into `scripts/smoke_test.py` and
+  `.env.example` (`CROATIA_USERNAME`/`CROATIA_PASSWORD`/
+  `CROATIA_BEARER_TOKEN`).
+
 ### Added — LTA DataMall (Singapore), this SDK's first Asian territory, Credentials-wanted (2026-08-23)
 
 `streetworks.singapore.SingaporeClient`, `streetworks.common.from_singapore`

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SYNTHETIC fixture, not real data - see streetworks.datex2.croatia
+     module docstring. The actual data pull is credential-gated and has
+     never been exercised. This DATEX II v3 XML is hand-built to match
+     the real confirmed shape (genuine ConstructionWorks/MaintenanceWorks
+     record types, real WGS84 georeferencing) Croatia's own NAP metadata
+     documents for the "HC Radovi DatexII v3" dataset - not fetched from
+     any real endpoint. -->
+<d2:payload xmlns:d2="http://datex2.eu/schema/3/messageContainer" xmlns:sit="http://datex2.eu/schema/3/situation" xmlns:loc="http://datex2.eu/schema/3/locationReferencing" xsi:type="sit:SituationPublication" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" lang="hrv">
+  <publicationTime xmlns="http://datex2.eu/schema/3/common">2026-08-24T09:00:00Z</publicationTime>
+  <sit:situation id="HR-HC-000789">
+    <sit:headerInformation>
+      <informationStatus xmlns="http://datex2.eu/schema/3/common">real</informationStatus>
+    </sit:headerInformation>
+    <sit:situationRecord xsi:type="sit:ConstructionWorks" id="HR-HC-000789_1" version="1">
+      <sit:situationRecordCreationTime>2026-08-20T06:00:00Z</sit:situationRecordCreationTime>
+      <sit:situationRecordVersionTime>2026-08-24T09:00:00Z</sit:situationRecordVersionTime>
+      <sit:probabilityOfOccurrence>certain</sit:probabilityOfOccurrence>
+      <sit:validity>
+        <validityStatus xmlns="http://datex2.eu/schema/3/common">definedByValidityTimeSpec</validityStatus>
+        <validityTimeSpecification xmlns="http://datex2.eu/schema/3/common">
+          <overallStartTime>2026-08-20T05:00:00Z</overallStartTime>
+          <overallEndTime>2026-10-15T18:00:00Z</overallEndTime>
+        </validityTimeSpecification>
+      </sit:validity>
+      <sit:generalPublicComment>
+        <sit:comment>
+          <values xmlns="http://datex2.eu/schema/3/common">
+            <value lang="hrv">Radovi na autocesti A1 - sanacija kolnika, zatvorena desna traka</value>
+          </values>
+        </sit:comment>
+      </sit:generalPublicComment>
+      <sit:locationReference xsi:type="loc:PointLocation">
+        <loc:pointByCoordinates>
+          <loc:pointCoordinates>
+            <loc:latitude>45.3271</loc:latitude>
+            <loc:longitude>15.8756</loc:longitude>
+          </loc:pointCoordinates>
+        </loc:pointByCoordinates>
+      </sit:locationReference>
+      <sit:constructionWorkType>roadWideningWork</sit:constructionWorkType>
+    </sit:situationRecord>
+  </sit:situation>
+  <sit:situation id="HR-HC-001042">
+    <sit:headerInformation>
+      <informationStatus xmlns="http://datex2.eu/schema/3/common">real</informationStatus>
+    </sit:headerInformation>
+    <sit:situationRecord xsi:type="sit:MaintenanceWorks" id="HR-HC-001042_1" version="1">
+      <sit:situationRecordCreationTime>2026-08-22T07:30:00Z</sit:situationRecordCreationTime>
+      <sit:situationRecordVersionTime>2026-08-24T09:00:00Z</sit:situationRecordVersionTime>
+      <sit:probabilityOfOccurrence>certain</sit:probabilityOfOccurrence>
+      <sit:validity>
+        <validityStatus xmlns="http://datex2.eu/schema/3/common">definedByValidityTimeSpec</validityStatus>
+        <validityTimeSpecification xmlns="http://datex2.eu/schema/3/common">
+          <overallStartTime>2026-08-22T06:00:00Z</overallStartTime>
+          <overallEndTime>2026-08-29T20:00:00Z</overallEndTime>
+        </validityTimeSpecification>
+      </sit:validity>
+      <sit:generalPublicComment>
+        <sit:comment>
+          <values xmlns="http://datex2.eu/schema/3/common">
+            <value lang="hrv">Državna cesta D8 kod Splita - košnja trave, usporen promet</value>
+          </values>
+        </sit:comment>
+      </sit:generalPublicComment>
+      <sit:locationReference xsi:type="loc:PointLocation">
+        <loc:pointByCoordinates>
+          <loc:pointCoordinates>
+            <loc:latitude>43.5081</loc:latitude>
+            <loc:longitude>16.4402</loc:longitude>
+          </loc:pointCoordinates>
+        </loc:pointByCoordinates>
+      </sit:locationReference>
+      <sit:roadMaintenanceType>vegetationManagementWork</sit:roadMaintenanceType>
+    </sit:situationRecord>
+  </sit:situation>
+</d2:payload>

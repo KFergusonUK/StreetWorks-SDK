@@ -365,6 +365,17 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     value, is unknown - see streetworks.datex2.austria's own module
     docstring.
 
+    Croatia (`croatia`) is better-confirmed than Austria at this tier,
+    close to Vejdirektoratet: Croatia's own National Access Point
+    (promet-info.hr) states the real pull URL directly in its public
+    dataset metadata - confirmed live with a genuine 401 on an
+    unauthenticated request, unlike Vejdirektoratet (URL only issued at
+    registration) or ASFINAG (URL unknown). Genuine DATEX II v3, real
+    WGS84 georeferencing confirmed from the NAP's own metadata. What's
+    unconfirmed: which of the NAP's two stated auth mechanisms (Basic or
+    Bearer) this specific dataset requires, and the authenticated pull
+    itself - see streetworks.datex2.croatia's own module docstring.
+
     LTA DataMall (`singapore`) is better-confirmed than Austria at this
     tier, close to Vejdirektoratet: built from LTA's own current official
     API User Guide (not secondhand claims), and the auth mechanism itself
@@ -408,6 +419,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "greece",
         "stockholm",
         "austria",
+        "croatia",
         "singapore",
         "sk511",
         "nb511",

@@ -1379,6 +1379,31 @@ def check_asfinag() -> str:
     )
 
 
+def check_croatia() -> str:
+    """Croatia (Hrvatske ceste / NPT) - PENDING LIVE VERIFICATION, see
+    streetworks.datex2.croatia. Requires CROATIA_USERNAME/
+    CROATIA_PASSWORD (HTTP Basic - the real pull URL is public, no
+    per-registration URL needed, see module docstring). The NAP also
+    states Bearer auth as a real mechanism (CROATIA_BEARER_TOKEN,
+    supported by the client) but isn't wired into this check - test that
+    path directly via CroatiaClient(bearer_token=...) if that's what
+    your registration issued, and please report back which one actually
+    worked - this would be the first real Croatian data seen."""
+    from streetworks.datex2 import CroatiaClient
+
+    with CroatiaClient(
+        username=os.environ["CROATIA_USERNAME"],
+        password=os.environ["CROATIA_PASSWORD"],
+    ) as croatia:
+        situations = list(croatia.iter_roadworks())
+    works = sum(len(s.roadworks) for s in situations)
+    return (
+        f"{len(situations):,} roadworks situations ({works:,} works "
+        "records) - first real Croatian data seen, compare against module "
+        "docstring's open questions"
+    )
+
+
 def check_singapore() -> str:
     """LTA DataMall (Singapore) - PENDING LIVE VERIFICATION, see
     streetworks.singapore. Requires SINGAPORE_LTA_ACCOUNT_KEY (free
@@ -2628,6 +2653,9 @@ def main() -> int:
         check_vejdirektoratet,
     )
     reporter.check("DATEX II (ASFINAG/Austria)", ["ASFINAG_BASE_URL"], check_asfinag)
+    reporter.check(
+        "DATEX II (Croatia)", ["CROATIA_USERNAME", "CROATIA_PASSWORD"], check_croatia
+    )
     reporter.check("LTA DataMall (Singapore)", ["SINGAPORE_LTA_ACCOUNT_KEY"], check_singapore)
     reporter.check(
         "TfNSW Live Traffic (NSW/Australia)", ["NSW_LIVETRAFFIC_API_KEY"], check_nsw_livetraffic
