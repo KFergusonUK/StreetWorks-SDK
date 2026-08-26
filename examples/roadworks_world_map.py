@@ -69,6 +69,7 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     "Lithuania": (23.9, 55.2), "Norway": (9.0, 61.0), "Sweden": (15.6, 62.2),
     "Denmark": (9.5, 56.1), "Ireland": (-8.0, 53.2), "Italy": (12.6, 42.5),
     "Greece": (23.7, 39.1), "Poland": (19.1, 52.1), "Romania": (24.9, 45.9),
+    "Croatia": (16.4, 45.1),
     "Paris": (2.35, 48.86), "London": (-0.13, 51.51), "Amsterdam": (4.90, 52.37),
     "Vienna": (16.37, 48.21), "Zürich": (8.54, 47.37), "Milan": (9.19, 45.46),
     "Copenhagen": (12.57, 55.68), "Oslo": (10.75, 59.91), "Helsinki": (24.94, 60.17),
@@ -92,6 +93,7 @@ TERRITORY_CENTROIDS: dict[str, tuple[float, float]] = {
     # Asia
     "Singapore": (103.8, 1.35),
     "Hong Kong": (114.15, 22.35),
+    "South Korea": (127.8, 36.5),
 }
 
 WGS84 = {"EPSG:4326", "CRS:84", "urn:ogc:def:crs:EPSG::4326",

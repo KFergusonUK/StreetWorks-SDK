@@ -54,9 +54,10 @@ missing.
   viewer that blocks external requests — open the generated HTML directly in a normal browser.
 - **[`roadworks_world_map.py`](../examples/roadworks_world_map.py)** — plots SDK coverage on a world map, registry-driven so new providers appear automatically. Default mode is offline (coverage only, coloured by access tier); `--live` also pulls current roadworks from keyless providers and from credential-gated ones with a key in the environment. Marker size is provider count, not live roadworks count — a reach demonstration, not an operational feed.
 
-  <img src="../examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 23 Aug 2026.">
+  <img src="../examples/roadworks_world_map/map_screenshot.png" width="600" alt="Coverage map, as of 26 Aug 2026.">
 
-  Real output from this example — coverage map only, not actual works sites — 23 Aug 2026. The
+  Real output from this example — coverage map only, not actual works sites — 26 Aug 2026, 125
+  providers across 55 territories. The
   generated HTML view (`roadworks_world_map/map.html`) isn't linked here: GitHub serves `.html`
   files in this repo as raw source, not a rendered page (the same reason the terrain-drape
   example's own HTML output isn't linked below). Generate it locally instead. Canada's marker is a
@@ -65,22 +66,28 @@ missing.
   literal territory `"Canada"`, but the display point was still pinned to Vancouver/BC from when
   DriveBC was the only one there, skewing the bubble west of most of the real coverage.
 
-  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 8193 points across 50 providers, as of 23 Aug 2026.">
+  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 8379 points across 125 providers, as of 26 Aug 2026.">
 
-  `--live` output from the same example — 8193 real roadworks, 23 Aug 2026. A partial run, not
+  `--live` output from the same example — 8379 real roadworks, 26 Aug 2026. A partial run, not
   full coverage: each provider is capped (`_LIMIT = 50` raw records; WZDx sweeps every keyless feed
   in the registry, each still capped) so the map stays a representative sample rather than a full
-  pull of registers running past a million rows. Two real, live-verified findings from generating
-  this particular run: the Northern Territory (`streetworks.au.nt`) was plotting nothing at all — a
+  pull of registers running past a million rows. This particular run also surfaced a real,
+  environment-specific connectivity gap, not a code bug: Catalonia's SCT
+  (`www.gencat.cat`) resolves to an IPv6 address that's completely unreachable from this build
+  environment (confirmed directly — `curl -6` times out, `curl -4` connects instantly) — every
+  other provider fetch is try/excepted independently, so this one slow feed's retries delayed the
+  overall run without dropping anything else, and simply contributed zero points this time. Two
+  more real, live-verified findings from an earlier run of this same example: the Northern
+  Territory (`streetworks.au.nt`) was plotting nothing at all — a
   real coordinate-order bug, not a data gap (its converter stored `(lon, lat)` while every other
   point on this map is `(lat, lon)`, this SDK's stated convention — fixed in
   `from_au_nt_roadreport`, NT's real points show now). Queensland was also plotting nothing — its
   real data is correctly stated in GDA2020 (`EPSG:7844`), not WGS84, and this script's WGS84-only
   filter skipped every point; the two frames agree to within ~1.8m globally, so this example now
   treats them as visually equivalent for display purposes only (never reprojected or relabelled in
-  the SDK's own stored data). One provider still doesn't appear in this run for a real, one-off
-  reason — Victoria returns a genuine `401` on the credential in `.env` (confirmed live, not
-  guessed) — not anything wrong with the SDK. Scotland (SRWR) is
+  the SDK's own stored data). One provider still doesn't appear for a real, one-off
+  reason — Victoria returns a genuine `401` on the credential in `.env` (confirmed live again in
+  this run's own smoke test) — not anything wrong with the SDK. Scotland (SRWR) is
   absent from the live points on principle, not omission: its real Open Data extract carries no
   coordinates at all, only a USRN per record, and resolving that to a real point would mean
   joining against [OS Open USRN](providers/uk.md#os-open-usrn)'s own ~300MB national geometry
