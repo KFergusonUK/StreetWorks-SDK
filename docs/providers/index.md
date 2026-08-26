@@ -9,6 +9,11 @@
 
 ✓ live · ~ in progress · ✗ ruled out
 
+See [`docs/providers/matrix.md`](matrix.md) for a compact per-territory
+X/~/o matrix (Roadworks/Street Gazetteer/TTRO/NUAR/Other columns), including
+dedicated state-by-state (USA, Germany), province-by-province (Canada) and
+région-by-région (France) breakdowns.
+
 **Europe**  ✓ Austria · Belgium · Bulgaria · Croatia · Denmark · Finland · France · Germany · Gibraltar · Guernsey · Iceland · Italy · Jersey · Lithuania · Luxembourg · Netherlands · Norway · Poland · Portugal · Romania · Spain · Switzerland · Greece · Ireland · UK   ~ Sweden   ✗ Albania
 **Americas**  ✓ Canada · United States
 **Oceania**  ✓ Australia · New Zealand

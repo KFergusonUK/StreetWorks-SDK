@@ -393,7 +393,7 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     streetworks.korea.client's own module docstring.
 
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
-    Nova Scotia 511 (`ns511`), 511 Yukon (`yt511`), Louisiana 511
+    Nova Scotia 511 (`ns511`), Louisiana 511
     (`la511`), New York 511 (`ny511`), Florida 511 (`fl511`),
     Pennsylvania 511 (`pa511`), North Carolina 511 (`nc511`) and New
     England 511 (`newengland511`) are all better-off than every other
@@ -414,8 +414,9 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     platform to graduate out of this tier. Newfoundland and Labrador
     (`nl511`), Georgia (`ga511`), Arizona (`az511`) and Idaho (`id511`)
     graduated the same way on 2026-08-26 (50, 70, 2,463 and 170 real
-    roadwork events respectively, round-tripped through the shared
-    from_na511 parsing unchanged).
+    roadwork events respectively), and 511 Yukon (`yt511`) graduated the
+    same day too (16 real events) - all round-tripped through the shared
+    from_na511 parsing unchanged.
 
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
@@ -433,7 +434,6 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "sk511",
         "nb511",
         "ns511",
-        "yt511",
         "la511",
         "ny511",
         "fl511",

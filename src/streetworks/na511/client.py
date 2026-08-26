@@ -154,13 +154,14 @@ same-day roadwork example - four other jurisdictions' own real roadwork
 samples already prove that part. ``ct511`` is verified in the registry
 accordingly.
 
-**Four more jurisdictions graduated together, 2026-08-26** - real
-developer keys for Newfoundland and Labrador, Georgia, Arizona and Idaho
-each round-tripped their own real events through the exact same shared
-parsing, no code changes needed: ``nl511`` (50 real roadwork events),
-``ga511`` (70), ``az511`` (2,463 - the largest single real pull seen on
-this platform so far) and ``id511`` (170). ``nl511``, ``ga511``,
-``az511`` and ``id511`` are all verified in the registry accordingly.
+**Five more jurisdictions graduated the same day, 2026-08-26** - real
+developer keys for Newfoundland and Labrador, Georgia, Arizona, Idaho
+and Yukon each round-tripped their own real events through the exact
+same shared parsing, no code changes needed: ``nl511`` (50 real
+roadwork events), ``ga511`` (70), ``az511`` (2,463 - the largest single
+real pull seen on this platform so far), ``id511`` (170) and ``yt511``
+(16). ``nl511``, ``ga511``, ``az511``, ``id511`` and ``yt511`` are all
+verified in the registry accordingly.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,

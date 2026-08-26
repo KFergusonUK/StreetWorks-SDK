@@ -4033,13 +4033,14 @@ _REGISTRY: list[ProviderEntry] = [
             "Alberta/Massachusetts CWZ. The field schema is not a "
             "guess: proven by Ontario's own real, unauthenticated "
             "response on the identical platform. This SDK's first "
-            "Canadian *territorial* roadworks coverage."
+            "Canadian *territorial* roadworks coverage. Graduated "
+            "2026-08-26: a real developer key round-tripped 16 real "
+            "events through the shared from_na511 parsing unchanged."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("yukon")',

@@ -4,6 +4,61 @@
 
 ## [0.10.0] - 2026-08-26
 
+### Added — `docs/providers/matrix.md`, a per-territory X/~/o coverage matrix with state/province/région breakdowns (2026-08-26)
+
+Prompted by a LinkedIn-article draft fact-check that surfaced several stale
+cells in a similar country-level table - rebuilt from scratch against the
+live registry rather than corrected in place, then extended well beyond the
+original scope:
+
+- **Territory-level matrix** for every covered country/territory
+  (Roadworks/Street Gazetteer/TTRO/NUAR/Other), with real corrections found
+  in the process: Croatia now `X` (graduated, see below); Isle of Man's
+  Street Gazetteer corrected to `o` (no Isle of Man provider of any kind
+  exists); Wales's TTRO corrected to `X` (D-TRO's real territories are
+  `{England, Wales}`, not England-only); Scotland's Other corrected to `o`
+  (UK Police's real territories are `{England, Northern Ireland, Wales}` -
+  Scotland genuinely isn't covered); New Zealand's Street Gazetteer
+  corrected to `~` (the real LINZ Roads/Road Sections register is still
+  credentials-wanted; only the separate Addresses register is verified);
+  Ireland's MapRoad reframed as genuinely `o` rather than merely
+  credentials-wanted, matching its own registry scope_note (no accessible
+  technical read path found anywhere, `ProviderUnavailableError` always
+  raised).
+- **United States, state-by-state** - real per-state status assembled from
+  three independent mechanisms (na511's per-jurisdiction `.verified` flags,
+  the generic WZDx registry's per-feed `state`/`needapikey` fields, and
+  standalone city/state permit registers), not a flat territory query,
+  since na511 and WZDx both register everything under the bare `"USA"`
+  territory string. Six states (Colorado, Massachusetts, Michigan, Oregon,
+  Pennsylvania, Virginia) were corrected from `X` to `~` - each has a real
+  *cataloged* WZDx feed, but every one needs a developer key this SDK
+  doesn't hold, and no alternate keyless source exists for any of the six.
+  Three more (Delaware, Kansas, Mississippi) were corrected from `o` to `X`
+  - each has a real, genuinely keyless WZDx feed that an earlier pass
+  missed entirely.
+- **Canada, province-by-province** - New Brunswick, Nova Scotia and
+  Saskatchewan corrected from `X` to `~` (all three 511 deployments are
+  still credentials-wanted, not verified).
+- **Germany, state-by-state** and **France, région-by-région** - both new,
+  requested after the first draft shipped. Both countries register every
+  sub-national provider under the bare country territory too, so
+  state/région assignment came from each entry's own `administrative_area`
+  field, matched by hand against each country's real administrative map.
+  Both also have a genuine national road-authority feed (Autobahn GmbH;
+  Bison Futé/the DIRs) reaching every state/région for the major-road
+  network alone - treated as the floor (`~`) for every row, `X` reserved
+  for a state/région with its own dedicated feed on top.
+
+### Confirmed — 511 Yukon graduates to verified (2026-08-26)
+
+A tester supplied a real Yukon developer key; 16 real events round-tripped
+through the shared `from_na511` parsing unchanged, no code changes needed -
+the sixth jurisdiction graduated out of the North American 511 platform's
+Credentials-wanted tier this cycle. Updated: `src/streetworks/registry.py`,
+`tests/test_registry.py`, `src/streetworks/na511/client.py`,
+`.env.example`.
+
 ### Confirmed — Newfoundland and Labrador, Georgia, Arizona, Idaho 511, and Croatia all graduate to verified (2026-08-26)
 
 A tester supplied real developer keys for five long-standing
