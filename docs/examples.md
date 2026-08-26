@@ -66,18 +66,26 @@ missing.
   literal territory `"Canada"`, but the display point was still pinned to Vancouver/BC from when
   DriveBC was the only one there, skewing the bubble west of most of the real coverage.
 
-  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 8379 points across 125 providers, as of 26 Aug 2026.">
+  <img src="../examples/roadworks_world_map/map_screenshot_live.png" width="600" alt="Live roadworks map, 11652 points across 125 providers, as of 26 Aug 2026.">
 
-  `--live` output from the same example — 8379 real roadworks, 26 Aug 2026. A partial run, not
+  `--live` output from the same example — 11652 real roadworks, 26 Aug 2026. A partial run, not
   full coverage: each provider is capped (`_LIMIT = 50` raw records; WZDx sweeps every keyless feed
   in the registry, each still capped) so the map stays a representative sample rather than a full
-  pull of registers running past a million rows. This particular run also surfaced a real,
-  environment-specific connectivity gap, not a code bug: Catalonia's SCT
-  (`www.gencat.cat`) resolves to an IPv6 address that's completely unreachable from this build
-  environment (confirmed directly — `curl -6` times out, `curl -4` connects instantly) — every
-  other provider fetch is try/excepted independently, so this one slow feed's retries delayed the
-  overall run without dropping anything else, and simply contributed zero points this time. Two
-  more real, live-verified findings from an earlier run of this same example: the Northern
+  pull of registers running past a million rows. A real operator mistake caught and fixed the same
+  session, not a code bug, worth stating plainly: the first attempt at this particular run only
+  reached 8379 points because `--live` was launched without sourcing `.env` first, so every
+  credential-gated provider (Alaska, Croatia, Georgia, Idaho, Arizona, Newfoundland and Labrador,
+  Yukon...) silently had no key available and was skipped — `CRED_ENV[key]()` returns `None` with
+  no key in the environment, and a gated provider with no key is treated exactly like one the
+  caller has no interest in, not an error. Re-run with credentials actually loaded, the same pull
+  picked up 3273 more real points, Alaska's own included (its earlier "empty" look on the map was
+  this, not a coordinate bug — its real events do span the state, Juneau to Fairbanks to
+  Anchorage). That same run also surfaced a real, environment-specific connectivity gap, not a code
+  bug either: Catalonia's SCT (`www.gencat.cat`) resolves to an IPv6 address that's completely
+  unreachable from this build environment (confirmed directly — `curl -6` times out, `curl -4`
+  connects instantly) — every provider fetch is try/excepted independently, so this one slow feed's
+  retries delayed the run without dropping anything else, and simply contributed zero points.
+  Two more real, live-verified findings from an earlier run of this same example: the Northern
   Territory (`streetworks.au.nt`) was plotting nothing at all — a
   real coordinate-order bug, not a data gap (its converter stored `(lon, lat)` while every other
   point on this map is `(lat, lon)`, this SDK's stated convention — fixed in
