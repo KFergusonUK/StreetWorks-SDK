@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-08-26
+
 ### Confirmed — Newfoundland and Labrador, Georgia, Arizona, Idaho 511, and Croatia all graduate to verified (2026-08-26)
 
 A tester supplied real developer keys for five long-standing
