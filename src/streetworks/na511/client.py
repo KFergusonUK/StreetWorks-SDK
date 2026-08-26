@@ -120,10 +120,10 @@ of the ``EventType`` correction above: Nevada's pull also carried real
 this time - real per-jurisdiction variation, not a contradiction), the
 roadworks filter itself staying exactly correct a third time. ``ab511``
 and ``nv511`` are both verified in the registry accordingly;
-``sk511``/``nb511``/``nl511``/``ns511``/``yt511``/``ga511``/``la511``/
-``ny511``/``az511``/``fl511``/``id511``/``pa511``/``nc511``/
-``newengland511`` remain in the same "schema proven, own key untested"
-position Alberta and Nevada themselves were in until now.
+``sk511``/``nb511``/``ns511``/``yt511``/``la511``/``ny511``/``fl511``/
+``pa511``/``nc511``/``newengland511`` remain in the same "schema
+proven, own key untested" position Alberta and Nevada themselves were
+in until now.
 
 **Alaska's own real authenticated response confirmed the same thing a
 third time, and surfaced two genuine converter bugs Ontario's/Alberta's/
@@ -153,6 +153,14 @@ shape byte-for-byte, so the schema confirmation doesn't depend on a
 same-day roadwork example - four other jurisdictions' own real roadwork
 samples already prove that part. ``ct511`` is verified in the registry
 accordingly.
+
+**Four more jurisdictions graduated together, 2026-08-26** - real
+developer keys for Newfoundland and Labrador, Georgia, Arizona and Idaho
+each round-tripped their own real events through the exact same shared
+parsing, no code changes needed: ``nl511`` (50 real roadwork events),
+``ga511`` (70), ``az511`` (2,463 - the largest single real pull seen on
+this platform so far) and ``id511`` (170). ``nl511``, ``ga511``,
+``az511`` and ``id511`` are all verified in the registry accordingly.
 
 **Real fields** (confirmed live via Ontario's response, cross-checked
 field-for-field against Alberta's own published docs): ``ID``,

@@ -2,6 +2,36 @@
 
 ## [Unreleased]
 
+### Confirmed — Newfoundland and Labrador, Georgia, Arizona, Idaho 511, and Croatia all graduate to verified (2026-08-26)
+
+A tester supplied real developer keys for five long-standing
+Credentials-wanted scaffolds, all confirmed live against real
+authenticated pulls with zero code changes needed:
+
+- **Newfoundland and Labrador 511** (`nl511`) - 50 real roadwork events.
+- **Georgia 511** (`ga511`) - 70 real roadwork events.
+- **Arizona 511** (`az511`) - 2,463 real roadwork events, the largest
+  single real pull seen on the na511 platform so far.
+- **Idaho 511** (`id511`) - 170 real roadwork events.
+- **Croatia** (`streetworks.datex2.croatia`) - a real developer login
+  (HTTP Basic, now confirmed as the correct auth for this account)
+  round-tripped 85 real situations, all real `MaintenanceWorks`
+  records, through the shared DATEX II parser unchanged - a bare
+  `SituationPublication` root, real WGS84 coordinates. No
+  `ConstructionWorks` seen live yet, though the NAP's own metadata
+  still names it as real. New test fixture:
+  `tests/fixtures/croatia_datex_live_pull.xml` (2 real trimmed
+  situations, not synthetic).
+
+All five moved out of the Credentials-wanted tier in the registry
+(`verified` no longer `False`); `streetworks.datex2.croatia`'s
+module-level `UserWarning` removed. Updated: `src/streetworks/registry.py`,
+`tests/test_registry.py`, `src/streetworks/na511/client.py`,
+`src/streetworks/datex2/croatia.py`, `.env.example`,
+`scripts/smoke_test.py`, `docs/providers/us.md`,
+`docs/providers/canada.md`, `docs/providers/croatia.md`,
+`docs/providers/index.md`, `docs/index.md`.
+
 ### Added — Hong Kong (Transport Department / Highways Department), confirmed live, this SDK's first verified Asian territory (2026-08-24)
 
 `streetworks.hongkong.HongKongClient`, `streetworks.common.from_hongkong`

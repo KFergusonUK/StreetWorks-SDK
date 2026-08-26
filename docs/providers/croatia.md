@@ -1,28 +1,28 @@
 # Croatia
 
-> This SDK's first Croatia coverage — a Credentials-wanted scaffold, not
-> yet live. Found while checking whether Croatia had a real roadworks
-> feed after Albania turned out a genuine dead end (see
+> This SDK's first Croatia coverage — confirmed live 2026-08-26. Found
+> while checking whether Croatia had a real roadworks feed after Albania
+> turned out a genuine dead end (see
 > [`docs/findings/europe-gaps.md`](../findings/europe-gaps.md)). Full
 > working notes for both, plus everything else found in this survey, in
 > that same file.
 
-## Hrvatske ceste (National Access Point) — Credentials wanted
+## Hrvatske ceste (National Access Point) — Confirmed live
 
 Croatia's national state-road roadworks source — genuine DATEX II v3,
 published on Croatia's own National Access Point (NPT — Nacionalna
 pristupna točka, a Realis ITS NAP platform deployment at
 `promet-info.hr`), run for Hrvatske ceste (the state-road authority).
-**Better-confirmed than Vejdirektoratet at the same stage**: the real
-pull URL is stated directly in the NAP's own public metadata, not issued
-only at registration.
+**Confirmed live 2026-08-26**: a real developer login (HTTP Basic)
+round-tripped 85 real situations, all real `MaintenanceWorks` records,
+through the shared DATEX II parser with zero code changes.
 
 ```python
 from streetworks.datex2.croatia import CroatiaClient
 from streetworks.common import from_datex2
 
-# either username/password (Basic) or bearer_token (Bearer) - which one
-# this dataset actually requires is unconfirmed, see module docstring
+# HTTP Basic (username/password) is confirmed correct; bearer_token
+# remains a real, unconfirmed-for-this-dataset alternative
 with CroatiaClient(username=username, password=password) as croatia:
     for situation in croatia.iter_roadworks():
         works = from_datex2(situation, territory="Croatia")
@@ -76,13 +76,12 @@ and the dataset's own URI, and mark any modifications as such. No
 comparable restriction to ASFINAG's own supplementary
 downstream-disclosure clause was found.
 
-**What's still open until a real credentialed pull**: which of
-Basic/Bearer auth this specific dataset actually accepts; whether the
-real DATEX II v3 response is a bare `SituationPublication` this SDK's
-own shared streaming parser handles unchanged, or a Croatia-specific
-profile with fields the parser doesn't expect; and real roadworks-
-record-type coverage — whether `ConstructionWorks`/`MaintenanceWorks`
-appear as the dedicated xsi:type, or via the same kind of generic-record
-discriminator gap Belgium's/Spain's own real feeds needed. See
-[`docs/providers/index.md#credentials-wanted`](index.md#credentials-wanted)
-for the condensed table entry.
+**Confirmed 2026-08-26, against a real authenticated pull**: HTTP Basic
+(`username`/`password`) is the correct auth for this account (Bearer
+remains a real, unconfirmed-for-this-dataset platform-wide alternative);
+the real DATEX II v3 response is a bare `SituationPublication` — this
+SDK's own shared streaming parser handled it with zero code changes; and
+every one of the 85 real situations checked was `MaintenanceWorks` (no
+`ConstructionWorks` seen in this pull, though the NAP's own metadata
+still names it as real). See
+[`docs/providers/index.md`](index.md) for the module table entry.

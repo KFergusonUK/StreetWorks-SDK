@@ -1,12 +1,12 @@
 """Tests for the Croatia (Hrvatske ceste / NPT) DATEX II adapter.
 
-**Pending live verification** - see the module docstring in
-``streetworks.datex2.croatia``. The fixture (``croatia_datex.xml``) is
-synthetic, not real data: only the NAP's own public dataset-metadata page
-(confirming the real pull URL, its DATEX-II-v3 standard, WGS84
-georeferencing, and Otvorena dozvola open licence) and a live 401 on that
-URL have been verified - the credential-gated data pull itself has never
-been exercised.
+**Confirmed live 2026-08-26** - see the module docstring in
+``streetworks.datex2.croatia``. ``croatia_datex.xml`` is a synthetic
+fixture (kept for its deliberate ConstructionWorks+MaintenanceWorks
+coverage); ``croatia_datex_live_pull.xml`` holds 2 REAL situations
+trimmed from a real authenticated pull (85 total, all real
+MaintenanceWorks), proving the shared parser handles the genuine
+response - a bare SituationPublication root - unchanged. Not synthetic.
 """
 
 from pathlib import Path
@@ -19,6 +19,9 @@ from streetworks.datex2 import CroatiaClient
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "croatia_datex.xml"
 FIXTURE_BYTES = FIXTURE_PATH.read_bytes()
+
+LIVE_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "croatia_datex_live_pull.xml"
+LIVE_FIXTURE_BYTES = LIVE_FIXTURE_PATH.read_bytes()
 
 BASE_URL = "https://b2b.promet-info.hr/dc/b2b.hc.roadworks.datex3"
 
@@ -73,3 +76,19 @@ def test_client_iter_roadworks_recognises_genuine_datex_types():
     with CroatiaClient(username="u", password="p") as client:
         roadworks = list(client.iter_roadworks())
     assert len(roadworks) == 2
+
+
+@respx.mock
+def test_client_parses_a_real_live_pull_unchanged():
+    """The shared parser needed zero code changes against the real
+    response - a bare SituationPublication root, real MaintenanceWorks
+    records, real WGS84 coordinates."""
+    respx.get(BASE_URL).mock(return_value=httpx.Response(200, content=LIVE_FIXTURE_BYTES))
+    with CroatiaClient(username="u", password="p") as client:
+        situations = list(client.iter_situations())
+    assert len(situations) == 2
+    assert all(s.records[0].record_type == "MaintenanceWorks" for s in situations)
+    lat, lon = situations[0].records[0].location.point
+    # real Croatian latitude is ~45-46, longitude ~15-19.
+    assert 44 < lat < 47
+    assert 14 < lon < 20

@@ -665,7 +665,7 @@ def check_nb511() -> str:
 
 
 def check_nl511() -> str:
-    """Newfoundland and Labrador 511 - PENDING LIVE VERIFICATION, see
+    """Newfoundland and Labrador 511 - CONFIRMED LIVE 2026-08-26, see
     streetworks.na511. Requires an API key (NEWFOUNDLAND_511_API_KEY,
     free self-service registration). Same platform/schema as Ontario 511
     (keyless, already verified - see check_on511)."""
@@ -745,7 +745,7 @@ def check_nv511() -> str:
 
 
 def check_ga511() -> str:
-    """Georgia 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """Georgia 511 - CONFIRMED LIVE 2026-08-26, see streetworks.na511.
     Requires an API key (GEORGIA_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
     verified - see check_on511) - found separately from GDOT's own
@@ -862,7 +862,7 @@ def check_ny511() -> str:
 
 
 def check_az511() -> str:
-    """Arizona 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """Arizona 511 - CONFIRMED LIVE 2026-08-26, see streetworks.na511.
     Requires an API key (ARIZONA_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
     verified - see check_on511)."""
@@ -878,7 +878,7 @@ def check_fl511() -> str:
 
 
 def check_id511() -> str:
-    """Idaho 511 - PENDING LIVE VERIFICATION, see streetworks.na511.
+    """Idaho 511 - CONFIRMED LIVE 2026-08-26, see streetworks.na511.
     Requires an API key (IDAHO_511_API_KEY, free self-service
     registration). Same platform/schema as Ontario 511 (keyless, already
     verified - see check_on511)."""
@@ -1380,15 +1380,13 @@ def check_asfinag() -> str:
 
 
 def check_croatia() -> str:
-    """Croatia (Hrvatske ceste / NPT) - PENDING LIVE VERIFICATION, see
+    """Croatia (Hrvatske ceste / NPT) - CONFIRMED LIVE 2026-08-26, see
     streetworks.datex2.croatia. Requires CROATIA_USERNAME/
-    CROATIA_PASSWORD (HTTP Basic - the real pull URL is public, no
-    per-registration URL needed, see module docstring). The NAP also
-    states Bearer auth as a real mechanism (CROATIA_BEARER_TOKEN,
-    supported by the client) but isn't wired into this check - test that
-    path directly via CroatiaClient(bearer_token=...) if that's what
-    your registration issued, and please report back which one actually
-    worked - this would be the first real Croatian data seen."""
+    CROATIA_PASSWORD (HTTP Basic - confirmed correct - the real pull URL
+    is public, no per-registration URL needed, see module docstring).
+    The NAP also states Bearer auth as a real platform-wide mechanism
+    (CROATIA_BEARER_TOKEN, supported by the client) but isn't wired into
+    this check and remains unconfirmed for this dataset."""
     from streetworks.datex2 import CroatiaClient
 
     with CroatiaClient(
@@ -1399,8 +1397,7 @@ def check_croatia() -> str:
     works = sum(len(s.roadworks) for s in situations)
     return (
         f"{len(situations):,} roadworks situations ({works:,} works "
-        "records) - first real Croatian data seen, compare against module "
-        "docstring's open questions"
+        "records)"
     )
 
 

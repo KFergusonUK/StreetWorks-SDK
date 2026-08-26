@@ -375,11 +375,14 @@ with NA511Client(api_key=api_key) as client:  # doctest: +SKIP
 `/api/v2/get/event` endpoint, the same structured
 `{"Error":{"Message":"Invalid Key"}}` rejection with no key supplied,
 and a real, working `/developers/doc` page whose own field-by-field
-documentation matches exactly. Requires a real developer key — not
-obtained on this SDK's behalf. Free self-service registration:
+documentation matches exactly. Free self-service registration:
 `https://511ga.org/developers/doc`; set `GEORGIA_511_API_KEY` (see
-`.env.example`) and run `scripts/smoke_test.py` to confirm the last
-open question.
+`.env.example`).
+
+**Confirmed with a real key, 2026-08-26** — 70 real roadwork events
+round-tripped through the identical parsing Ontario's/Alberta's/
+Nevada's/Alaska's/Connecticut's own responses already proved, no code
+changes needed.
 
 ## Alaska 511
 
@@ -583,12 +586,15 @@ rather than worked around, consistent with this SDK's standing rule
 against bypassing bot/WAF protection — genuinely unresolved, not ruled
 out.
 
-Requires a real developer key for each — not obtained on this SDK's
-behalf. Free self-service registration:
+**Arizona and Idaho confirmed with real keys, 2026-08-26** — 2,463 real
+roadwork events (Arizona, the largest single real pull seen on this
+platform so far) and 170 real roadwork events (Idaho) each round-tripped
+through the identical parsing every other jurisdiction on this platform
+already proved, no code changes needed. New York, Florida, Pennsylvania,
+North Carolina and New England 511 still need a real developer key each
+— not obtained on this SDK's behalf. Free self-service registration:
 `https://511ny.org/developers/doc`,
-`https://az511.gov/developers/doc`,
 `https://fl511.com/developers`,
-`https://511.idaho.gov/developers/doc`,
 `https://511pa.com/developers`,
 `https://www.drivenc.gov/developers/doc`, and
 `https://newengland511.org/developers`; set the matching

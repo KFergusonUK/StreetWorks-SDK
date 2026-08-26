@@ -426,8 +426,10 @@ confirmed versus still unchecked:
   Labrador, Nova Scotia, Yukon** — already covered, not a new build: see
   [`streetworks.na511`](#north-american-511-platform-ontario-alberta-saskatchewan-new-brunswick-newfoundland-and-labrador-nova-scotia-yukon)
   above. That's 7 of Canada's 10 provinces plus 1 of 3 territories.
-  Ontario is fully shipped and keyless; Alberta/New Brunswick/
-  Newfoundland and Labrador are built and ready, waiting only on a real
+  Ontario is fully shipped and keyless; Alberta (confirmed 2026-08-22)
+  and Newfoundland and Labrador (confirmed 2026-08-26, 50 real roadwork
+  events) are both verified against a real credentialed pull; New
+  Brunswick and Yukon are built and ready, waiting only on a real
   developer key someone with an account can supply;
   Saskatchewan/Nova Scotia are also built and ready but have no
   currently-known self-service route to a key at all (their own signup

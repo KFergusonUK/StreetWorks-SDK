@@ -2,18 +2,26 @@
 genuine DATEX II v3, credential-gated at the data-pull layer only.
 
 .. attention::
-   **PENDING LIVE VERIFICATION.** This module is built against Croatia's
-   own National Access Point (NPT, a Realis ITS NAP platform deployment
-   at ``promet-info.hr``) - its public dataset-metadata pages, not a
-   secondhand description - and a real, live, unauthenticated request
-   confirming the auth mechanism and endpoint shape (a plain ``GET`` on
-   the real, publicly-documented pull URL returns a genuine ``401``, not
-   a ``404``). No real authenticated response has been seen.
-   **Better-confirmed than Vejdirektoratet at the same stage**: Croatia's
-   own NAP states the real pull URL directly in its public metadata
-   (Vejdirektoratet's own protocol doc only says the URL is "configured
-   at registration," never published) - the URL itself needed no
-   registration to discover, only the credential to use it does.
+   **CONFIRMED LIVE (2026-08-26).** Verified against a real authenticated
+   pull with real HTTP Basic credentials: 85 real situations, all real
+   ``MaintenanceWorks`` records (no ``ConstructionWorks`` seen in this
+   pull - a real snapshot property, not a schema limitation; the legacy
+   dataset's own metadata still names both as real possibilities). The
+   shared streaming parser handles the real response with **zero code
+   changes** - a bare ``<SituationPublication>`` root, exactly as
+   assumed, resolving the "bare vs. profile-wrapped" open question below.
+   **Auth resolved: HTTP Basic (``username``/``password``) is confirmed
+   correct** - real registration issued a plain username/password pair,
+   not a bearer token; ``bearer_token`` support is kept (the NAP's own
+   metadata still states it as a real platform-wide mechanism) but is
+   now unconfirmed-for-this-account rather than unconfirmed-for-this-
+   dataset. Real coordinates are genuine WGS84 - both a
+   ``coordinatesForDisplay`` point and a full ``gmlLineString`` with
+   explicit ``srsName="EPSG:4326"`` are present on every real record
+   checked; the shared parser reads the LineString's first point. Real
+   ``generalPublicComment`` text is genuinely bilingual (``hr``/``en``
+   ``values``) on some but not all comments - only Croatian was seen
+   guaranteed present, English only sometimes.
 
 **Two real, sibling datasets found on the NAP, not one** - "HC Radovi
 DatexII" (legacy, published since 22.05.2023,
@@ -63,32 +71,20 @@ downstream-disclosure clause was found.
 
 **Credentials**: free self-service registration at
 `promet-info.hr/hr/registration <https://www.promet-info.hr/hr/registration>`_
-issues login credentials (the real form doesn't state up front whether
-that's a Basic Auth username/password pair, a Bearer token, or both -
-see the auth note above). Env vars:
+issues login credentials - confirmed to be a Basic Auth username/password
+pair for this account (see the auth note above). Env vars:
 ``CROATIA_USERNAME``/``CROATIA_PASSWORD`` or ``CROATIA_BEARER_TOKEN``
 (see ``.env.example``, ``scripts/smoke_test.py``).
 
-**What's still open until a real credentialed pull**:
-
-1. Which of Basic/Bearer auth this specific dataset actually accepts (the
-   NAP states both are real mechanisms on the platform, not necessarily
-   both for this one dataset).
-2. Whether the real DATEX II v3 response is a bare
-   ``SituationPublication`` this SDK's own shared streaming parser
-   handles unchanged, or a Croatia-specific profile with fields the
-   parser doesn't expect.
-3. Real roadworks-record-type coverage - whether
-   ``ConstructionWorks``/``MaintenanceWorks`` appear as the dedicated
-   xsi:type, or via the same kind of generic-record discriminator gap
-   Belgium's/Spain's own real feeds needed (see
-   :mod:`streetworks.datex2.belgium`/:mod:`streetworks.datex2.dgt`).
+**What's still open**: whether Bearer auth also works for this dataset
+(only Basic has been exercised); real record-type coverage beyond
+``MaintenanceWorks`` - no ``ConstructionWorks`` has been seen live yet,
+though the NAP's own metadata still names it as real.
 """
 
 from __future__ import annotations
 
 import io
-import warnings
 from collections.abc import Iterator
 
 import httpx
@@ -100,23 +96,8 @@ from .parser import iter_situations as _iter_situations
 
 __all__ = ["BASE_URL", "LEGACY_BASE_URL", "CroatiaClient"]
 
-warnings.warn(
-    "streetworks.datex2.croatia is a Credentials-wanted scaffold: built to "
-    "Croatia's own National Access Point metadata (see module docstring), "
-    "not yet verified against a real authenticated response. Have "
-    "promet-info.hr registration credentials for the 'HC Radovi DatexII "
-    "v3' dataset? Running the smoke test and reporting back one real "
-    "trimmed record, and which auth scheme (Basic or Bearer) actually "
-    "worked, would be the single most useful contribution - see the "
-    "'help wanted' issues at "
-    "https://github.com/KFergusonUK/StreetWorks-SDK/issues for exactly "
-    "what's needed.",
-    UserWarning,
-    stacklevel=2,
-)
-
-#: HC Radovi DatexII v3 - confirmed live (a real 401 on an unauthenticated
-#: request). See module docstring.
+#: HC Radovi DatexII v3 - confirmed live (2026-08-26, real authenticated
+#: pull, 85 real situations). See module docstring.
 BASE_URL = "https://b2b.promet-info.hr/dc/b2b.hc.roadworks.datex3"
 
 #: The sibling legacy (non-v3) dataset, same NAP, published since
@@ -126,11 +107,11 @@ LEGACY_BASE_URL = "https://b2b.promet-info.hr/dc/b2b.hc.roadworks.datex"
 
 class CroatiaClient:
     """Fetch Croatian state-road roadworks from Hrvatske ceste's real
-    NAP dataset. **Pending live verification - see module docstring.**
+    NAP dataset. **Confirmed live (2026-08-26) - see module docstring.**
 
-    Requires either ``username``/``password`` (HTTP Basic) or
-    ``bearer_token`` - which one this dataset actually accepts is
-    unconfirmed, see module docstring.
+    Requires either ``username``/``password`` (HTTP Basic, confirmed
+    correct) or ``bearer_token`` (real platform-wide mechanism, unconfirmed
+    for this account) - see module docstring.
 
     >>> from streetworks.datex2.croatia import CroatiaClient
     >>> from streetworks.common import from_datex2

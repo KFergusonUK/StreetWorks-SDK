@@ -1520,26 +1520,25 @@ _REGISTRY: list[ProviderEntry] = [
         territories=frozenset({"Croatia"}),
         administrative_area="Hrvatske ceste",
         scope_note=(
-            "Credentials-wanted scaffold, better-confirmed than "
-            "Vejdirektoratet at the same stage. Croatia's own National "
-            "Access Point (promet-info.hr, a Realis ITS NAP platform) "
-            "states the real pull URL directly in its public dataset "
-            "metadata - confirmed live with a genuine 401 on an "
-            "unauthenticated request, unlike Vejdirektoratet (URL only "
-            "issued at registration) or ASFINAG (URL unknown). Genuine "
-            "DATEX II v3, real WGS84 georeferencing, up to 1-minute "
-            "update frequency - all confirmed from the NAP's own public "
-            "metadata page, not secondhand. Auth: the NAP states both "
-            "Basic and Bearer authentication as real mechanisms for this "
-            "dataset; which one this specific feed requires is "
-            "unconfirmed. A real self-service registration form was "
-            "found and inspected live (email/name/organisation/"
-            "password, no visible approval gate before submission)."
+            "Graduated 2026-08-26: a real developer login (HTTP Basic) "
+            "round-tripped 85 real situations, all real MaintenanceWorks "
+            "records, through the shared DATEX II streaming parser with "
+            "zero code changes - a bare SituationPublication root, real "
+            "WGS84 (EPSG:4326) coordinates on every record. Croatia's own "
+            "National Access Point (promet-info.hr, a Realis ITS NAP "
+            "platform) states the real pull URL directly in its public "
+            "dataset metadata - confirmed live pre-graduation with a "
+            "genuine 401 on an unauthenticated request. Auth: HTTP Basic "
+            "confirmed correct for this account; the NAP's own metadata "
+            "still states Bearer as a real platform-wide mechanism too, "
+            "unconfirmed for this dataset. No ConstructionWorks seen live "
+            "yet (only MaintenanceWorks), though the NAP's own metadata "
+            "names both as real."
         ),
         credentials=(
             "Free self-service registration at promet-info.hr/hr/registration - "
-            "issues Basic Auth or Bearer credentials, which one this dataset "
-            "requires is unconfirmed"
+            "issues Basic Auth credentials (confirmed); Bearer is a real "
+            "platform-wide alternative, unconfirmed for this dataset"
         ),
         licence=(
             "Otvorena dozvola (Croatia's national Open Licence) - commercial "
@@ -1547,7 +1546,6 @@ _REGISTRY: list[ProviderEntry] = [
             "confirmed by reading the real published PDF"
         ),
         source_grade="operator",
-        verified=False,
         _module="streetworks.datex2",
         _client_name="CroatiaClient",
         import_line="from streetworks.datex2 import CroatiaClient",
@@ -3973,13 +3971,14 @@ _REGISTRY: list[ProviderEntry] = [
             "not obtained on a caller's behalf, same standing rule as "
             "Alberta/Massachusetts CWZ. The field schema is not a "
             "guess: proven by Ontario's own real, unauthenticated "
-            "response on the identical platform."
+            "response on the identical platform. Graduated 2026-08-26: "
+            "a real developer key round-tripped 50 real roadwork events "
+            "through the shared from_na511 parsing unchanged."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line=(
@@ -4108,13 +4107,14 @@ _REGISTRY: list[ProviderEntry] = [
             "obtained on a caller's behalf, same standing rule as "
             "Alberta/Massachusetts CWZ. The field schema is not a "
             "guess: proven by Ontario's own real, unauthenticated "
-            "response on the identical platform."
+            "response on the identical platform. Graduated 2026-08-26: "
+            "a real developer key round-tripped 70 real roadwork events "
+            "through the shared from_na511 parsing unchanged."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("georgia")',
@@ -4282,13 +4282,16 @@ _REGISTRY: list[ProviderEntry] = [
             "real /developers/doc page. Not obtained on a caller's "
             "behalf, same standing rule as Alberta/Massachusetts CWZ. "
             "The field schema is not a guess: proven by Ontario's own "
-            "real, unauthenticated response on the identical platform."
+            "real, unauthenticated response on the identical platform. "
+            "Graduated 2026-08-26: a real developer key round-tripped "
+            "2,463 real roadwork events through the shared from_na511 "
+            "parsing unchanged - the largest single real pull seen on "
+            "this platform so far."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("arizona")',
@@ -4337,13 +4340,15 @@ _REGISTRY: list[ProviderEntry] = [
             "real /developers/doc page. Not obtained on a caller's "
             "behalf, same standing rule as Alberta/Massachusetts CWZ. "
             "The field schema is not a guess: proven by Ontario's own "
-            "real, unauthenticated response on the identical platform."
+            "real, unauthenticated response on the identical platform. "
+            "Graduated 2026-08-26: a real developer key round-tripped "
+            "170 real roadwork events through the shared from_na511 "
+            "parsing unchanged."
         ),
         credentials="511 API developer key (self-service registration - see module docstring)",
         licence=None,
         licence_confirmed=False,
         source_grade="operator",
-        verified=False,
         _module="streetworks.na511",
         _client_name="NA511Client",
         import_line='from streetworks.na511 import NA511Client  # .fetch("idaho")',

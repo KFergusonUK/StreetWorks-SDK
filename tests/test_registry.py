@@ -365,16 +365,11 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     value, is unknown - see streetworks.datex2.austria's own module
     docstring.
 
-    Croatia (`croatia`) is better-confirmed than Austria at this tier,
-    close to Vejdirektoratet: Croatia's own National Access Point
-    (promet-info.hr) states the real pull URL directly in its public
-    dataset metadata - confirmed live with a genuine 401 on an
-    unauthenticated request, unlike Vejdirektoratet (URL only issued at
-    registration) or ASFINAG (URL unknown). Genuine DATEX II v3, real
-    WGS84 georeferencing confirmed from the NAP's own metadata. What's
-    unconfirmed: which of the NAP's two stated auth mechanisms (Basic or
-    Bearer) this specific dataset requires, and the authenticated pull
-    itself - see streetworks.datex2.croatia's own module docstring.
+    Croatia (`croatia`) was in this tier, better-confirmed than Austria,
+    close to Vejdirektoratet, until a real developer login (HTTP Basic)
+    confirmed exactly that live (2026-08-26): 85 real MaintenanceWorks
+    situations through the shared DATEX II parser unchanged - see
+    streetworks.datex2.croatia's own module docstring.
 
     LTA DataMall (`singapore`) is better-confirmed than Austria at this
     tier, close to Vejdirektoratet: built from LTA's own current official
@@ -398,13 +393,11 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     streetworks.korea.client's own module docstring.
 
     Saskatchewan Highway Hotline (`sk511`), New Brunswick 511 (`nb511`),
-    Newfoundland and Labrador 511 (`nl511`), Nova Scotia 511 (`ns511`),
-    511 Yukon (`yt511`), Georgia 511 (`ga511`), Louisiana 511 (`la511`),
-    New York 511 (`ny511`), Arizona 511 (`az511`), Florida 511
-    (`fl511`), Idaho 511 (`id511`), Pennsylvania 511 (`pa511`), North
-    Carolina 511 (`nc511`) and New England 511 (`newengland511`) are all
-    better-off than every other entry in this tier: each needs a real
-    developer key this
+    Nova Scotia 511 (`ns511`), 511 Yukon (`yt511`), Louisiana 511
+    (`la511`), New York 511 (`ny511`), Florida 511 (`fl511`),
+    Pennsylvania 511 (`pa511`), North Carolina 511 (`nc511`) and New
+    England 511 (`newengland511`) are all better-off than every other
+    entry in this tier: each needs a real developer key this
     build doesn't have, but the field schema itself isn't a guess or
     documentation-only claim - it's drawn from a real, live,
     unauthenticated pull against the identical commercial platform
@@ -417,8 +410,12 @@ def test_credentials_wanted_is_the_only_unverified_tier():
     docstring. 511 Alberta (`ab511`), Nevada 511 (`nv511`), Alaska 511
     (`ak511`) and Connecticut 511 (`ct511`) were in this same tier until
     a real developer key confirmed exactly that live for each
-    (2026-08-22) - they're verified now, the first four key-gated
-    jurisdictions on this platform to graduate out of this tier.
+    (2026-08-22) - the first four key-gated jurisdictions on this
+    platform to graduate out of this tier. Newfoundland and Labrador
+    (`nl511`), Georgia (`ga511`), Arizona (`az511`) and Idaho (`id511`)
+    graduated the same way on 2026-08-26 (50, 70, 2,463 and 170 real
+    roadwork events respectively, round-tripped through the shared
+    from_na511 parsing unchanged).
 
     Every other provider is verified against real data."""
     unverified = [e for e in _REGISTRY if not e.verified]
@@ -431,20 +428,15 @@ def test_credentials_wanted_is_the_only_unverified_tier():
         "greece",
         "stockholm",
         "austria",
-        "croatia",
         "singapore",
         "korea",
         "sk511",
         "nb511",
-        "nl511",
         "ns511",
         "yt511",
-        "ga511",
         "la511",
         "ny511",
-        "az511",
         "fl511",
-        "id511",
         "pa511",
         "nc511",
         "newengland511",
