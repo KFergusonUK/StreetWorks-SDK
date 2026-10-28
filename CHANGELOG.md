@@ -2,6 +2,35 @@
 
 ## [Unreleased]
 
+### Added — Street Manager Open Data archive, every Open Data event as public monthly zips (2026-10-28)
+
+`streetworks.opendata.archive`
+- DfT's archive of the Open Data feed: one zip per topic per month at
+  `opendata.manage-roadworks.service.gov.uk/{topic}/{yyyy}/{mm}.zip`. Permits from 2020/07,
+  activities from 2020/09, section 58s from 2022/03, no gaps, no credentials, OGL v3. A permit
+  month is about 1 GB (about 1.1 million events; about 71 GB in all), so nothing downloads
+  unless asked. Confirmed live before building - full record in
+  `docs/findings/streetmanager-opendata-archive.md`.
+- `ArchiveClient`: `url()` (no I/O), `available()` (one `HEAD`; a month not yet published is a
+  404), `files()` (the host's public S3 bucket listing, so what's published is listed rather
+  than guessed), and `download()` - streamed to a `.part` file and renamed once complete,
+  resumed with an HTTP `Range` (+ `If-Range`) request, and verified against the `ETag`, which
+  is the file's MD5. A resumed `.part` left from an older copy of the file is caught by that
+  check and the download restarted once.
+- `iter_events()` reads a zip, or every zip under a folder, one member at a time, yielding the
+  existing `EventNotification`. Filters are named after the live feed's SNS message attributes
+  (`usrn`, `area`, `ha_org`, `promoter_org`, `activity_type`, plus `event_types`); `ha_org` and
+  `promoter_org` match SWA codes, as the live attributes do. Bad zips and members are skipped
+  and counted on a `ReadStats`, never raised. No de-duplication: none was found within or
+  across months.
+- Registered as `opendata_archive` (`source_grade="register"`). Documented in
+  `docs/providers/uk.md` with the sizes, the publication timing (normally the 1st of the next
+  month; months cut at UK local midnight) and the memory cost: Python's `zipfile` holds about
+  0.7 GB for a permit month's member list while reading it.
+- Not built yet: folding events into the shared `Works` model, which is a derived view.
+- Tests use real fixtures: two pages of the live bucket listing, and small zips of real
+  members (original names and bytes) from the 2026/09 files of each topic.
+
 ## [0.11.0] - 2026-10-28
 
 ### Removed — `WorkAPI.create_alteration` and `WorkAPI.assess_alteration` (breaking) (2026-10-28)
