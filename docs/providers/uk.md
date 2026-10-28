@@ -75,13 +75,43 @@ from streetworks.streetmanager.models.v6.work import WorkResponse
 work = WorkResponse.model_validate(sm.work.get_work("TSR1591199404915"))
 ```
 
+The v6 models match the **V6.17.25** spec. DfT's spec declares every object
+closed, but V6 gains new fields every fortnight, so the SDK deliberately
+generates *response* models with `extra="allow"`: a field added by a later
+release is kept on the instance (`model.model_extra`) instead of failing
+validation. *Request* models keep `extra="forbid"`, so a misspelt field in a
+payload you're about to send still fails before the write.
+
+`asd_coordinate_geometry` on permit and change-request ASD rows (added in
+V6.17.24) is untyped in the spec; live it arrives as GeoJSON *text* in
+British National Grid, e.g. `'{"type":"LineString","coordinates":[...]}'` -
+`json.loads` it before use. Street Lookup's field of the same name is a
+GeoJSON object.
+
 To regenerate after a DfT release, run the **Regenerate Street Manager
-models** workflow from the Actions tab (it opens a PR), or locally:
+models** workflow from the Actions tab (it opens a PR), or locally - pinning
+the published release, so the generated header records which one the models
+match:
 
 ```bash
 pip install -e ".[gen]"
-python scripts/generate_models.py --version v6 --from-dir specs/streetmanager/v6
+python scripts/generate_models.py --version v6 --url-template \
+  "https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/V6/V6.17.25/json/{api}-swagger.json"
 ```
+
+DfT behaviour changes worth knowing about (no SDK code change needed):
+
+- **V6.17.25** - Street Lookup no longer returns ASDs whose NSG record has a
+  `record_end_date`, so `sm.lookup.is_traffic_sensitive(usrn)` can now return
+  `False` for a street whose only Traffic Sensitive designations have ended,
+  where it returned `True` before (sandbox from 22 Oct, production from
+  26 Oct 2026).
+- **V6.17.19** - contractor accounts without an active contract are refused by
+  every API except the Party endpoints for managing their own organisation;
+  the 403 surfaces as `streetworks.ForbiddenError`.
+- **Alterations** - DfT removed creating alterations (V6.17.12) and updating
+  their status (V6.17.20); change requests replace them. Reading alterations
+  (`sm.reporting.alterations()`) still works.
 
 See [`examples/collaboration_finder.py`](../../examples/collaboration_finder.py)
 for a worked example of finding same-street, close-in-time works worth

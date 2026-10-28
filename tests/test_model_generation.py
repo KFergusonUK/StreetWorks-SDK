@@ -58,3 +58,62 @@ def test_generate_models_from_swagger2_fixture(tmp_path, monkeypatch):
 
     with pytest.raises(pydantic.ValidationError):
         module.PermitSummaryResponse.model_validate({"status": "not-a-status"})
+
+
+def _load_generator():
+    spec = importlib.util.spec_from_file_location(
+        "generate_models", REPO_ROOT / "scripts" / "generate_models.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _closed(**properties):
+    return {"type": "object", "additionalProperties": False, "properties": properties}
+
+
+@pytest.mark.parametrize("swagger2", [True, False])
+def test_open_response_schemas_classifies_by_paths(swagger2):
+    prefix = "#/definitions/" if swagger2 else "#/components/schemas/"
+
+    def ref(name):
+        return {"$ref": prefix + name}
+
+    schemas = {
+        "ThingCreateRequest": _closed(site=ref("SiteInput")),
+        "SiteInput": _closed(x={"type": "string"}),
+        "ThingResponse": _closed(site=ref("SiteDetails"), inline=_closed()),
+        "SiteDetails": _closed(x={"type": "string"}),  # response-side, not named *Response
+        "OrphanResponse": _closed(),
+        "OrphanThing": _closed(),
+    }
+    if swagger2:
+        operation = {
+            "parameters": [{"in": "body", "name": "body", "schema": ref("ThingCreateRequest")}],
+            "responses": {"201": {"schema": ref("ThingResponse")}},
+        }
+        spec = {"swagger": "2.0", "paths": {"/things": {"post": operation}}, "definitions": schemas}
+    else:
+        body = {"content": {"application/json": {"schema": ref("ThingCreateRequest")}}}
+        result = {"content": {"application/json": {"schema": ref("ThingResponse")}}}
+        operation = {"requestBody": body, "responses": {"201": result}}
+        spec = {
+            "openapi": "3.0.0",
+            "paths": {"/things": {"post": operation}},
+            "components": {"schemas": schemas},
+        }
+
+    opened = _load_generator().open_response_schemas(spec)
+    out = opened["definitions"] if swagger2 else opened["components"]["schemas"]
+    extra = {name: schema["additionalProperties"] for name, schema in out.items()}
+    assert extra == {
+        "ThingCreateRequest": False,
+        "SiteInput": False,
+        "ThingResponse": True,
+        "SiteDetails": True,
+        "OrphanResponse": True,
+        "OrphanThing": False,
+    }
+    assert out["ThingResponse"]["properties"]["inline"]["additionalProperties"] is True
+    assert schemas["ThingResponse"]["additionalProperties"] is False  # input not mutated

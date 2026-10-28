@@ -2,6 +2,52 @@
 
 ## [Unreleased]
 
+### Removed — `WorkAPI.create_alteration` and `WorkAPI.assess_alteration` (breaking) (2026-10-28)
+
+`streetworks.streetmanager.client`
+- Both called endpoints DfT has removed from V6: `POST .../permits/{prn}/alterations` in V6.17.12
+  (sandbox 23 Apr 2026) and `PUT .../alterations/{arn}/status` in V6.17.20 (sandbox 13 Aug 2026),
+  so both already failed against live V6 when 0.10.0 shipped them. Change requests replace
+  alterations; there's no wrapper for them yet, so use `sm.work.post(...)` meanwhile.
+- Reading alterations is unaffected: `ReportingAPI.alterations()`/`iter_alterations()` (`GET
+  /alterations`) are still in the V6.17.25 spec, as is `GET .../alterations/{arn}`.
+
+### Fixed — Street Manager v6 models rejected live work responses since V6.17.24; regenerated against V6.17.25 (2026-10-28)
+
+`streetworks.streetmanager.models.v6`, `scripts/generate_models.py`
+- V6.17.24 (sandbox 8 Oct 2026) added `asd_coordinate_geometry` to every permit and
+  change-request ASD row. The models were generated with `extra="forbid"` (DfT's spec declares
+  every object `additionalProperties: false`), so `WorkResponse.model_validate(sm.work.get_work(...))`
+  failed for any work with ASDs - the key is present on every row, null or not. Confirmed
+  against a real sandbox response (15 `extra_forbidden` errors on one PAA), now
+  `tests/fixtures/streetmanager_work_asd_geometry_sandbox.json`, with contact details redacted.
+- Regenerating alone would only fix it until the next fortnightly additive release, so the
+  generator now reopens *response* schemas before generation (`open_response_schemas`):
+  response models get `extra="allow"` and keep unknown fields on `model_extra`; request models
+  keep `extra="forbid"`, so typos still fail before a write. Response-side is decided from the
+  spec's own `paths`, not class names - `WorkFeature`, `SiteDetails` and `GeoJSONGeometry` are
+  response-side without ending in `Response`. A deliberate deviation from the spec, noted in
+  every generated file's header. 202 models are now open, 128 closed.
+- Regenerated from the V6.17.25 published spec (the docs-site copy is byte-identical to the
+  live sandbox `/v6/` spec, and to V6.17.26's). The previous models matched V6.17.17. Schema
+  changes since: `asd_coordinate_geometry` on `PermitASD`/`PermitASDResponse`/
+  `ChangeRequestASDResponse` (untyped in the spec; live it's GeoJSON *text*, not an object);
+  `ChangeRequestResponse.assessment_reasonable_period_end_date` (V6.17.18);
+  `include_additional_orgs` on 19 Export CSV request models (dual-running HA users);
+  `ChangeRequestCreateRequest.proposed_start_date`/`proposed_end_date` narrowed from datetime
+  to `date` (midnight timestamps still validate, others now fail); and the alteration
+  status/duration-challenge request models removed with their endpoints
+  (`PermitAlterationStatusUpdateRequest`, `PermitAlterationDurationChallengeReviewRequest`,
+  `PermitAlterationDurationChallengeNonAcceptanceResponseRequest`, `AlterationStatus`).
+- The generator's header now records the pinned spec URL, and the **Regenerate Street Manager
+  models** workflow defaults to the V6.17.25 docs-site spec rather than the sandbox's floating
+  `/v6/` one, so the next check starts from a known release.
+- `docs/providers/uk.md`: the response/request extra-field policy, the geometry-as-text note,
+  the pinned regeneration command (replacing a `--from-dir` path that didn't exist), and three
+  DfT behaviour changes that need no code: V6.17.25's Street Lookup dropping end-dated ASDs
+  (so `is_traffic_sensitive` can flip to `False`), V6.17.19's contractor refusal (a 403,
+  `ForbiddenError`), and the alteration removals.
+
 ## [0.10.0] - 2026-08-26
 
 ### Added — `docs/providers/matrix.md`, a per-territory X/~/o coverage matrix with state/province/région breakdowns (2026-08-26)

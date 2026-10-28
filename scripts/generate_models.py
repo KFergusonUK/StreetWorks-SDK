@@ -1,24 +1,35 @@
 #!/usr/bin/env python3
 """Generate Pydantic v2 models from the Street Manager swagger specs.
 
-The DfT publishes an OpenAPI/Swagger 2.0 JSON file for each of the nine
-Street Manager APIs. This script turns them into typed Pydantic models under
-``src/streetworks/streetmanager/models/{version}/``.
+The DfT publishes an OpenAPI JSON file for each of the nine Street Manager
+APIs (OpenAPI 3 since at least V6.17.25; older releases were Swagger 2.0,
+which is still accepted). This script turns them into typed Pydantic models
+under ``src/streetworks/streetmanager/models/{version}/``.
 
 Two ways to supply the specs:
 
-1. **From a directory** of downloaded JSON files (the reliable route - the
-   API documentation page links every swagger.json; save them as
-   ``specs/streetmanager/v6/work.json`` etc.)::
+1. **From URLs**, using a template with ``{api}`` (and optionally
+   ``{version}``) placeholders. Prefer the DfT docs site's per-release specs,
+   so the generated header records exactly which release the models match::
+
+       python scripts/generate_models.py --version v6 \\
+           --url-template "https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/V6/V6.17.25/json/{api}-swagger.json"
+
+   The live ``https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/swagger.json``
+   also works, but floats with whatever release the sandbox is on.
+
+2. **From a directory** of downloaded JSON files, saved as
+   ``specs/streetmanager/v6/work.json`` etc.::
 
        python scripts/generate_models.py --version v6 --from-dir specs/streetmanager/v6
 
-2. **From URLs**, using a template with ``{api}`` (and optionally
-   ``{version}``) placeholders - useful in CI where the runner can reach the
-   DfT hosts::
-
-       python scripts/generate_models.py --version v6 \\
-           --url-template "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/swagger.json"
+Every object in the DfT specs is declared closed (``additionalProperties:
+false``), which datamodel-code-generator turns into ``extra="forbid"``. V6
+takes additive changes every fortnight, so a closed *response* model rejects
+the next release's new fields (V6.17.24's ``asd_coordinate_geometry`` broke
+``WorkResponse`` validation this way). ``open_response_schemas`` therefore
+reopens response schemas before generation - a deliberate deviation from the
+spec. Request models stay closed so a typo fails before a write.
 
 Requires the ``gen`` extra: ``pip install -e ".[gen]"``.
 
@@ -30,6 +41,7 @@ notes mention schema changes.
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import os
 import subprocess
@@ -60,7 +72,10 @@ MODELS_ROOT = Path(
 HEADER = (
     '"""GENERATED FILE - do not edit by hand.\n\n'
     "Generated from the DfT Street Manager {api} API swagger specification\n"
-    "({source}) by scripts/generate_models.py using datamodel-code-generator.\n"
+    "({source}) by scripts/generate_models.py using datamodel-code-generator.\n\n"
+    'Response models are generated with extra="allow" (the spec says forbid) so\n'
+    "fields added by later DfT releases are kept rather than rejected; request\n"
+    'models keep extra="forbid". See open_response_schemas() in the script.\n'
     '"""\n\n'
 )
 
@@ -89,8 +104,83 @@ def _rewrite_refs(node: object) -> object:
     return node
 
 
+def _schema_refs(node: object, found: set[str]) -> set[str]:
+    """Collect the names of every schema ``node`` ``$ref``s, in either the
+    Swagger 2.0 (``#/definitions/``) or OpenAPI 3 (``#/components/schemas/``)
+    form."""
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == "$ref" and isinstance(value, str):
+                if value.startswith(("#/definitions/", "#/components/schemas/")):
+                    found.add(value.rsplit("/", 1)[1])
+            else:
+                _schema_refs(value, found)
+    elif isinstance(node, list):
+        for item in node:
+            _schema_refs(item, found)
+    return found
+
+
+def _reachable(schemas: dict, roots: set[str]) -> set[str]:
+    seen, stack = set(roots), list(roots)
+    while stack:
+        for name in _schema_refs(schemas.get(stack.pop(), {}), set()) - seen:
+            seen.add(name)
+            stack.append(name)
+    return seen
+
+
+def _open_objects(node: object) -> None:
+    """Flip ``additionalProperties: false`` to ``true`` on a schema and any
+    inline object schemas inside it ($refs are left to their own schema)."""
+    if isinstance(node, dict):
+        if node.get("additionalProperties") is False:
+            node["additionalProperties"] = True
+        for value in node.values():
+            _open_objects(value)
+    elif isinstance(node, list):
+        for item in node:
+            _open_objects(item)
+
+
+def open_response_schemas(spec: dict) -> dict:
+    """Reopen the response schemas of a Swagger 2.0 or OpenAPI 3 spec, so
+    their models are generated with ``extra="allow"`` instead of ``"forbid"``.
+
+    Which schemas are responses comes from the spec's own ``paths``: anything
+    reachable from an operation's ``responses`` is response-side, anything
+    reachable from its ``requestBody``/``parameters`` is request-side. Names
+    alone don't work - ``WorkFeature``, ``SiteDetails`` and ``GeoJSONGeometry``
+    are response-side without ending in ``Response``. A schema reachable from
+    both is opened (validating reads is the common use); one no path
+    references falls back to the ``...Response`` naming convention.
+    """
+    spec = copy.deepcopy(spec)
+    schemas = spec.get("components", {}).get("schemas") or spec.get("definitions") or {}
+
+    response_roots: set[str] = set()
+    request_roots: set[str] = set()
+    for path_item in spec.get("paths", {}).values():
+        if not isinstance(path_item, dict):
+            continue
+        _schema_refs(path_item.get("parameters", []), request_roots)
+        for operation in path_item.values():
+            if not isinstance(operation, dict):
+                continue
+            _schema_refs(operation.get("responses", {}), response_roots)
+            _schema_refs(operation.get("requestBody", {}), request_roots)
+            _schema_refs(operation.get("parameters", []), request_roots)
+
+    response_side = _reachable(schemas, response_roots)
+    referenced = response_side | _reachable(schemas, request_roots)
+    for name, schema in schemas.items():
+        if name in response_side or (name not in referenced and name.endswith("Response")):
+            _open_objects(schema)
+    return spec
+
+
 def to_openapi3_schemas(spec: dict) -> dict:
-    """The Street Manager specs are Swagger 2.0; datamodel-code-generator
+    """Older Street Manager specs were Swagger 2.0; datamodel-code-generator
     reads OpenAPI 3 ``components/schemas``. Model generation only needs the
     schema definitions, so lift ``definitions`` across and rewrite refs.
     OpenAPI 3 documents pass through untouched."""
@@ -176,7 +266,7 @@ def main() -> int:
                 print(f"  fetching {url}")
                 spec = fetch_spec(url)
                 source_desc = url
-            spec = to_openapi3_schemas(spec)
+            spec = to_openapi3_schemas(open_response_schemas(spec))
             with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as handle:
                 json.dump(spec, handle)
                 tmp = Path(handle.name)
