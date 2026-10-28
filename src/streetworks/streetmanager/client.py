@@ -117,28 +117,6 @@ class WorkAPI(_SyncGroup):
     def stop_work(self, work_reference_number: str, payload: JSON) -> Any:
         return self.put(f"works/{work_reference_number}/stop", json=payload)
 
-    # --- alterations -------------------------------------------------------
-    def create_alteration(
-        self, work_reference_number: str, permit_reference_number: str, payload: JSON
-    ) -> JSON:
-        return self.post(
-            f"works/{work_reference_number}/permits/{permit_reference_number}/alterations",
-            json=payload,
-        )
-
-    def assess_alteration(
-        self,
-        work_reference_number: str,
-        permit_reference_number: str,
-        alteration_reference_number: str,
-        payload: JSON,
-    ) -> Any:
-        return self.put(
-            f"works/{work_reference_number}/permits/{permit_reference_number}"
-            f"/alterations/{alteration_reference_number}/status",
-            json=payload,
-        )
-
     # --- comments, inspections, sites --------------------------------------
     def add_comment(self, work_reference_number: str, payload: JSON) -> JSON:
         return self.post(f"works/{work_reference_number}/comments", json=payload)

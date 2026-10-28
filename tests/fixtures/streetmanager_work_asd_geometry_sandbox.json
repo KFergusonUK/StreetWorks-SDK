@@ -1,0 +1,1528 @@
+{
+  "work_reference_number": "UG10276191218",
+  "promoter_swa_code": "1355",
+  "promoter_organisation": "DURHAM COUNTY COUNCIL",
+  "promoter_organisation_industry_type": "highway_authority",
+  "promoter_organisation_industry_type_string": "highway_authority",
+  "highway_authority_swa_code": "1355",
+  "highway_authority": "DURHAM COUNTY COUNCIL",
+  "street_name": "NORTH ROAD",
+  "town": "DURHAM CITY",
+  "area_name": "",
+  "road_category": 1,
+  "road_category_is_active": true,
+  "works_coordinates": {
+    "type": "Point",
+    "coordinates": [
+      426805.187176584,
+      542901.721946022
+    ]
+  },
+  "usrn": 11707216,
+  "work_status": "planned",
+  "work_status_string": "planned",
+  "works_location_description": "TEST",
+  "work_start_date": "2026-11-23T00:00:00.000Z",
+  "work_end_date": "2026-11-26T00:00:00.000Z",
+  "work_start_time": null,
+  "work_end_time": null,
+  "description_of_work": "TEST WORKS",
+  "workstream_prefix": "102",
+  "permits": [
+    {
+      "permit_reference_number": "UG10276191218-01",
+      "proposed_start_date": "2026-11-23T00:00:00.000Z",
+      "proposed_end_date": "2026-11-26T00:00:00.000Z",
+      "actual_start_date": null,
+      "actual_stop_date": null,
+      "permit_status": "submitted",
+      "permit_status_string": "submitted",
+      "work_category": "paa",
+      "work_category_string": "paa"
+    }
+  ],
+  "history": [
+    {
+      "username": "redacted@example.com",
+      "topic": "PAA",
+      "details": "PAA submitted - Proposed start date: 23/11/2026 - Proposed end date: 26/11/2026",
+      "action_date": "2026-10-09T13:30:24.173Z",
+      "event": "paa_submitted",
+      "event_string": "paa_submitted",
+      "object_reference": "UG10276191218-01",
+      "update_id": 3941256,
+      "internal_user_identifier": null,
+      "internal_user_name": null,
+      "parent_object_reference_number": null
+    },
+    {
+      "username": "redacted@example.com",
+      "topic": "WORK",
+      "details": "Works record created for planned work",
+      "action_date": "2026-10-09T13:30:23.886Z",
+      "event": "planned_works_record_created",
+      "event_string": "planned_works_record_created",
+      "object_reference": "UG10276191218",
+      "update_id": 3941255,
+      "internal_user_identifier": null,
+      "internal_user_name": null,
+      "parent_object_reference_number": null
+    }
+  ],
+  "sites": [],
+  "inspections": [],
+  "fpns": [],
+  "files": null,
+  "section_81": null,
+  "number_of_sites": 0,
+  "section74s": [],
+  "inspection_units": 0,
+  "street_line": {
+    "type": "MultiLineString",
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "EPSG:27700"
+      }
+    },
+    "coordinates": [
+      [
+        [
+          426789,
+          542965
+        ],
+        [
+          426805.52,
+          542909.63
+        ],
+        [
+          426806.72,
+          542903.94
+        ],
+        [
+          426807.51,
+          542898.14
+        ],
+        [
+          426808.31,
+          542890.84
+        ],
+        [
+          426808.71,
+          542884.15
+        ],
+        [
+          426809.01,
+          542876.65
+        ],
+        [
+          426809.11,
+          542868.61
+        ],
+        [
+          426809.01,
+          542861.52
+        ],
+        [
+          426808.51,
+          542849.64
+        ],
+        [
+          426806.22,
+          542811.33
+        ],
+        [
+          426805.82,
+          542803.63
+        ],
+        [
+          426805.72,
+          542797.39
+        ],
+        [
+          426805.82,
+          542790.5
+        ],
+        [
+          426806.32,
+          542784.03
+        ],
+        [
+          426806.72,
+          542778.83
+        ],
+        [
+          426807.61,
+          542772.94
+        ],
+        [
+          426809,
+          542767.4
+        ]
+      ],
+      [
+        [
+          426858,
+          542704
+        ],
+        [
+          426870,
+          542695
+        ]
+      ],
+      [
+        [
+          427002.08,
+          542585.3
+        ],
+        [
+          427041.45,
+          542554.13
+        ]
+      ],
+      [
+        [
+          426850.2,
+          542711.59
+        ],
+        [
+          426858,
+          542704
+        ]
+      ],
+      [
+        [
+          427041.45,
+          542554.13
+        ],
+        [
+          427082.49,
+          542521.91
+        ],
+        [
+          427086.09,
+          542518.84
+        ],
+        [
+          427089.09,
+          542515.34
+        ],
+        [
+          427092.95,
+          542512.52
+        ],
+        [
+          427096.04,
+          542510.97
+        ],
+        [
+          427099.13,
+          542509.36
+        ],
+        [
+          427102.72,
+          542507.5
+        ],
+        [
+          427106.14,
+          542505.69
+        ],
+        [
+          427110.26,
+          542503.51
+        ],
+        [
+          427114.76,
+          542501.44
+        ],
+        [
+          427118.75,
+          542499.52
+        ],
+        [
+          427121.97,
+          542497.97
+        ],
+        [
+          427124.86,
+          542496.82
+        ],
+        [
+          427126.85,
+          542496.05
+        ],
+        [
+          427129.1,
+          542495.97
+        ],
+        [
+          427131.48,
+          542495.97
+        ],
+        [
+          427133.86,
+          542496.31
+        ],
+        [
+          427136.45,
+          542497.2
+        ],
+        [
+          427139.09,
+          542498.36
+        ],
+        [
+          427145,
+          542501
+        ]
+      ],
+      [
+        [
+          426730,
+          543254
+        ],
+        [
+          426728.88,
+          543176.81
+        ],
+        [
+          426729.56,
+          543160.69
+        ],
+        [
+          426730.56,
+          543149.95
+        ],
+        [
+          426732.91,
+          543135.51
+        ],
+        [
+          426743,
+          543084
+        ],
+        [
+          426746,
+          543073
+        ],
+        [
+          426752,
+          543056
+        ],
+        [
+          426772,
+          543012
+        ],
+        [
+          426777,
+          543000
+        ],
+        [
+          426783,
+          542984
+        ],
+        [
+          426788,
+          542968
+        ],
+        [
+          426789,
+          542965
+        ]
+      ],
+      [
+        [
+          426936.02,
+          542661.12
+        ],
+        [
+          426917.91,
+          542665.03
+        ],
+        [
+          426909.71,
+          542666.61
+        ],
+        [
+          426907.66,
+          542667.21
+        ],
+        [
+          426906.07,
+          542667.74
+        ],
+        [
+          426904.42,
+          542668.33
+        ],
+        [
+          426899,
+          542671
+        ]
+      ],
+      [
+        [
+          426870,
+          542695
+        ],
+        [
+          426881,
+          542686
+        ],
+        [
+          426899,
+          542671
+        ]
+      ],
+      [
+        [
+          426727,
+          543316
+        ],
+        [
+          426728.44,
+          543284.66
+        ],
+        [
+          426730,
+          543254
+        ]
+      ],
+      [
+        [
+          427145,
+          542501
+        ],
+        [
+          427146.21,
+          542492.92
+        ],
+        [
+          427147.12,
+          542488.38
+        ],
+        [
+          427147.92,
+          542485.54
+        ],
+        [
+          427149.05,
+          542482.59
+        ],
+        [
+          427150.3,
+          542480.2
+        ],
+        [
+          427152.12,
+          542477.36
+        ],
+        [
+          427175,
+          542453.99
+        ],
+        [
+          427183.17,
+          542444.44
+        ]
+      ],
+      [
+        [
+          426960.85,
+          542617.89
+        ],
+        [
+          426957.59,
+          542622.66
+        ],
+        [
+          426955.69,
+          542625.2
+        ],
+        [
+          426954.18,
+          542627.43
+        ],
+        [
+          426952.91,
+          542629.25
+        ],
+        [
+          426951.88,
+          542631.16
+        ],
+        [
+          426951.01,
+          542633.3
+        ],
+        [
+          426950.37,
+          542635.52
+        ],
+        [
+          426949.29,
+          542640.13
+        ]
+      ],
+      [
+        [
+          426960.85,
+          542617.89
+        ],
+        [
+          427002.08,
+          542585.3
+        ]
+      ],
+      [
+        [
+          426960.85,
+          542617.89
+        ],
+        [
+          426956.48,
+          542619.96
+        ],
+        [
+          426954.58,
+          542620.75
+        ],
+        [
+          426952.75,
+          542621.31
+        ],
+        [
+          426950.85,
+          542621.78
+        ],
+        [
+          426949.1,
+          542621.94
+        ],
+        [
+          426946.8,
+          542622.02
+        ],
+        [
+          426938.39,
+          542621.87
+        ]
+      ],
+      [
+        [
+          426809,
+          542767.4
+        ],
+        [
+          426810.31,
+          542762.49
+        ],
+        [
+          426811.91,
+          542758.29
+        ],
+        [
+          426814.2,
+          542753.4
+        ]
+      ],
+      [
+        [
+          426814.2,
+          542753.4
+        ],
+        [
+          426816.31,
+          542749.66
+        ],
+        [
+          426818.51,
+          542745.86
+        ],
+        [
+          426821.01,
+          542742.46
+        ],
+        [
+          426824.61,
+          542738.46
+        ],
+        [
+          426832.6,
+          542729.97
+        ],
+        [
+          426850.2,
+          542711.59
+        ]
+      ],
+      [
+        [
+          426730,
+          543254
+        ],
+        [
+          426736.73,
+          543263.11
+        ],
+        [
+          426739.5,
+          543266.98
+        ],
+        [
+          426741.89,
+          543271.03
+        ],
+        [
+          426744.28,
+          543275.82
+        ],
+        [
+          426746.18,
+          543281.08
+        ]
+      ],
+      [
+        [
+          426909,
+          542646.09
+        ],
+        [
+          426908.98,
+          542652.92
+        ],
+        [
+          426908.85,
+          542654.64
+        ],
+        [
+          426908.59,
+          542656.29
+        ],
+        [
+          426907.99,
+          542658.08
+        ],
+        [
+          426907.33,
+          542659.54
+        ],
+        [
+          426906.6,
+          542661.06
+        ],
+        [
+          426905.68,
+          542662.58
+        ],
+        [
+          426899,
+          542671
+        ]
+      ]
+    ]
+  },
+  "active_permit": {
+    "permit_reference_number": "UG10276191218-01",
+    "work_reference_number": "UG10276191218",
+    "promoter_swa_code": "1355",
+    "promoter_organisation": "DURHAM COUNTY COUNCIL",
+    "street_name": "NORTH ROAD",
+    "town": "DURHAM CITY",
+    "area_name": "",
+    "usrn": 11707216,
+    "highway_authority": "DURHAM COUNTY COUNCIL",
+    "highway_authority_swa_code": "1355",
+    "road_category": 1,
+    "road_category_is_active": true,
+    "works_coordinates": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          426795.23216363,
+          542940.398443129
+        ],
+        [
+          426803.985417429,
+          542916.051736465
+        ],
+        [
+          426808.070276325,
+          542897.973939194
+        ],
+        [
+          426809.091485706,
+          542879.604566357
+        ],
+        [
+          426808.799707018,
+          542861.964140445
+        ]
+      ]
+    },
+    "date_created": "2026-10-09T13:30:24.098Z",
+    "date_modified": "2026-10-09T13:30:24.098Z",
+    "permit_status": "submitted",
+    "permit_status_string": "submitted",
+    "actual_start_date": null,
+    "actual_stop_date": null,
+    "assessment_comments": null,
+    "promoter_contact_details": "Phone number",
+    "secondary_contact": "Redacted",
+    "secondary_contact_number": "000000",
+    "secondary_contact_email": null,
+    "proposed_start_date": "2026-11-23T00:00:00.000Z",
+    "proposed_start_time": null,
+    "proposed_end_date": "2026-11-26T00:00:00.000Z",
+    "proposed_end_time": null,
+    "reasonable_period_end_date": "2026-11-26T00:00:00.000Z",
+    "calendar_day_duration": 4,
+    "working_day_duration": 4,
+    "description_of_work": "TEST WORKS",
+    "excavation": true,
+    "traffic_management_plan": false,
+    "lane_rental_applicable": false,
+    "deadline_date": "2026-11-06T16:30:00.000Z",
+    "project_reference_number": "",
+    "collaborative_working": false,
+    "collaboration_details": null,
+    "collaborative_works": null,
+    "additional_info": "",
+    "traffic_management_type": "road_closure",
+    "traffic_management_type_string": "road_closure",
+    "application_type": "permit",
+    "application_type_string": "permit",
+    "activity_type": "highway_repair_and_maintenance_works",
+    "activity_type_string": "highway_repair_and_maintenance_works",
+    "work_category": "paa",
+    "work_category_string": "paa",
+    "works_location_description": "TEST",
+    "location_types": [
+      "footway",
+      "carriageway"
+    ],
+    "location_types_string": [
+      "footway",
+      "carriageway"
+    ],
+    "permit_asds": [
+      {
+        "street_special_desig_code": 2,
+        "street_special_desig_code_string": "2",
+        "special_desig_location_text": null,
+        "special_desig_description": "TRAFFIC SENSITIVE - CRITICAL JUNCTION - BUS ROUTE",
+        "special_desig_start_date": null,
+        "special_desig_start_time": 1530,
+        "special_desig_end_date": null,
+        "special_desig_end_time": 1900,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 2,
+        "special_desig_periodicity_code_string": "2"
+      },
+      {
+        "street_special_desig_code": 2,
+        "street_special_desig_code_string": "2",
+        "special_desig_location_text": null,
+        "special_desig_description": "TRAFFIC SENSITIVE - CRITICAL JUNCTION - BUS ROUTE",
+        "special_desig_start_date": null,
+        "special_desig_start_time": 700,
+        "special_desig_end_date": null,
+        "special_desig_end_time": 930,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 2,
+        "special_desig_periodicity_code_string": "2"
+      },
+      {
+        "street_special_desig_code": 2,
+        "street_special_desig_code_string": "2",
+        "special_desig_location_text": null,
+        "special_desig_description": "TRAFFIC SENSITIVE - CRITICAL JUNCTION - BUS ROUTE",
+        "special_desig_start_date": null,
+        "special_desig_start_time": 700,
+        "special_desig_end_date": null,
+        "special_desig_end_time": 1900,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 19,
+        "street_special_desig_code_string": "19",
+        "special_desig_location_text": "BETWEEN ALBERT STREET AND GARDEN HOUSE",
+        "special_desig_description": "PERMIT HOLDERS / PAY AND DISPLAY",
+        "special_desig_start_date": null,
+        "special_desig_start_time": 800,
+        "special_desig_end_date": null,
+        "special_desig_end_time": 1800,
+        "asd_coordinate_geometry": "{\"type\":\"LineString\",\"coordinates\":[[426809,542769],[426729,543181]]}",
+        "special_desig_periodicity_code": 2,
+        "special_desig_periodicity_code_string": "2"
+      },
+      {
+        "street_special_desig_code": 19,
+        "street_special_desig_code_string": "19",
+        "special_desig_location_text": "BETWEEN ALBERT STREET AND GARDEN HOUSE",
+        "special_desig_description": "PERMIT HOLDERS / PAY AND DISPLAY",
+        "special_desig_start_date": null,
+        "special_desig_start_time": 800,
+        "special_desig_end_date": null,
+        "special_desig_end_time": 1800,
+        "asd_coordinate_geometry": "{\"type\":\"LineString\",\"coordinates\":[[426808,542770],[426729,543181]]}",
+        "special_desig_periodicity_code": 12,
+        "special_desig_periodicity_code_string": "12"
+      }
+    ],
+    "permit_not_selected_asds": [
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": null,
+        "special_desig_description": "POSSIBLE ARCHAEOLOGICAL SITE IN THIS AREA - FOR NEW INSTALLATIONS ONLY PLEASE CONTACT ARCHAEOLOGY@DURHAM.GOV.UK",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 28,
+        "street_special_desig_code_string": "28",
+        "special_desig_location_text": null,
+        "special_desig_description": "P1 WINTER MAINTENANCE ROUTE",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 9,
+        "street_special_desig_code_string": "9",
+        "special_desig_location_text": null,
+        "special_desig_description": "DURHAM CITY CONSERVATION AREA",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 21,
+        "street_special_desig_code_string": "21",
+        "special_desig_location_text": null,
+        "special_desig_description": "30",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": null,
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": "ADJ ST LEONARDS SCHOOL",
+        "special_desig_description": "LAYER: TREE PRESERVATION ORDERS (TPO) ORDER NO: PN1-341 TITLE: WESTERN HILL DURHAM CITY TYPE: AREA ID: A4 STATUS: CONF  SPECIES: VAR",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Polygon\",\"coordinates\":[[[426739.16,543078.56],[426730.6,543076.66],[426723.95,543079.51],[426726.8,543093.78],[426721.09,543110.42],[426713.96,543126.11],[426696.84,543188.88],[426710.16,543223.12],[426716.34,543238.34],[426714.44,543258.78],[426713.01,543265.92],[426714.91,543272.1],[426713.01,543276.38],[426720.14,543278.28],[426723.47,543274],[426722.99,543183.65],[426722.52,543146.56],[426730.6,543105.67],[426735.36,543084.74],[426739.16,543078.56]]]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": "OPPOSITE ALBERT STREET JUNCTION",
+        "special_desig_description": "RETAINING WALL",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Point\",\"coordinates\":[426810,542764]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 20,
+        "street_special_desig_code_string": "20",
+        "special_desig_location_text": "NEAR FORK IN ROAD, CLOSE TO JUNCTION WITH FRAMWELLGATE PETH",
+        "special_desig_description": "SIGNALS CROSSING",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Point\",\"coordinates\":[426730,543246]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": "OUTSIDE ST CUTHBERT'S CHURCH",
+        "special_desig_description": "RETAINING WALL",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Point\",\"coordinates\":[426736,543122]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": "OPPOSITE 6 VICTORIA TERRACE",
+        "special_desig_description": "RETAINING WALL",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Point\",\"coordinates\":[426808,542834]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      },
+      {
+        "street_special_desig_code": 27,
+        "street_special_desig_code_string": "27",
+        "special_desig_location_text": "OUTSIDE PARKSIDE",
+        "special_desig_description": "RETAINING WALL",
+        "special_desig_start_date": null,
+        "special_desig_start_time": null,
+        "special_desig_end_date": null,
+        "special_desig_end_time": null,
+        "asd_coordinate_geometry": "{\"type\":\"Point\",\"coordinates\":[426865,542699]}",
+        "special_desig_periodicity_code": 1,
+        "special_desig_periodicity_code_string": "1"
+      }
+    ],
+    "permit_conditions": [
+      {
+        "condition": "NCT01a",
+        "condition_string": "NCT01a",
+        "comment": ""
+      },
+      {
+        "condition": "NCT01b",
+        "condition_string": "NCT01b",
+        "comment": ""
+      },
+      {
+        "condition": "NCT11a",
+        "condition_string": "NCT11a",
+        "comment": ""
+      }
+    ],
+    "files": [],
+    "change_requests": [],
+    "work_type": "planned",
+    "work_type_string": "planned",
+    "revoke_reason": null,
+    "sliding_end_date_candidate": false,
+    "validity_period_end_date": "2026-11-23T00:00:00.000Z",
+    "final_reinstatement": false,
+    "workstream_prefix": "102",
+    "close_footway": "yes_provide_alternative_route",
+    "close_footway_string": "yes_provide_alternative_route",
+    "reasons_for_refusal": [],
+    "reasons_for_refusal_string": [],
+    "is_lane_rental": false,
+    "assessment_discount_reason": null,
+    "is_early_start": true,
+    "is_deemed": false,
+    "pending_change_details": null,
+    "work_status": "planned",
+    "work_status_string": "planned",
+    "additional_contact": "",
+    "additional_contact_number": "",
+    "additional_contact_email": "",
+    "ever_modification_requested": false,
+    "excavation_carried_out": true,
+    "close_footpath": "no",
+    "close_footpath_string": "no",
+    "street_line": {
+      "type": "MultiLineString",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "EPSG:27700"
+        }
+      },
+      "coordinates": [
+        [
+          [
+            426789,
+            542965
+          ],
+          [
+            426805.52,
+            542909.63
+          ],
+          [
+            426806.72,
+            542903.94
+          ],
+          [
+            426807.51,
+            542898.14
+          ],
+          [
+            426808.31,
+            542890.84
+          ],
+          [
+            426808.71,
+            542884.15
+          ],
+          [
+            426809.01,
+            542876.65
+          ],
+          [
+            426809.11,
+            542868.61
+          ],
+          [
+            426809.01,
+            542861.52
+          ],
+          [
+            426808.51,
+            542849.64
+          ],
+          [
+            426806.22,
+            542811.33
+          ],
+          [
+            426805.82,
+            542803.63
+          ],
+          [
+            426805.72,
+            542797.39
+          ],
+          [
+            426805.82,
+            542790.5
+          ],
+          [
+            426806.32,
+            542784.03
+          ],
+          [
+            426806.72,
+            542778.83
+          ],
+          [
+            426807.61,
+            542772.94
+          ],
+          [
+            426809,
+            542767.4
+          ]
+        ],
+        [
+          [
+            426858,
+            542704
+          ],
+          [
+            426870,
+            542695
+          ]
+        ],
+        [
+          [
+            427002.08,
+            542585.3
+          ],
+          [
+            427041.45,
+            542554.13
+          ]
+        ],
+        [
+          [
+            426850.2,
+            542711.59
+          ],
+          [
+            426858,
+            542704
+          ]
+        ],
+        [
+          [
+            427041.45,
+            542554.13
+          ],
+          [
+            427082.49,
+            542521.91
+          ],
+          [
+            427086.09,
+            542518.84
+          ],
+          [
+            427089.09,
+            542515.34
+          ],
+          [
+            427092.95,
+            542512.52
+          ],
+          [
+            427096.04,
+            542510.97
+          ],
+          [
+            427099.13,
+            542509.36
+          ],
+          [
+            427102.72,
+            542507.5
+          ],
+          [
+            427106.14,
+            542505.69
+          ],
+          [
+            427110.26,
+            542503.51
+          ],
+          [
+            427114.76,
+            542501.44
+          ],
+          [
+            427118.75,
+            542499.52
+          ],
+          [
+            427121.97,
+            542497.97
+          ],
+          [
+            427124.86,
+            542496.82
+          ],
+          [
+            427126.85,
+            542496.05
+          ],
+          [
+            427129.1,
+            542495.97
+          ],
+          [
+            427131.48,
+            542495.97
+          ],
+          [
+            427133.86,
+            542496.31
+          ],
+          [
+            427136.45,
+            542497.2
+          ],
+          [
+            427139.09,
+            542498.36
+          ],
+          [
+            427145,
+            542501
+          ]
+        ],
+        [
+          [
+            426730,
+            543254
+          ],
+          [
+            426728.88,
+            543176.81
+          ],
+          [
+            426729.56,
+            543160.69
+          ],
+          [
+            426730.56,
+            543149.95
+          ],
+          [
+            426732.91,
+            543135.51
+          ],
+          [
+            426743,
+            543084
+          ],
+          [
+            426746,
+            543073
+          ],
+          [
+            426752,
+            543056
+          ],
+          [
+            426772,
+            543012
+          ],
+          [
+            426777,
+            543000
+          ],
+          [
+            426783,
+            542984
+          ],
+          [
+            426788,
+            542968
+          ],
+          [
+            426789,
+            542965
+          ]
+        ],
+        [
+          [
+            426936.02,
+            542661.12
+          ],
+          [
+            426917.91,
+            542665.03
+          ],
+          [
+            426909.71,
+            542666.61
+          ],
+          [
+            426907.66,
+            542667.21
+          ],
+          [
+            426906.07,
+            542667.74
+          ],
+          [
+            426904.42,
+            542668.33
+          ],
+          [
+            426899,
+            542671
+          ]
+        ],
+        [
+          [
+            426870,
+            542695
+          ],
+          [
+            426881,
+            542686
+          ],
+          [
+            426899,
+            542671
+          ]
+        ],
+        [
+          [
+            426727,
+            543316
+          ],
+          [
+            426728.44,
+            543284.66
+          ],
+          [
+            426730,
+            543254
+          ]
+        ],
+        [
+          [
+            427145,
+            542501
+          ],
+          [
+            427146.21,
+            542492.92
+          ],
+          [
+            427147.12,
+            542488.38
+          ],
+          [
+            427147.92,
+            542485.54
+          ],
+          [
+            427149.05,
+            542482.59
+          ],
+          [
+            427150.3,
+            542480.2
+          ],
+          [
+            427152.12,
+            542477.36
+          ],
+          [
+            427175,
+            542453.99
+          ],
+          [
+            427183.17,
+            542444.44
+          ]
+        ],
+        [
+          [
+            426960.85,
+            542617.89
+          ],
+          [
+            426957.59,
+            542622.66
+          ],
+          [
+            426955.69,
+            542625.2
+          ],
+          [
+            426954.18,
+            542627.43
+          ],
+          [
+            426952.91,
+            542629.25
+          ],
+          [
+            426951.88,
+            542631.16
+          ],
+          [
+            426951.01,
+            542633.3
+          ],
+          [
+            426950.37,
+            542635.52
+          ],
+          [
+            426949.29,
+            542640.13
+          ]
+        ],
+        [
+          [
+            426960.85,
+            542617.89
+          ],
+          [
+            427002.08,
+            542585.3
+          ]
+        ],
+        [
+          [
+            426960.85,
+            542617.89
+          ],
+          [
+            426956.48,
+            542619.96
+          ],
+          [
+            426954.58,
+            542620.75
+          ],
+          [
+            426952.75,
+            542621.31
+          ],
+          [
+            426950.85,
+            542621.78
+          ],
+          [
+            426949.1,
+            542621.94
+          ],
+          [
+            426946.8,
+            542622.02
+          ],
+          [
+            426938.39,
+            542621.87
+          ]
+        ],
+        [
+          [
+            426809,
+            542767.4
+          ],
+          [
+            426810.31,
+            542762.49
+          ],
+          [
+            426811.91,
+            542758.29
+          ],
+          [
+            426814.2,
+            542753.4
+          ]
+        ],
+        [
+          [
+            426814.2,
+            542753.4
+          ],
+          [
+            426816.31,
+            542749.66
+          ],
+          [
+            426818.51,
+            542745.86
+          ],
+          [
+            426821.01,
+            542742.46
+          ],
+          [
+            426824.61,
+            542738.46
+          ],
+          [
+            426832.6,
+            542729.97
+          ],
+          [
+            426850.2,
+            542711.59
+          ]
+        ],
+        [
+          [
+            426730,
+            543254
+          ],
+          [
+            426736.73,
+            543263.11
+          ],
+          [
+            426739.5,
+            543266.98
+          ],
+          [
+            426741.89,
+            543271.03
+          ],
+          [
+            426744.28,
+            543275.82
+          ],
+          [
+            426746.18,
+            543281.08
+          ]
+        ],
+        [
+          [
+            426909,
+            542646.09
+          ],
+          [
+            426908.98,
+            542652.92
+          ],
+          [
+            426908.85,
+            542654.64
+          ],
+          [
+            426908.59,
+            542656.29
+          ],
+          [
+            426907.99,
+            542658.08
+          ],
+          [
+            426907.33,
+            542659.54
+          ],
+          [
+            426906.6,
+            542661.06
+          ],
+          [
+            426905.68,
+            542662.58
+          ],
+          [
+            426899,
+            542671
+          ]
+        ]
+      ]
+    },
+    "reinstatement_registration_due_date": null,
+    "usrn_contains_hazardous_material": null,
+    "is_primary_promoter": null,
+    "collaboration_contact_name": "Redacted",
+    "collaboration_contact_email": "redacted@example.com",
+    "collaboration_contact_phone_number": null,
+    "estimated_number_of_network_days_saved": null,
+    "others_can_collaborate_on_work": true,
+    "reason_for_non_collaboration": null,
+    "can_collaborate_on_work_additional_details": "TEST",
+    "potential_clash_with_other_works": false,
+    "primary_promoter_permit_reference_number": null,
+    "collaboration_types": [
+      "sharing_traffic_management_only"
+    ],
+    "collaboration_types_string": [
+      "sharing_traffic_management_only"
+    ],
+    "assessment_status": null,
+    "is_ttro_required": true,
+    "immediate_risk": null,
+    "early_start_pre_approval": true,
+    "pre_approval_authoriser": "Redacted",
+    "pre_approval_details": "TEST",
+    "is_duration_challenged": null,
+    "lane_rental_assessment_additional_details": null,
+    "lane_rental_assessment_charge_band_string": null,
+    "lane_rental_assessment_chargeable_days": null,
+    "lane_rental_assessment_charges_agreed": null
+  },
+  "non_compliances": [],
+  "latest_comments": []
+}

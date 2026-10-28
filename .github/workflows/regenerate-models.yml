@@ -1,7 +1,10 @@
 name: Regenerate Street Manager models
 
 # Run manually from the Actions tab. Downloads the official swagger specs
-# and opens a PR if the generated Pydantic models changed.
+# and opens a PR if the generated Pydantic models changed. The default URL
+# pins a published DfT release (docs site) rather than the sandbox's floating
+# /v6/ spec, so the generated header records which release the models match -
+# bump the release in the URL when regenerating for a newer one.
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +14,7 @@ on:
         required: true
       url_template:
         description: "Swagger spec URL ({api}/{version} placeholders)"
-        default: "https://api.sandbox.manage-roadworks.service.gov.uk/{version}/{api}/swagger.json"
+        default: "https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/V6/V6.17.25/json/{api}-swagger.json"
         required: true
 
 jobs:
