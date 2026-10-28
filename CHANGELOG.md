@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-28
+
 ### Removed — `WorkAPI.create_alteration` and `WorkAPI.assess_alteration` (breaking) (2026-10-28)
 
 `streetworks.streetmanager.client`
