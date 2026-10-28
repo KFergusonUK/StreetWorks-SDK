@@ -150,6 +150,78 @@ complete FastAPI receiver.
 > credentials, though the messages, once flowing, are received the same
 > credential-free way. This module handles the receiving side of both.
 
+## Street Manager Open Data archive
+
+DfT also publishes every Open Data event as a public archive, linked from its
+[Archived notifications](https://department-for-transport-streetmanager.github.io/street-manager-docs/archived-notifications)
+page: one zip per topic per month. No credentials or registration; licence
+OGL v3 (the docs site footer on that page). `streetworks.opendata.archive`
+lists, downloads and reads it:
+
+```python
+from streetworks.opendata.archive import ArchiveClient, ReadStats, Topic, iter_events
+
+with ArchiveClient() as arc:
+    arc.files(Topic.ACTIVITY)                  # every published month, from the bucket listing
+    arc.available(Topic.PERMIT, 2026, 10)      # one HEAD; False until it's published
+    arc.download(Topic.PERMIT, 2026, 9, "sm/permit/2026-09.zip")   # ~1 GB, streamed to disk
+
+stats = ReadStats()
+for event in iter_events("sm/", event_types={"PERMIT_SUBMITTED"}, ha_org="1355", stats=stats):
+    print(event.object_reference, event.object_data["activity_type"])
+print(stats)   # zips read, members, events yielded, and anything skipped
+```
+
+Know the sizes before you download. Confirmed live 2026-10-28:
+
+| Topic | From | Per month | Events per month |
+|---|---|---|---|
+| `permit` | 2020/07 | 0.85–1.2 GB | about 1.1 million |
+| `activity` | 2020/09 | 10–25 MB | about 15,000 |
+| `section_58` | 2022/03 | 2–4 MB | about 3,500 |
+
+The whole permit archive is about 71 GB. Nothing downloads unless you call
+`download()`, one month at a time. Each month normally appears on the 1st of
+the following month, and months are cut at UK local midnight, not UTC.
+
+- **Downloads resume and are verified.** Bytes go to a `.part` file that is
+  renamed only once complete; running `download()` again continues it with an
+  HTTP range request. The finished file is checked against the server's
+  `ETag`, which is the file's MD5.
+- **Each event is the live feed's message**, as a
+  `streetworks.opendata.EventNotification` - `event_type`, `event_time`,
+  `object_reference` and `object_data`, the same fields DfT's Event Notifier
+  Message schema documents.
+- **Filters are named after the live feed's SNS message attributes**: `usrn`,
+  `area`, `ha_org` and `promoter_org` (SWA codes, not organisation names) and
+  `activity_type`, plus `event_types`. Each takes one value or a collection.
+- **Bad files are skipped, not fatal.** A zip that won't open or a member
+  that isn't an event is counted on `ReadStats` and skipped.
+- **Nothing is de-duplicated.** No duplicate events were found within a month
+  or across neighbouring months; `event_reference` is unique if you combine
+  overlapping sources yourself.
+- **Memory.** Reading a permit month holds about 0.7 GB (peaking near 0.9 GB)
+  for Python's `zipfile` member list until that zip is done. Activity and
+  section 58 months are small.
+
+The archive is events, not works: one permit appears as several events
+(submitted, granted, work start, work stop...). Turning those into the shared
+`Works` model means folding events per reference, which this SDK doesn't do
+for you yet.
+
+> **Don't pass archive events to `from_streetmanager()`.** A permit event's
+> `object_data` looks like a Reporting permit row, and the converter accepts
+> it without error, but the field names differ and the results are wrong:
+> actual start/end dates are dropped (the archive calls them
+> `actual_start_date_time`/`actual_end_date_time`) and the dates graded
+> "estimated"; the geometry is dropped (the archive's
+> `works_location_coordinates` is WKT text in British National Grid, not
+> GeoJSON); status and works type come out empty; and PAAs become sites
+> instead of plannings (the archive's `work_category` reads `"Major (PAA)"`;
+> the code `paa` is in `work_category_ref`). Each event would also become its
+> own record, so one permit appears several times. Read `object_data`
+> directly until the archive has a converter of its own.
+
 ## Transport for London (TfL Road Disruption)
 
 London roadworks are already in this SDK via Street Manager (the

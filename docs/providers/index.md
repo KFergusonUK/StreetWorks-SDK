@@ -70,7 +70,7 @@ Street Manager
   Credentials: Street Manager API account (email + password)
   from streetworks.streetmanager import StreetManagerClient
 
-... (5 more — OS Open USRN, DataVIA, D-TRO, Street Manager Open Data, UK Police)
+... (8 more — Street Manager Open Data, Street Manager Open Data archive, DataVIA, D-TRO, OS Open USRN, National Highways, TfL, UK Police)
 
 >>> DGTClient = get_provider("dgt")   # the class, not an instance - constructors vary
 >>> with DGTClient() as dgt:
@@ -115,6 +115,7 @@ client, documented in its own section in [`docs/providers/`](.).
 |---|---|---|
 | `streetworks.streetmanager` | [DfT Street Manager](https://department-for-transport-streetmanager.github.io/street-manager-docs/api-documentation/) — all nine APIs (Work, Reporting, Street Lookup, GeoJSON, Party, Data Export, Event, Sampling, Worklist), V6 & V7, sandbox & production | read + write |
 | `streetworks.opendata` | [Street Manager Open Data](https://department-for-transport-streetmanager.github.io/street-manager-docs/open-data/) — AWS SNS push notifications | receive |
+| `streetworks.opendata.archive` | [Street Manager Open Data archive](https://department-for-transport-streetmanager.github.io/street-manager-docs/archived-notifications) — every Open Data event as public monthly zips: permits from 2020/07, activities from 2020/09, section 58s from 2022/03 (no credentials, confirmed live 2026-10-28). A permit month is about 1 GB, about 71 GB in all; nothing downloads unless asked. Licence OGL v3. See [`docs/providers/uk.md`](uk.md#street-manager-open-data-archive) | read |
 | `streetworks.datavia` | [Geoplace DataVIA](https://datavia.geoplace.co.uk/documentation) — full NSG layer catalogue over OGC WFS and WMS (rendered maps + feature info), Basic + OAuth2 | read |
 | `streetworks.dtro` | [DfT Digital Traffic Regulation Orders](https://d-tro.dft.gov.uk/api-documentation/) — the legal orders behind speed limits, closures and restrictions; integration & production | read + write |
 | `streetworks.srwr` | [Scottish Road Works Register](https://roadworks.scot/) — national register via Open Data CSV extracts (no credentials) | read |

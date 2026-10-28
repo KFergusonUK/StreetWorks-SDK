@@ -510,6 +510,28 @@ _REGISTRY: list[ProviderEntry] = [
         import_line="from streetworks.opendata import handle, parse_message",
     ),
     ProviderEntry(
+        key="opendata_archive",
+        name="Street Manager Open Data archive",
+        description=(
+            "Every Street Manager Open Data event (permits since 2020, "
+            "activities, section 58s) as public monthly zips."
+        ),
+        kind=Kind.ROADWORKS,
+        network_scope=NetworkScope.COMPREHENSIVE,
+        territories=frozenset({"England"}),
+        scope_note=(
+            "Historical, not live: one zip per topic per month, normally "
+            "published on the 1st of the next month. A permit month is about "
+            "1 GB (about 71 GB since 2020/07); activity and section 58 months "
+            "are a few MB. Nothing downloads unless asked."
+        ),
+        licence="Open Government Licence v3.0 (OGL v3)",
+        source_grade="register",
+        _module="streetworks.opendata.archive",
+        _client_name="ArchiveClient",
+        import_line="from streetworks.opendata.archive import ArchiveClient, iter_events",
+    ),
+    ProviderEntry(
         key="datavia",
         name="Geoplace DataVIA",
         description=(
